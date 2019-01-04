@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="引言PCA全称Principal Component Analysis，即主成分分析，是一种常用的数据降维方法。它可以通过线性变换将原始数据变换为一组各维度线性无关的表示，以此来提取数据的主要线性分量。 向量的投影现有两个任意不共线向量$\vec{u}, \vec{v}$，将$\vec{u}$投射到$\vec{v}$上 投影后，可以得到两个正交向量  \vec{u}&apos; · (\vec{u} - \">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PCA">
+<meta property="og:url" content="http://yoursite.com/2018/10/22/PCA/index.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="引言PCA全称Principal Component Analysis，即主成分分析，是一种常用的数据降维方法。它可以通过线性变换将原始数据变换为一组各维度线性无关的表示，以此来提取数据的主要线性分量。 向量的投影现有两个任意不共线向量$\vec{u}, \vec{v}$，将$\vec{u}$投射到$\vec{v}$上 投影后，可以得到两个正交向量  \vec{u}&apos; · (\vec{u} - \">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2018/10/22/PCA/向量投影.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/10/22/PCA/PCA动态图.gif">
+<meta property="og:image" content="http://yoursite.com/2018/10/22/PCA/pca_restructure1.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/22/PCA/pca_restructure2.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/22/PCA/kernel_pca.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/10/22/PCA/2d_restructed.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/22/PCA/face_origin.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/22/PCA/face_reduced.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/22/PCA/face_restructed.png">
+<meta property="og:updated_time" content="2019-01-04T09:22:26.811Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PCA">
+<meta name="twitter:description" content="引言PCA全称Principal Component Analysis，即主成分分析，是一种常用的数据降维方法。它可以通过线性变换将原始数据变换为一组各维度线性无关的表示，以此来提取数据的主要线性分量。 向量的投影现有两个任意不共线向量$\vec{u}, \vec{v}$，将$\vec{u}$投射到$\vec{v}$上 投影后，可以得到两个正交向量  \vec{u}&apos; · (\vec{u} - \">
+<meta name="twitter:image" content="http://yoursite.com/2018/10/22/PCA/向量投影.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/22/PCA/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>PCA | LOUIS' BLOG</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LOUIS' BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">一个有灵(gōng)魂(shì)的博客</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/22/PCA/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="And the winner is, la vie, and the winner is, I'amour.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">PCA
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-10-22 21:34:09" itemprop="dateCreated datePublished" datetime="2018-10-22T21:34:09+08:00">2018-10-22</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-01-04 17:22:26" itemprop="dateModified" datetime="2019-01-04T17:22:26+08:00">2019-01-04</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p><code>PCA</code>全称<code>Principal Component Analysis</code>，即主成分分析，是一种常用的数据降维方法。它可以通过线性变换将原始数据变换为一组各维度线性无关的表示，以此来提取数据的主要线性分量。</p>
+<h1 id="向量的投影"><a href="#向量的投影" class="headerlink" title="向量的投影"></a>向量的投影</h1><p>现有两个任意不共线向量$\vec{u}, \vec{v}$，将$\vec{u}$投射到$\vec{v}$上<br><img src="/2018/10/22/PCA/向量投影.jpg" alt="向量投影"></p>
+<p>投影后，可以得到两个正交向量</p>
+<script type="math/tex; mode=display">
+\vec{u}' · (\vec{u} - \vec{u}') = 0</script><p>我们设</p>
+<script type="math/tex; mode=display">
+\vec{u}' = \mu \vec{v} \tag{1}</script><p>代入后有</p>
+<script type="math/tex; mode=display">
+\mu \vec{v} · (\vec{u} - \mu \vec{v}) = 0</script><p>引入矩阵运算，即</p>
+<script type="math/tex; mode=display">
+(\mu v)^T (u - \mu v) = 0</script><p>有</p>
+<script type="math/tex; mode=display">
+v^T u = \mu v^T v</script><p>则得到$u’$以$v$为基向量的坐标</p>
+<script type="math/tex; mode=display">
+\mu  = (v^T v)^{-1} v^T u \tag{2}</script><p>所以得到</p>
+<script type="math/tex; mode=display">
+u' = v (v^T v)^{-1} v^T u \tag{*}</script><blockquote>
+<ul>
+<li><p>坐标变换求解投影向量：$u’$可视作$u$经坐标变换$u’ = P u$得到，所以</p>
+<script type="math/tex; mode=display">
+P = v (v^T v)^{-1} v^T</script></li>
+<li><p>推广至多个向量的投影，即得到</p>
+<script type="math/tex; mode=display">
+P = X (X^T X)^{-1} X^T</script><p>这与<a href="https://louishsu.xyz/2018/10/18/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" target="_blank" rel="noopener">线性回归</a>中得到的结论一致。</p>
+</li>
+</ul>
+</blockquote>
+<p>实际上</p>
+<script type="math/tex; mode=display">
+u' = v (v^T v)^{-1} v^T u = \frac{v}{||v||} (\frac{v}{||v||})^T u</script><p>记单位向量$\frac{v}{||v||}$为$v_0$，得到</p>
+<script type="math/tex; mode=display">
+u' = v_0 v_0^T u</script><p>由几何关系，可以计算得投影后的长度为</p>
+<script type="math/tex; mode=display">
+d 
+= ||u|| \cos \theta 
+= ||u|| \frac{v^T u}{||u||||v||}
+= v_0^T u</script><p>所以在向量投影中，$u^T v_0$表示以$v_0$为基向量的坐标。</p>
+<h1 id="PCA"><a href="#PCA" class="headerlink" title="PCA"></a>PCA</h1><p>现在有$N$维数据集$D=\{x^{(1)}, x^{(2)}, …, x^{(M)}\}$，其中$x^{(i)} = \left[x^{(i)}_1, x^{(i)}_2, …, x^{(i)}_N\right]^T$，各维特征$D_{j}$间存在线性相关性，利用主成分分析可使</p>
+<ul>
+<li>数据维度降低；</li>
+<li>提取主成分，且各成分间不相关。</li>
+</ul>
+<blockquote>
+<p>说明</p>
+<ul>
+<li>由于选取的特征轴是正交的，所以计算结果线性无关；</li>
+<li>提取了方差较大的几个特征，为主要线性分量。</li>
+</ul>
+</blockquote>
+<p>以二维空间中的数据$x^{(i)} = \left[\begin{matrix}<br>    x^{(i)}_1 \\ x^{(i)}_2<br>\end{matrix}\right]$为例，维度可降至一维，如下图所示。<br><img src="/2018/10/22/PCA/PCA动态图.gif" alt="PCA动态图"></p>
+<p>主轴可有无穷多种选择，那么问题就是<strong>如何选取最优的主轴</strong>。先给出<code>PCA</code>的计算步骤。</p>
+<h2 id="计算步骤"><a href="#计算步骤" class="headerlink" title="计算步骤"></a>计算步骤</h2><p>输入的$M$个$N$维样本，有样本矩阵</p>
+<script type="math/tex; mode=display">
+X_{N×M} = \left[x^{(1)}, x^{(2)}, ..., x^{(M)} \right]
+= \left[
+    \begin{matrix}
+        x^{(1)}_1 & x^{(2)}_1 & ... & x^{(M)}_1 \\
+        x^{(1)}_2 & x^{(2)}_2 & ... & x^{(M)}_2 \\
+        ... \\
+        x^{(1)}_N & x^{(2)}_N & ... & x^{(M)}_N \\
+    \end{matrix}
+\right]</script><h3 id="投影"><a href="#投影" class="headerlink" title="投影"></a>投影</h3><ol>
+<li><p>对每个维度(行)进行去均值化</p>
+<script type="math/tex; mode=display">
+X_j := X_j - \mu_j</script><p> 其中$\mu_j = \overline{X_j}$，$j = 1, 2, …, N$</p>
+</li>
+<li><p>求各维度间的协方差矩阵$\Sigma_{N×N}$</p>
+<script type="math/tex; mode=display">\Sigma_{ij} = Cov(x_i, x_j)</script><p> 或</p>
+<script type="math/tex; mode=display">
+ \Sigma = \frac{1}{M} X X^T</script></li>
+</ol>
+<blockquote>
+<p>注：</p>
+<ol>
+<li><script type="math/tex; mode=display">
+X X^T = \left[
+           \begin{matrix}
+     \sum_{i=1}^M x^{(i)}_1 x^{(i)}_1 & 
+     \sum_{i=1}^M x^{(i)}_1 x^{(i)}_2 &
+     ... &
+     \sum_{i=1}^M x^{(i)}_1 x^{(i)}_N \\
+     \sum_{i=1}^M x^{(i)}_2 x^{(i)}_1 & 
+     \sum_{i=1}^M x^{(i)}_2 x^{(i)}_2 &
+     ... &
+     \sum_{i=1}^M x^{(i)}_2 x^{(i)}_N \\
+     ... &
+     ... &
+     ... &
+     ... \\
+     \sum_{i=1}^M x^{(i)}_N x^{(i)}_1 & 
+     \sum_{i=1}^M x^{(i)}_N x^{(i)}_2 &
+     ... &
+     \sum_{i=1}^M x^{(i)}_N x^{(i)}_N
+ \end{matrix}
+\right]</script><script type="math/tex; mode=display">
+= \sum_{i=1}^M \left[
+           \begin{matrix}
+         x^{(i)}_1 x^{(i)}_1 & 
+         x^{(i)}_1 x^{(i)}_2 &
+         ... &
+         x^{(i)}_1 x^{(i)}_N \\
+         x^{(i)}_2 x^{(i)}_1 & 
+         x^{(i)}_2 x^{(i)}_2 &
+         ... &
+         x^{(i)}_2 x^{(i)}_N \\
+         ... &
+         ... &
+         ... &
+         ... \\
+         x^{(i)}_N x^{(i)}_1 & 
+         x^{(i)}_N x^{(i)}_2 &
+         ... &
+         x^{(i)}_N x^{(i)}_N
+ \end{matrix}
+\right]</script><script type="math/tex; mode=display">
+= \sum_{i=1}^M x^{(i)} x^{(i)T}</script></li>
+<li><p>协方差定义式</p>
+<script type="math/tex; mode=display">
+   Cov(x,y)≝\frac{1}{n-1} ∑_{i=1}^n (x_i−\overline{x})^T(y_i−\overline{y})</script><p>其中$x=[x_1, x_2, …, x_n]^T, y=[y_1, y_2, …, y_n]^T$</p>
+</li>
+</ol>
+</blockquote>
+<ol>
+<li>求协方差矩阵$\Sigma$的特征值$λ_i$及其对应特征向量$α_i$，$i=1, …, N$；</li>
+<li><p>按照特征值从大到小排列特征对$(λ_i,α_i)$，选取$K$个最大特征值对应的特征向量作为降维后的主轴$ \beta_1, \beta_2, …, \beta_K $，其中$\beta_k$为单位向量</p>
+<script type="math/tex; mode=display">
+\beta_k = \left[ \beta_{k1}, \beta_{k2}, ..., \beta_{kN} \right]^T</script><p>记</p>
+<script type="math/tex; mode=display">
+B_{N×K} = \left[ \beta_1, \beta_2, ..., \beta_K \right]</script><p>$K$的选取方法有如下两种：</p>
+<ul>
+<li>指定选取$K$个主轴</li>
+<li>保留$99\%$的方差<script type="math/tex; mode=display">\frac{\sum_{i=1}^K \lambda_i}{\sum_{j=1}^N \lambda_j} > 0.99</script></li>
+</ul>
+</li>
+</ol>
+<ol>
+<li><p>将样本点投射到$K$维坐标系上<br> 样本$X^{(i)}$投射到主成分轴$\beta_k$上，其坐标表示为向量，为</p>
+<script type="math/tex; mode=display">
+ S^{(i)}_k = X^{(i)T}\beta_k</script><blockquote>
+<p>注意此时的基座标为$\beta_k$，或者说$X’^{(i)} = S^{(i)} \frac{\beta_k}{||\beta_k||}$</p>
+</blockquote>
+<p> 所有样本在主轴$\beta_k$上的投影坐标即</p>
+<script type="math/tex; mode=display">
+ S = B^T X</script><p> 其中$S_{K×M}$，$B_{N×K}$，$X_{N×M}$</p>
+</li>
+</ol>
+<blockquote>
+<p>注：若取$K=N$，可重建数据，如下<br><img src="/2018/10/22/PCA/pca_restructure1.png" alt="pca_restructure1"><br><img src="/2018/10/22/PCA/pca_restructure2.png" alt="pca_restructure2"></p>
+</blockquote>
+<h3 id="复原"><a href="#复原" class="headerlink" title="复原"></a>复原</h3><p>第$5$步中，样本点向量$X^{(i)}$的主要分量投射到$K$个$N$维向量上，投影坐标为$S^{(i)}_k$，即</p>
+<script type="math/tex; mode=display">
+X^{(i)} \approx \sum_{k=1}^K S^{(i)}_k \beta_k</script><p>以上就是样本点的复原公式，矩阵形式即</p>
+<script type="math/tex; mode=display">
+\hat{X} = BS</script><p>其中$\hat{X}_{N×M}$，$B_{N×K}$，$S_{K×M}$</p>
+<p>考虑到已去均值化，故</p>
+<script type="math/tex; mode=display">
+\hat{X}_j \approx \hat{X}_j + \mu_j</script><h2 id="证明"><a href="#证明" class="headerlink" title="证明"></a>证明</h2><blockquote>
+<p>投影向量的$2$范数最大，或者说，投影后的坐标平方和最大</p>
+</blockquote>
+<p>当所有样本$X$投射到第一主轴$\beta_1$上，其坐标为</p>
+<script type="math/tex; mode=display">
+S_1 = X^T \beta_1</script><p>所有元素的平方和，或向量$S_1$的$2$范数为</p>
+<script type="math/tex; mode=display">
+||S_1||_2^2 
+= S_1^T S_1 = \beta_1^T X X^T \beta_1 \tag{1}</script><p>即优化目标为</p>
+<script type="math/tex; mode=display">
+\max ||S_1||_2^2</script><script type="math/tex; mode=display">
+s.t.　||\beta_1||_2^2 = 1</script><p>矩阵$C=XX^T$为对称矩阵，故可单位正交化</p>
+<script type="math/tex; mode=display">
+C = W \Lambda W^T</script><script type="math/tex; mode=display">
+W = \left[\begin{matrix}
+    | & & |\\
+    w_1 & ... & w_M\\
+    | & & |\\
+\end{matrix}\right]　
+\Lambda = \left[\begin{matrix}
+    \lambda_1 &  & \\
+     & ... & \\
+     &  & \lambda_M\\
+\end{matrix}\right]</script><p>其中$\lambda_1 &gt; …&gt; \lambda_M$，$w_i(i=1,…,M)$为矩阵$C$的特征向量(单位向量，互相正交)</p>
+<blockquote>
+<p>实际上$R(C) \leq (n-1)$，即最多有$(n-1)$个特征值大于$0$。</p>
+</blockquote>
+<script type="math/tex; mode=display">
+||S_1||_2^2
+= \beta_1^T W \Lambda W^T \beta_1 \tag{2}</script><p>令$\alpha_1 = W^T \beta_1, \beta_1 = W \alpha_1$，可得</p>
+<script type="math/tex; mode=display">
+||S_1||_2^2
+= \alpha_1^T \Lambda \alpha_1 \tag{3}</script><p>即</p>
+<script type="math/tex; mode=display">
+||S_1||_2^2 = \sum_{i=1}^M \lambda_i \alpha_{1i}^2 \tag{4}</script><p>进一步</p>
+<script type="math/tex; mode=display">
+\sum_{i=1}^M \lambda_i \alpha_{1i}^2
+\leq \lambda_1 \sum_{i=1}^M \alpha_{1i}^2 \tag{5}</script><p>且由于$\beta_1^T\beta_1 = 1$，故</p>
+<script type="math/tex; mode=display">
+1 = \beta_1^T\beta_1 = \alpha_1^T W^T W \alpha = \alpha^T \alpha = 
+\sum_{i=1}^M \alpha_{1i}^2</script><p>可得</p>
+<script type="math/tex; mode=display">
+||S_1||_2^2
+= \sum_{i=1}^M \lambda_i \alpha_{1i}^2
+\leq \lambda_1  \tag{6}</script><p>为使$(6)$取等号，即达最大值，可使</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    \alpha_{11} = 1 \\
+    \alpha_{12} = ... = \alpha_{1M} = 0
+\end{cases}</script><p>即令</p>
+<script type="math/tex; mode=display">
+\beta_1 = W \alpha_1 = w_1</script><blockquote>
+<p>$\alpha_1 = [1, 0, …, 0]^T$</p>
+</blockquote>
+<p>所以$\beta_1$对应矩阵$C=XX^T$的特征向量$w_1$，且有</p>
+<script type="math/tex; mode=display">
+||S_1||_2^2 = \lambda_1</script><blockquote>
+<p>或者第一主成分的证明也可以这样，建立优化目标</p>
+<script type="math/tex; mode=display">
+\beta_1 = \arg \max　||S_1||_2^2</script><script type="math/tex; mode=display">s.t.　||\beta_1||_2^2 = 1</script><p>构造拉格朗日函数</p>
+<script type="math/tex; mode=display">
+L(\beta_1, \lambda_1) = ||S_1||_2^2 + \lambda_1 (1 - ||\beta_1||_2^2)</script><p>也即</p>
+<script type="math/tex; mode=display">
+L(\beta_1, \lambda_1) = \beta_1^T X X^T \beta_1 + \lambda_1 (1 - \beta_1^T \beta_1)</script><p>求其极值点</p>
+<script type="math/tex; mode=display">
+▽_{\beta_1}L(\beta_1) = 2 X X^T \beta_1 - 2 \lambda_1 \beta_1 = 0</script><p>有</p>
+<script type="math/tex; mode=display">
+X X^T \beta_1 = \lambda_1 \beta_1</script><p>可见$\beta_1$即方阵$X X^T$的特征向量</p>
+</blockquote>
+<p>当我们希望用更多的主成分刻画数据，如已经求得主成分$\beta_1, …, \beta_{r-1}$，先需求解$\beta_r$，引入正交约束$\beta_r^T \beta_i = 0$，即目标函数为</p>
+<script type="math/tex; mode=display">
+||S_r||_2^2 = \beta_r^T C \beta_r</script><script type="math/tex; mode=display">
+s.t.　\beta_r^T \beta_i = 0, i = 1, ..., r-1</script><script type="math/tex; mode=display">
+||\beta_r||_2^2 = 1</script><p>令$\beta_r = W \alpha_r$，则</p>
+<script type="math/tex; mode=display">
+||S_r||_2^2
+= \alpha_r^T \Lambda \alpha_r
+= \sum_i \lambda_i \alpha_{ri}^2</script><p>而根据正交约束</p>
+<script type="math/tex; mode=display">
+0 = \beta_r^T \beta_i = \alpha_r^T W^T w_i = \alpha_{ri},　
+i = 1, ..., r-1</script><blockquote>
+<p>$ W^T w_i = \left[0, …, 1_i, …, 0\right]^T$</p>
+</blockquote>
+<p>所以</p>
+<script type="math/tex; mode=display">
+||S_r||_2^2 = \sum_i \lambda_i \alpha_{ri}^2 = \lambda_r \alpha_{rr}^2 \tag{5}</script><p>又因为$\beta_r^T \beta_r = 1$(单位向量)，故</p>
+<script type="math/tex; mode=display">
+\beta_r^T \beta_r = \alpha_r^T W^T W \alpha_r = \alpha_r^T \alpha_r = \sum_i \alpha_{ri}^2 = 1</script><p>于是类似的，为使$(5)$取最大，取</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    \alpha_{rr} = 1\\
+    \alpha_{ri} = 0,　i = 1, ..., M, i \neq r
+\end{cases}</script><blockquote>
+<p>$\alpha_r = [0, …, 1_r, …, 0]$</p>
+</blockquote>
+<p>则此时</p>
+<script type="math/tex; mode=display">
+\beta_r = W \alpha_r = w_r</script><p>且有</p>
+<script type="math/tex; mode=display">
+||S_r||_2^2 = \lambda_r</script><p>证毕。</p>
+<h2 id="白化-whitening"><a href="#白化-whitening" class="headerlink" title="白化(whitening)"></a>白化(whitening)</h2><p><code>whitening</code>的目的是去掉数据之间的相关联度，是很多算法进行预处理的步骤。比如说当训练图片数据时，由于图片中相邻像素值有一定的关联，所以很多信息是冗余的。这时候去相关的操作就可以采用白化操作。</p>
+<p>数据的<code>whitening</code>必须满足两个条件：</p>
+<ol>
+<li>不同特征间相关性最小，接近$0$；</li>
+<li>所有特征的方差相等（不一定为$1$）。</li>
+</ol>
+<p>常见的白化操作有<code>PCA whitening</code>和<code>ZCA whitening</code>。</p>
+<blockquote>
+<p><a href="http://deeplearning.stanford.edu/wiki/index.php/Whitening" target="_blank" rel="noopener">Whitening - Ufldl</a></p>
+</blockquote>
+<ul>
+<li>PCA whitening<br>  <code>PCA whitening</code>指将数据$X$经过<code>PCA</code>降维为$S$后，可以看出$S$中每一维是独立的，满足<code>whitening</code>的第一个条件，这是只需要将$S$中的每一维都除以标准差就得到了每一维的方差为$1$，也就是说方差相等。<script type="math/tex; mode=display">
+  X_{PCAwhite, j} = \frac{X_{rot, j}}{\sqrt{\lambda_j}}</script></li>
+</ul>
+<ul>
+<li>ZCA whitening<br>  <code>ZCA whitening</code>是指数据$X$先经过<code>PCA</code>变换为$S$，但是并不降维，因为这里是把所有的成分都选进去了。这是也同样满足<code>whtienning</code>的第一个条件，特征间相互独立。然后同样进行方差为$1$的操作，最后将得到的矩阵左乘一个特征向量矩阵$U$即可。<script type="math/tex; mode=display">
+  X_{ZCAwhite} = U · X_{PCAwhite}</script></li>
+</ul>
+<h1 id="Kernel-PCA"><a href="#Kernel-PCA" class="headerlink" title="Kernel PCA"></a>Kernel PCA</h1><p><code>Kernel PCA</code>的思想是在高维的特征空间中求解协方差矩阵</p>
+<script type="math/tex; mode=display">
+\Sigma = \frac{1}{M} \sum_{i=1}^M \Phi(X^{(i)}) \Phi(X^{(i)})^T</script><p>其中$\Phi(X^{(i)})$表示将样本$i$映射到高维空间后中的向量，即</p>
+<script type="math/tex; mode=display">
+\Phi(X^{(i)}) = \left[ \phi^{(i)}_1, \phi^{(i)}_2, ..., \phi^{(i)}_{N'} \right]^T</script><p>其中$N’ &gt; N$，由于$\Phi(X^{(i)})$为隐式的，故设置核函数求解，记</p>
+<script type="math/tex; mode=display">
+\kappa(i, j) = \Phi(X^{(i)}) \Phi(X^{(i)})^T</script><blockquote>
+<p>关于核技巧，移步<a href="">非线性支持向量机</a></p>
+</blockquote>
+<p><img src="/2018/10/22/PCA/kernel_pca.jpg" alt="kernel_pca"></p>
+<h1 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h1><p>可利用<code>PCA</code>与线性回归求解$3$维空间中平面的法向量</p>
+<ol>
+<li>利用<code>PCA</code>重建数据(不降维，此时为$3$维)，此时第$1, 2$主成分轴可张成所求平面，即该平面可表示为<script type="math/tex; mode=display">
+ \Pi = span \{ \beta_1, \beta_2 \}</script></li>
+</ol>
+<blockquote>
+<p>就是说，第一、二主成分是这些点“拉伸”最大的方向 :-)，好懂不？</p>
+</blockquote>
+<ol>
+<li><p>由<a href="https://louishsu.xyz/2018/10/18/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" target="_blank" rel="noopener">正交投影</a>可知，平面外一点$y$可通过最小二乘(线性回归)的方法投射到平面上，向量运算，不考虑偏置项，即</p>
+<script type="math/tex; mode=display">
+ \hat{y} 
+ = \theta_1 x_1 + \theta_2 x_2 \tag{*}</script><p> 其中$x_1, x_2$表示第一、第二主成分$\beta_1, \beta_2$，为$3$维向量</p>
+<script type="math/tex; mode=display">
+ \hat{y} = \left[
+     \begin{matrix}
+         \hat{y_1} \\
+         \hat{y_2} \\
+         \hat{y_3} \\
+     \end{matrix}
+ \right]　
+ x_i = \left[
+     \begin{matrix}
+         x_{i1} \\
+         x_{i2} \\
+         x_{i3} \\
+     \end{matrix}
+ \right]</script><p> 可利用公式求解回归参数$\theta$</p>
+<script type="math/tex; mode=display">
+ \theta = (X^TX+\lambda I)^{-1} X^T y</script><blockquote>
+<p>注意：$X(n_samples, n_features)$，这里把$(x_{1j}, x_{2j}, y_{j})作为一组样本$</p>
+</blockquote>
+<p> 此时该参数表示在主轴上的坐标$(\theta_1, \theta_2)$，带回$(*))$即可解得$\hat{y}$</p>
+<script type="math/tex; mode=display">
+ \hat{y} 
+ = \theta_1 \beta_1 + \theta_2 \beta_2 \tag{*}</script><p> 通俗理解，一掌把$y$拍平在了平面$\Pi$上，变成了$\hat{y}$，但是哪有这么好拍。。。这个时候刺在掌心里一定有一个垂直的向量分量，即为该平面的法向量</p>
+<script type="math/tex; mode=display">
+ \vec{n} = y - \hat{y}</script><p> <strong>也可使用粗暴一点的方法，直接将第三主成分作为法向量。</strong></p>
+<blockquote>
+<p>或者直接上投影公式：</p>
+<script type="math/tex; mode=display">
+\hat{y} = Py</script><script type="math/tex; mode=display">　
+P = X (X^TX+\lambda I)^{-1} X^T</script></blockquote>
+</li>
+</ol>
+<pre><code>![projection](/PCA/projection.jpg)
+
+&gt; 总体的运算流程如下
+&gt; - 利用所有样本点(近似平面)计算主成分，第一、二主成分张成平面$\Pi$；
+&gt; - 选出其中一个样本点，将平行于平面$\Pi$的成分投射到$\Pi$上；
+&gt; - 该样本点剩余分量即法向量；
+&gt; - 一般来说，取所有点法向量的均值。
+</code></pre><h1 id="程序"><a href="#程序" class="headerlink" title="程序"></a>程序</h1><p><a href="https://github.com/isLouisHsu/Basic-Machine-Learning-Algorithm/tree/master/Andrew%20Ng%2C%20Stanford%20University/mlclass-ex7-3-pca" target="_blank" rel="noopener">@Github: PCA</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">class PrincipalComponentAnalysis():</span><br><span class="line">    def __init__(self, n_component=-1):</span><br><span class="line">        self.n_component = n_component</span><br><span class="line">        self.meanVal = None</span><br><span class="line">        self.axis = None</span><br><span class="line">    def fit(self, X, prop=0.99):</span><br><span class="line">        &apos;&apos;&apos;</span><br><span class="line">        the parameter &apos;prop&apos; is only for &apos;n_component = -1&apos;</span><br><span class="line">        &apos;&apos;&apos;</span><br><span class="line">        # 第一步: 归一化</span><br><span class="line">        self.meanVal = np.mean(X, axis=0)                   # 训练样本每个特征上的的均值</span><br><span class="line">        X_normalized = (X - self.meanVal)                   # 归一化训练样本</span><br><span class="line">        # 第二步：计算协方差矩阵</span><br><span class="line">        # cov = X_normalized.T.dot(X_normalized)</span><br><span class="line">        cov = np.cov(X_normalized.T)                        # 协方差矩阵</span><br><span class="line">        eigVal, eigVec = np.linalg.eig(cov)                 # EVD</span><br><span class="line">        order = np.argsort(eigVal)[::-1]                    # 从大到小排序</span><br><span class="line">        eigVal = eigVal[order]</span><br><span class="line">        eigVec = eigVec.T[order].T</span><br><span class="line">        # 选择主成分的数量</span><br><span class="line">        if self.n_component == -1:</span><br><span class="line">            sumOfEigVal = np.sum(eigVal)</span><br><span class="line">            sum_tmp = 0</span><br><span class="line">            for k in range(eigVal.shape[0]):</span><br><span class="line">                sum_tmp += eigVal[k]</span><br><span class="line">                if sum_tmp &gt; prop * sumOfEigVal:            # 平均均方误差与训练集方差的比例尽可能小的情况下选择尽可能小的 K 值</span><br><span class="line">                    self.n_component = k + 1</span><br><span class="line">                    break</span><br><span class="line">        # 选择投影坐标轴</span><br><span class="line">        self.axis = eigVec[:, :self.n_component]            # 选择前n_component个特征向量作为投影坐标轴</span><br><span class="line">    def transform(self, X):</span><br><span class="line">        # 第一步：归一化</span><br><span class="line">        X_normalized = (X - self.meanVal)                   # 归一化测试样本</span><br><span class="line">        # 第二步：投影 X_nxk · V_kxk&apos; = X&apos;_nxk&apos;</span><br><span class="line">        X_transformed = X_normalized.dot(self.axis)</span><br><span class="line">        return X_transformed</span><br><span class="line">    def fit_transform(self, X, prop=0.99):</span><br><span class="line">        self.fit(X, prop=prop)</span><br><span class="line">        return self.transform(X)</span><br><span class="line">    def transform_inv(self, X_transformed):</span><br><span class="line">        # 视投影向量长度为一个单位长度，投影结果为投影向量上的坐标</span><br><span class="line">        # X&apos;_nxk&apos; · V_kxk&apos;.T = X&apos;&apos;_nxk</span><br><span class="line">        X_restructed = X_transformed.dot(self.axis.T)</span><br><span class="line">        # 还原数据</span><br><span class="line">        X_restructed = X_restructed + self.meanVal</span><br><span class="line">        return X_restructed</span><br></pre></td></tr></table></figure>
+<p>实验结果</p>
+<ul>
+<li><p>Demo1: PCA applied on 2-d datasets<br>  <img src="/2018/10/22/PCA/2d_restructed.png" alt="2d_restructed"></p>
+</li>
+<li><p>Demo2: PCA applied on wild face</p>
+<ul>
+<li>origin<br><img src="/2018/10/22/PCA/face_origin.png" alt="origin"></li>
+<li>reduced<br><img src="/2018/10/22/PCA/face_reduced.png" alt="reduced"></li>
+<li>restructured<br><img src="/2018/10/22/PCA/face_restructed.png" alt="restructured"></li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/18/Softmax-Regression/" rel="next" title="Softmax Regression">
+                <i class="fa fa-chevron-left"></i> Softmax Regression
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/23/SVD/" rel="prev" title="SVD">
+                SVD <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Louis Hsu">
+            
+              <p class="site-author-name" itemprop="name">Louis Hsu</p>
+              <p class="site-description motion-element" itemprop="description">And the winner is, la vie, and the winner is, I'amour.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">分类</span>
+                  
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">标签</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/isLouisHsu" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:is.louishsu@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/islouishsu" target="_blank" title="知乎"><i class="fa fa-fw fa-知乎"></i>知乎</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/islouishsu" target="_blank" title="微博"><i class="fa fa-fw fa-weibo"></i>微博</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#向量的投影"><span class="nav-number">2.</span> <span class="nav-text">向量的投影</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PCA"><span class="nav-number">3.</span> <span class="nav-text">PCA</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#计算步骤"><span class="nav-number">3.1.</span> <span class="nav-text">计算步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#投影"><span class="nav-number">3.1.1.</span> <span class="nav-text">投影</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复原"><span class="nav-number">3.1.2.</span> <span class="nav-text">复原</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#证明"><span class="nav-number">3.2.</span> <span class="nav-text">证明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#白化-whitening"><span class="nav-number">3.3.</span> <span class="nav-text">白化(whitening)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kernel-PCA"><span class="nav-number">4.</span> <span class="nav-text">Kernel PCA</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#应用"><span class="nav-number">5.</span> <span class="nav-text">应用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#程序"><span class="nav-number">6.</span> <span class="nav-text">程序</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Louis Hsu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="引言奇异值分解Singular Value Decomposition是线性代数中一种重要的矩阵分解，奇异值分解则是特征分解在任意矩阵上的推广。在信号处理、统计学等领域有重要应用。 原理从特征值分解(EVD)讲起我们知道对于一个$n$阶方阵$A_{n×n}$，有  A\alpha_i = \lambda_i \alpha_i　i = 1, ..., n取  P = \left[\alpha_1,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SVD">
+<meta property="og:url" content="http://yoursite.com/2018/10/23/SVD/index.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="引言奇异值分解Singular Value Decomposition是线性代数中一种重要的矩阵分解，奇异值分解则是特征分解在任意矩阵上的推广。在信号处理、统计学等领域有重要应用。 原理从特征值分解(EVD)讲起我们知道对于一个$n$阶方阵$A_{n×n}$，有  A\alpha_i = \lambda_i \alpha_i　i = 1, ..., n取  P = \left[\alpha_1,">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2018/10/23/SVD/直观表示SVD.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/10/23/SVD/source.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/23/SVD/components.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/23/SVD/merge_all.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/23/SVD/merge_5.png">
+<meta property="og:updated_time" content="2019-01-04T09:28:55.354Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SVD">
+<meta name="twitter:description" content="引言奇异值分解Singular Value Decomposition是线性代数中一种重要的矩阵分解，奇异值分解则是特征分解在任意矩阵上的推广。在信号处理、统计学等领域有重要应用。 原理从特征值分解(EVD)讲起我们知道对于一个$n$阶方阵$A_{n×n}$，有  A\alpha_i = \lambda_i \alpha_i　i = 1, ..., n取  P = \left[\alpha_1,">
+<meta name="twitter:image" content="http://yoursite.com/2018/10/23/SVD/直观表示SVD.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/23/SVD/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>SVD | LOUIS' BLOG</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LOUIS' BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">一个有灵(gōng)魂(shì)的博客</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/23/SVD/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="And the winner is, la vie, and the winner is, I'amour.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SVD
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-10-23 21:34:09" itemprop="dateCreated datePublished" datetime="2018-10-23T21:34:09+08:00">2018-10-23</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-01-04 17:28:55" itemprop="dateModified" datetime="2019-01-04T17:28:55+08:00">2019-01-04</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>奇异值分解<code>Singular Value Decomposition</code>是线性代数中一种重要的矩阵分解，奇异值分解则是特征分解在任意矩阵上的推广。在信号处理、统计学等领域有重要应用。</p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><h2 id="从特征值分解-EVD-讲起"><a href="#从特征值分解-EVD-讲起" class="headerlink" title="从特征值分解(EVD)讲起"></a>从特征值分解(EVD)讲起</h2><p>我们知道对于一个$n$阶方阵$A_{n×n}$，有</p>
+<script type="math/tex; mode=display">
+A\alpha_i = \lambda_i \alpha_i　i = 1, ..., n</script><p>取</p>
+<script type="math/tex; mode=display">
+P = \left[\alpha_1, \alpha_2, ..., \alpha_n\right]</script><p>有下式成立</p>
+<script type="math/tex; mode=display">
+AP = P\Lambda</script><p>其中</p>
+<script type="math/tex; mode=display">
+\Lambda = \left[
+        \begin{matrix}
+            \lambda_1 & & \\
+            & ... & \\
+            & & \lambda_n \\
+        \end{matrix}
+\right]</script><blockquote>
+<p>特征值一般从大到小排列</p>
+</blockquote>
+<p>利用该式可将方阵$A_{n×n}$化作对角阵$\Lambda_{n×n}$</p>
+<script type="math/tex; mode=display">
+\Lambda = P^{-1}AP</script><p>或者</p>
+<script type="math/tex; mode=display">
+A = P \Lambda P^{-1} = \sum_{i=1}^n \lambda_i (P_{,i})(P_{,i})^{-1}</script><blockquote>
+<p>“$_{i}$”表示第$i$行，“$_{,i}$”表示第$i$列</p>
+</blockquote>
+<p>这样我们就可以理解为，矩阵$A$是由$n$个$n$阶矩阵$P_{,i}P^{-1}_{i}$加权组成，特征值$\lambda_i$即为权重。</p>
+<blockquote>
+<p>以上为个人理解，不妥之处可以指出。</p>
+</blockquote>
+<h2 id="奇异值分解-SVD"><a href="#奇异值分解-SVD" class="headerlink" title="奇异值分解(SVD)"></a>奇异值分解(SVD)</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>对于长方阵$A_{m×n}$，不能进行特征值分解，可进行如下分解</p>
+<script type="math/tex; mode=display">
+A_{m×n} = U_{m×m} \Sigma_{m×n} V_{n×n}^T</script><p>其中$U \in \mathbb{R}^{m×m}, V \in \mathbb{R}^{n×n}$，均为正交矩阵。矩阵$\Sigma_{m×n}$如下</p>
+<ul>
+<li><p>对于$m&gt;n$</p>
+<script type="math/tex; mode=display">
+  \Sigma_{m×n} = \left[
+          \begin{matrix}
+              S_{n×n} \\
+              --- \\
+              O_{(m-n)×n}
+          \end{matrix}
+  \right]</script></li>
+<li><p>对于$m&lt;n$</p>
+<script type="math/tex; mode=display">
+  \Sigma_{m×n} = \left[
+          \begin{matrix}
+              S_{m×m} & | & O_{m×(n-m)}
+          \end{matrix}
+  \right]</script></li>
+</ul>
+<p>矩阵$S_{n×n}$为对角阵，对角元素从大到小排列</p>
+<script type="math/tex; mode=display">
+S_{n×n} = \left[
+    \begin{matrix}
+        \sigma_1 & & \\
+         & ... & \\
+         & & \sigma_n\\
+    \end{matrix}
+\right]</script><p>直观表示<code>SVD</code>分解如下<br><img src="/2018/10/23/SVD/直观表示SVD.jpg" alt="直观表示SVD"></p>
+<p>当取$r&lt;n$时，有部分奇异值分解，可用于降维</p>
+<script type="math/tex; mode=display">
+A_{m×n} = U_{m×r} \Sigma_{r×r} V_{r×n}^T</script><h3 id="计算"><a href="#计算" class="headerlink" title="计算"></a>计算</h3><blockquote>
+<p>以下仅考虑$m&gt;n$的情况</p>
+</blockquote>
+<ol>
+<li><p>令矩阵$A^T$与$A$相乘，有</p>
+<script type="math/tex; mode=display">
+ A^TA = (U \Sigma V^T)^T (U \Sigma V^T)</script><script type="math/tex; mode=display">
+ = V \Sigma^T U^T U \Sigma V^T</script><script type="math/tex; mode=display">
+ A^TA = V \Sigma^T \Sigma V^T</script><blockquote>
+<p>矩阵$U$为正交阵，即满足$U^TU=I$</p>
+</blockquote>
+<p> 其中</p>
+<script type="math/tex; mode=display">
+ \Sigma^T \Sigma = 
+         \left[
+             \begin{matrix}
+                 S^T_{n×n} & | & O^T_{n×(m-n)}
+             \end{matrix}
+         \right]
+         \left[
+             \begin{matrix}
+                 S_{n×n} \\
+                 --- \\
+                 O_{(m-n)×n}
+             \end{matrix}
+         \right]</script><script type="math/tex; mode=display">
+ = S_{n×n}^2 
+ = \left[
+     \begin{matrix}
+         \sigma_1^2 & & \\
+         & ... & \\
+         & & \sigma_n^2\\
+     \end{matrix}
+ \right]</script><p> 则</p>
+<script type="math/tex; mode=display">
+ A^T A = V S^2  V^T</script><p> 即矩阵$A^T A$相似对角化为$S^2$，对角元素$\sigma_i^2$与矩阵$V$的列向量$v_i(i=1, …, n)$为矩阵$A^T A$的特征对。</p>
+<p> 那么对矩阵$A^T A$进行特征值分解，有</p>
+<script type="math/tex; mode=display">
+ (A^T A) \alpha^{(1)}_i = \lambda^{(1)}_i \alpha^{(1)}_i</script><p> 则</p>
+<script type="math/tex; mode=display">
+ v_i = \alpha^{(1)}_i　\sigma_i = \sqrt{\lambda^{(1)}_i}</script><blockquote>
+<p>注：对于二次型$x^T (A^T A) x$</p>
+<script type="math/tex; mode=display">
+x^T (A^T A) x = (Ax)^T(Ax) \geq 0</script><p>故矩阵$A^T A$半正定，$\sigma_i = \sqrt{\lambda_i}$有解</p>
+</blockquote>
+</li>
+</ol>
+<ol>
+<li><p>同理，令矩阵$A$与$A^T$相乘，可证得</p>
+<script type="math/tex; mode=display">
+ A A^T = U \Sigma \Sigma^T U^T</script><p> 其中</p>
+<script type="math/tex; mode=display">
+ \Sigma \Sigma^T = 
+         \left[
+             \begin{matrix}
+                 S_{n×n} \\
+                 --- \\
+                 O_{(m-n)×n}
+             \end{matrix}
+         \right]
+         \left[
+             \begin{matrix}
+                 S^T_{n×n} & | & O^T_{n×(m-n)}
+             \end{matrix}
+         \right]</script><script type="math/tex; mode=display">
+ = \left[
+     \begin{matrix}
+         S^2_{n×n} & O_{n×(m-n)} \\
+         O_{(m-n)×n} & O_{(m-n)×(m-n)}
+     \end{matrix}
+ \right]</script><p> 即矩阵$A A^T$相似对角化，对角元素$\sigma_i^2$与矩阵$U$的列向量$u_i(i=1, …, m)$为矩阵$A A^T$的特征对。</p>
+<p> 对矩阵$A A^T$进行特征值分解，有</p>
+<script type="math/tex; mode=display">
+ (A^T A) \alpha^{(2)}_i = \lambda^{(2)}_i \alpha^{(2)}_i</script><p> 则</p>
+<script type="math/tex; mode=display">
+ u_i = \alpha^{(2)}_i　\sigma_i = \sqrt{\lambda^{(2)}_i}</script><blockquote>
+<p>同理可证得$A A^T$半正定，略。</p>
+</blockquote>
+</li>
+</ol>
+<p>一般来说，为减少计算量，计算奇异值分解只进行一次特征值分解，如对于矩阵$X_{m×n}(m&gt;n)$，选取$n$阶矩阵$X^T X$进行特征值分解计算$v_i$，计算$u_i$方法下面介绍。</p>
+<p>根据前面推导，我们有特征值分解</p>
+<script type="math/tex; mode=display">
+(A^T A) \alpha^{(1)}_i = \lambda^{(1)}_i \alpha^{(1)}_i</script><script type="math/tex; mode=display">
+(A A^T) \alpha^{(2)}_i = \lambda^{(2)}_i \alpha^{(2)}_i</script><p>其中$\lambda^{(1)}_i = \lambda^{(2)}_i = \sigma_i^2$，$v_i = \alpha^{(1)}_i$，$u_i = \alpha^{(2)}_i$，即</p>
+<script type="math/tex; mode=display">
+A^T A v_i = \sigma_i^2 v_i \tag{1}</script><script type="math/tex; mode=display">
+A A^T u_i = \sigma_i^2 u_i \tag{2}</script><p>$(1)$式左右乘$A$，有</p>
+<script type="math/tex; mode=display">
+A A^T A v_i = \sigma_i^2 A v_i</script><p>发现什么？这是另一个特征值分解的表达式！</p>
+<script type="math/tex; mode=display">
+(A A^T) (A v_i) = \sigma_i^2 (A v_i)</script><p>故</p>
+<script type="math/tex; mode=display">
+u_i \propto A v_i　或　
+u_i = k · A v_i \tag{3}</script><p>现在求解系数$k$，根据定义</p>
+<script type="math/tex; mode=display">
+A = U \Sigma V^T　\Rightarrow　AV = U \Sigma</script><p>则</p>
+<script type="math/tex; mode=display">
+A v_i = \sigma_i u_i　\Rightarrow　u_i = \frac{1}{\sigma_i} A v_i</script><p>或者</p>
+<script type="math/tex; mode=display">
+U = A V \Sigma^{-1}</script><blockquote>
+<p>注：只能求前$n$个$u_i$，之后的需要列写方程求解</p>
+</blockquote>
+<h1 id="举栗"><a href="#举栗" class="headerlink" title="举栗"></a>举栗</h1><p>将矩阵$A$进行分解</p>
+<script type="math/tex; mode=display">
+A = \left[
+    \begin{matrix}
+        0 & 1 \\
+        1 & 1 \\
+        1 & 0
+    \end{matrix}
+\right]</script><p>为减少计算量，取$A^T A$计算</p>
+<script type="math/tex; mode=display">
+A^T A = \left[
+    \begin{matrix}
+        2 & 1 \\
+        1 & 2 
+    \end{matrix}
+\right]</script><p>特征值分解，有</p>
+<script type="math/tex; mode=display">
+A\left[
+    \begin{matrix}
+        \frac{1}{\sqrt{2}} & -\frac{1}{\sqrt{2}} \\
+        \frac{1}{\sqrt{2}} & \frac{1}{\sqrt{2}}
+    \end{matrix} 
+\right]
+= \left[
+    \begin{matrix}
+        \frac{1}{\sqrt{2}} & -\frac{1}{\sqrt{2}} \\
+        \frac{1}{\sqrt{2}} & \frac{1}{\sqrt{2}}
+    \end{matrix} 
+\right]
+\left[
+    \begin{matrix}
+        3 &  \\
+          & 1
+    \end{matrix} 
+\right]</script><p>故</p>
+<script type="math/tex; mode=display">
+\Sigma = \left[
+    \begin{matrix}
+        \sqrt{3} &  \\
+          & 1
+    \end{matrix} 
+\right]　
+V = \left[
+    \begin{matrix}
+        \frac{1}{\sqrt{2}} & -\frac{1}{\sqrt{2}} \\
+        \frac{1}{\sqrt{2}} & \frac{1}{\sqrt{2}}
+    \end{matrix} 
+\right]</script><script type="math/tex; mode=display">
+U = A V \Sigma^{-1} = \left[
+    \begin{matrix}
+        \frac{1}{\sqrt{6}} & \frac{1}{\sqrt{2}} \\
+        \frac{2}{\sqrt{6}} & 0 \\
+        \frac{1}{\sqrt{6}} & -\frac{1}{\sqrt{2}}
+    \end{matrix} 
+\right]</script><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; import numpy as np</span><br><span class="line">&gt;&gt;&gt; A = np.array([</span><br><span class="line">	[0, 1], [1, 1], [1, 0]</span><br><span class="line">	])</span><br><span class="line">&gt;&gt;&gt; ATA = A.T.dot(A)</span><br><span class="line">&gt;&gt;&gt; eigval, eigvec= np.linalg.eig(ATA)</span><br><span class="line">&gt;&gt;&gt; V = eigvec.copy()</span><br><span class="line">&gt;&gt;&gt; S = np.diag(np.sqrt(eigval))</span><br><span class="line">&gt;&gt;&gt; U = A.dot(V).dot(np.linalg.inv(S))</span><br><span class="line">&gt;&gt;&gt; U</span><br><span class="line">array([[ 0.40824829,  0.70710678],</span><br><span class="line">       [ 0.81649658,  0.        ],</span><br><span class="line">       [ 0.40824829, -0.70710678]])</span><br><span class="line">&gt;&gt;&gt; S</span><br><span class="line">array([[1.73205081, 0.        ],</span><br><span class="line">       [0.        , 1.        ]])</span><br><span class="line">&gt;&gt;&gt; V</span><br><span class="line">array([[ 0.70710678, -0.70710678],</span><br><span class="line">       [ 0.70710678,  0.70710678]])</span><br><span class="line">&gt;&gt;&gt; # 验证</span><br><span class="line">&gt;&gt;&gt; U.dot(S).dot(V.T)</span><br><span class="line">array([[-2.23711432e-17,  1.00000000e+00],</span><br><span class="line">       [ 1.00000000e+00,  1.00000000e+00],</span><br><span class="line">       [ 1.00000000e+00, -2.23711432e-17]])</span><br></pre></td></tr></table></figure>
+<h1 id="理解"><a href="#理解" class="headerlink" title="理解"></a>理解</h1><p>展开表达式，取$r \leq n$时，</p>
+<script type="math/tex; mode=display">
+A = U_{m×r} \Sigma_{r×r} V_{r×n}^T = \sum_{i=1}^r \sigma_i (U_{,i}) (V_{,i})^T</script><p>就得到与<code>PCA</code>相同的结论，矩阵$A$可由$r$个$m×n$的矩阵$(U_{,i}) (V_{,i})^T$加权组成。一般来说，前$10\%$甚至$1\%$的奇异值就占了全部奇异值之和的$99\%$，极大地保留了信息，而大大减少了存储空间。</p>
+<blockquote>
+<p>以图片为例，若原有<code>24bit</code>图片，其大小为<code>(1024, 768)</code>，则不计图片信息，仅仅数据共占<code>1024×768×3 B</code>，或<code>2.25 MB</code>。用奇异值分解进行压缩，保留$60\%$的奇异值，可达到几乎无损的程度，此时需要保存向量矩阵$U_{1024×60}$，$V_{60×768}$以及$60$个奇异值，以浮点数<code>float32</code>存储，一共占<code>420 KB</code>即可。</p>
+<script type="math/tex; mode=display">
+(1024 × 60 + 60 × 768 + 60) × 4 / 2^{10} = 420.23</script><p>说句题外话，存储量的压缩必然以计算量的增大为代价，相反亦然，所以需要协调好<code>RAM</code>与<code>ROM</code>容量，考虑计算机的计算速度。换句话说，空间和时间上必然是互补的，哲学的味道hhhh。</p>
+</blockquote>
+<h1 id="分解结果的信息保留"><a href="#分解结果的信息保留" class="headerlink" title="分解结果的信息保留"></a>分解结果的信息保留</h1><p>分解后各样本间的欧式距离与角度信息应不变，给出证明如下<br>设有$m$组$n$维样本样本</p>
+<script type="math/tex; mode=display">
+X_{n×m} = [X^{(1)}, X^{(2)}, ..., X^{(m)}]</script><p>经奇异值分解，有</p>
+<script type="math/tex; mode=display">
+X_{n×m} = U_{n×r} \Sigma_{r×r} V_{r×m}^T</script><p>记</p>
+<script type="math/tex; mode=display">
+Z_{r×m} = \Sigma V^T = [Z^{(1)}, Z^{(2)}, ..., Z^{(N)}]</script><p>有</p>
+<script type="math/tex; mode=display">
+X = U Z</script><ul>
+<li><p>欧式距离</p>
+<script type="math/tex; mode=display">
+  || X^{(i)} - X^{(j)} ||_2^2 = || U (Z^{(i)} - Z^{(j)}) ||_2^2</script><script type="math/tex; mode=display">
+  = \left[ U (Z^{(i)} - Z^{(j)}) \right]^T \left[ U (Z^{(i)} - Z^{(j)}) \right]</script><script type="math/tex; mode=display">
+  = (Z^{(i)} - Z^{(j)})^T U^T U (Z^{(i)} - Z^{(j)})</script><script type="math/tex; mode=display">
+  = || Z^{(i)} - Z^{(j)} ||_2^2</script><p>  即</p>
+<script type="math/tex; mode=display">
+  || X^{(i)} - X^{(j)} ||_2^2 = || Z^{(i)} - Z^{(j)} ||_2^2</script></li>
+<li><p>角度信息</p>
+<script type="math/tex; mode=display">
+  \frac{X^{(i)T}X^{(j)}}{||X^{(i)}||_2||X^{(j)}||_2}</script><script type="math/tex; mode=display">
+  = \frac{(UZ^{(i)})^T(UZ^{(j)})}{||UZ^{(i)}||_2||UZ^{(j)}||_2}</script><script type="math/tex; mode=display">
+  = \frac{(UZ^{(i)})^T(UZ^{(j)})}{\sqrt{(UZ^{(i)})^T(UZ^{(i)})} \sqrt{(UZ^{(j)})^T(UZ^{(j)})}}</script><script type="math/tex; mode=display">
+  = \frac{Z^{(i)T}Z^{(j)}}{||Z^{(i)}||_2||Z^{(j)}||_2}</script><p>  即</p>
+<script type="math/tex; mode=display">
+  \frac{X^{(i)T}X^{(j)}}{||X^{(i)}||_2||X^{(j)}||_2} = 
+  \frac{Z^{(i)T}Z^{(j)}}{||Z^{(i)}||_2||Z^{(j)}||_2}</script></li>
+</ul>
+<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><p><a href="https://github.com/isLouisHsu/Python-Examples-for-Pattern-Recognition-Course/blob/master/examples/p15_svd.py" target="_blank" rel="noopener">@Github: Code of SVD</a><br>对图片进行了分解<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line">class SVD():</span><br><span class="line">    &quot;&quot;&quot; Singular Value Decomposition</span><br><span class="line">    Attributes:</span><br><span class="line">        m &#123;int&#125;</span><br><span class="line">        n &#123;int&#125;</span><br><span class="line">        r &#123;int&#125;: if r == -1, then r = n</span><br><span class="line">        isTrains &#123;bool&#125;: isTrains = True if input.shape[0] &lt; input.shape[1]</span><br><span class="line">        U &#123;ndarray(m, r)&#125;</span><br><span class="line">        S &#123;ndarray(r, )&#125;</span><br><span class="line">        V &#123;ndarray(n, r)&#125;</span><br><span class="line">    Notes:</span><br><span class="line">        - Transpose input matrix if m &lt; n, and m, n := n, m</span><br><span class="line">        - Reassign r if eigvals contains zero</span><br><span class="line">        - Singular values are stored in a 1-dim array `S`</span><br><span class="line">        - X&apos; = U S V^T</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    def __init__(self, r=-1):</span><br><span class="line">        self.m = None</span><br><span class="line">        self.n = None</span><br><span class="line">        self.r = r</span><br><span class="line">        self.isTrans = False</span><br><span class="line">        self.U = None</span><br><span class="line">        self.S = None</span><br><span class="line">        self.V = None</span><br><span class="line">    def fit(self, X):</span><br><span class="line">        &quot;&quot;&quot; calculate components</span><br><span class="line">        Notes:</span><br><span class="line">            - Transpose input matrix if m &lt; n, and m, n := n, m</span><br><span class="line">            - reassign self.r if eigvals contains zero</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        (self.m, self.n) = X.shape</span><br><span class="line">        if self.m &lt; self.n:</span><br><span class="line">            X = X.T</span><br><span class="line">            self.m, self.n = self.n, self.m</span><br><span class="line">            self.isTrans = True</span><br><span class="line">        self.r = self.n if (self.r == -1) else self.r</span><br><span class="line"></span><br><span class="line">        XTX = X.T.dot(X)</span><br><span class="line">        eigval, eigvec = np.linalg.eig(X.T.dot(X))</span><br><span class="line">        eigval, eigvec = np.real(eigval), np.real(eigvec)</span><br><span class="line">        </span><br><span class="line">        self.S = np.sqrt(np.clip(eigval, 0, float(&apos;inf&apos;)))</span><br><span class="line">        self.S = self.S[self.S &gt; 0]</span><br><span class="line">        self.r = min(self.r, self.S.shape[0])               # reassign self.r</span><br><span class="line">        order = np.argsort(eigval)[::-1][: self.r]          # sort eigval from large to small</span><br><span class="line">        eigval = eigval[order]; eigvec = eigvec[:, order]</span><br><span class="line">        self.V = eigvec.copy()</span><br><span class="line">        self.U = X.dot(self.V).dot(</span><br><span class="line">                    np.linalg.inv(np.diag(self.S)))</span><br><span class="line">        return self.U, self.S, self.V</span><br><span class="line">    def compose(self, r=-1):</span><br><span class="line">        &quot;&quot;&quot; merge first r components</span><br><span class="line">        Parameters:</span><br><span class="line">            r &#123;int&#125;: if r==-1, merge all components</span><br><span class="line">        Returns:</span><br><span class="line">            X &#123;ndarray(m, n)&#125;</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        if r == -1:</span><br><span class="line">            X = self.U.dot(np.diag(self.S)).dot(self.V.T)</span><br><span class="line">            X = X.T if self.isTrans else X</span><br><span class="line">        else:</span><br><span class="line">            (m, n) = (self.n, self.m) if self.isTrans else (self.m, self.n)</span><br><span class="line">            X = np.zeros(shape=(m, n))</span><br><span class="line">            for i in range(r):</span><br><span class="line">                X += self.__getitem__(i)</span><br><span class="line">        return X</span><br><span class="line">    def __getitem__(self, idx):</span><br><span class="line">        &quot;&quot;&quot; get a component</span><br><span class="line">        Parameters:</span><br><span class="line">            index &#123;int&#125;: range from (0, self.r)</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        u = self.U[:, idx]</span><br><span class="line">        v = self.V[:, idx]</span><br><span class="line">        s = self.S[idx]</span><br><span class="line">        x = s * u.reshape(self.m, 1).\</span><br><span class="line">                    dot(v.reshape(1, self.n))</span><br><span class="line">        x = x.T if self.isTrans else x</span><br><span class="line">        return x</span><br><span class="line">    def showComponets(self, r=-1):</span><br><span class="line">        &quot;&quot;&quot; display components</span><br><span class="line">        Notes:</span><br><span class="line">            - Resize components&apos; shape into (40, 30)</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        m, n = self.m, self.n</span><br><span class="line">        r = self.r if r==-1 else r</span><br><span class="line">        n_images = 10; m_images = r // n_images + 1</span><br><span class="line">        m_size, n_size = 40, 30</span><br><span class="line">        showfig = np.zeros(shape=(m_images*m_size, n_images*n_size))</span><br><span class="line">        for i in range(r):</span><br><span class="line">            m_pos = i // n_images</span><br><span class="line">            n_pos = i %  n_images</span><br><span class="line">            component = self.__getitem__(i)</span><br><span class="line">            component = component.T if self.isTrans else component</span><br><span class="line">            component = cv2.resize(component, (30, 40))</span><br><span class="line">            showfig[m_pos*m_size: (m_pos+1)*m_size, n_pos*n_size: (n_pos+1)*n_size] = component</span><br><span class="line">        plt.figure(&apos;components&apos;)</span><br><span class="line">        plt.imshow(showfig)</span><br><span class="line">        plt.show()</span><br></pre></td></tr></table></figure></p>
+<p>用上面的代码进行实验<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># 读取一张图片</span><br><span class="line">X = load_images()[0].reshape((32, 32))</span><br><span class="line">showmat2d(X)</span><br><span class="line"># 对图片进行奇异值分解</span><br><span class="line">decomposer = SVD(r=-1)</span><br><span class="line">decomposer.fit(X)</span><br><span class="line"># 显示一下分量</span><br><span class="line">decomposer.showComponets(r=-1)</span><br><span class="line"># 将全部分量组合，并显示</span><br><span class="line">X_ = decomposer.compose(r=-1)</span><br><span class="line">showmat2d(X_)</span><br><span class="line"># 将前5个分量组合，并显示</span><br><span class="line">X_ = decomposer.compose(r=5)</span><br><span class="line">showmat2d(X_)</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><p>载入原图如下<br><img src="/2018/10/23/SVD/source.png" alt="source"></p>
+</li>
+<li><p>分量显示如下<br><img src="/2018/10/23/SVD/components.png" alt="components"></p>
+</li>
+<li><p>组合分量显示如下</p>
+<ul>
+<li>组合全部<br>  <img src="/2018/10/23/SVD/merge_all.png" alt="merge_all"></li>
+<li>组合前5个分量<br>  <img src="/2018/10/23/SVD/merge_5.png" alt="merge_5"></li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/22/PCA/" rel="next" title="PCA">
+                <i class="fa fa-chevron-left"></i> PCA
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/29/二次入坑raspberry-pi/" rel="prev" title="二次入坑raspberry-pi">
+                二次入坑raspberry-pi <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Louis Hsu">
+            
+              <p class="site-author-name" itemprop="name">Louis Hsu</p>
+              <p class="site-description motion-element" itemprop="description">And the winner is, la vie, and the winner is, I'amour.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">分类</span>
+                  
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">标签</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/isLouisHsu" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:is.louishsu@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/islouishsu" target="_blank" title="知乎"><i class="fa fa-fw fa-知乎"></i>知乎</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/islouishsu" target="_blank" title="微博"><i class="fa fa-fw fa-weibo"></i>微博</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#原理"><span class="nav-number">2.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#从特征值分解-EVD-讲起"><span class="nav-number">2.1.</span> <span class="nav-text">从特征值分解(EVD)讲起</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#奇异值分解-SVD"><span class="nav-number">2.2.</span> <span class="nav-text">奇异值分解(SVD)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#定义"><span class="nav-number">2.2.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算"><span class="nav-number">2.2.2.</span> <span class="nav-text">计算</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#举栗"><span class="nav-number">3.</span> <span class="nav-text">举栗</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#理解"><span class="nav-number">4.</span> <span class="nav-text">理解</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分解结果的信息保留"><span class="nav-number">5.</span> <span class="nav-text">分解结果的信息保留</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码"><span class="nav-number">6.</span> <span class="nav-text">代码</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Louis Hsu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
