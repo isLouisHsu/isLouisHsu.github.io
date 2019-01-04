@@ -1,0 +1,1690 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言前馈神经网络是一种最简单的神经网络，各神经元分层排列。每个神经元只与前一层的神经元相连。接收前一层的输出，并输出给下一层．各层间没有反馈。是目前应用最广泛、发展最迅速的人工神经网络之一，既可以用于解决分类问题，也可以用于解决回归问题。 简介前馈神经网络也叫作多层感知机，包含输入层，隐含层和输出层三个部分。它的目的是为了实现输入到输出的映射。  y = f(x;W)由于各层采用了非线性激活函数，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Feedforward Neural Network">
+<meta property="og:url" content="http://yoursite.com/2018/10/20/Feedforward-Neural-Network/index.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="前言前馈神经网络是一种最简单的神经网络，各神经元分层排列。每个神经元只与前一层的神经元相连。接收前一层的输出，并输出给下一层．各层间没有反馈。是目前应用最广泛、发展最迅速的人工神经网络之一，既可以用于解决分类问题，也可以用于解决回归问题。 简介前馈神经网络也叫作多层感知机，包含输入层，隐含层和输出层三个部分。它的目的是为了实现输入到输出的映射。  y = f(x;W)由于各层采用了非线性激活函数，">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2018/10/20/Feedforward-Neural-Network/Linear.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/20/Feedforward-Neural-Network/nonLinear.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/20/Feedforward-Neural-Network/单个神经元示意图.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/20/Feedforward-Neural-Network/前馈神经网络结构图.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/20/Feedforward-Neural-Network/超平面划分区域的拼接.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/10/20/Feedforward-Neural-Network/二元逻辑运算.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/20/Feedforward-Neural-Network/clf_linearout.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/20/Feedforward-Neural-Network/fnn.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/10/20/Feedforward-Neural-Network/dropout_1.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/20/Feedforward-Neural-Network/dropout_2.png">
+<meta property="og:updated_time" content="2019-01-04T10:02:36.836Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Feedforward Neural Network">
+<meta name="twitter:description" content="前言前馈神经网络是一种最简单的神经网络，各神经元分层排列。每个神经元只与前一层的神经元相连。接收前一层的输出，并输出给下一层．各层间没有反馈。是目前应用最广泛、发展最迅速的人工神经网络之一，既可以用于解决分类问题，也可以用于解决回归问题。 简介前馈神经网络也叫作多层感知机，包含输入层，隐含层和输出层三个部分。它的目的是为了实现输入到输出的映射。  y = f(x;W)由于各层采用了非线性激活函数，">
+<meta name="twitter:image" content="http://yoursite.com/2018/10/20/Feedforward-Neural-Network/Linear.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/20/Feedforward-Neural-Network/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Feedforward Neural Network | LOUIS' BLOG</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LOUIS' BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">一个有灵(gōng)魂(shì)的博客</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/20/Feedforward-Neural-Network/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="And the winner is, la vie, and the winner is, I'amour.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Feedforward Neural Network
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-10-20 16:27:50" itemprop="dateCreated datePublished" datetime="2018-10-20T16:27:50+08:00">2018-10-20</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-01-04 18:02:36" itemprop="dateModified" datetime="2019-01-04T18:02:36+08:00">2019-01-04</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>前馈神经网络是一种最简单的神经网络，各神经元分层排列。每个神经元只与前一层的神经元相连。接收前一层的输出，并输出给下一层．各层间没有反馈。是目前应用最广泛、发展最迅速的人工神经网络之一，既可以用于解决分类问题，也可以用于解决回归问题。</p>
+<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>前馈神经网络也叫作多层感知机，包含输入层，隐含层和输出层三个部分。它的目的是为了实现输入到输出的映射。</p>
+<script type="math/tex; mode=display">
+y = f(x;W)</script><p>由于各层采用了非线性激活函数，神经网络具有良好的非线性特性，如下图所示。</p>
+<ul>
+<li>激活函数为线性单元<br><img src="/2018/10/20/Feedforward-Neural-Network/Linear.png" alt="Linear"></li>
+<li>激活函数为非线性单元<br><img src="/2018/10/20/Feedforward-Neural-Network/nonLinear.png" alt="nonLinear"></li>
+</ul>
+<p>前馈神经网络可用于解决非线性的分类或回归问题，参数通过反向传播算法<code>(Back Propagation)</code>学习。</p>
+<h1 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h1><h2 id="神经元与网络结构图"><a href="#神经元与网络结构图" class="headerlink" title="神经元与网络结构图"></a>神经元与网络结构图</h2><p>单个神经元的示意图如下，输入为前一层的输出参数$X^{(l-1)}$</p>
+<script type="math/tex; mode=display">
+h_{w, b}(x) = \sigma (WX + b)</script><p>$\sigma(·)$表示激活函数。</p>
+<p><img src="/2018/10/20/Feedforward-Neural-Network/单个神经元示意图.png" alt="单个神经元示意图"></p>
+<p>以下为典型的神经网络结构图<br><img src="/2018/10/20/Feedforward-Neural-Network/前馈神经网络结构图.png" alt="前馈神经网络结构图"></p>
+<ul>
+<li>第一层为输入层<code>input layer</code>，一般不设置权值，预处理在输入网络前完成；</li>
+<li>最后一层为输出层<code>output layer</code>；</li>
+<li>其余层称为隐藏层<code>hidden layer</code>，隐藏层用于提取数据特征，隐藏层层数与各层神经元个数为超参数。</li>
+</ul>
+<blockquote>
+<p>神经元权值取值不同，可实现不同的逻辑运算，单个超平面只能进行二元划分，利用逻辑运算可将多个超平面划分的区域拼接起来，如图<br><img src="/2018/10/20/Feedforward-Neural-Network/超平面划分区域的拼接.jpg" alt="超平面划分区域的拼接"></p>
+<p>以下说明逻辑运算的实现方法<br><img src="/2018/10/20/Feedforward-Neural-Network/二元逻辑运算.png" alt="二元逻辑运算"><br>其中</p>
+<script type="math/tex; mode=display">
+f(z) = \begin{cases}
+    1 & z \geq 0 \\
+    0 & otherwise
+\end{cases}</script><ul>
+<li><p>与运算 $a ∧ b$</p>
+<script type="math/tex; mode=display">w_1 = 20, w_2 = 20, b = -30</script></li>
+<li><p>或运算 $a ∧ b$</p>
+<script type="math/tex; mode=display">w_1 = 20, w_2 = 20, b = -10</script></li>
+<li><p>非运算 $a = \overline{b}$</p>
+<script type="math/tex; mode=display">w_1 = -20, w_2 = 0, b = 0</script></li>
+<li><p>异或运算 $a \bigoplus b$，可通过组合运算实现</p>
+<script type="math/tex; mode=display">a \bigoplus b = (\overline{a} ∧ b) ∨ (a ∧ \overline{b})</script></li>
+</ul>
+</blockquote>
+<h2 id="激活函数"><a href="#激活函数" class="headerlink" title="激活函数"></a>激活函数</h2><ul>
+<li><p>隐藏层的激活函数，详情可查看<a href="https://louishsu.xyz/2018/10/20/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/" target="_blank" rel="noopener">另一篇博文：神经网络的激活函数</a>；</p>
+</li>
+<li><p>输出层的激活函数</p>
+<ul>
+<li><p>回归问题时，采用线性单元即可</p>
+<script type="math/tex; mode=display">
+  f(x) = x</script></li>
+<li><p>分类问题时，一般有以下几种选择</p>
+<ul>
+<li><p>单类别概率输出<br>  即每个神经元的输出对应该类别的$0-1$分布输出，这就需要将输出值限制在$[0, 1]$内，例如</p>
+<script type="math/tex; mode=display">P(y=1|x )= max\{0, min\{1, z\}\}</script><p>  <img src="/2018/10/20/Feedforward-Neural-Network/clf_linearout.png" alt="线性输出单元"></p>
+<p>  但是可以看到，当$(w^Tx+b)$处于单位区间外时，模型的输出对它的参数的梯度都将为$0$ ，不利于网络的训练，故采用$S$形函数<code>Sigmoid</code>(<a href="https://louishsu.xyz/2018/10/18/Logistic%E5%9B%9E%E5%BD%92/" target="_blank" rel="noopener">详情</a>)</p>
+<script type="math/tex; mode=display">
+  P(y=1|x ) = \frac{1}{1+e^{-(w^Tx+b)}}</script><blockquote>
+<p>$(1)$ <code>Sigmoid</code>函数定义域为$(-\infty, \infty)$，值域为$(0, 1)$，且在整个定义域上单调递增，即为单值函数，故可将线性输出单元的结果映射到$(0, 1)$范围内；<br>$(2)$ 在定义域上处处可导。</p>
+</blockquote>
+</li>
+<li><p>多类别的概率输出<br>  即每个神经元的输出对应判别为该类别的概率，且有</p>
+<script type="math/tex; mode=display">
+  \sum_{i=1}^C y_i = 1</script><p>  例如</p>
+<script type="math/tex; mode=display">
+  y_i = \frac{z_i}{\sum_j z_j}</script><p>  但是分式求导异常麻烦，故采用<code>Softmax</code>函数(<a href="https://louishsu.xyz/2018/10/18/softmax%E5%9B%9E%E5%BD%92/" target="_blank" rel="noopener">详情</a>)作为输出结点的激活函数，该函数求导结果比较简洁，且可利用输出计算导数，计算量减少。</p>
+<script type="math/tex; mode=display">
+  Softmax(x) = \frac
+              {1}
+              {\sum_{k=1}^K exp(x_k)}
+              \left[
+                  \begin{matrix}
+                      exp(x_1)\\
+                      exp(x_2)\\
+                      ...\\
+                      exp(x_K)
+                  \end{matrix}
+              \right]</script></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h1><ul>
+<li><p>回归问题<br>  常见的用于回归问题的损失函数为<code>MSE</code>，即</p>
+<script type="math/tex; mode=display">
+  L(y, \hat{y}) = \frac{1}{2M} \sum_{i=1}^M (\hat{y}^{(i)} - y^{(i)})^2</script></li>
+<li><p>分类问题<br>  一般采用交叉熵作为损失函数，如下</p>
+<script type="math/tex; mode=display">
+  L(\hat{y}, y) = - \frac{1}{M} \sum_{i=1}^M 1\{y^{(i)}_j=k\} 
+  \log (\hat{y}^{(i)}_j)</script><script type="math/tex; mode=display">
+  1\{y^{(i)}_j=k\} = 
+      \begin{cases}
+          1 & y^{(i)}_j = k \\
+          0 & y^{(i)}_j \neq k 
+      \end{cases}　j = 1, ..., N</script><p>  或者</p>
+<script type="math/tex; mode=display">
+  L(\hat{y}, y) = - \frac{1}{M} \sum_{i=1}^M 
+  y^{(i)T} \log (\hat{y}^{(i)})</script><p>  其中$y^{(i)}, \hat{y}^{(i)}$均表示向量，采用<code>one-hot</code>编码。</p>
+</li>
+</ul>
+<h1 id="梯度推导"><a href="#梯度推导" class="headerlink" title="梯度推导"></a>梯度推导</h1><p>以上内容网上资料一大堆，进入重点，反向传播时的梯度推导，给出网络结构如下。</p>
+<ul>
+<li>回归与分类在输出层有所区别；</li>
+<li>各层激活函数的输入变量以$z^{(l)}$表示，输出变量均以$x^{(l)}$表示；</li>
+<li>$W^{(l)}$表示从第$l$层到第$(l+1)$层的权值矩阵，则$w^{(l)}_{ij}$表示第$l$层第$j$个神经元到$(l+1)$层第$i$个神经元的连接权值；</li>
+<li>$b^{(l)}$表示第$l$层到第$(l+1)$层的偏置，则$b^{(l)}_i$表示到第$(l+1)$层第$i$个神经元的偏置值；</li>
+<li>各层变量维度推广为输入$d_{i}$，中间层$d_{h}$，输出层$d_{o}$；</li>
+<li>全连接，部分线条已省略，激活函数已省略；</li>
+</ul>
+<p><img src="/2018/10/20/Feedforward-Neural-Network/fnn.jpg" alt="FNN"></p>
+<p>则各层参数矩阵为</p>
+<script type="math/tex; mode=display">
+W^{(1)} = \left[
+        \begin{matrix}
+            w^{(1)}_{11} & ... & w^{(1)}_{1d_i} \\
+            ... & ... & ... \\
+            w^{(1)}_{d_h1} & ... & w^{(1)}_{d_hd_i}
+        \end{matrix}
+\right]　
+b^{(1)} = \left[
+        \begin{matrix}
+            b^{(1)}_{1} \\
+            ... \\
+            b^{(1)}_{d_h}
+        \end{matrix}
+\right]</script><script type="math/tex; mode=display">
+W^{(2)} = \left[
+        \begin{matrix}
+            w^{(2)}_{11} & ... & w^{(2)}_{1d_h} \\
+            ... & ... & ... \\
+            w^{(2)}_{d_o1} & ... & w^{(2)}_{d_od_h}
+        \end{matrix}
+\right]　
+b^{(2)} = \left[
+        \begin{matrix}
+            b^{(2)}_{1} \\
+            ... \\
+            b^{(2)}_{d_o}
+        \end{matrix}
+\right]</script><p>有</p>
+<script type="math/tex; mode=display">
+Z^{(2)} = W^{(1)} X^{(1)} + b^{(1)}</script><script type="math/tex; mode=display">
+X^{(2)} = \sigma_1 (Z^{(2)})</script><script type="math/tex; mode=display">
+Z^{(3)} = W^{(2)} X^{(2)} + b^{(2)}</script><script type="math/tex; mode=display">
+X^{(3)} = \sigma_2 (Z^{(3)})</script><script type="math/tex; mode=display">
+X^{(1)} = X　\hat{Y} = X^{(3)}</script><h2 id="回归问题"><a href="#回归问题" class="headerlink" title="回归问题"></a>回归问题</h2><p>损失函数采用<code>MSE</code>，即</p>
+<script type="math/tex; mode=display">
+L(Y, \hat{Y}) = \frac{1}{M} \sum_{i=1}^M L(Y^{(i)}, \hat{Y}^{(i)})</script><script type="math/tex; mode=display">
+L(Y^{(i)}, \hat{Y}^{(i)}) 
+= \frac{1}{2} || \hat{Y}^{(i)} - Y^{(i)} ||_2^2
+= \frac{1}{2} 
+\sum_{d_2=1}^{d_o}
+(\hat{y}^{(i)}_{d_2} - y^{(i)}_{d_2})^2</script><p>下面推导单个样本的损失函数的梯度，该批数据的梯度为均值。</p>
+<blockquote>
+<p>省略样本标记<code>$^{(i)}$</code></p>
+</blockquote>
+<ul>
+<li><p>隐含层到输出层</p>
+<ul>
+<li><p>对权值矩阵的梯度</p>
+<script type="math/tex; mode=display">
+  \frac{∂L}{∂w^{(2)}_{ij}}
+  = \frac{∂}{∂w^{(2)}_{ij}} \frac{1}{2} \sum_{d_2=1}^{d_o} (\hat{y}_{d_2} - y_{d_2})^2</script><script type="math/tex; mode=display">
+  = \sum_{d_2=1}^{d_o} (\hat{y}_{d_2} - y_{d_2}) \frac{∂}{∂w^{(2)}_{ij}} \hat{y}_{d_2} \tag{1}</script><p>  其中</p>
+<script type="math/tex; mode=display">
+  \begin{cases}
+      \hat{y}_{d_2} = \sigma_2 (z_{d_2}^{(3)}) \\
+      z_{d_2}^{(3)} = \sum_{d_1=1}^{d_h} w^{(2)}_{d_2 d_1} x^{(2)}_{d_1} + b^{(2)}_{d_2}
+  \end{cases}</script><p>  且</p>
+<script type="math/tex; mode=display">
+  \frac{∂}{∂w^{(2)}_{ij}} \hat{y}_{d_2}
+  = \sigma_2' (z_{d_2}^{(3)}) \frac{∂z_{d_2}^{(3)}}{∂w^{(2)}_{ij}} \tag{2}</script><script type="math/tex; mode=display">
+  \frac{∂}{∂w^{(2)}_{ij}} z_{d_2}^{(3)} = 
+      \begin{cases}
+          x^{(2)}_{d_1} & d_1 = j, d_2 = i \\
+          0 & otherwise
+      \end{cases} \tag{3}</script><p>  $(3)$代入$(2)$，再代入$(1)$可得到</p>
+<script type="math/tex; mode=display">
+  \frac{∂L}{∂w^{(2)}_{ij}}
+  = (\hat{y}_{d_2} - y_{d_2}) \sigma_2' (z_{d_2}^{(3)}) x^{(2)}_{d_1} | _{d_1=j, d_2=i}
+  = (\hat{y}_{i} - y_{i}) \sigma_2' (z_{i}^{(3)}) x^{(2)}_{j} \tag{*1}</script></li>
+<li><p>对偏置矩阵的梯度</p>
+<script type="math/tex; mode=display">
+  \frac{∂L}{∂b^{(2)}_i}
+  = \frac{∂}{∂b^{(2)}_i} \frac{1}{2} \sum_{d_2=1}^{d_o} (\hat{y}_{d_2} - y_{d_2})^2</script><script type="math/tex; mode=display">
+  = \sum_{d_2=1}^{d_o} (\hat{y}_{d_2} - y_{d_2}) \frac{∂}{∂b^{(2)}_i} \hat{y}_{d_2} \tag{4}</script><p>  其中</p>
+<script type="math/tex; mode=display">
+  \begin{cases}
+      \hat{y}_{d_2} = \sigma_2 (z_{d_2}^{(3)}) \\
+      z_{d_2}^{(3)} = \sum_{d_1=1}^{d_h} w^{(2)}_{d_2 d_1} x^{(2)}_{d_1} + b^{(2)}_{d_2}
+  \end{cases}</script><p>  有</p>
+<script type="math/tex; mode=display">
+  \frac{∂}{∂b^{(2)}_i} z_{d_2}^{(3)} = 
+      \begin{cases}
+          1 &  d_2 = i \\
+          0 & otherwise
+      \end{cases} \tag{5}</script><p>  所以</p>
+<script type="math/tex; mode=display">
+  \frac{∂L}{∂b^{(2)}_i} = (\hat{y}_{d_2} - y_{d_2}) \sigma_2' (z_{d_2}^{(3)}) | _{d_2=i}
+  = (\hat{y}_{i} - y_{i}) \sigma_2' (z_i^{(3)}) \tag{*2}</script></li>
+</ul>
+</li>
+<li><p>输入层到隐含层</p>
+<ul>
+<li><p>对权值矩阵的梯度</p>
+<script type="math/tex; mode=display">
+  \frac{∂L}{∂w^{(1)}_{ij}}
+  = \frac{∂}{∂w^{(1)}_{ij}} \frac{1}{2} \sum_{d_2=1}^{d_o} (\hat{y}_{d_2} - y_{d_2})^2</script><script type="math/tex; mode=display">
+  = \sum_{d_2=1}^{d_o} (\hat{y}_{d_2} - y_{d_2}) \frac{∂}{∂w^{(1)}_{ij}} \hat{y}_{d_2} \tag{6}</script><p>  其中</p>
+<script type="math/tex; mode=display">
+  \begin{cases}
+      \hat{y}_{d_2} = \sigma_2 (z_{d_2}^{(3)}) \\
+      z_{d_2}^{(3)} = \sum_{d_1=1}^{d_h} w^{(2)}_{d_2 d_1} x^{(2)}_{d_1} + b^{(2)}_{d_2} \\
+      x^{(2)}_{d_1} = \sigma_1 (z_{d_1}^{(2)}) \\
+      z_{d_1}^{(2)} = \sum_{d_0=1}^{d_i} w^{(1)}_{d_1 d_0} x^{(1)}_{d_0} + b^{(1)}_{d_1}
+  \end{cases}</script><p>  故</p>
+<script type="math/tex; mode=display">
+  \frac{∂}{∂w^{(1)}_{ij}} \hat{y}_{d_2}
+  = \frac{∂\hat{y}_{d_2}}{∂z_{d_2}^{(3)}} 
+      \frac{∂z_{d_2}^{(3)}}{∂w^{(1)}_{ij}} \tag{7}</script><p>  其中</p>
+<script type="math/tex; mode=display">
+  \frac{∂\hat{y}_{d_2}}{∂z_{d_2}^{(3)}} 
+  = \sigma_2' (z_{d_2}^{(3)})  \tag{8}</script><script type="math/tex; mode=display">
+  \frac{∂z_{d_2}^{(3)}}{∂w^{(1)}_{ij}} 
+  = \sum_{d1=1}^{d_h} w^{(2)}_{d_2 d_1} \frac{∂x^{(2)}_{d_1}}{∂w^{(1)}_{ij}} \tag{9}</script><script type="math/tex; mode=display">
+  \frac{∂x^{(2)}_{d_1}}{∂w^{(1)}_{ij}}
+  = \frac{∂x^{(2)}_{d_1}}{∂z_{d_1}^{(2)}}
+      \frac{∂z_{d_1}^{(2)}}{∂w^{(1)}_{ij}}  \tag{10}</script><p>  而其中</p>
+<script type="math/tex; mode=display">
+  \frac{∂x^{(2)}_{d_1}}{∂z_{d_1}^{(2)}} = x^{(2)}_{d_1} = \sigma_1' (z_{d_1}^{(2)}) \tag{11}</script><script type="math/tex; mode=display">
+  \frac{∂z_{d_1}^{(2)}}{∂w^{(1)}_{ij}} = 
+  \begin{cases}
+      x^{(1)}_{d_0} & d_1 = i, d_0 = j\\
+      0 & otherwise
+  \end{cases} \tag{12}</script><p>  $(11),(12)$代入$(10)$得到</p>
+<script type="math/tex; mode=display">
+  \frac{∂x^{(2)}_{d_1}}{∂w^{(1)}_{ij}} = 
+  \sigma_1' (z_{d_1}^{(2)})
+      x^{(1)}_{d_0} | _{d_1 = i, d_0 = j} \tag{13}</script><p>  $(13)$代回$(9)$，有</p>
+<script type="math/tex; mode=display">
+  \frac{∂z_{d_2}^{(3)}}{∂w^{(1)}_{ij}} 
+  = \sum_{d1=1}^{d_h} 
+  \left[
+      w^{(2)}_{d_2 d_1} 
+      \sigma_1' (z_{d_1}^{(2)})
+      x^{(1)}_{d_0}
+  \right] | _{d_1 = i, d_0 = j}</script><script type="math/tex; mode=display">
+  = w^{(2)}_{d_2 i} 
+      \sigma_1' (z_i^{(2)})
+      x^{(1)}_j \tag{14}</script><p>  将$(8),(14)$代入$(7)$得到</p>
+<script type="math/tex; mode=display">
+  \frac{∂}{∂w^{(1)}_{ij}} \hat{y}_{d_2}
+  = \sigma_2' (z_{d_2}^{(3)}) 
+       w^{(2)}_{d_2 i} 
+      \sigma_1' (z_i^{(2)})
+      x^{(1)}_j \tag{15}</script><p>  $(15)$代入$(6)$有</p>
+<script type="math/tex; mode=display">
+  \frac{∂L}{∂w^{(1)}_{ij}}
+  = \sum_{d_2=1}^{d_o} 
+      (\hat{y}_{d_2} - y_{d_2})      
+      \sigma_2' (z_{d_2}^{(3)}) 
+       w^{(2)}_{d_2 i} 
+      \sigma_1' (z_i^{(2)})
+      x^{(1)}_j \tag{*3}</script></li>
+<li><p>对偏置矩阵的梯度</p>
+<script type="math/tex; mode=display">
+  \frac{∂L}{∂b^{(1)}_i}
+  = \frac{∂}{∂b^{(1)}_i} \frac{1}{2} \sum_{d_2=1}^{d_o} (\hat{y}_{d_2} - y_{d_2})^2</script><script type="math/tex; mode=display">
+  = \sum_{d_2=1}^{d_o} (\hat{y}_{d_2} - y_{d_2}) \frac{∂}{∂b^{(1)}_i} \hat{y}_{d_2} \tag{16}</script><p>  同理可得</p>
+<script type="math/tex; mode=display">
+  \frac{∂}{∂b^{(1)}_i} \hat{y}_{d_2}
+  = \sigma_2' (z_{d_2}^{(3)}) 
+       w^{(2)}_{d_2 i} 
+      \sigma_1' (z_i^{(2)})  \tag{17}</script><p>  所以</p>
+<script type="math/tex; mode=display">
+  \frac{∂L}{∂b^{(1)}_i} =
+  \sum_{d_2=1}^{d_o} 
+      (\hat{y}_{d_2} - y_{d_2})      
+      \sigma_2' (z_{d_2}^{(3)}) 
+       w^{(2)}_{d_2 i} 
+      \sigma_1' (z_i^{(2)}) \tag{*4}</script></li>
+</ul>
+</li>
+</ul>
+<p>综上所述</p>
+<script type="math/tex; mode=display">
+\frac{∂L}{∂w^{(2)}_{ij}}
+= (\hat{y}_{i} - y_{i}) 
+    \sigma_2' (z_{i}^{(3)}) x^{(2)}_{j}</script><script type="math/tex; mode=display">
+\frac{∂L}{∂b^{(2)}_i} 
+= (\hat{y}_{i} - y_{i}) 
+    \sigma_2' (z_i^{(3)})</script><script type="math/tex; mode=display">
+\frac{∂L}{∂w^{(1)}_{ij}}
+= \sum_{d_2=1}^{d_o} 
+    (\hat{y}_{d_2} - y_{d_2})      
+    \sigma_2' (z_{d_2}^{(3)}) 
+    w^{(2)}_{d_2 i} 
+    \sigma_1' (z_i^{(2)})
+    x^{(1)}_j</script><script type="math/tex; mode=display">
+\frac{∂L}{∂b^{(1)}_i} 
+= \sum_{d_2=1}^{d_o} 
+    (\hat{y}_{d_2} - y_{d_2})      
+    \sigma_2' (z_{d_2}^{(3)}) 
+    w^{(2)}_{d_2 i} 
+    \sigma_1' (z_i^{(2)})</script><p>令</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    \delta^{(2)}_i 
+    = (\hat{y}_{i} - y_{i}) 
+        \sigma_2' (z_i^{(3)}) \\
+    \delta^{(1)}_i 
+    = \sum_{d_2=1}^{d_o} 
+        \delta^{(2)}_{d_2} 
+        w^{(2)}_{d_2 i} 
+        \sigma_1' (z_i^{(2)})
+\end{cases}</script><p>有</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    \frac{∂L}{∂w^{(2)}_{ij}} = \delta^{(2)}_i x^{(2)}_{j}\\
+    \frac{∂L}{∂b^{(2)}_i}    = \delta^{(2)}_i\\
+    \frac{∂L}{∂w^{(1)}_{ij}} = \delta^{(1)}_i x^{(1)}_j\\
+    \frac{∂L}{∂b^{(1)}_i}    = \delta^{(1)}_i
+\end{cases}</script><p>至此推导完毕。</p>
+<blockquote>
+<p>当隐藏层采用<code>Sigmoid</code>函数，输出层采用线性单元，可得到</p>
+<script type="math/tex; mode=display">
+\sigma_1' (z_i^{(2)}) 
+= \sigma_1 (z_i^{(2)}) 
+    \left[1 - \sigma_1 (z_i^{(2)}) \right]
+= x_i^{(2)} (1 - x_i^{(2)})</script><script type="math/tex; mode=display">
+\sigma_2' (z_i^{(3)}) = z_i^{(3)}</script><p>此时</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    \frac{∂L}{∂w^{(2)}_{ij}} = (\hat{y}_{i} - y_{i}) z_i^{(3)} x^{(2)}_{j} \\
+    \frac{∂L}{∂b^{(2)}_i}    = (\hat{y}_{i} - y_{i}) z_i^{(3)} \\
+    \frac{∂L}{∂w^{(1)}_{ij}} = \sum_{d_2=1}^{d_o} \delta^{(2)}_{d_2} w^{(2)}_{d_2 i} z_i^{(2)} x^{(1)}_j \\
+    \frac{∂L}{∂b^{(1)}_i}    = \sum_{d_2=1}^{d_o} \delta^{(2)}_{d_2} w^{(2)}_{d_2 i} z_i^{(2)}
+\end{cases}</script><p>可以看到，计算梯度时使用的数据在上一次前向传播时已计算得，故可减少计算量。</p>
+</blockquote>
+<h2 id="分类问题"><a href="#分类问题" class="headerlink" title="分类问题"></a>分类问题</h2><p>损失函数采用<code>Cross Entropy</code>，即</p>
+<script type="math/tex; mode=display">
+L(\hat{y}, y) = 
+\frac{1}{M} \sum_{i=1}^M L(\hat{y}^{(i)}, y^{(i)})</script><script type="math/tex; mode=display">
+L(\hat{y}^{(i)}, y^{(i)}) 
+= - y^{(i)T} \log (\hat{y}^{(i)})</script><p>上式中，$y^{(i)}, \hat{y}^{(i)}$均为列向量，且$y^{(i)}$表示<code>one-hot</code>编码后的标签向量，也可写作</p>
+<script type="math/tex; mode=display">
+L(\hat{y}^{(i)}, y^{(i)})
+= - \log \hat{y}^{(i)}_{y^{(i)}}</script><ul>
+<li>由该式可以看出，若输出层激活函数采用<code>Sigmoid</code>作为激活函数，则隐藏层——输出层之间权值矩阵$W^{(2)}$只会更新$w^{(i)}_{y^{(i)} d_1}, d_1 = 1, …, d_h$；</li>
+<li>一般采用<code>SoftMax</code>作为输出层激活函数，<code>Sigmoid</code>下面不作推导。</li>
+</ul>
+<blockquote>
+<p>关于<code>SoftMax</code>的梯度，移步<a href="https://louishsu.xyz/2018/10/18/softmax%E5%9B%9E%E5%BD%92/" target="_blank" rel="noopener">SoftMax Regression</a>中查看详细推导过程，这里直接给出结论。<br>对于</p>
+<script type="math/tex; mode=display">
+S(x) = \frac {1} {\sum_{k=1}^K exp(x_k)} \left[ \begin{matrix} exp(x_1)\\ exp(x_2)\\ ...\\ exp(x_K) \end{matrix} \right]</script><p>其梯度为</p>
+<script type="math/tex; mode=display">
+\frac{∂S(x)}{∂x_i}_{K×1} =  \left[ \begin{matrix} 0\\ ...\\ p_i\\ ...\\ 0 \end{matrix} \right] -  \left[ \begin{matrix} p_i p_1\\ ...\\ p_i^2\\ ...\\ p_i p_K \end{matrix} \right]
+= \left( \left[ \begin{matrix}  0 \\ ...\\ 1\\ ...\\ 0 \end{matrix} \right] - p \right)p_i</script><p>省略样本标记<code>$^{(i)}$</code></p>
+</blockquote>
+<ul>
+<li><p>隐含层到输出层</p>
+<ul>
+<li><p>对权值矩阵的梯度</p>
+<script type="math/tex; mode=display">
+  \frac{∂L}{∂w^{(2)}_{ij}}
+  = - \frac{∂}{∂w^{(2)}_{ij}} \log \hat{y}_{y}
+  = - \frac{1}{\hat{y}_y} 
+      \frac{∂\hat{y}_{y}}{∂w^{(2)}_{ij}} \tag{18}</script><p>  其中$\hat{y}_{y}$与$z^{(3)}_{d_2}(d_2 = 1, …, d_o) $均有联系，故</p>
+<script type="math/tex; mode=display">
+  \frac{∂\hat{y}_{y}}{∂w^{(2)}_{ij}}
+  = \sum_{d2=1}^{d_o} 
+      \frac{∂\hat{y}_{y}}{∂z^{(3)}_{d_2}} 
+      \frac{∂z^{(3)}_{d_2}}{∂w^{(2)}_{ij}} \tag{19}</script><p>  而</p>
+<script type="math/tex; mode=display">
+  \frac{∂\hat{y}_{y}}{∂z^{(3)}_{d_2}}
+  = \begin{cases}
+      \hat{y}_{y} (1 - \hat{y}_{d_2}) & d_2 = y \\
+      - \hat{y}_{y} \hat{y}_{d_2} & otherwise
+  \end{cases}</script><script type="math/tex; mode=display">
+  \frac{∂z^{(3)}_{d_2}}{∂w^{(2)}_{ij}}
+  = \begin{cases}
+      x^{(2)}_{d_1} & i = d_2, j = d_1 \\
+      0 & otherwise
+  \end{cases}</script><blockquote>
+<p>$z^{(3)}_{d_2} = \sum_{d_1=0}^{d_h} w^{(2)}_{d_2d_1} x^{(2)}_{d_1} + b^{(2)}_{d_2}$</p>
+</blockquote>
+<p>  代回$(19)$，再带回$(18)$，有</p>
+<script type="math/tex; mode=display">
+  \frac{∂L}{∂w^{(2)}_{ij}}
+  = - \frac{1}{\hat{y}_{y}} 
+      \sum_{d_2=1}^{d_o} 
+      \frac{∂\hat{y}_{y}}{∂z^{(3)}_{d_2}} 
+      x^{(2)}_{d_1} | _{d_2=i, d_1=j}</script><script type="math/tex; mode=display">
+  = \begin{cases}
+      - \frac{1}{\hat{y}_{y}} \hat{y}_{y} (1 - \hat{y}_i) x^{(2)}_j & i = y \\
+      - \frac{1}{\hat{y}_{y}} (- \hat{y}_{y} \hat{y}_i) x^{(2)}_j & otherwise
+  \end{cases}</script><script type="math/tex; mode=display">
+  = \begin{cases}
+      (\hat{y}_i - 1) x^{(2)}_j & i = y \\
+      \hat{y}_i x^{(2)}_j & otherwise
+  \end{cases}</script><p>  即</p>
+<script type="math/tex; mode=display">
+  \frac{∂L}{∂w^{(2)}_{ij}}
+  = (\hat{y}_i - y_i) x^{(2)}_j \tag{*5}</script></li>
+<li><p>对偏置矩阵的梯度</p>
+<script type="math/tex; mode=display">
+  \frac{∂L}{∂b^{(2)}_i}
+  = \hat{y}_i - y_i \tag{*6}</script></li>
+</ul>
+</li>
+<li><p>输入层到隐含层</p>
+<ul>
+<li><p>对权值矩阵的梯度</p>
+<script type="math/tex; mode=display">
+  \frac{∂L}{∂w^{(1)}_{ij}}
+  = - \frac{∂}{∂w^{(1)}_{ij}} \log \hat{y}_{y}
+  = - \frac{1}{\hat{y}_{y}} 
+      \frac{∂\hat{y}_{y}}{∂w^{(1)}_{ij}} \tag{20}</script><p>  其中</p>
+<script type="math/tex; mode=display">
+  \frac{∂\hat{y}_{y}}{∂w^{(1)}_{ij}}
+  = \sum_{d_2=1}^{d_o} 
+      \frac{∂\hat{y}_{y}}{∂z^{(3)}_{d_2}} 
+      \frac{∂z^{(3)}_{d_2}}{∂w^{(1)}_{ij}} \tag{21}</script><p>  $\frac{∂z^{(3)}_{d_2}}{∂w^{(1)}_{ij}}$部分与回归相同，有</p>
+<script type="math/tex; mode=display">
+  \frac{∂z_{d_2}^{(3)}}{∂w^{(1)}_{ij}}
+  = w^{(2)}_{d_2 i} \sigma_1' (z_i^{(2)}) x^{(1)}_j</script><p>  由上面分析可得</p>
+<script type="math/tex; mode=display">
+  \frac{∂\hat{y}_{y}}{∂z^{(3)}_{d_2}}
+  = \begin{cases}
+      \hat{y}_{y} (1 - \hat{y}_{d_2}) & d_2 = y \\
+      - \hat{y}_{y} \hat{y}_{d_2} & otherwise
+  \end{cases}</script><p>  故代回$(20)$可得到</p>
+<script type="math/tex; mode=display">
+  \frac{∂L}{∂w^{(1)}_{ij}}
+  = - \frac{1}{\hat{y}_{y}}
+      \sum_{d_2=1}^{d_o} 
+      \frac{∂\hat{y}_{y}}{∂z^{(3)}_{d_2}} 
+      \frac{∂z^{(3)}_{d_2}}{∂w^{(1)}_{ij}}</script><script type="math/tex; mode=display">
+  = - \frac{1}{\hat{y}_{y}}
+      \sum_{d_2=1}^{d_o} 
+      \frac{∂\hat{y}_{y}}{∂z^{(3)}_{d_2}} 
+      w^{(2)}_{d_2 i} \sigma_1' (z_i^{(2)}) x^{(1)}_j</script><script type="math/tex; mode=display">
+  = \left[ 
+      \sum_{d_2=1, d_2 \neq y}^{d_o} \hat{y}_{d_2} w^{(2)}_{d_2 i} + 
+      (\hat{y}_y - 1) w^{(2)}_{y i} 
+  \right] \sigma_1' (z_i^{(2)}) x^{(1)}_j</script><script type="math/tex; mode=display">
+  = \left[ 
+      \sum_{d_2=1}^{d_o} \hat{y}_{d_2} w^{(2)}_{d_2 i} - 
+      w^{(2)}_{y i}
+  \right] \sigma_1' (z_i^{(2)}) x^{(1)}_j \tag{*7}</script></li>
+<li><p>对偏置矩阵的梯度</p>
+<script type="math/tex; mode=display">
+  \frac{∂L}{∂b^{(1)}_i}
+  = \left[ 
+      \sum_{d_2=1}^{d_o} \hat{y}_{d_2} w^{(2)}_{d_2 i} - 
+      w^{(2)}_{y i}
+  \right] \sigma_1' (z_i^{(2)}) \tag{*8}</script></li>
+</ul>
+</li>
+</ul>
+<p>至此推导完毕。</p>
+<blockquote>
+<p>这个推导，仅供参考</p>
+</blockquote>
+<h1 id="过拟合问题"><a href="#过拟合问题" class="headerlink" title="过拟合问题"></a>过拟合问题</h1><p>和其他算法一样，前馈神经网络也存在过拟合的问题，解决方法有以下几种</p>
+<ul>
+<li><p>正则化<br>  与线性回归类似，神经网络也可以加入范数惩罚项，以下$C$表示普通的损失函数，$\lambda$为惩罚系数，$n$为样本数目，$w$表示权值参数。</p>
+<ul>
+<li><code>L1</code>正则化<br>  惩罚项为网络所有权值的绝对值之和。<script type="math/tex; mode=display">
+  C = C_0 + \frac{\lambda}{n} \sum_w |w|</script></li>
+<li><code>L2</code>正则化<br>  又称权值衰减<code>weights decay</code>，惩罚项为网络所有权值的平方和。<script type="math/tex; mode=display">
+  C = C_0 + \frac{\lambda}{2n} \sum_w w^2</script></li>
+</ul>
+</li>
+<li><p>Dropout<br>  以概率大小为<code>p</code>使部分神经元输出值直接为0，如此可以使反向传播时相关权值系数不做更新，只有被保留下来的权值和偏置值会被更新。<br>  <img src="/2018/10/20/Feedforward-Neural-Network/dropout_1.png" alt="dropout_1"><br>  <img src="/2018/10/20/Feedforward-Neural-Network/dropout_2.png" alt="dropout_2"></p>
+</li>
+<li><p>增加训练数据大小<br>  可在原数据上加以变换或噪声，图像的扩增方法可查看<a href="https://louishsu.xyz/2018/11/02/%E5%9B%BE%E5%83%8F%E6%95%B0%E6%8D%AE%E9%9B%86%E6%89%A9%E5%A2%9E-Augment-%E6%96%B9%E6%B3%95/" target="_blank" rel="noopener">图像数据集扩增</a>。</p>
+</li>
+</ul>
+<h1 id="程序"><a href="#程序" class="headerlink" title="程序"></a>程序</h1><p><a href="https://github.com/isLouisHsu/Python-Examples-for-PyTorch-Tutorial/blob/master/NeuralNetwork_ANN_MNIST.py" target="_blank" rel="noopener">@Github: Code of Neural Network</a></p>
+<p>使用<code>PyTorch</code>实现神经网络，以下为模型定义<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">class AnnNet(nn.Module):</span><br><span class="line">    def __init__(self):</span><br><span class="line">        super(AnnNet, self).__init__()</span><br><span class="line">        self.input_size = 28 * 28</span><br><span class="line">        self.hidden_size = 100</span><br><span class="line">        self.output_size = 10</span><br><span class="line">        self.fc1 = nn.Linear(self.input_size,  self.hidden_size)    # input   - hidden</span><br><span class="line">        self.fc2 = nn.Linear(self.hidden_size, self.output_size )   # hidden  - output</span><br><span class="line">        # self.activate = nn.Sigmoid()  # 参数更新非常慢，特别是层数多时</span><br><span class="line">        self.activate = nn.ReLU()       # 事实证明ReLU作为激活函数更加合适</span><br><span class="line">        self.softmax = nn.Softmax()</span><br><span class="line">    def forward(self, X):</span><br><span class="line">        h = self.activate(self.fc1(X))</span><br><span class="line">        y_pred = self.softmax(self.fc2(h))</span><br><span class="line">        return y_pred</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/19/分类问题的决策平面/" rel="next" title="分类问题的决策平面">
+                <i class="fa fa-chevron-left"></i> 分类问题的决策平面
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/20/Activate-Functions/" rel="prev" title="Activate Functions">
+                Activate Functions <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Louis Hsu">
+            
+              <p class="site-author-name" itemprop="name">Louis Hsu</p>
+              <p class="site-description motion-element" itemprop="description">And the winner is, la vie, and the winner is, I'amour.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">30</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/isLouisHsu" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:is.louishsu@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/islouishsu" target="_blank" title="知乎"><i class="fa fa-fw fa-知乎"></i>知乎</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/islouishsu" target="_blank" title="微博"><i class="fa fa-fw fa-weibo"></i>微博</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">2.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结构"><span class="nav-number">3.</span> <span class="nav-text">结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#神经元与网络结构图"><span class="nav-number">3.1.</span> <span class="nav-text">神经元与网络结构图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#激活函数"><span class="nav-number">3.2.</span> <span class="nav-text">激活函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#损失函数"><span class="nav-number">4.</span> <span class="nav-text">损失函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#梯度推导"><span class="nav-number">5.</span> <span class="nav-text">梯度推导</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#回归问题"><span class="nav-number">5.1.</span> <span class="nav-text">回归问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分类问题"><span class="nav-number">5.2.</span> <span class="nav-text">分类问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#过拟合问题"><span class="nav-number">6.</span> <span class="nav-text">过拟合问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#程序"><span class="nav-number">7.</span> <span class="nav-text">程序</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Louis Hsu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="回归(regression)评估指标解释方差(Explained Variance) EV(\hat{y}, y) = 1 - \frac{Var(y-\hat{y})}{Var(y)}解释方差越接近$1$表示回归效果越好。 平均绝对误差(Mean Absolute Error - MAE) MAE(\hat{y}, y)  = E(||\hat{y} - y||_1) = \frac{1}{n_">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Metrics">
+<meta property="og:url" content="http://yoursite.com/2018/11/21/Metrics/index.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="回归(regression)评估指标解释方差(Explained Variance) EV(\hat{y}, y) = 1 - \frac{Var(y-\hat{y})}{Var(y)}解释方差越接近$1$表示回归效果越好。 平均绝对误差(Mean Absolute Error - MAE) MAE(\hat{y}, y)  = E(||\hat{y} - y||_1) = \frac{1}{n_">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2018/11/21/Metrics/terminology_and_derivations_1.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/21/Metrics/terminology_and_derivations_2.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/21/Metrics/terminology_and_derivations_3.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/21/Metrics/metrics_classification2.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/21/Metrics/precision_recall.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/21/Metrics/confusion_matrix.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/21/Metrics/模型的评估指标/ROC_space.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/21/Metrics/ROC_space_samples.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/21/Metrics/ROC_curves.svg.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/21/Metrics/ROC_curves_up_right.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/21/Metrics/ROC_curves_AUC.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/21/Metrics/聚类/ARI.svg">
+<meta property="og:image" content="http://yoursite.com/2018/11/21/Metrics/聚类/ARI_Def.svg">
+<meta property="og:image" content="http://yoursite.com/2018/11/21/Metrics/sklearn_metrics.png">
+<meta property="og:updated_time" content="2019-01-04T10:21:28.062Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Metrics">
+<meta name="twitter:description" content="回归(regression)评估指标解释方差(Explained Variance) EV(\hat{y}, y) = 1 - \frac{Var(y-\hat{y})}{Var(y)}解释方差越接近$1$表示回归效果越好。 平均绝对误差(Mean Absolute Error - MAE) MAE(\hat{y}, y)  = E(||\hat{y} - y||_1) = \frac{1}{n_">
+<meta name="twitter:image" content="http://yoursite.com/2018/11/21/Metrics/terminology_and_derivations_1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/21/Metrics/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Metrics | LOUIS' BLOG</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LOUIS' BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">一个有灵(gōng)魂(shì)的博客</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/21/Metrics/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="And the winner is, la vie, and the winner is, I'amour.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Metrics
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-21 14:23:21" itemprop="dateCreated datePublished" datetime="2018-11-21T14:23:21+08:00">2018-11-21</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-01-04 18:21:28" itemprop="dateModified" datetime="2019-01-04T18:21:28+08:00">2019-01-04</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="回归-regression-评估指标"><a href="#回归-regression-评估指标" class="headerlink" title="回归(regression)评估指标"></a>回归(regression)评估指标</h1><h2 id="解释方差-Explained-Variance"><a href="#解释方差-Explained-Variance" class="headerlink" title="解释方差(Explained Variance)"></a>解释方差(Explained Variance)</h2><script type="math/tex; mode=display">
+EV(\hat{y}, y)
+= 1 - \frac{Var(y-\hat{y})}{Var(y)}</script><p>解释方差越接近$1$表示回归效果越好。</p>
+<h2 id="平均绝对误差-Mean-Absolute-Error-MAE"><a href="#平均绝对误差-Mean-Absolute-Error-MAE" class="headerlink" title="平均绝对误差(Mean Absolute Error - MAE)"></a>平均绝对误差(Mean Absolute Error - MAE)</h2><script type="math/tex; mode=display">
+MAE(\hat{y}, y) 
+= E(||\hat{y} - y||_1)
+= \frac{1}{n_{samples}} \sum_{i=1}^{n_{samples}} |\hat{y}^{(i)} - y^{(i)}|</script><p>$MAE$越小表示回归效果越好。</p>
+<h2 id="平均平方误差-Mean-Squared-Error-MSE"><a href="#平均平方误差-Mean-Squared-Error-MSE" class="headerlink" title="平均平方误差(Mean Squared Error - MSE)"></a>平均平方误差(Mean Squared Error - MSE)</h2><p>在<a href="https://louishsu.xyz/2018/10/18/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" target="_blank" rel="noopener">线性回归</a>一节，使用的损失函数即$MSE$</p>
+<script type="math/tex; mode=display">
+MSE(\hat{y}, y) 
+= E(||\hat{y} - y||_2^2)
+= \frac{1}{n_{samples}} \sum_{i=1}^{n_{samples}} (\hat{y}^{(i)} - y^{(i)})^2</script><p>其中$y$与$\hat{y}$均为$1$维向量，$MSE$越小表示回归效果越好。</p>
+<p>其含义比较直观，即偏差的平方和。也可以从最小化方差的角度解释，定义误差向量</p>
+<script type="math/tex; mode=display">
+e = \hat{y} - y</script><p>我们假定其期望为$0$，即</p>
+<script type="math/tex; mode=display">
+E(e) = 0　或　\overline{e} = 0</script><p>那么误差的方差为</p>
+<script type="math/tex; mode=display">
+Var(e) = E[(e - \overline{e})^T (e - \overline{e})] = E(||e||_2^2)</script><p>也即$MSE$。</p>
+<h2 id="均方根误差-Root-Mean-Squared-Error-RMSE"><a href="#均方根误差-Root-Mean-Squared-Error-RMSE" class="headerlink" title="均方根误差(Root Mean Squared Error - RMSE)"></a>均方根误差(Root Mean Squared Error - RMSE)</h2><script type="math/tex; mode=display">
+RMSE(\hat{y}, y) 
+= \sqrt{\frac{1}{n_{samples}} \sum_{i=1}^{n_{samples}} (\hat{y}^{(i)} - y^{(i)})^2}</script><p>实质与$MSE$是一样的。只不过用于数据更好的描述，使计算得损失的值较小。$RMSE$越小表示回归效果越好。</p>
+<h2 id="均方对数误差-Mean-Squard-Logarithmic-Error-MSLE"><a href="#均方对数误差-Mean-Squard-Logarithmic-Error-MSLE" class="headerlink" title="均方对数误差(Mean Squard Logarithmic Error - MSLE)"></a>均方对数误差(Mean Squard Logarithmic Error - MSLE)</h2><script type="math/tex; mode=display">
+MSLE(\hat{y}, y) = \frac{1}{n_{samples}} \sum_{i=1}^{n_{samples}} \left[\log (1+y^{(i)}) - \log (1+\hat{y}^{(i)})\right]^2</script><p>通常用于输出指数增长的模型，如，人口统计，商品的平均销售量，以及一段时间内的平均销售量等。注意，由对数性质，这一指标对过小的预测的惩罚大于预测过大的预测的惩罚。</p>
+<h2 id="中值绝对误差-Median-Absolute-Error-MedAE"><a href="#中值绝对误差-Median-Absolute-Error-MedAE" class="headerlink" title="中值绝对误差(Median Absolute Error - MedAE)"></a>中值绝对误差(Median Absolute Error - MedAE)</h2><script type="math/tex; mode=display">
+MedAE(\hat{y}, y) = median(|y - \hat{y}|)</script><h2 id="R决定系数-R2"><a href="#R决定系数-R2" class="headerlink" title="R决定系数(R2)"></a>R决定系数(R2)</h2><p>又称拟合优度，提供了一个衡量未来样本有多好的预测模型。最佳可能的分数是$1.0$，它可以是负的(因为模型可以任意恶化)。一个常数模型总是预测$y$的期望值，而不考虑输入特性，则得到$R^2$分数为$0.0$。</p>
+<script type="math/tex; mode=display">
+R^2(\hat{y}, y) = 1 - \frac{\sum_{i=1}^{n_{samples}} (y^{(i)} - \hat{y}^{(i)})^2}{\sum_{i=1}^{n_{samples}} (y^{(i)} - \overline{y})^2}</script><p>其中</p>
+<script type="math/tex; mode=display">
+\overline{y} = \frac{1}{n_{samples}} \sum_{i=1}^{n_{samples}} y^{(i)}</script><h1 id="分类-classification-评估指标"><a href="#分类-classification-评估指标" class="headerlink" title="分类(classification)评估指标"></a>分类(classification)评估指标</h1><p>先作如下定义<br><img src="/2018/11/21/Metrics/terminology_and_derivations_1.png" alt="terminology_and_derivations_1"><br><img src="/2018/11/21/Metrics/terminology_and_derivations_2.png" alt="terminology_and_derivations_2"><br><img src="/2018/11/21/Metrics/terminology_and_derivations_3.png" alt="terminology_and_derivations_3"></p>
+<p><img src="/2018/11/21/Metrics/metrics_classification2.png" alt="metrics_classification2"></p>
+<h2 id="准确率-Accuracy"><a href="#准确率-Accuracy" class="headerlink" title="准确率(Accuracy)"></a>准确率(Accuracy)</h2><script type="math/tex; mode=display">
+Accuracy(y, \hat{y})
+= \frac{1}{n_{samples}} \sum_{i=1}^{n_{samples}} 1(y^{(i)}=\hat{y}^{(i)})</script><p>也即</p>
+<script type="math/tex; mode=display">
+Accuracy
+= \frac{TN+TP}{TN+TP+FN+FP}</script><p>精度只是简单地计算出比例，但是没有对不同类别进行区分。因为不同类别错误代价可能不同。例如：判断这个病人是不是病危，如果不是病危错误判断为病危，那只是损失一点医务人员的时间和精力，如果是把病危的人判断为非病危状态，那损失的就是一条人命。他们之间存在重要性差异，这时候就不能用精度。对于样本不均衡的情况，也不是用精度来衡量。例如：有A类1000个，B类5个，如果我把这1005个样本都预测成A类，正确率=1000/1005=99.5%。</p>
+<h2 id="精确率-Precision-与召回率-Recall"><a href="#精确率-Precision-与召回率-Recall" class="headerlink" title="精确率(Precision)与召回率(Recall)"></a>精确率(Precision)与召回率(Recall)</h2><ul>
+<li><p>精确率<code>(Precision)</code><br>  即预测正样本中，实际为正样本的百分比，度量了分类器不会将真正的负样本错误地分为正样本的能力。</p>
+<script type="math/tex; mode=display">
+  Precision = \frac{TP}{TP+FP}</script></li>
+<li><p>召回率<code>(Recall)</code><br>  又称查全率，即实际正样本中，被预测为正样本的百分比，度量了分类器找到所有正样本的能力。</p>
+<script type="math/tex; mode=display">
+  Recall = \frac{TP}{TP + FN}</script><p><img src="/2018/11/21/Metrics/precision_recall.png" alt="precision_recall"></p>
+</li>
+</ul>
+<h2 id="F度量"><a href="#F度量" class="headerlink" title="F度量"></a>F度量</h2><blockquote>
+<p><a href="https://en.wikipedia.org/wiki/F1_score" target="_blank" rel="noopener">F1 score - Wikipedia</a></p>
+</blockquote>
+<ul>
+<li><p>$F_1$<br>  为精确率<code>(Precision)</code>与召回率<code>(Recall)</code>的调和均值<code>(harmonic mean)</code>。</p>
+<script type="math/tex; mode=display">
+  \frac{1}{F_1} 
+  = \frac{1}{2} (\frac{1}{Precision} + \frac{1}{Recall})</script><p>  也即</p>
+<script type="math/tex; mode=display">
+  F_1 = 2 · \frac{Precision·Recall}{Precision + Recall}</script></li>
+<li><p>$F_{\beta}$<br>  在$F_1$度量的基础上增加权值$\beta$，$\beta$越大，$Recall$的权重越大，否则$Precision$的权重越大。</p>
+<script type="math/tex; mode=display">
+  \frac{1}{F_{\beta}} = \frac{1}{1+\beta^2} \frac{1}{Precision} + \frac{\beta^2}{1+\beta^2}\frac{1}{Recall}</script><p>  也即</p>
+<script type="math/tex; mode=display">
+  F_{\beta} = (1+\beta^2)·\frac{Precision·Recall}{(\beta^2·Precision) + Recall}</script></li>
+</ul>
+<h2 id="混淆矩阵"><a href="#混淆矩阵" class="headerlink" title="混淆矩阵"></a>混淆矩阵</h2><p><code>Confusion matrix</code>，也被称作错误矩阵<code>(Error matrix)</code>，是一个特别的表。无监督学习中，通常称作匹配矩阵<code>(Matching matrix)</code>。每一列表达了分类器对样本的类别预测，每一行表达了样本所属的真实类别。</p>
+<p>例如我们有$27$个待分类样本，将其划分为<code>Cat</code>，<code>Dog</code>，<code>Rabbit</code>，讲实际标签与预测标签数目统计后填入混淆矩阵。</p>
+<p><img src="/2018/11/21/Metrics/confusion_matrix.png" alt="confusion_matrix"></p>
+<p>例如实际上有$8$个样本为<code>Cat</code>，而该分类器将其中$3$个划分为<code>Dog</code>，将$2$个为<code>Dog</code>的样本划分为<code>Cat</code>。我们可以根据上述混淆矩阵得出结论，该分类器对<code>Dog</code>和<code>Cat</code>分类能力较弱，而对<code>Rabbit</code>分类能力较强。而且正确预测的样本数目都在对角线上，很容易直观地检查表中的预测错误。</p>
+<p>以下为<code>scikit-learn</code>中混淆矩阵的<code>API</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; from sklearn.metrics import confusion_matrix</span><br><span class="line">&gt;&gt;&gt; </span><br><span class="line">&gt;&gt;&gt; y_true = [2, 0, 2, 2, 0, 1]</span><br><span class="line">&gt;&gt;&gt; y_pred = [0, 0, 2, 2, 0, 2]</span><br><span class="line">&gt;&gt;&gt; confusion_matrix(y_true, y_pred)</span><br><span class="line">array([[2, 0, 0],</span><br><span class="line">       [0, 0, 1],</span><br><span class="line">       [1, 0, 2]])</span><br><span class="line">&gt;&gt;&gt; </span><br><span class="line">&gt;&gt;&gt; y_true = [&quot;cat&quot;, &quot;ant&quot;, &quot;cat&quot;, &quot;cat&quot;, &quot;ant&quot;, &quot;bird&quot;]</span><br><span class="line">&gt;&gt;&gt; y_pred = [&quot;ant&quot;, &quot;ant&quot;, &quot;cat&quot;, &quot;cat&quot;, &quot;ant&quot;, &quot;cat&quot;]</span><br><span class="line">&gt;&gt;&gt; confusion_matrix(y_true, y_pred, labels=[&quot;ant&quot;, &quot;bird&quot;, &quot;cat&quot;])</span><br><span class="line">array([[2, 0, 0],</span><br><span class="line">       [0, 0, 1],</span><br><span class="line">       [1, 0, 2]])</span><br><span class="line">&gt;&gt;&gt; </span><br><span class="line">&gt;&gt;&gt; # In the binary case, we can extract true positives, etc as follows:</span><br><span class="line">&gt;&gt;&gt; tn, fp, fn, tp = confusion_matrix([0, 1, 0, 1], [1, 1, 1, 0]).ravel()</span><br><span class="line">&gt;&gt;&gt; (tn, fp, fn, tp)</span><br><span class="line">(0, 2, 1, 1)</span><br></pre></td></tr></table></figure></p>
+<h2 id="ROC曲线"><a href="#ROC曲线" class="headerlink" title="ROC曲线"></a>ROC曲线</h2><p><code>Receiver Operating Characteristic</code>，是根据一系列不同的二分类方式(分界值或决定阈)，以召回率(真正率<code>TPR</code>、灵敏度)为纵坐标，<code>fall-out</code>(假正率<code>FPR</code>、$1$-特异度)为横坐标绘制的曲线。</p>
+<ul>
+<li><p><code>true positive rate - TPR</code><br>  所有阳性样本中有多少正确的阳性结果。</p>
+<script type="math/tex; mode=display">
+  TPR = \frac{TP}{P} = \frac{TP}{TP + FN}</script></li>
+<li><p><code>false positive rate - FPR</code><br>  所有阴性样本中有多少不正确的阳性结果。</p>
+<script type="math/tex; mode=display">
+  FPR = \frac{FP}{N} = \frac{FP}{FP + TN}</script></li>
+</ul>
+<h3 id="ROC-space"><a href="#ROC-space" class="headerlink" title="ROC space"></a>ROC space</h3><p><img src="/2018/11/21/Metrics/模型的评估指标/ROC_space.png" alt="ROC_space"></p>
+<ul>
+<li>分别以<code>FPR</code>与<code>TPR</code>作为横纵轴(又称灵敏度-$1$特异度曲线<code>sensitivity vs (1 − specificity) plot</code>)；</li>
+<li>每次预测结果或混淆矩阵的实例代表了<code>ROC</code>空间中的一个点；<br>  例如上图中$A, B, C, C’$是以下表数据计算得到的点。<br>  <img src="/2018/11/21/Metrics/ROC_space_samples.png" alt="ROC_space_samples"></li>
+<li>在<code>ROC</code>空间中最左上方的点$(0, 1)$称作完美分类器<code>(perfect classification)</code>；</li>
+<li>随机分类器的结果分布在<code>ROC space</code>对角线$(0, 0)-(1, 1)$上，当实验次数足够多，其分区趋向$(0.5, 0.5)$;</li>
+<li>对角线以上的点代表好的分类结果(比随机的好)；线下的点代表坏的结果(比随机的差)；</li>
+<li>注意，持续不良分类器的输出可以简单地反转以获得一个好的分类器，反转后的分类器与原分类器在平面上关于对角线对称，例如点$C’$。</li>
+</ul>
+<h3 id="ROC曲线的绘制"><a href="#ROC曲线的绘制" class="headerlink" title="ROC曲线的绘制"></a>ROC曲线的绘制</h3><p>若训练集样本中，正样本与负样本以正态分布的形式分布在样本平面上，如下图，左峰为负样本，右峰为正样本，存在部分重叠(不然就不用搞这么多分类算法了)。</p>
+<p><img src="/2018/11/21/Metrics/ROC_curves.svg.png" alt="ROC_curves.svg"></p>
+<p>若假设正样本概率密度为$f_1(x)$，负样本的概率密度为$f_0(x)$，给定阈值$T$，则右</p>
+<script type="math/tex; mode=display">
+TPR(T) = \int_T^{\infty} f_1(x) dx</script><script type="math/tex; mode=display">
+FPR(T) = \int_T^{\infty} f_0(x) dx</script><p>选取不同的阈值划分分类器输出，就能得到<code>ROC</code>曲线。</p>
+<p>在基于有限样本作<code>ROC</code>图时，可以看到曲线每次都是一个“爬坡”，遇到正例往上爬一格$(1/m+)$，错了往右爬一格$(1/m-)$，显然往上爬对于算法性能来说是最好的。<br><img src="/2018/11/21/Metrics/ROC_curves_up_right.png" alt="ROC_curves_up_right"></p>
+<h3 id="Area-Under-the-Curve-AUC"><a href="#Area-Under-the-Curve-AUC" class="headerlink" title="Area Under the Curve - AUC"></a>Area Under the Curve - AUC</h3><p><code>ROC</code>曲线下的面积<code>AUC</code>物理意义为，任取一对正负样本，正样本的预测值大于负样本的预测值的概率。</p>
+<script type="math/tex; mode=display">
+A = \int_{-\infty}^{\infty} TPR(T) dFPR(T)</script><script type="math/tex; mode=display">
+= \int_{-\infty}^{\infty} 
+\int_{-\infty}^{\infty}
+I(T'> T)
+f_1(T') f_0(T)
+dT' dT</script><script type="math/tex; mode=display">
+= P(X_1 > X_0)</script><p>同样的，在有限个样本下，其面积用累加的方法计算(梯形面积)</p>
+<p><img src="/2018/11/21/Metrics/ROC_curves_AUC.png" alt="ROC_curves_AUC"></p>
+<script type="math/tex; mode=display">
+AUC = \sum_{i=1}^{m-1} \frac{1}{2} (y_{i+1} + y_i)(x_{i+1} - x_i)</script><ul>
+<li>$AUC = 1$，是完美分类器，采用这个预测模型时，存在至少一个阈值能得出完美预测。绝大多数预测的场合，不存在完美分类器。</li>
+<li>$0.5 &lt; AUC &lt; 1$，优于随机猜测。这个分类器（模型）妥善设定阈值的话，能有预测价值。</li>
+<li>$AUC = 0.5$，跟随机猜测一样（例：丢铜板），模型没有预测价值。</li>
+<li>$AUC &lt; 0.5$，比随机猜测还差；但只要总是反预测而行，就优于随机猜测。</li>
+</ul>
+<h3 id="sklearn"><a href="#sklearn" class="headerlink" title="sklearn"></a>sklearn</h3><p>以下为<code>scikit-learn</code>中混淆矩阵的<code>ROC</code>曲线<code>API</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; import numpy as np</span><br><span class="line">&gt;&gt;&gt; from sklearn import metrics</span><br><span class="line">&gt;&gt;&gt; </span><br><span class="line">&gt;&gt;&gt; y = np.array([1, 1, 2, 2])</span><br><span class="line">&gt;&gt;&gt; scores = np.array([0.1, 0.4, 0.35, 0.8])</span><br><span class="line">&gt;&gt;&gt; </span><br><span class="line">&gt;&gt;&gt; fpr, tpr, thresholds = metrics.roc_curve(y, scores, pos_label=2)</span><br><span class="line">&gt;&gt;&gt; fpr</span><br><span class="line">array([ 0. ,  0.5,  0.5,  1. ])</span><br><span class="line">&gt;&gt;&gt; tpr</span><br><span class="line">array([ 0.5,  0.5,  1. ,  1. ])</span><br><span class="line">&gt;&gt;&gt; thresholds</span><br><span class="line">array([ 0.8 ,  0.4 ,  0.35,  0.1 ])</span><br><span class="line">&gt;&gt;&gt; </span><br><span class="line">&gt;&gt;&gt; metrics.auc(fpr, tpr)</span><br><span class="line">0.75</span><br></pre></td></tr></table></figure></p>
+<h1 id="聚类-clustering-评估指标"><a href="#聚类-clustering-评估指标" class="headerlink" title="聚类(clustering)评估指标"></a>聚类(clustering)评估指标</h1><blockquote>
+<ul>
+<li><a href="https://blog.csdn.net/darkrabbit/article/details/80378597" target="_blank" rel="noopener">AI（005） - 笔记 - 聚类性能评估（Clustering Evaluation） - DarkRabbit的专栏 - CSDN博客 </a></li>
+<li><a href="https://en.wikipedia.org/wiki/Main_Page" target="_blank" rel="noopener">Wikipedia, the free encyclopedia</a></li>
+</ul>
+</blockquote>
+<h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>聚类性能比较好，就是聚类结果簇内相似度<code>(intra-cluster similarity)</code>高，而簇间相似度<code>(inter-cluster similarity)</code>低，即同一簇的样本尽可能的相似，不同簇的样本尽可能不同。</p>
+<p>聚类性能的评估（度量）分为两大类：</p>
+<ul>
+<li>外部评估<code>(external evaluation)</code>：将结果与某个参考模型<code>(reference model)</code>进行比较；</li>
+<li>内部评估<code>(internal evaluation)</code>：直接考虑聚类结果而不利用任何参考模型。</li>
+</ul>
+<p>将$n_{samples}$个样本$\{x^{(1)}, …, x^{(n_{samples})}\}$用待评估聚类算法划分为$K$个类$\{X_1, …, X_K\}$，假定参考模型将其划分为$L$类$\{Y_1, …, Y_L\}$，将样本两辆匹配</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    a = |SS| &  SS = \{(x^{(i)}, x^{(j)}) | x^{(i)}, x^{(j)} \in X_k; x^{(i)}, x^{(j)} \in Y_l\} \\
+    b = |SD| &  SD = \{(x^{(i)}, x^{(j)}) | x^{(i)}, x^{(j)} \in X_k; x^{(i)} \in Y_{l1}, x^{(j)} \in Y_{l2}\} \\
+    c = |DS| &  DS = \{(x^{(i)}, x^{(j)}) | x^{(i)} \in X_{k1}, x^{(j)} \in X_{k2}; x^{(i)}, x^{(j)} \in Y_l\} \\
+    d = |DD| &  DD = \{(x^{(i)}, x^{(j)}) | x^{(i)} \in X_{k1}, x^{(j)} \in X_{k2}; x^{(i)} \in Y_{l1}, x^{(j)} \in Y_{l2}\}
+\end{cases}</script><p>其中$k = 1, …, K; l = 1, …, L$</p>
+<script type="math/tex; mode=display">
+a + b + c + d
+=   \left(
+        \begin{matrix}
+            n \\ 2
+        \end{matrix}
+    \right)
+= \frac{n(n-1)}{2}</script><blockquote>
+<ul>
+<li>$SS$包含两种划分中均属于同一类的样本对；</li>
+<li>$SD$包含用待评估聚类算法划分中属于同一类，而在参考模型中属于不同类的样本对；</li>
+<li>$DS$包含用待评估聚类算法划分中属于不同类，而在参考模型中属于同一类的样本对；</li>
+<li>$DD$包含两种划分中均不属于同一类的样本对。</li>
+</ul>
+</blockquote>
+<h2 id="常用外部评估-external-evaluation"><a href="#常用外部评估-external-evaluation" class="headerlink" title="常用外部评估(external evaluation)"></a>常用外部评估(external evaluation)</h2><h3 id="Rand-Index-RI"><a href="#Rand-Index-RI" class="headerlink" title="Rand Index(RI)"></a>Rand Index(RI)</h3><blockquote>
+<p><a href="https://en.wikipedia.org/wiki/Rand_index" target="_blank" rel="noopener">Rand index - Wikipedia</a></p>
+</blockquote>
+<script type="math/tex; mode=display">
+RI = \frac{a+d}{a + b + c + d} = \frac{a+d}{\left(\begin{matrix} n \\ 2 \end{matrix}\right)}</script><p>显然，结果值在$[0,1]$之间，且值越大越好。</p>
+<ul>
+<li>当为$0$时，两个聚类无重叠；</li>
+<li>当为$1$时，两个聚类完全重叠。</li>
+</ul>
+<h3 id="Adjust-Rand-Index-ARI"><a href="#Adjust-Rand-Index-ARI" class="headerlink" title="Adjust Rand Index(ARI)"></a>Adjust Rand Index(ARI)</h3><p>让$RI$有了修正机会<code>(corrected-for-chance)</code>，在取值上从$[0,1]$变成$[-1, 1]$</p>
+<p>对于$X$与$Y$的重叠可以用一个列联表<code>(contingency table)</code>表示，记作$[n_{ij}]$，$n_{ij} = |X_i \bigcap Y_j|$<br><img src="/2018/11/21/Metrics/聚类/ARI.svg" alt="ARI"></p>
+<p>则定义$ARI$如下<br><img src="/2018/11/21/Metrics/聚类/ARI_Def.svg" alt="ARI_Def"></p>
+<h3 id="互信息与调整互信息-Adjusted-Mutual-Information-AMI"><a href="#互信息与调整互信息-Adjusted-Mutual-Information-AMI" class="headerlink" title="互信息与调整互信息(Adjusted Mutual Information - AMI)"></a>互信息与调整互信息(Adjusted Mutual Information - AMI)</h3><blockquote>
+<p>关于互信息可查看<a href="">熵</a>一节说明。</p>
+</blockquote>
+<p>$X_i$类别的概率定义为</p>
+<script type="math/tex; mode=display">
+P(k) = \frac{|X_k|}{N}</script><p>则划分结果的熵定义为</p>
+<script type="math/tex; mode=display">
+H(X) = - \sum_k P(k) \log P(k)</script><p>类似的</p>
+<script type="math/tex; mode=display">
+P'(l) = \frac{|Y_l|}{N}</script><script type="math/tex; mode=display">
+H(Y) = - \sum_j P'(l) \log P'(l)</script><p>另外</p>
+<script type="math/tex; mode=display">
+P(k, l) = \frac{|X_k, Y_l|}{N}</script><p>那么两种划分的互信息定义为</p>
+<script type="math/tex; mode=display">
+MI(X, Y) = \sum_{k, l} P(k, l) \log \frac{P(k, l)}{P(k) P'(l)}</script><p>和$ARI$一样，我们对它进行调整。</p>
+<script type="math/tex; mode=display">
+E[MI(X, Y)] 
+= \sum_k \sum_l \sum_{n_{kl} = \max\{1, a_k + b_l - N\}}^{\min \{a_k, b_l\}}
+\frac{n_{kl}}{N}
+\log \left( \frac{N·n_{kl}}{a_k b_l} \right) ×</script><script type="math/tex; mode=display">
+\frac
+{a_k!b_l!(N-a_k)!(N-b_l)!}
+{N!n_{kl}!(a_k-n_{kl})!(b_l-n_{kl})!(N-a_k-b_l+n_{kl})!}</script><p>最终$AMI$表达式为</p>
+<script type="math/tex; mode=display">
+AMI(X, Y) = \frac{MI(X, Y) - E[MI(X, Y)]}{\max \{H(X), H(Y)\} - E[MI(X, Y)]}</script><h3 id="同质性-Homogeneity-与完整性-Completeness"><a href="#同质性-Homogeneity-与完整性-Completeness" class="headerlink" title="同质性(Homogeneity)与完整性(Completeness)"></a>同质性(Homogeneity)与完整性(Completeness)</h3><p>这两个类似分类种的的准确率<code>(accuracy)</code>与召回率<code>(recall)</code>。</p>
+<ul>
+<li><p>同质性<code>(Homogeneity)</code><br>  即一个簇仅包含一个类别的样本</p>
+<script type="math/tex; mode=display">
+  H = 1 - \frac{H(X|Y)}{H(X)}</script><p>  其中$H(X|Y)$为条件熵</p>
+<script type="math/tex; mode=display">
+  H(X|Y) = \sum_k \sum_l P(X_k, Y_l) \log \frac{P(Y_l)}{P(X_k, Y_l)}
+  = \sum_k \sum_l \frac{n_{kl}}{N} \log \frac{n_{kl}}{N}</script></li>
+<li><p>完整性<code>(Completeness)</code><br>  同类别样本被归类到相同簇中</p>
+<script type="math/tex; mode=display">
+  C = 1 - \frac{H(Y|X)}{H(Y)}</script></li>
+<li><p>$V-measure$<br>  <code>Homogeneity</code>和<code>Completeness</code>的调和平均</p>
+<script type="math/tex; mode=display">
+  V = \frac{1}{\frac{1}{2} \left(\frac{1}{H} + \frac{1}{C}\right)} = \frac{2HC}{H + C}</script></li>
+</ul>
+<h3 id="Fowlkes-Mallows-index-FMI"><a href="#Fowlkes-Mallows-index-FMI" class="headerlink" title="Fowlkes-Mallows index(FMI)"></a>Fowlkes-Mallows index(FMI)</h3><p>成对精度和召回率的几何均值</p>
+<blockquote>
+<p><a href="https://en.wikipedia.org/wiki/Fowlkes%E2%80%93Mallows_index" target="_blank" rel="noopener">Fowlkes–Mallows index - Wikipedia</a></p>
+</blockquote>
+<p>定义</p>
+<ul>
+<li>$TP$ as the number of points that are present in the same cluster in both $A_1$ and $A_2$.</li>
+<li>$FP$ as the number of points that are present in the same cluster in $A_1$ but not in $A_2$.</li>
+<li>$FN$ as the number of points that are present in the same cluster in $A_2$ but not in $A_1$.</li>
+<li>$TN$ as the number of points that are in different clusters in both $A_1$ and $A_2$.</li>
+</ul>
+<p>则</p>
+<script type="math/tex; mode=display">
+TP + FP + TN + FN = \frac{n(n-1)}{2}</script><p>定义</p>
+<script type="math/tex; mode=display">
+FMI = \sqrt{\frac{TP}{TP + FP} · \frac{TP}{TP + FN}}</script><h3 id="杰卡德系数-Jaccard-Coefficient-JC"><a href="#杰卡德系数-Jaccard-Coefficient-JC" class="headerlink" title="杰卡德系数(Jaccard Coefficient - JC)"></a>杰卡德系数(Jaccard Coefficient - JC)</h3><blockquote>
+<p><a href="https://en.wikipedia.org/wiki/Jaccard_index" target="_blank" rel="noopener">Jaccard index - Wikipedia</a></p>
+</blockquote>
+<p>给定两个具有$n$个元素的集合$A, B$，定义</p>
+<ul>
+<li>$M_{11}$ represents the total number of attributes where $A$ and $B$ both have a value of $1$.</li>
+<li>$M_{01}$ represents the total number of attributes where the attribute of $A$ is $0$ and the attribute of $B$ is $1$.</li>
+<li>$M_{10}$ represents the total number of attributes where the attribute of $A$ is $1$ and the attribute of $B$ is $0$.</li>
+<li>$M_{00}$ represents the total number of attributes where $A$ and $B$ both have a value of $0$.</li>
+</ul>
+<p>则有</p>
+<script type="math/tex; mode=display">
+M_{11} + M_{01} + M_{10} + M_{00} = n</script><ul>
+<li><p><code>Jaccard</code>相似度系数</p>
+<script type="math/tex; mode=display">
+  J = \frac{M_{11}}{M_{01} + M_{10} + M_{11}}</script><blockquote>
+<p>也即$J=\frac{A \cap B}{A \cup B}$</p>
+</blockquote>
+</li>
+<li><p><code>Jaccard</code>距离</p>
+<script type="math/tex; mode=display">
+  D_J = 1 - J</script></li>
+</ul>
+<h2 id="常用内部评估-internal-evaluation"><a href="#常用内部评估-internal-evaluation" class="headerlink" title="常用内部评估(internal evaluation)"></a>常用内部评估(internal evaluation)</h2><h3 id="轮廓系数-Silhouette-coefficient"><a href="#轮廓系数-Silhouette-coefficient" class="headerlink" title="轮廓系数(Silhouette coefficient)"></a>轮廓系数(Silhouette coefficient)</h3><p>又称侧影法，适用于实际类别信息未知的情况，对其中一个样本点$x^{(i)}$，记</p>
+<ul>
+<li>$a(i)$：到本簇其他样本点的距离的平均值</li>
+<li>$b(i)$：该点到其他各个簇的样本点的平均距离的最小值</li>
+</ul>
+<p>定义轮廓系数</p>
+<script type="math/tex; mode=display">
+S(i) = \frac{b(i) - a(i)}{\max\{a(i), b(i)\}}</script><p>或者</p>
+<script type="math/tex; mode=display">
+S(i) = \begin{cases}
+    1 - \frac{a(i)}{b(i)} & a(i) < b(i) \\
+    0 & a(i) = b(i) \\
+    \frac{b(i)}{a(i)} - 1 & a(i) > b(i)
+\end{cases}</script><p>其含义如下</p>
+<ul>
+<li>当$a(i) \ll b(i)$时，无限接近于$1$，则意味着聚类合适；</li>
+<li>当$a(i) \gg b(i)$时，无限接近于$-1$，则意味着把样本i聚类到相邻簇中更合适；</li>
+<li>当$a(i)\approxeq b(i)$时，无限接近于$0$，则意味着样本在两个簇交集处。</li>
+</ul>
+<p>一般再对各个点的轮廓系数求均值</p>
+<script type="math/tex; mode=display">
+\overline{S} = \frac{1}{n_{samples}} \sum_{i=1}^{n_{samples}} S(i)</script><ul>
+<li>当$\overline{S} &gt; 0.5$，表示聚类合适；</li>
+<li>当$\overline{S} &lt; 0.2$，表示表明数据不存在聚类特征</li>
+</ul>
+<h3 id="Calinski-Harabaz-CH"><a href="#Calinski-Harabaz-CH" class="headerlink" title="Calinski-Harabaz(CH)"></a>Calinski-Harabaz(CH)</h3><p>也适用于实际类别信息未知的情况，以$K$分类为例</p>
+<ul>
+<li><p>类内散度$W$</p>
+<script type="math/tex; mode=display">
+  W(K) = \sum_k \sum_{C(j)=k} ||x_j - \overline{x_k}||^2</script></li>
+<li><p>类间散度$B$</p>
+<script type="math/tex; mode=display">
+  B(K) = \sum_k a_k ||\overline{x_k} - \overline{x}||^2</script></li>
+<li><p>$CH$</p>
+<script type="math/tex; mode=display">
+  CH(K) = \frac{B(K)(N-K)}{W(K)(K-1)}</script></li>
+</ul>
+<h3 id="Davies-Bouldin-Index-DBI"><a href="#Davies-Bouldin-Index-DBI" class="headerlink" title="Davies-Bouldin Index(DBI)"></a>Davies-Bouldin Index(DBI)</h3><p>定义</p>
+<ul>
+<li>$c_k$：簇$C_k$的中心点</li>
+<li>$\sigma_k$：簇$C_k$中所有元素到$c_k$的距离的均值</li>
+<li>$d(c_i, c_j)$：簇中心$c_i$与$c_j$之间的距离</li>
+</ul>
+<p>则</p>
+<script type="math/tex; mode=display">
+DBI = \frac{1}{K} \sum_{i=1}^K \max_{j \neq i} \left( \frac{\sigma_i + \sigma_j}{d(c_i, c_j)} \right)</script><p>$DBI$越小越好</p>
+<h3 id="Dunn-index-DI"><a href="#Dunn-index-DI" class="headerlink" title="Dunn index(DI)"></a>Dunn index(DI)</h3><p>定义</p>
+<ul>
+<li>$d(i,j)$：两类簇的距离，定义方法多样，例如两类簇中心的距离；</li>
+<li>$d’(k)$：簇$C_k$的类内距离，同样的，可定义多种，例如簇$C_k$中任意两点距离的最大值。</li>
+</ul>
+<p>则</p>
+<script type="math/tex; mode=display">
+DI = \frac{\min_{1 \leq i < j \leq K} d(i, j)}{\max_{1 \leq k \leq K} d'(k)}</script><h1 id="sklearn中的评价指标"><a href="#sklearn中的评价指标" class="headerlink" title="sklearn中的评价指标"></a>sklearn中的评价指标</h1><blockquote>
+<p><a href="http://sklearn.apachecn.org/en/0.19.0/modules/model_evaluation.html" target="_blank" rel="noopener">3.3. Model evaluation: quantifying the quality of predictions — scikit-learn 0.19.0 documentation - ApacheCN</a></p>
+</blockquote>
+<p><img src="/2018/11/21/Metrics/sklearn_metrics.png" alt="sklearn_metrics"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; from sklearn import metrics</span><br><span class="line">&gt;&gt;&gt; dir(metrics)</span><br><span class="line">[&apos;SCORERS&apos;, &apos;__all__&apos;, &apos;__builtins__&apos;, &apos;__cached__&apos;, &apos;__doc__&apos;, </span><br><span class="line">&apos;__file__&apos;, &apos;__loader__&apos;, &apos;__name__&apos;, &apos;__package__&apos;, &apos;__path__&apos;, &apos;__spec__&apos;,</span><br><span class="line"> &apos;accuracy_score&apos;, &apos;adjusted_mutual_info_score&apos;, &apos;adjusted_rand_score&apos;, </span><br><span class="line"> &apos;auc&apos;, &apos;average_precision_score&apos;, &apos;balanced_accuracy_score&apos;, </span><br><span class="line"> &apos;base&apos;, &apos;brier_score_loss&apos;, &apos;calinski_harabaz_score&apos;, &apos;check_scoring&apos;, </span><br><span class="line"> &apos;classification&apos;, &apos;classification_report&apos;, &apos;cluster&apos;, &apos;cohen_kappa_score&apos;, </span><br><span class="line"> &apos;completeness_score&apos;, &apos;confusion_matrix&apos;, &apos;consensus_score&apos;, </span><br><span class="line"> &apos;coverage_error&apos;, &apos;davies_bouldin_score&apos;, &apos;euclidean_distances&apos;, </span><br><span class="line"> &apos;explained_variance_score&apos;, &apos;f1_score&apos;, &apos;fbeta_score&apos;, </span><br><span class="line"> &apos;fowlkes_mallows_score&apos;, &apos;get_scorer&apos;, &apos;hamming_loss&apos;, &apos;hinge_loss&apos;, </span><br><span class="line"> &apos;homogeneity_completeness_v_measure&apos;, &apos;homogeneity_score&apos;, </span><br><span class="line"> &apos;jaccard_similarity_score&apos;, &apos;label_ranking_average_precision_score&apos;, </span><br><span class="line"> &apos;label_ranking_loss&apos;, &apos;log_loss&apos;, &apos;make_scorer&apos;, &apos;matthews_corrcoef&apos;, </span><br><span class="line"> &apos;mean_absolute_error&apos;, &apos;mean_squared_error&apos;, &apos;mean_squared_log_error&apos;, </span><br><span class="line"> &apos;median_absolute_error&apos;, &apos;mutual_info_score&apos;, </span><br><span class="line"> &apos;normalized_mutual_info_score&apos;, &apos;pairwise&apos;, &apos;pairwise_distances&apos;, </span><br><span class="line"> &apos;pairwise_distances_argmin&apos;, &apos;pairwise_distances_argmin_min&apos;, </span><br><span class="line"> &apos;pairwise_distances_chunked&apos;, &apos;pairwise_fast&apos;, &apos;pairwise_kernels&apos;, </span><br><span class="line"> &apos;precision_recall_curve&apos;, &apos;precision_recall_fscore_support&apos;, </span><br><span class="line"> &apos;precision_score&apos;, &apos;r2_score&apos;, &apos;ranking&apos;, &apos;recall_score&apos;, &apos;regression&apos;, </span><br><span class="line"> &apos;roc_auc_score&apos;, &apos;roc_curve&apos;, &apos;scorer&apos;, &apos;silhouette_samples&apos;, </span><br><span class="line"> &apos;silhouette_score&apos;, </span><br><span class="line"> &apos;v_measure_score&apos;, </span><br><span class="line"> &apos;zero_one_loss&apos;]</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/21/Entropy/" rel="next" title="Entropy">
+                <i class="fa fa-chevron-left"></i> Entropy
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/04/Github-Hexo博客搭建/" rel="prev" title="Hexo+Github博客搭建">
+                Hexo+Github博客搭建 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Louis Hsu">
+            
+              <p class="site-author-name" itemprop="name">Louis Hsu</p>
+              <p class="site-description motion-element" itemprop="description">And the winner is, la vie, and the winner is, I'amour.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">30</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/isLouisHsu" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:is.louishsu@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/islouishsu" target="_blank" title="知乎"><i class="fa fa-fw fa-知乎"></i>知乎</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/islouishsu" target="_blank" title="微博"><i class="fa fa-fw fa-weibo"></i>微博</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#回归-regression-评估指标"><span class="nav-number">1.</span> <span class="nav-text">回归(regression)评估指标</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#解释方差-Explained-Variance"><span class="nav-number">1.1.</span> <span class="nav-text">解释方差(Explained Variance)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#平均绝对误差-Mean-Absolute-Error-MAE"><span class="nav-number">1.2.</span> <span class="nav-text">平均绝对误差(Mean Absolute Error - MAE)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#平均平方误差-Mean-Squared-Error-MSE"><span class="nav-number">1.3.</span> <span class="nav-text">平均平方误差(Mean Squared Error - MSE)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#均方根误差-Root-Mean-Squared-Error-RMSE"><span class="nav-number">1.4.</span> <span class="nav-text">均方根误差(Root Mean Squared Error - RMSE)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#均方对数误差-Mean-Squard-Logarithmic-Error-MSLE"><span class="nav-number">1.5.</span> <span class="nav-text">均方对数误差(Mean Squard Logarithmic Error - MSLE)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#中值绝对误差-Median-Absolute-Error-MedAE"><span class="nav-number">1.6.</span> <span class="nav-text">中值绝对误差(Median Absolute Error - MedAE)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#R决定系数-R2"><span class="nav-number">1.7.</span> <span class="nav-text">R决定系数(R2)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分类-classification-评估指标"><span class="nav-number">2.</span> <span class="nav-text">分类(classification)评估指标</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#准确率-Accuracy"><span class="nav-number">2.1.</span> <span class="nav-text">准确率(Accuracy)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#精确率-Precision-与召回率-Recall"><span class="nav-number">2.2.</span> <span class="nav-text">精确率(Precision)与召回率(Recall)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#F度量"><span class="nav-number">2.3.</span> <span class="nav-text">F度量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#混淆矩阵"><span class="nav-number">2.4.</span> <span class="nav-text">混淆矩阵</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ROC曲线"><span class="nav-number">2.5.</span> <span class="nav-text">ROC曲线</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ROC-space"><span class="nav-number">2.5.1.</span> <span class="nav-text">ROC space</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ROC曲线的绘制"><span class="nav-number">2.5.2.</span> <span class="nav-text">ROC曲线的绘制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Area-Under-the-Curve-AUC"><span class="nav-number">2.5.3.</span> <span class="nav-text">Area Under the Curve - AUC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sklearn"><span class="nav-number">2.5.4.</span> <span class="nav-text">sklearn</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#聚类-clustering-评估指标"><span class="nav-number">3.</span> <span class="nav-text">聚类(clustering)评估指标</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#说明"><span class="nav-number">3.1.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用外部评估-external-evaluation"><span class="nav-number">3.2.</span> <span class="nav-text">常用外部评估(external evaluation)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Rand-Index-RI"><span class="nav-number">3.2.1.</span> <span class="nav-text">Rand Index(RI)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Adjust-Rand-Index-ARI"><span class="nav-number">3.2.2.</span> <span class="nav-text">Adjust Rand Index(ARI)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#互信息与调整互信息-Adjusted-Mutual-Information-AMI"><span class="nav-number">3.2.3.</span> <span class="nav-text">互信息与调整互信息(Adjusted Mutual Information - AMI)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同质性-Homogeneity-与完整性-Completeness"><span class="nav-number">3.2.4.</span> <span class="nav-text">同质性(Homogeneity)与完整性(Completeness)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fowlkes-Mallows-index-FMI"><span class="nav-number">3.2.5.</span> <span class="nav-text">Fowlkes-Mallows index(FMI)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#杰卡德系数-Jaccard-Coefficient-JC"><span class="nav-number">3.2.6.</span> <span class="nav-text">杰卡德系数(Jaccard Coefficient - JC)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用内部评估-internal-evaluation"><span class="nav-number">3.3.</span> <span class="nav-text">常用内部评估(internal evaluation)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#轮廓系数-Silhouette-coefficient"><span class="nav-number">3.3.1.</span> <span class="nav-text">轮廓系数(Silhouette coefficient)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Calinski-Harabaz-CH"><span class="nav-number">3.3.2.</span> <span class="nav-text">Calinski-Harabaz(CH)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Davies-Bouldin-Index-DBI"><span class="nav-number">3.3.3.</span> <span class="nav-text">Davies-Bouldin Index(DBI)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dunn-index-DI"><span class="nav-number">3.3.4.</span> <span class="nav-text">Dunn index(DI)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sklearn中的评价指标"><span class="nav-number">4.</span> <span class="nav-text">sklearn中的评价指标</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Louis Hsu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

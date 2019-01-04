@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言若参数估计时我们不知道样本的分布形式，那么就无法确定需要估计的概率密度函数，无法用最大似然估计、贝叶斯估计等参数估计方法，应该用非参数估计方法。 需要知道的是，作为非参数方法的共同问题是对样本数量需求较大，只要样本数目足够大众可以保证收敛于任何复杂的位置密度，但是计算量和存储量都比较大。当样本数很少时，如果能够对密度函数有先验认识，则参数估计能取得更好的估计效果。 基本原理若有$M$个样本$x">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Non-parameter Estimation">
+<meta property="og:url" content="http://yoursite.com/2018/11/19/Non-parameter-Estimation/index.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="前言若参数估计时我们不知道样本的分布形式，那么就无法确定需要估计的概率密度函数，无法用最大似然估计、贝叶斯估计等参数估计方法，应该用非参数估计方法。 需要知道的是，作为非参数方法的共同问题是对样本数量需求较大，只要样本数目足够大众可以保证收敛于任何复杂的位置密度，但是计算量和存储量都比较大。当样本数很少时，如果能够对密度函数有先验认识，则参数估计能取得更好的估计效果。 基本原理若有$M$个样本$x">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2018/11/19/Non-parameter-Estimation/hist_matplotlib.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/19/Non-parameter-Estimation/hist_ploy.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/19/Non-parameter-Estimation/Parzen_window.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/11/19/Non-parameter-Estimation/01_h_0.5.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/19/Non-parameter-Estimation/01_h_0.8.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/19/Non-parameter-Estimation/01_h_1.0.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/19/Non-parameter-Estimation/01_h_2.0.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/19/Non-parameter-Estimation/gaussian_h_0.5.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/19/Non-parameter-Estimation/gaussian_h_0.8.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/19/Non-parameter-Estimation/gaussian_h_1.0.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/19/Non-parameter-Estimation/gaussian_h_2.0.png">
+<meta property="og:updated_time" content="2019-01-04T10:10:25.057Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Non-parameter Estimation">
+<meta name="twitter:description" content="前言若参数估计时我们不知道样本的分布形式，那么就无法确定需要估计的概率密度函数，无法用最大似然估计、贝叶斯估计等参数估计方法，应该用非参数估计方法。 需要知道的是，作为非参数方法的共同问题是对样本数量需求较大，只要样本数目足够大众可以保证收敛于任何复杂的位置密度，但是计算量和存储量都比较大。当样本数很少时，如果能够对密度函数有先验认识，则参数估计能取得更好的估计效果。 基本原理若有$M$个样本$x">
+<meta name="twitter:image" content="http://yoursite.com/2018/11/19/Non-parameter-Estimation/hist_matplotlib.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/19/Non-parameter-Estimation/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Non-parameter Estimation | LOUIS' BLOG</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LOUIS' BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">一个有灵(gōng)魂(shì)的博客</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/19/Non-parameter-Estimation/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="And the winner is, la vie, and the winner is, I'amour.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Non-parameter Estimation
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-19 10:55:43" itemprop="dateCreated datePublished" datetime="2018-11-19T10:55:43+08:00">2018-11-19</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-01-04 18:10:25" itemprop="dateModified" datetime="2019-01-04T18:10:25+08:00">2019-01-04</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>若参数估计时我们不知道样本的分布形式，那么就无法确定需要估计的概率密度函数，无法用<a href="https://louishsu.xyz/2018/10/22/%E5%8F%82%E6%95%B0%E4%BC%B0%E8%AE%A1%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/" target="_blank" rel="noopener">最大似然估计、贝叶斯估计等参数估计方法</a>，应该用非参数估计方法。</p>
+<p>需要知道的是，作为非参数方法的共同问题是对样本数量需求较大，只要样本数目足够大众可以保证收敛于任何复杂的位置密度，但是计算量和存储量都比较大。当样本数很少时，如果能够对密度函数有先验认识，则参数估计能取得更好的估计效果。</p>
+<h1 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h1><p>若有$M$个样本$x^{(1)}, …, x^{(M)}$，依概率密度函数$p(x)$独立同分布抽样得到。</p>
+<p>一个样本$x$落在区域$R$中的概率$P$可表示为</p>
+<script type="math/tex; mode=display">
+P = \int_R p(x) dx \tag{1}</script><p>我们通过计算$P$来估计概率密度$p(x)$。</p>
+<p>$K$个样本落入区域$R$的概率$P_K$为二项分布，即$K \sim B(M, P)$</p>
+<script type="math/tex; mode=display">
+P_K = \left(\begin{matrix} M\\K \end{matrix}\right) P^K (1-P)^{M-K} \tag{2}</script><p>则$K$的期望与方差分别为</p>
+<script type="math/tex; mode=display">
+E(K) = MP;　D(K) = MP(1-P)</script><p>样本个数$M$越多，$D(K)$越大，即$K$在期望附近的波峰越明显，因此样本足够多时，用$K/M$作为$P$的一个估计非常准确，即</p>
+<script type="math/tex; mode=display">
+P \approx \frac{K}{M} \tag{3}</script><p>若我们假设$p(x)$是连续的，且区域$R$足够小，记其体积为$V$，那么有</p>
+<script type="math/tex; mode=display">
+P = \int_R p(x)dx \approx p(x) V \tag{4}</script><p>所以根据$(3)(4)$，得到</p>
+<script type="math/tex; mode=display">
+p(x) \approx \frac{K/M}{V} \tag{*}</script><p>但是我们获得的其实为平滑后的概率密度函数</p>
+<script type="math/tex; mode=display">
+\frac{P}{V} = \frac{\int_R p(x)dx}{\int_R dx}</script><p>我们希望其尽可能地趋近$p(x)$，那么必须要求$V \rightarrow 0$，但是这样就可能不包含任何样本，那么$p(x)\approx 0$，这样估计的结果毫无意义。</p>
+<p>所以在实际中，一般构造多个包含样本$x$的区域$R_1, …, R_i, …, R_n$，第$i$个区域使用$i$个样本，记$V_i$为$R_i$的体积，$M_i$为落在$R_i$中的样本个数，则对$p(x)$第$i$次估计$p_i(x)$表示为</p>
+<script type="math/tex; mode=display">
+p_i(x) \approx \frac{M_i / M}{V_i} \tag{5}</script><p>若要求$p_i(x)$收敛到$p(x)$，则必须满足</p>
+<ul>
+<li>$\lim_{i\rightarrow \infty} V_i = 0$</li>
+<li>$\lim_{i\rightarrow \infty} M_i = 0$</li>
+<li>$\lim_{i\rightarrow \infty} \frac{M_i}{M} = 0$</li>
+</ul>
+<h1 id="直方图法"><a href="#直方图法" class="headerlink" title="直方图法"></a>直方图法</h1><p>记不记得小学时的直方图统计，直方图方法的思想就是这样，以$1$维样本为例，我们将$x$的取值范围平均等分为$K$个区间，统计每个区间内样本的个数，由此计算区间的概率密度。</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>若共有$N$维样本$M$组，在每个维度上$K$等分，就有$K^N$个小空间，每个小空间的体积$V_i$可以定义为</p>
+<script type="math/tex; mode=display">
+V_i = \prod_{n=1}^N d_n,　i=1,...,K^N</script><p>其中</p>
+<script type="math/tex; mode=display">
+d_n = \frac{\max x_n - \min x_n}{K}</script><p>假设样本落到各个小空间的概率相同，若第$i$个小空间包含$M_i$个样本，则该空间的概率密度$\hat{p_i}$为</p>
+<script type="math/tex; mode=display">
+\hat{p_i} = \frac{M_i / M}{V_i} \tag{6}</script><p>估计的效果与小区间的大小密切相连，如果区域选择过大，会导致最终估计出来的概率密度函数非常粗糙；如果区域的选择过小，可能会导致有些区域内根本没有样本或者样本非常少，这样会导致估计出来的概率密度函数很不连续。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p><a href="https://github.com/isLouisHsu/Python-Examples-for-Pattern-Recognition-Course/blob/master/examples/p64_non_parametric_estmation.py" target="_blank" rel="noopener">@Github: Non-parametric Estmation</a></p>
+<p>我们可以用<code>matplotlib.pyplot.hist()</code>或<code>numpy.histogram()</code>实现</p>
+<ul>
+<li><p><code>matplotlib</code></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">n, bins, patches = plt.hist(arr, bins=10, normed=0, facecolor=&apos;black&apos;, edgecolor=&apos;black&apos;,alpha=1，histtype=&apos;bar&apos;)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>Args</code><br>  参数很多，选几个常用的讲解<ul>
+<li>arr: 需要计算直方图的一维数组</li>
+<li>bins: 直方图的柱数，可选项，默认为10</li>
+<li>normed: 是否将得到的直方图向量归一化。默认为0</li>
+<li>facecolor: 直方图颜色</li>
+<li>edgecolor: 直方图边框颜色</li>
+<li>alpha: 透明度</li>
+<li>histtype: 直方图类型，‘bar’, ‘barstacked’, ‘step’, ‘stepfilled’</li>
+</ul>
+</li>
+<li><code>Returns</code><ul>
+<li>n: 直方图向量，是否归一化由参数normed设定</li>
+<li>bins: 返回各个bin的区间范围</li>
+<li>patches: 返回每个bin里面包含的数据，是一个list</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code>numpy</code></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hist, bin_edges = histogram(a, bins=10, range=None, normed=None, weights=None, density=None)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">def histEstimate(X, n_bins, showfig=False):</span><br><span class="line">    &quot;&quot;&quot; 直方图密度估计</span><br><span class="line">    Args:</span><br><span class="line">        n_bins: &#123;int&#125; 直方图的条数</span><br><span class="line">    Returns:</span><br><span class="line">        hist: &#123;ndarray(n_bins,)&#125;</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    n, bins, patches = plt.hist(X, bins=n_bins, normed=1, facecolor=&apos;lightblue&apos;, edgecolor=&apos;white&apos;)</span><br><span class="line">    if showfig: plt.show()</span><br><span class="line">    return n, bins, patches</span><br></pre></td></tr></table></figure>
+<p><code>matplotlib</code>直方图显示如下<br><img src="/2018/11/19/Non-parameter-Estimation/hist_matplotlib.png" alt="hist_matplotlib"></p>
+<p>拟合各中心点显示如下<br><img src="/2018/11/19/Non-parameter-Estimation/hist_ploy.png" alt="hist_ploy"></p>
+<h1 id="K-n-近邻估计法"><a href="#K-n-近邻估计法" class="headerlink" title="$K_n$近邻估计法"></a>$K_n$近邻估计法</h1><p>随着样本数的增加，区域的体积应该尽可能小，同时又必须保证区域内有充分多的样本，但是每个区域的样本数有必须是总样本数的很小的一部分，而不是与直方图估计那样体积不变。</p>
+<p>那么我们想，能否根据样本的分布调整分区大小呢，$K$近邻估计法就是一种采用可变大小区间的密度估计方法。</p>
+<h2 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h2><p>根据总样本确定参数$K_n$，在求样本$x$处的密度估计$\hat{p}(x)$时，调整区域体积$V(x)$，直到区域内恰好落入$K_n$个样本，估计公式为</p>
+<script type="math/tex; mode=display">
+\hat{p}(x) = \frac{K_n/M}{V(x)} \tag{7}</script><p>一般指定超参数$a$，取</p>
+<script type="math/tex; mode=display">
+K_n = a × \sqrt{M} \tag{8}</script><blockquote>
+<script type="math/tex; mode=display">
+\hat{p}(x) = \frac{a × \sqrt{M} /M}{V(x)} = \frac{K_n'/M}{V'(x)}</script><p>其中$K_n’ = a,V’(x) = V(x)×\frac{1}{\sqrt{M}}$</p>
+</blockquote>
+<p>在样本密度比较高的区域的体积就会比较小，而在密度低的区域的体积则会自动增大，这样就能够较好的兼顾在高密度区域估计的分辨率和在低密度区域估计的连续性。</p>
+<h1 id="Parzen窗法"><a href="#Parzen窗法" class="headerlink" title="Parzen窗法"></a>Parzen窗法</h1><p>又称核密度估计。</p>
+<h2 id="原理-2"><a href="#原理-2" class="headerlink" title="原理"></a>原理</h2><p>我们暂时假设待估计点$x$的附近区间$R$为一个$N$维的<strong>超立方体</strong>，用$h$表示边的长度，那么</p>
+<script type="math/tex; mode=display">
+V_i = h^N</script><p>即<br><img src="/2018/11/19/Non-parameter-Estimation/Parzen_window.jpg" alt="Parzen_window"><br>定义窗函数$\varphi(·)$，表示落入以$x$为中心的超立方体的区域的点</p>
+<script type="math/tex; mode=display">
+\varphi \left(\frac{x_i-x}{h}\right) 
+= \begin{cases}
+    1 & \frac{|x_{in}-x_n|}{h} \leq \frac{1}{2},　n=1,...,N \\
+    0 & otherwise
+\end{cases} \tag{9}</script><blockquote>
+<script type="math/tex; mode=display">\frac{|x_{in}-x_n|}{h} \leq \frac{1}{2}　即　(x_i-x)_n \leq \frac{h}{2}</script><p>这里的$h$起到单位化的作用，便于推广</p>
+</blockquote>
+<p>那么落入以$x$为中心的<strong>超立方体</strong>的区域的点的个数为</p>
+<script type="math/tex; mode=display">
+M_i = \sum_{i=1}^M \varphi \left(\frac{x_i-x}{h}\right) \tag{10}</script><p>代入$p(x) \approx \frac{M_i/M}{V_i}$，我们得到</p>
+<script type="math/tex; mode=display">
+p(x) 
+\approx \frac{\sum_{i=1}^M \varphi \left(\frac{x_i-x}{h}\right)/M}{V_i}
+= \frac{1}{M} \sum_{i=1}^M \frac{1}{V_i} \varphi \left(\frac{x_i-x}{h}\right) \tag{11}</script><p>我们定义核函数(或称“窗函数”)</p>
+<script type="math/tex; mode=display">
+\kappa(z) = \frac{1}{V_i} \varphi(z) \tag{12}</script><p>核函数反应了一个观测样本$x_i$对在$x$处的概率密度估计的贡献，与样本$x_i$和$x$的距离有关。而概率密度估计就是在这一点上把所有观测样本的贡献进行平均</p>
+<script type="math/tex; mode=display">
+p(x) 
+\approx \frac{1}{M} \sum_{i=1}^M \kappa\left(\frac{x_i-x}{h}\right) \tag{13}</script><h2 id="核函数"><a href="#核函数" class="headerlink" title="核函数"></a>核函数</h2><p>核函数应满足概率密度的要求，即</p>
+<script type="math/tex; mode=display">
+\kappa(z) \geq 0　\And　\int \kappa(z)dz = 1</script><p>通常有以下几种核函数</p>
+<ul>
+<li><p>均匀核</p>
+<script type="math/tex; mode=display">
+  \kappa(z)
+  = \begin{cases}
+      1 & |z_n| \leq \frac{1}{2},　n=1,...,N \\
+      0 & otherwise
+  \end{cases}</script></li>
+<li><p>高斯核(正态核)<br>  高斯核是将窗放大到整个空间，各个观测样本$x_i$对待观测点$x$的加权和(越远权值越小)。</p>
+<script type="math/tex; mode=display">
+  \kappa(z)
+  = \frac{1}{(2\pi)^{N/2}|\Sigma|^{1/2}}
+  \exp \left(-\frac{1}{2} (z - \mu)^T \Sigma^{-1} (z - \mu)\right)</script></li>
+<li><p>超球窗</p>
+<script type="math/tex; mode=display">
+  \kappa(z)
+  = \begin{cases}
+      V^{-1} & ||z|| \leq 1 \\
+      0 & otherwise
+  \end{cases}</script><blockquote>
+<p>$z=\frac{x_i-x}{h}$，故$||z||\leq 1$即$||x_i-x||^2\leq h^2$<br>此时$h$表示超球体的半径</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="sklearn"><a href="#sklearn" class="headerlink" title="sklearn"></a>sklearn</h2><p><a href="http://sklearn.apachecn.org/en/0.19.0/modules/generated/sklearn.neighbors.KernelDensity.html#sklearn.neighbors.KernelDensity" target="_blank" rel="noopener">sklearn.neighbors.KernelDensity — scikit-learn 0.19.0 documentation - ApacheCN</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; from sklearn.neighbors import KernelDensity</span><br><span class="line">&gt;&gt;&gt; import numpy as np</span><br><span class="line">&gt;&gt;&gt; X = np.array([[-1, -1], [-2, -1], [-3, -2], [1, 1], [2, 1], [3, 2]])</span><br><span class="line">&gt;&gt;&gt; kde = KernelDensity(kernel=&apos;gaussian&apos;, bandwidth=0.2).fit(X)</span><br><span class="line">&gt;&gt;&gt; kde.score_samples(X)</span><br><span class="line">array([-0.41075698, -0.41075698, -0.41076071, -0.41075698, -0.41075698,</span><br><span class="line">       -0.41076071])</span><br><span class="line">&gt;&gt;&gt; kde.sample(10)</span><br><span class="line">array([[ 1.80042291,  1.1030739 ],</span><br><span class="line">       [ 0.87299669,  1.0762352 ],</span><br><span class="line">       [-2.40180586, -1.19554374],</span><br><span class="line">       [-1.97985919, -1.19361193],</span><br><span class="line">       [-2.95866231, -2.1972637 ],</span><br><span class="line">       [-1.12739556, -0.80851063],</span><br><span class="line">       [ 1.03756706,  1.24855099],</span><br><span class="line">       [ 1.21729703,  1.02345815],</span><br><span class="line">       [-2.11816867, -1.0486257 ],</span><br><span class="line">       [-1.04875537, -0.89928711]])</span><br></pre></td></tr></table></figure></p>
+<h2 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h2><p>具体代码见<br><a href="https://github.com/isLouisHsu/Python-Examples-for-Pattern-Recognition-Course/blob/master/examples/p64_non_parametric_estmation.py" target="_blank" rel="noopener">@Github: Non-parametric Estmation</a></p>
+<p>定义核函数如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 高斯核</span><br><span class="line">gaussian = lambda z: np.exp(-0.5*(np.linalg.norm(z)**2)) / np.sqrt(2*np.pi)</span><br><span class="line"># 均匀核</span><br><span class="line">square = lambda z: 1 if (np.linalg.norm(z) &lt;= 0.5) else 0</span><br></pre></td></tr></table></figure></p>
+<p>密度估计函数如下，需要对连续范围内的各个点，即$x \in [min(X), max(X)]$进行估计获得<code>p</code>，作图显示$x-p$即可<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">def parzenEstimate(X, kernel, h, n_num=50):</span><br><span class="line">    &quot;&quot;&quot; 核参数估计</span><br><span class="line">    Args:</span><br><span class="line">        X: &#123;ndarray(n_samples,)&#125;</span><br><span class="line">        kernel: &#123;function&#125; 可调用的核函数</span><br><span class="line">        h: &#123;float&#125; 核函数的参数</span><br><span class="line">    Returns:</span><br><span class="line">        p: &#123;ndarray(n_num,)&#125;</span><br><span class="line">    Notes:</span><br><span class="line">        - 一维，故`V_i = h`</span><br><span class="line">        - p(x) = \frac&#123;1&#125;&#123;M&#125; \sum_&#123;i=1&#125;^M \kappa \left( \frac&#123;x_i - x&#125;&#123;h&#125; \right)</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    x = np.linspace(np.min(X), np.max(X), num=n_num)</span><br><span class="line">    p = np.zeros(shape=(x.shape[0],))</span><br><span class="line">    z = lambda x, x_i, h: (x - x_i) / h</span><br><span class="line">    V_i = h; n_samples = X.shape[0]</span><br><span class="line">    for idx in range(x.shape[0]):</span><br><span class="line">        for i in range(X.shape[0]):</span><br><span class="line">            p[idx] += kernel(z(x[idx], X[i], h)) / V_i</span><br><span class="line">        p[idx] /= n_samples</span><br><span class="line">    return p</span><br></pre></td></tr></table></figure></p>
+<h3 id="均匀核"><a href="#均匀核" class="headerlink" title="均匀核"></a>均匀核</h3><ul>
+<li><p>$h=0.5$<br>  <img src="/2018/11/19/Non-parameter-Estimation/01_h_0.5.png" alt="01_h_0.5"></p>
+</li>
+<li><p>$h=0.8$<br>  <img src="/2018/11/19/Non-parameter-Estimation/01_h_0.8.png" alt="01_h_0.8"></p>
+</li>
+<li><p>$h=1.0$<br>  <img src="/2018/11/19/Non-parameter-Estimation/01_h_1.0.png" alt="01_h_1.0"></p>
+</li>
+<li><p>$h=2.0$<br>  <img src="/2018/11/19/Non-parameter-Estimation/01_h_2.0.png" alt="01_h_2.0"></p>
+</li>
+</ul>
+<h3 id="高斯核"><a href="#高斯核" class="headerlink" title="高斯核"></a>高斯核</h3><ul>
+<li><p>$h=0.5$<br>  <img src="/2018/11/19/Non-parameter-Estimation/gaussian_h_0.5.png" alt="gaussian_h_0.5"></p>
+</li>
+<li><p>$h=0.8$<br>  <img src="/2018/11/19/Non-parameter-Estimation/gaussian_h_0.8.png" alt="gaussian_h_0.8"></p>
+</li>
+<li><p>$h=1.0$<br>  <img src="/2018/11/19/Non-parameter-Estimation/gaussian_h_1.0.png" alt="gaussian_h_1.0"></p>
+</li>
+<li><p>$h=2.0$<br>  <img src="/2018/11/19/Non-parameter-Estimation/gaussian_h_2.0.png" alt="gaussian_h_2.0"></p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/19/Parameter-Estimation/" rel="next" title="Parameter Estimation">
+                <i class="fa fa-chevron-left"></i> Parameter Estimation
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/21/Entropy/" rel="prev" title="Entropy">
+                Entropy <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Louis Hsu">
+            
+              <p class="site-author-name" itemprop="name">Louis Hsu</p>
+              <p class="site-description motion-element" itemprop="description">And the winner is, la vie, and the winner is, I'amour.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">30</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/isLouisHsu" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:is.louishsu@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/islouishsu" target="_blank" title="知乎"><i class="fa fa-fw fa-知乎"></i>知乎</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/islouishsu" target="_blank" title="微博"><i class="fa fa-fw fa-weibo"></i>微博</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基本原理"><span class="nav-number">2.</span> <span class="nav-text">基本原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#直方图法"><span class="nav-number">3.</span> <span class="nav-text">直方图法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#原理"><span class="nav-number">3.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码"><span class="nav-number">3.2.</span> <span class="nav-text">代码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#K-n-近邻估计法"><span class="nav-number">4.</span> <span class="nav-text">$K_n$近邻估计法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#原理-1"><span class="nav-number">4.1.</span> <span class="nav-text">原理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Parzen窗法"><span class="nav-number">5.</span> <span class="nav-text">Parzen窗法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#原理-2"><span class="nav-number">5.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#核函数"><span class="nav-number">5.2.</span> <span class="nav-text">核函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sklearn"><span class="nav-number">5.3.</span> <span class="nav-text">sklearn</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码-1"><span class="nav-number">5.4.</span> <span class="nav-text">代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#均匀核"><span class="nav-number">5.4.1.</span> <span class="nav-text">均匀核</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高斯核"><span class="nav-number">5.4.2.</span> <span class="nav-text">高斯核</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Louis Hsu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
