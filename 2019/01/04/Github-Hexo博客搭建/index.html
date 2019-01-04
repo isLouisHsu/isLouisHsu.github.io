@@ -120,7 +120,7 @@
 <meta property="og:image" content="http://yoursite.com/Github-Hexo博客搭建/create_branch_hexo.png">
 <meta property="og:image" content="http://yoursite.com/Github-Hexo博客搭建/change_branch_hexo.png">
 <meta property="og:image" content="http://yoursite.com/Github-Hexo博客搭建/backup_blog.png">
-<meta property="og:updated_time" content="2019-01-04T07:35:47.930Z">
+<meta property="og:updated_time" content="2019-01-04T07:49:37.096Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo+Github博客搭建">
 <meta name="twitter:description" content="前言那么问题来了，现有的博客还是现有的这篇文章呢？ 软件安装安装node.js, git, hexo 博客搭建初始化推荐使用git命令窗口，执行如下指令12345678910111213141516171819202122232425262728293031$ mkdir Blog$ cd Blog$ hexo initINFO  Cloning hexo-starter to ~\Desktop">
@@ -396,7 +396,7 @@
                 
               
 
-              <time title="创建时间：2019-01-04 12:47:37 / 修改时间：15:35:47" itemprop="dateCreated datePublished" datetime="2019-01-04T12:47:37+08:00">2019-01-04</time>
+              <time title="创建时间：2019-01-04 12:47:37 / 修改时间：15:49:37" itemprop="dateCreated datePublished" datetime="2019-01-04T12:47:37+08:00">2019-01-04</time>
             
 
             
@@ -477,14 +477,14 @@
 <h1 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h1><ul>
 <li><p>目录结构</p>
 <ul>
-<li>public 生成的网站文件，发布的站点文件。</li>
-<li>source资源文件夹，用于存放内容。</li>
-<li>tag 标签文件夹。</li>
-<li>archive归档文件夹。</li>
-<li>category分类文件夹。</li>
-<li>downloads/code include code文件夹。</li>
-<li>:lang i18n_dir 国际化文件夹。</li>
-<li>_config.yml 配置文件</li>
+<li><code>public</code>  生成的网站文件，发布的站点文件。</li>
+<li><code>source</code>  资源文件夹，用于存放内容。</li>
+<li><code>tag</code>     标签文件夹。</li>
+<li><code>archive</code> 归档文件夹。</li>
+<li><code>category</code>分类文件夹。</li>
+<li><code>downloads/code include code</code>文件夹。</li>
+<li><code>:lang i18n_dir</code> 国际化文件夹。</li>
+<li><code>_config.yml</code> 配置文件</li>
 </ul>
 </li>
 <li><p>指令</p>
@@ -492,7 +492,10 @@
 </li>
 </ul>
 <!-- # 修改主题 -->
-<h1 id="拓展功能支持"><a href="#拓展功能支持" class="headerlink" title="拓展功能支持"></a>拓展功能支持</h1><h2 id="搜索功能"><a href="#搜索功能" class="headerlink" title="搜索功能"></a>搜索功能</h2><p>安装拓展包<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-generator-searchdb --save</span><br><span class="line">$ npm install hexo-generator-search --save</span><br></pre></td></tr></table></figure></p>
+<h1 id="拓展功能支持"><a href="#拓展功能支持" class="headerlink" title="拓展功能支持"></a>拓展功能支持</h1><h2 id="插入图片"><a href="#插入图片" class="headerlink" title="插入图片"></a>插入图片</h2><p>修改文件<code>_config.yml</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">post_asset_folder: true</span><br></pre></td></tr></table></figure></p>
+<p>在执行<code>$ hexo n [layout] &lt;title&gt;</code>时会生成同名文件夹，把图片放在这个文件夹内，在<code>.md</code>文件中插入图片<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![image_name](/title/image_name.png)</span><br></pre></td></tr></table></figure></p>
+<p>安装<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-asset-image --save</span><br></pre></td></tr></table></figure></p>
+<h2 id="搜索功能"><a href="#搜索功能" class="headerlink" title="搜索功能"></a>搜索功能</h2><p>安装拓展包<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-generator-searchdb --save</span><br><span class="line">$ npm install hexo-generator-search --save</span><br></pre></td></tr></table></figure></p>
 <p>站点配置文件<code>_config.yml</code>中添加<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">search:</span><br><span class="line">  path: search.xml</span><br><span class="line">  field: post</span><br><span class="line">  format: html</span><br><span class="line">  limit: 10000</span><br></pre></td></tr></table></figure></p>
 <p>修改主题配置文件<code>/themes/xxx/_config.yml</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">local_search:</span><br><span class="line">  enable: true</span><br></pre></td></tr></table></figure></p>
 <!-- ## 数学公式支持
@@ -523,22 +526,6 @@
       
       
 
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/01/04/hello-world/" rel="prev" title="Hello World">
-                Hello World <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
       
 
       
@@ -607,7 +594,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-count">1</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -671,7 +658,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#软件安装"><span class="nav-number">2.</span> <span class="nav-text">软件安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#博客搭建"><span class="nav-number">3.</span> <span class="nav-text">博客搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化"><span class="nav-number">3.1.</span> <span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关联Github"><span class="nav-number">3.2.</span> <span class="nav-text">关联Github</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用个人域名"><span class="nav-number">3.3.</span> <span class="nav-text">使用个人域名</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#备份博客"><span class="nav-number">4.</span> <span class="nav-text">备份博客</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用方法"><span class="nav-number">5.</span> <span class="nav-text">使用方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#拓展功能支持"><span class="nav-number">6.</span> <span class="nav-text">拓展功能支持</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#搜索功能"><span class="nav-number">6.1.</span> <span class="nav-text">搜索功能</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">7.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#软件安装"><span class="nav-number">2.</span> <span class="nav-text">软件安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#博客搭建"><span class="nav-number">3.</span> <span class="nav-text">博客搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化"><span class="nav-number">3.1.</span> <span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关联Github"><span class="nav-number">3.2.</span> <span class="nav-text">关联Github</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用个人域名"><span class="nav-number">3.3.</span> <span class="nav-text">使用个人域名</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#备份博客"><span class="nav-number">4.</span> <span class="nav-text">备份博客</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用方法"><span class="nav-number">5.</span> <span class="nav-text">使用方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#拓展功能支持"><span class="nav-number">6.</span> <span class="nav-text">拓展功能支持</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#插入图片"><span class="nav-number">6.1.</span> <span class="nav-text">插入图片</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搜索功能"><span class="nav-number">6.2.</span> <span class="nav-text">搜索功能</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">7.</span> <span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>
