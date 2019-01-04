@@ -108,23 +108,28 @@
 
 
 
-  <meta name="description" content="And the winner is, la vie, and the winner is, I&apos;amour.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="LOUIS&#39; BLOG">
-<meta property="og:url" content="http://yoursite.com/categories/Others/index.html">
+  <meta name="description" content="引言逻辑回归（Logistic Regression）是用于处理因变量为分类变量的回归问题，常见的是二分类或二项分布问题，也可以处理多分类问题，它实际上是属于一种分类方法。 模型先给出模型，推导过程稍后给出，逻辑回归包含Sigmoid函数 f(z) = \frac{1}{1+e^{-z}}其图像如下 定义 z = w^Tx其中$x=[x_0, x_1, …, x_n]^T, x_0=1$ h_w(">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Logistic Regression">
+<meta property="og:url" content="http://yoursite.com/2018/10/18/Logistic-Regression/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="And the winner is, la vie, and the winner is, I&apos;amour.">
+<meta property="og:description" content="引言逻辑回归（Logistic Regression）是用于处理因变量为分类变量的回归问题，常见的是二分类或二项分布问题，也可以处理多分类问题，它实际上是属于一种分类方法。 模型先给出模型，推导过程稍后给出，逻辑回归包含Sigmoid函数 f(z) = \frac{1}{1+e^{-z}}其图像如下 定义 z = w^Tx其中$x=[x_0, x_1, …, x_n]^T, x_0=1$ h_w(">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2018/10/18/Logistic-Regression/Sigmoid.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/18/Logistic-Regression/Sigmoid_gradient.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/18/Logistic-Regression/logistic_regression_result.png">
+<meta property="og:updated_time" content="2019-01-04T09:19:10.043Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LOUIS&#39; BLOG">
-<meta name="twitter:description" content="And the winner is, la vie, and the winner is, I&apos;amour.">
+<meta name="twitter:title" content="Logistic Regression">
+<meta name="twitter:description" content="引言逻辑回归（Logistic Regression）是用于处理因变量为分类变量的回归问题，常见的是二分类或二项分布问题，也可以处理多分类问题，它实际上是属于一种分类方法。 模型先给出模型，推导过程稍后给出，逻辑回归包含Sigmoid函数 f(z) = \frac{1}{1+e^{-z}}其图像如下 定义 z = w^Tx其中$x=[x_0, x_1, …, x_n]^T, x_0=1$ h_w(">
+<meta name="twitter:image" content="http://yoursite.com/2018/10/18/Logistic-Regression/Sigmoid.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/categories/Others/">
+  <link rel="canonical" href="http://yoursite.com/2018/10/18/Logistic-Regression/">
 
 
 
@@ -134,7 +139,7 @@
   };
 </script>
 
-  <title>分类: Others | LOUIS' BLOG</title>
+  <title>Logistic Regression | LOUIS' BLOG</title>
   
 
 
@@ -181,7 +186,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -238,7 +243,7 @@
         
         
           
-          <li class="menu-item menu-item-categories menu-item-active">
+          <li class="menu-item menu-item-categories">
     <a href="/categories/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
   </li>
@@ -327,83 +332,269 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block category">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>Others<small>分类</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
+
+  
 
   <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/18/Logistic-Regression/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="And the winner is, la vie, and the winner is, I'amour.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2019/01/04/Github-Hexo博客搭建/" itemprop="url">
-              
-                <span itemprop="name">Hexo+Github博客搭建</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">Logistic Regression
+              
+            
+          </h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-01-04T12:47:37+08:00" content="2019-01-04">
-          01-04
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
 
-    </header>
-  </article>
+            
+            
+            
 
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-10-18 19:05:16" itemprop="dateCreated datePublished" datetime="2018-10-18T19:05:16+08:00">2018-10-18</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-01-04 17:19:10" itemprop="dateModified" datetime="2019-01-04T17:19:10+08:00">2019-01-04</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>逻辑回归（Logistic Regression）是用于处理因变量为分类变量的回归问题，常见的是二分类或二项分布问题，也可以处理多分类问题，它实际上是属于一种分类方法。</p>
+<h1 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h1><p>先给出模型，推导过程稍后给出，逻辑回归包含<code>Sigmoid</code>函数</p>
+<script type="math/tex; mode=display">f(z) = \frac{1}{1+e^{-z}}</script><p>其图像如下<br><img src="/2018/10/18/Logistic-Regression/Sigmoid.png" alt="`Sigmod函数`"></p>
+<p>定义</p>
+<script type="math/tex; mode=display">z = w^Tx</script><p>其中$x=[x_0, x_1, …, x_n]^T, x_0=1$</p>
+<script type="math/tex; mode=display">h_w(x) = g(z) =  \frac{1}{1+e^{-z}}</script><h1 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h1><h2 id="由最大似然估计推导"><a href="#由最大似然估计推导" class="headerlink" title="由最大似然估计推导"></a>由最大似然估计推导</h2><p>对于二元分类问题，其取值作为随机变量，服从二项分布 $B(1, p)$，其中$p$即为预测输出概率$\hat{y}$</p>
+<script type="math/tex; mode=display">P(y_i^{(i)}) = (\hat{y}_i^{(i)})^{y_i^{(i)}}(1-\hat{y}_i^{(i)})^{1-y_i^{(i)}}</script><p>由极大似然估计</p>
+<script type="math/tex; mode=display">L = \prod_{i=0}^N P(y_i^{(i)}) = \prod_{i=0}^N (\hat{y}_i^{(i)})^{y_i^{(i)}}(1-\hat{y}_i^{(i)})^{1-y_i^{(i)}}</script><p>取对数似然函数</p>
+<script type="math/tex; mode=display">logL = \sum_{i=0}^N [y_i^{(i)} log \hat{y}_i^{(i)} + (1-y_i^{(i)}) log (1-\hat{y}_i^{(i)})]</script><p>优化目标是</p>
+<script type="math/tex; mode=display">w = argmax_w logL</script><p>优化问题一般表述成<code>minimize</code>问题，添加负号，构成<code>Neg Log Likelihood</code>损失</p>
+<script type="math/tex; mode=display">w = argmin_w (-logL)</script><p>一般取均值</p>
+<script type="math/tex; mode=display">L(\hat{y}, y)=- \frac{1}{N} \sum_i [y_i^{(i)} log(\hat{y}_i^{(i)})+(1 - y_i^{(i)})log(1-\hat{y}_i^{(i)})]</script><p>其中$y_i$表示真实值，$\hat{y}_i$表示预测值</p>
+<h2 id="从交叉熵理解"><a href="#从交叉熵理解" class="headerlink" title="从交叉熵理解"></a>从交叉熵理解</h2><p>已知交叉熵<code>cross entropy</code>定义如下</p>
+<script type="math/tex; mode=display">CrossEnt = \sum_i p_i log \frac{1}{q_i}</script><p>而对于样本$ (X_i, y_i) $，为确定事件，故标签概率的取值为$ p_i = y_i ∈ \{0,1\}$，$ q_i即预测输出的概率值\hat{y}_i $，可得到与上面相同的推导结论</p>
+<h2 id="从决策平面和贝叶斯决策理解"><a href="#从决策平面和贝叶斯决策理解" class="headerlink" title="从决策平面和贝叶斯决策理解"></a>从决策平面和贝叶斯决策理解</h2><p>相关内容查看<a href="https://louishsu.xyz/2018/10/19/%E5%88%86%E7%B1%BB%E9%97%AE%E9%A2%98%E7%9A%84%E5%86%B3%E7%AD%96%E5%B9%B3%E9%9D%A2/" target="_blank" rel="noopener">分类问题的决策平面</a>和<a href="https://louishsu.xyz/2018/10/18/%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%86%B3%E7%AD%96/" target="_blank" rel="noopener">贝叶斯决策</a>，逻辑回归考虑的一般是等先验概率问题，故决策函数定义为</p>
+<blockquote>
+<p>$if$ $P(c_i|x)&gt;P(c_j|x)$ $then$ $ x \in c_i $,  $ i, j = 1, 2 $</p>
+</blockquote>
+<p>从贝叶斯决策可知，对于类别$c_1$，有</p>
+<script type="math/tex; mode=display">
+P(c_1|x) = \frac{P(x|c_1)}{P(x|c_1) + P(x|c_2)}</script><p>设在各个类别下，特征$x$服从正态分布</p>
+<script type="math/tex; mode=display">
+P(x|c_i) = \frac{1}{ (2\pi)^{\frac{n}{2}} |\Sigma_i|^{\frac{1}{2}}}
+exp(-\frac{1}{2} (x-\mu_i)^T \Sigma^{-1} (x-\mu_i))</script><p>则</p>
+<script type="math/tex; mode=display">
+P(c_1|x) = \frac
+{1}
+{
+    1 + exp(-z)
+}</script><script type="math/tex; mode=display">
+P(c_2|x) = 1 - P(c_1|x) = \frac{exp(-z)}{1+exp(-z)}</script><blockquote>
+<p>$<br>P(c_1|x) = \frac<br>{exp(-\frac{1}{2} (x-\mu_1)^T \Sigma_1^{-1} (x-\mu_1)}<br>{exp(-\frac{1}{2} (x-\mu_1)^T \Sigma_1^{-1} (x-\mu_1) + exp(-\frac{1}{2} (x-\mu_2)^T \Sigma_2^{-1} (x-\mu_2)}<br>$</p>
+<p>$<br>P(c_1|x) = \frac<br>{1}<br>{1 + \frac{exp(-\frac{1}{2} (x-\mu_2)^T \Sigma_2^{-1} (x-\mu_2)}{exp(-\frac{1}{2} (x-\mu_1)^T \Sigma_1^{-1} (x-\mu_1)}<br>}<br>$</p>
+<p>假定各分类的样本方差相等，$ \Sigma_1 = \Sigma_2 = \sigma^2 I $</p>
+<p>$ P(c_1|x) = \frac {1}{1 + exp(- [ \frac{1}{\sigma^2} (\mu_1-\mu_2)^T x - \frac{1}{2 \sigma^2} (\mu_1^T\mu_1 - \mu_2^T\mu_2) ])}<br>$</p>
+<p>令</p>
+<script type="math/tex; mode=display">w = \frac{1}{\sigma^2} (\mu_1 -\mu_2)</script><script type="math/tex; mode=display">b = - \frac{1}{2\sigma^2}(\mu_1^T \mu_1 - \mu_2^T \mu_2)</script><p>即可得到</p>
+<script type="math/tex; mode=display">
+P(c_1|x) = \frac
+{1}
+{
+    1 + exp(-z)
+}</script><p>其中</p>
+<script type="math/tex; mode=display">z = w^T x + b</script></blockquote>
+<h1 id="梯度推导"><a href="#梯度推导" class="headerlink" title="梯度推导"></a>梯度推导</h1><p>先推导<code>Sigmoid</code>函数的导数</p>
+<script type="math/tex; mode=display">
+f'(z) = (1 - f(z))f(z)</script><p>值得注意的是，从$f’(z)$的图像可以看到，在$ x=0 $处$f’(z)$取极大值，且</p>
+<script type="math/tex; mode=display">
+f'(z)_{max} = f'(z)|_{z=0} = 0.25</script><script type="math/tex; mode=display">
+\lim_{z \rightarrow \infty} f'(z) = 0</script><p>在多层神经网络反向传播更新参数时，由于梯度多次累乘，<code>Sigmoid</code>作为<a href="https://louishsu.xyz/2018/10/20/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/" target="_blank" rel="noopener">激活函数</a>会存在“梯度消失”的问题，使得参数更新非常缓慢。</p>
+<p><img src="/2018/10/18/Logistic-Regression/Sigmoid_gradient.png" alt="`Sigmod导函数`"></p>
+<blockquote>
+<p>$ f’(z) $<br>$ = (\frac{1}{1+e^{-z}})’ $<br>$ = \frac<br>​          {-(1+e^{-z})’}<br>​          {(1+e^{-z})^2} $<br>$ = \frac<br>​          {e^{-z}}<br>​          {(1+e^{-z})^2} $<br>$ = \frac<br>​          {e^{-z}}<br>​          {1+e^{-z}}<br>​    \frac<br>​          {1}<br>​          {1+e^{-z}}$<br>$ = (1 - f(z))f(z)$</p>
+</blockquote>
+<p>利用链式求导法则可得</p>
+<blockquote>
+<p>$\frac{∂L}{∂w_j}$<br>$= -\frac{∂}{∂w_j} \frac{1}{N} \sum_i [y^{(i)} log(\hat{y}^{(i)})+(1-y^{(i)})log(1-\hat{y}^{(i)})]$<br>$= - \frac{1}{N} \sum_i [y^{(i)} \frac{1}{\hat{y}^{(i)}}\frac{∂}{∂w_j}\hat{y}^{(i)}-(1-y^{(i)})\frac{1}{1-\hat{y}^{(i)}}\frac{∂}{∂w_j}\hat{y}^{(i)}]$<br>$= - \frac{1}{N} \sum_i [y^{(i)} \frac{1}{\hat{y}^{(i)}}\hat{y}^{(i)}(1-\hat{y}^{(i)})w_j-(1-y^{(i)})\frac{1}{1-\hat{y}^{(i)}}\hat{y}^{(i)}(1-\hat{y}^{(i)})w_j]$<br>$= - \frac{1}{N} \sum_i [y^{(i)} (1-\hat{y}^{(i)})w_j-(1-y^{(i)}) y^{(i)} w_j]$<br>$=  \frac{1}{N} \sum_i (\hat{y}^{(i)} - y^{(i)})w_j $</p>
+</blockquote>
+<p>写作矩阵形式，记$X = [x_1, x_2, …, x_m]^T$，$x_i$为样本特征(列向量)</p>
+<script type="math/tex; mode=display">
+∇_w L = X^T (\hat{Y} - Y)</script><h1 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h1><p>和线性回归一样，采用梯度下降法求解</p>
+<script type="math/tex; mode=display">w := w - \alpha ∇_w L</script><h1 id="处理多分类问题"><a href="#处理多分类问题" class="headerlink" title="处理多分类问题"></a>处理多分类问题</h1><p>假设有$K$个类别，则依次以类别$c_i$为正样本训练模型，一共训练$K$个。测试样本在每个模型上计算，最终将概率最大的作为分类结果。</p>
+<blockquote>
+<p>这样划分数据集，会使训练集正负样本数目严重不对称，特别是类别很多的情况，对结果会产生影响。可推广至<a href="https://louishsu.xyz/2018/10/18/softmax%E5%9B%9E%E5%BD%92/" target="_blank" rel="noopener">softmax回归</a>解决这个问题。</p>
+</blockquote>
+<h1 id="程序"><a href="#程序" class="headerlink" title="程序"></a>程序</h1><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p><a href="https://github.com/isLouisHsu/Python-Examples-for-ML/blob/master/Andrew%20Ng%2C%20Stanford%20University/mlclass-ex2-logisticregression/LogReg.py" target="_blank" rel="noopener">@Github: Code for Logistic Regression</a></p>
+<h2 id="cost-function"><a href="#cost-function" class="headerlink" title="cost function"></a>cost function</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">def lossFunctionDerivative(self, X, theta, y_true):</span><br><span class="line">    &apos;&apos;&apos;</span><br><span class="line">    计算损失函数对参数theta的梯度</span><br><span class="line">    对theta[j]的梯度为：(y_pred - y_true)*x[j]</span><br><span class="line">    &apos;&apos;&apos;</span><br><span class="line">    err = self.predict_prob(X, theta) - y_true</span><br><span class="line">    return X.T.dot(err)/y_true.shape[0]</span><br><span class="line">def lossFunction(self, y_pred_prob, y_true):</span><br><span class="line">    &apos;&apos;&apos;</span><br><span class="line">    未使用</span><br><span class="line">    计算损失值: Cross-Entropy</span><br><span class="line">    y_pred_prob, y_true: NumPy array, shape=(n,)</span><br><span class="line">    &apos;&apos;&apos;</span><br><span class="line">    tmp = y_true*np.log(y_pred_prob) + (1 - y_true)*np.log(1 - y_pred_prob)</span><br><span class="line">    return np.mean(-tmp)</span><br></pre></td></tr></table></figure>
+<h2 id="training-step"><a href="#training-step" class="headerlink" title="training step"></a>training step</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">def gradDescent(self, min_acc, learning_rate=0.01, max_iter=10000):</span><br><span class="line">    acc = 0; n_iter = 0</span><br><span class="line">    for n_iter in range(max_iter):</span><br><span class="line">        for n in range(self.n_batch):</span><br><span class="line">            X_batch = self.X[n*self.batch_size:(n+1)*self.batch_size]</span><br><span class="line">            t_batch = self.t[n*self.batch_size:(n+1)*self.batch_size]</span><br><span class="line">            grad = self.lossFunctionDerivative(X_batch, self.theta, t_batch)</span><br><span class="line">            self.theta -= learning_rate * grad # 梯度下降</span><br><span class="line">            acc = self.accuracyRate(self.predict_prob(self.X, self.theta), self.t)</span><br><span class="line">            if acc &gt; min_acc:</span><br><span class="line">                print(&apos;第%d次迭代, 第%d批数据&apos; % (n_iter, n))</span><br><span class="line">                print(&quot;当前总体样本准确率为: &quot;, acc)</span><br><span class="line">                print(&quot;当前参数值为: &quot;, self.theta)</span><br><span class="line">                return self.theta</span><br><span class="line">        if n_iter%100 == 0:</span><br><span class="line">            print(&apos;第%d次迭代&apos; % n_iter)</span><br><span class="line">            print(&apos;准确率： &apos;, acc)</span><br><span class="line">    print(&quot;超过迭代次数&quot;)</span><br><span class="line">    print(&quot;当前总体样本准确率为: &quot;, acc)</span><br><span class="line">    print(&quot;当前参数值为: &quot;, self.theta)</span><br><span class="line">    return self.theta</span><br></pre></td></tr></table></figure>
+<h2 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h2><p><img src="/2018/10/18/Logistic-Regression/logistic_regression_result.png" alt="实验结果"></p>
 
       
     </div>
 
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/18/Linear-Regression/" rel="next" title="Linear Regression">
+                <i class="fa fa-chevron-left"></i> Linear Regression
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/18/Softmax-Regression/" rel="prev" title="Softmax Regression">
+                Softmax Regression <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+  </div>
 
 
           </div>
           
+
+  
+
+
 
         </div>
         
@@ -424,8 +615,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -530,6 +730,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#模型"><span class="nav-number">2.</span> <span class="nav-text">模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#损失函数"><span class="nav-number">3.</span> <span class="nav-text">损失函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#由最大似然估计推导"><span class="nav-number">3.1.</span> <span class="nav-text">由最大似然估计推导</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#从交叉熵理解"><span class="nav-number">3.2.</span> <span class="nav-text">从交叉熵理解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#从决策平面和贝叶斯决策理解"><span class="nav-number">3.3.</span> <span class="nav-text">从决策平面和贝叶斯决策理解</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#梯度推导"><span class="nav-number">4.</span> <span class="nav-text">梯度推导</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#训练"><span class="nav-number">5.</span> <span class="nav-text">训练</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#处理多分类问题"><span class="nav-number">6.</span> <span class="nav-text">处理多分类问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#程序"><span class="nav-number">7.</span> <span class="nav-text">程序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#代码"><span class="nav-number">7.1.</span> <span class="nav-text">代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cost-function"><span class="nav-number">7.2.</span> <span class="nav-text">cost function</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#training-step"><span class="nav-number">7.3.</span> <span class="nav-text">training step</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验结果"><span class="nav-number">7.4.</span> <span class="nav-text">实验结果</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -661,6 +877,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
 
   
 
@@ -1022,6 +1242,30 @@
   
   
 
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
   
 
 
