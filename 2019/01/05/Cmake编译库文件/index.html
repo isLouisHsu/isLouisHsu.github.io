@@ -108,17 +108,17 @@
 
 
 
-  <meta name="description" content="前言库文件即源代码的二进制文件，我们通常把一些公用函数制作成函数库，供其它程序使用。函数库分为静态库和动态库两种。静态库在程序编译时会被连接到目标代码中，程序运行时将不再需要该静态库；动态库在程序编译时并不会被连接到目标代码中，而是在程序运行是才被载入，因此在程序运行时还需要动态库存在。 编译以DarkNet为例，我们将其源代码编译成.a静态库文件。  下载源码 YOLO: Real-Time O">
+  <meta name="description" content="前言库文件即源代码的二进制文件，我们通常把一些公用函数制作成函数库，供其它程序使用。函数库分为静态库和动态库两种。静态库在程序编译时会被连接到目标代码中，程序运行时将不再需要该静态库；动态库在程序编译时并不会被连接到目标代码中，而是在程序运行是才被载入，因此在程序运行时还需要动态库存在。 编译以DarkNet为例，我们将其源代码编译成.a静态库文件。  下载源码  YOLO: Real-Time">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Cmake编译库文件">
 <meta property="og:url" content="http://yoursite.com/2019/01/05/Cmake编译库文件/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="前言库文件即源代码的二进制文件，我们通常把一些公用函数制作成函数库，供其它程序使用。函数库分为静态库和动态库两种。静态库在程序编译时会被连接到目标代码中，程序运行时将不再需要该静态库；动态库在程序编译时并不会被连接到目标代码中，而是在程序运行是才被载入，因此在程序运行时还需要动态库存在。 编译以DarkNet为例，我们将其源代码编译成.a静态库文件。  下载源码 YOLO: Real-Time O">
+<meta property="og:description" content="前言库文件即源代码的二进制文件，我们通常把一些公用函数制作成函数库，供其它程序使用。函数库分为静态库和动态库两种。静态库在程序编译时会被连接到目标代码中，程序运行时将不再需要该静态库；动态库在程序编译时并不会被连接到目标代码中，而是在程序运行是才被载入，因此在程序运行时还需要动态库存在。 编译以DarkNet为例，我们将其源代码编译成.a静态库文件。  下载源码  YOLO: Real-Time">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-05T10:29:44.671Z">
+<meta property="og:updated_time" content="2019-01-05T11:13:21.461Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Cmake编译库文件">
-<meta name="twitter:description" content="前言库文件即源代码的二进制文件，我们通常把一些公用函数制作成函数库，供其它程序使用。函数库分为静态库和动态库两种。静态库在程序编译时会被连接到目标代码中，程序运行时将不再需要该静态库；动态库在程序编译时并不会被连接到目标代码中，而是在程序运行是才被载入，因此在程序运行时还需要动态库存在。 编译以DarkNet为例，我们将其源代码编译成.a静态库文件。  下载源码 YOLO: Real-Time O">
+<meta name="twitter:description" content="前言库文件即源代码的二进制文件，我们通常把一些公用函数制作成函数库，供其它程序使用。函数库分为静态库和动态库两种。静态库在程序编译时会被连接到目标代码中，程序运行时将不再需要该静态库；动态库在程序编译时并不会被连接到目标代码中，而是在程序运行是才被载入，因此在程序运行时还需要动态库存在。 编译以DarkNet为例，我们将其源代码编译成.a静态库文件。  下载源码  YOLO: Real-Time">
 
 
 
@@ -390,7 +390,7 @@
                 
               
 
-              <time title="创建时间：2019-01-05 18:02:34 / 修改时间：18:29:44" itemprop="dateCreated datePublished" datetime="2019-01-05T18:02:34+08:00">2019-01-05</time>
+              <time title="创建时间：2019-01-05 18:02:34 / 修改时间：19:13:21" itemprop="dateCreated datePublished" datetime="2019-01-05T18:02:34+08:00">2019-01-05</time>
             
 
             
@@ -449,14 +449,13 @@
         <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>库文件即源代码的二进制文件，我们通常把一些公用函数制作成函数库，供其它程序使用。函数库分为静态库和动态库两种。静态库在程序编译时会被连接到目标代码中，程序运行时将不再需要该静态库；动态库在程序编译时并不会被连接到目标代码中，而是在程序运行是才被载入，因此在程序运行时还需要动态库存在。</p>
 <h1 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h1><p>以DarkNet为例，我们将其源代码编译成<code>.a</code>静态库文件。</p>
 <ol>
-<li>下载源码<blockquote>
+<li><p>下载源码</p>
+<blockquote>
 <p>YOLO: Real-Time Object Detection <a href="https://pjreddie.com/darknet/yolo/" target="_blank" rel="noopener">https://pjreddie.com/darknet/yolo/</a></p>
 </blockquote>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git clone https://github.com/pjreddie/darknet</span><br></pre></td></tr></table></figure>
 </li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git clone https://github.com/pjreddie/darknet</span><br></pre></td></tr></table></figure>
-<ol>
-<li><p>整理文件<br>我们将<code>include/</code>与<code>src/</code>目录复制到新建文件夹<code>darknet/</code>。</p>
+<li><p>整理文件<br> 我们将<code>include/</code>与<code>src/</code>目录复制到新建文件夹<code>darknet/</code>。</p>
 </li>
 <li><p>在<code>darknet/</code>目录下编写<code>CmakeLists.txt</code>文件，内容如下</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">CMAKE_MINIMUM_REQUIRED(VERSION 2.8)	                                # cmake需要的最小版本号</span><br><span class="line">PROJECT(darknet)			                                        # 项目名</span><br><span class="line"></span><br><span class="line">MESSAGE(STATUS </span><br><span class="line">    &quot;----------------------------------------------------------------------&quot;</span><br><span class="line">)</span><br><span class="line">MESSAGE(STATUS </span><br><span class="line">    &quot;project name:      &quot; $&#123;PROJECT_NAME&#125;           # cmake默认参数</span><br><span class="line">)</span><br><span class="line">MESSAGE(STATUS </span><br><span class="line">    &quot;source directory:  &quot; $&#123;PROJECT_SOURCE_DIR&#125;     # cmake默认参数</span><br><span class="line">)</span><br><span class="line">MESSAGE(STATUS </span><br><span class="line">    &quot;binary directory:  &quot; $&#123;PROJECT_BINARY_DIR&#125;     # cmake默认参数</span><br><span class="line">)</span><br><span class="line">MESSAGE(STATUS </span><br><span class="line">    &quot;----------------------------------------------------------------------&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># ----------------------------------------------------------------------------------</span><br><span class="line">INCLUDE_DIRECTORIES(                                # 头文件目录</span><br><span class="line">    $&#123;PROJECT_SOURCE_DIR&#125;/include</span><br><span class="line">    $&#123;PROJECT_SOURCE_DIR&#125;/src</span><br><span class="line">)                                                   </span><br><span class="line">AUX_SOURCE_DIRECTORY(                               # 源文件</span><br><span class="line">    $&#123;PROJECT_SOURCE_DIR&#125;/src </span><br><span class="line">    lib_srcfile</span><br><span class="line">)                                                   </span><br><span class="line">SET(LIBRARY_OUTPUT_PATH $&#123;PROJECT_BINARY_DIR&#125;/lib)  # 设置保存`.a`的目录</span><br><span class="line"></span><br><span class="line"># ----------------------------------------------------------------------------------</span><br><span class="line">ADD_LIBRARY(                                        # 生成库文件，可选择`.a`或`.so`</span><br><span class="line">    $&#123;PROJECT_NAME&#125;</span><br><span class="line">    STATIC                                          # `.a`</span><br><span class="line">    # SHARED                                        # `.so`</span><br><span class="line">    $&#123;lib_srcfile&#125;</span><br><span class="line">) </span><br><span class="line"></span><br><span class="line"># ----------------------------------------------------------------------------------</span><br><span class="line">SET_TARGET_PROPERTIES(</span><br><span class="line">    $&#123;PROJECT_NAME&#125;</span><br><span class="line">    PROPERTIES</span><br><span class="line">    LINKER_LANGUAGE C</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
