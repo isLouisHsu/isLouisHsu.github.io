@@ -108,28 +108,27 @@
 
 
 
-  <meta name="description" content="原理基于贝叶斯公式 P(c_k|x)=\frac{p(x|c_k)P(c_k)}{p(x)}P(x)=\sum_j p(x|c_j)P(c_j)几种常用的贝叶斯决策最小错误率贝叶斯决策在分类问题中，我们往往希望尽可能减少分类错误，即目标是追求最小错误率。假设有$K$分类问题，由贝叶斯公式 P(c_k|x)=\frac{p(x|c_k)P(c_k)}{p(x)}上式中$ k=1,…,K  $，各部分">
+  <meta name="description" content="前言一个没什么用的小技能 模块 wordcloud · PyPI https://pypi.org/project/wordcloud/  安装该模块1&amp;gt; pip install wordcloud 主要用到的为12345678wordcloud.WordCloud(font_path=None, width=400, height=200, margin=2,">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Bayes Decision">
-<meta property="og:url" content="http://yoursite.com/2018/10/18/Bayes-Decision/index.html">
+<meta property="og:title" content="Python生成词云图">
+<meta property="og:url" content="http://yoursite.com/2019/02/17/Python生成词云图/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="原理基于贝叶斯公式 P(c_k|x)=\frac{p(x|c_k)P(c_k)}{p(x)}P(x)=\sum_j p(x|c_j)P(c_j)几种常用的贝叶斯决策最小错误率贝叶斯决策在分类问题中，我们往往希望尽可能减少分类错误，即目标是追求最小错误率。假设有$K$分类问题，由贝叶斯公式 P(c_k|x)=\frac{p(x|c_k)P(c_k)}{p(x)}上式中$ k=1,…,K  $，各部分">
+<meta property="og:description" content="前言一个没什么用的小技能 模块 wordcloud · PyPI https://pypi.org/project/wordcloud/  安装该模块1&amp;gt; pip install wordcloud 主要用到的为12345678wordcloud.WordCloud(font_path=None, width=400, height=200, margin=2,">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/2018/10/18/Bayes-Decision/decision_table.jpg">
-<meta property="og:image" content="http://yoursite.com/2018/10/18/Bayes-Decision/最小风险贝叶斯决策例.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/18/Bayes-Decision/李航-例4.1.png">
-<meta property="og:updated_time" content="2019-01-04T10:05:14.987Z">
+<meta property="og:image" content="http://yoursite.com/2019/02/17/Python生成词云图/mask.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/02/17/Python生成词云图/wc.jpg">
+<meta property="og:updated_time" content="2019-02-17T13:41:24.539Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Bayes Decision">
-<meta name="twitter:description" content="原理基于贝叶斯公式 P(c_k|x)=\frac{p(x|c_k)P(c_k)}{p(x)}P(x)=\sum_j p(x|c_j)P(c_j)几种常用的贝叶斯决策最小错误率贝叶斯决策在分类问题中，我们往往希望尽可能减少分类错误，即目标是追求最小错误率。假设有$K$分类问题，由贝叶斯公式 P(c_k|x)=\frac{p(x|c_k)P(c_k)}{p(x)}上式中$ k=1,…,K  $，各部分">
-<meta name="twitter:image" content="http://yoursite.com/2018/10/18/Bayes-Decision/decision_table.jpg">
+<meta name="twitter:title" content="Python生成词云图">
+<meta name="twitter:description" content="前言一个没什么用的小技能 模块 wordcloud · PyPI https://pypi.org/project/wordcloud/  安装该模块1&amp;gt; pip install wordcloud 主要用到的为12345678wordcloud.WordCloud(font_path=None, width=400, height=200, margin=2,">
+<meta name="twitter:image" content="http://yoursite.com/2019/02/17/Python生成词云图/mask.jpg">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/10/18/Bayes-Decision/">
+  <link rel="canonical" href="http://yoursite.com/2019/02/17/Python生成词云图/">
 
 
 
@@ -139,7 +138,7 @@
   };
 </script>
 
-  <title>Bayes Decision | LOUIS' BLOG</title>
+  <title>Python生成词云图 | LOUIS' BLOG</title>
   
 
 
@@ -352,7 +351,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/18/Bayes-Decision/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/17/Python生成词云图/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Louis Hsu">
@@ -369,7 +368,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Bayes Decision
+          <h1 class="post-title" itemprop="name headline">Python生成词云图
               
             
           </h1>
@@ -394,24 +393,12 @@
                 
               
 
-              <time title="创建时间：2018-10-18 19:05:24" itemprop="dateCreated datePublished" datetime="2018-10-18T19:05:24+08:00">2018-10-18</time>
+              <time title="创建时间：2019-02-17 18:57:21 / 修改时间：21:41:24" itemprop="dateCreated datePublished" datetime="2019-02-17T18:57:21+08:00">2019-02-17</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-01-04 18:05:14" itemprop="dateModified" datetime="2019-01-04T18:05:14+08:00">2019-01-04</time>
               
             
           </span>
@@ -428,7 +415,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a></span>
 
                 
                 
@@ -462,64 +449,19 @@
       
 
       
-        <h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>基于贝叶斯公式</p>
-<script type="math/tex; mode=display">P(c_k|x)=\frac{p(x|c_k)P(c_k)}{p(x)}</script><script type="math/tex; mode=display">P(x)=\sum_j p(x|c_j)P(c_j)</script><h1 id="几种常用的贝叶斯决策"><a href="#几种常用的贝叶斯决策" class="headerlink" title="几种常用的贝叶斯决策"></a>几种常用的贝叶斯决策</h1><h2 id="最小错误率贝叶斯决策"><a href="#最小错误率贝叶斯决策" class="headerlink" title="最小错误率贝叶斯决策"></a>最小错误率贝叶斯决策</h2><p>在分类问题中，我们往往希望尽可能减少分类错误，即目标是追求最小错误率。假设有$K$分类问题，由贝叶斯公式</p>
-<script type="math/tex; mode=display">P(c_k|x)=\frac{p(x|c_k)P(c_k)}{p(x)}</script><p>上式中$ k=1,…,K  $，各部分定义如下</p>
-<blockquote>
-<p>$P(c_k|x)$——<code>后验概率(posteriori probability)</code><br>$P(c_k)$——<code>先验概率(priori probability)</code>，<br>$p(x|c_k)$——$c_k$关于$x$的<code>似然函数(likelihood)</code>，<br>$p(x)$——<code>证据因子(evidence)</code>，</p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>一个没什么用的小技能</p>
+<h1 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h1><blockquote>
+<p>wordcloud · PyPI <a href="https://pypi.org/project/wordcloud/" target="_blank" rel="noopener">https://pypi.org/project/wordcloud/</a></p>
 </blockquote>
-<p>证据因子由下式计算</p>
-<script type="math/tex; mode=display">p(x)=\sum_{j=0}^K p(x|c_j)P(c_j)</script><p>以上就是从样本中训练的参数，在预测阶段，定义决策规则为</p>
-<blockquote>
-<p>$if$ $P(c_i|x)&gt;P(c_j|x)$, $then$ $ x \in c_i $</p>
+<p>安装该模块<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; pip install wordcloud</span><br></pre></td></tr></table></figure></p>
+<p>主要用到的为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">wordcloud.WordCloud(font_path=None, width=400, height=200, margin=2,</span><br><span class="line">                ranks_only=None, prefer_horizontal=.9, mask=None, scale=1,</span><br><span class="line">                color_func=None, max_words=200, min_font_size=4,</span><br><span class="line">                stopwords=None, random_state=None, background_color=&apos;black&apos;,</span><br><span class="line">                max_font_size=None, font_step=1, mode=&quot;RGB&quot;,</span><br><span class="line">                relative_scaling=&apos;auto&apos;, regexp=None, collocations=True,</span><br><span class="line">                colormap=None, normalize_plurals=True, contour_width=0,</span><br><span class="line">                contour_color=&apos;black&apos;, repeat=False)</span><br></pre></td></tr></table></figure></p>
+<h1 id="使用例程"><a href="#使用例程" class="headerlink" title="使用例程"></a>使用例程</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">import cv2</span><br><span class="line">import numpy as np</span><br><span class="line">from wordcloud import WordCloud</span><br><span class="line"></span><br><span class="line">font = &apos;C:/Windows/Fonts/SIMYOU.TTF&apos;    # 幼圆</span><br><span class="line">string = &apos;LouisHsu 单键 小叔叔 想静静 95后 傲娇 skrrrrrrr 大猫座 佛了 要秃 嘤嘤嘤 真香&apos;</span><br><span class="line"></span><br><span class="line">mask = cv2.imread(&apos;./mask.jpg&apos;, cv2.IMREAD_GRAYSCALE)</span><br><span class="line">thresh, mask = cv2.threshold(mask, 127, 255, cv2.THRESH_BINARY)</span><br><span class="line"></span><br><span class="line">wc = WordCloud(</span><br><span class="line">        font_path=font, </span><br><span class="line">        background_color=&apos;white&apos;,</span><br><span class="line">        color_func=lambda *args, **kwargs: (0,0,0),</span><br><span class="line">        mask=mask,</span><br><span class="line">        max_words=500,</span><br><span class="line">        min_font_size=4,</span><br><span class="line">        max_font_size=None,</span><br><span class="line">        contour_width=1,</span><br><span class="line">        repeat=True                     # 允许词重复</span><br><span class="line">    )</span><br><span class="line">wc.generate_from_text(string)</span><br><span class="line">wc.to_file(&apos;./wc.jpg&apos;)                  #保存图片</span><br></pre></td></tr></table></figure>
+<p>输入原图为<br><img src="/2019/02/17/Python生成词云图/mask.jpg" alt="mask"></p>
+<p>生成图像<br><img src="/2019/02/17/Python生成词云图/wc.jpg" alt="wc"></p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><blockquote>
+<p>python WordCloud 简单实例 - 博客 - CSDN博客 <a href="https://blog.csdn.net/cy776719526/article/details/80171790" target="_blank" rel="noopener">https://blog.csdn.net/cy776719526/article/details/80171790</a></p>
 </blockquote>
-<p>由于分母为标量，对于任意输入的样本特征$x$，$P(x)$一定，故决策规则可简化为</p>
-<blockquote>
-<p>$if$ $P(x|c_i)P(c_i)&gt;P(x|c_j)P(c_j)$, $then$ $ x \in c_i $</p>
-</blockquote>
-<p>而对于分类错误的样本，如样本$x$属于分类$c_i$，但错误分类为$c_{err}, err \neq i$，样本的错误分类概率为</p>
-<script type="math/tex; mode=display">P(error|x) = P(c_{err}|x)</script><p>上式被称作<code>误差概率</code>，某类后验概率越大，则相应的误差概率就越小，定义平均误差概率</p>
-<script type="math/tex; mode=display">P_{mean} = \int P(error|x)P(x)dx</script><h2 id="带有拒绝域的最小错误率贝叶斯决策"><a href="#带有拒绝域的最小错误率贝叶斯决策" class="headerlink" title="带有拒绝域的最小错误率贝叶斯决策"></a>带有拒绝域的最小错误率贝叶斯决策</h2><p>一些情况下，某样本对应特征$x$计算结果中，属于各类别的概率没有显著比较大的数值，换句话说都比较小，那么对这次的判别就不太信任，选择拒绝决策结果。<br>将决策平面划分为两个区域</p>
-<script type="math/tex; mode=display">Acquired = \{x|max_j P(c_j|x)\geq 1-t\}</script><script type="math/tex; mode=display">Rejected = \{x|max_j P(c_j|x) < 1-t\}</script><p>其中$t$为阈值，$t$越小时，拒绝域$Rejected$越大，当满足</p>
-<script type="math/tex; mode=display">1-t \leq \frac{1}{K}</script><p>或者 </p>
-<script type="math/tex; mode=display">t \geq \frac{K-1}{K}</script><p>此时拒绝域为</p>
-<script type="math/tex; mode=display">Rejected = \{x|max_j P(c_j|x) < \frac{1}{K}\}</script><p>而当且仅当各分类概率相等时才有 $ max_j P(c_j|x) = \frac{1}{K} $，因此此时拒绝域为空，接受所有决策结果</p>
-<h2 id="最小风险贝叶斯决策"><a href="#最小风险贝叶斯决策" class="headerlink" title="最小风险贝叶斯决策"></a>最小风险贝叶斯决策</h2><p>在决策过程中，不同类型的决策错误所产生的代价是不同的。引入风险函数</p>
-<script type="math/tex; mode=display">\lambda_{i, j} = \lambda (\alpha_i|c_j)</script><p>表示实际类别为$c_j$时，采取错误判断为$c_i$的行为$\alpha_i$所产生的损失。该函数称为损失函数，通常它可以用表格的形式给出，叫做决策表，形如<br><img src="/2018/10/18/Bayes-Decision/decision_table.jpg" alt="决策表"><br>定义条件风险</p>
-<script type="math/tex; mode=display">R(\alpha_i|c_j) = \sum_j \lambda (\alpha_i|c_j) P(c_j|x)</script><p>特别地，取$0-1$损失时，即最小错误率贝叶斯决策</p>
-<script type="math/tex; mode=display">
-\lambda (\alpha_i|c_j) = \begin{cases}
-0 & i = j \\
-1 & i \neq j
-\end{cases}</script><!-- 
-$$
-函数名 = \begin{cases}
-公式1 & 条件1 \\
-公式2 & 条件2 \\
-公式3 & 条件3 
-\end{cases}
-$$
--->
-<p>可能比较抽象，这里举了一个例子</p>
-<div style="align: center">
-<img src="/2018/10/18/Bayes-Decision/最小风险贝叶斯决策例.png">
-</div>
 
-<h1 id="关于判别函数"><a href="#关于判别函数" class="headerlink" title="关于判别函数"></a>关于判别函数</h1><p>可查看<a href="https://louishsu.xyz/2018/10/19/%E5%88%86%E7%B1%BB%E9%97%AE%E9%A2%98%E7%9A%84%E5%86%B3%E7%AD%96%E5%B9%B3%E9%9D%A2/" target="_blank" rel="noopener">分类问题的决策平面</a></p>
-<h1 id="程序"><a href="#程序" class="headerlink" title="程序"></a>程序</h1><p><img src="/2018/10/18/Bayes-Decision/李航-例4.1.png" alt="例4.1"></p>
-<p>为帮助理解，先手动计算一遍结果</p>
-<blockquote>
-<p>先验概率(<code>priori probability</code>):<br>$ P(Y = -1) = \frac{6}{15} $<br>$ P(Y = 1) = \frac{9}{15} $<br>似然函数(<code>likelihood</code>)<br>$ P(X^{(1)} = 1|Y=-1) = \frac{3}{6}$<br>$ P(X^{(1)} = 2|Y=-1) = \frac{2}{6}$<br>$ P(X^{(1)} = 3|Y=-1) = \frac{1}{6}$<br>$ P(X^{(2)} = S|Y=-1) = \frac{3}{6}$<br>$ P(X^{(2)} = M|Y=-1) = \frac{2}{6}$<br>$ P(X^{(2)} = L|Y=-1) = \frac{1}{6}$<br>$ P(X^{(1)} = 1|Y=1) = \frac{2}{9}$<br>$ P(X^{(1)} = 2|Y=1) = \frac{3}{9}$<br>$ P(X^{(1)} = 3|Y=1) = \frac{4}{9}$<br>$ P(X^{(2)} = S|Y=1) = \frac{1}{9}$<br>$ P(X^{(2)} = M|Y=1) = \frac{4}{9}$<br>$ P(X^{(2)} = L|Y=1) = \frac{4}{9}$</p>
-</blockquote>
-<p>注意：证据因子(<code>evidence</code>)不能用如下朴素贝叶斯求解</p>
-<script type="math/tex; mode=display">P(X) = P(X^{(1)}) P(X^{(2)})</script><p>而是</p>
-<script type="math/tex; mode=display">P(X) =  P(X^{(1)}|Y=-1)P(Y = -1) + P(X^{(2)}|Y=-1)P(Y = -1)</script><p>一般分子用朴素贝叶斯求解</p>
-<script type="math/tex; mode=display">P(X|Y) = P(X^{(1)}|Y) P(X^{(2)}|Y)</script><p>将其加和作为分母</p>
-<script type="math/tex; mode=display">c_k: P(X)_k = \sum_{k=0}^2 P(X^{(1)}|Y=k) P(X^{(2)}|Y=k)</script><script type="math/tex; mode=display">P(Y_k|X) = \frac{P(X|Y_k)P(Y_k)}{P(X)_k}</script><p>选取最大概率的$ k $类别作为判别类别</p>
-<script type="math/tex; mode=display">k = argmax_k P(Y_k|X)</script><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p><a href="https://github.com/isLouisHsu/Python-Examples-for-ML/blob/master/Statistical%20Learning%20Method%2C%20Li%20Hang/naive_bayes_algorithm_demo.py" target="_blank" rel="noopener">@Github: Code for Naive Bayes Decision</a></p>
-<h3 id="training-step"><a href="#training-step" class="headerlink" title="training step"></a>training step</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">def fit(self, X, y):</span><br><span class="line">    X_encoded = self.featureEncoder.fit_transform(X).toarray()</span><br><span class="line">    y_encoded = OneHotEncoder().fit_transform(y.reshape((-1, 1))).toarray()</span><br><span class="line">    self.P_X = np.mean(X_encoded, axis=0)                           # one-hot编码下，各列的均值即各特征的概率</span><br><span class="line">    self.P_Y = np.mean(y_encoded, axis=0)                           # one-hot编码下，各列的均值即各了别的概率</span><br><span class="line">    self.n_labels, self.n_features = y_encoded.shape[1], X_encoded.shape[1]   </span><br><span class="line">    self.P_X_Y = np.zeros(shape=(self.n_labels, self.n_features))   # 各个类别下，分别统计各特征的概率</span><br><span class="line">    for i in range(self.n_labels):</span><br><span class="line">        X_encoded_of_yi = X_encoded[y_encoded[:, i]==1]             # 取出属于i类别的样本</span><br><span class="line">        self.P_X_Y[i] = np.mean(X_encoded_of_yi, axis=0)            # one-hot编码下，各列的均值即各特征的概率</span><br></pre></td></tr></table></figure>
-<h3 id="predict-step"><a href="#predict-step" class="headerlink" title="predict step"></a>predict step</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">def predict(self, X):</span><br><span class="line">    X_encoded = self.featureEncoder.transform(X).toarray()</span><br><span class="line">    n_samples = X_encoded.shape[0]</span><br><span class="line">    y_pred_prob = np.zeros(shape=(n_samples, self.n_labels))</span><br><span class="line">    for i in range(n_samples):</span><br><span class="line">        for j in range(self.n_labels):</span><br><span class="line">            P_Xi_encoded_Yj = X_encoded[i] * self.P_X_Y[j]          # 在Yj类别下，选出输入样本Xi对应的条件概率</span><br><span class="line">            P_Xi_encoded_Yj[P_Xi_encoded_Yj==0.0] = 1.0             # 将为0值替换为1，便于求解ΠP(Xi|yc)，只要将各元素累乘即可</span><br><span class="line">            y_pred_prob[i, j] = self.P_Y[j] * P_Xi_encoded_Yj.prod()</span><br><span class="line">        y_pred_prob[i] /= np.sum(y_pred_prob[i])                    # 分母一般是将分子加和，不能假定各特征独立并用朴素贝叶斯计算分母</span><br><span class="line">    return np.argmax(y_pred_prob, axis=1)</span><br></pre></td></tr></table></figure>
-<h3 id="main"><a href="#main" class="headerlink" title="main"></a>main</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">X = [</span><br><span class="line">    [1, 0], [1, 1], [1, 1], [1, 0], [1, 0],</span><br><span class="line">    [2, 0], [2, 1], [2, 1], [2, 2], [2, 2],</span><br><span class="line">    [3, 2], [3, 1], [3, 2], [3, 2], [3, 2]</span><br><span class="line">]</span><br><span class="line">y = [0 ,0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0]</span><br><span class="line"></span><br><span class="line">estimator = NaiveBayes()</span><br><span class="line">estimator.fit(X, y)</span><br><span class="line"></span><br><span class="line">X_test = np.array([[2, 0], [1, 1]])</span><br><span class="line">y_pred = estimator.predict(X_test)</span><br></pre></td></tr></table></figure>
       
     </div>
 
@@ -546,8 +488,8 @@ $$
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/18/Softmax-Regression/" rel="next" title="Softmax Regression">
-                <i class="fa fa-chevron-left"></i> Softmax Regression
+              <a href="/2019/01/05/makefile简单教程/" rel="next" title="makefile简单教程">
+                <i class="fa fa-chevron-left"></i> makefile简单教程
               </a>
             
           </div>
@@ -555,10 +497,6 @@ $$
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/10/19/分类问题的决策平面/" rel="prev" title="分类问题的决策平面">
-                分类问题的决策平面 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -738,7 +676,7 @@ $$
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#原理"><span class="nav-number">1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#几种常用的贝叶斯决策"><span class="nav-number">2.</span> <span class="nav-text">几种常用的贝叶斯决策</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#最小错误率贝叶斯决策"><span class="nav-number">2.1.</span> <span class="nav-text">最小错误率贝叶斯决策</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#带有拒绝域的最小错误率贝叶斯决策"><span class="nav-number">2.2.</span> <span class="nav-text">带有拒绝域的最小错误率贝叶斯决策</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最小风险贝叶斯决策"><span class="nav-number">2.3.</span> <span class="nav-text">最小风险贝叶斯决策</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于判别函数"><span class="nav-number">3.</span> <span class="nav-text">关于判别函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#程序"><span class="nav-number">4.</span> <span class="nav-text">程序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#代码"><span class="nav-number">4.1.</span> <span class="nav-text">代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#training-step"><span class="nav-number">4.1.1.</span> <span class="nav-text">training step</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#predict-step"><span class="nav-number">4.1.2.</span> <span class="nav-text">predict step</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#main"><span class="nav-number">4.1.3.</span> <span class="nav-text">main</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#模块"><span class="nav-number">2.</span> <span class="nav-text">模块</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用例程"><span class="nav-number">3.</span> <span class="nav-text">使用例程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>
@@ -1240,30 +1178,6 @@ $$
   
   
 
-  
-    
-      <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      tex2jax: {
-        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-        processEscapes: true,
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-      },
-      TeX: {equationNumbers: { autoNumber: "AMS" }}
-    });
-</script>
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Queue(function() {
-      var all = MathJax.Hub.getAllJax(), i;
-        for (i=0; i < all.length; i += 1) {
-          all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-    });
-</script>
-<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-    
   
 
 
