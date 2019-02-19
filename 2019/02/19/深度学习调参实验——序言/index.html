@@ -115,12 +115,15 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="前言深度学习调参方法很重要，但一直没有机会做实验验证。以下为一些调参时指定的超参数，以及模型设计手段，后续慢慢补齐。  input size batch size input normalization weight initialization finetune regularization / weight decay optimizor learing rate adjustment bat">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/02/19/深度学习调参实验——序言/00000_0.2811850125283901.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/02/19/深度学习调参实验——序言/00001_0.6961266452466924.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/02/19/深度学习调参实验——序言/00002_0.9444440242248141.jpg">
 <meta property="og:image" content="http://yoursite.com/2019/02/19/深度学习调参实验——序言/vgg.png">
-<meta property="og:updated_time" content="2019-02-19T08:22:10.434Z">
+<meta property="og:updated_time" content="2019-02-19T08:32:24.935Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深度学习调参实验——序言">
 <meta name="twitter:description" content="前言深度学习调参方法很重要，但一直没有机会做实验验证。以下为一些调参时指定的超参数，以及模型设计手段，后续慢慢补齐。  input size batch size input normalization weight initialization finetune regularization / weight decay optimizor learing rate adjustment bat">
-<meta name="twitter:image" content="http://yoursite.com/2019/02/19/深度学习调参实验——序言/vgg.png">
+<meta name="twitter:image" content="http://yoursite.com/2019/02/19/深度学习调参实验——序言/00000_0.2811850125283901.jpg">
 
 
 
@@ -392,7 +395,7 @@
                 
               
 
-              <time title="创建时间：2019-02-19 13:45:56 / 修改时间：16:22:10" itemprop="dateCreated datePublished" datetime="2019-02-19T13:45:56+08:00">2019-02-19</time>
+              <time title="创建时间：2019-02-19 13:45:56 / 修改时间：16:32:24" itemprop="dateCreated datePublished" datetime="2019-02-19T13:45:56+08:00">2019-02-19</time>
             
 
             
@@ -471,6 +474,12 @@
 <p>伊辛模型<code>(Ising model)</code>是一类描述物质相变的随机过程模型。物质经过相变，要出现新的结构和物性。发生相变的系统一般是在分子之间有较强相互作用的系统，又称合作系统。—— 百度百科</p>
 </blockquote>
 <p>基于<code>Metropolis</code>算法对<code>Ising</code>模型的模拟，做了一些并行和随机生成图片的修改，在每次模拟的时候随机取一个时间（<code>1e3</code>到<code>1e7</code>之间）点输出到图片，图片中第一个字段是编号，第二个字段对应的分数可以大致认为是图片的有序程度，范围0~1。此外，为防止模型拟合过快，在生成的图像上添加椒盐噪声。</p>
+<p>以下为生成的样本展示</p>
+<ul>
+<li>00000_0.2811850125283901.jpg<br>  <img src="/2019/02/19/深度学习调参实验——序言/00000_0.2811850125283901.jpg" alt="00000_0.2811850125283901.jpg"></li>
+<li>00001_0.6961266452466924.jpg<br>  <img src="/2019/02/19/深度学习调参实验——序言/00001_0.6961266452466924.jpg" alt="00001_0.6961266452466924.jpg"></li>
+<li>00002_0.9444440242248141.jpg<br>  <img src="/2019/02/19/深度学习调参实验——序言/00002_0.9444440242248141.jpg" alt="00002_0.9444440242248141.jpg"></li>
+</ul>
 <p>一共生成<code>1000</code>张的图片，为能导入预训练模型参数，图像分辨率与<code>ImageNet</code>数据集一致，为<code>224×224</code>。并固定训练集、验证集、测试集的划分方式，划分数量比例为<code>train: valid: test = 0.7: 0.25: 0.05</code>，标签保存在<code>.txt</code>文件中。</p>
 <blockquote>
 <p><a href="https://github.com/isLouisHsu/Deep-Learning-Experiments/tree/master/datasets" target="_blank" rel="noopener">Deep-Learning-Experiments/datasets at master · isLouisHsu/Deep-Learning-Experiments </a></p>
