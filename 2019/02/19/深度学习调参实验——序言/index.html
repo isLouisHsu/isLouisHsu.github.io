@@ -108,23 +108,26 @@
 
 
 
-  <meta name="description" content="Inside! Insane!">
-<meta property="og:type" content="website">
-<meta property="og:title" content="LOUIS&#39; BLOG">
-<meta property="og:url" content="http://yoursite.com/archives/2018/index.html">
+  <meta name="description" content="前言深度学习调参方法很重要，但一直没有机会做实验验证。以下为一些调参时指定的超参数，以及模型设计手段，后续慢慢补齐。  input size batch size input normalization weight initialization finetune regularization / weight decay optimizor learing rate adjustment bat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习调参实验——序言">
+<meta property="og:url" content="http://yoursite.com/2019/02/19/深度学习调参实验——序言/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="Inside! Insane!">
+<meta property="og:description" content="前言深度学习调参方法很重要，但一直没有机会做实验验证。以下为一些调参时指定的超参数，以及模型设计手段，后续慢慢补齐。  input size batch size input normalization weight initialization finetune regularization / weight decay optimizor learing rate adjustment bat">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/02/19/深度学习调参实验——序言/vgg.png">
+<meta property="og:updated_time" content="2019-02-19T08:22:10.434Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LOUIS&#39; BLOG">
-<meta name="twitter:description" content="Inside! Insane!">
+<meta name="twitter:title" content="深度学习调参实验——序言">
+<meta name="twitter:description" content="前言深度学习调参方法很重要，但一直没有机会做实验验证。以下为一些调参时指定的超参数，以及模型设计手段，后续慢慢补齐。  input size batch size input normalization weight initialization finetune regularization / weight decay optimizor learing rate adjustment bat">
+<meta name="twitter:image" content="http://yoursite.com/2019/02/19/深度学习调参实验——序言/vgg.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/2018/">
+  <link rel="canonical" href="http://yoursite.com/2019/02/19/深度学习调参实验——序言/">
 
 
 
@@ -134,7 +137,7 @@
   };
 </script>
 
-  <title>归档 | LOUIS' BLOG</title>
+  <title>深度学习调参实验——序言 | LOUIS' BLOG</title>
   
 
 
@@ -181,7 +184,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -246,7 +249,7 @@
         
         
           
-          <li class="menu-item menu-item-archives menu-item-active">
+          <li class="menu-item menu-item-archives">
     <a href="/archives/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
   </li>
@@ -327,772 +330,285 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
 
-      
-      <span class="archive-page-counter">
-        
-        
-         
-        
-        还行! 目前共计 35 篇日志。 继续努力。
-      </span>
-      
+  
 
-      
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/19/深度学习调参实验——序言/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="Inside! Insane!">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
 
         
         
+          <h1 class="post-title" itemprop="name headline">深度学习调参实验——序言
+              
+            
+          </h1>
         
 
-        
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-02-19 13:45:56 / 修改时间：16:22:10" itemprop="dateCreated datePublished" datetime="2019-02-19T13:45:56+08:00">2019-02-19</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2018">2018</h1>
-          </div>
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/11/24/scikit-learn-处理特征/" itemprop="url">
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
               
-                <span itemprop="name">scikit-learn: 处理特征</span>
+                <span class="post-meta-item-text">分类于</span>
               
-            </a>
-        
-      </h2>
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/徐先生的调参日志/" itemprop="url" rel="index"><span itemprop="name">徐先生的调参日志</span></a></span>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-24T20:26:14+08:00" content="2018-11-24">
-          11-24
-        </time>
-      </div>
+                
+                
+              
+            </span>
+          
 
-    </header>
-  </article>
+          
+            
+          
 
+          
+          
 
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/11/21/Metrics/" itemprop="url">
-              
-                <span itemprop="name">Metrics</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-21T14:23:21+08:00" content="2018-11-21">
-          11-21
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/11/21/Entropy/" itemprop="url">
-              
-                <span itemprop="name">Entropy</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-21T13:03:09+08:00" content="2018-11-21">
-          11-21
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>深度学习调参方法很重要，但一直没有机会做实验验证。<br>以下为一些调参时指定的超参数，以及模型设计手段，后续慢慢补齐。</p>
+<ul>
+<li>input size</li>
+<li>batch size</li>
+<li>input normalization</li>
+<li>weight initialization</li>
+<li>finetune</li>
+<li>regularization / weight decay</li>
+<li>optimizor</li>
+<li>learing rate adjustment</li>
+<li>batch normalization</li>
+<li>dropout</li>
+<li>activate function</li>
+<li>loss</li>
+<li>shortcut / residual</li>
+<li>global average pooling</li>
+</ul>
+<h1 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h1><h2 id="总体设计"><a href="#总体设计" class="headerlink" title="总体设计"></a>总体设计</h2><p>本次实验为一个简单的回归任务，基于<code>Ising Model</code>生成图像数据集及其对应的混乱程度，利用神经网络给图像混乱程度进行打分。固定数据集划分方式、模型结构、初始化参数，针对上述方法设计对比试验。</p>
+<h2 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h2><p>这里采用统计物理里非常经典的Ising模型的模拟来生成图片。</p>
+<blockquote>
+<p>伊辛模型<code>(Ising model)</code>是一类描述物质相变的随机过程模型。物质经过相变，要出现新的结构和物性。发生相变的系统一般是在分子之间有较强相互作用的系统，又称合作系统。—— 百度百科</p>
+</blockquote>
+<p>基于<code>Metropolis</code>算法对<code>Ising</code>模型的模拟，做了一些并行和随机生成图片的修改，在每次模拟的时候随机取一个时间（<code>1e3</code>到<code>1e7</code>之间）点输出到图片，图片中第一个字段是编号，第二个字段对应的分数可以大致认为是图片的有序程度，范围0~1。此外，为防止模型拟合过快，在生成的图像上添加椒盐噪声。</p>
+<p>一共生成<code>1000</code>张的图片，为能导入预训练模型参数，图像分辨率与<code>ImageNet</code>数据集一致，为<code>224×224</code>。并固定训练集、验证集、测试集的划分方式，划分数量比例为<code>train: valid: test = 0.7: 0.25: 0.05</code>，标签保存在<code>.txt</code>文件中。</p>
+<blockquote>
+<p><a href="https://github.com/isLouisHsu/Deep-Learning-Experiments/tree/master/datasets" target="_blank" rel="noopener">Deep-Learning-Experiments/datasets at master · isLouisHsu/Deep-Learning-Experiments </a></p>
+</blockquote>
+<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p>由于计算资源有限，数据量数目限制，选用<code>VGG16</code>模型时，拟合速度过快，不利于实验对比，故选择较小的模型<code>VGG11</code>，即下图中配置A。</p>
+<p><img src="/2019/02/19/深度学习调参实验——序言/vgg.png" alt="VGG"></p>
+<p>在此基础上对模型进行了部分改动</p>
+<ul>
+<li>第一层卷积层通道数由<code>3</code>改为<code>1</code></li>
+<li>卷积层<code>(convolution layer)</code>到全连接层<code>(fully connected layer)</code>的过渡层，可选择为全局平均池化层<code>(global average pooling layer)</code></li>
+<li>全连接层神经元数目更改，<code>512*7*7 - 4096 - 4096 - 1000</code><ul>
+<li>若过渡层为全连接层，则更改为<code>512*7*7 - 512 - 128 - 1</code></li>
+<li>若过渡层为全局平均池化层，则更改为<code>512 - 512 - 128 - 1</code></li>
+</ul>
+</li>
+<li>最后输出层激活函数选择<code>sigmoid</code>，将结果映射到<code>[0, 1]</code>范围内</li>
+<li>可任意配置<ul>
+<li>是否包含批归一化层<code>(batchnorm)</code></li>
+<li><code>dropout</code>参数</li>
+<li>激活函数种类</li>
+<li>参数初始化方法</li>
+<li>是否载入预训练模型<code>(finetune)</code></li>
+<li>是否使用全局平均赤化层<code>(global average pooling layer)</code></li>
+</ul>
+</li>
+<li>参数初始化方法<ul>
+<li>卷积核参数<ul>
+<li><code>W</code>：<strong>可选，做对比实验</strong>。</li>
+<li><code>b</code>：填充为<code>0</code></li>
+</ul>
+</li>
+<li>批归一化参数<ul>
+<li><code>W</code>：填充为<code>1</code></li>
+<li><code>b</code>：填充为<code>0</code></li>
+</ul>
+</li>
+<li>全连接参数<ul>
+<li><code>W</code>：初始化后服从正态分布<code>N(0, 0.001)</code></li>
+<li><code>b</code>：填充为<code>0</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>只对<code>features</code>进行<code>finetune</code></li>
+<li>权重第一次初始化后固化，后续实验导入相同参数</li>
+</ul>
+<h2 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h2><p>可选损失函数有</p>
+<ul>
+<li><code>MSE</code></li>
+<li><code>L1</code></li>
+<li><code>Huber</code></li>
+<li>…</li>
+</ul>
+<p>后续设计其他损失函数进行实验</p>
+<h2 id="评价指标"><a href="#评价指标" class="headerlink" title="评价指标"></a>评价指标</h2><ul>
+<li><p>Root Mean Squared Error(rmse)</p>
+<script type="math/tex; mode=display">
+  rmse = \sqrt{\frac{1}{N} \sum_{i=1}^N (y^{(i)}-\hat{y}^{(i)})^2}</script></li>
+<li><p>Root Mean Squared Logarithmic Error(rmse_log)</p>
+<script type="math/tex; mode=display">
+  rmse = \sqrt{\frac{1}{N} \sum_{i=1}^N (\log y^{(i)}-\log \hat{y}^{(i)})^2}</script></li>
+<li><p>Mean Absolute Error(mae)</p>
+<script type="math/tex; mode=display">
+  rmse = \frac{1}{N} \sum_{i=1}^N | y^{(i)}-\hat{y}^{(i)} |</script></li>
+<li><p>Mean Absolute Logarithmic Error(mae_log)</p>
+<script type="math/tex; mode=display">
+  rmse = \frac{1}{N} \sum_{i=1}^N | \log y^{(i)}-\log \hat{y}^{(i)} |</script></li>
+<li><p>Mean Absolute Relative Error(absrel)    </p>
+<script type="math/tex; mode=display">
+  rmse = \frac{1}{N} \sum_{i=1}^N | \frac{y^{(i)}-\hat{y}^{(i)}}{y^{(i)}} |</script></li>
+<li><p>Mean Squared  Relative Error(sqrrel)</p>
+<script type="math/tex; mode=display">
+  rmse = \frac{1}{N} \sum_{i=1}^N | \frac{(y^{(i)}-\hat{y}^{(i)})^2}{y^{(i)}} |</script></li>
+</ul>
+<h1 id="项目地址"><a href="#项目地址" class="headerlink" title="项目地址"></a>项目地址</h1><p><a href="https://github.com/isLouisHsu/Deep-Learning-Experiments" target="_blank" rel="noopener">isLouisHsu/Deep-Learning-Experiments: Some experiments about Deep Learning</a></p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><blockquote>
+<p>使用卷积神经网络做回归任务 - QQLQ - 博客园 <a href="https://www.cnblogs.com/laiqun/p/6287906.html" target="_blank" rel="noopener">https://www.cnblogs.com/laiqun/p/6287906.html</a></p>
+</blockquote>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/11/19/Non-parameter-Estimation/" itemprop="url">
-              
-                <span itemprop="name">Non-parameter Estimation</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-19T10:55:43+08:00" content="2018-11-19">
-          11-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/11/19/Parameter-Estimation/" itemprop="url">
-              
-                <span itemprop="name">Parameter Estimation</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-19T08:55:43+08:00" content="2018-11-19">
-          11-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/11/16/Clustering/" itemprop="url">
-              
-                <span itemprop="name">Clustering</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-16T17:32:44+08:00" content="2018-11-16">
-          11-16
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/11/12/EM-GMM/" itemprop="url">
-              
-                <span itemprop="name">EM & GMM</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-12T10:41:34+08:00" content="2018-11-12">
-          11-12
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/11/02/Data-Augmentation/" itemprop="url">
-              
-                <span itemprop="name">Data Augmentation</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-02T13:13:10+08:00" content="2018-11-02">
-          11-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/10/29/二次入坑raspberry-pi/" itemprop="url">
-              
-                <span itemprop="name">二次入坑raspberry-pi</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-10-29T11:25:59+08:00" content="2018-10-29">
-          10-29
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/10/26/Underfitting-Overfitting/" itemprop="url">
-              
-                <span itemprop="name">Underfitting & Overfitting</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-10-26T18:55:07+08:00" content="2018-10-26">
-          10-26
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/10/26/Cross-Validation-Hyperparameter/" itemprop="url">
-              
-                <span itemprop="name">Cross Validation & Hyperparameter</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-10-26T18:19:53+08:00" content="2018-10-26">
-          10-26
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/10/26/Spam-Classification/" itemprop="url">
-              
-                <span itemprop="name">Spam Classification</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-10-26T09:23:02+08:00" content="2018-10-26">
-          10-26
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/10/25/TF-IDF/" itemprop="url">
-              
-                <span itemprop="name">TF-IDF</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-10-25T18:36:13+08:00" content="2018-10-25">
-          10-25
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/10/23/SVD/" itemprop="url">
-              
-                <span itemprop="name">SVD</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-10-23T21:34:09+08:00" content="2018-10-23">
-          10-23
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/10/23/删除停用词/" itemprop="url">
-              
-                <span itemprop="name">删除停用词</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-10-23T21:08:40+08:00" content="2018-10-23">
-          10-23
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/10/22/PCA/" itemprop="url">
-              
-                <span itemprop="name">PCA</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-10-22T21:34:09+08:00" content="2018-10-22">
-          10-22
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/10/20/Activate-Functions/" itemprop="url">
-              
-                <span itemprop="name">Activate Functions</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-10-20T16:52:47+08:00" content="2018-10-20">
-          10-20
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/10/20/Feedforward-Neural-Network/" itemprop="url">
-              
-                <span itemprop="name">Feedforward Neural Network</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-10-20T16:27:50+08:00" content="2018-10-20">
-          10-20
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/10/19/分类问题的决策平面/" itemprop="url">
-              
-                <span itemprop="name">分类问题的决策平面</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-10-19T16:30:16+08:00" content="2018-10-19">
-          10-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/10/18/Bayes-Decision/" itemprop="url">
-              
-                <span itemprop="name">Bayes Decision</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-10-18T19:05:24+08:00" content="2018-10-18">
-          10-18
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/19/Python字符串格式化/" rel="next" title="Python字符串格式化">
+                <i class="fa fa-chevron-left"></i> Python字符串格式化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
-
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/archives/2018/page/2/">2</a><a class="extend next" rel="next" href="/archives/2018/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
-  </nav>
+  </article>
 
 
+  </div>
 
 
           </div>
           
+
+  
+
+
 
         </div>
         
@@ -1113,8 +629,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -1231,6 +756,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#方案"><span class="nav-number">2.</span> <span class="nav-text">方案</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#总体设计"><span class="nav-number">2.1.</span> <span class="nav-text">总体设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据集"><span class="nav-number">2.2.</span> <span class="nav-text">数据集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型"><span class="nav-number">2.3.</span> <span class="nav-text">模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#损失函数"><span class="nav-number">2.4.</span> <span class="nav-text">损失函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#评价指标"><span class="nav-number">2.5.</span> <span class="nav-text">评价指标</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#项目地址"><span class="nav-number">3.</span> <span class="nav-text">项目地址</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -1362,6 +903,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
 
   
 
