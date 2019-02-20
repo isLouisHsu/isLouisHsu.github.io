@@ -108,24 +108,26 @@
 
 
 
-  <meta name="description" content="Inside! Insane!">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Python">
-<meta property="og:url" content="http://yoursite.com/Python/index.html">
+  <meta name="description" content="前言既然是对比实验，就要设计基准(baseline)实验 配置选项在config.py中做如下设置1234567891011121314151617181920configer.inputsize = (224, 224)configer.finetune  = False      # True or False, overwrite weightini if trueconfiger.avgp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习调参实验——Baseline">
+<meta property="og:url" content="http://yoursite.com/2019/02/19/深度学习调参实验——Baseline/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="Inside! Insane!">
+<meta property="og:description" content="前言既然是对比实验，就要设计基准(baseline)实验 配置选项在config.py中做如下设置1234567891011121314151617181920configer.inputsize = (224, 224)configer.finetune  = False      # True or False, overwrite weightini if trueconfiger.avgp">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-04T09:45:01.082Z">
+<meta property="og:image" content="http://yoursite.com/2019/02/19/深度学习调参实验——Baseline/loss_curve.png">
+<meta property="og:updated_time" content="2019-02-20T07:41:36.197Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Python">
-<meta name="twitter:description" content="Inside! Insane!">
+<meta name="twitter:title" content="深度学习调参实验——Baseline">
+<meta name="twitter:description" content="前言既然是对比实验，就要设计基准(baseline)实验 配置选项在config.py中做如下设置1234567891011121314151617181920configer.inputsize = (224, 224)configer.finetune  = False      # True or False, overwrite weightini if trueconfiger.avgp">
+<meta name="twitter:image" content="http://yoursite.com/2019/02/19/深度学习调参实验——Baseline/loss_curve.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/Python/">
+  <link rel="canonical" href="http://yoursite.com/2019/02/19/深度学习调参实验——Baseline/">
 
 
 
@@ -135,7 +137,7 @@
   };
 </script>
 
-  <title>Python | LOUIS' BLOG</title>
+  <title>深度学习调参实验——Baseline | LOUIS' BLOG</title>
   
 
 
@@ -328,71 +330,200 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/19/深度学习调参实验——Baseline/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="Inside! Insane!">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-<h1 class="post-title" itemprop="name headline">Python</h1>
-
-<div class="post-meta">
-  
-  
-
-
-
-</div>
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
+          <h1 class="post-title" itemprop="name headline">深度学习调参实验——Baseline
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-02-19 16:23:16" itemprop="dateCreated datePublished" datetime="2019-02-19T16:23:16+08:00">2019-02-19</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-02-20 15:41:36" itemprop="dateModified" datetime="2019-02-20T15:41:36+08:00">2019-02-20</time>
+              
+            
+          </span>
+
           
-        
-      </div>
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/徐先生的调参日志/" itemprop="url" rel="index"><span itemprop="name">徐先生的调参日志</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>既然是对比实验，就要设计基准<code>(baseline)</code>实验</p>
+<h1 id="配置选项"><a href="#配置选项" class="headerlink" title="配置选项"></a>配置选项</h1><p>在<code>config.py</code>中做如下设置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">configer.inputsize = (224, 224)</span><br><span class="line"></span><br><span class="line">configer.finetune  = False      # True or False, overwrite weightini if true</span><br><span class="line">configer.avgpool   = False      # True or False</span><br><span class="line">configer.batchnorm = False      # True or False</span><br><span class="line"></span><br><span class="line">configer.weightdecay = 0.0      # float</span><br><span class="line">configer.lrbase    = 0.0001     # 学习率过大会发散</span><br><span class="line">configer.dropout   = 0.0        # float(0, 1)</span><br><span class="line">configer.batchsize = 20</span><br><span class="line"></span><br><span class="line">configer.inputnorm = None       # None, &apos;linear&apos;, &apos;max-min&apos;, &apos;z-score&apos;</span><br><span class="line">configer.weightini = &apos;normal&apos;   # &apos;normal&apos;,         &apos;uniform&apos;</span><br><span class="line">                                # &apos;xavier_normal&apos;,  &apos;xavier_uniform&apos;</span><br><span class="line">                                # &apos;kaiming_normal&apos;, &apos;kaiming_uniform&apos;</span><br><span class="line">                                # &apos;orthogonal&apos;,     &apos;sparse&apos;</span><br><span class="line">configer.criterion = &apos;mse&apos;      # &apos;mse&apos;, &apos;l1&apos;, &apos;huber&apos;</span><br><span class="line">configer.optimizer = &apos;sgd&apos;      # &apos;sgd&apos;, &apos;adam&apos;</span><br><span class="line">configer.lrmode    = &apos;const&apos;    # &apos;const&apos;, &apos;lr_finder&apos;, &apos;leslie&apos;, &apos;poly&apos;, &apos;step&apos;</span><br><span class="line">configer.activate  = &apos;relu&apos;     # &apos;relu&apos;, &apos;sigmoid&apos;, &apos;tanh&apos;, &apos;elu&apos;</span><br></pre></td></tr></table></figure></p>
+<h1 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h1><ol>
+<li><p>训练过程的<code>loss</code>曲线显示如下<br><img src="/2019/02/19/深度学习调参实验——Baseline/loss_curve.png" alt="baseline_loss_curve"></p>
+</li>
+<li><p>测试集统计结果如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2019-02-19 20:38:14 || model [base_1] || loss: 0.0861, rmse: 0.0729, rmse_log: 0.4245, mae: 0.0636, mae_log: 0.1078, absrel: 0.3966, sqrrel: 0.0455</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+
       
     </div>
-    
-
-
 
     
+
     
     
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/19/深度学习调参实验——序言/" rel="next" title="深度学习调参实验——序言">
+                <i class="fa fa-chevron-left"></i> 深度学习调参实验——序言
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/02/20/深度学习调参实验——Finetune/" rel="prev" title="深度学习调参实验——Finetune">
+                深度学习调参实验——Finetune <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
   </div>
 
 
@@ -422,8 +553,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -540,6 +680,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置选项"><span class="nav-number">2.</span> <span class="nav-text">配置选项</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验结果"><span class="nav-number">3.</span> <span class="nav-text">实验结果</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
