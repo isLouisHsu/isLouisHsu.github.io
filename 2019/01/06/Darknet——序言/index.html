@@ -108,25 +108,27 @@
 
 
 
-  <meta name="description" content="下载源码 OpenCV library https://opencv.org/  编译安装依赖软件包12$ sudo apt install cmake$ sudo apt-get install build-essential libgtk2.0-dev libavcodec-dev libavformat-dev libjpeg.dev libtiff4.dev libswscale-dev">
-<meta name="keywords" content="Linux">
+  <meta name="description" content="前言目前可用于深度学习的著名框架有  tensorflow pytorch keras theano caffe …  这些给广大调参狗带来便利，但不利于学生党理解底层实现，例如神经网络的BP算法。 Darknet提供了底层代码的实现，开源万岁！ Darknet简介 Darknet为全C语言实现的深度学习开源代码，细细品读，收获颇丰，后患无穷。 附上官网链接和Github地址  YOLO: Rea">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Ubuntu编译安装OpenCV">
-<meta property="og:url" content="http://yoursite.com/2019/01/04/Ubuntu编译安装OpenCV/index.html">
+<meta property="og:title" content="Darknet——序言">
+<meta property="og:url" content="http://yoursite.com/2019/01/06/Darknet——序言/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="下载源码 OpenCV library https://opencv.org/  编译安装依赖软件包12$ sudo apt install cmake$ sudo apt-get install build-essential libgtk2.0-dev libavcodec-dev libavformat-dev libjpeg.dev libtiff4.dev libswscale-dev">
+<meta property="og:description" content="前言目前可用于深度学习的著名框架有  tensorflow pytorch keras theano caffe …  这些给广大调参狗带来便利，但不利于学生党理解底层实现，例如神经网络的BP算法。 Darknet提供了底层代码的实现，开源万岁！ Darknet简介 Darknet为全C语言实现的深度学习开源代码，细细品读，收获颇丰，后患无穷。 附上官网链接和Github地址  YOLO: Rea">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-04T08:49:55.860Z">
+<meta property="og:image" content="http://yoursite.com/2019/01/06/Darknet——序言/darknet.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/06/Darknet——序言/Screen_Shot_2018-03-24_at_10.48.42_PM.png">
+<meta property="og:updated_time" content="2019-02-20T10:10:36.639Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Ubuntu编译安装OpenCV">
-<meta name="twitter:description" content="下载源码 OpenCV library https://opencv.org/  编译安装依赖软件包12$ sudo apt install cmake$ sudo apt-get install build-essential libgtk2.0-dev libavcodec-dev libavformat-dev libjpeg.dev libtiff4.dev libswscale-dev">
+<meta name="twitter:title" content="Darknet——序言">
+<meta name="twitter:description" content="前言目前可用于深度学习的著名框架有  tensorflow pytorch keras theano caffe …  这些给广大调参狗带来便利，但不利于学生党理解底层实现，例如神经网络的BP算法。 Darknet提供了底层代码的实现，开源万岁！ Darknet简介 Darknet为全C语言实现的深度学习开源代码，细细品读，收获颇丰，后患无穷。 附上官网链接和Github地址  YOLO: Rea">
+<meta name="twitter:image" content="http://yoursite.com/2019/01/06/Darknet——序言/darknet.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/01/04/Ubuntu编译安装OpenCV/">
+  <link rel="canonical" href="http://yoursite.com/2019/01/06/Darknet——序言/">
 
 
 
@@ -136,7 +138,7 @@
   };
 </script>
 
-  <title>Ubuntu编译安装OpenCV | LOUIS' BLOG</title>
+  <title>Darknet——序言 | LOUIS' BLOG</title>
   
 
 
@@ -349,7 +351,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/04/Ubuntu编译安装OpenCV/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/06/Darknet——序言/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Louis Hsu">
@@ -366,7 +368,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Ubuntu编译安装OpenCV
+          <h1 class="post-title" itemprop="name headline">Darknet——序言
               
             
           </h1>
@@ -391,12 +393,24 @@
                 
               
 
-              <time title="创建时间：2019-01-04 16:48:44 / 修改时间：16:49:55" itemprop="dateCreated datePublished" datetime="2019-01-04T16:48:44+08:00">2019-01-04</time>
+              <time title="创建时间：2019-01-06 09:38:38" itemprop="dateCreated datePublished" datetime="2019-01-06T09:38:38+08:00">2019-01-06</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-02-20 18:10:36" itemprop="dateModified" datetime="2019-02-20T18:10:36+08:00">2019-02-20</time>
               
             
           </span>
@@ -413,7 +427,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Darknet/" itemprop="url" rel="index"><span itemprop="name">Darknet</span></a></span>
 
                 
                 
@@ -447,18 +461,28 @@
       
 
       
-        <h1 id="下载源码"><a href="#下载源码" class="headerlink" title="下载源码"></a>下载源码</h1><blockquote>
-<p>OpenCV library <a href="https://opencv.org/" target="_blank" rel="noopener">https://opencv.org/</a></p>
-</blockquote>
-<h1 id="编译安装"><a href="#编译安装" class="headerlink" title="编译安装"></a>编译安装</h1><h2 id="依赖软件包"><a href="#依赖软件包" class="headerlink" title="依赖软件包"></a>依赖软件包</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt install cmake</span><br><span class="line">$ sudo apt-get install build-essential libgtk2.0-dev libavcodec-dev libavformat-dev libjpeg.dev libtiff4.dev libswscale-dev libjasper-dev</span><br></pre></td></tr></table></figure>
-<h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ unzip opencv-3.4.4.zip</span><br><span class="line">$ cd opencv-3.4.4</span><br><span class="line">$ mkdir build &amp;&amp; cd build</span><br><span class="line">$ cmake ..</span><br><span class="line">$ make -j4</span><br></pre></td></tr></table></figure>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ sudo make install</span><br><span class="line">$ sudo nano /etc/ld.so.conf.d/opencv.conf # add `/usr/local/lib`</span><br><span class="line">$ sudo ldconfig</span><br></pre></td></tr></table></figure>
-<h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><p><code>OpenCV</code>自带验证程序，在<code>opencv-3.4.4/samples/cpp/example_cmake</code>中可以找到</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ cd opencv-3.4.4/samples/cpp/example_cmake</span><br><span class="line">$ cmake .</span><br><span class="line">$ make</span><br><span class="line">$ ./opencv_example</span><br></pre></td></tr></table></figure>
-<p>如果没问题，可以看到你的大脸了~</p>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><blockquote>
-<p>Ubuntu16.04安装openCV3.4.4 - 辣屁小心的学习笔记 - CSDN博客 <a href="https://blog.csdn.net/weixin_39992397/article/details/84345197" target="_blank" rel="noopener">https://blog.csdn.net/weixin_39992397/article/details/84345197</a></p>
-</blockquote>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>目前可用于深度学习的著名框架有</p>
+<ul>
+<li>tensorflow</li>
+<li>pytorch</li>
+<li>keras</li>
+<li>theano</li>
+<li>caffe</li>
+<li>…</li>
+</ul>
+<p>这些给广大调参狗带来便利，但不利于学生党理解底层实现，例如神经网络的BP算法。</p>
+<p><code>Darknet</code>提供了底层代码的实现，开源万岁！</p>
+<h1 id="Darknet简介"><a href="#Darknet简介" class="headerlink" title="Darknet简介"></a>Darknet简介</h1><p><img src="/2019/01/06/Darknet——序言/darknet.png" alt="darknet"></p>
+<p><code>Darknet</code>为全C语言实现的深度学习开源代码，细细品读，收获颇丰，<del>后患无穷</del>。</p>
+<p>附上官网链接和<code>Github</code>地址</p>
+<ul>
+<li><a href="https://pjreddie.com/darknet/yolo/" target="_blank" rel="noopener">YOLO: Real-Time Object Detection</a></li>
+<li><a href="https://github.com/pjreddie/darknet" target="_blank" rel="noopener">pjreddie/darknet: Convolutional Neural Networks</a></li>
+</ul>
+<h1 id="简单实用"><a href="#简单实用" class="headerlink" title="简单实用"></a>简单实用</h1><p>官网详细说明如何使用，非常便捷<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git clone https://github.com/pjreddie/darknet</span><br><span class="line">$ cd darknet</span><br><span class="line">$ make</span><br></pre></td></tr></table></figure></p>
+<p>下载<code>yolov3</code>预训练模型权值，并进行检测<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ wget https://pjreddie.com/media/files/yolov3.weights</span><br><span class="line">$ ./darknet detect cfg/yolov3.cfg yolov3.weights data/dog.jpg</span><br><span class="line">layer     filters    size              input                output</span><br><span class="line">    0 conv     32  3 x 3 / 1   416 x 416 x   3   -&gt;   416 x 416 x  32  0.299 BFLOPs</span><br><span class="line">    1 conv     64  3 x 3 / 2   416 x 416 x  32   -&gt;   208 x 208 x  64  1.595 BFLOPs</span><br><span class="line">    .......</span><br><span class="line">  105 conv    255  1 x 1 / 1    52 x  52 x 256   -&gt;    52 x  52 x 255  0.353 BFLOPs</span><br><span class="line">  106 detection</span><br><span class="line">truth_thresh: Using default &apos;1.000000&apos;</span><br><span class="line">Loading weights from yolov3.weights...Done!</span><br><span class="line">data/dog.jpg: Predicted in 0.029329 seconds.</span><br><span class="line">dog: 99%</span><br><span class="line">truck: 93%</span><br><span class="line">bicycle: 99%</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/01/06/Darknet——序言/Screen_Shot_2018-03-24_at_10.48.42_PM.png" alt="Screen_Shot"></p>
+<h1 id="高阶"><a href="#高阶" class="headerlink" title="高阶"></a>高阶</h1><p>如果需要将其作为框架使用，先对源码进行编译，然后调用库文件即可，详细查看<a href="https://louishsu.xyz/2019/01/05/Cmake%E7%BC%96%E8%AF%91%E5%BA%93%E6%96%87%E4%BB%B6/" target="_blank" rel="noopener">Cmake编译库文件 | LOUIS’ BLOG</a></p>
 
       
     </div>
@@ -477,12 +501,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/Linux/" rel="tag"># Linux</a>
-          
-        </div>
-      
 
       
       
@@ -492,8 +510,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/04/Python读写配置文件/" rel="next" title="Python读写配置文件">
-                <i class="fa fa-chevron-left"></i> Python读写配置文件
+              <a href="/2019/01/05/makefile简单教程/" rel="next" title="makefile简单教程">
+                <i class="fa fa-chevron-left"></i> makefile简单教程
               </a>
             
           </div>
@@ -502,8 +520,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/01/04/Ubuntu编译安装Tensorflow/" rel="prev" title="Ubuntu编译安装Tensorflow">
-                Ubuntu编译安装Tensorflow <i class="fa fa-chevron-right"></i>
+              <a href="/2019/02/17/Python生成词云图/" rel="prev" title="Python生成词云图">
+                Python生成词云图 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -688,7 +706,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#下载源码"><span class="nav-number">1.</span> <span class="nav-text">下载源码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编译安装"><span class="nav-number">2.</span> <span class="nav-text">编译安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#依赖软件包"><span class="nav-number">2.1.</span> <span class="nav-text">依赖软件包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编译"><span class="nav-number">2.2.</span> <span class="nav-text">编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">2.3.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#验证"><span class="nav-number">2.4.</span> <span class="nav-text">验证</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Darknet简介"><span class="nav-number">2.</span> <span class="nav-text">Darknet简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#简单实用"><span class="nav-number">3.</span> <span class="nav-text">简单实用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#高阶"><span class="nav-number">4.</span> <span class="nav-text">高阶</span></a></li></ol></div>
             
 
           </div>
@@ -1190,6 +1208,30 @@
   
   
 
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
   
 
 
