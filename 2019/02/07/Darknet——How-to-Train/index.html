@@ -108,32 +108,29 @@
 
 
 
-  <meta name="description" content="前言目前可用于深度学习的著名框架有  tensorflow pytorch keras theano caffe …  这些给广大调参狗带来便利，但不利于学生党理解底层实现，例如神经网络的BP算法。 Darknet提供了底层代码的实现，开源万岁！ Darknet简介 Darknet为全C语言实现的深度学习开源代码，细细品读，收获颇丰，后患无穷。 附上官网链接和Github地址  YOLO: Rea">
+  <meta name="description" content="参数传递Darknet参数传递通过指针实现，指针定义在结构体layer和network_state中。本篇只谈层间的参数传递，层内部的参数更新在别的文章中说明，与之相关的几个参数如下，以全连接层(connected layer)为例讲解其作用。 12345678910111213141516171819202122struct layer &amp;#123;        ...        floa">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Darknet——序言">
-<meta property="og:url" content="http://yoursite.com/2019/01/06/Darknet——序言/index.html">
+<meta property="og:title" content="Darknet——How to Train">
+<meta property="og:url" content="http://yoursite.com/2019/02/07/Darknet——How-to-Train/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="前言目前可用于深度学习的著名框架有  tensorflow pytorch keras theano caffe …  这些给广大调参狗带来便利，但不利于学生党理解底层实现，例如神经网络的BP算法。 Darknet提供了底层代码的实现，开源万岁！ Darknet简介 Darknet为全C语言实现的深度学习开源代码，细细品读，收获颇丰，后患无穷。 附上官网链接和Github地址  YOLO: Rea">
+<meta property="og:description" content="参数传递Darknet参数传递通过指针实现，指针定义在结构体layer和network_state中。本篇只谈层间的参数传递，层内部的参数更新在别的文章中说明，与之相关的几个参数如下，以全连接层(connected layer)为例讲解其作用。 12345678910111213141516171819202122struct layer &amp;#123;        ...        floa">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/2019/01/06/Darknet——序言/darknet.png">
-<meta property="og:image" content="http://yoursite.com/2019/01/06/Darknet——序言/Screen_Shot_2018-03-24_at_10.48.42_PM.png">
-<meta property="og:image" content="http://yoursite.com/2019/01/06/Darknet——序言/darknet_build_win_no_gpu_sln.png">
-<meta property="og:image" content="http://yoursite.com/2019/01/06/Darknet——序言/darknet_build_win_release.png">
-<meta property="og:image" content="http://yoursite.com/2019/01/06/Darknet——序言/darknet_build_win_build.png">
-<meta property="og:image" content="http://yoursite.com/2019/01/06/Darknet——序言/darknet_build_win_success.png">
-<meta property="og:image" content="http://yoursite.com/2019/01/06/Darknet——序言/darknet_build_win_predict_dog.png">
-<meta property="og:updated_time" content="2019-02-28T08:39:20.001Z">
+<meta property="og:image" content="http://yoursite.com/2019/02/07/Darknet——How-to-Train/forward.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/02/07/Darknet——How-to-Train/forward_cost.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/02/07/Darknet——How-to-Train/backward.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/02/07/Darknet——How-to-Train/backward_cost.jpg">
+<meta property="og:updated_time" content="2019-02-28T11:53:19.902Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Darknet——序言">
-<meta name="twitter:description" content="前言目前可用于深度学习的著名框架有  tensorflow pytorch keras theano caffe …  这些给广大调参狗带来便利，但不利于学生党理解底层实现，例如神经网络的BP算法。 Darknet提供了底层代码的实现，开源万岁！ Darknet简介 Darknet为全C语言实现的深度学习开源代码，细细品读，收获颇丰，后患无穷。 附上官网链接和Github地址  YOLO: Rea">
-<meta name="twitter:image" content="http://yoursite.com/2019/01/06/Darknet——序言/darknet.png">
+<meta name="twitter:title" content="Darknet——How to Train">
+<meta name="twitter:description" content="参数传递Darknet参数传递通过指针实现，指针定义在结构体layer和network_state中。本篇只谈层间的参数传递，层内部的参数更新在别的文章中说明，与之相关的几个参数如下，以全连接层(connected layer)为例讲解其作用。 12345678910111213141516171819202122struct layer &amp;#123;        ...        floa">
+<meta name="twitter:image" content="http://yoursite.com/2019/02/07/Darknet——How-to-Train/forward.jpg">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/01/06/Darknet——序言/">
+  <link rel="canonical" href="http://yoursite.com/2019/02/07/Darknet——How-to-Train/">
 
 
 
@@ -143,7 +140,7 @@
   };
 </script>
 
-  <title>Darknet——序言 | LOUIS' BLOG</title>
+  <title>Darknet——How to Train | LOUIS' BLOG</title>
   
 
 
@@ -356,7 +353,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/06/Darknet——序言/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/07/Darknet——How-to-Train/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Louis Hsu">
@@ -373,7 +370,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Darknet——序言
+          <h1 class="post-title" itemprop="name headline">Darknet——How to Train
               
             
           </h1>
@@ -398,7 +395,7 @@
                 
               
 
-              <time title="创建时间：2019-01-06 09:38:38" itemprop="dateCreated datePublished" datetime="2019-01-06T09:38:38+08:00">2019-01-06</time>
+              <time title="创建时间：2019-02-07 17:04:39" itemprop="dateCreated datePublished" datetime="2019-02-07T17:04:39+08:00">2019-02-07</time>
             
 
             
@@ -415,7 +412,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-28 16:39:20" itemprop="dateModified" datetime="2019-02-28T16:39:20+08:00">2019-02-28</time>
+                <time title="修改时间：2019-02-28 19:53:19" itemprop="dateModified" datetime="2019-02-28T19:53:19+08:00">2019-02-28</time>
               
             
           </span>
@@ -466,40 +463,71 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>目前可用于深度学习的著名框架有</p>
+        <h1 id="参数传递"><a href="#参数传递" class="headerlink" title="参数传递"></a>参数传递</h1><p><code>Darknet</code>参数传递通过指针实现，指针定义在结构体<code>layer</code>和<code>network_state</code>中。本篇只谈层间的参数传递，层内部的参数更新在别的文章中说明，与之相关的几个参数如下，以全连接层<code>(connected layer)</code>为例讲解其作用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">struct layer &#123;</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    float * delta;</span><br><span class="line">    float * output;</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">typedef struct network_state &#123;</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    float *truth;</span><br><span class="line">    float *input;</span><br><span class="line">    float *delta;</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">&#125; network_state;</span><br></pre></td></tr></table></figure>
+<p>需要说明的是</p>
 <ul>
-<li>tensorflow</li>
-<li>pytorch</li>
-<li>keras</li>
-<li>theano</li>
-<li>caffe</li>
-<li>…</li>
+<li><code>layer.output</code>与<code>layer.delta</code>分配空间大小一致，为该层的输出大小<code>net.batch * layer.outputs</code>；</li>
+<li><code>state.truth</code>空间大小为<code>net.batch * net.layers[n-2].outputs</code>，<code>net.layers[n-1]</code>为损失层；</li>
+<li><code>state.input</code>指向前一层的输出<code>prev.output</code>，大小为<code>net.batch * prev.outputs</code>或<code>net.batch * layer.inputs</code>；</li>
+<li><code>state.delta</code>指向前一层网络的梯度空间<code>prev.delta</code>，大小为<code>net.batch * prev.outputs</code>或<code>net.batch * layer.inputs</code>；</li>
 </ul>
-<p>这些给广大调参狗带来便利，但不利于学生党理解底层实现，例如神经网络的BP算法。</p>
-<p><code>Darknet</code>提供了底层代码的实现，开源万岁！</p>
-<h1 id="Darknet简介"><a href="#Darknet简介" class="headerlink" title="Darknet简介"></a>Darknet简介</h1><p><img src="/2019/01/06/Darknet——序言/darknet.png" alt="darknet"></p>
-<p><code>Darknet</code>为全C语言实现的深度学习开源代码，细细品读，收获颇丰，<del>后患无穷</del>。</p>
-<p>附上官网链接和<code>Github</code>地址</p>
+<h1 id="训练入口函数"><a href="#训练入口函数" class="headerlink" title="训练入口函数"></a>训练入口函数</h1><p>主要做了以下几个工作</p>
 <ul>
-<li><a href="https://pjreddie.com/darknet/yolo/" target="_blank" rel="noopener">YOLO: Real-Time Object Detection</a></li>
-<li><a href="https://github.com/pjreddie/darknet" target="_blank" rel="noopener">pjreddie/darknet: Convolutional Neural Networks</a></li>
+<li>初始化<code>network_state</code>；</li>
+<li>前向计算<code>forward_network</code>；</li>
+<li>反向传播<code>backward_network</code>；</li>
+<li>计算损失<code>get_network_cost</code>；</li>
+<li>更新参数<code>update_network</code>；</li>
 </ul>
-<h1 id="Linux下安装与使用"><a href="#Linux下安装与使用" class="headerlink" title="Linux下安装与使用"></a>Linux下安装与使用</h1><p>官网详细说明如何使用，非常便捷<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git clone https://github.com/pjreddie/darknet</span><br><span class="line">$ cd darknet</span><br><span class="line">$ make</span><br></pre></td></tr></table></figure></p>
-<p>下载<code>yolov3</code>预训练模型权值，并进行检测<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ wget https://pjreddie.com/media/files/yolov3.weights</span><br><span class="line">$ ./darknet detect cfg/yolov3.cfg yolov3.weights data/dog.jpg</span><br><span class="line">layer     filters    size              input                output</span><br><span class="line">    0 conv     32  3 x 3 / 1   416 x 416 x   3   -&gt;   416 x 416 x  32  0.299 BFLOPs</span><br><span class="line">    1 conv     64  3 x 3 / 2   416 x 416 x  32   -&gt;   208 x 208 x  64  1.595 BFLOPs</span><br><span class="line">    .......</span><br><span class="line">  105 conv    255  1 x 1 / 1    52 x  52 x 256   -&gt;    52 x  52 x 255  0.353 BFLOPs</span><br><span class="line">  106 detection</span><br><span class="line">truth_thresh: Using default &apos;1.000000&apos;</span><br><span class="line">Loading weights from yolov3.weights...Done!</span><br><span class="line">data/dog.jpg: Predicted in 0.029329 seconds.</span><br><span class="line">dog: 99%</span><br><span class="line">truck: 93%</span><br><span class="line">bicycle: 99%</span><br></pre></td></tr></table></figure></p>
-<p><img src="/2019/01/06/Darknet——序言/Screen_Shot_2018-03-24_at_10.48.42_PM.png" alt="Screen_Shot"></p>
-<p>Linux下编译调用API，详细查看<a href="https://louishsu.xyz/2019/01/05/Cmake%E7%BC%96%E8%AF%91%E5%BA%93%E6%96%87%E4%BB%B6/" target="_blank" rel="noopener">Cmake编译库文件 | LOUIS’ BLOG</a></p>
-<h1 id="Windows下安装与使用"><a href="#Windows下安装与使用" class="headerlink" title="Windows下安装与使用"></a>Windows下安装与使用</h1><ol>
-<li>新建项目文件夹<code>project</code>，复制<code>darknet_AlexeyAB</code>中文件到该目录下</li>
-<li>选择无gpu版本，打开<code>project/build/darknet/darknet_no_gpu.sln</code><br> <img src="/2019/01/06/Darknet——序言/darknet_build_win_no_gpu_sln.png" alt="darknet_build_win_no_gpu_sln"></li>
-<li>修改版本为<code>release</code><br> <img src="/2019/01/06/Darknet——序言/darknet_build_win_release.png" alt="darknet_build_win_release"></li>
-<li>安装<code>OpenCV3</code></li>
-<li>一键<code>build</code>！如果需要生成<code>.dll</code>动态链接库，则配置<code>项目属性 -&gt; 常规 -&gt; 目标文件扩展名</code>为<code>.dll</code><br> <img src="/2019/01/06/Darknet——序言/darknet_build_win_build.png" alt="darknet_build_win_build"><br> <img src="/2019/01/06/Darknet——序言/darknet_build_win_success.png" alt="darknet_build_win_success"></li>
-</ol>
-<p>从<code>https://pjreddie.com/media/files/yolov3.weights</code>下载<code>yolo_v3</code>权重，放到放在<code>project/build/darknet/x64</code>目录，执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&gt; ./darknet_no_gpu.exe detect cfg/yolov3.cfg yolov3.weights data/dog.jpg</span><br><span class="line">layer     filters    size              input                output</span><br><span class="line">   0 conv     32  3 x 3 / 1   416 x 416 x   3   -&gt;   416 x 416 x  32 0.299 BF</span><br><span class="line">   1 conv     64  3 x 3 / 2   416 x 416 x  32   -&gt;   208 x 208 x  64 1.595 BF</span><br><span class="line">   2 conv     32  1 x 1 / 1   208 x 208 x  64   -&gt;   208 x 208 x  32 0.177 BF</span><br><span class="line">   3 conv     64  3 x 3 / 1   208 x 208 x  32   -&gt;   208 x 208 x  64 1.595 BF</span><br><span class="line">   4 Shortcut Layer: 1</span><br><span class="line">   5 conv    128  3 x 3 / 2   208 x 208 x  64   -&gt;   104 x 104 x 128 1.595 BF</span><br><span class="line">   6 conv     64  1 x 1 / 1   104 x 104 x 128   -&gt;   104 x 104 x  64 0.177 BF</span><br><span class="line">   7 conv    128  3 x 3 / 1   104 x 104 x  64   -&gt;   104 x 104 x 128 1.595 BF</span><br><span class="line">   </span><br><span class="line">   ...</span><br><span class="line">  </span><br><span class="line">  94 yolo</span><br><span class="line">  95 route  91</span><br><span class="line">  96 conv    128  1 x 1 / 1    26 x  26 x 256   -&gt;    26 x  26 x 128 0.044 BF</span><br><span class="line">  97 upsample            2x    26 x  26 x 128   -&gt;    52 x  52 x 128</span><br><span class="line">  98 route  97 36</span><br><span class="line">  99 conv    128  1 x 1 / 1    52 x  52 x 384   -&gt;    52 x  52 x 128 0.266 BF</span><br><span class="line"> 100 conv    256  3 x 3 / 1    52 x  52 x 128   -&gt;    52 x  52 x 256 1.595 BF</span><br><span class="line"> 101 conv    128  1 x 1 / 1    52 x  52 x 256   -&gt;    52 x  52 x 128 0.177 BF</span><br><span class="line"> 102 conv    256  3 x 3 / 1    52 x  52 x 128   -&gt;    52 x  52 x 256 1.595 BF</span><br><span class="line"> 103 conv    128  1 x 1 / 1    52 x  52 x 256   -&gt;    52 x  52 x 128 0.177 BF</span><br><span class="line"> 104 conv    256  3 x 3 / 1    52 x  52 x 128   -&gt;    52 x  52 x 256 1.595 BF</span><br><span class="line"> 105 conv    255  1 x 1 / 1    52 x  52 x 256   -&gt;    52 x  52 x 255 0.353 BF</span><br><span class="line"> 106 yolo</span><br><span class="line">Total BFLOPS 65.864</span><br><span class="line">Loading weights from yolov3.weights...Done!</span><br></pre></td></tr></table></figure></p>
-<p><img src="/2019/01/06/Darknet——序言/darknet_build_win_predict_dog.png" alt="darknet_build_win_predict_dog"></p>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><blockquote>
-<p>AlexeyAB/darknet: Windows and Linux version of Darknet Yolo v3 &amp; v2 Neural Networks for object detection (Tensor Cores are used) <a href="https://github.com/AlexeyAB/darknet" target="_blank" rel="noopener">https://github.com/AlexeyAB/darknet</a><br>Windows配置darknet - 楷尘·极客 - CSDN博客 <a href="https://blog.csdn.net/KayChanGEEK/article/details/84979441" target="_blank" rel="noopener">https://blog.csdn.net/KayChanGEEK/article/details/84979441</a></p>
-</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">float train_network_datum(network net, float *x, float *y)</span><br><span class="line">&#123;</span><br><span class="line">    network_state state;</span><br><span class="line">    *net.seen += net.batch;     // 网络全局参数，记录已读取图片的累计数量</span><br><span class="line">    state.index = 0;            // 网络层索引</span><br><span class="line">    state.net = net;            // 网络</span><br><span class="line">    state.input = x;            // 初始化输入</span><br><span class="line">    state.delta = 0;            // 初始化梯度</span><br><span class="line">    state.truth = y;            // 初始化 ground truth</span><br><span class="line">    state.train = 1;            // 是否训练</span><br><span class="line">    forward_network(net, state);</span><br><span class="line">    backward_network(net, state);</span><br><span class="line">    float error = get_network_cost(net);</span><br><span class="line">    if(((*net.seen)/net.batch)%net.subdivisions == 0) update_network(net);</span><br><span class="line">    return error;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="前向计算"><a href="#前向计算" class="headerlink" title="前向计算"></a>前向计算</h1><p>在遍历网络的各层时</p>
+<ul>
+<li>更新层索引；</li>
+<li>清除层的梯度<code>l.delta</code>；</li>
+<li>该层的前向计算<code>l.forward</code>，更新<code>l.output</code>；</li>
+<li>更新<code>state.input</code>为<code>l.output</code>，作为后续网络层的输入；</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">void forward_network(network net, network_state state)</span><br><span class="line">&#123;</span><br><span class="line">    state.workspace = net.workspace;</span><br><span class="line">    int i;</span><br><span class="line">    for(i = 0; i &lt; net.n; ++i)&#123;</span><br><span class="line">        state.index = i;</span><br><span class="line">        layer l = net.layers[i];</span><br><span class="line">        if(l.delta &amp;&amp; state.train)&#123;</span><br><span class="line">            scal_cpu(l.outputs * l.batch, 0, l.delta, 1);</span><br><span class="line">        &#125;</span><br><span class="line">        l.forward(l, state);</span><br><span class="line">        state.input = l.output;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在<code>l.forward</code>中</p>
+<ul>
+<li><code>l.output</code>更新；</li>
+<li><code>state</code>未更新；</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">void forward_connected_layer(connected_layer l, network_state state)</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    fill_cpu(l.outputs*l.batch, 0, l.output, 1);</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">    float *a = state.input;</span><br><span class="line">    float *b = l.weights;</span><br><span class="line">    float *c = l.output;</span><br><span class="line">    gemm(0,1,m,n,k,1,a,k,b,k,1,c,n);</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    for(i = 0; i &lt; l.batch; ++i)&#123;</span><br><span class="line">        axpy_cpu(l.outputs, 1, l.biases, 1, l.output + i*l.outputs, 1);</span><br><span class="line">    &#125;</span><br><span class="line">    activate_array(l.output, l.outputs*l.batch, l.activation);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/02/07/Darknet——How-to-Train/forward.jpg" alt="forward"></p>
+<p>而在损失函数层</p>
+<ul>
+<li>梯度值<code>l.delta</code>更新； </li>
+<li>各个样本的损失值<code>l.output</code>更新；</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">void forward_cost_layer(cost_layer l, network_state state)</span><br><span class="line">&#123;</span><br><span class="line">    if (!state.truth) return;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">	else if(l.cost_type == SSE)&#123;</span><br><span class="line">        l2_cpu(l.batch*l.inputs, state.input, state.truth, l.delta, l.output);</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    l.cost[0] = sum_array(l.output, l.batch*l.inputs);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/02/07/Darknet——How-to-Train/forward_cost.jpg" alt="forward_cost"></p>
+<h1 id="反向传播"><a href="#反向传播" class="headerlink" title="反向传播"></a>反向传播</h1><p>在遍历网络的各层时</p>
+<ul>
+<li>更新层索引；</li>
+<li>更新<code>state.input</code>为<code>prev.output</code>；</li>
+<li>更新<code>state.delta</code>为<code>prev.delta</code>；</li>
+<li>该层的反向传播<code>l.backward</code>时<ul>
+<li>更新<code>l.delta</code>与<code>state.delta</code>；</li>
+<li>更新层参数<code>l.weights</code>，<code>l.bias</code>等；</li>
+</ul>
+</li>
+</ul>
+<p>注意前一层的参数<code>prev.delta</code>在当前层反向传播时得到更新，也就是说，某层的梯度值在后一层及当前层传播时共同计算得到。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">void backward_network(network net, network_state state)</span><br><span class="line">&#123;</span><br><span class="line">    int i;</span><br><span class="line">    float *original_input = state.input;</span><br><span class="line">    float *original_delta = state.delta;</span><br><span class="line">    state.workspace = net.workspace;</span><br><span class="line">    for(i = net.n-1; i &gt;= 0; --i)&#123;</span><br><span class="line">        state.index = i;</span><br><span class="line">        if(i == 0)&#123;</span><br><span class="line">            state.input = original_input;</span><br><span class="line">            state.delta = original_delta;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            layer prev = net.layers[i-1];</span><br><span class="line">            state.input = prev.output;</span><br><span class="line">            state.delta = prev.delta;</span><br><span class="line">        &#125;</span><br><span class="line">        layer l = net.layers[i];</span><br><span class="line">        if (l.stopbackward) break;</span><br><span class="line">        l.backward(l, state);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在<code>l.backward</code>中</p>
+<ul>
+<li><code>l.delta</code>更新，由<code>l.output</code>计算得到；</li>
+<li><code>state.input</code>未更新，也即前一层的梯度<code>prev.output</code>未更新；</li>
+<li><code>state.delta</code>更新，也即前一层的梯度<code>prev.delta</code>得到更新；</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">void backward_connected_layer(connected_layer l, network_state state)</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    gradient_array(l.output, l.outputs*l.batch, l.activation, l.delta);</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    float *a = l.delta;</span><br><span class="line">    float *b = state.input;</span><br><span class="line">    float *c = l.weight_updates;</span><br><span class="line">    gemm(1,0,m,n,k,1,a,m,b,n,1,c,n);</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    a = l.delta;</span><br><span class="line">    b = l.weights;</span><br><span class="line">    c = state.delta;</span><br><span class="line">    if(c)gemm(0,0,m,n,k,1,a,k,b,n,1,c,n);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/02/07/Darknet——How-to-Train/backward.jpg" alt="backward"></p>
+<p>在损失函数层仅更新 <code>state.delta</code>，也即前一层的梯度<code>prev.delta</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">void backward_cost_layer(const cost_layer l, network_state state)</span><br><span class="line">&#123;</span><br><span class="line">    axpy_cpu(l.batch*l.inputs, l.scale, l.delta, 1, state.delta, 1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/02/07/Darknet——How-to-Train/backward_cost.jpg" alt="backward_cost"></p>
+<h1 id="参数更新"><a href="#参数更新" class="headerlink" title="参数更新"></a>参数更新</h1><p>未进行层间的参数传递。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">void update_network(network net)</span><br><span class="line">&#123;</span><br><span class="line">    int i;</span><br><span class="line">    int update_batch = net.batch*net.subdivisions;</span><br><span class="line">    float rate = get_current_rate(net);</span><br><span class="line">    for(i = 0; i &lt; net.n; ++i)&#123;</span><br><span class="line">        layer l = net.layers[i];</span><br><span class="line">        if(l.update)&#123;</span><br><span class="line">            l.update(l, update_batch, rate, net.momentum, net.decay);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -527,8 +555,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/05/makefile简单教程/" rel="next" title="makefile简单教程">
-                <i class="fa fa-chevron-left"></i> makefile简单教程
+              <a href="/2019/01/06/Darknet——序言/" rel="next" title="Darknet——序言">
+                <i class="fa fa-chevron-left"></i> Darknet——序言
               </a>
             
           </div>
@@ -537,8 +565,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/02/07/Darknet——How-to-Train/" rel="prev" title="Darknet——How to Train">
-                Darknet——How to Train <i class="fa fa-chevron-right"></i>
+              <a href="/2019/02/17/Python生成词云图/" rel="prev" title="Python生成词云图">
+                Python生成词云图 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -723,7 +751,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Darknet简介"><span class="nav-number">2.</span> <span class="nav-text">Darknet简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux下安装与使用"><span class="nav-number">3.</span> <span class="nav-text">Linux下安装与使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Windows下安装与使用"><span class="nav-number">4.</span> <span class="nav-text">Windows下安装与使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#参数传递"><span class="nav-number">1.</span> <span class="nav-text">参数传递</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#训练入口函数"><span class="nav-number">2.</span> <span class="nav-text">训练入口函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#前向计算"><span class="nav-number">3.</span> <span class="nav-text">前向计算</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#反向传播"><span class="nav-number">4.</span> <span class="nav-text">反向传播</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参数更新"><span class="nav-number">5.</span> <span class="nav-text">参数更新</span></a></li></ol></div>
             
 
           </div>
@@ -1225,30 +1253,6 @@
   
   
 
-  
-    
-      <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      tex2jax: {
-        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-        processEscapes: true,
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-      },
-      TeX: {equationNumbers: { autoNumber: "AMS" }}
-    });
-</script>
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Queue(function() {
-      var all = MathJax.Hub.getAllJax(), i;
-        for (i=0; i < all.length; i += 1) {
-          all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-    });
-</script>
-<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-    
   
 
 
