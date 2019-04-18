@@ -119,7 +119,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/04/18/n-dim-Array-PCA/d1.jpg">
 <meta property="og:image" content="http://yoursite.com/2019/04/18/n-dim-Array-PCA/d2.jpg">
 <meta property="og:image" content="http://yoursite.com/2019/04/18/n-dim-Array-PCA/d3.jpg">
-<meta property="og:updated_time" content="2019-04-18T13:47:54.590Z">
+<meta property="og:updated_time" content="2019-04-18T13:51:39.201Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="n-dim Array PCA">
 <meta name="twitter:description" content="前言在PCA中介绍了1维数据的主成分分析，那么对于多维数据，如何进行处理呢？有一种做法是，将单份的样本数据展开为1维向量，再进行PCA，例如著名的Eigenface，如图所示  这有一个缺点是，忽略了多维数据的空间信息，且计算时，若展开后维度过大，协方差矩阵的求逆过程非常耗时间，以下介绍多维主成分分析。 原理对于单维$n$维度数据$X = \left[\begin{matrix} x^{(1)}">
@@ -395,7 +395,7 @@
                 
               
 
-              <time title="创建时间：2019-04-18 19:24:50 / 修改时间：21:47:54" itemprop="dateCreated datePublished" datetime="2019-04-18T19:24:50+08:00">2019-04-18</time>
+              <time title="创建时间：2019-04-18 19:24:50 / 修改时间：21:51:39" itemprop="dateCreated datePublished" datetime="2019-04-18T19:24:50+08:00">2019-04-18</time>
             
 
             
@@ -471,10 +471,13 @@ X^{d_1, ..., d_n}_{N×n'_{d_1}×..×n'_{d_i}×...×n'_{d_n}}</script><p><strong>
 <p>以3维张量$X(H, W, C)$为例，指定降维顺序为$(d_1, d_2, d_3)$，其降维过程表示如图</p>
 <ul>
 <li><p>在$H$维度上</p>
+<p>  <img src="/2019/04/18/n-dim-Array-PCA/d1.jpg" alt="d1"></p>
 </li>
 <li><p>在$W$维度上</p>
+<p>  <img src="/2019/04/18/n-dim-Array-PCA/d2.jpg" alt="d2"></p>
 </li>
 <li><p>在$C$维度上</p>
+<p>  <img src="/2019/04/18/n-dim-Array-PCA/d3.jpg" alt="d3"></p>
 </li>
 </ul>
 <h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><p>同样的，以3维张量$X(H, W, C)$为例，指定降维顺序为$(d_1, d_2, d_3)$</p>
@@ -485,9 +488,7 @@ X^{d_1, ..., d_n}_{N×n'_{d_1}×..×n'_{d_i}×...×n'_{d_n}}</script><p><strong>
 <li>将其展开为$X_{flatten}(N_H×H)$，其中$N_H=C×W$</li>
 <li>降维得到$X’_{flatten}(N_H×H’)$</li>
 <li>重新将另外两维恢复，得到$X^{T_{d_1d_3}’}(C, W, H’)$</li>
-<li><p>将张量转置，得到$X^{d_1}(H’, W, C)$</p>
-<p><img src="/2019/04/18/n-dim-Array-PCA/d1.jpg" alt="d1"></p>
-</li>
+<li>将张量转置，得到$X^{d_1}(H’, W, C)$</li>
 </ol>
 </li>
 <li><p>在$W$维度上</p>
@@ -496,18 +497,14 @@ X^{d_1, ..., d_n}_{N×n'_{d_1}×..×n'_{d_i}×...×n'_{d_n}}</script><p><strong>
 <li>将其展开为$X_{flatten}(N_W×W)$，其中$N_W=H’×C$</li>
 <li>降维得到$X’_{flatten}(N_W×W’)$</li>
 <li>重新将另外两维恢复，得到$X^{T_{d_2d_3}’}(H’, C, W’)$</li>
-<li><p>将张量转置，得到$X^{d_1d_2}(H’, W’, C)$</p>
-<p><img src="/2019/04/18/n-dim-Array-PCA/d2.jpg" alt="d2"></p>
-</li>
+<li>将张量转置，得到$X^{d_1d_2}(H’, W’, C)$</li>
 </ol>
 </li>
 <li><p>在$C$维度上</p>
 <ol>
 <li>将$X^{d_1d_2}(H’, W’, C)$展开为$X_{flatten}(N_C×C)$，其中$N_C=H’×W’$</li>
 <li>降维得到$X’_{flatten}(N_C×C’)$</li>
-<li><p>重新将另外两维恢复，得到$X^{d_1d_2d_3}(H’, W’, C’)$</p>
-<p><img src="/2019/04/18/n-dim-Array-PCA/d3.jpg" alt="d3"></p>
-</li>
+<li>重新将另外两维恢复，得到$X^{d_1d_2d_3}(H’, W’, C’)$</li>
 </ol>
 </li>
 </ol>
