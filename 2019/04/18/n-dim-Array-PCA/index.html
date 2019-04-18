@@ -108,23 +108,29 @@
 
 
 
-  <meta name="description" content="Inside! Insane!">
-<meta property="og:type" content="website">
-<meta property="og:title" content="LOUIS&#39; BLOG">
-<meta property="og:url" content="http://yoursite.com/tags/Linux/index.html">
+  <meta name="description" content="前言在PCA中介绍了1维数据的主成分分析，那么对于多维数据，如何进行处理呢？有一种做法是，将单份的样本数据展开为1维向量，再进行PCA，例如著名的Eigenface，如图所示  这有一个缺点是，忽略了多维数据的空间信息，且计算时，若展开后维度过大，协方差矩阵的求逆过程非常耗时间，以下介绍多维主成分分析。 原理对于单维$n$维度数据$X = \left[\begin{matrix} x^{(1)}">
+<meta property="og:type" content="article">
+<meta property="og:title" content="n-dim Array PCA">
+<meta property="og:url" content="http://yoursite.com/2019/04/18/n-dim-Array-PCA/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="Inside! Insane!">
+<meta property="og:description" content="前言在PCA中介绍了1维数据的主成分分析，那么对于多维数据，如何进行处理呢？有一种做法是，将单份的样本数据展开为1维向量，再进行PCA，例如著名的Eigenface，如图所示  这有一个缺点是，忽略了多维数据的空间信息，且计算时，若展开后维度过大，协方差矩阵的求逆过程非常耗时间，以下介绍多维主成分分析。 原理对于单维$n$维度数据$X = \left[\begin{matrix} x^{(1)}">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/n-dim-Array-PCA/Eigenfaces.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/n-dim-Array-PCA/d1.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/n-dim-Array-PCA/d2.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/n-dim-Array-PCA/d3.jpg">
+<meta property="og:updated_time" content="2019-04-18T13:47:54.590Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LOUIS&#39; BLOG">
-<meta name="twitter:description" content="Inside! Insane!">
+<meta name="twitter:title" content="n-dim Array PCA">
+<meta name="twitter:description" content="前言在PCA中介绍了1维数据的主成分分析，那么对于多维数据，如何进行处理呢？有一种做法是，将单份的样本数据展开为1维向量，再进行PCA，例如著名的Eigenface，如图所示  这有一个缺点是，忽略了多维数据的空间信息，且计算时，若展开后维度过大，协方差矩阵的求逆过程非常耗时间，以下介绍多维主成分分析。 原理对于单维$n$维度数据$X = \left[\begin{matrix} x^{(1)}">
+<meta name="twitter:image" content="http://yoursite.com/2019/04/18/n-dim-Array-PCA/Eigenfaces.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/Linux/">
+  <link rel="canonical" href="http://yoursite.com/2019/04/18/n-dim-Array-PCA/">
 
 
 
@@ -134,7 +140,7 @@
   };
 </script>
 
-  <title>标签: Linux | LOUIS' BLOG</title>
+  <title>n-dim Array PCA | LOUIS' BLOG</title>
   
 
 
@@ -181,7 +187,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -230,7 +236,7 @@
         
         
           
-          <li class="menu-item menu-item-tags menu-item-active">
+          <li class="menu-item menu-item-tags">
     <a href="/tags/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
   </li>
@@ -327,134 +333,249 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block tag">
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>Linux<small>标签</small>
-        </h1>
-      </div>
-
-      
-        
+  
 
   <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/18/n-dim-Array-PCA/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="Inside! Insane!">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2019/01/04/Ubuntu编译安装Tensorflow/" itemprop="url">
-              
-                <span itemprop="name">Ubuntu编译安装Tensorflow</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">n-dim Array PCA
+              
+            
+          </h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-01-04T16:50:16+08:00" content="2019-01-04">
-          01-04
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
 
-    </header>
-  </article>
+            
+            
+            
 
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-18 19:24:50 / 修改时间：21:47:54" itemprop="dateCreated datePublished" datetime="2019-04-18T19:24:50+08:00">2019-04-18</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/01/04/Ubuntu编译安装OpenCV/" itemprop="url">
-              
-                <span itemprop="name">Ubuntu编译安装OpenCV</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-01-04T16:48:44+08:00" content="2019-01-04">
-          01-04
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+      
 
       
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/10/29/二次入坑raspberry-pi/" itemprop="url">
-              
-                <span itemprop="name">二次入坑raspberry-pi</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-10-29T11:25:59+08:00" content="2018-10-29">
-          10-29
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在<a href="https://louishsu.xyz/2018/10/22/PCA/" target="_blank" rel="noopener">PCA</a>中介绍了1维数据的主成分分析，那么对于多维数据，如何进行处理呢？有一种做法是，将单份的样本数据展开为1维向量，再进行PCA，例如著名的<a href="https://zh.wikipedia.org/wiki/%E7%89%B9%E5%BE%81%E8%84%B8" target="_blank" rel="noopener">Eigenface</a>，如图所示</p>
+<p><img src="/2019/04/18/n-dim-Array-PCA/Eigenfaces.png" alt="Eigenfaces"></p>
+<p>这有一个缺点是，忽略了多维数据的空间信息，且计算时，若展开后维度过大，协方差矩阵的求逆过程非常耗时间，以下介绍多维主成分分析。</p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>对于单维$n$维度数据$X = \left[\begin{matrix} x^{(1)} \\ x^{(2)} \\ … \\ x^{(N)} \end{matrix}\right]$，我们有</p>
+<script type="math/tex; mode=display">
+X' = XU</script><p>其中，$x^{(i)}$为$n$维行向量，组成样本矩阵$X_{N×n}$，$U_{n×n_1}$为投影矩阵，$X’_{N×n_1}$为降维后的样本矩阵。</p>
+<p>对于多(n)维样本张量数据$X_{N×n_{d_1}×n_{d_2}×…×n_{d_n}}$，指定各维度降维顺序，在$d_i$维度上，我们将张量在该维度上展开为$1$维向量</p>
+<script type="math/tex; mode=display">
+X_{N_{d_i}×n_{d_i}}</script><p>其中</p>
+<script type="math/tex; mode=display">
+N_{d_i} = \prod_{j=0,j≠i}^n n_{d_j}</script><p>然后在$d_i$维度上进行降维，即</p>
+<script type="math/tex; mode=display">
+X'_{N_{d_i}×n'_{d_i}} = X_{N_{d_i}×n_{d_i}} U^{d_i}</script><p>其中$U^{d_i}$表示$d_i$维度的投影矩阵，其大小为$n_{d_i}×n’_{d_i}$，然后，将该张量其余维度恢复，得到</p>
+<script type="math/tex; mode=display">
+X^{d_i}_{N×n_{d_1}×..×n'_{d_i}×...×n_{d_n}}</script><p>如此循环，在各维度进行降维，得到张量</p>
+<script type="math/tex; mode=display">
+X^{d_1, ..., d_n}_{N×n'_{d_1}×..×n'_{d_i}×...×n'_{d_n}}</script><p><strong>注意，不同的降维顺序得到的参数会存在差异。</strong></p>
+<p>以3维张量$X(H, W, C)$为例，指定降维顺序为$(d_1, d_2, d_3)$，其降维过程表示如图</p>
+<ul>
+<li><p>在$H$维度上</p>
+</li>
+<li><p>在$W$维度上</p>
+</li>
+<li><p>在$C$维度上</p>
+</li>
+</ul>
+<h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><p>同样的，以3维张量$X(H, W, C)$为例，指定降维顺序为$(d_1, d_2, d_3)$</p>
+<ol>
+<li><p>在$H$维度上</p>
+<ol>
+<li>将该张量转置，得到$X^{T_{d_1d_3}}(C, W, H)$</li>
+<li>将其展开为$X_{flatten}(N_H×H)$，其中$N_H=C×W$</li>
+<li>降维得到$X’_{flatten}(N_H×H’)$</li>
+<li>重新将另外两维恢复，得到$X^{T_{d_1d_3}’}(C, W, H’)$</li>
+<li><p>将张量转置，得到$X^{d_1}(H’, W, C)$</p>
+<p><img src="/2019/04/18/n-dim-Array-PCA/d1.jpg" alt="d1"></p>
+</li>
+</ol>
+</li>
+<li><p>在$W$维度上</p>
+<ol>
+<li>将$X^{d_1}(H’, W, C)$转置，得到$X^{T_{d_2d_3}}(H’, C, W)$</li>
+<li>将其展开为$X_{flatten}(N_W×W)$，其中$N_W=H’×C$</li>
+<li>降维得到$X’_{flatten}(N_W×W’)$</li>
+<li>重新将另外两维恢复，得到$X^{T_{d_2d_3}’}(H’, C, W’)$</li>
+<li><p>将张量转置，得到$X^{d_1d_2}(H’, W’, C)$</p>
+<p><img src="/2019/04/18/n-dim-Array-PCA/d2.jpg" alt="d2"></p>
+</li>
+</ol>
+</li>
+<li><p>在$C$维度上</p>
+<ol>
+<li>将$X^{d_1d_2}(H’, W’, C)$展开为$X_{flatten}(N_C×C)$，其中$N_C=H’×W’$</li>
+<li>降维得到$X’_{flatten}(N_C×C’)$</li>
+<li><p>重新将另外两维恢复，得到$X^{d_1d_2d_3}(H’, W’, C’)$</p>
+<p><img src="/2019/04/18/n-dim-Array-PCA/d3.jpg" alt="d3"></p>
+</li>
+</ol>
+</li>
+</ol>
+<p>详细查看<a href="https://github.com/isLouisHsu/Basic-Machine-Learning-Algorithm/blob/master/algorithm/tensor_pca.py" target="_blank" rel="noopener">GitHub</a>，其核心代码如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">def transform(self, X):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    Params:</span><br><span class="line">        X: &#123;ndarray(n_samples, d0, d1, d2, ..., dn-1)&#125; n-dim array</span><br><span class="line">    Returns:</span><br><span class="line">        X: &#123;ndarray(n_samples, d0, d1, d2, ..., dn-1)&#125; n-dim array</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">    assert self.n_dims == len(X.shape) - 1, &apos;please check input dimension! &apos;</span><br><span class="line">    idx = [i for i in range(len(X.shape))]   # index of dimensions</span><br><span class="line"></span><br><span class="line">    for i_dim in range(self.n_dims):</span><br><span class="line">            </span><br><span class="line">        ## transpose tensor</span><br><span class="line">        idx[-1], idx[i_dim + 1] = idx[i_dim + 1], idx[-1]</span><br><span class="line">        X = X.transpose(idx)</span><br><span class="line">        shape = list(X.shape)</span><br><span class="line"></span><br><span class="line">        # 1-dim pca</span><br><span class="line">        X = X.reshape((-1, shape[-1]))</span><br><span class="line">        X = self.decomposers[i_dim].transform(X)</span><br><span class="line"></span><br><span class="line">        ## transpose tensor</span><br><span class="line">        X = X.reshape(shape[:-1]+[X.shape[-1]])</span><br><span class="line">        X = X.transpose(idx)</span><br><span class="line">        idx[-1], idx[i_dim + 1] = idx[i_dim + 1], idx[-1]</span><br><span class="line">        </span><br><span class="line">    return X</span><br></pre></td></tr></table></figure>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
+<li><a href="https://zh.wikipedia.org/wiki/%E7%89%B9%E5%BE%81%E8%84%B8" target="_blank" rel="noopener">特征脸 - 维基百科，自由的百科全书</a></li>
+</ol>
 
       
     </div>
 
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/19/Python字符串格式化/" rel="next" title="Python字符串格式化">
+                <i class="fa fa-chevron-left"></i> Python字符串格式化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+  </div>
 
 
           </div>
           
+
+  
+
+
 
         </div>
         
@@ -475,8 +596,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -591,6 +721,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#原理"><span class="nav-number">2.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码实现"><span class="nav-number">3.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -722,6 +868,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
 
   
 
@@ -1083,6 +1233,30 @@
   
   
 
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
   
 
 
