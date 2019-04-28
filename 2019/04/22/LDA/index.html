@@ -108,24 +108,27 @@
 
 
 
-  <meta name="description" content="前言Python操作字符串行云流水，当然也支持格式化字符串。 通过格式符1print(&amp;quot;我叫%s, 今年%d岁&amp;quot; % (&amp;apos;Louis Hsu&amp;apos;, 18)) 或者使用字典进行值传递1print(&amp;quot;我叫%(name), 今年%(age)岁&amp;quot; % &amp;#123;&amp;apos;name&amp;apos;: &amp;apos;Louis Hsu&amp;apos;, &amp;a">
+  <meta name="description" content="前言在PCA中，介绍了无监督降维方法，主成分分析(Principal Components Analysis)。从投影后数据方差最大的角度出发，选取主轴。下面介绍一种有监督的降维方法，线性判别分析(Linear Discriminant Analysis)。 原理设有$n$维样本集$D=\{x^{(1)}, …, x^{(i)}, …, x^{(m)}\}$，所属类别数目为$C$，现求其第一投影轴">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Python字符串格式化">
-<meta property="og:url" content="http://yoursite.com/2019/02/19/Python字符串格式化/index.html">
+<meta property="og:title" content="LDA">
+<meta property="og:url" content="http://yoursite.com/2019/04/22/LDA/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="前言Python操作字符串行云流水，当然也支持格式化字符串。 通过格式符1print(&amp;quot;我叫%s, 今年%d岁&amp;quot; % (&amp;apos;Louis Hsu&amp;apos;, 18)) 或者使用字典进行值传递1print(&amp;quot;我叫%(name), 今年%(age)岁&amp;quot; % &amp;#123;&amp;apos;name&amp;apos;: &amp;apos;Louis Hsu&amp;apos;, &amp;a">
+<meta property="og:description" content="前言在PCA中，介绍了无监督降维方法，主成分分析(Principal Components Analysis)。从投影后数据方差最大的角度出发，选取主轴。下面介绍一种有监督的降维方法，线性判别分析(Linear Discriminant Analysis)。 原理设有$n$维样本集$D=\{x^{(1)}, …, x^{(i)}, …, x^{(m)}\}$，所属类别数目为$C$，现求其第一投影轴">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-02-19T05:43:17.000Z">
+<meta property="og:image" content="http://yoursite.com/2019/04/22/LDA/PCA.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/22/LDA/LDA.png">
+<meta property="og:updated_time" content="2019-04-28T09:56:37.953Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Python字符串格式化">
-<meta name="twitter:description" content="前言Python操作字符串行云流水，当然也支持格式化字符串。 通过格式符1print(&amp;quot;我叫%s, 今年%d岁&amp;quot; % (&amp;apos;Louis Hsu&amp;apos;, 18)) 或者使用字典进行值传递1print(&amp;quot;我叫%(name), 今年%(age)岁&amp;quot; % &amp;#123;&amp;apos;name&amp;apos;: &amp;apos;Louis Hsu&amp;apos;, &amp;a">
+<meta name="twitter:title" content="LDA">
+<meta name="twitter:description" content="前言在PCA中，介绍了无监督降维方法，主成分分析(Principal Components Analysis)。从投影后数据方差最大的角度出发，选取主轴。下面介绍一种有监督的降维方法，线性判别分析(Linear Discriminant Analysis)。 原理设有$n$维样本集$D=\{x^{(1)}, …, x^{(i)}, …, x^{(m)}\}$，所属类别数目为$C$，现求其第一投影轴">
+<meta name="twitter:image" content="http://yoursite.com/2019/04/22/LDA/PCA.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/02/19/Python字符串格式化/">
+  <link rel="canonical" href="http://yoursite.com/2019/04/22/LDA/">
 
 
 
@@ -135,7 +138,7 @@
   };
 </script>
 
-  <title>Python字符串格式化 | LOUIS' BLOG</title>
+  <title>LDA | LOUIS' BLOG</title>
   
 
 
@@ -348,7 +351,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/19/Python字符串格式化/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/22/LDA/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Louis Hsu">
@@ -365,7 +368,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Python字符串格式化
+          <h1 class="post-title" itemprop="name headline">LDA
               
             
           </h1>
@@ -390,12 +393,24 @@
                 
               
 
-              <time title="创建时间：2019-02-19 12:54:47 / 修改时间：13:43:17" itemprop="dateCreated datePublished" datetime="2019-02-19T12:54:47+08:00">2019-02-19</time>
+              <time title="创建时间：2019-04-22 20:18:44" itemprop="dateCreated datePublished" datetime="2019-04-22T20:18:44+08:00">2019-04-22</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-04-28 17:56:37" itemprop="dateModified" datetime="2019-04-28T17:56:37+08:00">2019-04-28</time>
               
             
           </span>
@@ -412,7 +427,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
 
                 
                 
@@ -446,24 +461,197 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Python操作字符串行云流水，当然也支持格式化字符串。</p>
-<h1 id="通过格式符"><a href="#通过格式符" class="headerlink" title="通过格式符"></a>通过格式符</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(&quot;我叫%s, 今年%d岁&quot; % (&apos;Louis Hsu&apos;, 18))</span><br></pre></td></tr></table></figure>
-<p>或者使用字典进行值传递<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(&quot;我叫%(name), 今年%(age)岁&quot; % &#123;&apos;name&apos;: &apos;Louis Hsu&apos;, &apos;age&apos;: 18&#125;)</span><br></pre></td></tr></table></figure></p>
-<p><strong>typecode</strong><br>| 格式符 | 含义 |<br>| ——— | ——— |<br>| %s | 字符串 (采用str()的显示) |<br>| %r | 字符串 (采用repr()的显示) |<br>| %c | 单个字符 |<br>| %b | 二进制整数 |<br>| %d | 十进制整数 |<br>| %i | 十进制整数 |<br>| %o | 八进制整数 |<br>| %x | 十六进制整数 |<br>| %e | 指数 (基底写为e) |<br>| %E | 指数 (基底写为E) |<br>| %f | 浮点数 |<br>| %F | 浮点数，与上相同 |<br>| %g | 指数(e)或浮点数 (根据显示长度) |<br>| %G | 指数(E)或浮点数 (根据显示长度) |<br>| %% | 字符”%” | </p>
-<p><strong>高阶</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">% [flags] [width].[precision] typecode</span><br><span class="line">- flags:        &apos;+&apos;(右对齐), &apos;-&apos;(左对齐), &apos; &apos;(左侧填充一个空格，与负数对齐), &apos;0&apos;(用0填充)</span><br><span class="line">- width:        显示宽度</span><br><span class="line">- precision:    小数精度位数，可使用&apos;*&apos;进行动态代入</span><br><span class="line">- typecode:     格式符</span><br></pre></td></tr></table></figure></p>
-<p>例如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">print(&apos;pi is %+2.2f&apos; % (3.1415926)) -&gt; pi is +3.14</span><br><span class="line">print(&apos;pi is %-2.2f&apos; % (3.1415926)) -&gt; pi is 3.14</span><br><span class="line">print(&apos;pi is % 2.2f&apos; % (3.1415926)) -&gt; pi is  3.14</span><br><span class="line">print(&apos;pi is %02.2f&apos; % (3.1415926)) -&gt; pi is 3.14</span><br><span class="line"></span><br><span class="line"># 同</span><br><span class="line">print(&apos;pi is %+*.*f&apos; % (2, 2, 3.1415926))</span><br><span class="line">print(&apos;pi is %-*.*f&apos; % (2, 2, 3.1415926))</span><br><span class="line">print(&apos;pi is % *.*f&apos; % (2, 2, 3.1415926))</span><br><span class="line">print(&apos;pi is %0*.*f&apos; % (2, 2, 3.1415926))</span><br></pre></td></tr></table></figure></p>
-<h1 id="通过format"><a href="#通过format" class="headerlink" title="通过format"></a>通过format</h1><h2 id="位置传递"><a href="#位置传递" class="headerlink" title="位置传递"></a>位置传递</h2><ol>
-<li><p>使用位置参数</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; li = [&apos;hoho&apos;,18]</span><br><span class="line">&gt;&gt;&gt; &apos;my name is &#123;&#125; ,age &#123;&#125;&apos;.format(&apos;hoho&apos;,18)</span><br><span class="line">&apos;my name is hoho ,age 18&apos;</span><br><span class="line">&gt;&gt;&gt; &apos;my name is &#123;1&#125; ,age &#123;0&#125;&apos;.format(10,&apos;hoho&apos;)</span><br><span class="line">&apos;my name is hoho ,age 10&apos;</span><br><span class="line">&gt;&gt;&gt; &apos;my name is &#123;1&#125; ,age &#123;0&#125; &#123;1&#125;&apos;.format(10,&apos;hoho&apos;)</span><br><span class="line">&apos;my name is hoho ,age 10 hoho&apos;</span><br><span class="line">&gt;&gt;&gt; &apos;my name is &#123;&#125; ,age &#123;&#125;&apos;.format(*li)</span><br><span class="line">&apos;my name is hoho ,age 18&apos;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>使用关键字参数</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; hash = &#123;&apos;name&apos;:&apos;hoho&apos;,&apos;age&apos;:18&#125;</span><br><span class="line">&gt;&gt;&gt; &apos;my name is &#123;name&#125;,age is &#123;age&#125;&apos;.format(name=&apos;hoho&apos;,age=19)</span><br><span class="line">&apos;my name is hoho,age is 19&apos;</span><br><span class="line">&gt;&gt;&gt; &apos;my name is &#123;name&#125;,age is &#123;age&#125;&apos;.format(**hash)</span><br><span class="line">&apos;my name is hoho,age is 18&apos;</span><br></pre></td></tr></table></figure>
-</li>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在<a href="https://louishsu.xyz/2018/10/22/PCA/" target="_blank" rel="noopener">PCA</a>中，介绍了无监督降维方法，主成分分析(Principal Components Analysis)。从投影后数据方差最大的角度出发，选取主轴。下面介绍一种有监督的降维方法，线性判别分析(Linear Discriminant Analysis)。</p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>设有$n$维样本集$D=\{x^{(1)}, …, x^{(i)}, …, x^{(m)}\}$，所属类别数目为$C$，现求其第一投影轴$u_1$，即</p>
+<script type="math/tex; mode=display">
+\tilde{x}^{(i)}_1 = u_1^Tx^{(i)}</script><p>现希望投影后，<strong>类内距离越小越好，类间距离越大越好</strong>，定义衡量指标</p>
+<ol>
+<li><p>类内离差阵</p>
+<script type="math/tex; mode=display">
+ S_W = \sum_{j=1}^C \frac{m_j}{m} \left[ \frac{1}{m_j} \sum_{i=1}^{m_j} (x^{(i)} - \mu^{(j)}) (x^{(i)} - \mu^{(j)})^T \right] \tag{1}</script><p> 即</p>
+<script type="math/tex; mode=display">
+ S_W = \frac{1}{m} \sum_{j=1}^C \sum_{i=1}^{m_j} (x^{(i)} - \mu^{(j)}) (x^{(i)} - \mu^{(j)})^T \tag{1}</script></li>
+<li><p>类间离差阵</p>
+<script type="math/tex; mode=display">
+ S_B = \sum_{j=1}^C \frac{m_j}{m} (\mu^{(j)} - \mu) (\mu^{(j)} - \mu)^T \tag{2}</script></li>
 </ol>
-<h2 id="格式限定"><a href="#格式限定" class="headerlink" title="格式限定"></a>格式限定</h2><p>基本格式如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;[:pad][align][sign][typecode]&#125;</span><br><span class="line">- :pad :    填充字符，空白位用该字符填充</span><br><span class="line">- align:    &apos;^&apos;, &apos;&lt;&apos;, &apos;&gt;&apos; 分别表示 &apos;居中&apos;, &apos;左对齐&apos;, &apos;右对齐&apos;(默认)，后面加宽度</span><br><span class="line">- sign :    &apos;+&apos;, &apos;-&apos; , &apos; &apos; 分别表示 &apos;正&apos;, &apos;负&apos;, &apos;正数前加空格&apos;</span><br><span class="line">- typecode: &apos;b&apos;, &apos;d&apos;, &apos;o&apos;, &apos;x&apos;, &apos;f&apos;, &apos;,&apos;, &apos;%&apos;, &apos;e&apos; 分别表示 &apos;二进制&apos;, &apos;十进制&apos;, &apos;八进制&apos;, &apos;十六进制&apos;, &apos;浮点数&apos;, &apos;逗号分隔&apos;, &apos;百分比格式&apos;,  &apos;指数记法&apos;</span><br></pre></td></tr></table></figure></p>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><blockquote>
-<p>python之字符串格式化(format) - benric - 博客园 <a href="https://www.cnblogs.com/benric/p/4965224.html" target="_blank" rel="noopener">https://www.cnblogs.com/benric/p/4965224.html</a><br>Python format 格式化函数 | 菜鸟教程 <a href="http://www.runoob.com/python/att-string-format.html" target="_blank" rel="noopener">http://www.runoob.com/python/att-string-format.html</a></p>
-</blockquote>
+<p>则投影到第一主轴$u_1$后数据的类内离差阵和类间离差阵为</p>
+<script type="math/tex; mode=display">
+\tilde{S_W} = \sum_{j=1}^C \frac{m_j}{m} \left[ \frac{1}{m_j} \sum_{i=1}^{m_j} 
+(\tilde{x}^{(i)}_1 - \tilde{\mu}^{(j)}_1) (\tilde{x}^{(i)}_1 - \tilde{\mu}^{(j)}_1)^T \right]</script><script type="math/tex; mode=display">
+\tilde{S_B} = \sum_{j=1}^C \frac{m_j}{m} 
+(\tilde{\mu}^{(j)}_1 - \tilde{\mu}_1) (\tilde{\mu}^{(j)}_1 - \tilde{\mu}_1)^T</script><p>其中</p>
+<script type="math/tex; mode=display">
+\tilde{x}^{(i)}_1 = u_1^T x^{(i)}</script><script type="math/tex; mode=display">
+\tilde{\mu}^{(j)}_1 = u_1^T \mu^{(j)}</script><script type="math/tex; mode=display">
+\tilde{\mu}_1 = u_1^T \mu</script><p>带入后得到</p>
+<script type="math/tex; mode=display">
+\tilde{S_W} = \frac{1}{m} \sum_{j=1}^C \sum_{i=1}^{m_j} 
+(u_1^T x^{(i)} - u_1^T \mu^{(j)}) (u_1^T x^{(i)} - u_1^T \mu^{(j)})^T</script><script type="math/tex; mode=display">
+= \frac{1}{m} \sum_{j=1}^C \sum_{i=1}^{m_j} 
+u_1^T(x^{(i)} - \mu^{(j)}) (x^{(i)} - \mu^{(j)})^T u_1</script><script type="math/tex; mode=display">
+= u_1^T S_W u_1</script><p>同理</p>
+<script type="math/tex; mode=display">
+\tilde{S_B} = u_1^T S_B u_1</script><p>定义优化目标</p>
+<script type="math/tex; mode=display">
+J = \min \left\{ \frac{\tilde{S_W}}{\tilde{S_B}} \right\}
+= \min \left\{ \frac{u_1^T S_W u_1}{u_1^T S_B u_1} \right\} \tag{3}</script><p>取</p>
+<script type="math/tex; mode=display">
+L(u_1) = \frac{u_1^T S_W u_1}{u_1^T S_B u_1} \tag{4}</script><p>则其极值为</p>
+<script type="math/tex; mode=display">
+\frac{∂L}{∂u_1} = \frac{2(u_1^T S_B u_1) S_W u_1 - 2(u_1^T S_W u_1) S_B u_1}{(u_1^T S_B u_1)^2} = 0</script><p>得到</p>
+<script type="math/tex; mode=display">
+(u_1^T S_B u_1) S_W u_1 = (u_1^T S_W u_1) S_B u_1</script><p>令$\lambda_1 = \frac{u_1^T S_B u_1}{u_1^T S_W u_1}$，有</p>
+<script type="math/tex; mode=display">
+S_B u_1 = \lambda_1 S_W u_1 \tag{5}</script><p>当$m$较大时，$S_W$一般非奇异，故</p>
+<script type="math/tex; mode=display">
+S_W^{-1} S_B u_1 = \lambda_1 u_1 \tag{6}</script><p>即$\{\lambda_1, u_1\}$为矩阵$S_W^{-1} S_B$的特征对。</p>
+<p>更进一步，对于而分类问题，我们有</p>
+<script type="math/tex; mode=display">
+S_B = \sum_{j=1}^C \frac{m_j}{m} (\mu^{(j)} - \mu) (\mu^{(j)} - \mu)^T</script><script type="math/tex; mode=display">
+= \frac{m_1}{m} (\mu^{(1)} - \mu) (\mu^{(1)} - \mu)^T + \frac{m_2}{m} (\mu^{(2)} - \mu) (\mu^{(2)} - \mu)^T</script><script type="math/tex; mode=display">
+= \frac{m_1}{m} \mu^{(1)} \mu^{(1)T} + \frac{m_2}{m} \mu^{(2)} \mu^{(2)T} - 2 \mu \left( \frac{m_1}{m} \mu^{(1)T} + \frac{m_2}{m} \mu^{(2)T} \right) + \mu \mu^T</script><p>其中</p>
+<script type="math/tex; mode=display">
+\frac{m_1}{m} \mu^{(1)} + \frac{m_2}{m} \mu^{(2)} = \mu \tag{*1}</script><p>所以$(7)$带入$S_B$化简得</p>
+<script type="math/tex; mode=display">
+S_B = \frac{m_1}{m} \mu^{(1)} \mu^{(1)T} + \frac{m_2}{m} \mu^{(2)} \mu^{(2)T} - \mu \mu^T</script><script type="math/tex; mode=display">
+= \frac{m_1}{m} \mu^{(1)} \mu^{(1)T} + \frac{m_2}{m} \mu^{(2)} \mu^{(2)T} - (\frac{m_1}{m} \mu^{(1)} + \frac{m_2}{m} \mu^{(2)}) (\frac{m_1}{m} \mu^{(1)} + \frac{m_2}{m} \mu^{(2)})^T</script><script type="math/tex; mode=display">
+= \frac{m_1}{m} \left(1-\frac{m_1}{m}\right) \mu^{(1)} \mu^{(1)T} + \frac{m_2}{m} \left(1-\frac{m_2}{m}\right) \mu^{(2)} \mu^{(2)T} - \frac{m_1}{m} \frac{m_2}{m} \mu^{(2)} \mu^{(1)T} - \frac{m_1}{m} \frac{m_2}{m} \mu^{(1)} \mu^{(2)T}</script><script type="math/tex; mode=display">
+= \left( \frac{m_1}{m} \mu^{(1)} - \frac{m_2}{m} \mu^{(2)} \right) \left( \frac{m_1}{m} \mu^{(1)} - \frac{m_2}{m} \mu^{(2)} \right)^T</script><p>$S_B$带入式$(*)$，得</p>
+<script type="math/tex; mode=display">
+左边 = S_W^{-1} \left( \frac{m_1}{m} \mu^{(1)} - \frac{m_2}{m} \mu^{(2)} \right) \left( \frac{m_1}{m} \mu^{(1)} - \frac{m_2}{m} \mu^{(2)} \right)^T u_1</script><p>其中$\left( \frac{m_1}{m} \mu^{(1)} - \frac{m_2}{m} \mu^{(2)} \right)^T u_1$为常数，记作$\alpha$，所以</p>
+<script type="math/tex; mode=display">
+u_1 = \frac{\alpha}{\lambda_1} S_W^{-1} \left( \frac{m_1}{m} \mu^{(1)} - \frac{m_2}{m} \mu^{(2)} \right) \tag{*2}</script><p>其中常数$\frac{\alpha}{\lambda_1}$不影响投影结果，如取$1$，则得到</p>
+<script type="math/tex; mode=display">
+u_1 = S_W^{-1} \left( \frac{m_1}{m} \mu^{(1)} - \frac{m_2}{m} \mu^{(2)} \right)</script><p>同理，可求得第二、三主成分轴</p>
+<h1 id="计算步骤"><a href="#计算步骤" class="headerlink" title="计算步骤"></a>计算步骤</h1><p>给定数据集矩阵</p>
+<script type="math/tex; mode=display">
+X = \left[ \begin{matrix}
+    ... \\
+    x^{(i)T} \\
+    ... 
+\end{matrix} \right]</script><p>其中$x^{(i)} = \left[ x^{(i)}_1, …, x^{(i)}_j, … x^{(i)}_n \right]^T$</p>
+<ol>
+<li>计算类内离差阵$S_W$与类间离差阵$S_B$；</li>
+<li>计算矩阵$S_W^{-1}S_B$的特征对$(\lambda_i, u_i)$；</li>
+<li>按特征值从大到小排序，选取最大的特征值作为第一主轴；</li>
+<li>将数据投影到主轴上；</li>
+</ol>
+<h1 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h1><p>LDA可用于分类，以二分类为例，在求取主轴$u_1$后，将各类中心投影到主轴上，即</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    \tilde{\mu}^{(1)}_1 = u_1^T \mu^{(1)} \\
+    \tilde{\mu}^{(2)}_1 = u_1^T \mu^{(2)}
+\end{cases}</script><p>选取阈值，如</p>
+<script type="math/tex; mode=display">
+\tilde{x}_1 = \frac{\tilde{\mu}^{(1)}_1 + \tilde{\mu}^{(2)}_1}{2}</script><p>则预测时，判决方程为</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    u_1^T x^{(i)} < \tilde{x}_1 \Rightarrow x^{(i)} \in \omega_1 \\
+    u_1^T x^{(i)} > \tilde{x}_1 \Rightarrow x^{(i)} \in \omega_2
+\end{cases}</script><h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><p>详情查看<a href="https://github.com/isLouisHsu/Basic-Machine-Learning-Algorithm/blob/master/algorithm/lda.py" target="_blank" rel="noopener">Github</a></p>
+<details>
+<summary>展开</summary>
+<pre><code>
+class LDA(object):
+    """ 先行判别分析
+
+    Attributes:
+        n_components:   {int} 主成分个数
+        axis:           {ndarray(n_features, n_component)}
+    Notes:
+        S_W = \frac{1}{m} \sum_{j=1}^C \sum_{i=1}^m_j (x^{(i)} - \mu^{(j)}) (x^{(i)} - \mu^{(j)})^T
+        S_B = \sum_{j=1}^C \frac{m_j}{m} (\mu^{(j)} - \mu) (\mu^{(j)} - \mu)^T
+    Example:
+
+    """
+
+    def __init__(self, n_components=-1):
+        self.n_components = n_components
+        self.axis = None
+
+    def fit(self, X, y, prop=0.99):
+        """ train the model
+        Params:
+            X:      {ndarray(n_samples, n_features)}
+            y:      {ndarray(n_samples)}
+            prop:   {float}:  在[0, 1]范围内，表示取特征值之和占所有特征值的比重
+        Notes:
+            - `prop`参数仅在`n_components=-1`时生效
+        """
+        labels = list(set(list(y)))
+        n_class = len(labels)
+        n_samples, n_feats = X.shape
+
+        ## 计算 S_W, S_B
+        S_W = np.zeros(shape=(n_feats, n_feats))
+        S_B = np.zeros(shape=(n_feats, n_feats))
+        mean_ = np.mean(X, axis=0)
+        for i_class in range(n_class):
+            X_ = X[y==labels[i_class]]
+            weight = X_.shape[0] / n_samples
+            means_ = np.mean(X_, axis=0)
+            S_W += ((X_ - means_).T).dot(X_ - means_) / X_.shape[0] * weight
+            S_B += (means_ - mean_).dot((means_ - mean_).T) * weight
+
+        ## 计算特征对
+        eigVal, eigVec = np.linalg.eig(np.linalg.inv(S_W).dot(S_B))
+        order = np.argsort(eigVal)[::-1]
+        eigVal = eigVal[order]
+        eigVec = eigVec.T[order].T
+
+        ## 选取主轴
+        if self.n_components == -1:
+            sumOfEigVal = np.sum(eigVal)
+            sum_tmp = 0
+            for k in range(eigVal.shape[0]):
+                sum_tmp += eigVal[k]
+                if sum_tmp > prop * sumOfEigVal:
+                    self.n_components = k + 1
+                    break
+        self.axis = eigVec[:, :self.n_components]
+
+    def transform(self, X):
+        """
+        Params:
+            X:  {ndarray(n_samples, n_features)}
+        Returns:
+            X:  {ndarray(n_samples, n_components)}
+        """
+        X = X.dot(self.axis)
+        return X
+
+    def fit_transform(self, X, y, prop=0.99):
+        """
+        Params:
+            X:  {ndarray(n_samples, n_features)}
+        Returns:
+            X:  {ndarray(n_samples, n_components)}
+        """
+        self.fit(X, y, prop=prop)
+        X = self.transform(X)
+        return X
+
+    def transform_inv(self, X):
+        """
+        Params:
+            X:  {ndarray(n_samples, n_components)}
+        Returns:
+            X:  {ndarray(n_samples, n_features)}
+        """
+        X = X.dot(self.axis.T)
+        return X
+</code></pre>
+</details>
+
+<p>与PCA投影结果对比如下</p>
+<ul>
+<li>PCA<br>  <img src="/2019/04/22/LDA/PCA.png" alt="PCA"></li>
+<li>LDA<br>  <img src="/2019/04/22/LDA/LDA.png" alt="LDA"></li>
+</ul>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
+<li><a href="https://www.cnblogs.com/LeftNotEasy/archive/2011/01/08/lda-and-pca-machine-learning.html" target="_blank" rel="noopener">机器学习中的数学(4)-线性判别分析（LDA）, 主成分分析(PCA)</a></li>
+</ol>
 
       
     </div>
@@ -491,8 +679,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/02/18/Python命令行参数解析/" rel="next" title="Python命令行参数解析">
-                <i class="fa fa-chevron-left"></i> Python命令行参数解析
+              <a href="/2019/04/18/n-dim-Array-PCA/" rel="next" title="n-dim Array PCA">
+                <i class="fa fa-chevron-left"></i> n-dim Array PCA
               </a>
             
           </div>
@@ -500,10 +688,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/04/18/n-dim-Array-PCA/" rel="prev" title="n-dim Array PCA">
-                n-dim Array PCA <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -683,7 +867,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#通过格式符"><span class="nav-number">2.</span> <span class="nav-text">通过格式符</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#通过format"><span class="nav-number">3.</span> <span class="nav-text">通过format</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#位置传递"><span class="nav-number">3.1.</span> <span class="nav-text">位置传递</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#格式限定"><span class="nav-number">3.2.</span> <span class="nav-text">格式限定</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#原理"><span class="nav-number">2.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#计算步骤"><span class="nav-number">3.</span> <span class="nav-text">计算步骤</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#应用"><span class="nav-number">4.</span> <span class="nav-text">应用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码"><span class="nav-number">5.</span> <span class="nav-text">代码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">6.</span> <span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>
@@ -1185,6 +1369,30 @@
   
   
 
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
   
 
 

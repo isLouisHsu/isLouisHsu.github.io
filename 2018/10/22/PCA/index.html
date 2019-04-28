@@ -124,7 +124,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/10/22/PCA/face_origin.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/22/PCA/face_reduced.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/22/PCA/face_restructed.png">
-<meta property="og:updated_time" content="2019-02-27T06:15:16.000Z">
+<meta property="og:updated_time" content="2019-04-22T13:04:01.809Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PCA">
 <meta name="twitter:description" content="引言PCA全称Principal Component Analysis，即主成分分析，是一种常用的数据降维方法。它可以通过线性变换将原始数据变换为一组各维度线性无关的表示，以此来提取数据的主要线性分量。 向量的投影现有两个任意不共线向量$\vec{u}, \vec{v}$，将$\vec{u}$投射到$\vec{v}$上 投影后，可以得到两个正交向量  \vec{u}&apos; · (\vec{u} - \">
@@ -417,7 +417,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-27 14:15:16" itemprop="dateModified" datetime="2019-02-27T14:15:16+08:00">2019-02-27</time>
+                <time title="修改时间：2019-04-22 21:04:01" itemprop="dateModified" datetime="2019-04-22T21:04:01+08:00">2019-04-22</time>
               
             
           </span>
@@ -799,11 +799,11 @@ P = X (X^TX+\lambda I)^{-1} X^T</script></blockquote>
 </ol>
 <pre><code>![projection](/PCA/projection.jpg)
 
-&gt; 总体的运算流程如下
-&gt; - 利用所有样本点(近似平面)计算主成分，第一、二主成分张成平面$\Pi$；
-&gt; - 选出其中一个样本点，将平行于平面$\Pi$的成分投射到$\Pi$上；
-&gt; - 该样本点剩余分量即法向量；
-&gt; - 一般来说，取所有点法向量的均值。
+总体的运算流程如下
+- 利用所有样本点(近似平面)计算主成分，第一、二主成分张成平面$\Pi$；
+- 选出其中一个样本点，将平行于平面$\Pi$的成分投射到$\Pi$上；
+- 该样本点剩余分量即法向量；
+- 一般来说，取所有点法向量的均值。
 </code></pre><h1 id="程序"><a href="#程序" class="headerlink" title="程序"></a>程序</h1><p><a href="https://github.com/isLouisHsu/Basic-Machine-Learning-Algorithm/tree/master/Andrew%20Ng%2C%20Stanford%20University/mlclass-ex7-3-pca" target="_blank" rel="noopener">@Github: PCA</a></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">class PrincipalComponentAnalysis():</span><br><span class="line">    def __init__(self, n_component=-1):</span><br><span class="line">        self.n_component = n_component</span><br><span class="line">        self.meanVal = None</span><br><span class="line">        self.axis = None</span><br><span class="line">    def fit(self, X, prop=0.99):</span><br><span class="line">        &apos;&apos;&apos;</span><br><span class="line">        the parameter &apos;prop&apos; is only for &apos;n_component = -1&apos;</span><br><span class="line">        &apos;&apos;&apos;</span><br><span class="line">        # 第一步: 归一化</span><br><span class="line">        self.meanVal = np.mean(X, axis=0)                   # 训练样本每个特征上的的均值</span><br><span class="line">        X_normalized = (X - self.meanVal)                   # 归一化训练样本</span><br><span class="line">        # 第二步：计算协方差矩阵</span><br><span class="line">        # cov = X_normalized.T.dot(X_normalized)</span><br><span class="line">        cov = np.cov(X_normalized.T)                        # 协方差矩阵</span><br><span class="line">        eigVal, eigVec = np.linalg.eig(cov)                 # EVD</span><br><span class="line">        order = np.argsort(eigVal)[::-1]                    # 从大到小排序</span><br><span class="line">        eigVal = eigVal[order]</span><br><span class="line">        eigVec = eigVec.T[order].T</span><br><span class="line">        # 选择主成分的数量</span><br><span class="line">        if self.n_component == -1:</span><br><span class="line">            sumOfEigVal = np.sum(eigVal)</span><br><span class="line">            sum_tmp = 0</span><br><span class="line">            for k in range(eigVal.shape[0]):</span><br><span class="line">                sum_tmp += eigVal[k]</span><br><span class="line">                if sum_tmp &gt; prop * sumOfEigVal:            # 平均均方误差与训练集方差的比例尽可能小的情况下选择尽可能小的 K 值</span><br><span class="line">                    self.n_component = k + 1</span><br><span class="line">                    break</span><br><span class="line">        # 选择投影坐标轴</span><br><span class="line">        self.axis = eigVec[:, :self.n_component]            # 选择前n_component个特征向量作为投影坐标轴</span><br><span class="line">    def transform(self, X):</span><br><span class="line">        # 第一步：归一化</span><br><span class="line">        X_normalized = (X - self.meanVal)                   # 归一化测试样本</span><br><span class="line">        # 第二步：投影 X_nxk · V_kxk&apos; = X&apos;_nxk&apos;</span><br><span class="line">        X_transformed = X_normalized.dot(self.axis)</span><br><span class="line">        return X_transformed</span><br><span class="line">    def fit_transform(self, X, prop=0.99):</span><br><span class="line">        self.fit(X, prop=prop)</span><br><span class="line">        return self.transform(X)</span><br><span class="line">    def transform_inv(self, X_transformed):</span><br><span class="line">        # 视投影向量长度为一个单位长度，投影结果为投影向量上的坐标</span><br><span class="line">        # X&apos;_nxk&apos; · V_kxk&apos;.T = X&apos;&apos;_nxk</span><br><span class="line">        X_restructed = X_transformed.dot(self.axis.T)</span><br><span class="line">        # 还原数据</span><br><span class="line">        X_restructed = X_restructed + self.meanVal</span><br><span class="line">        return X_restructed</span><br></pre></td></tr></table></figure>
 <p>实验结果</p>
@@ -929,7 +929,7 @@ P = X (X^TX+\lambda I)^{-1} X^T</script></blockquote>
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">35</span>
+                    <span class="site-state-item-count">36</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
