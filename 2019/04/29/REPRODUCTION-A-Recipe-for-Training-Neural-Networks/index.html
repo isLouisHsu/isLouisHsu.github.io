@@ -1,0 +1,377 @@
+<!DOCTYPE HTML>
+<html class="no-js" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!--[if lte IE 9]>
+<meta http-equiv="refresh" content="0;url=http://yoursite.com/warn.html">
+<![endif]-->
+<meta charset="utf-8">
+<meta http-equiv="X-DNS-Prefetch-Control" content="on">
+<link rel="dns-prefetch" href="http://yoursite.com">
+<link rel="dns-prefetch" href="//www.google-analytics.com">
+<link rel="prefetch" href="http://yoursite.com">
+<link rel="prefetch" href="//www.google-analytics.com">
+
+
+<link rel="prerender" href="http://yoursite.com">
+
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+<meta http-equiv="mobile-agent" content="format=html5; url=http://yoursite.com">
+<meta name="author" content="Louis Hsu">
+<link rel="stylesheet" href="/css/JSimple.css">
+
+<link rel="shortcut icon" href="/images/favicon.png">
+
+
+<title>[reproduction]a recipe for training neural networks - LOUIS&#39; BLOG</title>
+
+<meta name="keywords" content="">
+
+<meta name="description " content="Inside! Insane!">
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            tex2jax: {
+                inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                processEscapes: true
+            }
+        });
+    </script>
+
+
+    
+
+    
+
+</head>
+<body>
+<div id="nav">
+    <nav class="nav-menu">
+        <a class="site-name current" href="/" title="彬">彬</a>
+        <a class="site-index current" href="/"><i class="fa fa-home"></i><span>Home</span></a>
+        <a href="/archives" title="Archives"><i class="fa fa-archives"></i><span>Archives</span></a>
+        <a href="/tags" title="Tags"><i class="fa fa-tags"></i><span>Tags</span></a>
+        <!-- custom single page of menus -->
+        
+        
+        <a href="/help" title="帮助">
+            <i class="fa fa-question-circle"></i>
+            <span>帮助</span>
+        </a>
+        
+    </nav>
+</div>
+
+<div class="nav-user">
+    <a class="btn-search" href="#"><i class="fa fa-search"></i></a>
+    <a class="btn-read-mode" href="#"><i class="fa fa-sun-o"></i></a>
+    <a class="btn-sns-qr" href="javascript:"><i class="fa fa-telegram"></i></a>
+</div>
+
+<div id="wrapper" class="clearfix">
+    <div id="body">
+        <div class="main" id="main">
+            <div id="cover">
+    <div class="cover-img"></div>
+    <div class="cover-info">
+        
+        <h1 class="cover-siteName">LOUIS&#39; BLOG</h1>
+        <h3 class="cover-siteTitle">人生苦短，不如不管，继续任性</h3>
+        <p class="cover-siteDesc">技术博客？</p>
+        <div class="cover-sns">
+            
+
+        </div>
+    </div>
+</div>
+
+            <div class="page-title">
+    <ul>
+        <li><a href="/">Recent Posts</a></li>
+        
+            
+                <li class="">
+                    <a href="/categories//" data-name="主页">主页</a>
+                </li>
+            
+                <li class="">
+                    <a href="/categories/Python" data-name="Python">Python</a>
+                </li>
+            
+                <li class="">
+                    <a href="/categories/Machine-Learning" data-name="机器学习">机器学习</a>
+                </li>
+            
+                <li class="">
+                    <a href="/categories/Deep-Learning" data-name="深度学习">深度学习</a>
+                </li>
+            
+                <li class="">
+                    <a href="/categories/冯唐" data-name="冯唐">冯唐</a>
+                </li>
+            
+                <li class="">
+                    <a href="/categories/Others" data-name="其他">其他</a>
+                </li>
+            
+        
+        <li class="page-search">
+    <form id="search" class="search-form">
+        <input type="text" readonly="readonly" id="local-search-input-tip" placeholder="click to search...">
+        <button type="button" disabled="disabled" class="search-form-submit"><i class="fa fa-search"></i></button>
+    </form>
+</li>
+
+    </ul>
+</div>
+<div class="main-inner">
+    <article class="post" itemscope="" itemtype="http://schema.org/BlogPosting">
+        <div class="post-header">
+            <div class="post-author clearfix">
+                <a class="avatar fleft" href="https://louishsu.xyz/" target="_blank">
+                    <img width="48" src="/images/favicon.png" alt="avatar">
+                </a>
+                <p><span class="label">Author</span>
+                    <a href="https://louishsu.xyz/" target="_blank">Louis Hsu</a>
+                    <span title="Last edited at&nbsp;2019-04-29">2019-04-29</span>
+                </p>
+                <p>有味道的程序员</p>
+            </div>
+            <h2 class="post-title">[REPRODUCTION]A Recipe for Training Neural Networks</h2>
+            <div class="post-meta">
+                emm... 18763 words in the article |
+                you are the&nbsp;<span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>th friend who reading now
+            </div>
+        </div>
+        <div class="post-content markdown-body">
+            <p><strong>转载自<a href="http://karpathy.github.io" target="_blank" rel="noopener">Andrej Karpathy blog</a></strong></p>
+<h2 id="The-recipe"><a href="#The-recipe" class="headerlink" title="The recipe"></a>The recipe</h2><p>In light of the above two facts, I have developed a specific process for myself that I follow when applying a neural net to a new problem, which I will try to describe. You will see that it takes the two principles above very seriously. In particular, it builds from simple to complex and at every step of the way we make concrete hypotheses about what will happen and then either validate them with an experiment or investigate until we find some issue. What we try to prevent very hard is the introduction of a lot of “unverified” complexity at once, which is bound to introduce bugs/misconfigurations that will take forever to find (if ever). If writing your neural net code was like training one, you’d want to use a very small learning rate and guess and then evaluate the full test set after every iteration.</p>
+<h4 id="1-Become-one-with-the-data"><a href="#1-Become-one-with-the-data" class="headerlink" title="1. Become one with the data"></a>1. Become one with the data</h4><p>The first step to training a neural net is to not touch any neural net code at all and instead begin by <u>thoroughly inspecting your data</u>. This step is critical. I like to spend copious amount of time (measured in units of hours) scanning through thousands of examples, understanding their distribution and looking for patterns. Luckily, your brain is pretty good at this. One time I discovered that the data contained duplicate examples. Another time I found corrupted images / labels. I look for data imbalances and biases. I will typically also pay attention to my own process for classifying the data, which hints at the kinds of architectures we’ll eventually explore. As an example - are very local features enough or do we need global context? How much variation is there and what form does it take? What variation is spurious and could be preprocessed out? Does spatial position matter or do we want to average pool it out? How much does detail matter and how far could we afford to downsample the images? How noisy are the labels?</p>
+<blockquote>
+<ol>
+<li>data contained duplicate examples</li>
+<li>corrupted images &amp; labels</li>
+<li>data imbalances and biases</li>
+<li>local features v.s. global context</li>
+<li>quantity &amp; form of variation</li>
+<li>preprocess out some variation</li>
+<li>spatial position v.s. average pool</li>
+<li>detail v.s. downsample</li>
+<li>labels are noisy?</li>
+</ol>
+</blockquote>
+<p>In addition, since the neural net is effectively a compressed/compiled version of your dataset, you’ll be able to <u>look at your network (mis)predictions and understand where they might be coming from</u>. And if your network is giving you some prediction that doesn’t seem consistent with what you’ve seen in the data, something is off.</p>
+<p>Once you get a qualitative sense it is also a good idea to write some simple code to <u>search/filter/sort by whatever you can think of (e.g. type of label, size of annotations, number of annotations, etc.) and visualize their distributions and the outliers along any axis.</u> The outliers especially almost always uncover some bugs in data quality or preprocessing.</p>
+<h4 id="2-Set-up-the-end-to-end-training-evaluation-skeleton-get-dumb-baselines"><a href="#2-Set-up-the-end-to-end-training-evaluation-skeleton-get-dumb-baselines" class="headerlink" title="2. Set up the end-to-end training/evaluation skeleton + get dumb baselines"></a>2. Set up the end-to-end training/evaluation skeleton + get dumb baselines</h4><p>Now that we understand our data can we reach for our super fancy Multi-scale ASPP FPN ResNet and begin training awesome models? For sure no. That is the road to suffering. <u>Our next step is to set up a full training + evaluation skeleton and gain trust in its correctness via a series of experiments.</u> At this stage it is best to pick some simple model that you couldn’t possibly have screwed up somehow - e.g. a linear classifier, or a very tiny ConvNet. We’ll want to train it, visualize the losses, any other metrics (e.g. accuracy), model predictions, and perform a series of ablation experiments with explicit hypotheses along the way.</p>
+<p>Tips &amp; tricks for this stage:</p>
+<ul>
+<li><strong>fix random seed</strong>. Always use a fixed random seed to guarantee that when you run the code twice you will get the same outcome. This removes a factor of variation and will help keep you sane.</li>
+<li><strong>simplify</strong>. Make sure to disable any unnecessary fanciness. As an example, definitely turn off any data augmentation at this stage. Data augmentation is a regularization strategy that we may incorporate later, but for now it is just another opportunity to introduce some dumb bug.</li>
+<li><strong>add significant digits to your eval</strong>. When plotting the test loss run the evaluation over the entire (large) test set. Do not just plot test losses over batches and then rely on smoothing them in Tensorboard. We are in pursuit of correctness and are very willing to give up time for staying sane.</li>
+<li><strong>verify loss @ init</strong>. Verify that your loss starts at the correct loss value. E.g. if you initialize your final layer correctly you should measure <code>-log(1/n_classes)</code> on a softmax at initialization. The same default values can be derived for L2 regression, Huber losses, etc.</li>
+<li><strong>init well</strong>. Initialize the final layer weights correctly. E.g. if you are regressing some values that have a mean of 50 then initialize the final bias to 50. If you have an imbalanced dataset of a ratio 1:10 of positives:negatives, set the bias on your logits such that your network predicts probability of 0.1 at initialization. Setting these correctly will speed up convergence and eliminate “hockey stick” loss curves where in the first few iteration your network is basically just learning the bias.</li>
+<li><strong>human baseline</strong>. Monitor metrics other than loss that are human interpretable and checkable (e.g. accuracy). Whenever possible evaluate your own (human) accuracy and compare to it. Alternatively, annotate the test data twice and for each example treat one annotation as prediction and the second as ground truth.</li>
+<li><strong>input-indepent baseline</strong>. Train an input-independent baseline, (e.g. easiest is to just set all your inputs to zero). This should perform worse than when you actually plug in your data without zeroing it out. Does it? i.e. does your model learn to extract any information out of the input at all?</li>
+<li><strong>overfit one batch</strong>. Overfit a single batch of only a few examples (e.g. as little as two). To do so we increase the capacity of our model (e.g. add layers or filters) and verify that we can reach the lowest achievable loss (e.g. zero). I also like to visualize in the same plot both the label and the prediction and ensure that they end up aligning perfectly once we reach the minimum loss. If they do not, there is a bug somewhere and we cannot continue to the next stage.</li>
+<li><strong>verify decreasing training loss</strong>. At this stage you will hopefully be underfitting on your dataset because you’re working with a toy model. Try to increase its capacity just a bit. Did your training loss go down as it should?</li>
+<li><strong>visualize just before the net</strong>. The unambiguously correct place to visualize your data is immediately before your <code>y_hat = model(x)</code> (or <code>sess.run</code> in tf). That is - you want to visualize <em>exactly</em> what goes into your network, decoding that raw tensor of data and labels into visualizations. This is the only “source of truth”. I can’t count the number of times this has saved me and revealed problems in data preprocessing and augmentation.</li>
+<li><strong>visualize prediction dynamics</strong>. I like to visualize model predictions on a fixed test batch during the course of training. The “dynamics” of how these predictions move will give you incredibly good intuition for how the training progresses. Many times it is possible to feel the network “struggle” to fit your data if it wiggles too much in some way, revealing instabilities. Very low or very high learning rates are also easily noticeable in the amount of jitter.</li>
+<li><strong>use backprop to chart dependencies</strong>. Your deep learning code will often contain complicated, vectorized, and broadcasted operations. A relatively common bug I’ve come across a few times is that people get this wrong (e.g. they use <code>view</code> instead of <code>transpose/permute</code> somewhere) and inadvertently mix information across the batch dimension. It is a depressing fact that your network will typically still train okay because it will learn to ignore data from the other examples. One way to debug this (and other related problems) is to set the loss for some example <strong>i</strong> to be 1.0, run the backward pass all the way to the input, and ensure that you get a non-zero gradient only on the <strong>i-th</strong> example. More generally, gradients give you information about what depends on what in your network, which can be useful for debugging.</li>
+<li><strong>generalize a special case</strong>. This is a bit more of a general coding tip but I’ve often seen people create bugs when they bite off more than they can chew, writing a relatively general functionality from scratch. I like to write a very specific function to what I’m doing right now, get that to work, and then generalize it later making sure that I get the same result. Often this applies to vectorizing code, where I almost always write out the fully loopy version first and only then transform it to vectorized code one loop at a time.</li>
+</ul>
+<blockquote>
+<ol>
+<li>固定随机种子，消除随机带来的误差</li>
+<li>简单出发，先不使用数据集扩增</li>
+<li>测试集不要画曲线，不然会疯的</li>
+<li>评估起始损失值，<code>-log(1/n_classes)</code>，各类初始概率应大致相等；<strong>思路一致</strong>, $p\approx$</li>
+<li>初始化最后一层权重很重要；<strong>没看懂，一般都是采用随机初始化方法？？</strong></li>
+<li>从人类角度评估，多在意准确率而不是损失；<strong>好吧</strong></li>
+<li>先训练一个<code>baseline</code>，不用追求准确率，观察网络是否提取了想要的特征</li>
+<li>反复训练同一个批次的数据，使网络过拟合，查看损失最低能到多少；<strong>确定网络结构没有问题</strong></li>
+<li>试着增加模型<code>capacity</code>，观察训练集损失是否下降，以确定合适的网络容量；<strong>确定模型参数量</strong></li>
+<li>输入网络前，可视化数据，查看数据是否正确；<strong>确定输入数据没有问题</strong></li>
+<li>可视化一些相同数据的输出，观察输出波动；<strong>观察网络收敛情况</strong></li>
+<li>用反向传播debug网络；<strong>高级技能？技能点还不够</strong></li>
+<li>全循环慢慢改成矢量化代码；<strong>一些复杂的计算可参考</strong></li>
+</ol>
+</blockquote>
+<h4 id="3-Overfit"><a href="#3-Overfit" class="headerlink" title="3. Overfit"></a>3. Overfit</h4><p>At this stage we should have a good understanding of the dataset and we have the full training + evaluation pipeline working. For any given model we can (reproducibly) compute a metric that we trust. We are also armed with our performance for an input-independent baseline, the performance of a few dumb baselines (we better beat these), and we have a rough sense of the performance of a human (we hope to reach this). The stage is now set for iterating on a good model.</p>
+<p>The approach I like to take to finding a good model has two stages: first get a model large enough that it can overfit (i.e. focus on training loss) and then regularize it appropriately (give up some training loss to improve the validation loss). The reason I like these two stages is that if we are not able to reach a low error rate with any model at all that may again indicate some issues, bugs, or misconfiguration.</p>
+<p>A few tips &amp; tricks for this stage:</p>
+<ul>
+<li><strong>picking the model</strong>. To reach a good training loss you’ll want to choose an appropriate architecture for the data. When it comes to choosing this my #1 advice is: <strong>Don’t be a hero</strong>. I’ve seen a lot of people who are eager to get crazy and creative in stacking up the lego blocks of the neural net toolbox in various exotic architectures that make sense to them. Resist this temptation strongly in the early stages of your project. I always advise people to simply find the most related paper and copy paste their simplest architecture that achieves good performance. E.g. if you are classifying images don’t be a hero and just copy paste a ResNet-50 for your first run. You’re allowed to do something more custom later and beat this.</li>
+<li><strong>adam is safe</strong>. In the early stages of setting baselines I like to use Adam with a learning rate of <a href="https://twitter.com/karpathy/status/801621764144971776?lang=en" target="_blank" rel="noopener">3e-4</a>. In my experience Adam is much more forgiving to hyperparameters, including a bad learning rate. For ConvNets a well-tuned SGD will almost always slightly outperform Adam, but the optimal learning rate region is much more narrow and problem-specific. (Note: If you are using RNNs and related sequence models it is more common to use Adam. At the initial stage of your project, again, don’t be a hero and follow whatever the most related papers do.)</li>
+<li><strong>complexify only one at a time</strong>. If you have multiple signals to plug into your classifier I would advise that you plug them in one by one and every time ensure that you get a performance boost you’d expect. Don’t throw the kitchen sink at your model at the start. There are other ways of building up complexity - e.g. you can try to plug in smaller images first and make them bigger later, etc.</li>
+<li><strong>do not trust learning rate decay defaults</strong>. If you are re-purposing code from some other domain always be very careful with learning rate decay. Not only would you want to use different decay schedules for different problems, but - even worse - in a typical implementation the schedule will be based current epoch number, which can vary widely simply depending on the size of your dataset. E.g. ImageNet would decay by 10 on epoch 30. If you’re not training ImageNet then you almost certainly do not want this. If you’re not careful your code could secretely be driving your learning rate to zero too early, not allowing your model to converge. In my own work I always disable learning rate decays entirely (I use a constant LR) and tune this all the way at the very end.</li>
+</ul>
+<blockquote>
+<ol>
+<li>不要逞强，搭建各种奇奇怪怪的模型。先从相近任务效果良好的网络结构出发，慢慢改进再击败它；</li>
+<li><code>Adam</code>对参数敏感性低，<code>SGD</code>往往效果更好；</li>
+<li>慢慢提高输入数据的复杂性，如输入数据的特征数、图像尺寸；</li>
+<li>根据自己的学习任务，调整学习率衰减参数；</li>
+</ol>
+</blockquote>
+<h4 id="4-Regularize"><a href="#4-Regularize" class="headerlink" title="4. Regularize"></a>4. Regularize</h4><p>Ideally, we are now at a place where we have a large model that is fitting at least the training set. Now it is time to regularize it and gain some validation accuracy by giving up some of the training accuracy. Some tips &amp; tricks:</p>
+<ul>
+<li><strong>get more data</strong>. First, the by far best and preferred way to regularize a model in any practical setting is to add more real training data. It is a very common mistake to spend a lot engineering cycles trying to squeeze juice out of a small dataset when you could instead be collecting more data. As far as I’m aware adding more data is pretty much the only guaranteed way to monotonically improve the performance of a well-configured neural network almost indefinitely. The other would be ensembles (if you can afford them), but that tops out after ~5 models.</li>
+<li><strong>data augment</strong>. The next best thing to real data is half-fake data - try out more aggressive data augmentation.</li>
+<li><strong>creative augmentation</strong>. If half-fake data doesn’t do it, fake data may also do something. People are finding creative ways of expanding datasets; For example, <a href="https://openai.com/blog/learning-dexterity/" target="_blank" rel="noopener">domain randomization</a>, use of <a href="http://vladlen.info/publications/playing-data-ground-truth-computer-games/" target="_blank" rel="noopener">simulation</a>, clever <a href="https://arxiv.org/abs/1708.01642" target="_blank" rel="noopener">hybrids</a> such as inserting (potentially simulated) data into scenes, or even GANs.</li>
+<li><strong>pretrain</strong>. It rarely ever hurts to use a pretrained network if you can, even if you have enough data.</li>
+<li><strong>stick with supervised learning</strong>. Do not get over-excited about unsupervised pretraining. Unlike what that blog post from 2008 tells you, as far as I know, no version of it has reported strong results in modern computer vision (though NLP seems to be doing pretty well with BERT and friends these days, quite likely owing to the more deliberate nature of text, and a higher signal to noise ratio).</li>
+<li><strong>smaller input dimensionality</strong>. Remove features that may contain spurious signal. Any added spurious input is just another opportunity to overfit if your dataset is small. Similarly, if low-level details don’t matter much try to input a smaller image.</li>
+<li><strong>smaller model size</strong>. In many cases you can use domain knowledge constraints on the network to decrease its size. As an example, it used to be trendy to use Fully Connected layers at the top of backbones for ImageNet but these have since been replaced with simple average pooling, eliminating a ton of parameters in the process.</li>
+<li><strong>decrease the batch size</strong>. Due to the normalization inside batch norm smaller batch sizes somewhat correspond to stronger regularization. This is because the batch empirical mean/std are more approximate versions of the full mean/std so the scale &amp; offset “wiggles” your batch around more.</li>
+<li><strong>drop</strong>. Add dropout. Use dropout2d (spatial dropout) for ConvNets. Use this sparingly/carefully because dropout <a href="https://arxiv.org/abs/1801.05134" target="_blank" rel="noopener">does not seem to play nice</a> with batch normalization.</li>
+<li><strong>weight decay</strong>. Increase the weight decay penalty.</li>
+<li><strong>early stopping</strong>. Stop training based on your measured validation loss to catch your model just as it’s about to overfit.</li>
+<li><strong>try a larger model</strong>. I mention this last and only after early stopping but I’ve found a few times in the past that larger models will of course overfit much more eventually, but their “early stopped” performance can often be much better than that of smaller models.</li>
+</ul>
+<p>Finally, to gain additional confidence that your network is a reasonable classifier, I like to visualize the network’s first-layer weights and ensure you get nice edges that make sense. If your first layer filters look like noise then something could be off. Similarly, activations inside the net can sometimes display odd artifacts and hint at problems.</p>
+<blockquote>
+<p>略微升高一点训练数据的损失，换取验证集损失的下降。</p>
+<ol>
+<li>扩大数据集；<strong>拼的就是算力和数据量</strong></li>
+<li>数据集扩增；<strong>来了</strong></li>
+<li>使用一些生成的虚假数据；</li>
+<li>预训练模型，即使有足够的数据量；</li>
+<li>监督性学习比非监督好；</li>
+<li>减少数据特征的冗余性，如删减特征、降低图像分辨率；<strong>数据冗余容易过拟合</strong></li>
+<li>减少模型参数容量；<strong>过大可能过拟合</strong></li>
+<li>增大批数据量；<strong>梯度下降方向更准确</strong></li>
+<li><code>Dropout</code>；<strong><code>BatchNorm</code>效果更好？</strong></li>
+<li>权重衰减；<strong>正则惩罚</strong></li>
+<li><code>Early stopping</code>；<strong>提前中断训练防止过拟合</strong></li>
+<li>尝试更大的模型，有时候更大容易过拟合，但是提前中断训练效果会更好；</li>
+<li>第一层网络的权值是否有可解释性；<strong>WTF?</strong></li>
+</ol>
+</blockquote>
+<h4 id="5-Tune"><a href="#5-Tune" class="headerlink" title="5. Tune"></a>5. Tune</h4><p>You should now be “in the loop” with your dataset exploring a wide model space for architectures that achieve low validation loss. A few tips and tricks for this step:</p>
+<ul>
+<li><strong>random over grid search</strong>. For simultaneously tuning multiple hyperparameters it may sound tempting to use grid search to ensure coverage of all settings, but keep in mind that it is <a href="http://jmlr.csail.mit.edu/papers/volume13/bergstra12a/bergstra12a.pdf" target="_blank" rel="noopener">best to use random search instead</a>. Intuitively, this is because neural nets are often much more sensitive to some parameters than others. In the limit, if a parameter <strong>a</strong> matters but changing <strong>b</strong> has no effect then you’d rather sample <strong>a</strong> more throughly than at a few fixed points multiple times.</li>
+<li><strong>hyper-parameter optimization</strong>. There is a large number of fancy bayesian hyper-parameter optimization toolboxes around and a few of my friends have also reported success with them, but my personal experience is that the state of the art approach to exploring a nice and wide space of models and hyperparameters is to use an intern :). Just kidding.</li>
+</ul>
+<blockquote>
+<ol>
+<li>随机搜索超参数，对重要参数调整更多；</li>
+<li>招募一个实习生帮助自己调参hhhhhh；</li>
+</ol>
+</blockquote>
+<h4 id="6-Squeeze-out-the-juice"><a href="#6-Squeeze-out-the-juice" class="headerlink" title="6. Squeeze out the juice"></a>6. Squeeze out the juice</h4><p>Once you find the best types of architectures and hyper-parameters you can still use a few more tricks to squeeze out the last pieces of juice out of the system:</p>
+<ul>
+<li><strong>ensembles</strong>. Model ensembles are a pretty much guaranteed way to gain 2% of accuracy on anything. If you can’t afford the computation at test time look into distilling your ensemble into a network using <a href="https://arxiv.org/abs/1503.02531" target="_blank" rel="noopener">dark knowledge</a>.</li>
+<li><strong>leave it training</strong>. I’ve often seen people tempted to stop the model training when the validation loss seems to be leveling off. In my experience networks keep training for unintuitively long time. One time I accidentally left a model training during the winter break and when I got back in January it was SOTA (“state of the art”).</li>
+</ul>
+<blockquote>
+<ol>
+<li>集成方法；</li>
+<li>坚信模型能收敛并能取得良好的效果，不要手贱中断他。</li>
+</ol>
+</blockquote>
+<h4 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h4><p>Once you make it here you’ll have all the ingredients for success: You have a deep understanding of the technology, the dataset and the problem, you’ve set up the entire training/evaluation infrastructure and achieved high confidence in its accuracy, and you’ve explored increasingly more complex models, gaining performance improvements in ways you’ve predicted each step of the way. You’re now ready to read a lot of papers, try a large number of experiments, and get your SOTA results. Good luck!</p>
+
+        </div>
+        <div class="post-tool">
+            <a class="btn-thumbs-up" href="javascript:void(0);" data-cid="52" title="95">
+                <i class="fa fa-thumbs-up" aria-hidden="true"></i> Donate
+            </a>
+        </div>
+        
+        <div class="post-tags">Tags：
+            
+        </div>
+        
+    </article>
+    
+    <p style="text-align: center">This article just represents my own viewpoint. If there is something wrong, please correct me.</p>
+    
+    
+
+    
+
+</div>
+<script src="/js/busuanzi.pure.mini.js"></script>
+
+
+        </div><!-- end #main-->
+    </div><!-- end #body -->
+    <footer class="footer">
+    <div class="footer-inner" style="text-align: center">
+        <p>
+            <a href="/about" title="About">About</a>&nbsp;&nbsp<em>·</em>&nbsp;&nbsp
+            <!-- 自定义链接 -->
+            <a href="/help" title="Help">Help</a>&nbsp;&nbsp<em>·</em>&nbsp;&nbsp
+            <a href="/links" title="Links">Links</a>&nbsp;&nbsp<em>·</em>&nbsp;&nbsp
+            <a href="/sitemap.xml" title="SiteMap">SiteMap</a>
+        </p>
+        <p>
+            Has been established&nbsp<a href="/timeline" id="siteBuildingTime"></a>&nbspDays，<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="licence">Based on Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)</a><br>
+            ©2017-<span id="cpYear"></span> Based on&nbsp<a href="http://hexo.io" target="_blank" rel="nofollow">Hexo</a>
+            ，Theme by&nbsp&nbsp<a href="https://github.com/tangkunyin/hexo-theme-jsimple" target="_blank" rel="bookmark">JSimple</a>
+            ，Author&nbsp<a href="https://louishsu.xyz/" target="_blank" rel="friend">Louis Hsu</a>
+            ，Hosted by <a href="https://pages.github.com/" target="_blank" rel="nofollow">GitHub Pages</a>
+        </p>
+    </div>
+</footer>
+<script src="/js/SimpleCore.js"></script>
+
+</div>
+<!-- search pop -->
+<div class="popup search-popup local-search-popup">
+    <div class="local-search-header clearfix">
+        <span class="search-icon">
+            <i class="fa fa-search"></i>
+        </span>
+        <span class="popup-btn-close">
+            <i class="fa fa-times-circle"></i>
+        </span>
+        <div class="local-search-input-wrapper">
+            <input id="local-search-input" spellcheck="false" type="text" autocomplete="off" placeholder="Input query keywords here...">
+        </div>
+    </div>
+    <div id="local-search-result"></div>
+</div>
+<div class="fixed-btn">
+    <a class="btn-gotop" href="javascript:"> <i class="fa fa-angle-up"></i></a>
+</div>
+<script>
+    $(function () {
+        var jsi_config = {
+            buildingTime: '10/20/2018',
+            current: $('.post-tags').length > 0 ? 'post' : 'archive',
+            snsQRCode: '/images/sns-qrcode.png',
+            donateImg: '/images/donate-qr.png',
+            localSearch: { dbPath: '' },
+            readMode: 'day'
+        };
+        
+            jsi_config.localSearch = {
+                dbPath: '/search.json',
+                trigger: 'auto',
+                topN: '1',
+                unescape: 'false'
+            }
+        
+        SimpleCore.init(jsi_config);
+        
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>
