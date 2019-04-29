@@ -551,22 +551,22 @@
             <div class="links-of-author motion-element">
               
                 <span class="links-of-author-item">
-                  <a href="https://github.com/isLouisHsu" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  <a href="https://github.com/isLouisHsu" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i></a>
                   
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="mailto:is.louishsu@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  <a href="mailto:is.louishsu@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i></a>
                   
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="https://www.zhihu.com/people/islouishsu" target="_blank" title="知乎"><i class="fa fa-fw fa-知乎"></i>知乎</a>
+                  <a href="https://www.zhihu.com/people/islouishsu" target="_blank" title="Zhihu"><i class="fa fa-fw fa-知乎"></i></a>
                   
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="http://weibo.com/islouishsu" target="_blank" title="微博"><i class="fa fa-fw fa-weibo"></i>微博</a>
+                  <a href="http://weibo.com/islouishsu" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i></a>
                   
                 </span>
               
@@ -623,6 +623,24 @@
 
 
         
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
 
 
 
@@ -1065,39 +1083,105 @@
         onPopupClose();
       }
     });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
   </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
-
-
-
-
-  
-
-  
-
-  
-
-  
-  
-
-  
-  
-
-  
-
-
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
 
 </body>
 </html>
