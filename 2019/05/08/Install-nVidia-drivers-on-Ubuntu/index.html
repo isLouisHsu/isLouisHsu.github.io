@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="PPA安装 禁用nouveau驱动先将Ubuntu系统集成的显卡驱动程序nouveau从linux内核卸载  查看当前驱动状态123456789$ lsmod | grep nouveaunouveau              1851392  1mxm_wmi                16384  1 nouveaui2c_algo_bit           16384  2 i915">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-05-08T12:20:46.895Z">
+<meta property="og:updated_time" content="2019-05-08T12:30:46.658Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Install nVidia drivers on Ubuntu">
 <meta name="twitter:description" content="PPA安装 禁用nouveau驱动先将Ubuntu系统集成的显卡驱动程序nouveau从linux内核卸载  查看当前驱动状态123456789$ lsmod | grep nouveaunouveau              1851392  1mxm_wmi                16384  1 nouveaui2c_algo_bit           16384  2 i915">
@@ -393,7 +393,7 @@
                 
               
 
-              <time title="创建时间：2019-05-08 19:47:04 / 修改时间：20:20:46" itemprop="dateCreated datePublished" datetime="2019-05-08T19:47:04+08:00">2019-05-08</time>
+              <time title="创建时间：2019-05-08 19:47:04 / 修改时间：20:30:46" itemprop="dateCreated datePublished" datetime="2019-05-08T19:47:04+08:00">2019-05-08</time>
             
 
             
@@ -470,7 +470,7 @@
 <p>按<code>ctrl+alt+F1</code>进入<code>tty</code>模式，关闭图形桌面显示管理器<code>LightDM</code><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> service lightdm stop</span><br></pre></td></tr></table></figure></p>
 <p>安装驱动<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> sudo apt-get install nvidia-418</span><br><span class="line"><span class="meta">$</span> sudo reboot</span><br></pre></td></tr></table></figure></p>
 <ol>
-<li>查看安装情况<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> sudo nvidia-smi</span><br><span class="line"><span class="meta">$</span> sudo nvidia-settings</span><br></pre></td></tr></table></figure>
+<li>查看安装情况<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> sudo nvidia-smi</span><br><span class="line">Wed May  8 20:22:55 2019       </span><br><span class="line">+------------------------------------------------------+                       </span><br><span class="line">| NVIDIA-SMI 340.107    Driver Version: 340.107        |                       </span><br><span class="line">|-------------------------------+----------------------+----------------------+</span><br><span class="line">| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |</span><br><span class="line">| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |</span><br><span class="line">|===============================+======================+======================|</span><br><span class="line">|   0  GeForce GT 730M     Off  | 0000:04:00.0     N/A |                  N/A |</span><br><span class="line">| N/A   46C    P0    N/A /  N/A |    185MiB /  1023MiB |     N/A      Default |</span><br><span class="line">+-------------------------------+----------------------+----------------------+</span><br><span class="line">                                                                               </span><br><span class="line">+-----------------------------------------------------------------------------+</span><br><span class="line">| Compute processes:                                               GPU Memory |</span><br><span class="line">|  GPU       PID  Process name                                     Usage      |</span><br><span class="line">|=============================================================================|</span><br><span class="line">|    0            Not Supported                                               |</span><br><span class="line">+-----------------------------------------------------------------------------+</span><br><span class="line"></span><br><span class="line"><span class="meta">$</span> sudo nvidia-settings</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 <h1 id="CUDA"><a href="#CUDA" class="headerlink" title="CUDA"></a>CUDA</h1><p>查看<a href="https://louishsu.xyz/2019/01/04/Ubuntu%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Tensorflow/" target="_blank" rel="noopener">Ubuntu编译安装Tensorflow</a></p>
