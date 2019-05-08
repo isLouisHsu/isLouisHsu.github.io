@@ -108,23 +108,25 @@
 
 
 
-  <meta name="description" content="技术博客？">
-<meta property="og:type" content="website">
-<meta property="og:title" content="LOUIS&#39; BLOG">
-<meta property="og:url" content="http://yoursite.com/archives/2018/11/index.html">
+  <meta name="description" content="PPA安装 禁用nouveau驱动先将Ubuntu系统集成的显卡驱动程序nouveau从linux内核卸载  查看当前驱动状态123456789$ lsmod | grep nouveaunouveau              1851392  1mxm_wmi                16384  1 nouveaui2c_algo_bit           16384  2 i915">
+<meta name="keywords" content="Linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Install nVidia drivers on Ubuntu">
+<meta property="og:url" content="http://yoursite.com/2019/05/08/Install-nVidia-drivers-on-Ubuntu/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="技术博客？">
+<meta property="og:description" content="PPA安装 禁用nouveau驱动先将Ubuntu系统集成的显卡驱动程序nouveau从linux内核卸载  查看当前驱动状态123456789$ lsmod | grep nouveaunouveau              1851392  1mxm_wmi                16384  1 nouveaui2c_algo_bit           16384  2 i915">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-05-08T12:20:46.895Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LOUIS&#39; BLOG">
-<meta name="twitter:description" content="技术博客？">
+<meta name="twitter:title" content="Install nVidia drivers on Ubuntu">
+<meta name="twitter:description" content="PPA安装 禁用nouveau驱动先将Ubuntu系统集成的显卡驱动程序nouveau从linux内核卸载  查看当前驱动状态123456789$ lsmod | grep nouveaunouveau              1851392  1mxm_wmi                16384  1 nouveaui2c_algo_bit           16384  2 i915">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/2018/11/">
+  <link rel="canonical" href="http://yoursite.com/2019/05/08/Install-nVidia-drivers-on-Ubuntu/">
 
 
 
@@ -134,7 +136,7 @@
   };
 </script>
 
-  <title>归档 | LOUIS' BLOG</title>
+  <title>Install nVidia drivers on Ubuntu | LOUIS' BLOG</title>
   
 
 
@@ -181,7 +183,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -246,7 +248,7 @@
         
         
           
-          <li class="menu-item menu-item-archives menu-item-active">
+          <li class="menu-item menu-item-archives">
     <a href="/archives/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
   </li>
@@ -327,348 +329,244 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
 
-      
-      <span class="archive-page-counter">
-        
-        
-         
-        
-        还行! 目前共计 40 篇日志。 继续努力。
-      </span>
-      
+  
+    <div class="reading-progress-bar"></div>
+  
 
-      
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/08/Install-nVidia-drivers-on-Ubuntu/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="技术博客？">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
 
         
         
+          <h1 class="post-title" itemprop="name headline">Install nVidia drivers on Ubuntu
+              
+            
+          </h1>
         
 
-        
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-08 19:47:04 / 修改时间：20:20:46" itemprop="dateCreated datePublished" datetime="2019-05-08T19:47:04+08:00">2019-05-08</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2018">2018</h1>
-          </div>
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/11/24/scikit-learn-处理特征/" itemprop="url">
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
               
-                <span itemprop="name">scikit-learn: 处理特征</span>
+                <span class="post-meta-item-text">分类于</span>
               
-            </a>
-        
-      </h2>
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a></span>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-24T20:26:14+08:00" content="2018-11-24">
-          11-24
-        </time>
-      </div>
+                
+                
+              
+            </span>
+          
 
-    </header>
-  </article>
+          
+            
+          
 
+          
+          
 
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/11/21/Metrics/" itemprop="url">
-              
-                <span itemprop="name">Metrics</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-21T14:23:21+08:00" content="2018-11-21">
-          11-21
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/11/21/Entropy/" itemprop="url">
-              
-                <span itemprop="name">Entropy</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-21T13:03:09+08:00" content="2018-11-21">
-          11-21
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+      
+        <h1 id="PPA安装"><a href="#PPA安装" class="headerlink" title="PPA安装"></a>PPA安装</h1><ol>
+<li>禁用<code>nouveau</code>驱动<br>先将<code>Ubuntu</code>系统集成的显卡驱动程序<code>nouveau</code>从<code>linux</code>内核卸载</li>
+</ol>
+<p>查看当前驱动状态<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> lsmod | grep nouveau</span><br><span class="line">nouveau              1851392  1</span><br><span class="line">mxm_wmi                16384  1 nouveau</span><br><span class="line">i2c_algo_bit           16384  2 i915,nouveau</span><br><span class="line">ttm                   110592  1 nouveau</span><br><span class="line">drm_kms_helper        172032  2 i915,nouveau</span><br><span class="line">drm                   458752  8 drm_kms_helper,i915,ttm,nouveau</span><br><span class="line">wmi                    24576  3 wmi_bmof,mxm_wmi,nouveau</span><br><span class="line">video                  45056  3 thinkpad_acpi,i915,nouveau</span><br></pre></td></tr></table></figure></p>
+<p>添加黑名单<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> ll /etc/modprobe.d/blacklist.conf</span><br><span class="line">-rw-r--r-- 1 root root 1667 11月 13 05:54 /etc/modprobe.d/blacklist.conf</span><br><span class="line"></span><br><span class="line"><span class="meta">$</span> sudo chmod 666 /etc/modprobe.d/blacklist.conf</span><br><span class="line">[sudo] password for louishsu: </span><br><span class="line"></span><br><span class="line"><span class="meta">$</span> sudo vim /etc/modprobe.d/blacklist.conf </span><br><span class="line"></span><br><span class="line"><span class="meta">$</span> sudo chmod 644 /etc/modprobe.d/blacklist.conf</span><br><span class="line"></span><br><span class="line"><span class="meta">$</span> sudo update-initramfs -u</span><br><span class="line">update-initramfs: Generating /boot/initrd.img-4.18.0-17-generic</span><br><span class="line">...</span><br><span class="line">I: Set the RESUME variable to override this.</span><br></pre></td></tr></table></figure></p>
+<p>重启后查看驱动状态，无输出表示禁用成功<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> lsmod | grep nouveau</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>安装驱动</li>
+</ol>
+<p>这里使用<code>PPA</code>方式安装，首先添加源<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> sudo add-apt-repository ppa:graphics-drivers/ppa</span><br><span class="line"><span class="meta">$</span> sudo apt-get update</span><br></pre></td></tr></table></figure></p>
+<p>查看合适的驱动版本，如下<code>recommended</code><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> ubuntu-drivers devices</span><br></pre></td></tr></table></figure></p>
+<p>按<code>ctrl+alt+F1</code>进入<code>tty</code>模式，关闭图形桌面显示管理器<code>LightDM</code><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> service lightdm stop</span><br></pre></td></tr></table></figure></p>
+<p>安装驱动<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> sudo apt-get install nvidia-418</span><br><span class="line"><span class="meta">$</span> sudo reboot</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>查看安装情况<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> sudo nvidia-smi</span><br><span class="line"><span class="meta">$</span> sudo nvidia-settings</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="CUDA"><a href="#CUDA" class="headerlink" title="CUDA"></a>CUDA</h1><p>查看<a href="https://louishsu.xyz/2019/01/04/Ubuntu%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Tensorflow/" target="_blank" rel="noopener">Ubuntu编译安装Tensorflow</a></p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
+<li><a href="https://blog.csdn.net/10km/article/details/61191230" target="_blank" rel="noopener">ubuntu16.04下NVIDIA GTX965M显卡驱动PPA安装</a></li>
+</ol>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/11/19/Non-parameter-Estimation/" itemprop="url">
-              
-                <span itemprop="name">Non-parameter Estimation</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-19T10:55:43+08:00" content="2018-11-19">
-          11-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/11/19/Parameter-Estimation/" itemprop="url">
-              
-                <span itemprop="name">Parameter Estimation</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-19T08:55:43+08:00" content="2018-11-19">
-          11-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/11/16/Clustering/" itemprop="url">
-              
-                <span itemprop="name">Clustering</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-16T17:32:44+08:00" content="2018-11-16">
-          11-16
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/11/12/EM-GMM/" itemprop="url">
-              
-                <span itemprop="name">EM & GMM</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-12T10:41:34+08:00" content="2018-11-12">
-          11-12
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/11/02/Data-Augmentation/" itemprop="url">
-              
-                <span itemprop="name">Data Augmentation</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-02T13:13:10+08:00" content="2018-11-02">
-          11-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/30/无所畏/" rel="next" title="无所畏">
+                <i class="fa fa-chevron-left"></i> 无所畏
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+  </div>
 
 
           </div>
           
+
+  
+
+
 
         </div>
         
@@ -689,8 +587,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -813,6 +720,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#PPA安装"><span class="nav-number">1.</span> <span class="nav-text">PPA安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CUDA"><span class="nav-number">2.</span> <span class="nav-text">CUDA</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -969,6 +892,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
 
   
 
