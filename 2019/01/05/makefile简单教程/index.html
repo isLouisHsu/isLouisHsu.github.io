@@ -110,14 +110,14 @@
 
   <meta name="description" content="前言准备源文件新建目录demo/，其结构如下123456789\-- demo    \-- bin             # 二进制文件，即可执行文件    \-- include         # 头文件`.h`        |-- hello.h    \-- obj             # 目标文件`.o`        |-- *.o    \-- src">
 <meta property="og:type" content="article">
-<meta property="og:title" content="makefile简单教程">
+<meta property="og:title" content="Makefile简单教程">
 <meta property="og:url" content="http://yoursite.com/2019/01/05/makefile简单教程/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="前言准备源文件新建目录demo/，其结构如下123456789\-- demo    \-- bin             # 二进制文件，即可执行文件    \-- include         # 头文件`.h`        |-- hello.h    \-- obj             # 目标文件`.o`        |-- *.o    \-- src">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-05-01T10:45:54.873Z">
+<meta property="og:updated_time" content="2019-05-09T06:40:14.281Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="makefile简单教程">
+<meta name="twitter:title" content="Makefile简单教程">
 <meta name="twitter:description" content="前言准备源文件新建目录demo/，其结构如下123456789\-- demo    \-- bin             # 二进制文件，即可执行文件    \-- include         # 头文件`.h`        |-- hello.h    \-- obj             # 目标文件`.o`        |-- *.o    \-- src">
 
 
@@ -135,7 +135,7 @@
   };
 </script>
 
-  <title>makefile简单教程 | LOUIS' BLOG</title>
+  <title>Makefile简单教程 | LOUIS' BLOG</title>
   
 
 
@@ -367,7 +367,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">makefile简单教程
+          <h1 class="post-title" itemprop="name headline">Makefile简单教程
               
             
           </h1>
@@ -409,7 +409,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-05-01 18:45:54" itemprop="dateModified" datetime="2019-05-01T18:45:54+08:00">2019-05-01</time>
+                <time title="修改时间：2019-05-09 14:40:14" itemprop="dateModified" datetime="2019-05-09T14:40:14+08:00">2019-05-09</time>
               
             
           </span>
@@ -505,7 +505,7 @@
 <h2 id="关于三个函数的使用"><a href="#关于三个函数的使用" class="headerlink" title="关于三个函数的使用"></a>关于三个函数的使用</h2><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">DIR_INC = ./<span class="keyword">include</span></span><br><span class="line">DIR_SRC = ./src</span><br><span class="line">DIR_OBJ = ./obj</span><br><span class="line"></span><br><span class="line">SRC = <span class="variable">$(<span class="built_in">wildcard</span> $&#123;DIR_SRC&#125;/*.c)</span>		<span class="comment"># 指定编译当前目录下所有`.c`文件，全路径`./src/*.c`</span></span><br><span class="line">DIR = <span class="variable">$(<span class="built_in">notdir</span> $&#123;SRC&#125;)</span>				<span class="comment"># 去除路径名，只留下文件名`*.c`</span></span><br><span class="line">OBJ = <span class="variable">$(<span class="built_in">patsubst</span> %.c, $&#123;DIR_OBJ&#125;/%.o, $&#123;DIR&#125;)</span>	<span class="comment"># 将`DIR`中匹配到的`%.c`，替换为`$&#123;DIR_OBJ&#125;/%.o`</span></span><br><span class="line"></span><br><span class="line"><span class="section">ALL:</span></span><br><span class="line">	@echo <span class="variable">$(SRC)</span></span><br><span class="line">	@echo <span class="variable">$(DIR)</span></span><br><span class="line">	@echo <span class="variable">$(OBJ)</span></span><br></pre></td></tr></table></figure>
 <p>执行<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ make</span><br><span class="line">./src/hello<span class="selector-class">.c</span> ./src/test.c</span><br><span class="line">hello<span class="selector-class">.c</span> test.c</span><br><span class="line">./obj/hello<span class="selector-class">.o</span> ./obj/test.o</span><br></pre></td></tr></table></figure></p>
 <blockquote>
-<p>注：若<code>./src</code>目录下还有子目录<code>./src/inc</code>，则<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> SRC = $(wildcard <span class="variable">$&#123;DIR_SRC&#125;</span>/*.c) $(wildcard <span class="variable">$&#123;DIR_SRC&#125;</span>/inc/*.c)</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"></span></span><br></pre></td></tr></table></figure></p>
+<p>注：若<code>./src</code>目录下还有子目录<code>./src/inc</code>，则<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; SRC = <span class="variable">$(</span>wildcard <span class="variable">$&#123;</span>DIR_SRC&#125;/*.c) <span class="variable">$(</span>wildcard <span class="variable">$&#123;</span>DIR_SRC&#125;/inc/*.c)</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure></p>
 </blockquote>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><blockquote>
 <p>Makefile 使用总结 - wang_yb - 博客园 <a href="https://www.cnblogs.com/wang_yb/p/3990952.html" target="_blank" rel="noopener">https://www.cnblogs.com/wang_yb/p/3990952.html</a></p>
@@ -561,8 +561,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/05/Cmake编译库文件/" rel="next" title="cmake编译库文件">
-                <i class="fa fa-chevron-left"></i> cmake编译库文件
+              <a href="/2019/01/05/Cmake编译库文件/" rel="next" title="CMake编译库文件">
+                <i class="fa fa-chevron-left"></i> CMake编译库文件
               </a>
             
           </div>
