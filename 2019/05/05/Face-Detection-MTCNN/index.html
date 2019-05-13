@@ -1,0 +1,1910 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言MTCNN即Multi-task Cascaded Convolutional Networks，利用深度学习方法进行人脸识别、检测与关键点定位，可谓结合机器视觉领域三大任务为一体。 该算法中，人脸检测与识别视作分类任务，即判别框内图像是否包含人脸；定位视作回归任务，共需确定7个坐标点，依次为：回归框左上、右下坐标，左眼、右眼、鼻尖、左嘴角、右嘴角坐标。 在设计损失函数时，分类任务采用交叉熵(">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Face Detection: MTCNN">
+<meta property="og:url" content="http://yoursite.com/2019/05/05/Face-Detection-MTCNN/index.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="前言MTCNN即Multi-task Cascaded Convolutional Networks，利用深度学习方法进行人脸识别、检测与关键点定位，可谓结合机器视觉领域三大任务为一体。 该算法中，人脸检测与识别视作分类任务，即判别框内图像是否包含人脸；定位视作回归任务，共需确定7个坐标点，依次为：回归框左上、右下坐标，左眼、右眼、鼻尖、左嘴角、右嘴角坐标。 在设计损失函数时，分类任务采用交叉熵(">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/05/05/Face-Detection-MTCNN/detect_algorithm.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/05/05/Face-Detection-MTCNN/mtcnn.png">
+<meta property="og:image" content="http://yoursite.com/2019/05/05/Face-Detection-MTCNN/detect_demo.png">
+<meta property="og:image" content="http://yoursite.com/2019/05/05/Face-Detection-MTCNN/landmark_demo.png">
+<meta property="og:updated_time" content="2019-05-13T05:35:01.257Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Face Detection: MTCNN">
+<meta name="twitter:description" content="前言MTCNN即Multi-task Cascaded Convolutional Networks，利用深度学习方法进行人脸识别、检测与关键点定位，可谓结合机器视觉领域三大任务为一体。 该算法中，人脸检测与识别视作分类任务，即判别框内图像是否包含人脸；定位视作回归任务，共需确定7个坐标点，依次为：回归框左上、右下坐标，左眼、右眼、鼻尖、左嘴角、右嘴角坐标。 在设计损失函数时，分类任务采用交叉熵(">
+<meta name="twitter:image" content="http://yoursite.com/2019/05/05/Face-Detection-MTCNN/detect_algorithm.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/05/05/Face-Detection-MTCNN/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Face Detection: MTCNN | LOUIS' BLOG</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LOUIS' BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">人生苦短，不如不管，继续任性。</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/05/Face-Detection-MTCNN/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="技术博客？">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Face Detection: MTCNN
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-05 22:05:37" itemprop="dateCreated datePublished" datetime="2019-05-05T22:05:37+08:00">2019-05-05</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-05-13 13:35:01" itemprop="dateModified" datetime="2019-05-13T13:35:01+08:00">2019-05-13</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>MTCNN即Multi-task Cascaded Convolutional Networks，利用深度学习方法进行人脸识别、检测与关键点定位，可谓结合机器视觉领域三大任务为一体。</p>
+<p>该算法中，人脸检测与识别视作分类任务，即判别框内图像是否包含人脸；定位视作回归任务，共需确定7个坐标点，依次为：回归框左上、右下坐标，左眼、右眼、鼻尖、左嘴角、右嘴角坐标。</p>
+<p>在设计损失函数时，分类任务采用交叉熵<code>(Cross Entropy)</code>，回归任务采用均方误差<code>(MSE)</code>，并且三个任务的损失，可给定不同的系数进行网络训练，使各网络侧重点不同，即<code>PNet</code>与<code>RNet</code>侧重于人脸识别与回归框定位，<code>ONet</code>侧重于关键点定位。</p>
+<h1 id="算法对比"><a href="#算法对比" class="headerlink" title="算法对比"></a>算法对比</h1><p><img src="/2019/05/05/Face-Detection-MTCNN/detect_algorithm.jpg" alt="detect_algorithm"></p>
+<h1 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h1><p>共设计3个卷积网络，每个网络均可输出识别概率(1)、回归框坐标(2×2)、关键点坐标(5×2)，三个网络级联以获得良好的预测结果。各网络结构图如下</p>
+<p><img src="/2019/05/05/Face-Detection-MTCNN/mtcnn.png" alt="mtcnn"></p>
+<p>分类任务输出层可采用<code>softmax</code>，即视作多分类任务；或者采用<code>sigmoid</code>，视作二分类任务。</p>
+<h2 id="1-P-Net：-Proposal-Network"><a href="#1-P-Net：-Proposal-Network" class="headerlink" title="1. P-Net： Proposal Network"></a>1. P-Net： Proposal Network</h2><p>检测任务比较重要的一步是产生数目足够多的候选框，<code>PNet</code>设计全卷积网络，可接受任意大小的图片输入，利用输出的特征图生成候选框，具体生成算法在检测算法中说明。该网络在训练时接受$12×12×3$的图像输入，各层参数如下。</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">layer     filters    size           input                output</span><br><span class="line"><span class="number">0</span> conv      <span class="number">10</span>      <span class="number">3</span> x <span class="number">3</span> / <span class="number">1</span>    <span class="number">12</span> x  <span class="number">12</span> x   <span class="number">3</span>   -&gt;    <span class="number">10</span> x  <span class="number">10</span> x  <span class="number">10</span>  <span class="number">0.000</span> BFLOPs</span><br><span class="line"><span class="number">1</span> max               <span class="number">2</span> x <span class="number">2</span> / <span class="number">2</span>    <span class="number">10</span> x  <span class="number">10</span> x  <span class="number">10</span>   -&gt;     <span class="number">5</span> x   <span class="number">5</span> x  <span class="number">10</span></span><br><span class="line"><span class="number">2</span> conv      <span class="number">16</span>      <span class="number">3</span> x <span class="number">3</span> / <span class="number">1</span>     <span class="number">5</span> x   <span class="number">5</span> x  <span class="number">10</span>   -&gt;     <span class="number">3</span> x   <span class="number">3</span> x  <span class="number">16</span>  <span class="number">0.000</span> BFLOPs</span><br><span class="line"><span class="number">3</span> conv      <span class="number">32</span>      <span class="number">3</span> x <span class="number">3</span> / <span class="number">1</span>     <span class="number">3</span> x   <span class="number">3</span> x  <span class="number">16</span>   -&gt;     <span class="number">1</span> x   <span class="number">1</span> x  <span class="number">32</span>  <span class="number">0.000</span> BFLOPs</span><br><span class="line"><span class="number">4</span> conv      <span class="number">15</span>      <span class="number">1</span> x <span class="number">1</span> / <span class="number">1</span>     <span class="number">1</span> x   <span class="number">1</span> x  <span class="number">32</span>   -&gt;     <span class="number">1</span> x   <span class="number">1</span> x  <span class="number">15</span>  <span class="number">0.000</span> BFLOPs</span><br></pre></td></tr></table></figure>
+<h2 id="2-R-Net：-Refine-Network"><a href="#2-R-Net：-Refine-Network" class="headerlink" title="2. R-Net： Refine Network"></a>2. R-Net： Refine Network</h2><p><code>PNet</code>产生候选框后，将这些候选框内的图像数据分割并缩放到统一大小，输入到<code>RNet</code>改善识别结果。该网络最后增加全连接层，仅接受$24×24×3$的图像输入，各层参数如下。</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">layer     filters    size           input                output</span><br><span class="line"><span class="number">0</span> conv     <span class="number">28</span>       <span class="number">3</span> x <span class="number">3</span> / <span class="number">1</span>    <span class="number">24</span> x  <span class="number">24</span> x   <span class="number">3</span>   -&gt;    <span class="number">22</span> x  <span class="number">22</span> x  <span class="number">28</span>  <span class="number">0.001</span> BFLOPs</span><br><span class="line"><span class="number">1</span> max               <span class="number">3</span> x <span class="number">3</span> / <span class="number">2</span>    <span class="number">22</span> x  <span class="number">22</span> x  <span class="number">28</span>   -&gt;    <span class="number">11</span> x  <span class="number">11</span> x  <span class="number">28</span></span><br><span class="line"><span class="number">2</span> conv     <span class="number">48</span>       <span class="number">3</span> x <span class="number">3</span> / <span class="number">1</span>    <span class="number">11</span> x  <span class="number">11</span> x  <span class="number">28</span>   -&gt;     <span class="number">9</span> x   <span class="number">9</span> x  <span class="number">48</span>  <span class="number">0.002</span> BFLOPs</span><br><span class="line"><span class="number">3</span> max               <span class="number">3</span> x <span class="number">3</span> / <span class="number">2</span>     <span class="number">9</span> x   <span class="number">9</span> x  <span class="number">48</span>   -&gt;     <span class="number">4</span> x   <span class="number">4</span> x  <span class="number">48</span></span><br><span class="line"><span class="number">4</span> conv     <span class="number">64</span>       <span class="number">2</span> x <span class="number">2</span> / <span class="number">1</span>     <span class="number">4</span> x   <span class="number">4</span> x  <span class="number">48</span>   -&gt;     <span class="number">3</span> x   <span class="number">3</span> x  <span class="number">64</span>  <span class="number">0.000</span> BFLOPs</span><br><span class="line"><span class="number">5</span> connected                                 <span class="number">576</span>   -&gt;               <span class="number">128</span></span><br><span class="line"><span class="number">6</span> connected                                 <span class="number">128</span>   -&gt;                <span class="number">15</span></span><br></pre></td></tr></table></figure>
+<h2 id="3-O-Net：-Output-Network"><a href="#3-O-Net：-Output-Network" class="headerlink" title="3. O-Net： Output Network"></a>3. O-Net： Output Network</h2><p>该网络功能与<code>RNet</code>相同，不同的是分辨率更高，网络层次更深，且训练过程中，损失的设置更偏重于关键点的回归。接受$48×48×3$的图像输入，各层参数如下。</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">layer     filters    size              input                output</span><br><span class="line"><span class="number">0</span> conv     <span class="number">32</span>       <span class="number">3</span> x <span class="number">3</span> / <span class="number">1</span>    <span class="number">48</span> x  <span class="number">48</span> x   <span class="number">3</span>   -&gt;    <span class="number">46</span> x  <span class="number">46</span> x  <span class="number">32</span>  <span class="number">0.004</span> BFLOPs</span><br><span class="line"><span class="number">1</span> max               <span class="number">3</span> x <span class="number">3</span> / <span class="number">2</span>    <span class="number">46</span> x  <span class="number">46</span> x  <span class="number">32</span>   -&gt;    <span class="number">23</span> x  <span class="number">23</span> x  <span class="number">32</span></span><br><span class="line"><span class="number">2</span> conv     <span class="number">64</span>       <span class="number">3</span> x <span class="number">3</span> / <span class="number">1</span>    <span class="number">23</span> x  <span class="number">23</span> x  <span class="number">32</span>   -&gt;    <span class="number">21</span> x  <span class="number">21</span> x  <span class="number">64</span>  <span class="number">0.016</span> BFLOPs</span><br><span class="line"><span class="number">3</span> max               <span class="number">3</span> x <span class="number">3</span> / <span class="number">2</span>    <span class="number">21</span> x  <span class="number">21</span> x  <span class="number">64</span>   -&gt;    <span class="number">10</span> x  <span class="number">10</span> x  <span class="number">64</span></span><br><span class="line"><span class="number">4</span> conv     <span class="number">64</span>       <span class="number">3</span> x <span class="number">3</span> / <span class="number">1</span>    <span class="number">10</span> x  <span class="number">10</span> x  <span class="number">64</span>   -&gt;     <span class="number">8</span> x   <span class="number">8</span> x  <span class="number">64</span>  <span class="number">0.005</span> BFLOPs</span><br><span class="line"><span class="number">5</span> max               <span class="number">2</span> x <span class="number">2</span> / <span class="number">2</span>     <span class="number">8</span> x   <span class="number">8</span> x  <span class="number">64</span>   -&gt;     <span class="number">4</span> x   <span class="number">4</span> x  <span class="number">64</span></span><br><span class="line"><span class="number">6</span> conv    <span class="number">128</span>       <span class="number">2</span> x <span class="number">2</span> / <span class="number">1</span>     <span class="number">4</span> x   <span class="number">4</span> x  <span class="number">64</span>   -&gt;     <span class="number">3</span> x   <span class="number">3</span> x <span class="number">128</span>  <span class="number">0.001</span> BFLOPs</span><br><span class="line"><span class="number">7</span> connected                                <span class="number">1152</span>   -&gt;               <span class="number">256</span></span><br><span class="line"><span class="number">8</span> connected                                 <span class="number">256</span>   -&gt;                <span class="number">15</span></span><br></pre></td></tr></table></figure>
+<h1 id="训练数据"><a href="#训练数据" class="headerlink" title="训练数据"></a>训练数据</h1><h2 id="1-数据集"><a href="#1-数据集" class="headerlink" title="1. 数据集"></a>1. 数据集</h2><ul>
+<li><p>人脸检测<br>  <a href="http://mmlab.ie.cuhk.edu.hk/projects/WIDERFace/" target="_blank" rel="noopener">WIDER FACE</a>是目前最常用的训练集，也是目前最大的公开训练集，人工标注的风格比较友好，适合训练。总共32203图像，393703标注人脸，目前难度最大，各种难点比较全面：尺度，姿态，遮挡，表情，化妆，光照等。</p>
+<p>  <a href="http://mmlab.ie.cuhk.edu.hk/projects/WIDERFace/" target="_blank" rel="noopener">WIDER FACE</a>有以下特点：</p>
+<ul>
+<li>图像分辨率普遍偏高，所有图像的宽都缩放到1024，最小标注人脸10*10，都是彩色图像；</li>
+<li>每张图像的人脸数据偏多，平均12.2人脸/图，密集小人脸非常多；</li>
+<li>分训练集train/验证集val/测试集test，分别占40%/10%/50%，而且测试集的标注结果(ground truth)没有公开，需要提交结果给官方比较，更加公平公正，而且测试集非常大，结果可靠性极高；</li>
+<li>根据EdgeBox的检测率情况划分为三个难度等级：Easy, Medium, Hard。</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2019/05/05/Face-Detection-MTCNN/detect_demo.png" alt="detect_demo"></p>
+<ul>
+<li><p>关键点定位<br>  <a href="http://mmlab.ie.cuhk.edu.hk/archive/CNN_FacePoint.htm" target="_blank" rel="noopener">CNN FACE POINT</a>，包含5个关键点位置。</p>
+<blockquote>
+<p>Training set: <a href="http://mmlab.ie.cuhk.edu.hk/archive/CNN/data/train.zip" target="_blank" rel="noopener">Download</a><br>  It contains 5,590 LFW images and 7,876 other images downloaded from the web. The training set and validation set are defined in trainImageList.txt and testImageList.txt, respectively. Each line of these text files starts with the image name, followed by the boundary positions of the face bounding box retured by our face detector, then followed by the positions of the five facial points.<br>Testing set: <a href="http://mmlab.ie.cuhk.edu.hk/archive/CNN/data/test.zip" target="_blank" rel="noopener">Download</a><br>  It contains the 1,521 BioID images, 781 LFPW training images, and 249 LFPW test images used in our testing, together with the text files recording the boundary positions of the face bounding box retured by our face detector for each dataset. A few images that our face detector failed are not listed in the text files. LFPW images are renamed for the convenience of processing.</p>
+</blockquote>
+<p>  <img src="/2019/05/05/Face-Detection-MTCNN/landmark_demo.png" alt="landmark_demo"></p>
+</li>
+</ul>
+<h2 id="2-训练数据生成"><a href="#2-训练数据生成" class="headerlink" title="2. 训练数据生成"></a>2. 训练数据生成</h2><p>采用了<code>Hard Example Mining</code>，后一网络的训练数据由前一网络结果生成，即先用训练好的前一网络进行数据评估，在评分较低、难以检测的数据中继续采样。在生成数据时，使用数据增广。</p>
+<p>七个关键点坐标转换为偏移量<code>(offset)</code>，使其不受图像缩放影响，且数值较小便于网络收敛，计算方法如下</p>
+<ul>
+<li><p>Bounding Box</p>
+<script type="math/tex; mode=display">
+  offset_{x_1} = \frac{x_1 - x_1'}{size}</script><script type="math/tex; mode=display">
+  offset_{x_2} = \frac{x_2 - x_2'}{size}</script><ul>
+<li>$y_n$同$x_n$;</li>
+<li>$(x_1, y_1)$表示左上角点位置，$(x_2, y_2)$表示右下角点位置;</li>
+<li>$(x_1’, y_1’)$表示<code>ground true</code>矩形方框位置;</li>
+<li>$size$表示方形回归框边长，即$size = x_2 - x_1 = y_2 - y_1$;</li>
+</ul>
+</li>
+<li><p>Landmark<br>  均以<strong>正方形回归框左上方点</strong>坐标作为基准</p>
+<script type="math/tex; mode=display">
+  offset_{x_n} = \frac{x_n - x_1}{size}</script><script type="math/tex; mode=display">
+  offset_{y_n} = \frac{y_n - y_1}{size}</script><ul>
+<li>$(x_n, y_n)$表示五个关键点坐标;</li>
+<li>$(x_1, y_1)$表示回归框左上角点位置;</li>
+<li>$size$表示方形回归框边长，即$size = x_2 - x_1 = y_2 - y_1$;</li>
+</ul>
+</li>
+</ul>
+<p>根据<code>groudtruth</code>随机偏移和旋转，切割人脸数据，根据<code>iou</code>评分，共记作3种标签的样本，其标签分别为</p>
+<ul>
+<li><p><code>Positive(1)</code>:<br>  $iou &gt; 0.65$，其数据格式样例如下</p>
+  <figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxx/positive/<span class="number">404031.</span>jpg <span class="number">1.0</span> <span class="number">0.18</span> <span class="number">-0.09</span> <span class="number">0.15</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Negative(0)</code>:<br>  $iou &lt; 0.3$，其数据格式样例如下</p>
+  <figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxx/negative/<span class="number">92073.</span>jpg <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Part(-1)</code>:<br>  $0.4 \leq iou \leq 0.65$，其数据格式样例如下</p>
+  <figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxx/part/<span class="number">749569.</span>jpg <span class="number">-1.0</span> <span class="number">-0.04</span> <span class="number">0.07</span> <span class="number">-0.15</span> <span class="number">0.36</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>此外，关键点数据标签记作<code>Landmark(-2)</code>，其数据格式样例如下</p>
+  <figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxx/train_PNet_landmark_aug/<span class="number">4.</span>jpg <span class="number">-2.0</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.24367088607594936</span> <span class="number">0.17405063291139242</span> <span class="number">0.7563291139240507</span> <span class="number">0.2310126582278481</span> <span class="number">0.48417721518987344</span> <span class="number">0.6170886075949367</span> <span class="number">0.2310126582278481</span> <span class="number">0.8069620253164557</span> <span class="number">0.6677215189873418</span> <span class="number">0.8575949367088608</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h1><h2 id="1-Classification-loss"><a href="#1-Classification-loss" class="headerlink" title="1. Classification loss"></a>1. Classification loss</h2><p>人脸识别为分类任务，采用二分类交叉熵损失函数，即</p>
+<script type="math/tex; mode=display">
+L^{(i)}_{cls} = - y^{(i)} \log (p^{(i)}) - (1 - y^{(i)}) \log (1 - p^{(i)})</script><p>注意，在计算分类损失时，将<code>Negative(0)</code>, <code>Part(-1)</code>, <code>Landmark(-2)</code>标签均视作<code>0</code>。</p>
+<h2 id="2-Regression-loss"><a href="#2-Regression-loss" class="headerlink" title="2. Regression loss"></a>2. Regression loss</h2><p>回归任务，采用最小方差准则，即</p>
+<script type="math/tex; mode=display">
+L^{(i)}_{bbox} = \frac{1}{4} \sum_{j=0}^4 (pred^{(i)}_j - gt^{(i)}_j)^2</script><script type="math/tex; mode=display">
+L^{(i)}_{landmark} = \frac{1}{10} \sum_{j=0}^10 (pred^{(i)}_j - gt^{(i)}_j)^2</script><p>注意，在计算回归框损失时，仅对<code>Positive(1)</code>, <code>Part(-1)</code>样本进行，计算关键点损失时，仅对<code>Landmark(-2)</code>样本进行。</p>
+<h2 id="3-OHEM"><a href="#3-OHEM" class="headerlink" title="3. OHEM"></a>3. OHEM</h2><p><code>OHEM</code>即<code>Online Hard Example Mining</code>，在线硬样本数据挖掘，即对于当前批次数据，计算损失时，选取总损失值最大的<code>k</code>个样本，计算其均值作为该批次的损失值。</p>
+<h2 id="4-Total-Loss"><a href="#4-Total-Loss" class="headerlink" title="4. Total Loss"></a>4. Total Loss</h2><p>三个网络赋予各损失的系数不同， 使其偏重于其中某个任务</p>
+<script type="math/tex; mode=display">
+L_{total} = \frac{1}{topk} \sum_{i=0}^{topk} coef_{cls} L^{(i)}_{cls} + coef_{bbox} L^{(i)}_{bbox} + coef_{landmark} L^{(i)}_{landmark}</script><p>其中$topk$即<code>OHEM</code>计算得到的样本数。</p>
+<details>
+<summary>PyTorch实现</summary>
+<pre><code>
+class MtcnnLoss(nn.Module):
+
+    def __init__(self, cls, bbox, landmark, ohem=0.7):
+        super(MtcnnLoss, self).__init__()
+
+        self.cls = cls
+        self.bbox = bbox
+        self.landmark = landmark
+        self.ohem = ohem
+
+        self.bce = nn.BCEWithLogitsLoss(reduction='none')
+        self.mse = nn.MSELoss(reduction='none')
+
+    def forward(self, pred, gt):
+        """
+        Params:
+            pred:   {tensor(N, n) or tensor(N, n, 1, 1)}
+            gt:     {tensor(N, n)}
+
+        Notes:
+            y_true
+        """
+        N = pred.shape[0]
+        pred = pred.view(N, -1)
+
+        ## origin label
+        gt_labels = gt[:, 0]
+
+        ## pos -> 1, neg -> 0, others -> 0
+        pred_cls = pred[:, 0]
+        gt_cls = gt_labels.clone(); gt_cls[gt_labels!=1.0] = 0.0
+        loss_cls = self.bce(pred_cls, gt_cls)
+        # ohem
+        n_keep = int(self.ohem * loss_cls.shape[0])
+        loss_cls = torch.mean(torch.topk(loss_cls, n_keep)[0])
+
+        ## label=1 or label=-1 then do regression
+        idx = (gt_labels==1)^(gt_labels==-1)
+        pred_bbox = pred[idx, 1: 5]
+        gt_bbox = gt[idx, 1: 5]
+        loss_bbox = self.mse(pred_bbox, gt_bbox)
+        loss_bbox = torch.mean(loss_bbox, dim=1)
+        # ohem
+        n_keep = int(self.ohem * loss_bbox.shape[0])
+        loss_bbox = torch.mean(torch.topk(loss_bbox, n_keep)[0])    
+
+        ## keep label =-2  then do landmark detection
+        idx = gt_labels==-2
+        pred_landmark = pred[idx, 5:]
+        gt_landmark = gt[idx, 5:]
+        loss_landmark = self.mse(pred_landmark, gt_landmark)
+        loss_landmark = torch.mean(loss_landmark, dim=1)
+        # ohem
+        n_keep = int(self.ohem * loss_landmark.shape[0])
+        loss_landmark = torch.mean(torch.topk(loss_landmark, n_keep)[0])
+
+        ## total loss
+        loss_total = self.cls*loss_cls + self.bbox*loss_bbox + self.landmark*loss_landmark
+
+        return loss_total, loss_cls, loss_bbox, loss_landmark
+
+
+loss_coef = {
+    'PNet': [1.0, 0.5, 0.5],
+    'RNet': [1.0, 0.5, 0.5],
+    'ONet': [1.0, 0.5, 1.0],
+}
+</code></pre>
+</details>
+
+<h1 id="检测算法"><a href="#检测算法" class="headerlink" title="检测算法"></a>检测算法</h1><p>检测算法以功能区分，主要分成两个部分：候选框生成与候选框筛除。</p>
+<h2 id="1-候选框生成"><a href="#1-候选框生成" class="headerlink" title="1. 候选框生成"></a>1. 候选框生成</h2><p>该步骤使用的网络为<code>PNet</code>。指定超参数<code>minface</code>，对于任意尺寸输入的图像<code>H × W</code>，先将其缩放</p>
+<script type="math/tex; mode=display">
+H_c = H × \frac{12}{minface}</script><script type="math/tex; mode=display">
+W_c = W × \frac{12}{minface}</script><p>指定超参数<code>factor</code>，更新缩小尺度，将图片缩小，在每个尺度上进行计算，即</p>
+<script type="math/tex; mode=display">
+H_c := H_c × factor</script><script type="math/tex; mode=display">
+W_c := W_c × factor</script><p>对于某一尺度下的图片得到的运算特征图，</p>
+<script type="math/tex; mode=display">
+Feat_{h×w×15} = PNet(input)</script><p>提取其分类层输出特征图$Feat_{cls}$，设定阈值<code>thresh</code>，对于大于阈值的点，按下式生成候选框</p>
+<script type="math/tex; mode=display">
+x_1 = stride × i × \frac{1}{scale}</script><script type="math/tex; mode=display">
+y_1 = stride × j × \frac{1}{scale}</script><script type="math/tex; mode=display">
+x_2 = x_1 + \frac{cellsize}{scale}</script><script type="math/tex; mode=display">
+y_2 = y_1 + \frac{cellsize}{scale}</script><p>其中<code>cellsize</code>为超参数，一般指定为<code>cellsize=12</code></p>
+<h2 id="2-候选框筛除"><a href="#2-候选框筛除" class="headerlink" title="2. 候选框筛除"></a>2. 候选框筛除</h2><p>改步使用网络<code>PNet</code>与<code>ONet</code>，依次对上一层网络进行<code>refine</code>，计算方法一致。</p>
+<ul>
+<li>获取上一层网络输出回归框，截取图片中相应位置的图像数据，并缩放到对应尺寸；</li>
+<li>前向计算，得到特征输出；</li>
+<li>设定阈值，只保留分类评估大于阈值的结果；</li>
+<li>对剩余结果进行<code>NMS</code>，输出结果；</li>
+</ul>
+<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><p>详情查看<a href="https://github.com/isLouisHsu/MTCNN_Darknet/tree/master/torch_mtcnn" target="_blank" rel="noopener">Github</a>。</p>
+<details>
+<summary>展开查看Detector代码</summary>
+<pre><code>
+class MtcnnDetector(object):
+    """ mtcnn detector
+    Params:
+        prefix: {str} checkpoint
+    Attributes:
+    Content:
+    """
+    def __init__(self, min_face=20, thresh=[0.6, 0.7, 0.7], scale=0.79, stride=2, cellsize=12):
+
+        self.min_face = min_face
+        self.thresh = thresh
+        self.scale  = scale
+        self.stride = stride
+        self.cellsize = cellsize
+
+        self.pnet = PNet()
+        self.rnet = RNet()
+        self.onet = ONet()
+
+        self._load_state(self.pnet)
+        self._load_state(self.rnet)
+        self._load_state(self.onet)
+
+        # stat(self.pnet, (3, 12, 12))
+        # stat(self.rnet, (3, 24, 24))
+        # stat(self.onet, (3, 48, 48))
+
+    def _load_state(self, net):
+
+        ckpt = './ckptdir/{}.pkl'.format(net._get_name())
+        if not os.path.exists(ckpt): return
+        ckpt = torch.load(ckpt, map_location='cuda' if torch.cuda.is_available() else 'cpu')
+        net.load_state_dict(ckpt['net_state'])
+
+    def detect_image(self, image):
+        """ Detect face over single image
+        Params:
+            image:    {ndarray(H, W, C)}
+        """
+
+        boxes, boxes_c, _ = self._detect_pnet(image)
+
+    def _detect_pnet(self, image):
+        """
+        Params:
+            image:      {ndarray(1, C, H, W)}
+        Returns:
+            boxes:    {ndarray(n_boxes, 5)} x1, y1, x2, y2, score
+            boxes_c:  {ndarray(n_boxes, 5)} x1, y1, x2, y2, score
+            landmark: None
+        """
+        NETSIZE = 12
+
+        def _resize_image(image, scale):
+            """ resize image according to scale
+            Params:
+                image:  {ndarray(h, w, c)}
+                scale:  {float}
+            """
+            h, w, c = image.shape
+            hn = int(h*scale); wn = int(w*scale)
+            resized = cv2.resize(image, (wn, hn), interpolation=cv2.INTER_LINEAR)
+            return resized
+
+        def _generate_box(cls_map, reg_map, thresh, scale):
+            """ generate boxes
+            Params:
+                cls_map: {ndarray(h, w)}
+                reg_map: {ndarray(4, h, w)}
+                thresh:  {float}
+                scale:   {float}
+            Returns:
+                bboxes:  {ndarray(n_boxes, 9)} x1, y1, x2, y2, score, offsetx1, offsety1, offsetx2, offsety2
+            """
+            idx = np.where(cls_map>thresh)
+
+            if idx[0].size == 0:
+                return np.array([])
+
+            x1 = np.round(self.stride * idx[1] / scale)
+            y1 = np.round(self.stride * idx[0] / scale)
+            x2 = np.round((self.stride * idx[1] + self.cellsize) / scale)
+            y2 = np.round((self.stride * idx[0] + self.cellsize) / scale)
+
+            # print("current scale: {} current size: {}".format(scale, self.cellsize/scale))
+
+            score = cls_map[idx[0], idx[1]]
+            reg = np.array([reg_map[i, idx[0], idx[1]] for i in range(4)])
+
+            boxes = np.vstack([x1, y1, x2, y2 ,score, reg]).T
+
+            return boxes
+
+        # ======================= generate boxes ===========================
+        cur_scale = NETSIZE / self.min_face
+        cur_img = _resize_image(image, cur_scale)
+        all_boxes = None
+
+        while min(cur_img.shape[:-1]) >= NETSIZE:
+
+            ## forward network
+            X = ToTensor()(cur_img).unsqueeze(0)
+            y_pred = self.pnet(X)[0].detach().numpy()
+
+            ## generate bbox
+            cls_map = sigmoid(y_pred[0,:,:])
+            reg_map = y_pred[1:5,:,:]
+            boxes = _generate_box(cls_map, reg_map, self.thresh[0], cur_scale)
+
+            ## update scale
+            cur_scale *= self.scale
+            cur_img = _resize_image(image, cur_scale)
+            if boxes.size == 0: continue
+
+            ## nms
+            # boxes = boxes[self._nms(boxes[:, :5], 0.6, 'Union')]
+            # show_bbox(image.copy(), boxes[:, :5])
+
+            ## save bbox
+            if all_boxes is None:
+                all_boxes = boxes
+            else:
+                all_boxes = np.concatenate([all_boxes, boxes], axis=0)
+
+        # ====================================================================
+
+        if all_boxes is None: 
+            return np.array([]), np.array([]), None
+
+        ## nms
+        all_boxes = all_boxes[self._nms(all_boxes[:, 0:5], 0.6, 'Union')]
+
+        ## parse
+        boxes  = all_boxes[:, :4]                   # (n_boxes, 4)
+        score  = all_boxes[:,  4].reshape((-1, 1))  # (n_boxes, 1)
+        offset = all_boxes[:, 5:]                   # (n_boxes, 4)
+
+        # refine bbox
+        boxes_c = self._cal_box(boxes, offset)
+
+        ## concat
+        boxes = np.concatenate([boxes, score], axis=1)
+        boxes_c = np.concatenate([boxes_c, score], axis=1)
+
+        ## landmark
+        landmark = None
+
+        return boxes, boxes_c, landmark
+
+    def _detect_rnet(self, image, bboxes):
+        """
+        Params:
+            image: {ndarray(H, W, C)}
+            bboxes:  {ndarray(n_boxes, 5)} x1, y1, x2, y2, score
+        Returns:
+            boxes:    {ndarray(n_boxes, 5)} x1, y1, x2, y2, score
+            boxes_c:  {ndarray(n_boxes, 5)} x1, y1, x2, y2, score
+            landmark: None
+        """
+        NETSIZE = 24
+
+        if bboxes.shape[0] == 0:
+            return np.array([]), np.array([]), None
+
+        bboxes = self._square(bboxes)
+        patches = self._crop_patch(image, bboxes, NETSIZE)
+
+        ## forward network
+        X = torch.cat(list(map(lambda x: ToTensor()(x).unsqueeze(0), patches)), dim=0)
+        y_pred = self.rnet(X).detach().numpy()  # (n_boxes, 15)
+        scores = sigmoid(y_pred[:, 0])          # (n_boxes,)
+        offset = y_pred[:, 1: 5]                # (n_boxes, 4)
+        landmark = y_pred[:, 5:]                # (n_boxes, 10)
+
+        ## update score
+        bboxes[:, -1] = scores
+
+        ## filter
+        idx = scores > self.thresh[1]
+        bboxes = bboxes[idx]                        # (n_boxes, 5)
+        offset = offset[idx]                        # (n_boxes, 4)
+        landmark = landmark[idx]                    # (n_boxes, 10)
+        if bboxes.shape[0] == 0:
+            return np.array([]), np.array([]), None
+
+        ## nms
+        idx = self._nms(bboxes, 0.5)
+        bboxes = bboxes[idx]
+        offset = offset[idx]
+        landmark = landmark[idx]
+
+        bboxes_c = self._cal_box(bboxes[:,:-1], offset)
+        bboxes_c = np.concatenate([bboxes_c, bboxes[:, -1].reshape((-1, 1))], axis=1)
+
+        ## landmark
+        landmark = self._cal_landmark(bboxes[:, :-1], landmark)
+
+        return bboxes, bboxes_c, landmark
+
+    def _detect_onet(self, image, bboxes):
+        """
+        Params:
+            image: {ndarray(H, W, C)}
+            bboxes:  {ndarray(n_boxes, 5)} x1, y1, x2, y2, score
+        Returns:
+            boxes:    {ndarray(n_boxes, 5)} x1, y1, x2, y2, score
+            boxes_c:  {ndarray(n_boxes, 5)} x1, y1, x2, y2, score
+            landmark: None
+        """
+        NETSIZE = 48
+
+        if bboxes.shape[0] == 0:
+            return np.array([]), np.array([]), np.array([])
+
+        bboxes = self._square(bboxes)
+        patches = self._crop_patch(image, bboxes, NETSIZE)
+
+        ## forward network
+        X = torch.cat(list(map(lambda x: ToTensor()(x).unsqueeze(0), patches)), dim=0)
+        y_pred = self.onet(X).detach().numpy()  # (n_boxes, 15)
+        scores = sigmoid(y_pred[:, 0])          # (n_boxes,)
+        offset = y_pred[:, 1: 5]                # (n_boxes, 4)
+        landmark = y_pred[:, 5:]                # (n_boxes, 10)
+
+        ## update score
+        bboxes[:, -1] = scores
+
+        ## filter
+        idx = scores > self.thresh[2]
+        bboxes = bboxes[idx]                        # (n_boxes, 5)
+        offset = offset[idx]                        # (n_boxes, 4)
+        landmark = landmark[idx]                    # (n_boxes, 10)
+        if bboxes.shape[0] == 0:
+            return np.array([]), np.array([]), np.array([])
+
+        ## nms
+        idx = self._nms(bboxes, 0.5)
+        bboxes = bboxes[idx]
+        offset = offset[idx]
+        landmark = landmark[idx]
+
+        bboxes_c = self._cal_box(bboxes[:,:-1], offset)
+        bboxes_c = np.concatenate([bboxes_c, bboxes[:, -1].reshape((-1, 1))], axis=1)
+
+        ## landmark
+        landmark = self._cal_landmark(bboxes[:, :-1], landmark)
+
+        return bboxes, bboxes_c, landmark
+
+    @classmethod
+    def _cal_box(self, boxes, offset):
+        """ refine boxes
+        Params:
+            boxes:  {ndarray(n_boxes, 4)} unrefined boxes
+            offset: {ndarray(n_boxes, 4)} boxes offset
+        Returns:
+            boxes_c:{ndarray(n_boxes, 4)} refined boxes
+        Notes:
+            offset = (gt - square) / size of square box
+             => gt = square + offset * size of square box (*)
+            where
+                - `offset`, `gt`, `square` are ndarrays
+                - `size of square box` is a number
+        """
+        ## square boxes' heights and widths
+        x1, y1, x2, y2 = np.hsplit(boxes, 4)        # (n_boxes, 1)
+        w = x2 - x1 + 1; h = y2 - y1 + 1            # (n_boxes, 1)
+        bsize = np.hstack([w, h]*2)                 # (n_boxes, 4)
+        bbase = np.hstack([x1, y1, x2, y2])         # (n_boxes, 4)
+        ## refine
+        boxes_c = bbase + offset*bsize
+        return boxes_c
+
+    @classmethod
+    def _cal_landmark(self, boxes, offset):
+        """ calculate landmark
+        Params:
+            boxes:  {ndarray(n_boxes,  4)} unrefined boxes
+            offset: {ndarray(n_boxes, 10)} landmark offset
+        Returns:
+            landmark:{ndarray(n_boxes, 10)} landmark location
+        Notes:
+            offset_x = (gt_x - square_x1) / size of square box
+             => gt_x = square_x1 + offset_x * size of square box (*)
+            offset_y = (gt_y - square_y1) / size of square box
+             => gt_y = square_y1 + offset_y * size of square box (*)
+            where
+                - `offset_{}`, `gt_{}`, `square_{}1` are ndarrays
+                - `size of square box` is a number
+        """
+        ## square boxes' heights and widths
+        x1, y1, x2, y2 = np.hsplit(boxes, 4)        # (n_boxes, 1)
+        w = x2 - x1 +1; h = y2 - y1 + 1             # (n_boxes, 1)
+        bsize = np.hstack([w, h]*5)                 # (n_boxes, 10)
+        bbase = np.hstack([x1, y1]*5)               # (n_boxes, 10)
+        ## refine
+        landmark = bbase + offset*bbase
+        return landmark
+
+    @classmethod
+    def _nms(self, dets, thresh, mode="Union"):
+        """
+        Params:
+            dets:   {ndarray(n_boxes, 5)} x1, y1, x2, y2 score
+            thresh: {float} retain overlap <= thresh="" mode:="" {str}="" 'union'="" or="" 'minimum'="" returns:="" idx:="" {list[int]}="" indexes="" to="" keep="" notes:="" greedily="" select="" boxes="" with="" high="" confidence="" idx="" overlap="" <="thresh" rule="" out=""> thresh
+            if thresh==1.0, keep all
+        """
+        x1 = dets[:, 0]
+        y1 = dets[:, 1]
+        x2 = dets[:, 2]
+        y2 = dets[:, 3]
+        scores = dets[:, 4]
+
+        areas = (x2 - x1 + 1) * (y2 - y1 + 1)
+        order = scores.argsort()[::-1]
+
+        idx = []
+        while order.size > 0:
+            i = order[0]
+            idx.append(i)
+
+            xx1 = np.maximum(x1[i], x1[order[1:]])
+            yy1 = np.maximum(y1[i], y1[order[1:]])
+            xx2 = np.minimum(x2[i], x2[order[1:]])
+            yy2 = np.minimum(y2[i], y2[order[1:]])
+            w = np.maximum(0.0, xx2 - xx1 + 1)
+            h = np.maximum(0.0, yy2 - yy1 + 1)
+
+            inter = w * h
+            if mode == "Union":
+                ovr = inter / (areas[i] + areas[order[1:]] - inter)
+            elif mode == "Minimum":
+                ovr = inter / np.minimum(areas[i], areas[order[1:]])
+
+            inds = np.where(ovr <= 0="" 1="" 2="" thresh)[0]="" order="order[inds" +="" 1]="" return="" idx="" @classmethod="" def="" _square(self,="" bbox):="" """="" convert="" rectangle="" bbox="" to="" square="" params:="" bbox:="" {ndarray(n_boxes,="" 5)}="" returns:="" bbox_s:="" ##="" boxes'="" heights="" and="" widths="" x1,="" y1,="" x2,="" y2,="" score="np.hsplit(bbox," 5)="" #="" (n_boxes,="" 1)="" w="x2" -="" x1="" +1;="" h="y2" y1="" maxsize="np.maximum(w," h)="" x2="x1" y2="y1" bbox_s="np.hstack([x1," score])="" _crop_patch(self,="" image,="" bbox_s,="" size):="" crop="" patches="" from="" image="" image:="" {ndarray(h,="" w,="" c)}="" squared="" patches:="" {list[ndarray(h,="" c)]}="" locate(bbox,="" imh,="" imw):="" imw:="" {float}="" size="" of="" input="" oriloc,="" dstloc:="" 4)}="" origin="" 5)#="" x:="" x.astype('int').reshape(-1),="" [x1,="" y2]))="" 1;="" destinate="" boxes="" xx1="np.zeros_like(x1)" yy1="np.zeros_like(y1)" xx2="w.copy()" yy2="h.copy()" left="" side="" out="" i="x1" <="" xx1[i]="0" (0="" x1[i])="" [i]="0" top="" yy1[i]="0" y1[i])="" right=""> imw - 1
+            xx2[i] = (w[i]-1) + (imw-1 - x2[i])
+            x2 [i] = imw - 1
+            ## bottom side out of image
+            i = y2 > imh - 1
+            yy2[i] = (h[i]-1) + (imh-1 - y2[i])
+            y2 [i] = imh - 1
+
+            return [x1, y1, x2, y2, xx1, yy1, xx2, yy2]
+
+        imh, imw, _ = image.shape
+        n_boxes = bbox_s.shape[0]
+
+        x1, y1, x2, y2, score = np.hsplit(bbox_s, 5)    
+        pw = x2 - x1 +1; ph = y2 - y1 + 1
+        pshape = np.hstack([ph, pw, 3*np.ones(shape=(score.shape[0], 1))]).astype('int')   # (n_boxes, 2)
+
+        x1, y1, x2, y2, xx1, yy1, xx2, yy2 = locate(bbox_s, imh, imw) # (n_boxes, 1)
+
+        patches = []
+        for i_boxes in range(n_boxes):
+            patch = np.zeros(shape=pshape[i_boxes], dtype='uint8')
+            patch[yy1[i_boxes]: yy2[i_boxes], xx1[i_boxes]: xx2[i_boxes]] = image[y1[i_boxes]: y2[i_boxes], x1[i_boxes]: x2[i_boxes]]
+            patch = cv2.resize(patch, (size, size))
+            patches += [patch]
+
+        return patches
+</=></=></code></pre>
+</details>
+
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
+<li><a href="https://arxiv.org/abs/1604.02878" target="_blank" rel="noopener">Joint Face Detection and Alignment using Multi-task Cascaded Convolutional Networks</a></li>
+<li><a href="https://github.com/kpzhang93/MTCNN_face_detection_alignment" target="_blank" rel="noopener">kpzhang93/MTCNN_face_detection_alignment</a></li>
+<li><a href="https://github.com/AITTSMD/MTCNN-Tensorflow" target="_blank" rel="noopener">AITTSMD/MTCNN-Tensorflow</a></li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/30/无所畏/" rel="next" title="无所畏">
+                <i class="fa fa-chevron-left"></i> 无所畏
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/08/Install-nVidia-drivers-on-Ubuntu/" rel="prev" title="Install nVidia drivers on Ubuntu">
+                Install nVidia drivers on Ubuntu <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Louis Hsu">
+            
+              <p class="site-author-name" itemprop="name">Louis Hsu</p>
+              <p class="site-description motion-element" itemprop="description">技术博客？</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">41</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/isLouisHsu" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://is.louishsu@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/islouishsu" target="_blank" title="Zhihu"><i class="fa fa-fw fa-zhihu"></i>Zhihu</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/islouishsu" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=517565384&auto=1&height=66"></iframe>
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#算法对比"><span class="nav-number">2.</span> <span class="nav-text">算法对比</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#网络结构"><span class="nav-number">3.</span> <span class="nav-text">网络结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-P-Net：-Proposal-Network"><span class="nav-number">3.1.</span> <span class="nav-text">1. P-Net： Proposal Network</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-R-Net：-Refine-Network"><span class="nav-number">3.2.</span> <span class="nav-text">2. R-Net： Refine Network</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-O-Net：-Output-Network"><span class="nav-number">3.3.</span> <span class="nav-text">3. O-Net： Output Network</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#训练数据"><span class="nav-number">4.</span> <span class="nav-text">训练数据</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-数据集"><span class="nav-number">4.1.</span> <span class="nav-text">1. 数据集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-训练数据生成"><span class="nav-number">4.2.</span> <span class="nav-text">2. 训练数据生成</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#损失函数"><span class="nav-number">5.</span> <span class="nav-text">损失函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Classification-loss"><span class="nav-number">5.1.</span> <span class="nav-text">1. Classification loss</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Regression-loss"><span class="nav-number">5.2.</span> <span class="nav-text">2. Regression loss</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-OHEM"><span class="nav-number">5.3.</span> <span class="nav-text">3. OHEM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Total-Loss"><span class="nav-number">5.4.</span> <span class="nav-text">4. Total Loss</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#检测算法"><span class="nav-number">6.</span> <span class="nav-text">检测算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-候选框生成"><span class="nav-number">6.1.</span> <span class="nav-text">1. 候选框生成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-候选框筛除"><span class="nav-number">6.2.</span> <span class="nav-text">2. 候选框筛除</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码"><span class="nav-number">7.</span> <span class="nav-text">代码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">8.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Louis Hsu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+</body>
+</html>
