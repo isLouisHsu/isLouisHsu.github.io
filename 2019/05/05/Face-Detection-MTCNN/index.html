@@ -119,7 +119,11 @@
 <meta property="og:image" content="http://yoursite.com/2019/05/05/Face-Detection-MTCNN/mtcnn.png">
 <meta property="og:image" content="http://yoursite.com/2019/05/05/Face-Detection-MTCNN/detect_demo.png">
 <meta property="og:image" content="http://yoursite.com/2019/05/05/Face-Detection-MTCNN/landmark_demo.png">
-<meta property="og:updated_time" content="2019-05-13T05:35:01.257Z">
+<meta property="og:image" content="http://yoursite.com/2019/05/05/Face-Detection-MTCNN/offsets.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/05/05/Face-Detection-MTCNN/pnet_gen_box.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/05/05/Face-Detection-MTCNN/nms.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/05/05/Face-Detection-MTCNN/iou.jpg">
+<meta property="og:updated_time" content="2019-05-21T10:49:05.515Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Face Detection: MTCNN">
 <meta name="twitter:description" content="前言MTCNN即Multi-task Cascaded Convolutional Networks，利用深度学习方法进行人脸识别、检测与关键点定位，可谓结合机器视觉领域三大任务为一体。 该算法中，人脸检测与识别视作分类任务，即判别框内图像是否包含人脸；定位视作回归任务，共需确定7个坐标点，依次为：回归框左上、右下坐标，左眼、右眼、鼻尖、左嘴角、右嘴角坐标。 在设计损失函数时，分类任务采用交叉熵(">
@@ -414,7 +418,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-05-13 13:35:01" itemprop="dateModified" datetime="2019-05-13T13:35:01+08:00">2019-05-13</time>
+                <time title="修改时间：2019-05-21 18:49:05" itemprop="dateModified" datetime="2019-05-21T18:49:05+08:00">2019-05-21</time>
               
             
           </span>
@@ -507,6 +511,7 @@
 </ul>
 <h2 id="2-训练数据生成"><a href="#2-训练数据生成" class="headerlink" title="2. 训练数据生成"></a>2. 训练数据生成</h2><p>采用了<code>Hard Example Mining</code>，后一网络的训练数据由前一网络结果生成，即先用训练好的前一网络进行数据评估，在评分较低、难以检测的数据中继续采样。在生成数据时，使用数据增广。</p>
 <p>七个关键点坐标转换为偏移量<code>(offset)</code>，使其不受图像缩放影响，且数值较小便于网络收敛，计算方法如下</p>
+<p><img src="/2019/05/05/Face-Detection-MTCNN/offsets.jpg" alt="offsets"></p>
 <ul>
 <li><p>Bounding Box</p>
 <script type="math/tex; mode=display">
@@ -628,7 +633,8 @@ loss_coef = {
 </details>
 
 <h1 id="检测算法"><a href="#检测算法" class="headerlink" title="检测算法"></a>检测算法</h1><p>检测算法以功能区分，主要分成两个部分：候选框生成与候选框筛除。</p>
-<h2 id="1-候选框生成"><a href="#1-候选框生成" class="headerlink" title="1. 候选框生成"></a>1. 候选框生成</h2><p>该步骤使用的网络为<code>PNet</code>。指定超参数<code>minface</code>，对于任意尺寸输入的图像<code>H × W</code>，先将其缩放</p>
+<h2 id="1-候选框生成"><a href="#1-候选框生成" class="headerlink" title="1. 候选框生成"></a>1. 候选框生成</h2><p><img src="/2019/05/05/Face-Detection-MTCNN/pnet_gen_box.jpg" alt="pnet_gen_box"></p>
+<p>该步骤使用的网络为<code>PNet</code>。指定超参数<code>minface</code>，对于任意尺寸输入的图像<code>H × W</code>，先将其缩放</p>
 <script type="math/tex; mode=display">
 H_c = H × \frac{12}{minface}</script><script type="math/tex; mode=display">
 W_c = W × \frac{12}{minface}</script><p>指定超参数<code>factor</code>，更新缩小尺度，将图片缩小，在每个尺度上进行计算，即</p>
@@ -649,6 +655,35 @@ y_2 = y_1 + \frac{cellsize}{scale}</script><p>其中<code>cellsize</code>为超�
 <li>设定阈值，只保留分类评估大于阈值的结果；</li>
 <li>对剩余结果进行<code>NMS</code>，输出结果；</li>
 </ul>
+<h2 id="3-NMS"><a href="#3-NMS" class="headerlink" title="3. NMS"></a>3. NMS</h2><p><img src="/2019/05/05/Face-Detection-MTCNN/nms.jpg" alt="nms"></p>
+<p>例如，有中三个候选框a, b, c，其评分依次为0.8, 0.7, 0.9，设定NMS阈值</p>
+<script type="math/tex; mode=display">
+thresh=0.4</script><ol>
+<li>先将其排序，以降序排序为c, a, b；</li>
+<li>保存当前评分最高的回归框，即c；</li>
+<li><p>计算c与a, b的IoU，计算方法如下</p>
+<p> <img src="/2019/05/05/Face-Detection-MTCNN/iou.jpg" alt="iou"></p>
+<script type="math/tex; mode=display">
+ IoU = \frac{Intersection}{Union}</script><p> 其中</p>
+<script type="math/tex; mode=display">
+ Intersection = w_{inter} × h_{inter}</script><script type="math/tex; mode=display">
+ w_{inter} = \min (x^a_2, x^b_2) - \max (x^a_1, x^b_1)</script><script type="math/tex; mode=display">
+ h_{inter} = \min (y^a_2, y^b_2) - \max (y^a_1, y^b_1)</script><p> 而</p>
+<script type="math/tex; mode=display">
+ Union = Area_a + Area_b - Intersection</script></li>
+<li><p>则c与a, b的IoU为</p>
+<script type="math/tex; mode=display">
+ IoU_{a,c} = \frac{1×8}{10×9+9×11-1×8}=0.044</script><script type="math/tex; mode=display">
+ IoU_{a,b} = \frac{4×6}{10×9+10×11-4×6}=0.136</script><p> 均小于阈值，故无框被删除。</p>
+</li>
+<li><p>保存当前评分最高的回归框，即a；</p>
+</li>
+<li><p>计算a与b的IoU</p>
+<script type="math/tex; mode=display">
+ IoU_{a,b} = \frac{7×9}{9×11+10×11-7×9} = 0.432</script><p> 大于阈值，删除候选框b</p>
+</li>
+<li>最终保留a，c。</li>
+</ol>
 <h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><p>详情查看<a href="https://github.com/isLouisHsu/MTCNN_Darknet/tree/master/torch_mtcnn" target="_blank" rel="noopener">Github</a>。</p>
 <details>
 <summary>展开查看Detector代码</summary>
@@ -1273,7 +1308,7 @@ class MtcnnDetector(object):
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#算法对比"><span class="nav-number">2.</span> <span class="nav-text">算法对比</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#网络结构"><span class="nav-number">3.</span> <span class="nav-text">网络结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-P-Net：-Proposal-Network"><span class="nav-number">3.1.</span> <span class="nav-text">1. P-Net： Proposal Network</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-R-Net：-Refine-Network"><span class="nav-number">3.2.</span> <span class="nav-text">2. R-Net： Refine Network</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-O-Net：-Output-Network"><span class="nav-number">3.3.</span> <span class="nav-text">3. O-Net： Output Network</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#训练数据"><span class="nav-number">4.</span> <span class="nav-text">训练数据</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-数据集"><span class="nav-number">4.1.</span> <span class="nav-text">1. 数据集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-训练数据生成"><span class="nav-number">4.2.</span> <span class="nav-text">2. 训练数据生成</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#损失函数"><span class="nav-number">5.</span> <span class="nav-text">损失函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Classification-loss"><span class="nav-number">5.1.</span> <span class="nav-text">1. Classification loss</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Regression-loss"><span class="nav-number">5.2.</span> <span class="nav-text">2. Regression loss</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-OHEM"><span class="nav-number">5.3.</span> <span class="nav-text">3. OHEM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Total-Loss"><span class="nav-number">5.4.</span> <span class="nav-text">4. Total Loss</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#检测算法"><span class="nav-number">6.</span> <span class="nav-text">检测算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-候选框生成"><span class="nav-number">6.1.</span> <span class="nav-text">1. 候选框生成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-候选框筛除"><span class="nav-number">6.2.</span> <span class="nav-text">2. 候选框筛除</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码"><span class="nav-number">7.</span> <span class="nav-text">代码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">8.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#算法对比"><span class="nav-number">2.</span> <span class="nav-text">算法对比</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#网络结构"><span class="nav-number">3.</span> <span class="nav-text">网络结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-P-Net：-Proposal-Network"><span class="nav-number">3.1.</span> <span class="nav-text">1. P-Net： Proposal Network</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-R-Net：-Refine-Network"><span class="nav-number">3.2.</span> <span class="nav-text">2. R-Net： Refine Network</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-O-Net：-Output-Network"><span class="nav-number">3.3.</span> <span class="nav-text">3. O-Net： Output Network</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#训练数据"><span class="nav-number">4.</span> <span class="nav-text">训练数据</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-数据集"><span class="nav-number">4.1.</span> <span class="nav-text">1. 数据集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-训练数据生成"><span class="nav-number">4.2.</span> <span class="nav-text">2. 训练数据生成</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#损失函数"><span class="nav-number">5.</span> <span class="nav-text">损失函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Classification-loss"><span class="nav-number">5.1.</span> <span class="nav-text">1. Classification loss</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Regression-loss"><span class="nav-number">5.2.</span> <span class="nav-text">2. Regression loss</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-OHEM"><span class="nav-number">5.3.</span> <span class="nav-text">3. OHEM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Total-Loss"><span class="nav-number">5.4.</span> <span class="nav-text">4. Total Loss</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#检测算法"><span class="nav-number">6.</span> <span class="nav-text">检测算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-候选框生成"><span class="nav-number">6.1.</span> <span class="nav-text">1. 候选框生成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-候选框筛除"><span class="nav-number">6.2.</span> <span class="nav-text">2. 候选框筛除</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-NMS"><span class="nav-number">6.3.</span> <span class="nav-text">3. NMS</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码"><span class="nav-number">7.</span> <span class="nav-text">代码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">8.</span> <span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>
