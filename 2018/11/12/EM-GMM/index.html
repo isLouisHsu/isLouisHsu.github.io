@@ -562,7 +562,7 @@ E_w\left[
 <script type="math/tex; mode=display">
 \theta^{(t+1)} 
 = \arg \max L(\theta|\theta^{(t)}) \tag{M-step}</script><p>我们需要不断最大化$L(\theta | \theta^{(t)})$来不断优化，这就是所谓的<code>EM算法</code>，<code>E-step</code>是指求出期望，<code>M-step</code>是指迭代更新参数<br><img src="/2018/11/12/EM-GMM/EM算法图解.png" alt="EM算法图解"></p>
-<p>伪代码如下<br><figure class="highlight monkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">According <span class="keyword">to</span> prior knowledge set </span><br><span class="line">    $\theta$</span><br><span class="line"><span class="keyword">Repeat</span> <span class="keyword">until</span> convergence&#123;</span><br><span class="line">    E-<span class="keyword">step</span>: The expectation of hidden variables</span><br><span class="line">    M-<span class="keyword">step</span>: Finding the maximum of likelihood <span class="function"><span class="keyword">function</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>伪代码如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">According to prior knowledge set </span><br><span class="line">    $\theta$</span><br><span class="line">Repeat until convergence&#123;</span><br><span class="line">    E-step: The expectation of hidden variables</span><br><span class="line">    M-step: Finding the maximum of likelihood function</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>实际上，从边缘概率与条件概率入手</p>
 <script type="math/tex; mode=display">
 \sum_i \log P(x^{(i)}|\theta)
@@ -849,7 +849,7 @@ P(w_k^{(i)}|\mu_k^{(t)}, \Sigma_k^{(t)})
   \mu_k^{(t+1)} = \frac{\sum_i \gamma^{(i)(t)}_k x^{(i)}}{\sum_i \gamma^{(i)(t)}_k}</script><script type="math/tex; mode=display">
   \Sigma_k^{(t+1)} = \frac{\sum_i \gamma^{(i)(t)}_k (x^{(i)} - \mu_k) (x^{(i)} - \mu_k)^T}{\sum_i \gamma^{(i)(t)}_k}</script><script type="math/tex; mode=display">
   \pi_k^{(t+1)} = \frac{\sum_i \gamma^{(i)(t)}_k}{N}</script><p>  伪代码为</p>
-  <figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">According <span class="keyword">to</span> prior knowledge set</span><br><span class="line">    <span class="string">\pi^&#123;(t)&#125;(n_clusters,)</span></span><br><span class="line">    <span class="string">\mu^&#123;(t)&#125;(n_clusters,</span> n_features)</span><br><span class="line">    <span class="string">\Sigma^&#123;(t)&#125;(n_clusters,</span> n_features, n_features)</span><br><span class="line">Repeat <span class="keyword">until</span> convergence&#123;</span><br><span class="line">    <span class="comment"># E-step: calculate \gamma^&#123;(t)&#125;</span></span><br><span class="line">        <span class="string">\gamma(n_samples,</span> n_clusters)</span><br><span class="line">    <span class="comment"># M-step: update \pi, \mu, \Sigma</span></span><br><span class="line">        <span class="string">\pi^&#123;(t+1)&#125;(n_clusters,)</span></span><br><span class="line">        <span class="string">\mu^&#123;(t+1)&#125;(n_clusters,</span> n_features)</span><br><span class="line">        <span class="string">\Sigma^&#123;(t+1)&#125;(n_clusters,</span> n_features, n_features)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">According to prior knowledge set</span><br><span class="line">    \pi^&#123;(t)&#125;(n_clusters,)</span><br><span class="line">    \mu^&#123;(t)&#125;(n_clusters, n_features)</span><br><span class="line">    \Sigma^&#123;(t)&#125;(n_clusters, n_features, n_features)</span><br><span class="line">Repeat until convergence&#123;</span><br><span class="line">    # E-step: calculate \gamma^&#123;(t)&#125;</span><br><span class="line">        \gamma(n_samples, n_clusters)</span><br><span class="line">    # M-step: update \pi, \mu, \Sigma</span><br><span class="line">        \pi^&#123;(t+1)&#125;(n_clusters,)</span><br><span class="line">        \mu^&#123;(t+1)&#125;(n_clusters, n_features)</span><br><span class="line">        \Sigma^&#123;(t+1)&#125;(n_clusters, n_features, n_features)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>初始点的选择可以随机选择，也可使用<code>K-Means</code></p>
 </blockquote>
@@ -992,7 +992,7 @@ P(w_k^{(i)}|\mu_k^{(t)}, \Sigma_k^{(t)})
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">41</span>
+                    <span class="site-state-item-count">42</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1027,7 +1027,9 @@ P(w_k^{(i)}|\mu_k^{(t)}, \Sigma_k^{(t)})
                     
                       
                     
-                    <span class="site-state-item-count">10</span>
+                      
+                    
+                    <span class="site-state-item-count">11</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>

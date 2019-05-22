@@ -471,7 +471,7 @@
 <p>踩坑？？？全部给我踩平！！！</p>
 </blockquote>
 <p>来自<a href="https://www.lintcode.com/ai/spam-message-classification/overview" target="_blank" rel="noopener">LintCode垃圾短信分类</a><br><a href="https://github.com/isLouisHsu/Python-Examples-for-Pattern-Recognition-Course/tree/master/spam%20or%20ham" target="_blank" rel="noopener">@Github: spam or ham</a></p>
-<h1 id="垒代码"><a href="#垒代码" class="headerlink" title="垒代码"></a>垒代码</h1><h2 id="预处理及向量化"><a href="#预处理及向量化" class="headerlink" title="预处理及向量化"></a>预处理及向量化</h2><p>观察各文本后，发现各文本中包含的单词多种多样，包含标点、数字等，例如<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- Go <span class="keyword">until</span> jurong point, crazy.. Available only <span class="keyword">in</span> bugis n great world la e buffet... Cine there got amore wat...</span><br><span class="line">- XXXMobileMovieClub: To use your credit, click <span class="keyword">the</span> WAP link <span class="keyword">in</span> <span class="keyword">the</span> next txt message <span class="keyword">or</span> click here&gt;&gt; <span class="keyword">http</span>://wap. </span><br><span class="line">- <span class="number">07732584351</span> - Rodger Burns - MSG = We tried <span class="built_in">to</span> call you re your reply <span class="built_in">to</span> our sms <span class="keyword">for</span> <span class="keyword">a</span> free nokia mobile + free camcorder.</span><br></pre></td></tr></table></figure></p>
+<h1 id="垒代码"><a href="#垒代码" class="headerlink" title="垒代码"></a>垒代码</h1><h2 id="预处理及向量化"><a href="#预处理及向量化" class="headerlink" title="预处理及向量化"></a>预处理及向量化</h2><p>观察各文本后，发现各文本中包含的单词多种多样，包含标点、数字等，例如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- Go until jurong point, crazy.. Available only in bugis n great world la e buffet... Cine there got amore wat...</span><br><span class="line">- XXXMobileMovieClub: To use your credit, click the WAP link in the next txt message or click here&gt;&gt; http://wap. </span><br><span class="line">- 07732584351 - Rodger Burns - MSG = We tried to call you re your reply to our sms for a free nokia mobile + free camcorder.</span><br></pre></td></tr></table></figure></p>
 <p>且按空格分词后，部分单词中仍包含<code>whitespace</code>，故选择的预处理方案是，<strong>去除分词后文本中的标点、数字、空格等，并将单词中字母全部转为小写</strong>。</p>
 <blockquote>
 <p>中文分词可采用<code>jieba</code>(街霸？)</p>
@@ -653,7 +653,7 @@ if　p(x|c_i)P(c_i) > p(x|c_j)P(c_j),　then　x \in c_i</script><p>但实际效
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">41</span>
+                    <span class="site-state-item-count">42</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -688,7 +688,9 @@ if　p(x|c_i)P(c_i) > p(x|c_j)P(c_j),　then　x \in c_i</script><p>但实际效
                     
                       
                     
-                    <span class="site-state-item-count">10</span>
+                      
+                    
+                    <span class="site-state-item-count">11</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
