@@ -108,35 +108,34 @@
 
 
 
-  <meta name="description" content="引言PCA全称Principal Component Analysis，即主成分分析，是一种常用的数据降维方法。它可以通过线性变换将原始数据变换为一组各维度线性无关的表示，以此来提取数据的主要线性分量。 向量的投影现有两个任意不共线向量$\vec{u}, \vec{v}$，将$\vec{u}$投射到$\vec{v}$上 投影后，可以得到两个正交向量  \vec{u}&apos; · (\vec{u} - \">
-<meta name="keywords" content="降维">
+  <meta name="description" content="前言在目标检测中，若多个回归框(Bounding Box)重叠内容较多，则可以保留其中几个，删除其余冗余的框，非极大值抑制(Non-Maximum Suppression, NMS)算法可实现该功能。 那么用什么指标评价两个回归框重叠过多呢，以下介绍图像的交并比IoU(Intersection over Union)。 IoU原理IoU的思路非常简单，即计算两个回归框交集部分面积与并集面积的比值，">
+<meta name="keywords" content="Object Detection">
 <meta property="og:type" content="article">
-<meta property="og:title" content="PCA">
-<meta property="og:url" content="http://yoursite.com/2018/10/22/PCA/index.html">
+<meta property="og:title" content="NMS &amp; soft-NMS">
+<meta property="og:url" content="http://yoursite.com/2019/05/26/NMS-softer-NMS/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="引言PCA全称Principal Component Analysis，即主成分分析，是一种常用的数据降维方法。它可以通过线性变换将原始数据变换为一组各维度线性无关的表示，以此来提取数据的主要线性分量。 向量的投影现有两个任意不共线向量$\vec{u}, \vec{v}$，将$\vec{u}$投射到$\vec{v}$上 投影后，可以得到两个正交向量  \vec{u}&apos; · (\vec{u} - \">
+<meta property="og:description" content="前言在目标检测中，若多个回归框(Bounding Box)重叠内容较多，则可以保留其中几个，删除其余冗余的框，非极大值抑制(Non-Maximum Suppression, NMS)算法可实现该功能。 那么用什么指标评价两个回归框重叠过多呢，以下介绍图像的交并比IoU(Intersection over Union)。 IoU原理IoU的思路非常简单，即计算两个回归框交集部分面积与并集面积的比值，">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/2018/10/22/PCA/向量投影.jpg">
-<meta property="og:image" content="http://yoursite.com/2018/10/22/PCA/PCA动态图.gif">
-<meta property="og:image" content="http://yoursite.com/2018/10/22/PCA/pca_restructure1.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/22/PCA/pca_restructure2.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/22/PCA/kernel_pca.jpg">
-<meta property="og:image" content="http://yoursite.com/2018/10/22/PCA/2d_restructed.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/22/PCA/face_origin.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/22/PCA/face_reduced.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/22/PCA/face_restructed.png">
-<meta property="og:updated_time" content="2019-05-01T10:47:18.706Z">
+<meta property="og:image" content="http://yoursite.com/2019/05/26/NMS-softer-NMS/IoU1.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/05/26/NMS-softer-NMS/IoU2.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/05/26/NMS-softer-NMS/NMS1.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/05/26/NMS-softer-NMS/soft-NMS1.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/05/26/NMS-softer-NMS/NMS2.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/05/26/NMS-softer-NMS/f1.png">
+<meta property="og:image" content="http://yoursite.com/2019/05/26/NMS-softer-NMS/f2.png">
+<meta property="og:image" content="http://yoursite.com/2019/05/26/NMS-softer-NMS/f3.png">
+<meta property="og:updated_time" content="2019-05-26T06:11:25.041Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="PCA">
-<meta name="twitter:description" content="引言PCA全称Principal Component Analysis，即主成分分析，是一种常用的数据降维方法。它可以通过线性变换将原始数据变换为一组各维度线性无关的表示，以此来提取数据的主要线性分量。 向量的投影现有两个任意不共线向量$\vec{u}, \vec{v}$，将$\vec{u}$投射到$\vec{v}$上 投影后，可以得到两个正交向量  \vec{u}&apos; · (\vec{u} - \">
-<meta name="twitter:image" content="http://yoursite.com/2018/10/22/PCA/向量投影.jpg">
+<meta name="twitter:title" content="NMS &amp; soft-NMS">
+<meta name="twitter:description" content="前言在目标检测中，若多个回归框(Bounding Box)重叠内容较多，则可以保留其中几个，删除其余冗余的框，非极大值抑制(Non-Maximum Suppression, NMS)算法可实现该功能。 那么用什么指标评价两个回归框重叠过多呢，以下介绍图像的交并比IoU(Intersection over Union)。 IoU原理IoU的思路非常简单，即计算两个回归框交集部分面积与并集面积的比值，">
+<meta name="twitter:image" content="http://yoursite.com/2019/05/26/NMS-softer-NMS/IoU1.jpg">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/10/22/PCA/">
+  <link rel="canonical" href="http://yoursite.com/2019/05/26/NMS-softer-NMS/">
 
 
 
@@ -146,7 +145,7 @@
   };
 </script>
 
-  <title>PCA | LOUIS' BLOG</title>
+  <title>NMS & soft-NMS | LOUIS' BLOG</title>
   
 
 
@@ -361,7 +360,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/22/PCA/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/26/NMS-softer-NMS/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Louis Hsu">
@@ -378,7 +377,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">PCA
+          <h1 class="post-title" itemprop="name headline">NMS & soft-NMS
               
             
           </h1>
@@ -403,24 +402,12 @@
                 
               
 
-              <time title="创建时间：2018-10-22 21:34:09" itemprop="dateCreated datePublished" datetime="2018-10-22T21:34:09+08:00">2018-10-22</time>
+              <time title="创建时间：2019-05-26 11:17:09 / 修改时间：14:11:25" itemprop="dateCreated datePublished" datetime="2019-05-26T11:17:09+08:00">2019-05-26</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-05-01 18:47:18" itemprop="dateModified" datetime="2019-05-01T18:47:18+08:00">2019-05-01</time>
               
             
           </span>
@@ -437,7 +424,21 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Algorithm/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Algorithm/Machine-Learning/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a></span>
 
                 
                 
@@ -478,356 +479,71 @@
       
 
       
-        <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p><code>PCA</code>全称<code>Principal Component Analysis</code>，即主成分分析，是一种常用的数据降维方法。它可以通过线性变换将原始数据变换为一组各维度线性无关的表示，以此来提取数据的主要线性分量。</p>
-<h1 id="向量的投影"><a href="#向量的投影" class="headerlink" title="向量的投影"></a>向量的投影</h1><p>现有两个任意不共线向量$\vec{u}, \vec{v}$，将$\vec{u}$投射到$\vec{v}$上<br><img src="/2018/10/22/PCA/向量投影.jpg" alt="向量投影"></p>
-<p>投影后，可以得到两个正交向量</p>
-<script type="math/tex; mode=display">
-\vec{u}' · (\vec{u} - \vec{u}') = 0</script><p>我们设</p>
-<script type="math/tex; mode=display">
-\vec{u}' = \mu \vec{v} \tag{1}</script><p>代入后有</p>
-<script type="math/tex; mode=display">
-\mu \vec{v} · (\vec{u} - \mu \vec{v}) = 0</script><p>引入矩阵运算，即</p>
-<script type="math/tex; mode=display">
-(\mu v)^T (u - \mu v) = 0</script><p>有</p>
-<script type="math/tex; mode=display">
-v^T u = \mu v^T v</script><p>则得到$u’$以$v$为基向量的坐标</p>
-<script type="math/tex; mode=display">
-\mu  = (v^T v)^{-1} v^T u \tag{2}</script><p>所以得到</p>
-<script type="math/tex; mode=display">
-u' = v (v^T v)^{-1} v^T u \tag{*}</script><blockquote>
-<ul>
-<li><p>坐标变换求解投影向量：$u’$可视作$u$经坐标变换$u’ = P u$得到，所以</p>
-<script type="math/tex; mode=display">
-P = v (v^T v)^{-1} v^T</script></li>
-<li><p>推广至多个向量的投影，即得到</p>
-<script type="math/tex; mode=display">
-P = X (X^T X)^{-1} X^T</script><p>这与<a href="https://louishsu.xyz/2018/10/18/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" target="_blank" rel="noopener">线性回归</a>中得到的结论一致。</p>
-</li>
-</ul>
-</blockquote>
-<p>实际上</p>
-<script type="math/tex; mode=display">
-u' = v (v^T v)^{-1} v^T u = \frac{v}{||v||} (\frac{v}{||v||})^T u</script><p>记单位向量$\frac{v}{||v||}$为$v_0$，得到</p>
-<script type="math/tex; mode=display">
-u' = v_0 v_0^T u</script><p>由几何关系，可以计算得投影后的长度为</p>
-<script type="math/tex; mode=display">
-d 
-= ||u|| \cos \theta 
-= ||u|| \frac{v^T u}{||u||||v||}
-= v_0^T u</script><p>所以在向量投影中，$u^T v_0$表示以$v_0$为基向量的坐标。</p>
-<h1 id="PCA"><a href="#PCA" class="headerlink" title="PCA"></a>PCA</h1><p>现在有$N$维数据集$D=\{x^{(1)}, x^{(2)}, …, x^{(M)}\}$，其中$x^{(i)} = \left[x^{(i)}_1, x^{(i)}_2, …, x^{(i)}_N\right]^T$，各维特征$D_{j}$间存在线性相关性，利用主成分分析可使</p>
-<ul>
-<li>数据维度降低；</li>
-<li>提取主成分，且各成分间不相关。</li>
-</ul>
-<blockquote>
-<p>说明</p>
-<ul>
-<li>由于选取的特征轴是正交的，所以计算结果线性无关；</li>
-<li>提取了方差较大的几个特征，为主要线性分量。</li>
-</ul>
-</blockquote>
-<p>以二维空间中的数据$x^{(i)} = \left[\begin{matrix}<br>    x^{(i)}_1 \\ x^{(i)}_2<br>\end{matrix}\right]$为例，维度可降至一维，如下图所示。<br><img src="/2018/10/22/PCA/PCA动态图.gif" alt="PCA动态图"></p>
-<p>主轴可有无穷多种选择，那么问题就是<strong>如何选取最优的主轴</strong>。先给出<code>PCA</code>的计算步骤。</p>
-<h2 id="计算步骤"><a href="#计算步骤" class="headerlink" title="计算步骤"></a>计算步骤</h2><p>输入的$M$个$N$维样本，有样本矩阵</p>
-<script type="math/tex; mode=display">
-X_{N×M} = \left[x^{(1)}, x^{(2)}, ..., x^{(M)} \right]
-= \left[
-    \begin{matrix}
-        x^{(1)}_1 & x^{(2)}_1 & ... & x^{(M)}_1 \\
-        x^{(1)}_2 & x^{(2)}_2 & ... & x^{(M)}_2 \\
-        ... \\
-        x^{(1)}_N & x^{(2)}_N & ... & x^{(M)}_N \\
-    \end{matrix}
-\right]</script><h3 id="投影"><a href="#投影" class="headerlink" title="投影"></a>投影</h3><ol>
-<li><p>对每个维度(行)进行去均值化</p>
-<script type="math/tex; mode=display">
-X_j := X_j - \mu_j</script><p> 其中$\mu_j = \overline{X_j}$，$j = 1, 2, …, N$</p>
-</li>
-<li><p>求各维度间的协方差矩阵$\Sigma_{N×N}$</p>
-<script type="math/tex; mode=display">\Sigma_{ij} = Cov(x_i, x_j)</script><p> 或</p>
-<script type="math/tex; mode=display">
- \Sigma = \frac{1}{M} X X^T</script></li>
-</ol>
-<blockquote>
-<p>注：</p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在目标检测中，若多个回归框<code>(Bounding Box)</code>重叠内容较多，则可以保留其中几个，删除其余冗余的框，非极大值抑制<code>(Non-Maximum Suppression, NMS)</code>算法可实现该功能。</p>
+<p>那么用什么指标评价两个回归框重叠过多呢，以下介绍图像的交并比<code>IoU(Intersection over Union)</code>。</p>
+<h1 id="IoU"><a href="#IoU" class="headerlink" title="IoU"></a>IoU</h1><h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p><code>IoU</code>的思路非常简单，即计算两个回归框交集部分面积与并集面积的比值，如下图，其计算公式为</p>
+<script type="math/tex; mode=display">IoU_{a, b} = \frac{Area_{inter}}{Area_{union}}</script><p>其中</p>
+<script type="math/tex; mode=display">Area_{union} = Area_{a} + Area_{b} - Area_{inter}</script><script type="math/tex; mode=display">Area_{inter} = w_{inter}*h_{inter}</script><script type="math/tex; mode=display">w_{inter} = x^a_2 - x^b_1</script><script type="math/tex; mode=display">h_{inter} = y^a_2 - y^b_1</script><p><img src="/2019/05/26/NMS-softer-NMS/IoU1.jpg" alt="iou1"></p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p>算法实现中，比较关键的一点是计算交集部分的坐标点，记两个回归框$a, b$左上角坐标为$(x^<em>_1, y^</em>_1)$，右下角为$(x^<em>_2, y^</em>_2)$</p>
+<p>则应有</p>
+<script type="math/tex; mode=display">x^{inter}_1 = \max \{x^a_1, x^b_1\}, y^{inter}_1 = \max \{y^a_1, y^b_1\}</script><script type="math/tex; mode=display">x^{inter}_2 = \min \{x^a_2, x^b_2\}, y^{inter}_2 = \min \{y^a_2, y^b_2\}</script><p><img src="/2019/05/26/NMS-softer-NMS/IoU2.jpg" alt="IoU2"></p>
+<p>使用C/C++实现如下<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="keyword">float</span> x1, y1, x2, y2;</span><br><span class="line">&#125;bbox;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">bbox_overlap</span><span class="params">(<span class="keyword">float</span> ax1, <span class="keyword">float</span> ax2, <span class="keyword">float</span> bx1, <span class="keyword">float</span> bx2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">float</span> left  = _max(ax1, bx1);</span><br><span class="line">    <span class="keyword">float</span> right = _min(ax2, bx2);</span><br><span class="line">    <span class="keyword">float</span> gap = right - left;</span><br><span class="line">    <span class="keyword">return</span> gap;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">bbox_intersection</span><span class="params">(bbox a, bbox b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">float</span> w = bbox_overlap(a.x1, a.x2, b.x1, b.x2);</span><br><span class="line">    <span class="keyword">float</span> h = bbox_overlap(a.y1, a.y2, b.y1, b.y2);</span><br><span class="line">    <span class="keyword">if</span>(w &lt; <span class="number">0</span> || h &lt; <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">float</span> area = w*h;</span><br><span class="line">    <span class="keyword">return</span> area;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">bbox_area</span><span class="params">(bbox a)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">float</span> w = a.x2 - a.x1;</span><br><span class="line">    <span class="keyword">float</span> h = a.y2 - a.y1;</span><br><span class="line">    <span class="keyword">return</span> w*h;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">bbox_union</span><span class="params">(bbox a, bbox b, <span class="keyword">int</span> mode)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">float</span> u = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">float</span> area_a = bbox_area(a);</span><br><span class="line">    <span class="keyword">float</span> area_b = bbox_area(b);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (mode == <span class="number">0</span>)&#123;</span><br><span class="line">        u = area_a + area_b - bbox_intersection(a, b);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (mode == <span class="number">1</span>)&#123;</span><br><span class="line">        u = _min(area_a, area_b);</span><br><span class="line">    &#125; </span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> u;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">bbox_iou</span><span class="params">(bbox a, bbox b, <span class="keyword">int</span> mode)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">float</span> i = bbox_intersection(a, b);</span><br><span class="line">    <span class="keyword">float</span> u = bbox_union(a, b, mode);</span><br><span class="line">    <span class="keyword">return</span> i/u;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="NMS"><a href="#NMS" class="headerlink" title="NMS"></a>NMS</h1><p>以下图为例，其中三个候选框$a,b,c$，其评分依次为0.8, 0.7, 0.9，设定<code>IoU</code>阈值</p>
+<script type="math/tex; mode=display">thresh=0.4</script><p>计算步骤如下<br><img src="/2019/05/26/NMS-softer-NMS/NMS1.jpg" alt="NMS1"></p>
 <ol>
-<li><script type="math/tex; mode=display">
-X X^T = \left[
-           \begin{matrix}
-     \sum_{i=1}^M x^{(i)}_1 x^{(i)}_1 & 
-     \sum_{i=1}^M x^{(i)}_1 x^{(i)}_2 &
-     ... &
-     \sum_{i=1}^M x^{(i)}_1 x^{(i)}_N \\
-     \sum_{i=1}^M x^{(i)}_2 x^{(i)}_1 & 
-     \sum_{i=1}^M x^{(i)}_2 x^{(i)}_2 &
-     ... &
-     \sum_{i=1}^M x^{(i)}_2 x^{(i)}_N \\
-     ... &
-     ... &
-     ... &
-     ... \\
-     \sum_{i=1}^M x^{(i)}_N x^{(i)}_1 & 
-     \sum_{i=1}^M x^{(i)}_N x^{(i)}_2 &
-     ... &
-     \sum_{i=1}^M x^{(i)}_N x^{(i)}_N
- \end{matrix}
-\right]</script><script type="math/tex; mode=display">
-= \sum_{i=1}^M \left[
-           \begin{matrix}
-         x^{(i)}_1 x^{(i)}_1 & 
-         x^{(i)}_1 x^{(i)}_2 &
-         ... &
-         x^{(i)}_1 x^{(i)}_N \\
-         x^{(i)}_2 x^{(i)}_1 & 
-         x^{(i)}_2 x^{(i)}_2 &
-         ... &
-         x^{(i)}_2 x^{(i)}_N \\
-         ... &
-         ... &
-         ... &
-         ... \\
-         x^{(i)}_N x^{(i)}_1 & 
-         x^{(i)}_N x^{(i)}_2 &
-         ... &
-         x^{(i)}_N x^{(i)}_N
- \end{matrix}
-\right]</script><script type="math/tex; mode=display">
-= \sum_{i=1}^M x^{(i)} x^{(i)T}</script></li>
-<li><p>协方差定义式</p>
-<script type="math/tex; mode=display">
-   Cov(x,y)≝\frac{1}{n-1} ∑_{i=1}^n (x_i−\overline{x})^T(y_i−\overline{y})</script><p>其中$x=[x_1, x_2, …, x_n]^T, y=[y_1, y_2, …, y_n]^T$</p>
+<li>将其排序，如降序排序， 得到结果$c,a,b$；</li>
+<li>保存当前评分最高的回归框，即$c$；</li>
+<li>计算$c$与剩余框，即$a,b$的<code>IoU</code>，即<script type="math/tex; mode=display">IoU_{c,a} = \frac{1×8}{10×9 + 9×11 - 1×8} = 0.044</script><script type="math/tex; mode=display">IoU_{c,b} = \frac{4×6}{10×9 + 10×11 - 4×6} = 0.136</script></li>
+<li>无大于阈值的框，故无框被删除；</li>
+<li>保存当前评分最高的回归框，即$a$；</li>
+<li>计算$a$与剩余框即$b$的<code>IoU</code>，即<script type="math/tex; mode=display">IoU_{a,b} = \frac{7×9}{9×11 + 10×11 - 7×9} = 0.432</script></li>
+<li>大于阈值，故删除$b$；</li>
+<li>最终保留框$a,c$；</li>
+</ol>
+<h2 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h2><ol>
+<li><p>Python</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_nms</span><span class="params">(dets, thresh, mode=<span class="string">"Union"</span>)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Params:</span></span><br><span class="line"><span class="string">        dets:   &#123;ndarray(n_boxes, 5)&#125; x1, y1, x2, y2 score</span></span><br><span class="line"><span class="string">        thresh: &#123;float&#125; retain overlap &lt;= thresh</span></span><br><span class="line"><span class="string">        mode:   &#123;str&#125; 'Union' or 'Minimum'</span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        idx:   &#123;list[int]&#125; indexes to keep</span></span><br><span class="line"><span class="string">    Notes:</span></span><br><span class="line"><span class="string">        greedily select boxes with high confidence</span></span><br><span class="line"><span class="string">        idx boxes overlap &lt;= thresh</span></span><br><span class="line"><span class="string">        rule out overlap &gt; thresh</span></span><br><span class="line"><span class="string">        if thresh==1.0, keep all</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    x1 = dets[:, <span class="number">0</span>]</span><br><span class="line">    y1 = dets[:, <span class="number">1</span>]</span><br><span class="line">    x2 = dets[:, <span class="number">2</span>]</span><br><span class="line">    y2 = dets[:, <span class="number">3</span>]</span><br><span class="line">    scores = dets[:, <span class="number">4</span>]</span><br><span class="line"></span><br><span class="line">    areas = (x2 - x1 + <span class="number">1</span>) * (y2 - y1 + <span class="number">1</span>)</span><br><span class="line">    order = scores.argsort()[::<span class="number">-1</span>]</span><br><span class="line"></span><br><span class="line">    idx = []</span><br><span class="line">    <span class="keyword">while</span> order.size &gt; <span class="number">0</span>:</span><br><span class="line">        i = order[<span class="number">0</span>]</span><br><span class="line">        idx.append(i)</span><br><span class="line"></span><br><span class="line">        xx1 = np.maximum(x1[i], x1[order[<span class="number">1</span>:]])</span><br><span class="line">        yy1 = np.maximum(y1[i], y1[order[<span class="number">1</span>:]])</span><br><span class="line">        xx2 = np.minimum(x2[i], x2[order[<span class="number">1</span>:]])</span><br><span class="line">        yy2 = np.minimum(y2[i], y2[order[<span class="number">1</span>:]])</span><br><span class="line">        w = np.maximum(<span class="number">0.0</span>, xx2 - xx1 + <span class="number">1</span>)</span><br><span class="line">        h = np.maximum(<span class="number">0.0</span>, yy2 - yy1 + <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        inter = w * h</span><br><span class="line">        <span class="keyword">if</span> mode == <span class="string">"Union"</span>:</span><br><span class="line">            ovr = inter / (areas[i] + areas[order[<span class="number">1</span>:]] - inter)</span><br><span class="line">        <span class="keyword">elif</span> mode == <span class="string">"Minimum"</span>:</span><br><span class="line">            ovr = inter / np.minimum(areas[i], areas[order[<span class="number">1</span>:]])</span><br><span class="line"></span><br><span class="line">        inds = np.where(ovr &lt;= thresh)[<span class="number">0</span>]</span><br><span class="line">        order = order[inds + <span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> idx</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>C/C++</p>
+ <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">detect</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">float</span> score;    <span class="comment">/* 该框评分 */</span></span><br><span class="line">    bbox bx;        <span class="comment">/* 回归方框 */</span></span><br><span class="line">    bbox offset;    <span class="comment">/* 偏置 */</span></span><br><span class="line">    landmark mk;    <span class="comment">/* 位置 */</span></span><br><span class="line">&#125; detect;</span><br><span class="line"></span><br><span class="line"><span class="comment">// decending order, bubble</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">bsort</span><span class="params">(detect** dets, <span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n - <span class="number">1</span>; i++ )&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n - <span class="number">1</span> - i; j++ )&#123;</span><br><span class="line">            <span class="keyword">float</span> a = (*dets)[j].score;</span><br><span class="line">            <span class="keyword">float</span> b = (*dets)[j+<span class="number">1</span>].score;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (a &lt; b)&#123;</span><br><span class="line">                detect tmp = (*dets)[j];</span><br><span class="line">                (*dets)[j] = (*dets)[j+<span class="number">1</span>];</span><br><span class="line">                (*dets)[j+<span class="number">1</span>] = tmp;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> _nms(detect* dets, <span class="keyword">int</span> n, <span class="keyword">float</span> thresh, <span class="keyword">int</span> mode)</span><br><span class="line">&#123;</span><br><span class="line">    bsort(&amp;dets, n);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (dets[i].score == <span class="number">0</span>) <span class="keyword">continue</span>;   <span class="comment">// 表示该框已被删除</span></span><br><span class="line">        bbox a = dets[i].bx;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; n; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            bbox b = dets[j].bx;</span><br><span class="line">            <span class="keyword">if</span> (bbox_iou(a, b, mode) &gt; thresh)</span><br><span class="line">                dets[j].score = <span class="number">0</span>;          <span class="comment">// 删除该框</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-</blockquote>
-<ol>
-<li>求协方差矩阵$\Sigma$的特征值$λ_i$及其对应特征向量$α_i$，$i=1, …, N$；</li>
-<li><p>按照特征值从大到小排列特征对$(λ_i,α_i)$，选取$K$个最大特征值对应的特征向量作为降维后的主轴$ \beta_1, \beta_2, …, \beta_K $，其中$\beta_k$为单位向量</p>
+<h1 id="Soft-NMS"><a href="#Soft-NMS" class="headerlink" title="Soft-NMS"></a>Soft-NMS</h1><p>对于两个相邻较近的同类物体，如下图，<code>NMS</code>可能将左框删除，这是由于在删除同类别框时，只考虑了<code>IoU</code>重叠大小，并没有将两个框的评分引入计算，当两个框相邻很近但评分都较高时，不能简单地删除。</p>
+<p><img src="/2019/05/26/NMS-softer-NMS/soft-NMS1.jpg" alt="soft-NMS1"></p>
+<p>改进后的<code>soft-NMS</code>伪代码如下<br><img src="/2019/05/26/NMS-softer-NMS/NMS2.jpg" alt="NMS2"></p>
+<p>也可统一写作</p>
 <script type="math/tex; mode=display">
-\beta_k = \left[ \beta_{k1}, \beta_{k2}, ..., \beta_{kN} \right]^T</script><p>记</p>
+s_i \leftarrow s_i f(iou(\mathcal{M}, b_i))</script><p>其中<code>NMS</code>算法引入<code>hard threshold</code>，即</p>
 <script type="math/tex; mode=display">
-B_{N×K} = \left[ \beta_1, \beta_2, ..., \beta_K \right]</script><p>$K$的选取方法有如下两种：</p>
+f(iou(\mathcal{M}, b_i)) = \begin{cases}
+    1 & iou(\mathcal{M}, b_i) < N_t \\
+    0 & iou(\mathcal{M}, b_i) \geq N_t
+\end{cases}</script><p><img src="/2019/05/26/NMS-softer-NMS/f1.png" alt="f1"></p>
+<p>应考虑以下因素</p>
 <ul>
-<li>指定选取$K$个主轴</li>
-<li>保留$99\%$的方差<script type="math/tex; mode=display">\frac{\sum_{i=1}^K \lambda_i}{\sum_{j=1}^N \lambda_j} > 0.99</script></li>
+<li>相邻检测的分数应该降低到它们具有增加假阳性率<code>(false positive rate)</code>的可能性较小的程度，同时在排序的检测列表中高于明显的假阳性。</li>
+<li>完全去除具有低NMS阈值的相邻检测将是次优的并且当在高重叠阈值处执行评估时将增加未命中率。</li>
+<li>当使用高NMS阈值时，在一系列重叠阈值上测量的平均精度将下降。</li>
 </ul>
-</li>
+<p>基于以上分析，改进$f(iou(\mathcal{M}, b_i))$为</p>
+<script type="math/tex; mode=display">
+f(iou(\mathcal{M}, b_i)) = \begin{cases}
+    1 & iou(\mathcal{M}, b_i) < N_t \\
+    1 - iou(\mathcal{M}, b_i) & iou(\mathcal{M}, b_i) \geq N_t
+\end{cases}</script><p>其函数图像如下，在超过阈值时，为线性函数，且重叠越多，其抑制效果越大或称惩罚越多<br><img src="/2019/05/26/NMS-softer-NMS/f2.png" alt="f2"></p>
+<p>但该函数不连续，可能导致NMS结果的突然改变，故修改为非线性连续函数如下</p>
+<script type="math/tex; mode=display">
+f(iou(\mathcal{M}, b_i)) = \exp (-\frac{iou(\mathcal{M}, b_i)^2}{\sigma}), \forall b_i \notin \mathcal{D}</script><blockquote>
+<p>注意到$x = \sqrt{\frac{\sigma}{2}}$为函数$f(x)$的拐点</p>
+</blockquote>
+<p><img src="/2019/05/26/NMS-softer-NMS/f3.png" alt="f3"></p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
+<li><a href="https://ieeexplore.ieee.org/abstract/document/1699659" target="_blank" rel="noopener">Efficient Non-Maximum Suppression</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/37489043" target="_blank" rel="noopener">非极大值抑制(Non-Maximum Suppression)</a></li>
+<li><a href="https://www.pyimagesearch.com/2014/11/17/non-maximum-suppression-object-detection-python/" target="_blank" rel="noopener">Non-Maximum Suppression for Object Detection in Python</a></li>
+<li><a href="https://arxiv.org/abs/1704.04503" target="_blank" rel="noopener">Improving Object Detection With One Line of Code</a></li>
+<li><a href="https://blog.csdn.net/u014380165/article/details/79502197" target="_blank" rel="noopener">Soft NMS算法笔记</a></li>
 </ol>
-<ol>
-<li><p>将样本点投射到$K$维坐标系上<br> 样本$X^{(i)}$投射到主成分轴$\beta_k$上，其坐标表示为向量，为</p>
-<script type="math/tex; mode=display">
- S^{(i)}_k = X^{(i)T}\beta_k</script><blockquote>
-<p>注意此时的基座标为$\beta_k$，或者说$X’^{(i)} = S^{(i)} \frac{\beta_k}{||\beta_k||}$</p>
-</blockquote>
-<p> 所有样本在主轴$\beta_k$上的投影坐标即</p>
-<script type="math/tex; mode=display">
- S = B^T X</script><p> 其中$S_{K×M}$，$B_{N×K}$，$X_{N×M}$</p>
-</li>
-</ol>
-<blockquote>
-<p>注：若取$K=N$，可重建数据，如下<br><img src="/2018/10/22/PCA/pca_restructure1.png" alt="pca_restructure1"><br><img src="/2018/10/22/PCA/pca_restructure2.png" alt="pca_restructure2"></p>
-</blockquote>
-<h3 id="复原"><a href="#复原" class="headerlink" title="复原"></a>复原</h3><p>第$5$步中，样本点向量$X^{(i)}$的主要分量投射到$K$个$N$维向量上，投影坐标为$S^{(i)}_k$，即</p>
-<script type="math/tex; mode=display">
-X^{(i)} \approx \sum_{k=1}^K S^{(i)}_k \beta_k</script><p>以上就是样本点的复原公式，矩阵形式即</p>
-<script type="math/tex; mode=display">
-\hat{X} = BS</script><p>其中$\hat{X}_{N×M}$，$B_{N×K}$，$S_{K×M}$</p>
-<p>考虑到已去均值化，故</p>
-<script type="math/tex; mode=display">
-\hat{X}_j \approx \hat{X}_j + \mu_j</script><h2 id="证明"><a href="#证明" class="headerlink" title="证明"></a>证明</h2><blockquote>
-<p>投影向量的$2$范数最大，或者说，投影后的坐标平方和最大</p>
-</blockquote>
-<p>当所有样本$X$投射到第一主轴$\beta_1$上，其坐标为</p>
-<script type="math/tex; mode=display">
-S_1 = X^T \beta_1</script><p>所有元素的平方和，或向量$S_1$的$2$范数为</p>
-<script type="math/tex; mode=display">
-||S_1||_2^2 
-= S_1^T S_1 = \beta_1^T X X^T \beta_1 \tag{1}</script><p>即优化目标为</p>
-<script type="math/tex; mode=display">
-\max ||S_1||_2^2</script><script type="math/tex; mode=display">
-s.t.　||\beta_1||_2^2 = 1</script><p>矩阵$C=XX^T$为对称矩阵，故可单位正交化</p>
-<script type="math/tex; mode=display">
-C = W \Lambda W^T</script><script type="math/tex; mode=display">
-W = \left[\begin{matrix}
-    | & & |\\
-    w_1 & ... & w_M\\
-    | & & |\\
-\end{matrix}\right]　
-\Lambda = \left[\begin{matrix}
-    \lambda_1 &  & \\
-     & ... & \\
-     &  & \lambda_M\\
-\end{matrix}\right]</script><p>其中$\lambda_1 &gt; …&gt; \lambda_M$，$w_i(i=1,…,M)$为矩阵$C$的特征向量(单位向量，互相正交)</p>
-<blockquote>
-<p>实际上$R(C) \leq (n-1)$，即最多有$(n-1)$个特征值大于$0$。</p>
-</blockquote>
-<script type="math/tex; mode=display">
-||S_1||_2^2
-= \beta_1^T W \Lambda W^T \beta_1 \tag{2}</script><p>令$\alpha_1 = W^T \beta_1, \beta_1 = W \alpha_1$，可得</p>
-<script type="math/tex; mode=display">
-||S_1||_2^2
-= \alpha_1^T \Lambda \alpha_1 \tag{3}</script><p>即</p>
-<script type="math/tex; mode=display">
-||S_1||_2^2 = \sum_{i=1}^M \lambda_i \alpha_{1i}^2 \tag{4}</script><p>进一步</p>
-<script type="math/tex; mode=display">
-\sum_{i=1}^M \lambda_i \alpha_{1i}^2
-\leq \lambda_1 \sum_{i=1}^M \alpha_{1i}^2 \tag{5}</script><p>且由于$\beta_1^T\beta_1 = 1$，故</p>
-<script type="math/tex; mode=display">
-1 = \beta_1^T\beta_1 = \alpha_1^T W^T W \alpha = \alpha^T \alpha = 
-\sum_{i=1}^M \alpha_{1i}^2</script><p>可得</p>
-<script type="math/tex; mode=display">
-||S_1||_2^2
-= \sum_{i=1}^M \lambda_i \alpha_{1i}^2
-\leq \lambda_1  \tag{6}</script><p>为使$(6)$取等号，即达最大值，可使</p>
-<script type="math/tex; mode=display">
-\begin{cases}
-    \alpha_{11} = 1 \\
-    \alpha_{12} = ... = \alpha_{1M} = 0
-\end{cases}</script><p>即令</p>
-<script type="math/tex; mode=display">
-\beta_1 = W \alpha_1 = w_1</script><blockquote>
-<p>$\alpha_1 = [1, 0, …, 0]^T$</p>
-</blockquote>
-<p>所以$\beta_1$对应矩阵$C=XX^T$的特征向量$w_1$，且有</p>
-<script type="math/tex; mode=display">
-||S_1||_2^2 = \lambda_1</script><blockquote>
-<p>或者第一主成分的证明也可以这样，建立优化目标</p>
-<script type="math/tex; mode=display">
-\beta_1 = \arg \max　||S_1||_2^2</script><script type="math/tex; mode=display">s.t.　||\beta_1||_2^2 = 1</script><p>构造拉格朗日函数</p>
-<script type="math/tex; mode=display">
-L(\beta_1, \lambda_1) = ||S_1||_2^2 + \lambda_1 (1 - ||\beta_1||_2^2)</script><p>也即</p>
-<script type="math/tex; mode=display">
-L(\beta_1, \lambda_1) = \beta_1^T X X^T \beta_1 + \lambda_1 (1 - \beta_1^T \beta_1)</script><p>求其极值点</p>
-<script type="math/tex; mode=display">
-▽_{\beta_1}L(\beta_1) = 2 X X^T \beta_1 - 2 \lambda_1 \beta_1 = 0</script><p>有</p>
-<script type="math/tex; mode=display">
-X X^T \beta_1 = \lambda_1 \beta_1</script><p>可见$\beta_1$即方阵$X X^T$的特征向量</p>
-</blockquote>
-<p>当我们希望用更多的主成分刻画数据，如已经求得主成分$\beta_1, …, \beta_{r-1}$，先需求解$\beta_r$，引入正交约束$\beta_r^T \beta_i = 0$，即目标函数为</p>
-<script type="math/tex; mode=display">
-||S_r||_2^2 = \beta_r^T C \beta_r</script><script type="math/tex; mode=display">
-s.t.　\beta_r^T \beta_i = 0, i = 1, ..., r-1</script><script type="math/tex; mode=display">
-||\beta_r||_2^2 = 1</script><p>令$\beta_r = W \alpha_r$，则</p>
-<script type="math/tex; mode=display">
-||S_r||_2^2
-= \alpha_r^T \Lambda \alpha_r
-= \sum_i \lambda_i \alpha_{ri}^2</script><p>而根据正交约束</p>
-<script type="math/tex; mode=display">
-0 = \beta_r^T \beta_i = \alpha_r^T W^T w_i = \alpha_{ri},　
-i = 1, ..., r-1</script><blockquote>
-<p>$ W^T w_i = \left[0, …, 1_i, …, 0\right]^T$</p>
-</blockquote>
-<p>所以</p>
-<script type="math/tex; mode=display">
-||S_r||_2^2 = \sum_i \lambda_i \alpha_{ri}^2 = \lambda_r \alpha_{rr}^2 \tag{5}</script><p>又因为$\beta_r^T \beta_r = 1$(单位向量)，故</p>
-<script type="math/tex; mode=display">
-\beta_r^T \beta_r = \alpha_r^T W^T W \alpha_r = \alpha_r^T \alpha_r = \sum_i \alpha_{ri}^2 = 1</script><p>于是类似的，为使$(5)$取最大，取</p>
-<script type="math/tex; mode=display">
-\begin{cases}
-    \alpha_{rr} = 1\\
-    \alpha_{ri} = 0,　i = 1, ..., M, i \neq r
-\end{cases}</script><blockquote>
-<p>$\alpha_r = [0, …, 1_r, …, 0]$</p>
-</blockquote>
-<p>则此时</p>
-<script type="math/tex; mode=display">
-\beta_r = W \alpha_r = w_r</script><p>且有</p>
-<script type="math/tex; mode=display">
-||S_r||_2^2 = \lambda_r</script><p>证毕。</p>
-<h2 id="白化-whitening"><a href="#白化-whitening" class="headerlink" title="白化(whitening)"></a>白化(whitening)</h2><p><code>whitening</code>的目的是去掉数据之间的相关联度，是很多算法进行预处理的步骤。比如说当训练图片数据时，由于图片中相邻像素值有一定的关联，所以很多信息是冗余的。这时候去相关的操作就可以采用白化操作。</p>
-<p>数据的<code>whitening</code>必须满足两个条件：</p>
-<ol>
-<li>不同特征间相关性最小，接近$0$；</li>
-<li>所有特征的方差相等（不一定为$1$）。</li>
-</ol>
-<p>常见的白化操作有<code>PCA whitening</code>和<code>ZCA whitening</code>。</p>
-<blockquote>
-<p><a href="http://deeplearning.stanford.edu/wiki/index.php/Whitening" target="_blank" rel="noopener">Whitening - Ufldl</a></p>
-</blockquote>
-<ul>
-<li>PCA whitening<br>  <code>PCA whitening</code>指将数据$X$经过<code>PCA</code>降维为$S$后，可以看出$S$中每一维是独立的，满足<code>whitening</code>的第一个条件，这是只需要将$S$中的每一维都除以标准差就得到了每一维的方差为$1$，也就是说方差相等。<script type="math/tex; mode=display">
-  X_{PCAwhite, j} = \frac{X_{rot, j}}{\sqrt{\lambda_j}}</script></li>
-</ul>
-<ul>
-<li>ZCA whitening<br>  <code>ZCA whitening</code>是指数据$X$先经过<code>PCA</code>变换为$S$，但是并不降维，因为这里是把所有的成分都选进去了。这是也同样满足<code>whtienning</code>的第一个条件，特征间相互独立。然后同样进行方差为$1$的操作，最后将得到的矩阵左乘一个特征向量矩阵$U$即可。<script type="math/tex; mode=display">
-  X_{ZCAwhite} = U · X_{PCAwhite}</script></li>
-</ul>
-<h1 id="Kernel-PCA"><a href="#Kernel-PCA" class="headerlink" title="Kernel PCA"></a>Kernel PCA</h1><p><code>Kernel PCA</code>的思想是在高维的特征空间中求解协方差矩阵</p>
-<script type="math/tex; mode=display">
-\Sigma = \frac{1}{M} \sum_{i=1}^M \Phi(X^{(i)}) \Phi(X^{(i)})^T</script><p>其中$\Phi(X^{(i)})$表示将样本$i$映射到高维空间后中的向量，即</p>
-<script type="math/tex; mode=display">
-\Phi(X^{(i)}) = \left[ \phi^{(i)}_1, \phi^{(i)}_2, ..., \phi^{(i)}_{N'} \right]^T</script><p>其中$N’ &gt; N$，由于$\Phi(X^{(i)})$为隐式的，故设置核函数求解，记</p>
-<script type="math/tex; mode=display">
-\kappa(i, j) = \Phi(X^{(i)}) \Phi(X^{(i)})^T</script><blockquote>
-<p>关于核技巧，移步<a href="">非线性支持向量机</a></p>
-</blockquote>
-<p><img src="/2018/10/22/PCA/kernel_pca.jpg" alt="kernel_pca"></p>
-<h1 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h1><p>可利用<code>PCA</code>与线性回归求解$3$维空间中平面的法向量</p>
-<ol>
-<li>利用<code>PCA</code>重建数据(不降维，此时为$3$维)，此时第$1, 2$主成分轴可张成所求平面，即该平面可表示为<script type="math/tex; mode=display">
- \Pi = span \{ \beta_1, \beta_2 \}</script></li>
-</ol>
-<blockquote>
-<p>就是说，第一、二主成分是这些点“拉伸”最大的方向 :-)，好懂不？</p>
-</blockquote>
-<ol>
-<li><p>由<a href="https://louishsu.xyz/2018/10/18/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" target="_blank" rel="noopener">正交投影</a>可知，平面外一点$y$可通过最小二乘(线性回归)的方法投射到平面上，向量运算，不考虑偏置项，即</p>
-<script type="math/tex; mode=display">
- \hat{y} 
- = \theta_1 x_1 + \theta_2 x_2 \tag{*}</script><p> 其中$x_1, x_2$表示第一、第二主成分$\beta_1, \beta_2$，为$3$维向量</p>
-<script type="math/tex; mode=display">
- \hat{y} = \left[
-     \begin{matrix}
-         \hat{y_1} \\
-         \hat{y_2} \\
-         \hat{y_3} \\
-     \end{matrix}
- \right]　
- x_i = \left[
-     \begin{matrix}
-         x_{i1} \\
-         x_{i2} \\
-         x_{i3} \\
-     \end{matrix}
- \right]</script><p> 可利用公式求解回归参数$\theta$</p>
-<script type="math/tex; mode=display">
- \theta = (X^TX+\lambda I)^{-1} X^T y</script><blockquote>
-<p>注意：$X(n_samples, n_features)$，这里把$(x_{1j}, x_{2j}, y_{j})作为一组样本$</p>
-</blockquote>
-<p> 此时该参数表示在主轴上的坐标$(\theta_1, \theta_2)$，带回$(*))$即可解得$\hat{y}$</p>
-<script type="math/tex; mode=display">
- \hat{y} 
- = \theta_1 \beta_1 + \theta_2 \beta_2 \tag{*}</script><p> 通俗理解，一掌把$y$拍平在了平面$\Pi$上，变成了$\hat{y}$，但是哪有这么好拍。。。这个时候刺在掌心里一定有一个垂直的向量分量，即为该平面的法向量</p>
-<script type="math/tex; mode=display">
- \vec{n} = y - \hat{y}</script><p> <strong>也可使用粗暴一点的方法，直接将第三主成分作为法向量。</strong></p>
-<blockquote>
-<p>或者直接上投影公式：</p>
-<script type="math/tex; mode=display">
-\hat{y} = Py</script><script type="math/tex; mode=display">　
-P = X (X^TX+\lambda I)^{-1} X^T</script></blockquote>
-</li>
-</ol>
-<pre><code>![projection](/PCA/projection.jpg)
-
-总体的运算流程如下
-- 利用所有样本点(近似平面)计算主成分，第一、二主成分张成平面$\Pi$；
-- 选出其中一个样本点，将平行于平面$\Pi$的成分投射到$\Pi$上；
-- 该样本点剩余分量即法向量；
-- 一般来说，取所有点法向量的均值。
-</code></pre><h1 id="程序"><a href="#程序" class="headerlink" title="程序"></a>程序</h1><p><a href="https://github.com/isLouisHsu/Basic-Machine-Learning-Algorithm/tree/master/Andrew%20Ng%2C%20Stanford%20University/mlclass-ex7-3-pca" target="_blank" rel="noopener">@Github: PCA</a></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PrincipalComponentAnalysis</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, n_component=<span class="number">-1</span>)</span>:</span></span><br><span class="line">        self.n_component = n_component</span><br><span class="line">        self.meanVal = <span class="keyword">None</span></span><br><span class="line">        self.axis = <span class="keyword">None</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fit</span><span class="params">(self, X, prop=<span class="number">0.99</span>)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        the parameter 'prop' is only for 'n_component = -1'</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">        <span class="comment"># 第一步: 归一化</span></span><br><span class="line">        self.meanVal = np.mean(X, axis=<span class="number">0</span>)                   <span class="comment"># 训练样本每个特征上的的均值</span></span><br><span class="line">        X_normalized = (X - self.meanVal)                   <span class="comment"># 归一化训练样本</span></span><br><span class="line">        <span class="comment"># 第二步：计算协方差矩阵</span></span><br><span class="line">        <span class="comment"># cov = X_normalized.T.dot(X_normalized)</span></span><br><span class="line">        cov = np.cov(X_normalized.T)                        <span class="comment"># 协方差矩阵</span></span><br><span class="line">        eigVal, eigVec = np.linalg.eig(cov)                 <span class="comment"># EVD</span></span><br><span class="line">        order = np.argsort(eigVal)[::<span class="number">-1</span>]                    <span class="comment"># 从大到小排序</span></span><br><span class="line">        eigVal = eigVal[order]</span><br><span class="line">        eigVec = eigVec.T[order].T</span><br><span class="line">        <span class="comment"># 选择主成分的数量</span></span><br><span class="line">        <span class="keyword">if</span> self.n_component == <span class="number">-1</span>:</span><br><span class="line">            sumOfEigVal = np.sum(eigVal)</span><br><span class="line">            sum_tmp = <span class="number">0</span></span><br><span class="line">            <span class="keyword">for</span> k <span class="keyword">in</span> range(eigVal.shape[<span class="number">0</span>]):</span><br><span class="line">                sum_tmp += eigVal[k]</span><br><span class="line">                <span class="keyword">if</span> sum_tmp &gt; prop * sumOfEigVal:            <span class="comment"># 平均均方误差与训练集方差的比例尽可能小的情况下选择尽可能小的 K 值</span></span><br><span class="line">                    self.n_component = k + <span class="number">1</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">        <span class="comment"># 选择投影坐标轴</span></span><br><span class="line">        self.axis = eigVec[:, :self.n_component]            <span class="comment"># 选择前n_component个特征向量作为投影坐标轴</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">transform</span><span class="params">(self, X)</span>:</span></span><br><span class="line">        <span class="comment"># 第一步：归一化</span></span><br><span class="line">        X_normalized = (X - self.meanVal)                   <span class="comment"># 归一化测试样本</span></span><br><span class="line">        <span class="comment"># 第二步：投影 X_nxk · V_kxk' = X'_nxk'</span></span><br><span class="line">        X_transformed = X_normalized.dot(self.axis)</span><br><span class="line">        <span class="keyword">return</span> X_transformed</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fit_transform</span><span class="params">(self, X, prop=<span class="number">0.99</span>)</span>:</span></span><br><span class="line">        self.fit(X, prop=prop)</span><br><span class="line">        <span class="keyword">return</span> self.transform(X)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">transform_inv</span><span class="params">(self, X_transformed)</span>:</span></span><br><span class="line">        <span class="comment"># 视投影向量长度为一个单位长度，投影结果为投影向量上的坐标</span></span><br><span class="line">        <span class="comment"># X'_nxk' · V_kxk'.T = X''_nxk</span></span><br><span class="line">        X_restructed = X_transformed.dot(self.axis.T)</span><br><span class="line">        <span class="comment"># 还原数据</span></span><br><span class="line">        X_restructed = X_restructed + self.meanVal</span><br><span class="line">        <span class="keyword">return</span> X_restructed</span><br></pre></td></tr></table></figure>
-<p>实验结果</p>
-<ul>
-<li><p>Demo1: PCA applied on 2-d datasets<br>  <img src="/2018/10/22/PCA/2d_restructed.png" alt="2d_restructed"></p>
-</li>
-<li><p>Demo2: PCA applied on wild face</p>
-<ul>
-<li>origin<br><img src="/2018/10/22/PCA/face_origin.png" alt="origin"></li>
-<li>reduced<br><img src="/2018/10/22/PCA/face_reduced.png" alt="reduced"></li>
-<li>restructured<br><img src="/2018/10/22/PCA/face_restructed.png" alt="restructured"></li>
-</ul>
-</li>
-</ul>
 
       
     </div>
@@ -872,7 +588,7 @@ P = X (X^TX+\lambda I)^{-1} X^T</script></blockquote>
       
         <div class="post-tags">
           
-            <a href="/tags/降维/" rel="tag"># 降维</a>
+            <a href="/tags/Object-Detection/" rel="tag"># Object Detection</a>
           
         </div>
       
@@ -885,8 +601,8 @@ P = X (X^TX+\lambda I)^{-1} X^T</script></blockquote>
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/20/Activate-Functions/" rel="next" title="Activate Functions">
-                <i class="fa fa-chevron-left"></i> Activate Functions
+              <a href="/2019/05/22/Github清除commit记录/" rel="next" title="Github清除commit记录">
+                <i class="fa fa-chevron-left"></i> Github清除commit记录
               </a>
             
           </div>
@@ -894,10 +610,6 @@ P = X (X^TX+\lambda I)^{-1} X^T</script></blockquote>
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/10/23/删除停用词/" rel="prev" title="删除停用词">
-                删除停用词 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -1095,7 +807,7 @@ P = X (X^TX+\lambda I)^{-1} X^T</script></blockquote>
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#向量的投影"><span class="nav-number">2.</span> <span class="nav-text">向量的投影</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PCA"><span class="nav-number">3.</span> <span class="nav-text">PCA</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#计算步骤"><span class="nav-number">3.1.</span> <span class="nav-text">计算步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#投影"><span class="nav-number">3.1.1.</span> <span class="nav-text">投影</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复原"><span class="nav-number">3.1.2.</span> <span class="nav-text">复原</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#证明"><span class="nav-number">3.2.</span> <span class="nav-text">证明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#白化-whitening"><span class="nav-number">3.3.</span> <span class="nav-text">白化(whitening)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kernel-PCA"><span class="nav-number">4.</span> <span class="nav-text">Kernel PCA</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#应用"><span class="nav-number">5.</span> <span class="nav-text">应用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#程序"><span class="nav-number">6.</span> <span class="nav-text">程序</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IoU"><span class="nav-number">2.</span> <span class="nav-text">IoU</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#原理"><span class="nav-number">2.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码"><span class="nav-number">2.2.</span> <span class="nav-text">代码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NMS"><span class="nav-number">3.</span> <span class="nav-text">NMS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#代码-1"><span class="nav-number">3.1.</span> <span class="nav-text">代码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Soft-NMS"><span class="nav-number">4.</span> <span class="nav-text">Soft-NMS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>
