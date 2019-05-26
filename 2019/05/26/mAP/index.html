@@ -108,23 +108,23 @@
 
 
 
-  <meta name="description" content="前言本文介绍一种目标检测任务的评价指标mean average precison(mAP)。 Precision, Recall, Average Precision计算方法以上定义查看Metrics/分类(classification)评估指标，计算方式如下 精确率(Precision)即所有真实正样本中，被预测为正样本的比例 P = \frac{TP}{TP + FN}123456789101">
+  <meta name="description" content="前言本文介绍一种目标检测任务的评价指标mean Average Precison(mAP)，有以下几个重点  如何绘制Precision-Recall曲线； 如何用插值方法计算Average Precison； 理解目标检测中mAP的计算；  Precision, Recall, Average Precision计算方法以上定义查看Metrics/分类(classification)评估指标，计">
 <meta name="keywords" content="Object Detection">
 <meta property="og:type" content="article">
 <meta property="og:title" content="mAP">
 <meta property="og:url" content="http://yoursite.com/2019/05/26/mAP/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="前言本文介绍一种目标检测任务的评价指标mean average precison(mAP)。 Precision, Recall, Average Precision计算方法以上定义查看Metrics/分类(classification)评估指标，计算方式如下 精确率(Precision)即所有真实正样本中，被预测为正样本的比例 P = \frac{TP}{TP + FN}123456789101">
+<meta property="og:description" content="前言本文介绍一种目标检测任务的评价指标mean Average Precison(mAP)，有以下几个重点  如何绘制Precision-Recall曲线； 如何用插值方法计算Average Precison； 理解目标检测中mAP的计算；  Precision, Recall, Average Precision计算方法以上定义查看Metrics/分类(classification)评估指标，计">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/2019/05/26/mAP/2-class-precision-recall.png">
 <meta property="og:image" content="http://yoursite.com/2019/05/26/mAP/2-class-precision-recall-approximated.png">
 <meta property="og:image" content="http://yoursite.com/2019/05/26/mAP/2-class-precision-recall-interpolated.png">
 <meta property="og:image" content="http://yoursite.com/2019/05/26/mAP/2-class-precision-recall-11points.png">
 <meta property="og:image" content="http://yoursite.com/2019/05/26/mAP/P-R.png">
-<meta property="og:updated_time" content="2019-05-26T12:16:47.667Z">
+<meta property="og:updated_time" content="2019-05-26T12:21:53.754Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mAP">
-<meta name="twitter:description" content="前言本文介绍一种目标检测任务的评价指标mean average precison(mAP)。 Precision, Recall, Average Precision计算方法以上定义查看Metrics/分类(classification)评估指标，计算方式如下 精确率(Precision)即所有真实正样本中，被预测为正样本的比例 P = \frac{TP}{TP + FN}123456789101">
+<meta name="twitter:description" content="前言本文介绍一种目标检测任务的评价指标mean Average Precison(mAP)，有以下几个重点  如何绘制Precision-Recall曲线； 如何用插值方法计算Average Precison； 理解目标检测中mAP的计算；  Precision, Recall, Average Precision计算方法以上定义查看Metrics/分类(classification)评估指标，计">
 <meta name="twitter:image" content="http://yoursite.com/2019/05/26/mAP/2-class-precision-recall.png">
 
 
@@ -399,7 +399,7 @@
                 
               
 
-              <time title="创建时间：2019-05-26 11:36:22 / 修改时间：20:16:47" itemprop="dateCreated datePublished" datetime="2019-05-26T11:36:22+08:00">2019-05-26</time>
+              <time title="创建时间：2019-05-26 11:36:22 / 修改时间：20:21:53" itemprop="dateCreated datePublished" datetime="2019-05-26T11:36:22+08:00">2019-05-26</time>
             
 
             
@@ -469,7 +469,12 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本文介绍一种目标检测任务的评价指标<code>mean average precison(mAP)</code>。</p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本文介绍一种目标检测任务的评价指标<code>mean Average Precison(mAP)</code>，有以下几个重点</p>
+<ul>
+<li>如何绘制<code>Precision-Recall</code>曲线；</li>
+<li>如何用插值方法计算<code>Average Precison</code>；</li>
+<li>理解目标检测中<code>mAP</code>的计算；</li>
+</ul>
 <h1 id="Precision-Recall-Average-Precision"><a href="#Precision-Recall-Average-Precision" class="headerlink" title="Precision, Recall, Average Precision"></a>Precision, Recall, Average Precision</h1><h2 id="计算方法"><a href="#计算方法" class="headerlink" title="计算方法"></a>计算方法</h2><p>以上定义查看<a href="https://louishsu.xyz/2018/11/21/Metrics/" target="_blank" rel="noopener">Metrics/分类(classification)评估指标</a>，计算方式如下</p>
 <h3 id="精确率-Precision"><a href="#精确率-Precision" class="headerlink" title="精确率(Precision)"></a>精确率<code>(Precision)</code></h3><p>即所有真实正样本中，被预测为正样本的比例</p>
 <script type="math/tex; mode=display">P = \frac{TP}{TP + FN}</script><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">precision_score</span><span class="params">(gt, pred)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Params:</span></span><br><span class="line"><span class="string">        gt:     &#123;ndarray(N)&#125; `0` or `1`</span></span><br><span class="line"><span class="string">        pred:   &#123;ndarray(N)&#125; `0` or `1`</span></span><br><span class="line"><span class="string">    Returns：</span></span><br><span class="line"><span class="string">        p:      &#123;float&#125;</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    index = pred == <span class="number">1</span></span><br><span class="line">    _gt = gt[index]</span><br><span class="line">    tp = _gt[_gt == <span class="number">1</span>].shape[<span class="number">0</span>]</span><br><span class="line">    pp = _gt.shape[<span class="number">0</span>]</span><br><span class="line">    p = tp / pp <span class="keyword">if</span> pp != <span class="number">0</span> <span class="keyword">else</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> p</span><br></pre></td></tr></table></figure>
