@@ -115,7 +115,7 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="引言对于分类问题，计算结果一般为概率值，那么如何根据计算得的概率进行判别分类呢？  这部分理解后，Logistic回归与Softmax回归的模型就很容易推得。  判别函数对于一个类别为$K$的分类问题，如果对于所有的$ i,j=1,…,K, j\neq i$，有  g_i(x) &amp;gt; g_j(x)则此分类器将这个样本对应的特征向量$x$判别为$w_i$，则此分类器的作用是，计算$K$个判别函数并选取">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-04T10:19:28.000Z">
+<meta property="og:updated_time" content="2019-05-26T13:19:51.648Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="分类问题的决策平面">
 <meta name="twitter:description" content="引言对于分类问题，计算结果一般为概率值，那么如何根据计算得的概率进行判别分类呢？  这部分理解后，Logistic回归与Softmax回归的模型就很容易推得。  判别函数对于一个类别为$K$的分类问题，如果对于所有的$ i,j=1,…,K, j\neq i$，有  g_i(x) &amp;gt; g_j(x)则此分类器将这个样本对应的特征向量$x$判别为$w_i$，则此分类器的作用是，计算$K$个判别函数并选取">
@@ -409,7 +409,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-04 18:19:28" itemprop="dateModified" datetime="2019-01-04T18:19:28+08:00">2019-01-04</time>
+                <time title="修改时间：2019-05-26 21:19:51" itemprop="dateModified" datetime="2019-05-26T21:19:51+08:00">2019-05-26</time>
               
             
           </span>
@@ -469,7 +469,7 @@
       
         <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>对于分类问题，计算结果一般为概率值，那么如何根据计算得的概率进行判别分类呢？</p>
 <blockquote>
-<p>这部分理解后，<a href="https://louishsu.xyz/2018/10/18/Logistic%E5%9B%9E%E5%BD%92/" target="_blank" rel="noopener">Logistic回归</a>与<a href="https://louishsu.xyz/2018/10/18/softmax%E5%9B%9E%E5%BD%92/" target="_blank" rel="noopener">Softmax回归</a>的模型就很容易推得。</p>
+<p>这部分理解后，<a href="https://louishsu.xyz/2018/10/18/Logistic-Regression/" target="_blank" rel="noopener">Logistic回归</a>与<a href="https://louishsu.xyz/2018/10/18/Softmax-Regression/" target="_blank" rel="noopener">Softmax回归</a>的模型就很容易推得。</p>
 </blockquote>
 <h1 id="判别函数"><a href="#判别函数" class="headerlink" title="判别函数"></a>判别函数</h1><p>对于一个类别为$K$的分类问题，如果对于所有的$ i,j=1,…,K, j\neq i$，有</p>
 <script type="math/tex; mode=display">
@@ -479,7 +479,7 @@ g_i(x) > g_j(x)</script><p>则此分类器将这个样本对应的特征向量$x
 <div style="text-align: right"> ——《模式识别原理与应用课程笔记》</div>
 
 </blockquote>
-<p>例如<a href="https://louishsu.xyz/2018/10/18/%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%86%B3%E7%AD%96/" target="_blank" rel="noopener">最小风险贝叶斯决策</a></p>
+<p>例如<a href="https://louishsu.xyz/2018/10/18/Bayes-Decision/" target="_blank" rel="noopener">最小风险贝叶斯决策</a></p>
 <h1 id="正态分布下的判别函数"><a href="#正态分布下的判别函数" class="headerlink" title="正态分布下的判别函数"></a>正态分布下的判别函数</h1><blockquote>
 <p><a href="https://www.cnblogs.com/bingjianing/p/9117330.html" target="_blank" rel="noopener">多元高斯分布（The Multivariate normal distribution） - bingjianing - 博客园</a></p>
 </blockquote>
@@ -497,7 +497,7 @@ exp(-\frac{1}{2} (x-\mu)^T \Sigma^{-1} (x-\mu))</script><p>其中</p>
 ​    \end{matrix}
 \right] \tag{3}
 $$ -->
-<p>在<a href="https://louishsu.xyz/2018/10/18/%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%86%B3%E7%AD%96/" target="_blank" rel="noopener">最小错误率判别</a>时</p>
+<p>在<a href="https://louishsu.xyz/2018/10/19/%E5%88%86%E7%B1%BB%E9%97%AE%E9%A2%98%E7%9A%84%E5%86%B3%E7%AD%96%E5%B9%B3%E9%9D%A2/" target="_blank" rel="noopener">最小错误率判别</a>时</p>
 <script type="math/tex; mode=display">g_i(x) = P(x|c_i)P(c_i)</script><p>即</p>
 <script type="math/tex; mode=display">
 g_i(x) = 
@@ -736,6 +736,8 @@ g_i(x) = x^TW_ix + w_ix + w_0</script>
                 <div class="site-state-item site-state-tags">
                   <a href="/tags/index.html">
                     
+                    
+                      
                     
                       
                     
