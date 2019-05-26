@@ -1,0 +1,1673 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言本文介绍一种目标检测任务的评价指标mean average precison(mAP)。 Precision, Recall, Average Precision计算方法以上定义查看Metrics/分类(classification)评估指标，计算方式如下  精确率(Precision) 即所有真实正样本中，被预测为正样本的比例 P = \frac{TP}{TP + FN} 123456789">
+<meta name="keywords" content="Object Detection">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mAP">
+<meta property="og:url" content="http://yoursite.com/2019/05/26/mAP/index.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="前言本文介绍一种目标检测任务的评价指标mean average precison(mAP)。 Precision, Recall, Average Precision计算方法以上定义查看Metrics/分类(classification)评估指标，计算方式如下  精确率(Precision) 即所有真实正样本中，被预测为正样本的比例 P = \frac{TP}{TP + FN} 123456789">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/05/26/mAP/2-class-precision-recall.png">
+<meta property="og:image" content="http://yoursite.com/2019/05/26/mAP/2-class-precision-recall-approximated.png">
+<meta property="og:image" content="http://yoursite.com/2019/05/26/mAP/P-R.png">
+<meta property="og:updated_time" content="2019-05-26T11:48:45.535Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mAP">
+<meta name="twitter:description" content="前言本文介绍一种目标检测任务的评价指标mean average precison(mAP)。 Precision, Recall, Average Precision计算方法以上定义查看Metrics/分类(classification)评估指标，计算方式如下  精确率(Precision) 即所有真实正样本中，被预测为正样本的比例 P = \frac{TP}{TP + FN} 123456789">
+<meta name="twitter:image" content="http://yoursite.com/2019/05/26/mAP/2-class-precision-recall.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/05/26/mAP/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>mAP | LOUIS' BLOG</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LOUIS' BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">人生苦短，不如不管，继续任性。</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/26/mAP/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="技术博客？">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">mAP
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-26 11:36:22 / 修改时间：19:48:45" itemprop="dateCreated datePublished" datetime="2019-05-26T11:36:22+08:00">2019-05-26</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本文介绍一种目标检测任务的评价指标<code>mean average precison(mAP)</code>。</p>
+<h1 id="Precision-Recall-Average-Precision"><a href="#Precision-Recall-Average-Precision" class="headerlink" title="Precision, Recall, Average Precision"></a>Precision, Recall, Average Precision</h1><h2 id="计算方法"><a href="#计算方法" class="headerlink" title="计算方法"></a>计算方法</h2><p>以上定义查看<a href="https://louishsu.xyz/2018/11/21/Metrics/" target="_blank" rel="noopener">Metrics/分类(classification)评估指标</a>，计算方式如下</p>
+<ol>
+<li><p>精确率<code>(Precision)</code><br> 即所有真实正样本中，被预测为正样本的比例</p>
+<script type="math/tex; mode=display">P = \frac{TP}{TP + FN}</script> <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">precision_score</span><span class="params">(gt, pred)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Params:</span></span><br><span class="line"><span class="string">        gt:     &#123;ndarray(N)&#125; `0` or `1`</span></span><br><span class="line"><span class="string">        pred:   &#123;ndarray(N)&#125; `0` or `1`</span></span><br><span class="line"><span class="string">    Returns：</span></span><br><span class="line"><span class="string">        p:      &#123;float&#125;</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    index = pred == <span class="number">1</span></span><br><span class="line">    _gt = gt[index]</span><br><span class="line">    tp = _gt[_gt == <span class="number">1</span>].shape[<span class="number">0</span>]</span><br><span class="line">    pp = _gt.shape[<span class="number">0</span>]</span><br><span class="line">    p = tp / pp <span class="keyword">if</span> pp != <span class="number">0</span> <span class="keyword">else</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> p</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>召回率<code>(Recall)</code><br> 即所有预测的正样本中，真正为正样本的比例</p>
+<script type="math/tex; mode=display">R = \frac{TP}{TP + NP}</script> <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">recall_score</span><span class="params">(gt, pred)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Params:</span></span><br><span class="line"><span class="string">        gt:     &#123;ndarray(N)&#125; `0` or `1`</span></span><br><span class="line"><span class="string">        pred:   &#123;ndarray(N)&#125; `0` or `1`</span></span><br><span class="line"><span class="string">    Returns：</span></span><br><span class="line"><span class="string">        r:      &#123;float&#125;</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    index = gt == <span class="number">1</span></span><br><span class="line">    _pred = pred[index]</span><br><span class="line">    tp = _pred[_pred == <span class="number">1</span>].shape[<span class="number">0</span>]</span><br><span class="line">    gp = _pred.shape[<span class="number">0</span>]</span><br><span class="line">    r = tp / gp <span class="keyword">if</span> gp != <span class="number">0</span> <span class="keyword">else</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">return</span> r</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>平均精确度<code>(Average Precision)</code><br> 依次设定不同的阈值，根据预测评分，得到不同的预测标签结果，那么就可以计算得到不同的$P$和$R$，做出$P-R$曲线，其与坐标轴面积即平均精确度。</p>
+<ol>
+<li><p>Average Precision<br> <img src="/2019/05/26/mAP/2-class-precision-recall.png" alt="2-class-precision-recall"></p>
+<blockquote>
+<p>该图来自<a href="https://arleyzhang.github.io/articles/c521a01c/" target="_blank" rel="noopener">目标检测评价标准-AP mAP</a>，侵删。</p>
+</blockquote>
+<p> 那么AP计算公式为</p>
+<script type="math/tex; mode=display">AP = \int_0^1 P(r) dr \tag{1}</script> <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">average_precision</span><span class="params">(p, r)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Params:</span></span><br><span class="line"><span class="string">        p: &#123;ndarray(n)&#125; Precision</span></span><br><span class="line"><span class="string">        r: &#123;ndarray(n)&#125; Recall</span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        AP:&#123;float&#125;</span></span><br><span class="line"><span class="string">    Notes:</span></span><br><span class="line"><span class="string">        AP = \int_0^1 P(r) dr</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    n = len(p)</span><br><span class="line">    AP = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n):</span><br><span class="line">        deltaR = r[i] - r[i<span class="number">-1</span>]</span><br><span class="line">        P_inter = (p[i] + p[i<span class="number">-1</span>]) / <span class="number">2</span></span><br><span class="line">        AP += P_inter * deltaR  <span class="comment"># 梯形面积</span></span><br><span class="line">    <span class="keyword">return</span> AP</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Approximated Average Precision<br> <img src="/2019/05/26/mAP/2-class-precision-recall-approximated.png" alt="2-class-precision-recall-approximated"></p>
+<p> 注意图中折线上每个点代表一个样本，则将$(1)$离散化，累积<strong>每个样本点</strong>带来的面积变化</p>
+<script type="math/tex; mode=display">AP_{approx} = \sum_{k=1}^N P(k) \Delta r(k) \tag{2}</script><p> 其中$N$为样本总数，$k$为样本数，且</p>
+<script type="math/tex; mode=display">\Delta r(k) = r(k) - r(k-1)</script> <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">average_precision_approximated</span><span class="params">(p, r)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Params:</span></span><br><span class="line"><span class="string">        p: &#123;ndarray(n)&#125; Precision</span></span><br><span class="line"><span class="string">        r: &#123;ndarray(n)&#125; Recall</span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        AP:&#123;float&#125;</span></span><br><span class="line"><span class="string">    Notes:</span></span><br><span class="line"><span class="string">        AP_&#123;approx&#125; = \sum_&#123;k=1&#125;^N P(k) \Delta r(k)</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    n = len(p)</span><br><span class="line">    AP = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n):</span><br><span class="line">        deltaR = r[i] - r[i<span class="number">-1</span>]</span><br><span class="line">        P_inter = p[i]          <span class="comment"># 每个点处的Precision</span></span><br><span class="line">        AP += P_inter * deltaR  <span class="comment"># 矩形面积</span></span><br><span class="line">    <span class="keyword">return</span> AP</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+</ol>
+<pre><code>3. Interpolated average precision
+    ![2-class-precision-recall-interpolated](/mAP/2-class-precision-recall-interpolated.png)
+
+    换一种插值方法计算$P(k)$
+    $$P_{inter}(k) = \max_{\hat{k} \geq k} P(\hat{k})$$
+
+    $$AP_{inter} = \sum_{k=1}^{N} P_{inter}(k) \Delta r(k) \tag{3}$$
+
+    其中$\hat{k}$为第$k$个样本点后的样本索引，也即，**$P_{inter}(k)$为第$k$个样本点后，最大的`Precision`值**。
+
+    因为正样本影响`Recall`阈值，故式$(3)$也可写作
+    $$P_{inter}(k) = \max_{\hat{k} \geq k} P(\hat{k})$$
+
+    $$AP_{inter} = \sum_{k=1}^{K} P_{inter}(k) \Delta r(k) \tag{4}$$
+
+    其中$K$表示正样本的个数。
+
+    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">average_precision_interpolated</span><span class="params">(p, r)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Params:</span></span><br><span class="line"><span class="string">        p: &#123;ndarray(n)&#125; Precision</span></span><br><span class="line"><span class="string">        r: &#123;ndarray(n)&#125; Recall</span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        AP:&#123;float&#125;</span></span><br><span class="line"><span class="string">    Notes:</span></span><br><span class="line"><span class="string">        P_&#123;inter&#125;(k) = \max_&#123;\hat&#123;k&#125; \geq k&#125; P(\hat&#123;k&#125;)</span></span><br><span class="line"><span class="string">        AP_&#123;inter&#125; = \sum_&#123;k=1&#125;^&#123;N&#125; P_&#123;inter&#125;(k) \Delta r(k)</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    n = len(p)</span><br><span class="line">    AP = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n):</span><br><span class="line">        deltaR = r[i] - r[i<span class="number">-1</span>]</span><br><span class="line">        P_inter = max(p[i:])    <span class="comment"># 每个点后最大的Precision</span></span><br><span class="line">        AP += P_inter * deltaR  <span class="comment"># 矩形面积</span></span><br><span class="line">    <span class="keyword">return</span> AP</span><br></pre></td></tr></table></figure>
+
+4. 11 points Interpolated Average Precision
+    ![2-class-precision-recall-11points](/mAP/2-class-precision-recall-11points.png)
+
+    固定选取$\{0, 0.1, \cdots, 1.0\}$ 11个`Recall`阈值，**选取$P_{inter}(k)$为每个阈值点后最大`Precision`值**，进行计算
+    $$P_{inter}(k) = \max_{r(\hat{k}) \geq R(k)} P(\hat{k}), R \in \{0.0, 0.1, \cdots, 1.0\}$$
+
+    $$AP_{inter} = \sum_{k=1}^{K} P_{inter}(k) \Delta r(k) \tag{4}$$
+
+    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">average_precision_11_points</span><span class="params">(p, r)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Params:</span></span><br><span class="line"><span class="string">        p: &#123;ndarray(n)&#125; Precision</span></span><br><span class="line"><span class="string">        r: &#123;ndarray(n)&#125; Recall</span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        AP:&#123;float&#125;</span></span><br><span class="line"><span class="string">    Notes:</span></span><br><span class="line"><span class="string">        P_&#123;inter&#125;(k) = \max_&#123;r(\hat&#123;k&#125;) \geq R(k)&#125; P(\hat&#123;k&#125;), R \in \&#123;0.0, 0.1, \cdots, 1.0\&#125;</span></span><br><span class="line"><span class="string">        AP_&#123;inter&#125; = \sum_&#123;k=1&#125;^&#123;K&#125; P_&#123;inter&#125;(k) \Delta r(k)</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    AP = <span class="number">0</span></span><br><span class="line">    deltaR = <span class="number">0.1</span></span><br><span class="line">    p = np.array(p); r = np.array(r)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">11</span>):</span><br><span class="line">        <span class="keyword">if</span> i == <span class="number">10</span>: </span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        R = i*deltaR</span><br><span class="line">        P_inter = np.max(p[r&gt;R])<span class="comment"># 每个阈值点后最大的Precision</span></span><br><span class="line">        AP += P_inter * deltaR  <span class="comment"># 矩形面积</span></span><br><span class="line">    <span class="keyword">return</span> AP</span><br></pre></td></tr></table></figure>
+</code></pre><h2 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h2><p>以一个二分类任务为例，假设我们得到样本真实标签与预测评分如下</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Index</th>
+<th style="text-align:center">Ground Truth</th>
+<th style="text-align:center">Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0.4</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0.7</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0.6</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0.45</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0.2</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0.2</td>
+</tr>
+<tr>
+<td style="text-align:center">6</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0.3</td>
+</tr>
+<tr>
+<td style="text-align:center">7</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0.6</td>
+</tr>
+<tr>
+<td style="text-align:center">8</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0.9</td>
+</tr>
+<tr>
+<td style="text-align:center">9</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0.8</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>可依次设定阈值</p>
+<script type="math/tex; mode=display">thresh = 0.2, 0.2, 0.3, 0.4, 0.45, 0.6, 0.6, 0.7, 0.8, 0.9</script><p>特别注意以下几个正样本Score对应阈值点，得表格如下</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Index</th>
+<th style="text-align:center">Ground Truth</th>
+<th style="text-align:center">Score</th>
+<th style="text-align:center">thresh=0.2</th>
+<th style="text-align:center">thresh=0.3</th>
+<th style="text-align:center">thresh=0.6</th>
+<th style="text-align:center">thresh=0.8</th>
+<th style="text-align:center">thresh=0.9</th>
+<th style="text-align:center">thresh=1.0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0.4</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0.7</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0.6</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0.45</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0.2</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0.2</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">6</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0.3</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">7</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0.6</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">8</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0.9</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">9</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0.8</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>recall</strong></td>
+<td style="text-align:center">/</td>
+<td style="text-align:center">/</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0.8</td>
+<td style="text-align:center">0.6</td>
+<td style="text-align:center">0.4</td>
+<td style="text-align:center">0.2</td>
+<td style="text-align:center">0.0</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>precision</strong></td>
+<td style="text-align:center">/</td>
+<td style="text-align:center">/</td>
+<td style="text-align:center">5/10</td>
+<td style="text-align:center">4/8</td>
+<td style="text-align:center">3/5</td>
+<td style="text-align:center">2/2</td>
+<td style="text-align:center">1/1</td>
+<td style="text-align:center">1.0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>$P-R$曲线如下<br><img src="/2019/05/26/mAP/P-R.png" alt="P-R"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## 准备数据</span></span><br><span class="line">gt = np.array([<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>], dtype=<span class="string">'int'</span>)</span><br><span class="line">pred = np.array([<span class="number">0.4</span>, <span class="number">0.7</span>, <span class="number">0.6</span>, <span class="number">0.45</span>, <span class="number">0.2</span>, <span class="number">0.2</span>, <span class="number">0.3</span>, <span class="number">0.6</span>, <span class="number">0.9</span>, <span class="number">0.8</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">## 作P-R曲线，每个点均需计算</span></span><br><span class="line">thresh = list(np.sort(pred))[::<span class="number">-1</span>]</span><br><span class="line">p = []; r = []</span><br><span class="line"><span class="keyword">for</span> t <span class="keyword">in</span> thresh:</span><br><span class="line">    label = score2label(pred, t)</span><br><span class="line">    n = pred[pred==t].shape[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(n):</span><br><span class="line">        p += [precision_score(gt, label)]</span><br><span class="line">        r += [recall_score(gt, label)]</span><br><span class="line"></span><br><span class="line">plt.figure(<span class="string">"P-R"</span>)</span><br><span class="line">plt.xlabel(<span class="string">"recall"</span>); plt.ylabel(<span class="string">"precision"</span>)</span><br><span class="line">plt.ylim([<span class="number">0</span>, <span class="number">1.2</span>])</span><br><span class="line">plt.grid()</span><br><span class="line">plt.plot(r, p)</span><br><span class="line">plt.scatter(r, p)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<h1 id="mAP"><a href="#mAP" class="headerlink" title="mAP"></a>mAP</h1><p>对每一类计算<code>AP</code>，求其均值</p>
+<script type="math/tex; mode=display">
+mAP = \frac{1}{C} \sum_{i=0}^{C} AP_i</script><h1 id="PASCAL-VOC"><a href="#PASCAL-VOC" class="headerlink" title="PASCAL VOC"></a>PASCAL VOC</h1><p>原文<a href="http://host.robots.ox.ac.uk/pascal/VOC/voc2012/devkit_doc.pdf" target="_blank" rel="noopener">devkit_doc/3.4.1</a>如下</p>
+<blockquote>
+<p>3.4.1 Average Precision (AP) The computation of the average precision (AP) measure was changed in 2010 to improve precision and ability to measure differences between methods with low AP. It is computed as follows: </p>
+<ol>
+<li>Compute a version of the measured precision/recall curve with precision monotonically decreasing, by setting the precision for recall r to the maximum precision obtained for any recall $r′ \geq r$.</li>
+<li>Compute the AP as the area under this curve by numerical integration. No approximation is involved since the curve is piecewise constant.</li>
+</ol>
+<p>Note that prior to 2010 the AP is computed by sampling the monotonically decreasing curve at a fixed set of uniformly-spaced recall values $0, 0.1, 0.2, \cdots, 1.0$. By contrast, VOC2010–2012 effectively samples the curve at all unique recall values.</p>
+</blockquote>
+<p>记真实回归框为$B_{gt}$，预测回归框为$B_p$，则当预测框与真实框<code>IoU</code>大于阈值$0.5$时，认定物体被检测到，即</p>
+<script type="math/tex; mode=display">
+IoU_{gt, p} = \frac{area(B_p \bigcap B_{gt})}{area(B_p \bigcup B_{gt})} \geq 0.5</script><p>其计算方法更加粗暴，计算每个<code>Recall</code>阈值点处最大<code>Precision</code>的均值</p>
+<script type="math/tex; mode=display">P_{inter}(r) = \max_{\hat{r}: \hat{r} \geq r} P(\hat{r})</script><script type="math/tex; mode=display">AP_{voc} = \frac{1}{11} \sum_{r \in \{0.0, 0.1, \cdots, 1.0\}} P_{inter}(r) \tag{5}</script><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">average_precision_voc</span><span class="params">(p, r)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Params:</span></span><br><span class="line"><span class="string">        p: &#123;ndarray(n)&#125; Precision</span></span><br><span class="line"><span class="string">        r: &#123;ndarray(n)&#125; Recall</span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        AP:&#123;float&#125;</span></span><br><span class="line"><span class="string">    Notes:</span></span><br><span class="line"><span class="string">        P_&#123;inter&#125;(r) = \max_&#123;\hat&#123;r&#125;: \hat&#123;r&#125; \geq r&#125; P(\hat&#123;r&#125;)</span></span><br><span class="line"><span class="string">        AP_&#123;voc&#125; = \frac&#123;1&#125;&#123;11&#125; \sum_&#123;r \in \&#123;0.0, 0.1, \cdots, 1.0\&#125;&#125; P_&#123;inter&#125;(r)</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    AP = <span class="number">0</span></span><br><span class="line">    deltaR = <span class="number">0.1</span></span><br><span class="line">    p = np.array(p); r = np.array(r)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">11</span>):</span><br><span class="line">        R = i*deltaR</span><br><span class="line">        <span class="keyword">if</span> i != <span class="number">10</span>: </span><br><span class="line">            P_inter = np.max(p[r&gt;R])<span class="comment"># 每个阈值点后最大的Precision</span></span><br><span class="line">        AP += P_inter           <span class="comment"># 矩形面积</span></span><br><span class="line">    AP = AP / <span class="number">11</span></span><br><span class="line">    <span class="keyword">return</span> AP</span><br></pre></td></tr></table></figure>
+<h1 id="COCO"><a href="#COCO" class="headerlink" title="COCO"></a>COCO</h1><p>COCO评估指标较多，共有12项，详细查看<a href="http://cocodataset.org/#detection-eval" target="_blank" rel="noopener">Detection Evaluation</a>，以下仅介绍其<code>AP</code>计算方法，原文如下。</p>
+<blockquote>
+<p>Average Precision (AP):</p>
+<ol>
+<li><p>primary challenge metric($AP$)</p>
+<script type="math/tex; mode=display">IoU=.50:.05:.95</script></li>
+<li><p>PASCAL VOC metric($AP^{IoU}=.50$)</p>
+<script type="math/tex; mode=display">IoU=.50</script></li>
+<li><p>strict metric($AP^{IoU}=.75$) </p>
+<script type="math/tex; mode=display">IoU=.75</script></li>
+</ol>
+</blockquote>
+<p>与<code>VOC</code>类似，但选取更多阈值的<code>IoU</code>，从中标记预测正确的样本进行计算。当$IoU = 0.5$时，即<code>VOC</code>计算方法。</p>
+<h1 id="举例-1"><a href="#举例-1" class="headerlink" title="举例"></a>举例</h1><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
+<li><a href="http://host.robots.ox.ac.uk/pascal/VOC/voc2012/devkit_doc.pdf" target="_blank" rel="noopener">The PASCAL Visual Object Classes Challenge 2012 (VOC2012) Development Kit</a></li>
+<li><a href="https://arleyzhang.github.io/articles/c521a01c/" target="_blank" rel="noopener">目标检测评价标准-AP mAP</a></li>
+<li><a href="https://www.zhihu.com/question/41540197" target="_blank" rel="noopener">mean average precision（MAP）在计算机视觉中是如何计算和应用的？</a></li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Object-Detection/" rel="tag"># Object Detection</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/26/NMS-softer-NMS/" rel="next" title="NMS & soft-NMS">
+                <i class="fa fa-chevron-left"></i> NMS & soft-NMS
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Louis Hsu">
+            
+              <p class="site-author-name" itemprop="name">Louis Hsu</p>
+              <p class="site-description motion-element" itemprop="description">技术博客？</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">44</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/isLouisHsu" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://is.louishsu@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/islouishsu" target="_blank" title="Zhihu"><i class="fa fa-fw fa-zhihu"></i>Zhihu</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/islouishsu" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=517565384&auto=1&height=66"></iframe>
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Precision-Recall-Average-Precision"><span class="nav-number">2.</span> <span class="nav-text">Precision, Recall, Average Precision</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#计算方法"><span class="nav-number">2.1.</span> <span class="nav-text">计算方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#举例"><span class="nav-number">2.2.</span> <span class="nav-text">举例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mAP"><span class="nav-number">3.</span> <span class="nav-text">mAP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PASCAL-VOC"><span class="nav-number">4.</span> <span class="nav-text">PASCAL VOC</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#COCO"><span class="nav-number">5.</span> <span class="nav-text">COCO</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#举例-1"><span class="nav-number">6.</span> <span class="nav-text">举例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">7.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Louis Hsu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+</body>
+</html>
