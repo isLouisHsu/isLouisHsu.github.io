@@ -108,24 +108,24 @@
 
 
 
-  <meta name="description" content="技术博客？">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Windows">
-<meta property="og:url" content="http://yoursite.com/Windows/index.html">
+  <meta name="description" content="前言ANSI定义了用于屏幕显示的Escape屏幕控制码，打印输出到终端时，可指定输出颜色、格式等。 基本格式1\033[&amp;lt;background color&amp;gt;;&amp;lt;front color&amp;gt;m string to print \033[0m  \033[ xxxx m为一个句段； \033[0m关闭所有属性；  光标控制    ANSI控制码 含义     \033[nA 光标上">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Useful Terminal Control Sequences">
+<meta property="og:url" content="http://yoursite.com/2019/05/28/Useful-Terminal-Control-Sequences/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="技术博客？">
+<meta property="og:description" content="前言ANSI定义了用于屏幕显示的Escape屏幕控制码，打印输出到终端时，可指定输出颜色、格式等。 基本格式1\033[&amp;lt;background color&amp;gt;;&amp;lt;front color&amp;gt;m string to print \033[0m  \033[ xxxx m为一个句段； \033[0m关闭所有属性；  光标控制    ANSI控制码 含义     \033[nA 光标上">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-07T07:48:06.000Z">
+<meta property="og:updated_time" content="2019-05-28T07:07:25.260Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Windows">
-<meta name="twitter:description" content="技术博客？">
+<meta name="twitter:title" content="Useful Terminal Control Sequences">
+<meta name="twitter:description" content="前言ANSI定义了用于屏幕显示的Escape屏幕控制码，打印输出到终端时，可指定输出颜色、格式等。 基本格式1\033[&amp;lt;background color&amp;gt;;&amp;lt;front color&amp;gt;m string to print \033[0m  \033[ xxxx m为一个句段； \033[0m关闭所有属性；  光标控制    ANSI控制码 含义     \033[nA 光标上">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/Windows/">
+  <link rel="canonical" href="http://yoursite.com/2019/05/28/Useful-Terminal-Control-Sequences/">
 
 
 
@@ -135,7 +135,7 @@
   };
 </script>
 
-  <title>Windows | LOUIS' BLOG</title>
+  <title>Useful Terminal Control Sequences | LOUIS' BLOG</title>
   
 
 
@@ -328,71 +328,432 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/28/Useful-Terminal-Control-Sequences/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="技术博客？">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-<h1 class="post-title" itemprop="name headline">Windows</h1>
-
-<div class="post-meta">
-  
-  
-
-
-
-</div>
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
+          <h1 class="post-title" itemprop="name headline">Useful Terminal Control Sequences
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-28 14:28:21 / 修改时间：15:07:25" itemprop="dateCreated datePublished" datetime="2019-05-28T14:28:21+08:00">2019-05-28</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
           
-        
-      </div>
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p><code>ANSI</code>定义了用于屏幕显示的<code>Escape</code>屏幕控制码，打印输出到终端时，可指定输出颜色、格式等。</p>
+<h1 id="基本格式"><a href="#基本格式" class="headerlink" title="基本格式"></a>基本格式</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\033[&lt;background color&gt;;&lt;front color&gt;m string to print \033[0m</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>\033[ xxxx m</code>为一个句段；</li>
+<li><code>\033[0m</code>关闭所有属性；</li>
+</ul>
+<h1 id="光标控制"><a href="#光标控制" class="headerlink" title="光标控制"></a>光标控制</h1><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>ANSI控制码</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>\033[nA</td>
+<td>光标上移n行</td>
+</tr>
+<tr>
+<td>\033[nB</td>
+<td>光标下移n行</td>
+</tr>
+<tr>
+<td>\033[nC</td>
+<td>光标右移n行</td>
+</tr>
+<tr>
+<td>\033[nD</td>
+<td>光标左移n行</td>
+</tr>
+<tr>
+<td>\033[y;xH</td>
+<td>设置光标位置</td>
+</tr>
+<tr>
+<td>\033[2J</td>
+<td>清屏</td>
+</tr>
+<tr>
+<td>\033[K</td>
+<td>清除从光标到行尾的内容</td>
+</tr>
+<tr>
+<td>\033[s</td>
+<td>保存光标位置</td>
+</tr>
+<tr>
+<td>\033[u</td>
+<td>恢复光标位置</td>
+</tr>
+<tr>
+<td>\033[?25l</td>
+<td>隐藏光标</td>
+</tr>
+<tr>
+<td>\033[?25h</td>
+<td>显示光标</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="颜色控制"><a href="#颜色控制" class="headerlink" title="颜色控制"></a>颜色控制</h1><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>ANSI控制码</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>\033[m</td>
+<td>NONE</td>
+</tr>
+<tr>
+<td>\033[0;32;31m</td>
+<td>RED</td>
+</tr>
+<tr>
+<td>\033[1;31m</td>
+<td>LIGHT RED</td>
+</tr>
+<tr>
+<td>\033[0;32;32m</td>
+<td>GREEN</td>
+</tr>
+<tr>
+<td>\033[1;32m</td>
+<td>LIGHT GREEN</td>
+</tr>
+<tr>
+<td>\033[0;32;34m</td>
+<td>BULE</td>
+</tr>
+<tr>
+<td>\033[1;34m</td>
+<td>LIGHT BLUE</td>
+</tr>
+<tr>
+<td>\033[1;30m</td>
+<td>GRAY</td>
+</tr>
+<tr>
+<td>\033[0;36m</td>
+<td>CYAN</td>
+</tr>
+<tr>
+<td>\033[1;36m</td>
+<td>LIGHT CYAN</td>
+</tr>
+<tr>
+<td>\033[0;35m</td>
+<td>PURPLE</td>
+</tr>
+<tr>
+<td>\033[1;35m</td>
+<td>LIAGHT PURPLE</td>
+</tr>
+<tr>
+<td>\033[0;33m</td>
+<td>BROWN</td>
+</tr>
+<tr>
+<td>\033[1;33m</td>
+<td>YELLO</td>
+</tr>
+<tr>
+<td>\033[0;37m</td>
+<td>LIGHT GRAY</td>
+</tr>
+<tr>
+<td>\033[1;37m</td>
+<td>WHITE</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>背景色与字体颜色符号不同</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>背景色</th>
+<th>字体色</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>40: 黑</td>
+<td>30: 黑</td>
+</tr>
+<tr>
+<td>41: 红</td>
+<td>31: 红</td>
+</tr>
+<tr>
+<td>42: 绿</td>
+<td>32: 绿</td>
+</tr>
+<tr>
+<td>43: 黄</td>
+<td>33: 黄</td>
+</tr>
+<tr>
+<td>44: 蓝</td>
+<td>34: 蓝</td>
+</tr>
+<tr>
+<td>45: 紫</td>
+<td>35: 紫</td>
+</tr>
+<tr>
+<td>46: 深绿</td>
+<td>36: 深绿</td>
+</tr>
+<tr>
+<td>47: 白色</td>
+<td>37: 白色</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="格式控制"><a href="#格式控制" class="headerlink" title="格式控制"></a>格式控制</h1><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>ANSI控制码</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>\033[0m</td>
+<td>关闭所有属性</td>
+</tr>
+<tr>
+<td>\033[1m</td>
+<td>设置高亮度</td>
+</tr>
+<tr>
+<td>\033[4m</td>
+<td>下划线</td>
+</tr>
+<tr>
+<td>\033[5m</td>
+<td>闪烁</td>
+</tr>
+<tr>
+<td>\033[7m</td>
+<td>反显</td>
+</tr>
+<tr>
+<td>\033[8m</td>
+<td>消隐</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h1><p>例如用python打印输出<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">"\007"</span>)                       <span class="comment"># 发出提示音</span></span><br><span class="line">print(<span class="string">"\033[42:31m hello! \033[0m"</span>) <span class="comment"># 绿底红字` hello! ` </span></span><br><span class="line">print(<span class="string">"\033[4m"</span>)                    <span class="comment"># 开启下划线</span></span><br><span class="line">print(<span class="string">"\033[0m"</span>)                    <span class="comment"># 关闭所有格式</span></span><br><span class="line">print(<span class="string">"\033[42:31m hello! \033[0m"</span>) <span class="comment"># 下划线绿底红字` hello! ` </span></span><br><span class="line">print(<span class="string">"\033[2J"</span>)                    <span class="comment"># 清屏</span></span><br></pre></td></tr></table></figure></p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
+<li><a href="https://blog.csdn.net/lzuacm/article/details/8993785" target="_blank" rel="noopener">“\\033”(ESC)的用法-ANSI的Esc屏幕控制 - CSDN</a></li>
+<li><a href="https://www.student.cs.uwaterloo.ca/~cs452/terminal.html" target="_blank" rel="noopener">Useful Terminal Control Sequences - student.cs.uwaterloo.ca</a></li>
+</ol>
+
       
     </div>
-    
-
-
 
     
+
     
     
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/26/mAP/" rel="next" title="mAP">
+                <i class="fa fa-chevron-left"></i> mAP
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
   </div>
 
 
@@ -422,8 +783,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -552,6 +922,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基本格式"><span class="nav-number">2.</span> <span class="nav-text">基本格式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#光标控制"><span class="nav-number">3.</span> <span class="nav-text">光标控制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#颜色控制"><span class="nav-number">4.</span> <span class="nav-text">颜色控制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#格式控制"><span class="nav-number">5.</span> <span class="nav-text">格式控制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#举例"><span class="nav-number">6.</span> <span class="nav-text">举例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">7.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
