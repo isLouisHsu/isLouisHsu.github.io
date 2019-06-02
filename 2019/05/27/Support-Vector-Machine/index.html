@@ -1,0 +1,1916 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言Github: isLouisHsu/Basic-Machine-Learning-Algorithm/algorithm/p97_svm.py 补一补支持向量机的笔记。 支持向量机(SVM)为有监督学习算法，可用于回归、分类甚至聚类(支持向量聚类)，其主要特点为  将样本表示为超空间中的点； 求取支持向量，其余样本点对超平面无影响； 对于线性不可分问题，利用核函数映射到高维空间，使其线性可分">
+<meta name="keywords" content="监督学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Support Vector Machine">
+<meta property="og:url" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/index.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="前言Github: isLouisHsu/Basic-Machine-Learning-Algorithm/algorithm/p97_svm.py 补一补支持向量机的笔记。 支持向量机(SVM)为有监督学习算法，可用于回归、分类甚至聚类(支持向量聚类)，其主要特点为  将样本表示为超空间中的点； 求取支持向量，其余样本点对超平面无影响； 对于线性不可分问题，利用核函数映射到高维空间，使其线性可分">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/distance.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/kernel_poly.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/svm-3-conditions.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/r.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/regression.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/linear.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/non-linear.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/epsilon.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/y1neqy2.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/y1eqy2.jpg">
+<meta property="og:updated_time" content="2019-06-02T12:06:43.552Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Support Vector Machine">
+<meta name="twitter:description" content="前言Github: isLouisHsu/Basic-Machine-Learning-Algorithm/algorithm/p97_svm.py 补一补支持向量机的笔记。 支持向量机(SVM)为有监督学习算法，可用于回归、分类甚至聚类(支持向量聚类)，其主要特点为  将样本表示为超空间中的点； 求取支持向量，其余样本点对超平面无影响； 对于线性不可分问题，利用核函数映射到高维空间，使其线性可分">
+<meta name="twitter:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/distance.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/05/27/Support-Vector-Machine/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Support Vector Machine | LOUIS' BLOG</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LOUIS' BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">人生苦短，不如不管，继续任性。</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/27/Support-Vector-Machine/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="技术博客？">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Support Vector Machine
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-27 09:32:15" itemprop="dateCreated datePublished" datetime="2019-05-27T09:32:15+08:00">2019-05-27</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-06-02 20:06:43" itemprop="dateModified" datetime="2019-06-02T20:06:43+08:00">2019-06-02</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p><a href="https://github.com/isLouisHsu/Basic-Machine-Learning-Algorithm/blob/master/algorithm/p97_svm.py" target="_blank" rel="noopener">Github: isLouisHsu/Basic-Machine-Learning-Algorithm/algorithm/p97_svm.py</a></p>
+<p>补一补支持向量机的笔记。</p>
+<p>支持向量机<code>(SVM)</code>为有监督学习算法，可用于回归、分类甚至聚类(支持向量聚类)，其主要特点为</p>
+<ul>
+<li>将样本表示为超空间中的点；</li>
+<li>求取支持向量，其余样本点对超平面无影响；</li>
+<li>对于线性不可分问题，利用核函数映射到高维空间，使其线性可分；</li>
+</ul>
+<h1 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h1><p>以下介绍支持向量机的基本原理，首先对一些概念作补充</p>
+<h2 id="概念补充"><a href="#概念补充" class="headerlink" title="概念补充"></a>概念补充</h2><ol>
+<li><p>$n$维空间与超平面<br> 如对于$n$维数据集，其所在空间即为$n$维欧式空间，则在该空间中，余维度为$1$的线性子空间，或称$n-1$维仿射子空间，称为超平面，为$n-1$维，可由下式确定</p>
+<script type="math/tex; mode=display">w^T x + b = 0 \tag{1}</script><p> 其中$w,x$为$n$维列向量，$x$表示超平面上的点($n$维)，$w$表示超平面的法向量，决定超平面的方向，$b$为实数。</p>
+<script type="math/tex; mode=display">x = (x_1, x_2, \cdots, x_n)^T</script><script type="math/tex; mode=display">w = (w_1, w_2, \cdots, w_n)^T</script><p> 例如$3$维空间中的$2$维平面方程为</p>
+<script type="math/tex; mode=display">Ax + By + Cz + D = 0</script></li>
+<li><p>点到超平面的距离<br> <img src="/2019/05/27/Support-Vector-Machine/distance.jpg" alt="distance"></p>
+<p> 对于样本空间中任一点$x$，到超平面$\mathcal{P}_{w,b}$的距离，可表示为</p>
+<script type="math/tex; mode=display">\mathcal{D} = \frac{|w^T x + b|}{||w||} \tag{2}</script><p> 其中$||w||$为向量$w$的$2$范数，即</p>
+<script type="math/tex; mode=display">||w|| = \sqrt{w_1^2 + w_2^2 + \cdots + w_n^2} \tag{3}</script><blockquote>
+<p>证明：假设超平面上一向量点为$x_0$，则向量$x-x_0$在单位法向量$\frac{w}{||w||}$上的投影$d$，即为向量点到超平面的距离</p>
+<script type="math/tex; mode=display">d =  |\frac{w^T}{||w||} (x-x_0)|</script><p>而</p>
+<script type="math/tex; mode=display">w^T x + b = 0 \Rightarrow w^T = -b</script><p>所以</p>
+<script type="math/tex; mode=display">d =  | \frac{- w^T x_0 - b}{||w||} | = \frac{|w^T x_0 + b|}{||w||}</script></blockquote>
+</li>
+</ol>
+<h2 id="核技巧"><a href="#核技巧" class="headerlink" title="核技巧"></a>核技巧</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>在前言中说到支持向量机使用核函数映射低维空间到高维空间，这是如何做到的？<br>假设有两个$n$维向量$x_i, x_j$，设有映射$\mathit{\Phi}$使其维度扩张到$n’$维，即</p>
+<script type="math/tex; mode=display">x' = \mathit{\Phi}(x)</script><p>则定义核函数为</p>
+<script type="math/tex; mode=display">\kappa(x_i, x_j) = \mathit{\Phi}(x_i)^T \mathit{\Phi}(x_j) \tag{4}</script><h3 id="常用核函数"><a href="#常用核函数" class="headerlink" title="常用核函数"></a>常用核函数</h3><ol>
+<li>线性<code>(linear)</code>核函数<script type="math/tex; mode=display">\kappa(x_i, x_j) = x_i^T x_j</script></li>
+<li>多项式<code>(Polynomial)</code>核函数<script type="math/tex; mode=display">\kappa(x_i, x_j) = (\gamma x_i^T x_j + c)^n</script></li>
+<li>高斯<code>(Gaussian)</code>核函数<script type="math/tex; mode=display">\kappa(x_i, x_j) = e^{-\gamma \frac{||x_i - x_j||^2}{2\sigma^2}}</script></li>
+<li>拉普拉斯<code>(Laplace)</code>核函数<script type="math/tex; mode=display">\kappa(x_i, x_j) = e^{-\gamma \frac{||x_i - x_j||}{2\sigma}}</script></li>
+<li>Sigmoid核函数<script type="math/tex; mode=display">\kappa(x_i, x_j) = \tanh (\gamma x_i^T x_j + c)</script></li>
+</ol>
+<p>等等。</p>
+<p>至于如何选取核函数，需要技术人员一定的先验知识，或者使用超参数搜索确定。</p>
+<h3 id="实例分析核函数的作用"><a href="#实例分析核函数的作用" class="headerlink" title="实例分析核函数的作用"></a>实例分析核函数的作用</h3><ol>
+<li><p>多项式核函数<br> 指定多项式核函数参数$ \gamma = 1, c = 0, n = 2 $，即</p>
+<script type="math/tex; mode=display">\kappa(x_i, x_j) = (x_i^T x_j)^2 \tag{4.a}</script><p> 设原始空间为$2$维，即</p>
+<script type="math/tex; mode=display">x_i = (x_{i1}, x_{i2})^T</script><p> 代入核函数$(4.a)$，有</p>
+<script type="math/tex; mode=display">\kappa(x_i, x_j) = \left[(x_{i1}, x_{i2}) (x_{j1}, x_{j2})^T \right]^2 = (x_{i1}x_{j1} + x_{i2}x_{j2})^2</script><script type="math/tex; mode=display">= x_{i1}^2 x_{j1}^2 + 2x_{i1}x_{j1}x_{i2}x_{j2} + x_{i2}^2 x_{j2}^2</script><p> 把以上$3$项多项式表示成$3$维向量内积，即</p>
+<script type="math/tex; mode=display">\kappa(x_i, x_j) = \left[ \begin{matrix} x_{i1}^2 & \sqrt{2}x_{i1}x_{i2} & x_{i2}^2 \end{matrix} \right] 
+                         \left[ \begin{matrix} x_{j1}^2 & \sqrt{2}x_{j1}x_{j2} & x_{j2}^2 \end{matrix} \right]^T</script><p> 由上式与式$(4)$可得，该核函数对应的映射函数为</p>
+<script type="math/tex; mode=display">\mathit{\Phi}(x) = \left[ \begin{matrix} x_1^2 & \sqrt{2}x_1x_2 & x_2^2 \end{matrix} \right]^T \tag{4.b}</script><p> 这样就把$2$维空间中的点映射到了$3$维空间，作图如下。<br> <img src="/2019/05/27/Support-Vector-Machine/kernel_poly.jpg" alt="kernel_poly"></p>
+</li>
+</ol>
+<pre><code><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">X = np.array([</span><br><span class="line">[<span class="number">1</span>,<span class="number">1</span>],[<span class="number">1</span>,<span class="number">2</span>],[<span class="number">1</span>,<span class="number">3</span>],[<span class="number">1</span>,<span class="number">4</span>],[<span class="number">2</span>,<span class="number">1</span>],[<span class="number">2</span>,<span class="number">2</span>],[<span class="number">3</span>,<span class="number">1</span>],[<span class="number">4</span>,<span class="number">1</span>],[<span class="number">5</span>,<span class="number">1</span>],[<span class="number">5</span>,<span class="number">2</span>],</span><br><span class="line">[<span class="number">6</span>,<span class="number">1</span>],[<span class="number">6</span>,<span class="number">2</span>],[<span class="number">6</span>,<span class="number">3</span>],[<span class="number">6</span>,<span class="number">4</span>],[<span class="number">3</span>,<span class="number">3</span>],[<span class="number">3</span>,<span class="number">4</span>],[<span class="number">3</span>,<span class="number">5</span>],[<span class="number">4</span>,<span class="number">3</span>],[<span class="number">4</span>,<span class="number">4</span>],[<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line">])</span><br><span class="line">Y=np.array([<span class="number">-1</span>] * <span class="number">14</span> + [<span class="number">1</span>] * <span class="number">6</span>)</span><br><span class="line"></span><br><span class="line">plt.figure(<span class="number">0</span>)</span><br><span class="line">plt.scatter(X[:, <span class="number">0</span>], X[:, <span class="number">1</span>], c=Y)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将数据映射到高维后显示</span></span><br><span class="line"><span class="comment"># 映射函数为Φ(x)=[x1^2 √2*x1*x2 x2^2]</span></span><br><span class="line">FX = np.zeros((<span class="number">0</span>, <span class="number">3</span>))</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(X.shape[<span class="number">0</span>]):</span><br><span class="line">    tmp = np.array([X[i, <span class="number">0</span>]**<span class="number">2</span>, np.sqrt(<span class="number">2</span>)*X[i, <span class="number">0</span>]*X[i, <span class="number">1</span>], X[i, <span class="number">1</span>]**<span class="number">2</span>]).reshape(<span class="number">1</span>, <span class="number">-1</span>)</span><br><span class="line">    FX = np.r_[FX, tmp]</span><br><span class="line"></span><br><span class="line">fig = plt.figure(<span class="number">1</span>)</span><br><span class="line">figAx = Axes3D(fig)</span><br><span class="line">figAx.scatter(FX[:, <span class="number">0</span>], FX[:, <span class="number">1</span>], FX[:, <span class="number">2</span>], c=Y)</span><br><span class="line"></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+</code></pre><ol>
+<li><p>高斯核函数</p>
+<script type="math/tex; mode=display">\kappa(x_i, x_j) = e^{-\gamma \frac{||x_i - x_j||^2}{2\sigma^2}} = e^{c||x_i - x_j||^2} \tag{4.c}</script><p> 其中包含指数函数，其级数展开式为</p>
+<script type="math/tex; mode=display">e^x = \sum_{i=0}^{\infty} \frac{x^i}{i!} = \sum_{i=0}^{n} \frac{x^i}{i!} + R(n)</script><p> 因此可将样本点映射到无穷维度。</p>
+<ul>
+<li><p>输入维度为$1$</p>
+<script type="math/tex; mode=display">||x_i - x_j||^2 = (x_i - x_j)^2 =x_i^2 - 2x_ix_j + x_j^2</script><p>  则代入核函数$(4.c)$得到</p>
+<script type="math/tex; mode=display">e^{c||x_i - x_j||^2} 
+  = e^{c(x_i^2 - 2x_ix_j + x_j^2)}
+  = e^{c(x_i^2 + x_j^2)} e^{-2c x_i x_j}</script><p>  其中</p>
+<script type="math/tex; mode=display">
+  e^{-2c x_i x_j} = \sum_{n=0}^{\infty} \frac{(-2c)^n x_i^n x_j^n}{n!} = 1 - 2cx_ix_j + \frac{4 c^2 x_i^2 x_j^2}{2} - \frac{8 c^3 x_i^3 x_j^3}{6} + \cdots</script><script type="math/tex; mode=display">
+  = \left[\begin{matrix} \cdots, \sqrt{\frac{(-2c)^n}{n!}x_i^n}, \cdots \end{matrix} \right]
+  \left[\begin{matrix} \cdots, \sqrt{\frac{(-2c)^n}{n!}x_j^n}, \cdots \end{matrix} \right]^T</script><p>  所以</p>
+<script type="math/tex; mode=display">
+  e^{c||x_i - x_j||^2}
+  = e^{c(x_i^2 + x_j^2)} \sum_{n=0}^{\infty} \frac{(-2c)^n x_i^n x_j^n}{n!}</script><script type="math/tex; mode=display">
+  = \left\{ e^{cx_i^2} \left[\begin{matrix} \cdots, \sqrt{\frac{(-2c)^n}{n!}x_i^n}, \cdots \end{matrix} \right] \right\}
+  \left\{ e^{cx_j^2} \left[\begin{matrix} \cdots, \sqrt{\frac{(-2c)^n}{n!}x_j^n}, \cdots \end{matrix} \right] \right\}^T</script><p>  则可得映射函数为</p>
+<script type="math/tex; mode=display">\mathit{\Phi}(x) = e^{cx^2} \left[\begin{matrix} \cdots, \sqrt{\frac{(-2c)^n}{n!}x^n}, \cdots \end{matrix} \right] \tag{4.d}</script></li>
+<li><p>输入维度为$d$</p>
+<script type="math/tex; mode=display">||x_i - x_j||^2 = (x_i - x_j)^T (x_i - x_j) = x_i^T x_i - 2 x_i^T x_j + x_j^T x_j</script><p>  代入核函数$(4.c)$得到</p>
+<script type="math/tex; mode=display">e^{c||x_i - x_j||^2} = e^{c(x_i^T x_i + x_j^T x_j)} e^{-2c x_i^T x_j}</script><p>  其中</p>
+<script type="math/tex; mode=display">e^{-2c x_i^T x_j} = \sum_{n=0}^{\infty} \frac{(-2c)^n (x_i^T x_j)^n}{n!}</script><p>  故</p>
+<script type="math/tex; mode=display">e^{c||x_i - x_j||^2} = e^{c(x_i^T x_i + x_j^T x_j)} \sum_{n=0}^{\infty} \frac{(-2c)^n (x_i^T x_j)^n}{n!}</script></li>
+</ul>
+</li>
+</ol>
+<pre><code>    特殊化，对于$d=2$，展开至$3$阶，得到
+    $$
+    e^{c||x_i - x_j||^2} = e^{c(x_{i1}^2 + x_{i2}^2 + x_{j1}^2 + x_{j2}^2)} \left[ 1 - 2c (x_{i1}x_{j1} + x_{i2}x_{j2}) + 4c^2 (x_{i1}x_{j1} + x_{i2}x_{j2})^2 -8c^3 (x_{i1}x_{j1} + x_{i2}x_{j2})^3 \right]
+    $$
+
+    其中
+    $$
+    \begin{cases}
+        x_{i1}x_{j1} + x_{i2}x_{j2} \\
+        (x_{i1}x_{j1} + x_{i2}x_{j2})^2 = x_{i1}^2 x_{j1}^2 + 2x_{i1}x_{j1}x_{i2}x_{j2} + x_{i2}^2 x_{j2}^2 \\
+        (x_{i1}x_{j1} + x_{i2}x_{j2})^3 = x_{i1}^3 x_{j1}^3 + 3x_{i1}x_{j1}x_{i2}^2x_{j2}^2 + 3x_{i1}^2x_{j1}^2x_{i2}x_{j2} + x_{i2}^3 x_{j2}^3 \\
+    \end{cases}
+    $$
+
+    带入后得
+    $$
+    e^{c||x_i - x_j||^2} = e^{c(x_{i1}^2 + x_{i2}^2 + x_{j1}^2 + x_{j2}^2)} [ 1 - 2c (x_{i1}x_{j1} + x_{i2}x_{j2}) + 4c^2 (x_{i1}^2 x_{j1}^2 + 2x_{i1}x_{j1}x_{i2}x_{j2} + 
+    $$
+
+    $$ 
+    x_{i2}^2 x_{j2}^2) -8c^3 (x_{i1}^3 x_{j1}^3 + 3x_{i1}x_{j1}x_{i2}^2x_{j2}^2 + 3x_{i1}^2x_{j1}^2x_{i2}x_{j2} + x_{i2}^3 x_{j2}^3) ]
+    $$
+
+    所以映射函数为
+    $$
+    \mathit{\Phi}(x) = e^{c(x_1^2 + x_2^2)} \left[ 
+        \begin{matrix}
+            1, \sqrt{-2c} x_1, \sqrt{-2c} x_2, \sqrt{4c^2} x_1^2, \sqrt{8c^2} x_1x_2, \sqrt{4c^2} x_2^2, \sqrt{-8c^3}x_1^3, \sqrt{-24c^3} x_1 x_2^2, \sqrt{-24c^3} x_1^2 x_2, \sqrt{-8c^3} x_1^3
+        \end{matrix} \right]^T \tag{4.e}
+    $$
+
+    即升维后维数为$10$。
+</code></pre><h2 id="线性支持向量机"><a href="#线性支持向量机" class="headerlink" title="线性支持向量机"></a>线性支持向量机</h2><p>对于线性可分得情况，目标为求解一个超平面$w^T \mathit{\Phi}(x) + b = 0$使两类点落在超平面两侧。</p>
+<p><img src="/2019/05/27/Support-Vector-Machine/svm-3-conditions.jpg" alt="svm-3-conditions"></p>
+<p>观察以上两图，图$(c)$分割最佳，应有</p>
+<ul>
+<li>超平面在两类点间隔内，可平移距离最大；<script type="math/tex; mode=display">r = \max (r_+ - r_-)</script></li>
+<li>分割平面$\mathcal{P}$到$\mathcal{P}_+, \mathcal{P}_-$的距离相等，即；<script type="math/tex; mode=display">r_- = r_+ = \frac{r}{2}</script></li>
+<li>落在支撑超平面$\mathcal{P}_+, \mathcal{P}_-$上的点称为<strong>支持向量<code>Support Vector</code></strong>，可记作$x_{+/-}^{sup}$；</li>
+</ul>
+<p>设分割超平面$\mathcal{P}$为</p>
+<script type="math/tex; mode=display">g(x) = w^T \mathit{\Phi}(x) + b = 0 \tag{5}</script><p>判别方程可定义为</p>
+<script type="math/tex; mode=display">\hat{y} = \text{sign} \left[  w^T \mathit{\Phi}(x) + b \right] \tag{6}</script><p>则平面$\mathcal{P}$上下平移后得到平面$\mathcal{P}_+, \mathcal{P}_-$，即</p>
+<script type="math/tex; mode=display">g_+(x) = w^T \mathit{\Phi}(x) + b - C(常数) = 0</script><script type="math/tex; mode=display">g_-(x) = w^T \mathit{\Phi}(x) + b + C(常数) = 0</script><p>作归一化处理，两边同除以$C(常数)$，则支撑超平面方程为</p>
+<script type="math/tex; mode=display">g_+(x) = w^T \mathit{\Phi}(x) + b - 1 = 0</script><script type="math/tex; mode=display">g_-(x) = w^T \mathit{\Phi}(x) + b + 1 = 0</script><p>对于正负样本$x_{+/-}$，分别满足</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    w^T \mathit{\Phi}(x_+) + b > 1 \\
+    y = 1
+\end{cases}
+\begin{cases}
+    w^T \mathit{\Phi}(x_-) + b < - 1 \\
+    y = -1
+\end{cases}</script><p>即</p>
+<script type="math/tex; mode=display">y \left[ w^T \mathit{\Phi}(x) + b \right] > 1</script><p>现希望优化两个平面间的距离，使其达到最大，即优化目标为</p>
+<script type="math/tex; mode=display">w, b = \argmax r</script><script type="math/tex; mode=display">s.t.\qquad y \left[ w^T \mathit{\Phi}(x) + b \right] > 1 \tag{7}</script><p><strong>那么如何求解支撑超平面间距离$r$呢？</strong>，有两种思路</p>
+<ol>
+<li><p>思路一<br> <img src="/2019/05/27/Support-Vector-Machine/r.jpg" alt="r"></p>
+<p> 过超平面$\mathcal{P}$任一点$\mathit{\Phi}(x)$作垂线，分别交$\mathcal{P}_{+/-}$于向量$\mathit{\Phi}(x_{+/-})$，则</p>
+<script type="math/tex; mode=display">
+ \begin{cases}
+     w^T \mathit{\Phi}(x_+) + b = + 1 \\
+     w^T \mathit{\Phi}(x_-) + b = - 1 
+ \end{cases}</script><p> 利用距离公式求解点$\mathit{\Phi}(x)$到超平面$\mathcal{P}$的距离</p>
+<script type="math/tex; mode=display">r_+ = r_- = \frac{r}{2} = \frac{| w^T \mathit{\Phi}(x_{+/-}) + b |}{||w||} = \frac{1}{||w||}</script><p> 所以</p>
+<script type="math/tex; mode=display">r = \frac{2}{||w||} \tag{8.a}</script></li>
+<li><p>思路二</p>
+<script type="math/tex; mode=display">r_+ = r_- = \frac{r}{2} = \min_i \frac{| w^T \mathit{\Phi}(x^{(i)}) + b |}{||w||}, \quad i = 1, ..., N</script><p> 由支持向量定义</p>
+<script type="math/tex; mode=display">| w^T \mathit{\Phi}(x_{+/-}^{sup}) + b | = \min | w^T \mathit{\Phi}(x^{(i)}) + b |</script><p> 且</p>
+<script type="math/tex; mode=display">| w^T \mathit{\Phi}(x_{+/-}^{sup}) + b | = 1</script><p> 所以</p>
+<script type="math/tex; mode=display">r = \frac{2}{||w||} \tag{8.b}</script></li>
+</ol>
+<p>所以优化目标为</p>
+<script type="math/tex; mode=display">w, b = \argmax \frac{2}{||w||}</script><script type="math/tex; mode=display">s.t.\qquad y \left[ w^T \mathit{\Phi}(x) + b \right] \geq 1 \tag{9.a}</script><p>为方便求解，相当于</p>
+<script type="math/tex; mode=display">w, b = \argmin \frac{1}{2} ||w||^2</script><script type="math/tex; mode=display">s.t.\qquad y \left[ w^T \mathit{\Phi}(x) + b \right] \geq 1 \tag{10.b}</script><h1 id="回归问题"><a href="#回归问题" class="headerlink" title="回归问题"></a>回归问题</h1><p>回归模型的目标是让训练集中每个样本点$(x^{(i)}, y^{(i)})$尽量拟合到一个线性模型上</p>
+<script type="math/tex; mode=display">y^{(i)} = w^T \mathit{\Phi}(x^{(i)}) + b</script><p>对于一般的回归模型，一般使用$MSE$作为损失函数，但是在$y^{(i)} \neq w^T \mathit{\Phi}(x^{(i)}) + b$时就会有损失，所以$SVM$不采用。</p>
+<p>定义一个常量$\epsilon &gt; 0$，对于某个样本点$(x^{(i)}, y^{(i)})$，其损失定义如下，即在支撑超平面间隔内的样本点是没有损失的</p>
+<script type="math/tex; mode=display">
+L^{(i)} = \begin{cases}
+    0 & | y^{(i)} - w^T \mathit{\Phi}(x^{(i)}) - b | \leq \epsilon \\
+    | y^{(i)} - w^T \mathit{\Phi}(x^{(i)}) - b | - \epsilon & \text{otherwise}
+\end{cases}</script><p><img src="/2019/05/27/Support-Vector-Machine/regression.jpg" alt="regression"></p>
+<h1 id="优化问题的求解与SMO算法"><a href="#优化问题的求解与SMO算法" class="headerlink" title="优化问题的求解与SMO算法"></a>优化问题的求解与SMO算法</h1><h2 id="带约束的优化问题求解"><a href="#带约束的优化问题求解" class="headerlink" title="带约束的优化问题求解"></a>带约束的优化问题求解</h2><ol>
+<li><p>纯等式约束<br> 一般形式为</p>
+<script type="math/tex; mode=display">\vec{w} = \argmin f(\vec{w})</script><script type="math/tex; mode=display">s.t. \qquad h_j(\vec{w}) = 0, \quad j = 1, 2, \cdots, m \tag{11}</script><p> 其中$f(\vec{w}), h_j(\vec{w})$均可导</p>
+<p> 列写拉格朗日函数</p>
+<script type="math/tex; mode=display">L(\vec{w}, \vec{\lambda}) = f(\vec{w}) + \sum_{j=0}^m \lambda_j h_j(\vec{w}) \tag{11.a}</script><p> 求取极点</p>
+<script type="math/tex; mode=display">
+ \begin{cases}
+ \frac{\partial L}{\partial w_i} = \frac{\partial f(\vec{w})}{\partial w_i} + \sum_{j=0}^m \lambda_j \frac{\partial h_j(\vec{w})}{\partial w_i} = 0 \\
+ \frac{\partial L}{\partial \lambda_j} = h_j(\vec{w}) = 0
+ \end{cases} \tag{11.b}</script><blockquote>
+<p>如 $f(x, y) = x^2 + 3xy + y^2, \quad s.t. \quad x + y = 100 $</p>
+</blockquote>
+</li>
+<li><p>纯不等式约束<br> 一般形式为</p>
+<script type="math/tex; mode=display">\vec{w} = \argmin f(\vec{w})</script><script type="math/tex; mode=display">s.t. \qquad g_j(\vec{w}) \leq 0, \quad j = 1, 2, \cdots, p \tag{12}</script><p> 对于上不等式约束，引入松弛变量$\epsilon_j^2$，使其转换为等式约束</p>
+<script type="math/tex; mode=display">s.t. \qquad g_j(\vec{w}) + \epsilon_j^2 = 0, \quad j = 1, 2, \cdots, p</script><blockquote>
+<p>注意，这里引入的松弛变量为平方项，如此可避免增加约束$\epsilon_j \geq 0$</p>
+</blockquote>
+<p> 列写拉格朗日函数</p>
+<script type="math/tex; mode=display">L(\vec{w}, \vec{\mu}, \vec{\epsilon^2}) = f(\vec{w}) + \sum_{j=0}^p \mu_j (g_j(\vec{w}) + \epsilon_j^2) \tag{12.a}</script><p> 求取极值点</p>
+<script type="math/tex; mode=display">
+ \begin{cases}
+ \frac{\partial L}{\partial w_i} = \frac{\partial f(\vec{w})}{\partial w_i} + \sum_{j=0}^p \mu_j \frac{\partial g_j(\vec{w})}{\partial w_i} = 0 \\
+ \frac{\partial L}{\partial \mu_j} = g_j(\vec{w}) + \epsilon_j^2 = 0 \\
+ \frac{\partial L}{\partial \epsilon_j} = 2 \mu_j \epsilon_j = 0 \\
+ \mu_j \geq 0
+ \end{cases} \tag{12.b}</script><p> 注意等式三</p>
+<ol>
+<li>若$\mu_j = 0$，即对应不等式$g_j(\vec{w}) \leq 0$未起到约束作用；</li>
+<li><p>若$\mu_j \neq 0$，则$\epsilon_j = 0$，那么$ g_j(\vec{w}) = 0$；<br>则总结可得</p>
+<script type="math/tex; mode=display">\mu_j g_j(\vec{w}) = 0</script><p>故$(12.b)$转化为</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+\frac{\partial f(\vec{w})}{\partial w_i} + \sum_{j=0}^p \mu_j \frac{\partial g_j(\vec{w})}{\partial w_i} = 0 \\
+\mu_j g_j(\vec{w}) = 0 \\
+\mu_j \geq 0
+\end{cases} \tag{12.c}</script></li>
+</ol>
+</li>
+</ol>
+<ol>
+<li><p>混合条件约束<br> 一般形式为</p>
+<script type="math/tex; mode=display">\vec{w} = \argmin f(\vec{w})</script><script type="math/tex; mode=display">s.t. \qquad h_j(\vec{w}) = 0, \quad j = 1, 2, \cdots, m</script><script type="math/tex; mode=display">\quad \qquad g_k(\vec{w}) \leq 0, \quad k = 1, 2, \cdots, p \tag{13}</script><p> 经上述内容，可得</p>
+<script type="math/tex; mode=display">L(\vec{w}, \vec{\mu}, \vec{\epsilon^2}) = f(\vec{w}) + \sum_{j=0}^m \lambda_j h_j(\vec{w}) + \sum_{j=0}^p \mu_j (g_j(\vec{w}) + \epsilon_j^2) \tag{13.a}</script><p> 求取极值点</p>
+<script type="math/tex; mode=display">
+ \begin{cases}
+ \frac{\partial f(\vec{w})}{\partial w_i} + \sum_{j=0}^m \lambda_j \frac{\partial h_j(\vec{w})}{\partial w_i} + \sum_{j=0}^p \mu_j \frac{\partial g_j(\vec{w})}{\partial w_i} = 0 \\
+ h_j(\vec{w}) = 0 \\
+ \mu_j g_j(\vec{w}) = 0 \\
+ \mu_j \geq 0
+ \end{cases} \tag{13.b}</script><p> 上式即$K.K.T.$条件。</p>
+</li>
+</ol>
+<h2 id="线性可分情况下求解"><a href="#线性可分情况下求解" class="headerlink" title="线性可分情况下求解"></a>线性可分情况下求解</h2><p><img src="/2019/05/27/Support-Vector-Machine/linear.jpg" alt="linear"></p>
+<p>对于优化问题$(10.b)$</p>
+<script type="math/tex; mode=display">w, b = \argmax \frac{2}{||w||}</script><script type="math/tex; mode=display">s.t.\qquad y \left[ w^T \mathit{\Phi}(x) + b \right] \geq 1 \tag{10.b}</script><p>利用拉格朗日乘子法</p>
+<script type="math/tex; mode=display">L(w, b, \mu) = \frac{1}{2} ||w||^2 + \sum_i \mu^{(i)} \left\{ 1 - y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] \right\} \tag{14}</script><p>则带求解问题为</p>
+<script type="math/tex; mode=display">w, b, \mu = \argmin_{w, b} \max_{\mu} L(w, b, \mu) \tag{15.a}</script><p>转化为上式的<strong>对偶问题</strong></p>
+<script type="math/tex; mode=display">w, b, \mu = \argmin_{\mu} \max_{w,b} L(w, b, \mu) \tag{15.b}</script><blockquote>
+<p>凸优化</p>
+</blockquote>
+<p>分别对参数求偏导</p>
+<script type="math/tex; mode=display">\frac{\partial}{\partial w_j} L(w, b, \mu) = w_j - \sum_i \mu^{(i)} y^{(i)} \mathit{\Phi}(x^{(i)}_j)</script><script type="math/tex; mode=display">\frac{\partial}{\partial b} L(w, b, \mu) = - \sum_i \mu^{(i)} y^{(i)}</script><blockquote>
+<p>$ \frac{\partial}{\partial w_j} \frac{1}{2} ||w||^2 = w_j; \quad \frac{\partial}{\partial w_j} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] = \mathit{\Phi}(x^{(i)}_j) $，注意这里还没有用到映射函数$\mathit{\Phi}(x)$计算。</p>
+</blockquote>
+<p>该式为不等式约束，由$K.K.T.$条件，联立得到</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    \sum_i \mu^{(i)} y^{(i)} \mathit{\Phi}(x^{(i)}_j) = w_j \\
+    \sum_i \mu^{(i)} y^{(i)} = 0 \\
+    \\
+    1 - y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] \leq 0 \\
+    \mu^{(i)} \left\{ 1 - y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] \right\} = 0 \\
+    \mu^{(i)} \geq 0
+\end{cases} \tag{16}</script><p>有</p>
+<script type="math/tex; mode=display">\tilde{L}(\mu) = \frac{1}{2} w^T w + \sum_i \mu^{(i)} \left\{ 1 - y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] \right\}</script><script type="math/tex; mode=display">\qquad \qquad \qquad \qquad = \frac{1}{2} w^T w + \sum_i \mu^{(i)} - w^T \sum_i \mu^{(i)} y^{(i)} \mathit{\Phi}(x^{(i)}) + b \sum_i \mu^{(i)} y^{(i)} \tag{17.a}</script><p>将$w = \sum_i \mu^{(i)} y^{(i)} \mathit{\Phi}(x^{(i)}), \sum_i \mu^{(i)} y^{(i)} = 0$代入，消去变量$w, b$，有</p>
+<script type="math/tex; mode=display">\tilde{L}(\mu) = \sum_i \mu^{(i)} - \frac{1}{2} w^T w \tag{17.b}</script><p>其中</p>
+<script type="math/tex; mode=display">w^T w = \left[ \sum_i \mu^{(i)} y^{(i)} \mathit{\Phi}(x^{(i)}) \right]^T \left[ \sum_i \mu^{(i)} y^{(i)} \mathit{\Phi}(x^{(i)}) \right]</script><script type="math/tex; mode=display">\qquad = \sum_i \left[ \mu^{(i)} y^{(i)} \mathit{\Phi}(x^{(i)})^T \sum_j \mu^{(j)} y^{(j)} \mathit{\Phi}(x^{(j)}) \right]</script><script type="math/tex; mode=display">\quad = \sum_i \sum_j \mu^{(i)} \mu^{(j)} y^{(i)} y^{(j)} \mathit{\Phi}(x^{(i)})^T \mathit{\Phi}(x^{(j)}) \tag{17.c}</script><p>代回$(17.b)$得到</p>
+<script type="math/tex; mode=display">\tilde{L}(\mu) = \sum_i \mu^{(i)} - \frac{1}{2} \sum_i \sum_j \mu^{(i)} \mu^{(j)} y^{(i)} y^{(j)} \mathit{\Phi}(x^{(i)})^T \mathit{\Phi}(x^{(j)}) \tag{17}</script><blockquote>
+<p>这里出现了<strong>核函数</strong>：$\kappa(x^{(i)}, x^{(j)}) = \mathit{\Phi}(x^{(i)})^T \mathit{\Phi}(x^{(j)})$</p>
+</blockquote>
+<p>那么优化问题现在转化为</p>
+<script type="math/tex; mode=display">\mu = \argmax_{\mu} \tilde{L}(\mu) = \argmax_{\mu} \sum_i \mu^{(i)} - \frac{1}{2} \sum_i \sum_j \mu^{(i)} \mu^{(j)} y^{(i)} y^{(j)} \mathit{\Phi}(x^{(i)})^T \mathit{\Phi}(x^{(j)})</script><script type="math/tex; mode=display">s.t.\qquad \mu^{(i)} \geq 0, \quad \sum_i \mu^{(i)} y^{(i)} = 0 \tag{18}</script><p>其中$i = 1, \cdots, N$，现在只需优化$\mu$即可，该式使用$SMO$或梯度下降法算法求解，再用下式求解参数$w, b$</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    w = \sum_i \mu^{(i)} y^{(i)} \mathit{\Phi}(x^{(i)}) \\
+    y^{sup} \left[ w^T \mathit{\Phi}(x^{sup}) + b \right] = 1
+\end{cases} \tag{19}</script><p>可能存在多个支持向量，均满足等式$(19.2)$。</p>
+<h2 id="线性不可分情况下求解"><a href="#线性不可分情况下求解" class="headerlink" title="线性不可分情况下求解"></a>线性不可分情况下求解</h2><p><img src="/2019/05/27/Support-Vector-Machine/non-linear.jpg" alt="non-linear"></p>
+<p>如上图，存在部分样本点线性不可分，有两种方法可解决</p>
+<ol>
+<li>核函数</li>
+<li>软间隔支持向量机</li>
+</ol>
+<h3 id="核函数"><a href="#核函数" class="headerlink" title="核函数"></a>核函数</h3><p>上面介绍了核函数，其作用是将样本特征升维，添加的维度与已存在的特征是线性不相关的，例如我们有样本点</p>
+<script type="math/tex; mode=display">x^{(i)} = \left[\begin{matrix}
+    x^{(i)}_1, \cdots, x^{(i)}_n
+\end{matrix}\right]^T</script><p>可以增加多项式维，例如$(x^{(i)}_j)^n, \prod_{k \leq n}^{k \leq K \leq N} x^{(i)}_k$等，或者添加其他形式的非线性函数，但我们知道，所有函数均可在某点$x = x_0$处展开为幂级数，本质上一致</p>
+<script type="math/tex; mode=display">
+f(x) = \sum_n \frac{f^{(n)}(x - x_0)}{n!} (x - x_0)^{(n)}</script><p>核函数就是利用级数展开的概念，构造多项式维度，将样本点升维，例如高斯核函数$\kappa(x_i, x_j) = e^{-\gamma \frac{||x_i - x_j||^2}{2\sigma^2}}$将其升高到无穷维。机器学习算法求解各维度的权值系数，特征越重要，系数值占比越大。</p>
+<h3 id="软间隔支持向量机"><a href="#软间隔支持向量机" class="headerlink" title="软间隔支持向量机"></a>软间隔支持向量机</h3><p><strong>本质上仍为线性支持向量机</strong>，对于线性不可分的情况，应允许部分样本点不满足条件</p>
+<script type="math/tex; mode=display">y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] \geq 1</script><p>可对每个样本引入松弛变量$\epsilon^{(i)}$，即</p>
+<script type="math/tex; mode=display">y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] \geq 1 - \epsilon^{(i)} \tag{20}</script><blockquote>
+<p>仅仅对于落在支撑超平面间的样本点满足$\epsilon^{(i)} &gt; 0$</p>
+</blockquote>
+<p>形象解释，即对于<strong>落在支撑超平面间的样本点$x^{(i)}$</strong>，视其为<strong>软间隔支持向量(自创)</strong>，调整$\epsilon^{(i)}$将支撑超平面进行微量的位移$d_{\epsilon^{(i)}}$，如下图<br><img src="/2019/05/27/Support-Vector-Machine/epsilon.jpg" alt="epsilon"></p>
+<p>但是呢，也要对不满足该条件的样本个数进行限制，希望越少越好。那么加入<strong>惩罚系数$C$(超参数)</strong>，对不满足条件的样本进行惩罚，使$\sum_i \epsilon^{(i)}$越小越好，则优化目标变更为</p>
+<script type="math/tex; mode=display">w, b = \argmin_{w,b} \left( \frac{1}{2} ||w||^2 + C \sum_i \epsilon^{(i)} \right)</script><script type="math/tex; mode=display">s.t. \qquad y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] \geq 1 - \epsilon^{(i)}</script><script type="math/tex; mode=display">\qquad \epsilon^{(i)} \geq 0 \tag{21}</script><p>同样的，构造拉格朗日函数</p>
+<script type="math/tex; mode=display">L(w, b, \epsilon, \mu_1, \mu_2) = \left( \frac{1}{2} ||w||^2 + C \sum_i \epsilon^{(i)} \right) + \sum_i \mu_1^{(i)} \left\{ 1 - \epsilon^{(i)} - y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] \right\} + \sum_i \mu_2^{(i)} \left( - \epsilon^{(i)} \right) \tag{22}</script><p>根据$K.K.T.$条件</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    \sum_i \mu_1^{(i)} y^{(i)} \mathit{\Phi}(x^{(i)}_j) = w_j \\
+    \sum_i \mu_1^{(i)} y^{(i)} = 0 \\
+    C - \mu_1^{(i)} - \mu_2^{(i)} = 0 \\
+    \\
+    1 - \epsilon^{(i)} - y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] \leq 0 \\
+    \mu_1^{(i)} \left\{ 1 - \epsilon^{(i)} - y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] \right\} = 0 \\
+    \mu_1^{(i)} \geq 0 \\
+    \\
+    - \epsilon^{(i)} \leq 0 \\
+    \mu_2^{(i)} \left( - \epsilon^{(i)} \right) = 0 \\
+    \mu_2^{(i)} \geq 0
+\end{cases} \tag{23}</script><p>消除$w, b, \epsilon$</p>
+<script type="math/tex; mode=display">
+\tilde{L}(\mu_1, \mu_2) = \frac{1}{2} w^T w + C \sum_i \epsilon^{(i)} + 
+\sum_i \mu_1^{(i)} \left( 1 - \epsilon^{(i)} \right) - 
+w^T \sum_i \mu_1^{(i)} y^{(i)} \mathit{\Phi}(x^{(i)}) - 
+b \sum_i \mu_1^{(i)} y^{(i)} - 
+\sum_i \mu_2^{(i)} \epsilon^{(i)}</script><p>其中$w = \sum_i \mu_1^{(i)} y^{(i)} \mathit{\Phi}(x^{(i)}); \quad \sum_i \mu_1^{(i)} y^{(i)} = 0$</p>
+<script type="math/tex; mode=display">
+\tilde{L}(\mu_1, \mu_2) = - \frac{1}{2} w^T w  + C \sum_i \epsilon^{(i)} + \sum_i \mu_1^{(i)} - \sum_i \left( \mu_1^{(i)} + \mu_2^{(i)} \right) \epsilon^{(i)}</script><p>其中$\mu_1^{(i)} + \mu_2^{(i)} = C$，所以同$(17)$</p>
+<script type="math/tex; mode=display">\tilde{L}(\mu_1) = \sum_i \mu_1^{(i)} - \frac{1}{2} w^T w = \sum_i \mu_1^{(i)} - \frac{1}{2} \sum_i \sum_j \mu_1^{(i)} \mu_1^{(j)} y^{(i)} y^{(j)} \mathit{\Phi}(x^{(i)})^T \mathit{\Phi}(x^{(j)}) \tag{24}</script><p>那么优化问题现在转化为</p>
+<script type="math/tex; mode=display">\mu_1 = \argmax_{\mu_1} \tilde{L}(\mu_1) = \argmax_{\mu_1} \sum_i \mu_1^{(i)} - \frac{1}{2} \sum_i \sum_j \mu_1^{(i)} \mu_1^{(j)} y^{(i)} y^{(j)} \mathit{\Phi}(x^{(i)})^T \mathit{\Phi}(x^{(j)})</script><script type="math/tex; mode=display">s.t.\qquad \mu_1^{(i)} \geq 0, \quad \mu_2^{(i)} \geq 0</script><script type="math/tex; mode=display">\sum_i \mu_1^{(i)} y^{(i)} = 0</script><script type="math/tex; mode=display">C - \mu_1^{(i)} - \mu_2^{(i)} = 0 \tag{25}</script><p>对于上式，有如下分析</p>
+<script type="math/tex; mode=display">\begin{cases} \mu_1^{(i)} \geq 0 \\ \mu_2^{(i)} \geq 0 \\ \mu_2^{(i)} = C - \mu_1^{(i)} \end{cases} \Rightarrow C \geq \mu_1^{(i)} \geq 0 \tag{26.a}</script><ol>
+<li>$C = \mu_1^{(i)}$时，$\mu_2^{(i)} = 0$，由$\mu_2^{(i)} \left( - \epsilon^{(i)} \right) = 0$，可得$\epsilon^{(i)} \geq 0$<ol>
+<li>$\epsilon^{(i)} = 0$时，$y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] = 1$，该点为支撑向量；</li>
+<li>$\epsilon^{(i)} &gt; 0$时，$y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] &lt; 1$，该点在支撑超平面间；</li>
+</ol>
+</li>
+<li>$C \neq \mu_1^{(i)}$即$C &gt; \mu_1^{(i)} \geq 0$时，$\mu_2^{(i)} \neq 0$，则由$\mu_2^{(i)} \left( - \epsilon^{(i)} \right) = 0$，可得$\epsilon^{(i)} = 0$，那么$\mu_1^{(i)} \left\{ 1 - y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] \right\} = 0$<ol>
+<li>$\mu_1^{(i)} &gt; 0$时，$y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] = 1$，该点为支撑向量；</li>
+<li>$\mu_1^{(i)} = 0$时，$y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] \geq 1$，该点分类正确，在支持超平面上或者两边</li>
+</ol>
+</li>
+</ol>
+<p>总结一下，即</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    \mu_1^{(i)} = 0 \iff y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] \geq 1 \\
+    0 < \mu_1^{(i)} < C \iff y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] = 1 \\
+    \mu_1^{(i)} = C \iff y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] \leq 1
+\end{cases} \tag{27}</script><p>同样利用$SMO$或梯度下降法求解$\mu_1$，然后以下式求解$w, b, \epsilon, \mu_2$</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    \mu_2 = C - \mu_1 \\
+    w_j = \sum_i \mu_1^{(i)} y^{(i)} \mathit{\Phi}(x^{(i)}_j) \\
+    y^{sup} \left[ w^T \mathit{\Phi}(x^{sup}) + b \right] = 1 \\
+    y^{sup'} \left[ w^T \mathit{\Phi}(x^{sup'}) + b \right] = 1 - \epsilon^{sup'}
+\end{cases} \tag{28}</script><blockquote>
+<p>注：$(x^{sup’}, y^{sup’})$表示“软间隔支持向量”。<br>注：(1) 并非所有的样本点都有一个松弛变量与其对应。实际上只有“离群点”才有，所有没离群的点松弛变量都等于0<br>(2) 松弛变量的值实际上标示出了对应的点到底离群有多远，值越大，点就越远<br>(3) 惩罚因子C决定了你有多重视离群点带来的损失，显然当所有离群点的松弛变量的和一定时，你定的C越大，对目标函数的损失也越大，此时就暗示着你非常不愿意放弃这些离群点，最极端的情况C定为无限大，这样只要稍有一个点离群，目标函数的值马上变成无限大，马上让问题变成无解，这就退化成了硬间隔问题<br>(4) 惩罚因子C不是一个变量，整个优化问题在解的时候，C是一个你必须事先指定的值，指定这个值以后，解一下，得到一个分类器，然后用测试数据看看结果怎么样，如果不够好，换一个C的值，再解一次优化问题，得到另一个分类器，再看看效果，如此就是一个参数寻优的过程，但这和优化问题本身决不是一回事，优化问题在解的过程中，C一直是定值<br>(5) 尽管加了松弛变量这么一说，但这个优化问题仍然是一个优化问题（汗，这不废话么），解它的过程比起原始的硬间隔问题来说，没有任何更加特殊的地方(C≥$\mu^{(i)}$≥0)<br>(6) 完全可以给每一个离群点都使用不同的C，这时就意味着你对每个样本的重视程度都不一样，有些样本丢了也就丢了，错了也就错了，这些就给一个比较小的C；而有些样本很重要，决不能分类错误（比如中央下达的文件啥的，笑），就给一个很大的C。<br><strong>以上忘记从哪里摘抄的了:-(</strong> </p>
+</blockquote>
+<h2 id="Sequential-Minimal-Optimization-SMO"><a href="#Sequential-Minimal-Optimization-SMO" class="headerlink" title="Sequential Minimal Optimization(SMO)"></a>Sequential Minimal Optimization(SMO)</h2><p>以上我们得到优化目标</p>
+<script type="math/tex; mode=display">\mu = \argmax_{\mu} \tilde{L}(\mu) = \argmax_{\mu} \sum_i \mu^{(i)} - \frac{1}{2} \sum_i \sum_j \mu^{(i)} \mu^{(j)} y^{(i)} y^{(j)} \mathit{\Phi}(x^{(i)})^T \mathit{\Phi}(x^{(j)})</script><script type="math/tex; mode=display">s.t.\qquad \mu^{(i)} \geq 0</script><script type="math/tex; mode=display">\quad \sum_i \mu^{(i)} y^{(i)} = 0</script><script type="math/tex; mode=display">\quad C \geq \mu^{(i)} \geq 0 \tag{29}</script><h3 id="基本思想"><a href="#基本思想" class="headerlink" title="基本思想"></a>基本思想</h3><p>把对整个λ向量的优化转化为对每一对$\mu^{(i)},\mu^{(j)}$的优化，如果我们把其他λ先固定，仅仅优化某一对$\mu^{(i)},\mu^{(j)}$，那么我们可以通过解析式（即通过确定的公式来计算）来优化$\mu^{(i)},\mu^{(j)}$ 。而且此时$K.K.T.$条件很重要，之前说过最优解是一定会满足$K.K.T.$条件的，所以如果我们优化使所有$\mu$都满足了$K.K.T.$条件，那么这样最优解就会找到。</p>
+<h3 id="选择优化对的方法"><a href="#选择优化对的方法" class="headerlink" title="选择优化对的方法"></a>选择优化对的方法</h3><p>寻找两个参数时，应找那些违反$K.K.T.$条件的，具体过程可分为外层循环和内层循环，利用启发式规则寻找待优化参数对。</p>
+<ol>
+<li>启发式规则1<ol>
+<li>在<strong>所有样本</strong>中选择违反$K.K.T.$条件的一个乘子$\mu^{(i)}$，用启发式规则2选择另一个乘子$\mu^{(j)}$，对这两个乘子进行优化；</li>
+<li>接着，从<strong>所有非边界样本</strong>中，选择违反$K.K.T.$条件的一个乘子作为最外层循环，用启发式规则2选择另一个乘子进行这两个乘子的优化；</li>
+<li>最后，若上述非边界样本中没有违反$K.K.T.$条件的样本，则<strong>再从整个样本中</strong>去找，直到所有样本中没有需要改变的乘子，或满足其他停止条件为止。</li>
+</ol>
+</li>
+<li>启发式规则2<ol>
+<li>首先在<strong>非边界乘子</strong>中获得$|E_1−E_2|$最大的样本$\mu^{(j)}$；</li>
+<li>如果1中没有找到，则从<strong>所有样本中</strong>随机确定$\mu^{(j)}$</li>
+</ol>
+</li>
+</ol>
+<p>满足式$(27)$即满足$K.K.T.$条件</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    \mu_1^{(i)} = 0 \iff y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] \geq 1 \\
+    0 < \mu_1^{(i)} < C \iff y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] = 1 \\
+    \mu_1^{(i)} = C \iff y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] \leq 1
+\end{cases} \tag{27}</script><p>那么以下情况不满足$K.K.T.$条件</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] \geq 1 时，\mu_1^{(i)} > 0\\
+    y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] = 1 时，\mu_1^{(i)} = 0 或 \mu_1^{(i)} = 1 \\
+    y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] \leq 1 时，\mu_1^{(i)} < C
+\end{cases} \tag{30}</script><blockquote>
+<p><a href="https://www.cnblogs.com/xxrxxr/p/7538430.html" target="_blank" rel="noopener">第三部分：SMO算法的个人理解 - cnblogs</a><br>找第一个参数的具体过程是这样的：</p>
+<ol>
+<li>遍历一遍整个数据集，对每个不满足$K.K.T.$条件的参数，选作第一个待修改参数</li>
+<li>在上面对整个数据集遍历一遍后，选择那些参数满足$0 &lt; \mu &lt; C$的子集，开始遍历，如果发现一个不满足$K.K.T.$条件的，作为第一个待修改参数，然后找到第二个待修改的参数并修改，修改完后，重新开始遍历这个子集</li>
+<li>遍历完子集后，重新开始①②，直到在执行①和②时没有任何修改就结束<br>（为什么要这样遍历，我现在还是不太明白）</li>
+</ol>
+<p>找第二个参数的过程是这样的：</p>
+<ol>
+<li>启发式找，找能让下式最大的</li>
+<li>寻找一个随机位置的满足下式的可以优化的参数进行修改</li>
+<li>在整个数据集上寻找一个随机位置的可以优化的参数进行修改</li>
+<li>都不行那就找下一个第一个参数</li>
+</ol>
+</blockquote>
+<h3 id="两个变量的优化问题"><a href="#两个变量的优化问题" class="headerlink" title="两个变量的优化问题"></a>两个变量的优化问题</h3><p>以$\mu^{(1)}, \mu^{(2)}$为例</p>
+<script type="math/tex; mode=display">\min_{\mu^{(1)}, \mu^{(2)}} \left[ \frac{1}{2} \sum_i \sum_j \mu^{(i)} \mu^{(j)} y^{(i)} y^{(j)} \mathit{\Phi}(x^{(i)})^T \mathit{\Phi}(x^{(j)}) - \sum_i \mu^{(i)} \right]</script><script type="math/tex; mode=display">= \min_{\mu^{(1)}, \mu^{(2)}} \left[ \frac{1}{2} \sum_i \mu^{(i)} y^{(i)} \mathit{\Phi}(x^{(i)})^T \sum_j \mu^{(j)} y^{(j)} \mathit{\Phi}(x^{(j)}) - \sum_i \mu^{(i)} \right] \tag{31.a}</script><p>其中</p>
+<script type="math/tex; mode=display">\sum_i \mu^{(i)} y^{(i)} \mathit{\Phi}(x^{(i)})^T = \mu^{(1)} y^{(1)} \mathit{\Phi}(x^{(1)})^T + \mu^{(2)} y^{(2)} \mathit{\Phi}(x^{(2)})^T + \sum_{i=3} \mu^{(i)} y^{(i)} \mathit{\Phi}(x^{(i)})^T</script><script type="math/tex; mode=display">\sum_j \mu^{(j)} y^{(j)} \mathit{\Phi}(x^{(j)})^T = \mu^{(1)} y^{(1)} \mathit{\Phi}(x^{(1)})^T + \mu^{(2)} y^{(2)} \mathit{\Phi}(x^{(2)})^T + \sum_{j=3} \mu^{(j)} y^{(j)} \mathit{\Phi}(x^{(j)})^T</script><script type="math/tex; mode=display">\sum_i \mu^{(i)} = \mu^{(1)} + \mu^{(2)} + \sum_{i=3} \mu^{(i)}</script><p>代回$(31.a)$，多项式展开整理得到</p>
+<script type="math/tex; mode=display">
+(31.b) = \min_{\mu^{(1)}, \mu^{(2)}} [
+\frac{1}{2} \mu^{(1)2} \mathit{\Phi}(x^{(1)})^T \mathit{\Phi}(x^{(1)}) + 
+\frac{1}{2} \mu^{(2)2} \mathit{\Phi}(x^{(2)})^T \mathit{\Phi}(x^{(2)}) + 
+\mu^{(1)} \mu^{(2)} y^{(1)} y^{(2)} \mathit{\Phi}(x^{(1)})^T \mathit{\Phi}(x^{(2)}) +</script><script type="math/tex; mode=display">
+\mu^{(1)} y^{(1)} \sum_{i=3} \mu^{(i)} y^{(i)} \mathit{\Phi}(x^{(1)})^T \mathit{\Phi}(x^{(i)}) + 
+\mu^{(2)} y^{(2)} \sum_{j=3} \mu^{(j)} y^{(j)} \mathit{\Phi}(x^{(2)})^T \mathit{\Phi}(x^{(j)}) +</script><script type="math/tex; mode=display">
+\frac{1}{2} \sum_{i=3} \sum_{j=3} \mu^{(i)} \mu^{(j)} y^{(i)} y^{(j)} \mathit{\Phi}(x^{(i)})^T \mathit{\Phi}(x^{(j)}) - 
+(\mu^{(1)} + \mu^{(2)}) - \sum_{i=3} \mu^{(i)}] \tag{31.b}</script><p>令核函数</p>
+<script type="math/tex; mode=display">K_{ij} = \mathit{\Phi}(x^{(i)})^T \mathit{\Phi}(x^{(j)}) \tag{32.a}</script><script type="math/tex; mode=display">const = \frac{1}{2} \sum_{i=3} \sum_{j=3} \mu^{(i)} \mu^{(j)} y^{(i)} y^{(j)} \mathit{\Phi}(x^{(i)})^T \mathit{\Phi}(x^{(j)}) - \sum_{i=3} \mu^{(i)} \tag{32.b}</script><p>定义</p>
+<script type="math/tex; mode=display">f(x^{(i)}) = \sum_m \mu^{(m)} y^{(m)} K_{im} + b \tag{32.c}</script><script type="math/tex; mode=display">E^{(i)} = f(x^{(i)}) - y^{(i)}</script><script type="math/tex; mode=display">v^{(i)} = \sum_{m=3} \mu^{(m)} y^{(m)} K_{im} = f(x^{(i)}) - \sum_{m=1}^2 \mu^{(m)} y^{(m)} K_{im} - b \tag{32.e}</script><p>以上，代回$(31.b)$，优化问题转化为</p>
+<script type="math/tex; mode=display">
+\min_{\mu^{(1)}, \mu^{(2)}} [
+\frac{1}{2} \mu^{(1)2} K_{11} + 
+\frac{1}{2} \mu^{(2)2} K_{22} + 
+\mu^{(1)} \mu^{(2)} y^{(1)} y^{(2)} K_{12} +</script><script type="math/tex; mode=display">
+\mu^{(1)} y^{(1)} v^{(1)} + 
+\mu^{(2)} y^{(2)} v^{(2)} -
+(\mu^{(1)} + \mu^{(2)}) + 
+const]</script><script type="math/tex; mode=display">s.t.\qquad \mu^{(i)} \geq 0</script><script type="math/tex; mode=display">\mu^{(1)} y^{(1)} + \mu^{(2)} y^{(2)} = - \sum_{i=3} \mu^{(i)} y^{(i)}</script><script type="math/tex; mode=display">C \geq \mu^{(i)} \geq 0 \tag{33}</script><p>记</p>
+<script type="math/tex; mode=display">
+g(\mu^{(1)}, \mu^{(2)}) = 
+\frac{1}{2} \mu^{(1)2} K_{11} + 
+\frac{1}{2} \mu^{(2)2} K_{22} + 
+\mu^{(1)} \mu^{(2)} y^{(1)} y^{(2)} K_{12} +</script><script type="math/tex; mode=display">
+\mu^{(1)} y^{(1)} v^{(1)} + 
+\mu^{(2)} y^{(2)} v^{(2)} -
+(\mu^{(1)} + \mu^{(2)}) + 
+const \tag{34}</script><p>记$\epsilon = - \sum_{i=3} \mu^{(i)} y^{(i)}$，则</p>
+<script type="math/tex; mode=display">\mu^{(1)} y^{(1)} + \mu^{(2)} y^{(2)} = \epsilon</script><p>消去$\mu^{(1)}$</p>
+<script type="math/tex; mode=display">\mu^{(1)} = \frac{\epsilon - \mu^{(2)} y^{(2)}}{y^{(1)}} \quad 同 \quad \mu^{(1)} = y^{(1)}\epsilon - y^{(1)} y^{(2)} \mu^{(2)}</script><p>记$\gamma = y^{(1)}\epsilon, \quad s = y^{(1)} y^{(2)} $，则</p>
+<script type="math/tex; mode=display">\mu^{(1)} = \gamma - s \mu^{(2)} \tag{35}</script><blockquote>
+<script type="math/tex; mode=display">s^2 = 1, \quad \gamma s = y^{(2)}\epsilon</script></blockquote>
+<p>代入函数$(34)$，有</p>
+<script type="math/tex; mode=display">
+\tilde{g}(\mu^{(2)}) 
+= \frac{1}{2} (K_{11} + K_{22} - 2 K_{12}) \mu^{(2)2} +</script><script type="math/tex; mode=display">
+\left[ - \gamma s (K_{11} - K_{12}) - y^{(2)} (v^{(1)} - v^{(2)}) + s - 1 \right] \mu^{(2)} +</script><script type="math/tex; mode=display">
+(\frac{1}{2} K_{11} \gamma^2 + \epsilon v^{(1)} - \gamma) + const \tag{36}</script><p>转化为单变量$\mu^{(2)}$的二次优化问题。</p>
+<h3 id="剪裁边界"><a href="#剪裁边界" class="headerlink" title="剪裁边界"></a>剪裁边界</h3><p>需考虑$\mu^{(2)}$的取值范围，即编程时$\mu^{(2)}$的<strong>剪裁边界</strong>，设</p>
+<script type="math/tex; mode=display">L \leq \mu^{(2)}_{new} \leq H \tag{37}</script><p>综合条件</p>
+<script type="math/tex; mode=display">\mu^{(1)}_{new} y^{(1)} + \mu^{(2)}_{new} y^{(2)} = \epsilon</script><script type="math/tex; mode=display">0 \leq \mu^{(i)} \leq C</script><blockquote>
+<p>$\mu^{(1)}_{new} y^{(1)} + \mu^{(2)}_{new} y^{(2)} = \epsilon \Rightarrow \mu^{(1)}_{new} + \mu^{(2)}_{new} y^{(1)} y^{(2)} = \epsilon  y^{(1)}$ </p>
+</blockquote>
+<ol>
+<li><p>$y^{(1)} \neq y^{(2)}$时，$y^{(1)} y^{(2)} = -1$</p>
+<script type="math/tex; mode=display">\mu^{(1)}_{old} - \mu^{(2)}_{old} = \epsilon_{\neq} (常数) \quad 则 \quad \mu^{(2)}_{old} = \mu^{(1)}_{old} - \epsilon_{\neq} \tag{38.a}</script><p> 考虑</p>
+<script type="math/tex; mode=display">0 \leq \mu^{(i)} \leq C</script><p> 则</p>
+<script type="math/tex; mode=display">
+ \begin{cases}
+     0 \leq \mu^{(1)}_{old} \leq C \\
+     0 \leq \mu^{(2)}_{old} \leq C \\
+ \end{cases}
+ \Rightarrow 0 - \epsilon_{\neq} \leq \mu^{(2)}_{old} = \mu^{(1)}_{old} - \epsilon_{\neq} \leq C - \epsilon_{\neq}</script><p> <img src="/2019/05/27/Support-Vector-Machine/y1neqy2.jpg" alt="y1neqy2"></p>
+<p> 此时上下界为</p>
+<script type="math/tex; mode=display">
+ \begin{cases}
+     L = \max \{ 0, - \epsilon_{\neq} \} \\
+     H = \min \{ C, C - \epsilon_{\neq} \} \\
+ \end{cases} \tag{38.b}</script><p> $(38.a)$代入$(38.b)$，得到迭代式</p>
+<script type="math/tex; mode=display">
+ \begin{cases}
+     L = \max \{ 0, - \mu^{(1)}_{old} + \mu^{(2)}_{old} \} \\
+     H = \min \{ C, C - \mu^{(1)}_{old} + \mu^{(2)}_{old} \} \\
+ \end{cases} \tag{38}</script></li>
+<li><p>$y^{(1)} = y^{(2)}$时，$y^{(1)} y^{(2)} = 1$</p>
+<script type="math/tex; mode=display">\mu^{(1)}_{old} + \mu^{(2)}_{old} = \epsilon_{=} (常数) \quad 则 \quad \mu^{(2)}_{old} = - \mu^{(1)}_{old} + \epsilon_{=} \tag{39.a}</script><p> 考虑</p>
+<script type="math/tex; mode=display">0 \leq \mu^{(i)} \leq C</script><p> 则</p>
+<script type="math/tex; mode=display">
+ \begin{cases}
+     0 \leq \mu^{(1)}_{old} \leq C \\
+     0 \leq \mu^{(2)}_{old} \leq C \\
+ \end{cases}
+ \Rightarrow - C + \epsilon_{=} \leq - \mu^{(1)}_{old} + \epsilon_{=} \leq 0 + \epsilon_{=}</script><p> <img src="/2019/05/27/Support-Vector-Machine/y1eqy2.jpg" alt="y1eqy2"></p>
+<p> 此时上下界为</p>
+<script type="math/tex; mode=display">
+ \begin{cases}
+     L = \max \{ 0, - C + \epsilon_{=} \} \\
+     H = \min \{ C, 0 + \epsilon_{=} \} \\
+ \end{cases} \tag{39.b}</script><p> $(39.a)$代入$(39.b)$，得到迭代式</p>
+<script type="math/tex; mode=display">
+ \begin{cases}
+     L = \max \{ 0, \mu^{(1)}_{old} + \mu^{(2)}_{old} - C \} \\
+     H = \min \{ C, \mu^{(1)}_{old} + \mu^{(2)}_{old} \} \\
+ \end{cases} \tag{39}</script></li>
+</ol>
+<h3 id="单变量的二次优化"><a href="#单变量的二次优化" class="headerlink" title="单变量的二次优化"></a>单变量的二次优化</h3><script type="math/tex; mode=display">
+\tilde{g}(\mu^{(2)}) 
+= \frac{1}{2} (K_{11} + K_{22} - 2 K_{12}) \mu^{(2)2} +</script><script type="math/tex; mode=display">
+\left[ - \gamma s (K_{11} - K_{12}) - y^{(2)} (v^{(1)} - v^{(2)}) + s - 1 \right] \mu^{(2)} +</script><script type="math/tex; mode=display">
+(\frac{1}{2} K_{11} \gamma^2 + \epsilon v^{(1)} - \gamma) + const \tag{36}</script><ol>
+<li><p>二次项系数$K_{11} + K_{22} - 2 K_{12} &gt; 0$时<br> 求极值点</p>
+<script type="math/tex; mode=display">\frac{\partial \tilde{g}(\mu^{(2)})}{\partial \mu^{(2)}} = 0 \Rightarrow \tilde{\mu}^{(2)} \tag{40.a}</script><ol>
+<li>若$L \leq \tilde{\mu}^{(2)} \leq H$，则最小值点即为$\mu^{(2)} = \tilde{\mu}^{(2)}$；</li>
+<li>否则在边界处取得最小值。</li>
+</ol>
+</li>
+<li><p>二次项系数$K_{11} + K_{22} - 2 K_{12} = 0$时</p>
+<script type="math/tex; mode=display">
+ \tilde{g}(\mu^{(2)}) = 
+ \left[ - \gamma s (K_{11} - K_{12}) - y^{(2)} (v^{(1)} - v^{(2)}) + s - 1 \right] \mu^{(2)} + 
+ (\frac{1}{2} K_{11} \gamma^2 + \epsilon v^{(1)} - \gamma) + const \tag{40.b}</script><p> $\tilde{g}(\mu^{(2)})$为一次函数，在边界处取得最小值。</p>
+</li>
+<li><p>二次项系数$K_{11} + K_{22} - 2 K_{12} &lt; 0$时<br> $\tilde{g}(\mu^{(2)})$为开口向下的二次函数，在边界处取得最小值。</p>
+</li>
+</ol>
+<p>综上所述，$\mu^{(2)}$更新的解析解为</p>
+<script type="math/tex; mode=display">
+\mu^{(2)}_{new, clip} = \begin{cases}
+    H & \mu^{(2)}_{new} > H \\
+    \mu^{(2)}_{new} & L \leq \mu^{(2)}_{new} \leq H \\
+    L & \mu^{(2)}_{new} < L \\
+\end{cases} \tag{40}</script><p>又因为</p>
+<script type="math/tex; mode=display">\mu^{(1)}_{old} = \gamma - s \mu^{(2)}_{old} \tag{41.a}</script><script type="math/tex; mode=display">\mu^{(1)}_{new} = \gamma - s \mu^{(2)}_{new, clip} \tag{41.b}</script><p>两式相减，得到$\mu^{(1)}$更新的增量形式</p>
+<script type="math/tex; mode=display">
+\mu^{(1)}_{new} = \mu^{(1)}_{old} + y^{(1)} y^{(2)} \left( \mu^{(2)}_{old} - \mu^{(2)}_{new, clip} \right) \tag{41}</script><p>更新$\mu^{(1)}, \mu^{(2)}$后，重新计算$b$，因为$b$影响到$E^{(i)}$的计算，由$(27)$</p>
+<script type="math/tex; mode=display">0 < \mu_1^{(i)} < C \iff y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] = 1</script><p>此时对应支撑向量$x^{sup}$，上右式两边同乘$y^{(i)}$，得到</p>
+<script type="math/tex; mode=display">w^T \mathit{\Phi}(x^{(i)}) + b = y^{(i)}</script><script type="math/tex; mode=display">\Rightarrow b = y^{(i)} - w^T \mathit{\Phi}(x^{(i)}) = y^{(i)} - \sum_m \mu^{(m)} y^{(m)} K_{im}</script><blockquote>
+<p>疑问：$w^T \mathit{\Phi}(x^{(i)}) = \sum_m \mu^{(m)} y^{(m)} K_{im}?$</p>
+</blockquote>
+<p>所以</p>
+<script type="math/tex; mode=display">b^{(1)}_{new} = y^{(1)} - \sum_{m=3} \mu^{(m)} y^{(m)} K_{1m} - \mu^{(1)}_{new} y^{(1)} K_{11} - \mu^{(2)}_{new} y^{(2)} K_{12} \tag{42.a}</script><p>其中</p>
+<script type="math/tex; mode=display">\sum_{m=3} \mu^{(m)} y^{(m)} K_{1m} = f(x^{(1)}) - \sum_{m=1}^2 \mu^{(m)}_{old} y^{(m)} K_{1m} - b_{old} \tag{42.b}</script><blockquote>
+<script type="math/tex; mode=display">v^{(i)} = \sum_{m=3} \mu^{(m)} y^{(m)} K_{im} = f(x^{(i)}) - \sum_{m=1}^2 \mu^{(m)} y^{(m)} K_{im} - b \tag{32.e}</script></blockquote>
+<p>所以</p>
+<script type="math/tex; mode=display">b^{(1)}_{new} = y^{(1)} - f(x^{(1)}) - \mu^{(1)}_{old} y^{(1)} K_{11} + \mu^{(2)}_{old} y^{(2)} K_{12} + b_{old} - \mu^{(1)}_{new} y^{(1)} K_{11} - \mu^{(2)}_{new} y^{(2)} K_{12}</script><script type="math/tex; mode=display">= - E^{(1)} + (\mu^{(1)}_{old} - \mu^{(1)}_{new}) y^{(1)} K_{11} + (\mu^{(2)}_{old} - \mu^{(2)}_{new}) y^{(2)} K_{12} + b_{old} \tag{42}</script><p>同理</p>
+<script type="math/tex; mode=display">b^{(2)}_{new} = - E^{(2)} + (\mu^{(1)}_{old} - \mu^{(1)}_{new}) y^{(1)} K_{21} + (\mu^{(2)}_{old} - \mu^{(2)}_{new}) y^{(2)} K_{22} + b_{old} \tag{43}</script><p>当$b^{(1)}$和$b^{(2)}$均有效时</p>
+<script type="math/tex; mode=display">b_{new} = b^{(1)}_{new} = b^{(2)}_{new} \tag{44.a}</script><p>当两个乘子都在边界上时，则$b$阈值与$K.K.T.$条件一致时，不满足时取中点</p>
+<script type="math/tex; mode=display">
+b = \begin{cases}
+    b^{(1)} & 0 < \mu^{(1)}_{new} < C \\
+    b^{(2)} & 0 < \mu^{(2)}_{new} < C \\
+    \frac{1}{2} (b^{(1)} + b^{(2)}) & \text{otherwise}
+\end{cases} \tag{44.b}</script><h3 id="梳理"><a href="#梳理" class="headerlink" title="梳理"></a>梳理</h3><ol>
+<li><p>计算误差</p>
+<script type="math/tex; mode=display">E^{(i)} = f(x^{(i)}) - y^{(i)} = \sum_i \mu^{(m)} y^{(m)} K_{im} + b -y^{(i)}</script></li>
+<li><p>计算上下界</p>
+<script type="math/tex; mode=display">
+ \begin{cases}
+     L = \max \{ 0, - \mu^{(i)}_{old} + \mu^{(j)}_{old} \};\quad H = \min \{ C, C - \mu^{(i)}_{old} + \mu^{(j)}_{old} \} & y^{(i)} \neq y^{(j)} \\
+     L = \max \{ 0, \mu^{(i)}_{old} + \mu^{(j)}_{old} - C \};\quad H = \min \{ C, \mu^{(i)}_{old} + \mu^{(j)}_{old} \} & y^{(i)} = y^{(j)} 
+ \end{cases}</script></li>
+<li><p>计算$\eta$</p>
+<script type="math/tex; mode=display">\eta = K_{ii} + K_{jj} - 2K_{ij}</script></li>
+<li><p>更新$\mu^{(j)}$</p>
+<script type="math/tex; mode=display">\mu^{(j)}_{new} = \mu^{(j)}_{old} + \frac{y^{(j)}(E^{(i)} - E^{(j)})}{\eta}</script></li>
+<li><p>修剪$\mu^{(j)}$</p>
+<script type="math/tex; mode=display">
+ \mu^{(j)}_{new, clip} = \begin{cases}
+     H & \mu^{(j)}_{new} > H \\
+     \mu^{(j)}_{new} & L \leq \mu^{(j)}_{new} \leq H \\
+     L & \mu^{(j)}_{new} < L \\
+ \end{cases}</script></li>
+<li><p>更新$\mu^{(i)}$</p>
+<script type="math/tex; mode=display">\mu^{(i)}_{new} = \mu^{(i)}_{old} + y^{(i)} y^{(j)} \left( \mu^{(j)}_{old} - \mu^{(j)}_{new, clip} \right)</script></li>
+<li><p>更新$b^{(i)}, b^{(j)}$</p>
+</li>
+</ol>
+<script type="math/tex; mode=display">b^{(i)}_{new} = - E^{(i)} + (\mu^{(i)}_{old} - \mu^{(i)}_{new}) y^{(i)} K_{ii} + (\mu^{(j)}_{old} - \mu^{(j)}_{new}) y^{(j)} K_{ij} + b_{old}</script><script type="math/tex; mode=display">b^{(j)}_{new} = - E^{(j)} + (\mu^{(i)}_{old} - \mu^{(i)}_{new}) y^{(i)} K_{ji} + (\mu^{(j)}_{old} - \mu^{(j)}_{new}) y^{(j)} K_{jj} + b_{old}</script><ol>
+<li>修剪$b$<script type="math/tex; mode=display">
+b = \begin{cases}
+    b^{(i)} & 0 < \mu^{(i)}_{new} < C \\
+    b^{(j)} & 0 < \mu^{(j)}_{new} < C \\
+    \frac{b^{(i)} + b^{(j)}}{2} & \text{otherwise}
+\end{cases}</script></li>
+</ol>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
+<li><a href="https://zh.wikipedia.org/wiki/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA" target="_blank" rel="noopener">支持向量机 - 维基百科，自由的百科全书</a></li>
+<li><a href="https://scikit-learn.org/stable/modules/svm.html" target="_blank" rel="noopener">1.4. Support Vector Machine - scikit learn</a></li>
+<li><a href="https://www.jiqizhixin.com/articles/2017-02-06-3" target="_blank" rel="noopener">详解支持向量机 - 机器之心</a></li>
+<li><a href="https://blog.csdn.net/lijil168/article/details/69395023" target="_blank" rel="noopener">深入理解拉格朗日乘子法（Lagrange Multiplier) 和KKT条件 - CSDN</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/26514613" target="_blank" rel="noopener">浅谈最优化问题的KKT条件 - 知乎</a></li>
+<li><a href="https://www.cnblogs.com/xxrxxr/p/7538430.html" target="_blank" rel="noopener">第三部分：SMO算法的个人理解</a></li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/监督学习/" rel="tag"># 监督学习</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/26/mAP/" rel="next" title="mAP">
+                <i class="fa fa-chevron-left"></i> mAP
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/28/Useful-Terminal-Control-Sequences/" rel="prev" title="Useful Terminal Control Sequences">
+                Useful Terminal Control Sequences <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Louis Hsu">
+            
+              <p class="site-author-name" itemprop="name">Louis Hsu</p>
+              <p class="site-description motion-element" itemprop="description">技术博客？</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">46</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/isLouisHsu" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://is.louishsu@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/islouishsu" target="_blank" title="Zhihu"><i class="fa fa-fw fa-zhihu"></i>Zhihu</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/islouishsu" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=517565384&auto=1&height=66"></iframe>
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基本原理"><span class="nav-number">2.</span> <span class="nav-text">基本原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概念补充"><span class="nav-number">2.1.</span> <span class="nav-text">概念补充</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#核技巧"><span class="nav-number">2.2.</span> <span class="nav-text">核技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#定义"><span class="nav-number">2.2.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用核函数"><span class="nav-number">2.2.2.</span> <span class="nav-text">常用核函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例分析核函数的作用"><span class="nav-number">2.2.3.</span> <span class="nav-text">实例分析核函数的作用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线性支持向量机"><span class="nav-number">2.3.</span> <span class="nav-text">线性支持向量机</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#回归问题"><span class="nav-number">3.</span> <span class="nav-text">回归问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#优化问题的求解与SMO算法"><span class="nav-number">4.</span> <span class="nav-text">优化问题的求解与SMO算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#带约束的优化问题求解"><span class="nav-number">4.1.</span> <span class="nav-text">带约束的优化问题求解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线性可分情况下求解"><span class="nav-number">4.2.</span> <span class="nav-text">线性可分情况下求解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线性不可分情况下求解"><span class="nav-number">4.3.</span> <span class="nav-text">线性不可分情况下求解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#核函数"><span class="nav-number">4.3.1.</span> <span class="nav-text">核函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#软间隔支持向量机"><span class="nav-number">4.3.2.</span> <span class="nav-text">软间隔支持向量机</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sequential-Minimal-Optimization-SMO"><span class="nav-number">4.4.</span> <span class="nav-text">Sequential Minimal Optimization(SMO)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本思想"><span class="nav-number">4.4.1.</span> <span class="nav-text">基本思想</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#选择优化对的方法"><span class="nav-number">4.4.2.</span> <span class="nav-text">选择优化对的方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#两个变量的优化问题"><span class="nav-number">4.4.3.</span> <span class="nav-text">两个变量的优化问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#剪裁边界"><span class="nav-number">4.4.4.</span> <span class="nav-text">剪裁边界</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单变量的二次优化"><span class="nav-number">4.4.5.</span> <span class="nav-text">单变量的二次优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#梳理"><span class="nav-number">4.4.6.</span> <span class="nav-text">梳理</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Louis Hsu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+</body>
+</html>
