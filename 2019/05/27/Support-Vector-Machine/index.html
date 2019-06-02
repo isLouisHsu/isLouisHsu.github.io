@@ -126,7 +126,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/epsilon.jpg">
 <meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/y1neqy2.jpg">
 <meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/y1eqy2.jpg">
-<meta property="og:updated_time" content="2019-06-02T12:13:10.388Z">
+<meta property="og:updated_time" content="2019-06-02T12:31:25.531Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Support Vector Machine">
 <meta name="twitter:description" content="前言Github: isLouisHsu/Basic-Machine-Learning-Algorithm/algorithm/p97_svm.py 补一补支持向量机的笔记。 支持向量机(SVM)为有监督学习算法，可用于回归、分类甚至聚类(支持向量聚类)，其主要特点为  将样本表示为超空间中的点； 求取支持向量，其余样本点对超平面无影响； 对于线性不可分问题，利用核函数映射到高维空间，使其线性可分">
@@ -421,7 +421,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-06-02 20:13:10" itemprop="dateModified" datetime="2019-06-02T20:13:10+08:00">2019-06-02</time>
+                <time title="修改时间：2019-06-02 20:31:25" itemprop="dateModified" datetime="2019-06-02T20:31:25+08:00">2019-06-02</time>
               
             
           </span>
@@ -559,8 +559,8 @@
       (x_{i1}x_{j1} + x_{i2}x_{j2})^3 = x_{i1}^3 x_{j1}^3 + 3x_{i1}x_{j1}x_{i2}^2x_{j2}^2 + 3x_{i1}^2x_{j1}^2x_{i2}x_{j2} + x_{i2}^3 x_{j2}^3 \\
   \end{cases}</script><p>  带入后得</p>
 <script type="math/tex; mode=display">
-  e^{c||x_i - x_j||^2} = e^{c(x_{i1}^2 + x_{i2}^2 + x_{j1}^2 + x_{j2}^2)} [ 1 - 2c (x_{i1}x_{j1} + x_{i2}x_{j2}) + 4c^2 (x_{i1}^2 x_{j1}^2 + 2x_{i1}x_{j1}x_{i2}x_{j2} +</script><script type="math/tex; mode=display">
-  x_{i2}^2 x_{j2}^2) -8c^3 (x_{i1}^3 x_{j1}^3 + 3x_{i1}x_{j1}x_{i2}^2x_{j2}^2 + 3x_{i1}^2x_{j1}^2x_{i2}x_{j2} + x_{i2}^3 x_{j2}^3) ]</script><p>  所以映射函数为</p>
+  e^{c||x_i - x_j||^2} = e^{c(x_{i1}^2 + x_{i2}^2 + x_{j1}^2 + x_{j2}^2)} [ 1 - 2c (x_{i1}x_{j1} + x_{i2}x_{j2}) + 4c^2 (x_{i1}^2 x_{j1}^2 + 2x_{i1}x_{j1}x_{i2}x_{j2} + x_{i2}^2 x_{j2}^2) -</script><script type="math/tex; mode=display">
+  8c^3 (x_{i1}^3 x_{j1}^3 + 3x_{i1}x_{j1}x_{i2}^2x_{j2}^2 + 3x_{i1}^2x_{j1}^2x_{i2}x_{j2} + x_{i2}^3 x_{j2}^3) ]</script><p>  所以映射函数为</p>
 <script type="math/tex; mode=display">
   \mathit{\Phi}(x) = e^{c(x_1^2 + x_2^2)} \left[ 
       \begin{matrix}
@@ -612,7 +612,7 @@
 </ol>
 <p>所以优化目标为</p>
 <script type="math/tex; mode=display">w, b = \arg \max \frac{2}{||w||}</script><script type="math/tex; mode=display">s.t.\qquad y \left[ w^T \mathit{\Phi}(x) + b \right] \geq 1 \tag{9.a}</script><p>为方便求解，相当于</p>
-<script type="math/tex; mode=display">w, b = \argmin \frac{1}{2} ||w||^2</script><script type="math/tex; mode=display">s.t.\qquad y \left[ w^T \mathit{\Phi}(x) + b \right] \geq 1 \tag{10.b}</script><h1 id="回归问题"><a href="#回归问题" class="headerlink" title="回归问题"></a>回归问题</h1><p>回归模型的目标是让训练集中每个样本点$(x^{(i)}, y^{(i)})$尽量拟合到一个线性模型上</p>
+<script type="math/tex; mode=display">w, b = \arg \min \frac{1}{2} ||w||^2</script><script type="math/tex; mode=display">s.t.\qquad y \left[ w^T \mathit{\Phi}(x) + b \right] \geq 1 \tag{10.b}</script><h1 id="回归问题"><a href="#回归问题" class="headerlink" title="回归问题"></a>回归问题</h1><p>回归模型的目标是让训练集中每个样本点$(x^{(i)}, y^{(i)})$尽量拟合到一个线性模型上</p>
 <script type="math/tex; mode=display">y^{(i)} = w^T \mathit{\Phi}(x^{(i)}) + b</script><p>对于一般的回归模型，一般使用$MSE$作为损失函数，但是在$y^{(i)} \neq w^T \mathit{\Phi}(x^{(i)}) + b$时就会有损失，所以$SVM$不采用。</p>
 <p>定义一个常量$\epsilon &gt; 0$，对于某个样本点$(x^{(i)}, y^{(i)})$，其损失定义如下，即在支撑超平面间隔内的样本点是没有损失的</p>
 <script type="math/tex; mode=display">
@@ -622,7 +622,7 @@ L^{(i)} = \begin{cases}
 \end{cases}</script><p><img src="/2019/05/27/Support-Vector-Machine/regression.jpg" alt="regression"></p>
 <h1 id="优化问题的求解与SMO算法"><a href="#优化问题的求解与SMO算法" class="headerlink" title="优化问题的求解与SMO算法"></a>优化问题的求解与SMO算法</h1><h2 id="带约束的优化问题求解"><a href="#带约束的优化问题求解" class="headerlink" title="带约束的优化问题求解"></a>带约束的优化问题求解</h2><ol>
 <li><p>纯等式约束<br> 一般形式为</p>
-<script type="math/tex; mode=display">\vec{w} = \argmin f(\vec{w})</script><script type="math/tex; mode=display">s.t. \qquad h_j(\vec{w}) = 0, \quad j = 1, 2, \cdots, m \tag{11}</script><p> 其中$f(\vec{w}), h_j(\vec{w})$均可导</p>
+<script type="math/tex; mode=display">\vec{w} = \arg \min f(\vec{w})</script><script type="math/tex; mode=display">s.t. \qquad h_j(\vec{w}) = 0, \quad j = 1, 2, \cdots, m \tag{11}</script><p> 其中$f(\vec{w}), h_j(\vec{w})$均可导</p>
 <p> 列写拉格朗日函数</p>
 <script type="math/tex; mode=display">L(\vec{w}, \vec{\lambda}) = f(\vec{w}) + \sum_{j=0}^m \lambda_j h_j(\vec{w}) \tag{11.a}</script><p> 求取极点</p>
 <script type="math/tex; mode=display">
@@ -634,7 +634,7 @@ L^{(i)} = \begin{cases}
 </blockquote>
 </li>
 <li><p>纯不等式约束<br> 一般形式为</p>
-<script type="math/tex; mode=display">\vec{w} = \argmin f(\vec{w})</script><script type="math/tex; mode=display">s.t. \qquad g_j(\vec{w}) \leq 0, \quad j = 1, 2, \cdots, p \tag{12}</script><p> 对于上不等式约束，引入松弛变量$\epsilon_j^2$，使其转换为等式约束</p>
+<script type="math/tex; mode=display">\vec{w} = \arg \min f(\vec{w})</script><script type="math/tex; mode=display">s.t. \qquad g_j(\vec{w}) \leq 0, \quad j = 1, 2, \cdots, p \tag{12}</script><p> 对于上不等式约束，引入松弛变量$\epsilon_j^2$，使其转换为等式约束</p>
 <script type="math/tex; mode=display">s.t. \qquad g_j(\vec{w}) + \epsilon_j^2 = 0, \quad j = 1, 2, \cdots, p</script><blockquote>
 <p>注意，这里引入的松弛变量为平方项，如此可避免增加约束$\epsilon_j \geq 0$</p>
 </blockquote>
@@ -662,7 +662,7 @@ L^{(i)} = \begin{cases}
 </ol>
 <ol>
 <li><p>混合条件约束<br> 一般形式为</p>
-<script type="math/tex; mode=display">\vec{w} = \argmin f(\vec{w})</script><script type="math/tex; mode=display">s.t. \qquad h_j(\vec{w}) = 0, \quad j = 1, 2, \cdots, m</script><script type="math/tex; mode=display">\quad \qquad g_k(\vec{w}) \leq 0, \quad k = 1, 2, \cdots, p \tag{13}</script><p> 经上述内容，可得</p>
+<script type="math/tex; mode=display">\vec{w} = \arg \min f(\vec{w})</script><script type="math/tex; mode=display">s.t. \qquad h_j(\vec{w}) = 0, \quad j = 1, 2, \cdots, m</script><script type="math/tex; mode=display">\quad \qquad g_k(\vec{w}) \leq 0, \quad k = 1, 2, \cdots, p \tag{13}</script><p> 经上述内容，可得</p>
 <script type="math/tex; mode=display">L(\vec{w}, \vec{\mu}, \vec{\epsilon^2}) = f(\vec{w}) + \sum_{j=0}^m \lambda_j h_j(\vec{w}) + \sum_{j=0}^p \mu_j (g_j(\vec{w}) + \epsilon_j^2) \tag{13.a}</script><p> 求取极值点</p>
 <script type="math/tex; mode=display">
  \begin{cases}
@@ -677,8 +677,8 @@ L^{(i)} = \begin{cases}
 <p>对于优化问题$(10.b)$</p>
 <script type="math/tex; mode=display">w, b = \arg \max \frac{2}{||w||}</script><script type="math/tex; mode=display">s.t.\qquad y \left[ w^T \mathit{\Phi}(x) + b \right] \geq 1 \tag{10.b}</script><p>利用拉格朗日乘子法</p>
 <script type="math/tex; mode=display">L(w, b, \mu) = \frac{1}{2} ||w||^2 + \sum_i \mu^{(i)} \left\{ 1 - y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] \right\} \tag{14}</script><p>则带求解问题为</p>
-<script type="math/tex; mode=display">w, b, \mu = \argmin_{w, b} \max_{\mu} L(w, b, \mu) \tag{15.a}</script><p>转化为上式的<strong>对偶问题</strong></p>
-<script type="math/tex; mode=display">w, b, \mu = \argmin_{\mu} \max_{w,b} L(w, b, \mu) \tag{15.b}</script><blockquote>
+<script type="math/tex; mode=display">w, b, \mu = \arg \min_{w, b} \max_{\mu} L(w, b, \mu) \tag{15.a}</script><p>转化为上式的<strong>对偶问题</strong></p>
+<script type="math/tex; mode=display">w, b, \mu = \arg \min_{\mu} \max_{w,b} L(w, b, \mu) \tag{15.b}</script><blockquote>
 <p>凸优化</p>
 </blockquote>
 <p>分别对参数求偏导</p>
@@ -727,7 +727,7 @@ f(x) = \sum_n \frac{f^{(n)}(x - x_0)}{n!} (x - x_0)^{(n)}</script><p>核函数�
 </blockquote>
 <p>形象解释，即对于<strong>落在支撑超平面间的样本点$x^{(i)}$</strong>，视其为<strong>软间隔支持向量(自创)</strong>，调整$\epsilon^{(i)}$将支撑超平面进行微量的位移$d_{\epsilon^{(i)}}$，如下图<br><img src="/2019/05/27/Support-Vector-Machine/epsilon.jpg" alt="epsilon"></p>
 <p>但是呢，也要对不满足该条件的样本个数进行限制，希望越少越好。那么加入<strong>惩罚系数$C$(超参数)</strong>，对不满足条件的样本进行惩罚，使$\sum_i \epsilon^{(i)}$越小越好，则优化目标变更为</p>
-<script type="math/tex; mode=display">w, b = \argmin_{w,b} \left( \frac{1}{2} ||w||^2 + C \sum_i \epsilon^{(i)} \right)</script><script type="math/tex; mode=display">s.t. \qquad y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] \geq 1 - \epsilon^{(i)}</script><script type="math/tex; mode=display">\qquad \epsilon^{(i)} \geq 0 \tag{21}</script><p>同样的，构造拉格朗日函数</p>
+<script type="math/tex; mode=display">w, b = \arg \min_{w,b} \left( \frac{1}{2} ||w||^2 + C \sum_i \epsilon^{(i)} \right)</script><script type="math/tex; mode=display">s.t. \qquad y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] \geq 1 - \epsilon^{(i)}</script><script type="math/tex; mode=display">\qquad \epsilon^{(i)} \geq 0 \tag{21}</script><p>同样的，构造拉格朗日函数</p>
 <script type="math/tex; mode=display">L(w, b, \epsilon, \mu_1, \mu_2) = \left( \frac{1}{2} ||w||^2 + C \sum_i \epsilon^{(i)} \right) + \sum_i \mu_1^{(i)} \left\{ 1 - \epsilon^{(i)} - y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] \right\} + \sum_i \mu_2^{(i)} \left( - \epsilon^{(i)} \right) \tag{22}</script><p>根据$K.K.T.$条件</p>
 <script type="math/tex; mode=display">
 \begin{cases}
