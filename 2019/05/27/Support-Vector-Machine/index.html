@@ -126,7 +126,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/epsilon.jpg">
 <meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/y1neqy2.jpg">
 <meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/y1eqy2.jpg">
-<meta property="og:updated_time" content="2019-06-02T12:06:43.552Z">
+<meta property="og:updated_time" content="2019-06-02T12:13:10.388Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Support Vector Machine">
 <meta name="twitter:description" content="前言Github: isLouisHsu/Basic-Machine-Learning-Algorithm/algorithm/p97_svm.py 补一补支持向量机的笔记。 支持向量机(SVM)为有监督学习算法，可用于回归、分类甚至聚类(支持向量聚类)，其主要特点为  将样本表示为超空间中的点； 求取支持向量，其余样本点对超平面无影响； 对于线性不可分问题，利用核函数映射到高维空间，使其线性可分">
@@ -421,7 +421,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-06-02 20:06:43" itemprop="dateModified" datetime="2019-06-02T20:06:43+08:00">2019-06-02</time>
+                <time title="修改时间：2019-06-02 20:13:10" itemprop="dateModified" datetime="2019-06-02T20:13:10+08:00">2019-06-02</time>
               
             
           </span>
@@ -549,43 +549,28 @@
 <script type="math/tex; mode=display">||x_i - x_j||^2 = (x_i - x_j)^T (x_i - x_j) = x_i^T x_i - 2 x_i^T x_j + x_j^T x_j</script><p>  代入核函数$(4.c)$得到</p>
 <script type="math/tex; mode=display">e^{c||x_i - x_j||^2} = e^{c(x_i^T x_i + x_j^T x_j)} e^{-2c x_i^T x_j}</script><p>  其中</p>
 <script type="math/tex; mode=display">e^{-2c x_i^T x_j} = \sum_{n=0}^{\infty} \frac{(-2c)^n (x_i^T x_j)^n}{n!}</script><p>  故</p>
-<script type="math/tex; mode=display">e^{c||x_i - x_j||^2} = e^{c(x_i^T x_i + x_j^T x_j)} \sum_{n=0}^{\infty} \frac{(-2c)^n (x_i^T x_j)^n}{n!}</script></li>
+<script type="math/tex; mode=display">e^{c||x_i - x_j||^2} = e^{c(x_i^T x_i + x_j^T x_j)} \sum_{n=0}^{\infty} \frac{(-2c)^n (x_i^T x_j)^n}{n!}</script><p>  特殊化，对于$d=2$，展开至$3$阶，得到</p>
+<script type="math/tex; mode=display">
+  e^{c||x_i - x_j||^2} = e^{c(x_{i1}^2 + x_{i2}^2 + x_{j1}^2 + x_{j2}^2)} \left[ 1 - 2c (x_{i1}x_{j1} + x_{i2}x_{j2}) + 4c^2 (x_{i1}x_{j1} + x_{i2}x_{j2})^2 -8c^3 (x_{i1}x_{j1} + x_{i2}x_{j2})^3 \right]</script><p>  其中</p>
+<script type="math/tex; mode=display">
+  \begin{cases}
+      x_{i1}x_{j1} + x_{i2}x_{j2} \\
+      (x_{i1}x_{j1} + x_{i2}x_{j2})^2 = x_{i1}^2 x_{j1}^2 + 2x_{i1}x_{j1}x_{i2}x_{j2} + x_{i2}^2 x_{j2}^2 \\
+      (x_{i1}x_{j1} + x_{i2}x_{j2})^3 = x_{i1}^3 x_{j1}^3 + 3x_{i1}x_{j1}x_{i2}^2x_{j2}^2 + 3x_{i1}^2x_{j1}^2x_{i2}x_{j2} + x_{i2}^3 x_{j2}^3 \\
+  \end{cases}</script><p>  带入后得</p>
+<script type="math/tex; mode=display">
+  e^{c||x_i - x_j||^2} = e^{c(x_{i1}^2 + x_{i2}^2 + x_{j1}^2 + x_{j2}^2)} [ 1 - 2c (x_{i1}x_{j1} + x_{i2}x_{j2}) + 4c^2 (x_{i1}^2 x_{j1}^2 + 2x_{i1}x_{j1}x_{i2}x_{j2} +</script><script type="math/tex; mode=display">
+  x_{i2}^2 x_{j2}^2) -8c^3 (x_{i1}^3 x_{j1}^3 + 3x_{i1}x_{j1}x_{i2}^2x_{j2}^2 + 3x_{i1}^2x_{j1}^2x_{i2}x_{j2} + x_{i2}^3 x_{j2}^3) ]</script><p>  所以映射函数为</p>
+<script type="math/tex; mode=display">
+  \mathit{\Phi}(x) = e^{c(x_1^2 + x_2^2)} \left[ 
+      \begin{matrix}
+          1, \sqrt{-2c} x_1, \sqrt{-2c} x_2, \sqrt{4c^2} x_1^2, \sqrt{8c^2} x_1x_2, \sqrt{4c^2} x_2^2, \sqrt{-8c^3}x_1^3, \sqrt{-24c^3} x_1 x_2^2, \sqrt{-24c^3} x_1^2 x_2, \sqrt{-8c^3} x_1^3
+      \end{matrix} \right]^T \tag{4.e}</script><p>  即升维后维数为$10$。</p>
+</li>
 </ul>
 </li>
 </ol>
-<pre><code>    特殊化，对于$d=2$，展开至$3$阶，得到
-    $$
-    e^{c||x_i - x_j||^2} = e^{c(x_{i1}^2 + x_{i2}^2 + x_{j1}^2 + x_{j2}^2)} \left[ 1 - 2c (x_{i1}x_{j1} + x_{i2}x_{j2}) + 4c^2 (x_{i1}x_{j1} + x_{i2}x_{j2})^2 -8c^3 (x_{i1}x_{j1} + x_{i2}x_{j2})^3 \right]
-    $$
-
-    其中
-    $$
-    \begin{cases}
-        x_{i1}x_{j1} + x_{i2}x_{j2} \\
-        (x_{i1}x_{j1} + x_{i2}x_{j2})^2 = x_{i1}^2 x_{j1}^2 + 2x_{i1}x_{j1}x_{i2}x_{j2} + x_{i2}^2 x_{j2}^2 \\
-        (x_{i1}x_{j1} + x_{i2}x_{j2})^3 = x_{i1}^3 x_{j1}^3 + 3x_{i1}x_{j1}x_{i2}^2x_{j2}^2 + 3x_{i1}^2x_{j1}^2x_{i2}x_{j2} + x_{i2}^3 x_{j2}^3 \\
-    \end{cases}
-    $$
-
-    带入后得
-    $$
-    e^{c||x_i - x_j||^2} = e^{c(x_{i1}^2 + x_{i2}^2 + x_{j1}^2 + x_{j2}^2)} [ 1 - 2c (x_{i1}x_{j1} + x_{i2}x_{j2}) + 4c^2 (x_{i1}^2 x_{j1}^2 + 2x_{i1}x_{j1}x_{i2}x_{j2} + 
-    $$
-
-    $$ 
-    x_{i2}^2 x_{j2}^2) -8c^3 (x_{i1}^3 x_{j1}^3 + 3x_{i1}x_{j1}x_{i2}^2x_{j2}^2 + 3x_{i1}^2x_{j1}^2x_{i2}x_{j2} + x_{i2}^3 x_{j2}^3) ]
-    $$
-
-    所以映射函数为
-    $$
-    \mathit{\Phi}(x) = e^{c(x_1^2 + x_2^2)} \left[ 
-        \begin{matrix}
-            1, \sqrt{-2c} x_1, \sqrt{-2c} x_2, \sqrt{4c^2} x_1^2, \sqrt{8c^2} x_1x_2, \sqrt{4c^2} x_2^2, \sqrt{-8c^3}x_1^3, \sqrt{-24c^3} x_1 x_2^2, \sqrt{-24c^3} x_1^2 x_2, \sqrt{-8c^3} x_1^3
-        \end{matrix} \right]^T \tag{4.e}
-    $$
-
-    即升维后维数为$10$。
-</code></pre><h2 id="线性支持向量机"><a href="#线性支持向量机" class="headerlink" title="线性支持向量机"></a>线性支持向量机</h2><p>对于线性可分得情况，目标为求解一个超平面$w^T \mathit{\Phi}(x) + b = 0$使两类点落在超平面两侧。</p>
+<h2 id="线性支持向量机"><a href="#线性支持向量机" class="headerlink" title="线性支持向量机"></a>线性支持向量机</h2><p>对于线性可分得情况，目标为求解一个超平面$w^T \mathit{\Phi}(x) + b = 0$使两类点落在超平面两侧。</p>
 <p><img src="/2019/05/27/Support-Vector-Machine/svm-3-conditions.jpg" alt="svm-3-conditions"></p>
 <p>观察以上两图，图$(c)$分割最佳，应有</p>
 <ul>
@@ -608,7 +593,7 @@
     y = -1
 \end{cases}</script><p>即</p>
 <script type="math/tex; mode=display">y \left[ w^T \mathit{\Phi}(x) + b \right] > 1</script><p>现希望优化两个平面间的距离，使其达到最大，即优化目标为</p>
-<script type="math/tex; mode=display">w, b = \argmax r</script><script type="math/tex; mode=display">s.t.\qquad y \left[ w^T \mathit{\Phi}(x) + b \right] > 1 \tag{7}</script><p><strong>那么如何求解支撑超平面间距离$r$呢？</strong>，有两种思路</p>
+<script type="math/tex; mode=display">w, b = \arg \max r</script><script type="math/tex; mode=display">s.t.\qquad y \left[ w^T \mathit{\Phi}(x) + b \right] > 1 \tag{7}</script><p><strong>那么如何求解支撑超平面间距离$r$呢？</strong>，有两种思路</p>
 <ol>
 <li><p>思路一<br> <img src="/2019/05/27/Support-Vector-Machine/r.jpg" alt="r"></p>
 <p> 过超平面$\mathcal{P}$任一点$\mathit{\Phi}(x)$作垂线，分别交$\mathcal{P}_{+/-}$于向量$\mathit{\Phi}(x_{+/-})$，则</p>
@@ -626,7 +611,7 @@
 <script type="math/tex; mode=display">r = \frac{2}{||w||} \tag{8.b}</script></li>
 </ol>
 <p>所以优化目标为</p>
-<script type="math/tex; mode=display">w, b = \argmax \frac{2}{||w||}</script><script type="math/tex; mode=display">s.t.\qquad y \left[ w^T \mathit{\Phi}(x) + b \right] \geq 1 \tag{9.a}</script><p>为方便求解，相当于</p>
+<script type="math/tex; mode=display">w, b = \arg \max \frac{2}{||w||}</script><script type="math/tex; mode=display">s.t.\qquad y \left[ w^T \mathit{\Phi}(x) + b \right] \geq 1 \tag{9.a}</script><p>为方便求解，相当于</p>
 <script type="math/tex; mode=display">w, b = \argmin \frac{1}{2} ||w||^2</script><script type="math/tex; mode=display">s.t.\qquad y \left[ w^T \mathit{\Phi}(x) + b \right] \geq 1 \tag{10.b}</script><h1 id="回归问题"><a href="#回归问题" class="headerlink" title="回归问题"></a>回归问题</h1><p>回归模型的目标是让训练集中每个样本点$(x^{(i)}, y^{(i)})$尽量拟合到一个线性模型上</p>
 <script type="math/tex; mode=display">y^{(i)} = w^T \mathit{\Phi}(x^{(i)}) + b</script><p>对于一般的回归模型，一般使用$MSE$作为损失函数，但是在$y^{(i)} \neq w^T \mathit{\Phi}(x^{(i)}) + b$时就会有损失，所以$SVM$不采用。</p>
 <p>定义一个常量$\epsilon &gt; 0$，对于某个样本点$(x^{(i)}, y^{(i)})$，其损失定义如下，即在支撑超平面间隔内的样本点是没有损失的</p>
@@ -690,7 +675,7 @@ L^{(i)} = \begin{cases}
 </ol>
 <h2 id="线性可分情况下求解"><a href="#线性可分情况下求解" class="headerlink" title="线性可分情况下求解"></a>线性可分情况下求解</h2><p><img src="/2019/05/27/Support-Vector-Machine/linear.jpg" alt="linear"></p>
 <p>对于优化问题$(10.b)$</p>
-<script type="math/tex; mode=display">w, b = \argmax \frac{2}{||w||}</script><script type="math/tex; mode=display">s.t.\qquad y \left[ w^T \mathit{\Phi}(x) + b \right] \geq 1 \tag{10.b}</script><p>利用拉格朗日乘子法</p>
+<script type="math/tex; mode=display">w, b = \arg \max \frac{2}{||w||}</script><script type="math/tex; mode=display">s.t.\qquad y \left[ w^T \mathit{\Phi}(x) + b \right] \geq 1 \tag{10.b}</script><p>利用拉格朗日乘子法</p>
 <script type="math/tex; mode=display">L(w, b, \mu) = \frac{1}{2} ||w||^2 + \sum_i \mu^{(i)} \left\{ 1 - y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] \right\} \tag{14}</script><p>则带求解问题为</p>
 <script type="math/tex; mode=display">w, b, \mu = \argmin_{w, b} \max_{\mu} L(w, b, \mu) \tag{15.a}</script><p>转化为上式的<strong>对偶问题</strong></p>
 <script type="math/tex; mode=display">w, b, \mu = \argmin_{\mu} \max_{w,b} L(w, b, \mu) \tag{15.b}</script><blockquote>
@@ -717,7 +702,7 @@ L^{(i)} = \begin{cases}
 <p>这里出现了<strong>核函数</strong>：$\kappa(x^{(i)}, x^{(j)}) = \mathit{\Phi}(x^{(i)})^T \mathit{\Phi}(x^{(j)})$</p>
 </blockquote>
 <p>那么优化问题现在转化为</p>
-<script type="math/tex; mode=display">\mu = \argmax_{\mu} \tilde{L}(\mu) = \argmax_{\mu} \sum_i \mu^{(i)} - \frac{1}{2} \sum_i \sum_j \mu^{(i)} \mu^{(j)} y^{(i)} y^{(j)} \mathit{\Phi}(x^{(i)})^T \mathit{\Phi}(x^{(j)})</script><script type="math/tex; mode=display">s.t.\qquad \mu^{(i)} \geq 0, \quad \sum_i \mu^{(i)} y^{(i)} = 0 \tag{18}</script><p>其中$i = 1, \cdots, N$，现在只需优化$\mu$即可，该式使用$SMO$或梯度下降法算法求解，再用下式求解参数$w, b$</p>
+<script type="math/tex; mode=display">\mu = \arg \max_{\mu} \tilde{L}(\mu) = \arg \max_{\mu} \sum_i \mu^{(i)} - \frac{1}{2} \sum_i \sum_j \mu^{(i)} \mu^{(j)} y^{(i)} y^{(j)} \mathit{\Phi}(x^{(i)})^T \mathit{\Phi}(x^{(j)})</script><script type="math/tex; mode=display">s.t.\qquad \mu^{(i)} \geq 0, \quad \sum_i \mu^{(i)} y^{(i)} = 0 \tag{18}</script><p>其中$i = 1, \cdots, N$，现在只需优化$\mu$即可，该式使用$SMO$或梯度下降法算法求解，再用下式求解参数$w, b$</p>
 <script type="math/tex; mode=display">
 \begin{cases}
     w = \sum_i \mu^{(i)} y^{(i)} \mathit{\Phi}(x^{(i)}) \\
@@ -767,7 +752,7 @@ b \sum_i \mu_1^{(i)} y^{(i)} -
 <script type="math/tex; mode=display">
 \tilde{L}(\mu_1, \mu_2) = - \frac{1}{2} w^T w  + C \sum_i \epsilon^{(i)} + \sum_i \mu_1^{(i)} - \sum_i \left( \mu_1^{(i)} + \mu_2^{(i)} \right) \epsilon^{(i)}</script><p>其中$\mu_1^{(i)} + \mu_2^{(i)} = C$，所以同$(17)$</p>
 <script type="math/tex; mode=display">\tilde{L}(\mu_1) = \sum_i \mu_1^{(i)} - \frac{1}{2} w^T w = \sum_i \mu_1^{(i)} - \frac{1}{2} \sum_i \sum_j \mu_1^{(i)} \mu_1^{(j)} y^{(i)} y^{(j)} \mathit{\Phi}(x^{(i)})^T \mathit{\Phi}(x^{(j)}) \tag{24}</script><p>那么优化问题现在转化为</p>
-<script type="math/tex; mode=display">\mu_1 = \argmax_{\mu_1} \tilde{L}(\mu_1) = \argmax_{\mu_1} \sum_i \mu_1^{(i)} - \frac{1}{2} \sum_i \sum_j \mu_1^{(i)} \mu_1^{(j)} y^{(i)} y^{(j)} \mathit{\Phi}(x^{(i)})^T \mathit{\Phi}(x^{(j)})</script><script type="math/tex; mode=display">s.t.\qquad \mu_1^{(i)} \geq 0, \quad \mu_2^{(i)} \geq 0</script><script type="math/tex; mode=display">\sum_i \mu_1^{(i)} y^{(i)} = 0</script><script type="math/tex; mode=display">C - \mu_1^{(i)} - \mu_2^{(i)} = 0 \tag{25}</script><p>对于上式，有如下分析</p>
+<script type="math/tex; mode=display">\mu_1 = \arg \max_{\mu_1} \tilde{L}(\mu_1) = \arg \max_{\mu_1} \sum_i \mu_1^{(i)} - \frac{1}{2} \sum_i \sum_j \mu_1^{(i)} \mu_1^{(j)} y^{(i)} y^{(j)} \mathit{\Phi}(x^{(i)})^T \mathit{\Phi}(x^{(j)})</script><script type="math/tex; mode=display">s.t.\qquad \mu_1^{(i)} \geq 0, \quad \mu_2^{(i)} \geq 0</script><script type="math/tex; mode=display">\sum_i \mu_1^{(i)} y^{(i)} = 0</script><script type="math/tex; mode=display">C - \mu_1^{(i)} - \mu_2^{(i)} = 0 \tag{25}</script><p>对于上式，有如下分析</p>
 <script type="math/tex; mode=display">\begin{cases} \mu_1^{(i)} \geq 0 \\ \mu_2^{(i)} \geq 0 \\ \mu_2^{(i)} = C - \mu_1^{(i)} \end{cases} \Rightarrow C \geq \mu_1^{(i)} \geq 0 \tag{26.a}</script><ol>
 <li>$C = \mu_1^{(i)}$时，$\mu_2^{(i)} = 0$，由$\mu_2^{(i)} \left( - \epsilon^{(i)} \right) = 0$，可得$\epsilon^{(i)} \geq 0$<ol>
 <li>$\epsilon^{(i)} = 0$时，$y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] = 1$，该点为支撑向量；</li>
@@ -797,7 +782,7 @@ b \sum_i \mu_1^{(i)} y^{(i)} -
 <p>注：$(x^{sup’}, y^{sup’})$表示“软间隔支持向量”。<br>注：(1) 并非所有的样本点都有一个松弛变量与其对应。实际上只有“离群点”才有，所有没离群的点松弛变量都等于0<br>(2) 松弛变量的值实际上标示出了对应的点到底离群有多远，值越大，点就越远<br>(3) 惩罚因子C决定了你有多重视离群点带来的损失，显然当所有离群点的松弛变量的和一定时，你定的C越大，对目标函数的损失也越大，此时就暗示着你非常不愿意放弃这些离群点，最极端的情况C定为无限大，这样只要稍有一个点离群，目标函数的值马上变成无限大，马上让问题变成无解，这就退化成了硬间隔问题<br>(4) 惩罚因子C不是一个变量，整个优化问题在解的时候，C是一个你必须事先指定的值，指定这个值以后，解一下，得到一个分类器，然后用测试数据看看结果怎么样，如果不够好，换一个C的值，再解一次优化问题，得到另一个分类器，再看看效果，如此就是一个参数寻优的过程，但这和优化问题本身决不是一回事，优化问题在解的过程中，C一直是定值<br>(5) 尽管加了松弛变量这么一说，但这个优化问题仍然是一个优化问题（汗，这不废话么），解它的过程比起原始的硬间隔问题来说，没有任何更加特殊的地方(C≥$\mu^{(i)}$≥0)<br>(6) 完全可以给每一个离群点都使用不同的C，这时就意味着你对每个样本的重视程度都不一样，有些样本丢了也就丢了，错了也就错了，这些就给一个比较小的C；而有些样本很重要，决不能分类错误（比如中央下达的文件啥的，笑），就给一个很大的C。<br><strong>以上忘记从哪里摘抄的了:-(</strong> </p>
 </blockquote>
 <h2 id="Sequential-Minimal-Optimization-SMO"><a href="#Sequential-Minimal-Optimization-SMO" class="headerlink" title="Sequential Minimal Optimization(SMO)"></a>Sequential Minimal Optimization(SMO)</h2><p>以上我们得到优化目标</p>
-<script type="math/tex; mode=display">\mu = \argmax_{\mu} \tilde{L}(\mu) = \argmax_{\mu} \sum_i \mu^{(i)} - \frac{1}{2} \sum_i \sum_j \mu^{(i)} \mu^{(j)} y^{(i)} y^{(j)} \mathit{\Phi}(x^{(i)})^T \mathit{\Phi}(x^{(j)})</script><script type="math/tex; mode=display">s.t.\qquad \mu^{(i)} \geq 0</script><script type="math/tex; mode=display">\quad \sum_i \mu^{(i)} y^{(i)} = 0</script><script type="math/tex; mode=display">\quad C \geq \mu^{(i)} \geq 0 \tag{29}</script><h3 id="基本思想"><a href="#基本思想" class="headerlink" title="基本思想"></a>基本思想</h3><p>把对整个λ向量的优化转化为对每一对$\mu^{(i)},\mu^{(j)}$的优化，如果我们把其他λ先固定，仅仅优化某一对$\mu^{(i)},\mu^{(j)}$，那么我们可以通过解析式（即通过确定的公式来计算）来优化$\mu^{(i)},\mu^{(j)}$ 。而且此时$K.K.T.$条件很重要，之前说过最优解是一定会满足$K.K.T.$条件的，所以如果我们优化使所有$\mu$都满足了$K.K.T.$条件，那么这样最优解就会找到。</p>
+<script type="math/tex; mode=display">\mu = \arg \max_{\mu} \tilde{L}(\mu) = \arg \max_{\mu} \sum_i \mu^{(i)} - \frac{1}{2} \sum_i \sum_j \mu^{(i)} \mu^{(j)} y^{(i)} y^{(j)} \mathit{\Phi}(x^{(i)})^T \mathit{\Phi}(x^{(j)})</script><script type="math/tex; mode=display">s.t.\qquad \mu^{(i)} \geq 0</script><script type="math/tex; mode=display">\quad \sum_i \mu^{(i)} y^{(i)} = 0</script><script type="math/tex; mode=display">\quad C \geq \mu^{(i)} \geq 0 \tag{29}</script><h3 id="基本思想"><a href="#基本思想" class="headerlink" title="基本思想"></a>基本思想</h3><p>把对整个λ向量的优化转化为对每一对$\mu^{(i)},\mu^{(j)}$的优化，如果我们把其他λ先固定，仅仅优化某一对$\mu^{(i)},\mu^{(j)}$，那么我们可以通过解析式（即通过确定的公式来计算）来优化$\mu^{(i)},\mu^{(j)}$ 。而且此时$K.K.T.$条件很重要，之前说过最优解是一定会满足$K.K.T.$条件的，所以如果我们优化使所有$\mu$都满足了$K.K.T.$条件，那么这样最优解就会找到。</p>
 <h3 id="选择优化对的方法"><a href="#选择优化对的方法" class="headerlink" title="选择优化对的方法"></a>选择优化对的方法</h3><p>寻找两个参数时，应找那些违反$K.K.T.$条件的，具体过程可分为外层循环和内层循环，利用启发式规则寻找待优化参数对。</p>
 <ol>
 <li>启发式规则1<ol>
