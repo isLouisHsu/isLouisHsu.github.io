@@ -108,30 +108,24 @@
 
 
 
-  <meta name="description" content="引言线性回归可以说是机器学习最基础的算法 模型\hat{y}^{(i)} = w^Tx^{(i)}其中 x^{(i)}=[x_0^{(i)}, x_1^{(i)}, ..., x_n^{(i)}]^T, x_0^{(i)}=1这里$x_0^{(i)}=1$表示偏置$b$，即$b=w_0$ \hat{y}^{(i)} = w^Tx^{(i)} + b 注：对于非线性的数据，可构造高次特征。  损失函">
+  <meta name="description" content="前言在读取大数据量的文件时，使用迭代器和生成器可减少内存开销。 迭代器(Iterator)迭代是Python访问集合元素的一种方式。迭代器是一个可以记住遍历的位置的对象。迭代器对象从集合的第一个元素开始访问，直到所有的元素被访问完结束。迭代器只能往前不会后退。 内建函数iter()与next()该函数将可迭代对象转换为迭代器，支持的数据容器对象如string、list、dict、tuple等，使用">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linear Regression">
-<meta property="og:url" content="http://yoursite.com/2018/10/18/Linear-Regression/index.html">
+<meta property="og:title" content="Python迭代器与生成器">
+<meta property="og:url" content="http://yoursite.com/2019/07/11/Python迭代器与生成器/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="引言线性回归可以说是机器学习最基础的算法 模型\hat{y}^{(i)} = w^Tx^{(i)}其中 x^{(i)}=[x_0^{(i)}, x_1^{(i)}, ..., x_n^{(i)}]^T, x_0^{(i)}=1这里$x_0^{(i)}=1$表示偏置$b$，即$b=w_0$ \hat{y}^{(i)} = w^Tx^{(i)} + b 注：对于非线性的数据，可构造高次特征。  损失函">
+<meta property="og:description" content="前言在读取大数据量的文件时，使用迭代器和生成器可减少内存开销。 迭代器(Iterator)迭代是Python访问集合元素的一种方式。迭代器是一个可以记住遍历的位置的对象。迭代器对象从集合的第一个元素开始访问，直到所有的元素被访问完结束。迭代器只能往前不会后退。 内建函数iter()与next()该函数将可迭代对象转换为迭代器，支持的数据容器对象如string、list、dict、tuple等，使用">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/projection_linreg2.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/projection_linreg3.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/w_i_x_i.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/result_linreg_noreg.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/result_linreg_reg.png">
-<meta property="og:updated_time" content="2019-05-01T10:44:53.000Z">
+<meta property="og:updated_time" content="2019-07-11T10:15:05.041Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linear Regression">
-<meta name="twitter:description" content="引言线性回归可以说是机器学习最基础的算法 模型\hat{y}^{(i)} = w^Tx^{(i)}其中 x^{(i)}=[x_0^{(i)}, x_1^{(i)}, ..., x_n^{(i)}]^T, x_0^{(i)}=1这里$x_0^{(i)}=1$表示偏置$b$，即$b=w_0$ \hat{y}^{(i)} = w^Tx^{(i)} + b 注：对于非线性的数据，可构造高次特征。  损失函">
-<meta name="twitter:image" content="http://yoursite.com/2018/10/18/Linear-Regression/projection_linreg2.png">
+<meta name="twitter:title" content="Python迭代器与生成器">
+<meta name="twitter:description" content="前言在读取大数据量的文件时，使用迭代器和生成器可减少内存开销。 迭代器(Iterator)迭代是Python访问集合元素的一种方式。迭代器是一个可以记住遍历的位置的对象。迭代器对象从集合的第一个元素开始访问，直到所有的元素被访问完结束。迭代器只能往前不会后退。 内建函数iter()与next()该函数将可迭代对象转换为迭代器，支持的数据容器对象如string、list、dict、tuple等，使用">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/10/18/Linear-Regression/">
+  <link rel="canonical" href="http://yoursite.com/2019/07/11/Python迭代器与生成器/">
 
 
 
@@ -141,7 +135,7 @@
   };
 </script>
 
-  <title>Linear Regression | LOUIS' BLOG</title>
+  <title>Python迭代器与生成器 | LOUIS' BLOG</title>
   
 
 
@@ -356,7 +350,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/18/Linear-Regression/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/11/Python迭代器与生成器/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Louis Hsu">
@@ -373,7 +367,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Linear Regression
+          <h1 class="post-title" itemprop="name headline">Python迭代器与生成器
               
             
           </h1>
@@ -398,24 +392,12 @@
                 
               
 
-              <time title="创建时间：2018-10-18 19:05:02" itemprop="dateCreated datePublished" datetime="2018-10-18T19:05:02+08:00">2018-10-18</time>
+              <time title="创建时间：2019-07-11 16:33:12 / 修改时间：18:15:05" itemprop="dateCreated datePublished" datetime="2019-07-11T16:33:12+08:00">2019-07-11</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-05-01 18:44:53" itemprop="dateModified" datetime="2019-05-01T18:44:53+08:00">2019-05-01</time>
               
             
           </span>
@@ -432,7 +414,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a></span>
 
                 
                 
@@ -473,61 +455,25 @@
       
 
       
-        <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>线性回归可以说是机器学习最基础的算法</p>
-<h1 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h1><script type="math/tex; mode=display">\hat{y}^{(i)} = w^Tx^{(i)}</script><p>其中</p>
-<script type="math/tex; mode=display">x^{(i)}=[x_0^{(i)}, x_1^{(i)}, ..., x_n^{(i)}]^T, x_0^{(i)}=1</script><p>这里$x_0^{(i)}=1$表示偏置$b$，即$b=w_0$</p>
-<script type="math/tex; mode=display">\hat{y}^{(i)} = w^Tx^{(i)} + b</script><blockquote>
-<p><code>注</code>：对于非线性的数据，可构造高次特征。</p>
-</blockquote>
-<h1 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h1><h2 id="定义误差"><a href="#定义误差" class="headerlink" title="定义误差"></a>定义误差</h2><script type="math/tex; mode=display">e^{(i)} = \hat{y}^{(i)} - y^{(i)}</script><p>其中$y^{(i)}$表示真实值</p>
-<h2 id="定义损失函数"><a href="#定义损失函数" class="headerlink" title="定义损失函数"></a>定义损失函数</h2><p>单个样本的误差定义为</p>
-<script type="math/tex; mode=display">L_{single}(\hat{y}^{(i)}, y^{(i)})=\frac{1}{2}||e^{(i)}||_2^2=\frac{1}{2}(\hat{y}^{(i)}-y^{(i)})^2</script><p>所有样本的误差定义为</p>
-<script type="math/tex; mode=display">L(y, t)=\frac{1}{2N}\sum_i (\hat{y}^{(i)}-y^{(i)})^2</script><p>也可以定义为误差的和而不是均值，对结果无影响，可视作学习率$α$除去一个常数</p>
-<h1 id="梯度推导"><a href="#梯度推导" class="headerlink" title="梯度推导"></a>梯度推导</h1><blockquote>
-<p>$\frac{∂L}{∂w_j}$<br>$= \frac{∂}{∂w_j}\frac{1}{2N}\sum_i(\hat{y}^{(i)}-y^{(i)})^2$<br>$= \frac{1}{2N} \sum_i \frac{∂}{∂w_j} (\hat{y}^{(i)}-y^{(i)})^2$<br>$= \frac{1}{N} \sum_i (\hat{y}^{(i)}-y^{(i)}) \frac{∂t^{(i)}}{∂w_j}$<br>$=  \frac{1}{N} \sum_i (\hat{y}^{(i)}-y^{(i)}) x_j^{(i)}$</p>
-</blockquote>
-<p>或者使用矩阵推导，记$X = [x_1, x_2, …, x_m]^T$，$x_i$为样本特征(列向量)</p>
-<script type="math/tex; mode=display">
-L = \frac{1}{2}(Xw-Y)^T(Xw-Y)</script><script type="math/tex; mode=display">
-∇_w L = X^T(\hat{Y}-Y)</script><blockquote>
-<p>$∇_w L$<br>$= \frac{1}{2} ∇_w (w^TX^TXw - Y^TXw - w^TX^TY + Y^TY)$<br>$= \frac{1}{2} (2X^TXw - X^TY - X^TY)$<br>$= X^T(Xw-Y) $</p>
-</blockquote>
-<p>在梯度为$\vec{0}$的点，即$∇_w L = \vec{0}$时对应最优解</p>
-<script type="math/tex; mode=display">X^T(Xw-Y) = 0</script><blockquote>
-<p>令<script type="math/tex">X^T(Xw-Y) = 0</script></p>
-<p>有<script type="math/tex">X^TXw = X^TY</script></p>
-<script type="math/tex; mode=display">w^*=(X^TX+\lambda I)^{-1}X^TY</script></blockquote>
-<p>其中$X^+=(X^TX+\lambda I)^{-1}X^T$，表示矩阵$X_{m×n}$的伪逆</p>
-<h2 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h2><p>采用梯度下降法求解</p>
-<script type="math/tex; mode=display">w := w - \alpha ∇_w L</script><p>其中$w$表示参数向量</p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在读取大数据量的文件时，使用迭代器和生成器可减少内存开销。</p>
+<h1 id="迭代器-Iterator"><a href="#迭代器-Iterator" class="headerlink" title="迭代器(Iterator)"></a>迭代器(Iterator)</h1><p>迭代是Python访问集合元素的一种方式。迭代器是一个可以记住遍历的位置的对象。迭代器对象从集合的第一个元素开始访问，直到所有的元素被访问完结束。迭代器只能往前不会后退。</p>
+<h2 id="内建函数iter-与next"><a href="#内建函数iter-与next" class="headerlink" title="内建函数iter()与next()"></a>内建函数iter()与next()</h2><p>该函数将可迭代对象转换为迭代器，支持的数据容器对象如<code>string</code>、<code>list</code>、<code>dict</code>、<code>tuple</code>等，使用方法如下<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span>&gt;&gt; # 创建可迭代对象</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; a = "iterator"</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; b = [_ for _ in a]</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; c = dict(zip(a, range(len(a))))</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; d = tuple(a)</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; a</span><br><span class="line">'iterator'</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; b</span><br><span class="line">['i', 't', 'e', 'r', 'a', 't', 'o', 'r']</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; c</span><br><span class="line">&#123;'i': 0, 't': 5, 'e': 2, 'r': 7, 'a': 4, 'o': 6&#125;</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; d</span><br><span class="line">('i', 't', 'e', 'r', 'a', 't', 'o', 'r')</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt;</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; # 调用`iter()`函数将可迭代对象转换为迭代器</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; all = [a, b, c, d]</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; iterAll = list(map(iter, all))</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; all</span><br><span class="line">['iterator', ['i', 't', 'e', 'r', 'a', 't', 'o', 'r'], &#123;'i': 0, 't': 5, 'e': 2, 'r': 7, 'a': 4, 'o': 6&#125;, ('i', 't', 'e', 'r', 'a', 't', 'o', 'r')]</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; iterAll</span><br><span class="line">[&lt;str_iterator object at 0x00000216C399D6A0&gt;, &lt;list_iterator object at 0x00000216C399D6D8&gt;, &lt;dict_keyiterator object at 0x00000216C37672C8&gt;, &lt;tuple_iterator object at 0x00000216C399D710&gt;]</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt;</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; # 反复调用`next()`函数取出迭代器值</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; next(iterAll[0])</span><br><span class="line">'i'</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; next(iterAll[0])</span><br><span class="line">'t'</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; next(iterAll[0])</span><br><span class="line">'e'</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; next(iterAll[0])</span><br><span class="line">'r'</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; next(iterAll[0])</span><br><span class="line">'a'</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; next(iterAll[0])</span><br><span class="line">'t'</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; next(iterAll[0])</span><br><span class="line">'o'</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; next(iterAll[0])</span><br><span class="line">'r'</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; # 迭代结束</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; next(iterAll[0])</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File "&lt;stdin&gt;", line 1, in &lt;module&gt;</span><br><span class="line">StopIteration</span><br></pre></td></tr></table></figure></p>
+<h2 id="for语法糖"><a href="#for语法糖" class="headerlink" title="for语法糖"></a>for语法糖</h2><p>实际中对可迭代对象进行迭代时，上述这般麻烦。在Python的循环语句<code>for</code>已对其进行包装，内部调用函数<code>iter()</code>和<code>next()</code>，返回可迭代对象元素<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span>&gt;&gt; a</span><br><span class="line">'iterator'</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; for i in a:</span><br><span class="line">...     print(i)</span><br><span class="line">...</span><br><span class="line">i</span><br><span class="line">t</span><br><span class="line">e</span><br><span class="line">r</span><br><span class="line">a</span><br><span class="line">t</span><br><span class="line">o</span><br><span class="line">r</span><br></pre></td></tr></table></figure></p>
+<h2 id="自定义迭代器-敲黑板划重点！"><a href="#自定义迭代器-敲黑板划重点！" class="headerlink" title="自定义迭代器(敲黑板划重点！)"></a>自定义迭代器(敲黑板划重点！)</h2><p>将自定义类定义为可迭代对象的实现方法是，实现魔术方法<code>__iter__()</code>与<code>__next__()</code>。</p>
+<p>例如，要求返回斐波那契数列前20个值。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Fibonacci</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, m)</span>:</span></span><br><span class="line">        </span><br><span class="line">        self.m = m</span><br><span class="line">        self.n, self.a, self.b = <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__iter__</span><span class="params">(self)</span>:</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> self</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__next__</span><span class="params">(self)</span>:</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> self.n &lt; self.m:</span><br><span class="line">            t = self.b</span><br><span class="line">            self.a, self.b = self.b, self.a + self.b</span><br><span class="line">            self.n += <span class="number">1</span></span><br><span class="line">            <span class="keyword">return</span> t</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span> StopIteration</span><br></pre></td></tr></table></figure></p>
+<p>在命令行中执行<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span>&gt;&gt; from iter import Fibonacci</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; </span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; g = Fibonacci(20)</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; g</span><br><span class="line">&lt;iter.Fibonacci object at 0x000001F359927E10&gt;</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; </span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; while True:</span><br><span class="line">...     try:</span><br><span class="line">...             next(g)</span><br><span class="line">...     except StopIteration:</span><br><span class="line">...             break</span><br><span class="line">...</span><br><span class="line">1</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">5</span><br><span class="line">8</span><br><span class="line">13</span><br><span class="line">21</span><br><span class="line">34</span><br><span class="line">55</span><br><span class="line">89</span><br><span class="line">144</span><br><span class="line">233</span><br><span class="line">377</span><br><span class="line">610</span><br><span class="line">987</span><br><span class="line">1597</span><br><span class="line">2584</span><br><span class="line">4181</span><br><span class="line">6765</span><br></pre></td></tr></table></figure></p>
 <blockquote>
-<p>进一步思考：为什么使用梯度下降可以求取最优解呢？</p>
-<script type="math/tex; mode=display">∇_w^2 L = ∇_w X^T(Xw-Y) = X^TX</script><p>而对于矩阵 $ X^TX $</p>
-<script type="math/tex; mode=display">u^T(X^TX)u = (Xu)^T(Xu) \geq 0</script><p>即损失函数的<code>Hessian</code>矩阵$∇_w^2 L$为正定矩阵，$L$为凸函数，存在全局最优解</p>
+<p>在<code>Pytorch</code>中，数据集<code>Dataset</code>定义时，重写函数<code>__getitem__()</code>与<code>__len__()</code>，并不是可迭代对象，而<code>Dataloader</code>为可迭代对象，详细源码可查看<a href="https://github.com/pytorch/pytorch/blob/master/torch/utils/data/dataloader.py/" target="_blank" rel="noopener">Github: Pytorch</a></p>
 </blockquote>
-<h1 id="从投影的角度理解线性回归"><a href="#从投影的角度理解线性回归" class="headerlink" title="从投影的角度理解线性回归"></a>从投影的角度理解线性回归</h1><p><img src="/2018/10/18/Linear-Regression/projection_linreg2.png" alt="投影理解"></p>
-<p><img src="/2018/10/18/Linear-Regression/projection_linreg3.png" alt="用投影推导最优解"></p>
-<h1 id="线性回归的正则化"><a href="#线性回归的正则化" class="headerlink" title="线性回归的正则化"></a>线性回归的正则化</h1><p>为克服过拟合问题，可加入正则化项$||w||_2^2$，此时损失函数定义为</p>
-<script type="math/tex; mode=display">L(\hat{y}, y)=\frac{1}{2N} ||\hat{y}^{(i)}-y^{(i)}||_2^2 + \lambda ||w||_2^2</script><p>或者</p>
-<script type="math/tex; mode=display">L(\hat{y}, y)=\frac{1}{2N} \sum_i (\hat{y}^{(i)}-y^{(i)})^2 +  \frac{\lambda}{2N}\sum_j w_j^2</script><p>其中$i = 1, …, N_{sample}; j = 1, …, N_{feature},j&gt;0 $</p>
-<p>此时梯度为</p>
-<script type="math/tex; mode=display">\frac{∂L}{∂w_j} = \frac{1}{N} \sum_i (\hat{y}^{(i)}-y^{(i)}) x_j^{(i)} + \frac{\lambda}{N}w_j</script><p>其中$j = 1, …, N_{feature},j&gt;0 $</p>
-<h1 id="局部加权线性回归"><a href="#局部加权线性回归" class="headerlink" title="局部加权线性回归"></a>局部加权线性回归</h1><p>目标函数定义为</p>
-<script type="math/tex; mode=display">L(y, t)=\frac{1}{2N}\sum_i w^{(i)} (\hat{y}^{(i)}-y^{(i)})^2</script><p>其中</p>
-<script type="math/tex; mode=display">w^{(i)} = e^{-\frac{(x^{(i)}-x)^2}{2\tau^2}}</script><p>$x$表示输入的预测样本，$x^{(i)}$表示训练样本</p>
-<p><div style="align: center">
-<img src="/2018/10/18/Linear-Regression/w_i_x_i.png">
-</div><br>离很近的样本，权值接近于1，而对于离很远的样本，此时权值接近于0，这样就是在局部构成线性回归，它依赖的也只是周边的点。</p>
-<p>对于线性回归算法，一旦拟合出适合训练数据的参数$w$，保存这些参数$w$，对于之后的预测，不需要再使用原始训练数据集，所以是参数学习算法。而对于局部加权线性回归算法，每次进行预测都需要全部的训练数据（每次进行的预测得到不同的参数$w$），没有固定的参数$w$，所以是非参数算法。</p>
-<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><p><a href="https://github.com/isLouisHsu/Python-Examples-for-ML/tree/master/Andrew%20Ng%2C%20Stanford%20University/mlclass-ex5-regularizedllinearregression" target="_blank" rel="noopener">@Github: Code for Linear Regression</a></p>
-<h2 id="training-step"><a href="#training-step" class="headerlink" title="training step"></a>training step</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fit</span><span class="params">(self, X, y, learning_rate=<span class="number">0.01</span>, max_iter=<span class="number">5000</span>, min_loss=<span class="number">10</span>)</span>:</span></span><br><span class="line">    <span class="comment"># --------------- 数据预处理部分 ---------------</span></span><br><span class="line">    <span class="comment"># 加入全1列</span></span><br><span class="line">    X = np.c_[np.ones(shape=(X.shape[<span class="number">0</span>])), X]</span><br><span class="line">    <span class="comment"># 构造高次特征</span></span><br><span class="line">    <span class="keyword">if</span> self.n_ploy &gt; <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>, self.n_ploy + <span class="number">1</span>):</span><br><span class="line">            X = np.c_[X, X[:, <span class="number">1</span>]**i]</span><br><span class="line">    <span class="comment"># ---------------- 参数迭代部分 ----------------</span></span><br><span class="line">    <span class="comment"># 初始化参数</span></span><br><span class="line">    self.theta = np.random.uniform(<span class="number">-1</span>, <span class="number">1</span>, size=(X.shape[<span class="number">1</span>],))</span><br><span class="line">    <span class="comment"># 数据批次</span></span><br><span class="line">    n_batch = X.shape[<span class="number">0</span>] <span class="keyword">if</span> self.n_batch==<span class="number">-1</span> <span class="keyword">else</span> self.n_batch</span><br><span class="line">    batch_size = X.shape[<span class="number">0</span>] // n_batch</span><br><span class="line">    <span class="comment"># 停止条件</span></span><br><span class="line">    n_iter = <span class="number">0</span>; loss = float(<span class="string">'inf'</span>)</span><br><span class="line">    <span class="comment"># 开始迭代</span></span><br><span class="line">    <span class="keyword">for</span> n_iter <span class="keyword">in</span> range(max_iter):</span><br><span class="line">        <span class="keyword">for</span> n <span class="keyword">in</span> range(n_batch):</span><br><span class="line">            n1, n2 = n*batch_size, (n+<span class="number">1</span>)*batch_size</span><br><span class="line">            X_batch = X[n1: n2]; y_batch = y[n1: n2]</span><br><span class="line">            </span><br><span class="line">            grad = self.lossFunctionDerivative(X_batch, y_batch)</span><br><span class="line">            self.theta -= learning_rate * grad</span><br><span class="line">            </span><br><span class="line">            loss = self.score(y_batch, self.predict(X_batch))</span><br><span class="line">            <span class="keyword">if</span> loss &lt; min_loss:</span><br><span class="line">                print(<span class="string">'第%d次迭代, 第%d批数据'</span> % (n_iter, n))</span><br><span class="line">                print(<span class="string">"当前总体样本损失为: "</span>, loss)</span><br><span class="line">                <span class="keyword">return</span> self.theta</span><br><span class="line">        <span class="keyword">if</span> n_iter%<span class="number">100</span> == <span class="number">0</span>:</span><br><span class="line">            print(<span class="string">'第%d次迭代'</span> % n_iter)</span><br><span class="line">            print(<span class="string">"当前总体样本损失为: "</span>, loss)</span><br><span class="line">    print(<span class="string">"超过迭代次数"</span>)</span><br><span class="line">    print(<span class="string">"当前总体样本损失为: "</span>, loss)</span><br><span class="line">    <span class="keyword">return</span> self.theta</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">lossFunctionDerivative</span><span class="params">(self, X, y)</span>:</span></span><br><span class="line">    y_pred = self.predict(X)</span><br><span class="line">    <span class="comment"># theta = self.theta;     # ！注意：theta = self.theta 不仅仅是赋值，类似引用，修改theta会影响self.theta</span></span><br><span class="line">    theta = self.theta.copy()</span><br><span class="line">    theta[<span class="number">0</span>] = <span class="number">0</span>            <span class="comment"># θ0不需要正则化</span></span><br><span class="line">    <span class="keyword">return</span> (X.T.dot(y_pred - y) + self.regularize * theta) / X.shape[<span class="number">0</span>]</span><br></pre></td></tr></table></figure>
-<h2 id="predict-step"><a href="#predict-step" class="headerlink" title="predict step"></a>predict step</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">predict</span><span class="params">(self, X, preprocessed=False)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> preprocessed:</span><br><span class="line">        <span class="comment"># 加入全1列</span></span><br><span class="line">        X = np.c_[np.ones(shape=(X.shape[<span class="number">0</span>])), X]</span><br><span class="line">        <span class="comment"># 构造高次特征</span></span><br><span class="line">        <span class="keyword">if</span> self.n_ploy &gt; <span class="number">1</span>:</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>, self.n_ploy + <span class="number">1</span>):</span><br><span class="line">                X = np.c_[X, X[:, <span class="number">1</span>]**i]</span><br><span class="line">    <span class="keyword">return</span> X.dot(self.theta)</span><br></pre></td></tr></table></figure>
-<h2 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果"></a>运行结果</h2><ul>
-<li><p>无正则化<br>  <img src="/2018/10/18/Linear-Regression/result_linreg_noreg.png" alt="无正则化的线性回归结果"></p>
-</li>
-<li><p>正则化<br>  <img src="/2018/10/18/Linear-Regression/result_linreg_reg.png" alt="正则化的线性回归结果"></p>
-</li>
-</ul>
+<h1 id="生成器-Generator"><a href="#生成器-Generator" class="headerlink" title="生成器(Generator)"></a>生成器(Generator)</h1><p>调用一个生成器函数，返回的是一个迭代器对象。在调用生成器运行的过程中，每次遇到<code>yield</code>时函数会暂停并保存当前所有的运行信息，返回<code>yield</code>的值, 并在下一次执行<code>next()</code>方法时从当前位置继续运行。</p>
+<h2 id="推导式定义生成器"><a href="#推导式定义生成器" class="headerlink" title="推导式定义生成器"></a>推导式定义生成器</h2><p>语法类似列表推导式，不同的是将<code>[]</code>改为<code>()</code><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span>&gt;&gt; g = (i for i in range(20))</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; g</span><br><span class="line">&lt;generator object &lt;genexpr&gt; at 0x00000161D16F44F8&gt;</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; next(g)</span><br><span class="line">0</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; next(g)</span><br><span class="line">1</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; next(g)</span><br><span class="line">2</span><br></pre></td></tr></table></figure></p>
+<h2 id="将函数定义为生成器"><a href="#将函数定义为生成器" class="headerlink" title="将函数定义为生成器"></a>将函数定义为生成器</h2><p>利用函数打印斐波那契数列<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fibonacci</span><span class="params">(m)</span>:</span></span><br><span class="line">    n, a, b = <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> n &lt; m:</span><br><span class="line">        print(b)</span><br><span class="line">        a, b = b, a + b</span><br><span class="line">        n = n + <span class="number">1</span></span><br></pre></td></tr></table></figure></p>
+<p>若需得到生成器，将<code>print()</code>改为<code>yield()</code>即可<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fibonacci_gen</span><span class="params">(m)</span>:</span></span><br><span class="line">    n, a, b = <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> n &lt; m:</span><br><span class="line">        <span class="keyword">yield</span>(b)</span><br><span class="line">        a, b = b, a + b</span><br><span class="line">        n = n + <span class="number">1</span></span><br></pre></td></tr></table></figure></p>
+<p>在命令行中执行<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span>&gt;&gt; from iter import fibonacci_gen</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; g = fibonacci_gen(20)</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; g</span><br><span class="line">&lt;generator object fibonacci_gen at 0x000001F036DA44F8&gt;</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; next(g)</span><br><span class="line">1</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; next(g)</span><br><span class="line">1</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; next(g)</span><br><span class="line">2</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; next(g)</span><br><span class="line">3</span><br><span class="line"><span class="meta">&gt;</span>&gt;&gt; next(g)</span><br><span class="line">5</span><br></pre></td></tr></table></figure></p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
+<li><a href="https://www.runoob.com/python3/python3-iterator-generator.html" target="_blank" rel="noopener">Python3 迭代器与生成器 - 菜鸟教程</a></li>
+<li><a href="https://www.cnblogs.com/tkqasn/p/5984090.html" target="_blank" rel="noopener">python 迭代器和生成器详解 - 博客园</a></li>
+</ol>
 
       
     </div>
@@ -579,15 +525,15 @@ L = \frac{1}{2}(Xw-Y)^T(Xw-Y)</script><script type="math/tex; mode=display">
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2019/07/11/WSL-Windows-Subsystem-for-Linux/" rel="next" title="WSL - Windows Subsystem for Linux">
+                <i class="fa fa-chevron-left"></i> WSL - Windows Subsystem for Linux
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/10/18/Logistic-Regression/" rel="prev" title="Logistic Regression">
-                Logistic Regression <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -784,7 +730,7 @@ L = \frac{1}{2}(Xw-Y)^T(Xw-Y)</script><script type="math/tex; mode=display">
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#模型"><span class="nav-number">2.</span> <span class="nav-text">模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#损失函数"><span class="nav-number">3.</span> <span class="nav-text">损失函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#定义误差"><span class="nav-number">3.1.</span> <span class="nav-text">定义误差</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定义损失函数"><span class="nav-number">3.2.</span> <span class="nav-text">定义损失函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#梯度推导"><span class="nav-number">4.</span> <span class="nav-text">梯度推导</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#训练"><span class="nav-number">4.1.</span> <span class="nav-text">训练</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#从投影的角度理解线性回归"><span class="nav-number">5.</span> <span class="nav-text">从投影的角度理解线性回归</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线性回归的正则化"><span class="nav-number">6.</span> <span class="nav-text">线性回归的正则化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#局部加权线性回归"><span class="nav-number">7.</span> <span class="nav-text">局部加权线性回归</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码"><span class="nav-number">8.</span> <span class="nav-text">代码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#training-step"><span class="nav-number">8.1.</span> <span class="nav-text">training step</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#predict-step"><span class="nav-number">8.2.</span> <span class="nav-text">predict step</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行结果"><span class="nav-number">8.3.</span> <span class="nav-text">运行结果</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#迭代器-Iterator"><span class="nav-number">2.</span> <span class="nav-text">迭代器(Iterator)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#内建函数iter-与next"><span class="nav-number">2.1.</span> <span class="nav-text">内建函数iter()与next()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#for语法糖"><span class="nav-number">2.2.</span> <span class="nav-text">for语法糖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义迭代器-敲黑板划重点！"><span class="nav-number">2.3.</span> <span class="nav-text">自定义迭代器(敲黑板划重点！)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#生成器-Generator"><span class="nav-number">3.</span> <span class="nav-text">生成器(Generator)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#推导式定义生成器"><span class="nav-number">3.1.</span> <span class="nav-text">推导式定义生成器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#将函数定义为生成器"><span class="nav-number">3.2.</span> <span class="nav-text">将函数定义为生成器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>
@@ -1311,30 +1257,6 @@ L = \frac{1}{2}(Xw-Y)^T(Xw-Y)</script><script type="math/tex; mode=display">
   
   
 
-  
-    
-      <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      tex2jax: {
-        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-        processEscapes: true,
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-      },
-      TeX: {equationNumbers: { autoNumber: "AMS" }}
-    });
-</script>
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Queue(function() {
-      var all = MathJax.Hub.getAllJax(), i;
-        for (i=0; i < all.length; i += 1) {
-          all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-    });
-</script>
-<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-    
   
 
 
