@@ -130,7 +130,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/07/13/SphereFace-CosFace-ArcFace/taylor_arccos,_n_=_5.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/13/SphereFace-CosFace-ArcFace/cos.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/13/SphereFace-CosFace-ArcFace/cos_&_monocos.png">
-<meta property="og:updated_time" content="2019-07-13T12:04:09.718Z">
+<meta property="og:updated_time" content="2019-07-13T14:32:52.402Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SphereFace, CosFace, ArcFace">
 <meta name="twitter:description" content="前言深度神经网络可将样本映射到超空间中的嵌入向量，然而若不在损失中增加几何约束，该超空间中的嵌入向量不具有几何意义。现对空间中嵌入向量间的余弦距离研究甚是火热，可用于open-set数据集的识别问题，特别是人脸验证问题。  所谓open-set与close-set，是指训练集中是否包含测试集中的类别，如人脸问题中，训练集不可能包含所有人的人脸数据，则如何识别未出现在训练集中的样本成为一个问题。">
@@ -408,7 +408,7 @@
                 
               
 
-              <time title="创建时间：2019-07-13 12:35:11 / 修改时间：20:04:09" itemprop="dateCreated datePublished" datetime="2019-07-13T12:35:11+08:00">2019-07-13</time>
+              <time title="创建时间：2019-07-13 12:35:11 / 修改时间：22:32:52" itemprop="dateCreated datePublished" datetime="2019-07-13T12:35:11+08:00">2019-07-13</time>
             
 
             
@@ -519,18 +519,21 @@
 <h2 id="SphereFace-Multiplicative-Angular-Margin"><a href="#SphereFace-Multiplicative-Angular-Margin" class="headerlink" title="SphereFace: Multiplicative Angular Margin"></a>SphereFace: Multiplicative Angular Margin</h2><p>与<a href="#CosFace-Additive-Cosine-Margin">CosFace: Additive Cosine Margin</a>思路一致，在<a href="#Geometric-Modified-Softmax-Loss">Modified Softmax Loss</a>基础上添加Margin，不同的是对角度增加乘法裕度。</p>
 <p>引入乘子$m$，使$\theta^{(i)}_{y^{(i)}}$更大，更新为$\phi^{(i)}_{c_{y^{(i)}}}$，其余$\theta^{(i)}_j$不变，从而使得对类别$c_{y^{(i)}}$<strong>惩罚更大</strong></p>
 <script type="math/tex; mode=display">\phi^{(i)}_{c_{y^{(i)}}} = m \theta^{(i)}_{y^{(i)}}</script><script type="math/tex; mode=display">\cos \phi^{(i)}_{c_{y^{(i)}}} = \cos m \theta^{(i)}_{y^{(i)}} < \cos \theta^{(i)}_{c_{y^{(i)}}} \tag{9}</script><p>所以$m &gt; 1$，原文中去整数，即$m \geq 2$，同时，沿用<code>CosFace</code>中对$||f^{(i)}||$处理，$(*1)$更新为</p>
-<script type="math/tex; mode=display">L = \frac{1}{N} \sum_i - \log \frac{e^{s \cos m \theta^{(i)}_{y^{(i)}}}}{e^{s \cos m \theta^{(i)}_{y^{(i)}}} + \sum_{k \neq y^{(i)}} e^{s \cos \theta^{(i)}_k}}, 其中m(\text{integer}) \geq 2 \tag{*3}</script><script type="math/tex; mode=display">s.t. \qquad \cos \theta^{(i)}_j = \frac{W_j^T f^{(i)}}{||W_j||||f^{(i)}||}</script><p>$m$典型值为</p>
+<script type="math/tex; mode=display">L = \frac{1}{N} \sum_i - \log \frac{e^{s \cos m \theta^{(i)}_{y^{(i)}}}}{e^{s \cos m \theta^{(i)}_{y^{(i)}}} + \sum_{k \neq y^{(i)}} e^{s \cos \theta^{(i)}_k}}, 其中m(\text{integer}) \geq 2 \tag{*3}</script><script type="math/tex; mode=display">s.t. \qquad \cos \theta^{(i)}_j = \frac{W_j^T f^{(i)}}{||W_j||||f^{(i)}||}</script><p>此时类别$c_{y^{(i)}}$与其他类$c_j$间的判别平面为</p>
+<script type="math/tex; mode=display">m \theta^{(i)}_{c_{y^{(i)}}} = \theta^{(i)}_{c_j}</script><p>$m$典型值为</p>
 <script type="math/tex; mode=display">m = 2</script><p><img src="/2019/07/13/SphereFace-CosFace-ArcFace/sphereface.jpg" alt="sphereface"></p>
 <h2 id="ArcFace-Additive-Angular-Margin"><a href="#ArcFace-Additive-Angular-Margin" class="headerlink" title="ArcFace: Additive Angular Margin"></a>ArcFace: Additive Angular Margin</h2><p>与<a href="#CosFace-Additive-Cosine-Margin">CosFace: Additive Cosine Margin</a>思路一致，在<a href="#Geometric-Modified-Softmax-Loss">Modified Softmax Loss</a>基础上添加Margin，对角度增加加法裕度。</p>
 <p>引入$m$，使$\theta^{(i)}_{y^{(i)}}$更大，更新为$\phi^{(i)}_{c_{y^{(i)}}}$，其余$\theta^{(i)}_j$不变，从而使得对类别$c_{y^{(i)}}$<strong>惩罚更大</strong></p>
 <script type="math/tex; mode=display">\phi^{(i)}_{c_{y^{(i)}}} = \theta^{(i)}_{y^{(i)}} + m</script><script type="math/tex; mode=display">\cos \phi^{(i)}_{c_{y^{(i)}}} = \cos (\theta^{(i)}_{y^{(i)}} + m) < \cos \theta^{(i)}_{c_{y^{(i)}}} \tag{9}</script><p>所以$m &gt; 0$，同时，沿用<code>CosFace</code>中对$||f^{(i)}||$处理，$(*1)$更新为</p>
 <script type="math/tex; mode=display">L = \frac{1}{N} \sum_i - \log \frac{e^{s \cos (\theta^{(i)}_{y^{(i)}} + m)}}{e^{s \cos (\theta^{(i)}_{y^{(i)}} + m)} + \sum_{k \neq y^{(i)}} e^{s \cos \theta^{(i)}_k}}, 其中m > 0 \tag{*4}</script><script type="math/tex; mode=display">s.t. \qquad \cos \theta^{(i)}_j = \frac{W_j^T f^{(i)}}{||W_j||||f^{(i)}||}</script><p>$m$典型值为</p>
-<script type="math/tex; mode=display">m = 0.5</script><p><img src="/2019/07/13/SphereFace-CosFace-ArcFace/arcface.jpg" alt="arcface"></p>
+<script type="math/tex; mode=display">m = 0.5</script><p>此时类别$c_{y^{(i)}}$与其他类$c_j$间的判别平面为</p>
+<script type="math/tex; mode=display">\theta^{(i)}_{c_{y^{(i)}}} + m = \theta^{(i)}_{c_j}</script><p><img src="/2019/07/13/SphereFace-CosFace-ArcFace/arcface.jpg" alt="arcface"></p>
 <h1 id="可改进之处"><a href="#可改进之处" class="headerlink" title="可改进之处"></a>可改进之处</h1><h2 id="CosMulFace"><a href="#CosMulFace" class="headerlink" title="CosMulFace?"></a>CosMulFace?</h2><p>好像还有一个空余的位置可以添加参数，笑:-)。</p>
 <p>与<a href="#CosFace-Additive-Cosine-Margin">CosFace: Additive Cosine Margin</a>思路一致，在<a href="#Geometric-Modified-Softmax-Loss">Modified Softmax Loss</a>基础上添加Margin，不同的是对余弦值增加乘法裕度。</p>
 <p>引入乘子$m$，使$\theta^{(i)}_{y^{(i)}}$更大，更新为$\phi^{(i)}_{c_{y^{(i)}}}$，其余$\theta^{(i)}_j$不变，从而使得对类别$c_{y^{(i)}}$<strong>惩罚更大</strong></p>
 <script type="math/tex; mode=display">\phi^{(i)}_{c_{y^{(i)}}} = \arccos (m \cos \theta^{(i)}_{c_{y^{(i)}}}) > \theta^{(i)}_{c_{y^{(i)}}}</script><script type="math/tex; mode=display">\cos \phi^{(i)}_{c_{y^{(i)}}} = m \cos \theta^{(i)}_{y^{(i)}} < \cos \theta^{(i)}_{c_{y^{(i)}}} \tag{9}</script><p>所以$0 &lt; m &lt; 1$，同时，沿用<code>CosFace</code>中对$||f^{(i)}||$处理，$(*1)$更新为</p>
-<script type="math/tex; mode=display">L = \frac{1}{N} \sum_i - \log \frac{e^{s m \cos \theta^{(i)}_{y^{(i)}}}}{e^{s m \cos \theta^{(i)}_{y^{(i)}}} + \sum_{k \neq y^{(i)}} e^{s \cos \theta^{(i)}_k}}, 其中0 < m < 1 \tag{*5}</script><script type="math/tex; mode=display">s.t. \qquad \cos \theta^{(i)}_j = \frac{W_j^T f^{(i)}}{||W_j||||f^{(i)}||}</script><p><img src="/2019/07/13/SphereFace-CosFace-ArcFace/cosmulface.jpg" alt="cosmulface"></p>
+<script type="math/tex; mode=display">L = \frac{1}{N} \sum_i - \log \frac{e^{s m \cos \theta^{(i)}_{y^{(i)}}}}{e^{s m \cos \theta^{(i)}_{y^{(i)}}} + \sum_{k \neq y^{(i)}} e^{s \cos \theta^{(i)}_k}}, 其中0 < m < 1 \tag{*5}</script><script type="math/tex; mode=display">s.t. \qquad \cos \theta^{(i)}_j = \frac{W_j^T f^{(i)}}{||W_j||||f^{(i)}||}</script><p>此时类别$c_{y^{(i)}}$与其他类$c_j$间的判别平面为</p>
+<script type="math/tex; mode=display">m \cos \theta^{(i)}_{c_{y^{(i)}}} = \cos \theta^{(i)}_{c_j}</script><p><img src="/2019/07/13/SphereFace-CosFace-ArcFace/cosmulface.jpg" alt="cosmulface"></p>
 <h2 id="AdaptiveFace-Adaptive-Margin"><a href="#AdaptiveFace-Adaptive-Margin" class="headerlink" title="AdaptiveFace: Adaptive Margin?"></a>AdaptiveFace: Adaptive Margin?</h2><p>类别$c_{y^{(i)}}$与$c_j(j \neq y^{(i)})$间的Margin必须为固定常数？</p>
 <p>设置参数</p>
 <script type="math/tex; mode=display">
