@@ -124,7 +124,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/10/18/Softmax-Regression/accuracy_batchsize_200.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/18/Softmax-Regression/loss_batch_1.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/18/Softmax-Regression/accuracy_batch_1.png">
-<meta property="og:updated_time" content="2019-05-26T13:18:10.000Z">
+<meta property="og:updated_time" content="2019-07-13T05:41:09.564Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Softmax Regression">
 <meta name="twitter:description" content="Unsupervised Feature Learning and Deep Learning Tutorial  引言Logistic Regression中采用的非线性函数为Sigmoid，将输出值映射到$(0, 1)$之间作为概率输出，处理的是二分类问题，那么对于多分类的问题怎么处理呢？ 模型 由Logistic回归推广而来  SoftmaxSoftmax在机器学习和深度学习中有着非常广泛">
@@ -419,7 +419,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-05-26 21:18:10" itemprop="dateModified" datetime="2019-05-26T21:18:10+08:00">2019-05-26</time>
+                <time title="修改时间：2019-07-13 13:41:09" itemprop="dateModified" datetime="2019-07-13T13:41:09+08:00">2019-07-13</time>
               
             
           </span>
@@ -584,7 +584,14 @@ y^{(i)} = \left[
      \right]^T</script><p>则</p>
 <script type="math/tex; mode=display">
 L(\hat{y}, y) = - \frac{1}{N} \sum_{i=1}^N y^{(i)T}
-log (\hat{y}^{(i)})</script><h2 id="由决策平面理解"><a href="#由决策平面理解" class="headerlink" title="由决策平面理解"></a>由决策平面理解</h2><p>从<a href="https://louishsu.xyz/2018/10/18/%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%86%B3%E7%AD%96/" target="_blank" rel="noopener">贝叶斯决策</a>和<a href="https://louishsu.xyz/2018/10/19/%E5%88%86%E7%B1%BB%E9%97%AE%E9%A2%98%E7%9A%84%E5%86%B3%E7%AD%96%E5%B9%B3%E9%9D%A2/" target="_blank" rel="noopener">分类问题的决策平面</a>可知，对于类别$c_i$，有</p>
+log (\hat{y}^{(i)})</script><blockquote>
+<p>实际上，由熵定义</p>
+<script type="math/tex; mode=display">H(p) = \sum_x p(x) \log \frac{1}{p(x)}</script><p>交叉熵为</p>
+<script type="math/tex; mode=display">H(p, q) = \sum_x p(x) \log \frac{1}{q(x)}</script><p>K-L散度为</p>
+<script type="math/tex; mode=display">D_{KL}(p || q) = \sum_x p(x) \log \frac{p(x)}{q(x)}</script><p>也即</p>
+<script type="math/tex; mode=display">D_{KL}(p || q) = H(p, q) - H(p)</script><p>常常用于衡量两个概率分布$p(x), q(x)$之间的差异。而对于固定的数据集，$H(p)$为常熟，故最小化交叉熵$H(p, q)$实际上为最小化K-L散度$D_{KL}(p || q)$。</p>
+</blockquote>
+<h2 id="由决策平面理解"><a href="#由决策平面理解" class="headerlink" title="由决策平面理解"></a>由决策平面理解</h2><p>从<a href="https://louishsu.xyz/2018/10/18/%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%86%B3%E7%AD%96/" target="_blank" rel="noopener">贝叶斯决策</a>和<a href="https://louishsu.xyz/2018/10/19/%E5%88%86%E7%B1%BB%E9%97%AE%E9%A2%98%E7%9A%84%E5%86%B3%E7%AD%96%E5%B9%B3%E9%9D%A2/" target="_blank" rel="noopener">分类问题的决策平面</a>可知，对于类别$c_i$，有</p>
 <script type="math/tex; mode=display">
 P(c_i|x) = \frac{P(x|c_i)}{\sum_{j=0}^KP(x|c_j)}</script><blockquote>
 <p>假设每个类别的样本服从正态分布，先验概率相等，各类别样本特征间协方差相等。证明略.</p>
@@ -882,7 +889,7 @@ W := W - \alpha ∇_W L</script><h1 id="代码"><a href="#代码" class="headerl
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">48</span>
+                    <span class="site-state-item-count">49</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
