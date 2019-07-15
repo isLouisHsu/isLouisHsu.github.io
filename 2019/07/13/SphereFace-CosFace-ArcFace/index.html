@@ -108,12 +108,12 @@
 
 
 
-  <meta name="description" content="前言深度神经网络可将样本映射到超空间中的嵌入向量，然而若不在损失中增加几何约束，该超空间中的嵌入向量不具有几何意义。现对空间中嵌入向量间的余弦距离研究甚是火热，可用于open-set数据集的识别问题，特别是人脸验证问题。  所谓open-set与close-set，是指训练集中是否包含测试集中的类别，如人脸问题中，训练集不可能包含所有人的人脸数据，则如何识别未出现在训练集中的样本成为一个问题。">
+  <meta name="description" content="文中合成gif图不清晰，原图可在该页面下载获取  前言深度神经网络可将样本映射到超空间中的嵌入向量，然而若不在损失中增加几何约束，该超空间中的嵌入向量不具有几何意义。现对空间中嵌入向量间的余弦距离研究甚是火热，可用于open-set数据集的识别问题，特别是人脸验证问题。  所谓open-set与close-set，是指训练集中是否包含测试集中的类别，如人脸问题中，训练集不可能包含所有人的人脸数">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SphereFace, CosFace, ArcFace">
 <meta property="og:url" content="http://yoursite.com/2019/07/13/SphereFace-CosFace-ArcFace/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="前言深度神经网络可将样本映射到超空间中的嵌入向量，然而若不在损失中增加几何约束，该超空间中的嵌入向量不具有几何意义。现对空间中嵌入向量间的余弦距离研究甚是火热，可用于open-set数据集的识别问题，特别是人脸验证问题。  所谓open-set与close-set，是指训练集中是否包含测试集中的类别，如人脸问题中，训练集不可能包含所有人的人脸数据，则如何识别未出现在训练集中的样本成为一个问题。">
+<meta property="og:description" content="文中合成gif图不清晰，原图可在该页面下载获取  前言深度神经网络可将样本映射到超空间中的嵌入向量，然而若不在损失中增加几何约束，该超空间中的嵌入向量不具有几何意义。现对空间中嵌入向量间的余弦距离研究甚是火热，可用于open-set数据集的识别问题，特别是人脸验证问题。  所谓open-set与close-set，是指训练集中是否包含测试集中的类别，如人脸问题中，训练集不可能包含所有人的人脸数">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/2019/07/13/SphereFace-CosFace-ArcFace/feature.gif">
 <meta property="og:image" content="http://yoursite.com/2019/07/13/SphereFace-CosFace-ArcFace/open-close-set.jpg">
@@ -135,10 +135,14 @@
 <meta property="og:image" content="http://yoursite.com/2019/07/13/SphereFace-CosFace-ArcFace/exp1_dim3.gif">
 <meta property="og:image" content="http://yoursite.com/2019/07/13/SphereFace-CosFace-ArcFace/exp2_dim2.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/13/SphereFace-CosFace-ArcFace/exp2_dim3.gif">
-<meta property="og:updated_time" content="2019-07-15T04:12:35.961Z">
+<meta property="og:image" content="http://yoursite.com/2019/07/13/SphereFace-CosFace-ArcFace/exp3_dim2.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/13/SphereFace-CosFace-ArcFace/exp3_dim3.gif">
+<meta property="og:image" content="http://yoursite.com/2019/07/13/SphereFace-CosFace-ArcFace/gif/scatter_lda8.gif">
+<meta property="og:image" content="http://yoursite.com/2019/07/13/SphereFace-CosFace-ArcFace/gif/scatter_lda8_spherized.gif">
+<meta property="og:updated_time" content="2019-07-15T06:23:10.319Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SphereFace, CosFace, ArcFace">
-<meta name="twitter:description" content="前言深度神经网络可将样本映射到超空间中的嵌入向量，然而若不在损失中增加几何约束，该超空间中的嵌入向量不具有几何意义。现对空间中嵌入向量间的余弦距离研究甚是火热，可用于open-set数据集的识别问题，特别是人脸验证问题。  所谓open-set与close-set，是指训练集中是否包含测试集中的类别，如人脸问题中，训练集不可能包含所有人的人脸数据，则如何识别未出现在训练集中的样本成为一个问题。">
+<meta name="twitter:description" content="文中合成gif图不清晰，原图可在该页面下载获取  前言深度神经网络可将样本映射到超空间中的嵌入向量，然而若不在损失中增加几何约束，该超空间中的嵌入向量不具有几何意义。现对空间中嵌入向量间的余弦距离研究甚是火热，可用于open-set数据集的识别问题，特别是人脸验证问题。  所谓open-set与close-set，是指训练集中是否包含测试集中的类别，如人脸问题中，训练集不可能包含所有人的人脸数">
 <meta name="twitter:image" content="http://yoursite.com/2019/07/13/SphereFace-CosFace-ArcFace/feature.gif">
 
 
@@ -430,7 +434,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-15 12:12:35" itemprop="dateModified" datetime="2019-07-15T12:12:35+08:00">2019-07-15</time>
+                <time title="修改时间：2019-07-15 14:23:10" itemprop="dateModified" datetime="2019-07-15T14:23:10+08:00">2019-07-15</time>
               
             
           </span>
@@ -489,6 +493,9 @@
 
       
         <p><img src="/2019/07/13/SphereFace-CosFace-ArcFace/feature.gif" alt="feature"></p>
+<blockquote>
+<p>文中合成<code>gif</code>图不清晰，原图可在<a href="https://github.com/isLouisHsu/isLouisHsu.github.io/tree/master/2019/07/13/SphereFace-CosFace-ArcFace/gif" target="_blank" rel="noopener">该页面</a>下载获取</p>
+</blockquote>
 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>深度神经网络可将样本映射到超空间中的嵌入向量，然而若不在损失中增加几何约束，该超空间中的嵌入向量不具有几何意义。现对空间中嵌入向量间的余弦距离研究甚是火热，可用于<code>open-set</code>数据集的识别问题，特别是人脸验证问题。</p>
 <blockquote>
 <p>所谓<code>open-set</code>与<code>close-set</code>，是指训练集中是否包含测试集中的类别，如人脸问题中，训练集不可能包含所有人的人脸数据，则如何识别未出现在训练集中的样本成为一个问题。<br><img src="/2019/07/13/SphereFace-CosFace-ArcFace/open-close-set.jpg" alt="open-close-set"></p>
@@ -576,6 +583,24 @@ M_{4 \times C} = \left[ \begin{matrix}
 L = \frac{1}{N} \sum_i - \log \frac
 {e^{s \cdot m^4_{y^{(i)}} \left[\cos (m^1_{y^{(i)}} \theta^{(i)}_{y^{(i)}} + m^2_{y^{(i)}}) - m^3_{y^{(i)}} - 1\right] }}
 {e^{s \cdot m^4_{y^{(i)}} \left[\cos (m^1_{y^{(i)}} \theta^{(i)}_{y^{(i)}} + m^2_{y^{(i)}}) - m^3_{y^{(i)}} - 1\right] } + \sum_{k \neq y^{(i)}} e^{s (\cos \theta^{(i)}_k - 1)}} \tag{*6}</script><script type="math/tex; mode=display">s.t. \qquad \cos \theta^{(i)}_j = \frac{W_j^T f^{(i)}}{||W_j||||f^{(i)}||}</script><p>反向传播时，同时更新$M_{4 \times C}$。</p>
+<h2 id="船新版本"><a href="#船新版本" class="headerlink" title="船新版本"></a>船新版本</h2><p>先保密hhh，见<a href="#3-%E4%BC%A0%E6%96%B0%E7%89%88%E6%9C%AC">实验3</a>。</p>
+<!-- 在[Modified Softmax Loss](#Geometric-Modified-Softmax-Loss)基础上，增加损失项
+
+$$ L = \frac{1}{N} \sum_i - \log \frac{e^{s \cos \theta^{(i)}_{y^{(i)}} }}{e^{s \cos \theta^{(i)}_{y^{(i)}} } + \sum_{k \neq y^{(i)}} e^{s \cos \theta^{(i)}_k}} + \lambda || \sum_j W_j ||_2 \tag{*7} $$
+
+$$
+s.t.
+\begin{cases}
+    \cos \theta^{(i)}_j = \frac{W_j^T f^{(i)}}{||W_j||||f^{(i)}||} \\
+    || W_j ||_2 = 1 \\
+\end{cases}
+$$
+
+即使得各类别所属向量的**矢量和**长度趋向$0$，由于最小化损失项$|| \sum_j W_j ||_2$，其最优解为
+$$ W_j = \vec{0} $$
+
+或者说$W_j$长度衰减至$0$，所以需要加上限制，**在每次参数迭代后，重新归一化该向量，使其为单位向量**，即
+$$ W_j := \frac{W_j}{||W_j||} $$ -->
 <h1 id="CosFace-SphereFace-ArcFace-CosMulFace"><a href="#CosFace-SphereFace-ArcFace-CosMulFace" class="headerlink" title="CosFace + SphereFace + ArcFace + CosMulFace"></a>CosFace + SphereFace + ArcFace + CosMulFace</h1><p>综合<a href="#CosFace-Additive-Cosine-Margin">CosFace</a>, <a href="#SphereFace-Multiplicative-Angular-Margin">SphereFace</a>, <a href="#ArcFace-Additive-Angular-Margin">ArcFace</a>, <a href="#CosMulFace">CosMulFace</a>, 得到</p>
 <script type="math/tex; mode=display">
 L = \frac{1}{N} \sum_i - \log \frac
@@ -707,6 +732,10 @@ L = \frac{1}{N} \sum_i - \log \frac
 </tbody>
 </table>
 </div>
+<ol>
+<li>参数$s$对实验结果影响不大；</li>
+<li><code>CosFace</code>, <code>SphereFace</code>, <code>ArcFace</code>三种损失作用下，角度的区分度均比<code>Modified Softmax</code>效果好。</li>
+</ol>
 <h3 id="嵌入向量维度为2"><a href="#嵌入向量维度为2" class="headerlink" title="嵌入向量维度为2"></a>嵌入向量维度为2</h3><p><img src="/2019/07/13/SphereFace-CosFace-ArcFace/exp1_dim2.png" alt="exp1_dim2"></p>
 <h3 id="嵌入向量维度为3"><a href="#嵌入向量维度为3" class="headerlink" title="嵌入向量维度为3"></a>嵌入向量维度为3</h3><blockquote>
 <p>使用<code>imageio.mimread()</code>函数，读取出<code>.gif</code>会改变原图颜色，很迷。</p>
@@ -720,7 +749,6 @@ L = \frac{1}{N} \sum_i - \log \frac
 <th>CosMulFace</th>
 <th>CosMulFace</th>
 <th>CosMulFace</th>
-<th>CosMulFace</th>
 <th>AdaptiveFace</th>
 </tr>
 </thead>
@@ -731,11 +759,9 @@ L = \frac{1}{N} \sum_i - \log \frac
 <td>8</td>
 <td>8</td>
 <td>8</td>
-<td>8</td>
 </tr>
 <tr>
 <td>$m_1(m_1&gt;=2)$</td>
-<td>1</td>
 <td>1</td>
 <td>1</td>
 <td>1</td>
@@ -746,7 +772,6 @@ L = \frac{1}{N} \sum_i - \log \frac
 <td>0</td>
 <td>0</td>
 <td>0</td>
-<td>0</td>
 <td>/</td>
 </tr>
 <tr>
@@ -754,22 +779,27 @@ L = \frac{1}{N} \sum_i - \log \frac
 <td>0</td>
 <td>0</td>
 <td>0</td>
-<td>0</td>
 <td>/</td>
 </tr>
 <tr>
 <td>$m_4(m_4 &gt; 1)$</td>
-<td><strong>1.00</strong></td>
-<td><strong>1.50</strong></td>
 <td><strong>2.00</strong></td>
-<td><strong>2.50</strong></td>
+<td><strong>3.00</strong></td>
+<td><strong>4.00</strong></td>
 <td>/</td>
 </tr>
 </tbody>
 </table>
 </div>
+<p><code>CosMulFace</code>在$m=2, 4$时效果良好；<code>AdaptiveFace</code>角度区分度一般。</p>
 <h3 id="嵌入向量维度为2-1"><a href="#嵌入向量维度为2-1" class="headerlink" title="嵌入向量维度为2"></a>嵌入向量维度为2</h3><p><img src="/2019/07/13/SphereFace-CosFace-ArcFace/exp2_dim2.png" alt="exp2_dim2"></p>
 <h3 id="嵌入向量维度为3-1"><a href="#嵌入向量维度为3-1" class="headerlink" title="嵌入向量维度为3"></a>嵌入向量维度为3</h3><p><img src="/2019/07/13/SphereFace-CosFace-ArcFace/exp2_dim3.gif" alt="exp2_dim3"></p>
+<h2 id="3-传新版本"><a href="#3-传新版本" class="headerlink" title="3. 传新版本"></a>3. 传新版本</h2><p>可见其角度分布更加均匀，从而区分度更大。</p>
+<h3 id="嵌入向量维度为2-2"><a href="#嵌入向量维度为2-2" class="headerlink" title="嵌入向量维度为2"></a>嵌入向量维度为2</h3><p><img src="/2019/07/13/SphereFace-CosFace-ArcFace/exp3_dim2.png" alt="exp3_dim2"></p>
+<h3 id="嵌入向量维度为3-2"><a href="#嵌入向量维度为3-2" class="headerlink" title="嵌入向量维度为3"></a>嵌入向量维度为3</h3><p><img src="/2019/07/13/SphereFace-CosFace-ArcFace/exp3_dim3.gif" alt="exp3_dim3"></p>
+<p>上图和#$%@%一样，如下为<code>scatter_lda8</code>原图</p>
+<p><img src="/2019/07/13/SphereFace-CosFace-ArcFace/gif/scatter_lda8.gif" alt="scatter_lda8"></p>
+<p><img src="/2019/07/13/SphereFace-CosFace-ArcFace/gif/scatter_lda8_spherized.gif" alt="scatter_lda8_spherized"></p>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
 <li><a href="https://arxiv.org/abs/1801.07698v1" target="_blank" rel="noopener">ArcFace: Additive Angular Margin Loss for Deep Face Recognition - arxiv.org</a></li>
 <li><a href="https://arxiv.org/abs/1801.09414" target="_blank" rel="noopener">CosFace: Large Margin Cosine Loss for Deep Face Recognition - arxiv.org</a></li>
@@ -1033,7 +1063,7 @@ L = \frac{1}{N} \sum_i - \log \frac
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#原理"><span class="nav-number">2.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Maltilabel-Softmax-CrossEnt"><span class="nav-number">2.1.</span> <span class="nav-text">Maltilabel: Softmax + CrossEnt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Geometric-Modified-Softmax-Loss"><span class="nav-number">2.2.</span> <span class="nav-text">Geometric: Modified Softmax Loss</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CosFace-Additive-Cosine-Margin"><span class="nav-number">2.3.</span> <span class="nav-text">CosFace: Additive Cosine Margin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SphereFace-Multiplicative-Angular-Margin"><span class="nav-number">2.4.</span> <span class="nav-text">SphereFace: Multiplicative Angular Margin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ArcFace-Additive-Angular-Margin"><span class="nav-number">2.5.</span> <span class="nav-text">ArcFace: Additive Angular Margin</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#可改进之处"><span class="nav-number">3.</span> <span class="nav-text">可改进之处</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CosMulFace"><span class="nav-number">3.1.</span> <span class="nav-text">CosMulFace?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AdaptiveFace-Adaptive-Margin"><span class="nav-number">3.2.</span> <span class="nav-text">AdaptiveFace: Adaptive Margin?</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CosFace-SphereFace-ArcFace-CosMulFace"><span class="nav-number">4.</span> <span class="nav-text">CosFace + SphereFace + ArcFace + CosMulFace</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#方法对比"><span class="nav-number">5.</span> <span class="nav-text">方法对比</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#计算方法"><span class="nav-number">6.</span> <span class="nav-text">计算方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码实现"><span class="nav-number">7.</span> <span class="nav-text">代码实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#arccos函数不可导点问题"><span class="nav-number">7.1.</span> <span class="nav-text">arccos函数不可导点问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cos函数的单调性问题"><span class="nav-number">7.2.</span> <span class="nav-text">cos函数的单调性问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络层"><span class="nav-number">7.3.</span> <span class="nav-text">网络层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#损失函数"><span class="nav-number">7.4.</span> <span class="nav-text">损失函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验"><span class="nav-number">8.</span> <span class="nav-text">实验</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-设置不同参数，对比实验结果"><span class="nav-number">8.1.</span> <span class="nav-text">1.设置不同参数，对比实验结果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#嵌入向量维度为2"><span class="nav-number">8.1.1.</span> <span class="nav-text">嵌入向量维度为2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#嵌入向量维度为3"><span class="nav-number">8.1.2.</span> <span class="nav-text">嵌入向量维度为3</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-改进的方法实验"><span class="nav-number">8.2.</span> <span class="nav-text">2. 改进的方法实验</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#嵌入向量维度为2-1"><span class="nav-number">8.2.1.</span> <span class="nav-text">嵌入向量维度为2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#嵌入向量维度为3-1"><span class="nav-number">8.2.2.</span> <span class="nav-text">嵌入向量维度为3</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">9.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#原理"><span class="nav-number">2.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Maltilabel-Softmax-CrossEnt"><span class="nav-number">2.1.</span> <span class="nav-text">Maltilabel: Softmax + CrossEnt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Geometric-Modified-Softmax-Loss"><span class="nav-number">2.2.</span> <span class="nav-text">Geometric: Modified Softmax Loss</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CosFace-Additive-Cosine-Margin"><span class="nav-number">2.3.</span> <span class="nav-text">CosFace: Additive Cosine Margin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SphereFace-Multiplicative-Angular-Margin"><span class="nav-number">2.4.</span> <span class="nav-text">SphereFace: Multiplicative Angular Margin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ArcFace-Additive-Angular-Margin"><span class="nav-number">2.5.</span> <span class="nav-text">ArcFace: Additive Angular Margin</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#可改进之处"><span class="nav-number">3.</span> <span class="nav-text">可改进之处</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CosMulFace"><span class="nav-number">3.1.</span> <span class="nav-text">CosMulFace?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AdaptiveFace-Adaptive-Margin"><span class="nav-number">3.2.</span> <span class="nav-text">AdaptiveFace: Adaptive Margin?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#船新版本"><span class="nav-number">3.3.</span> <span class="nav-text">船新版本</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CosFace-SphereFace-ArcFace-CosMulFace"><span class="nav-number">4.</span> <span class="nav-text">CosFace + SphereFace + ArcFace + CosMulFace</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#方法对比"><span class="nav-number">5.</span> <span class="nav-text">方法对比</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#计算方法"><span class="nav-number">6.</span> <span class="nav-text">计算方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码实现"><span class="nav-number">7.</span> <span class="nav-text">代码实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#arccos函数不可导点问题"><span class="nav-number">7.1.</span> <span class="nav-text">arccos函数不可导点问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cos函数的单调性问题"><span class="nav-number">7.2.</span> <span class="nav-text">cos函数的单调性问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络层"><span class="nav-number">7.3.</span> <span class="nav-text">网络层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#损失函数"><span class="nav-number">7.4.</span> <span class="nav-text">损失函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验"><span class="nav-number">8.</span> <span class="nav-text">实验</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-设置不同参数，对比实验结果"><span class="nav-number">8.1.</span> <span class="nav-text">1.设置不同参数，对比实验结果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#嵌入向量维度为2"><span class="nav-number">8.1.1.</span> <span class="nav-text">嵌入向量维度为2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#嵌入向量维度为3"><span class="nav-number">8.1.2.</span> <span class="nav-text">嵌入向量维度为3</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-改进的方法实验"><span class="nav-number">8.2.</span> <span class="nav-text">2. 改进的方法实验</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#嵌入向量维度为2-1"><span class="nav-number">8.2.1.</span> <span class="nav-text">嵌入向量维度为2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#嵌入向量维度为3-1"><span class="nav-number">8.2.2.</span> <span class="nav-text">嵌入向量维度为3</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-传新版本"><span class="nav-number">8.3.</span> <span class="nav-text">3. 传新版本</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#嵌入向量维度为2-2"><span class="nav-number">8.3.1.</span> <span class="nav-text">嵌入向量维度为2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#嵌入向量维度为3-2"><span class="nav-number">8.3.2.</span> <span class="nav-text">嵌入向量维度为3</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">9.</span> <span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>

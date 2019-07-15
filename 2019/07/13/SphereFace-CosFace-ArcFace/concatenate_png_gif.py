@@ -47,10 +47,13 @@ def concat_gif(modelTypeLists, outFileName):
 
 if __name__ == "__main__":
     
-    modeltype = ['modified', 'cos', 'sphere', 'arc_s1', 'arc_s4', 'arc_s8', 'arc_s16']
-    concat_gif(modeltype, 'exp1_dim3.gif')
+    # modeltype = ['modified', 'cos', 'sphere', 'arc_s1', 'arc_s4', 'arc_s8', 'arc_s16']
+    # concat_gif(modeltype, 'exp1_dim3.gif')
     
-    modeltype = ['cosmul_m2', 'cosmul_m3', 'cosmul_m4', 'adaptive']
-    concat_gif(modeltype, 'exp2_dim3.gif')
+    # modeltype = ['cosmul_m2', 'cosmul_m3', 'cosmul_m4', 'adaptive']
+    # concat_gif(modeltype, 'exp2_dim3.gif')
+    
+    modeltype = ['scatter_lda1', 'scatter_lda2', 'scatter_lda4', 'scatter_lda8']
+    concat_gif(modeltype, 'exp3_dim3.gif')
 
-    # concat_png('gif/start 0.png', 'gif/end 0.png', 'exp2_dim2.png')
+    # concat_png('gif/start 0.png', 'gif/end 0.png', 'exp3_dim2.png')
