@@ -34,8 +34,10 @@ def concat_gif(modelTypeLists, outFileName):
 
             for k in range(len(modelTypeLists)):
                 cv2.putText(frame, modelTypeLists[k], (600*k + 20, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5)
-            cv2.putText(frame, "louishsu", (1200, 590), cv2.FONT_HERSHEY_SIMPLEX, 14, (222, 222, 222), 15)
 
+        # 打上水印就是我的图了hhhh
+        pos = np.array(frame.shape[:-1]) // 2 - np.array([-550, 600]) // 2
+        cv2.putText(frame, "louishsu", tuple(pos)[::-1], cv2.FONT_HERSHEY_SIMPLEX, 10, (233, 233, 233), 15)
         frames += [frame]
         # cv2.imshow("frame", cv2.resize(frame, tuple(np.array(frame.shape[:-1]) // 4)[::-1])); cv2.waitKey(0)
 
@@ -48,7 +50,7 @@ if __name__ == "__main__":
     modeltype = ['modified', 'cos', 'sphere', 'arc_s1', 'arc_s4', 'arc_s8', 'arc_s16']
     concat_gif(modeltype, 'exp1_dim3.gif')
     
-    modeltype = ['cosmul_m2', 'cosmul_m3', 'cosmul_m4', 'arc_s1', 'adaptive']
+    modeltype = ['cosmul_m2', 'cosmul_m3', 'cosmul_m4', 'adaptive']
     concat_gif(modeltype, 'exp2_dim3.gif')
 
-    concat_png('gif/start 0.png', 'gif/end 0.png', 'exp2_dim2.png')
+    # concat_png('gif/start 0.png', 'gif/end 0.png', 'exp2_dim2.png')
