@@ -456,6 +456,16 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/05/05/Face-Detection-MTCNN/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count gitment-comments-count" data-xid="/2019/05/05/Face-Detection-MTCNN/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -861,7 +871,9 @@ thresh=0.4</script><ol>
 
   
     <div class="comments" id="comments">
-      <div id="lv-container" data-id="city" data-uid="MTAyMC80NTM3NC8yMTg4Nw=="></div>
+      
+        <div id="gitment-container"></div>
+      
     </div>
 
   
@@ -1017,7 +1029,7 @@ thresh=0.4</script><ol>
           
 
           <div id="music163player">
-              <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=517565384&auto=1&height=66">
+              <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="450" src="//music.163.com/outchain/player?type=0&id=2703291040&auto=0&height=430">
               </iframe>
           </div>
 
@@ -1218,24 +1230,47 @@ thresh=0.4</script><ol>
 
 
   
-    <script type="text/javascript">
-      window.livereOptions = {
-        refer: '2019/05/05/Face-Detection-MTCNN/'
-      };
-      (function(d, s) {
-        var j, e = d.getElementsByTagName(s)[0];
-        if (typeof LivereTower === 'function') { return; }
-        j = d.createElement(s);
-        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
-        j.async = true;
-        e.parentNode.insertBefore(j, e);
-      })(document, 'script');
-    </script>
-  
 
 
 
 
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname,
+            owner: 'isLouisHsu',
+            repo: 'isLouisHsu.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '356386826698e8b817ca076b08d7c0e9814f52ea',
+            
+                client_id: 'e65d27f7cf5c62feaf97'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
 
 
 
