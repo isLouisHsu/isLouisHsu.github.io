@@ -108,24 +108,27 @@
 
 
 
-  <meta name="description" content="前言Python操作字符串行云流水，当然也支持格式化字符串。 通过格式符1print(&amp;quot;我叫%s, 今年%d岁&amp;quot; % (&amp;apos;Louis Hsu&amp;apos;, 18)) 或者使用字典进行值传递1print(&amp;quot;我叫%(name), 今年%(age)岁&amp;quot; % &amp;#123;&amp;apos;name&amp;apos;: &amp;apos;Louis Hsu&amp;apos;, &amp;a">
+  <meta name="description" content="前言Reference前言12345678910111213141516171819 ___________&amp;lt; LLE很靠谱 &amp;gt; -----------      \                    / \  //\       \    |\___/|      /   \//  \\            /0  0  \__  /    //  | \ \">
+<meta name="keywords" content="降维,manifold">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Python字符串格式化">
-<meta property="og:url" content="http://yoursite.com/2019/02/19/Python字符串格式化/index.html">
+<meta property="og:title" content="Locally Linear Embedding">
+<meta property="og:url" content="http://yoursite.com/2019/08/09/Locally-Linear-Embedding/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="前言Python操作字符串行云流水，当然也支持格式化字符串。 通过格式符1print(&amp;quot;我叫%s, 今年%d岁&amp;quot; % (&amp;apos;Louis Hsu&amp;apos;, 18)) 或者使用字典进行值传递1print(&amp;quot;我叫%(name), 今年%(age)岁&amp;quot; % &amp;#123;&amp;apos;name&amp;apos;: &amp;apos;Louis Hsu&amp;apos;, &amp;a">
+<meta property="og:description" content="前言Reference前言12345678910111213141516171819 ___________&amp;lt; LLE很靠谱 &amp;gt; -----------      \                    / \  //\       \    |\___/|      /   \//  \\            /0  0  \__  /    //  | \ \">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-07-17T12:12:39.091Z">
+<meta property="og:image" content="http://yoursite.com/2019/08/09/Locally-Linear-Embedding/sphx_glr_plot_lle_digits_008.png">
+<meta property="og:updated_time" content="2019-08-09T10:14:52.059Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Python字符串格式化">
-<meta name="twitter:description" content="前言Python操作字符串行云流水，当然也支持格式化字符串。 通过格式符1print(&amp;quot;我叫%s, 今年%d岁&amp;quot; % (&amp;apos;Louis Hsu&amp;apos;, 18)) 或者使用字典进行值传递1print(&amp;quot;我叫%(name), 今年%(age)岁&amp;quot; % &amp;#123;&amp;apos;name&amp;apos;: &amp;apos;Louis Hsu&amp;apos;, &amp;a">
+<meta name="twitter:title" content="Locally Linear Embedding">
+<meta name="twitter:description" content="前言Reference前言12345678910111213141516171819 ___________&amp;lt; LLE很靠谱 &amp;gt; -----------      \                    / \  //\       \    |\___/|      /   \//  \\            /0  0  \__  /    //  | \ \">
+<meta name="twitter:image" content="http://yoursite.com/2019/08/09/Locally-Linear-Embedding/sphx_glr_plot_lle_digits_008.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/02/19/Python字符串格式化/">
+  <link rel="canonical" href="http://yoursite.com/2019/08/09/Locally-Linear-Embedding/">
 
 
 
@@ -135,7 +138,7 @@
   };
 </script>
 
-  <title>Python字符串格式化 | LOUIS' BLOG</title>
+  <title>Locally Linear Embedding | LOUIS' BLOG</title>
   
 
 
@@ -358,7 +361,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/19/Python字符串格式化/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/09/Locally-Linear-Embedding/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Louis Hsu">
@@ -375,7 +378,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Python字符串格式化
+          <h1 class="post-title" itemprop="name headline">Locally Linear Embedding
               
             
           </h1>
@@ -400,24 +403,12 @@
                 
               
 
-              <time title="创建时间：2019-02-19 12:54:47" itemprop="dateCreated datePublished" datetime="2019-02-19T12:54:47+08:00">2019-02-19</time>
+              <time title="创建时间：2019-08-09 14:41:55 / 修改时间：18:14:52" itemprop="dateCreated datePublished" datetime="2019-08-09T14:41:55+08:00">2019-08-09</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-07-17 20:12:39" itemprop="dateModified" datetime="2019-07-17T20:12:39+08:00">2019-07-17</time>
               
             
           </span>
@@ -434,7 +425,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
 
                 
                 
@@ -449,8 +440,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/02/19/Python字符串格式化/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count gitment-comments-count" data-xid="/2019/02/19/Python字符串格式化/" itemprop="commentsCount"></span>
+                <a href="/2019/08/09/Locally-Linear-Embedding/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count gitment-comments-count" data-xid="/2019/08/09/Locally-Linear-Embedding/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -485,24 +476,101 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Python操作字符串行云流水，当然也支持格式化字符串。</p>
-<h1 id="通过格式符"><a href="#通过格式符" class="headerlink" title="通过格式符"></a>通过格式符</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(&quot;我叫%s, 今年%d岁&quot; % (&apos;Louis Hsu&apos;, 18))</span><br></pre></td></tr></table></figure>
-<p>或者使用字典进行值传递<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(&quot;我叫%(name), 今年%(age)岁&quot; % &#123;&apos;name&apos;: &apos;Louis Hsu&apos;, &apos;age&apos;: 18&#125;)</span><br></pre></td></tr></table></figure></p>
-<p><strong>typecode</strong><br>|  格式符 | 含义 |<br>| ——— | ———- |<br>| %s | 字符串 (采用str()的显示) |<br>| %r | 字符串 (采用repr()的显示) |<br>| %c | 单个字符 |<br>| %b | 二进制整数 |<br>| %d | 十进制整数 |<br>| %i | 十进制整数 |<br>| %o | 八进制整数 |<br>| %x | 十六进制整数 |<br>| %e | 指数 (基底写为e) |<br>| %E | 指数 (基底写为E) |<br>| %f | 浮点数 |<br>| %F | 浮点数，与上相同 |<br>| %g | 指数(e)或浮点数 (根据显示长度) |<br>| %G | 指数(E)或浮点数 (根据显示长度) |<br>| %% | 字符”%” | </p>
-<p><strong>高阶</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">% [flags] [width].[precision] typecode</span><br><span class="line">- flags:        &apos;+&apos;(右对齐), &apos;-&apos;(左对齐), &apos; &apos;(左侧填充一个空格，与负数对齐), &apos;0&apos;(用0填充)</span><br><span class="line">- width:        显示宽度</span><br><span class="line">- precision:    小数精度位数，可使用&apos;*&apos;进行动态代入</span><br><span class="line">- typecode:     格式符</span><br></pre></td></tr></table></figure></p>
-<p>例如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">print(&apos;pi is %+2.2f&apos; % (3.1415926)) -&gt; pi is +3.14</span><br><span class="line">print(&apos;pi is %-2.2f&apos; % (3.1415926)) -&gt; pi is 3.14</span><br><span class="line">print(&apos;pi is % 2.2f&apos; % (3.1415926)) -&gt; pi is  3.14</span><br><span class="line">print(&apos;pi is %02.2f&apos; % (3.1415926)) -&gt; pi is 3.14</span><br><span class="line"></span><br><span class="line"># 同</span><br><span class="line">print(&apos;pi is %+*.*f&apos; % (2, 2, 3.1415926))</span><br><span class="line">print(&apos;pi is %-*.*f&apos; % (2, 2, 3.1415926))</span><br><span class="line">print(&apos;pi is % *.*f&apos; % (2, 2, 3.1415926))</span><br><span class="line">print(&apos;pi is %0*.*f&apos; % (2, 2, 3.1415926))</span><br></pre></td></tr></table></figure></p>
-<h1 id="通过format"><a href="#通过format" class="headerlink" title="通过format"></a>通过format</h1><h2 id="位置传递"><a href="#位置传递" class="headerlink" title="位置传递"></a>位置传递</h2><ol>
-<li><p>使用位置参数</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; li = [&apos;hoho&apos;,18]</span><br><span class="line">&gt;&gt;&gt; &apos;my name is &#123;&#125; ,age &#123;&#125;&apos;.format(&apos;hoho&apos;,18)</span><br><span class="line">&apos;my name is hoho ,age 18&apos;</span><br><span class="line">&gt;&gt;&gt; &apos;my name is &#123;1&#125; ,age &#123;0&#125;&apos;.format(10,&apos;hoho&apos;)</span><br><span class="line">&apos;my name is hoho ,age 10&apos;</span><br><span class="line">&gt;&gt;&gt; &apos;my name is &#123;1&#125; ,age &#123;0&#125; &#123;1&#125;&apos;.format(10,&apos;hoho&apos;)</span><br><span class="line">&apos;my name is hoho ,age 10 hoho&apos;</span><br><span class="line">&gt;&gt;&gt; &apos;my name is &#123;&#125; ,age &#123;&#125;&apos;.format(*li)</span><br><span class="line">&apos;my name is hoho ,age 18&apos;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>使用关键字参数</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; hash = &#123;&apos;name&apos;:&apos;hoho&apos;,&apos;age&apos;:18&#125;</span><br><span class="line">&gt;&gt;&gt; &apos;my name is &#123;name&#125;,age is &#123;age&#125;&apos;.format(name=&apos;hoho&apos;,age=19)</span><br><span class="line">&apos;my name is hoho,age is 19&apos;</span><br><span class="line">&gt;&gt;&gt; &apos;my name is &#123;name&#125;,age is &#123;age&#125;&apos;.format(**hash)</span><br><span class="line">&apos;my name is hoho,age is 18&apos;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h2 id="格式限定"><a href="#格式限定" class="headerlink" title="格式限定"></a>格式限定</h2><p>基本格式如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;[:pad][align][sign][typecode]&#125;</span><br><span class="line">- :pad :    填充字符，空白位用该字符填充</span><br><span class="line">- align:    &apos;^&apos;, &apos;&lt;&apos;, &apos;&gt;&apos; 分别表示 &apos;居中&apos;, &apos;左对齐&apos;, &apos;右对齐&apos;(默认)，后面加宽度</span><br><span class="line">- sign :    &apos;+&apos;, &apos;-&apos; , &apos; &apos; 分别表示 &apos;正&apos;, &apos;负&apos;, &apos;正数前加空格&apos;</span><br><span class="line">- typecode: &apos;b&apos;, &apos;d&apos;, &apos;o&apos;, &apos;x&apos;, &apos;f&apos;, &apos;,&apos;, &apos;%&apos;, &apos;e&apos; 分别表示 &apos;二进制&apos;, &apos;十进制&apos;, &apos;八进制&apos;, &apos;十六进制&apos;, &apos;浮点数&apos;, &apos;逗号分隔&apos;, &apos;百分比格式&apos;,  &apos;指数记法&apos;</span><br></pre></td></tr></table></figure></p>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><blockquote>
-<p>python之字符串格式化(format) - benric - 博客园 <a href="https://www.cnblogs.com/benric/p/4965224.html" target="_blank" rel="noopener">https://www.cnblogs.com/benric/p/4965224.html</a><br>Python format 格式化函数 | 菜鸟教程 <a href="http://www.runoob.com/python/att-string-format.html" target="_blank" rel="noopener">http://www.runoob.com/python/att-string-format.html</a></p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><h1 id="前言-1"><a href="#前言-1" class="headerlink" title="前言"></a>前言</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"> ___________</span><br><span class="line">&lt; LLE很靠谱 &gt;</span><br><span class="line"> -----------</span><br><span class="line">      \                    / \  //\</span><br><span class="line">       \    |\___/|      /   \//  \\</span><br><span class="line">            /0  0  \__  /    //  | \ \</span><br><span class="line">           /     /  \/_/    //   |  \  \</span><br><span class="line">           @_^_@&apos;/   \/_   //    |   \   \</span><br><span class="line">           //_^_/     \/_ //     |    \    \</span><br><span class="line">        ( //) |        \///      |     \     \</span><br><span class="line">      ( / /) _|_ /   )  //       |      \     _\</span><br><span class="line">    ( // /) &apos;/,_ _ _/  ( ; -.    |    _ _\.-~        .-~~~^-.</span><br><span class="line">  (( / / )) ,-&#123;        _      `-.|.-~-.           .~         `.</span><br><span class="line"> (( // / ))  &apos;/\      /                 ~-. _ .-~      .-~^-.  \</span><br><span class="line"> (( /// ))      `.   &#123;            &#125;                   /      \  \</span><br><span class="line">  (( / ))     .----~-.\        \-&apos;                 .~         \  `. \^-.</span><br><span class="line">             ///.----..&gt;        \             _ -~             `.  ^-`  ^-_</span><br><span class="line">               ///-._ _ _ _ _ _ _&#125;^ - - - - ~                     ~-- ,.-~</span><br><span class="line">                                                                  /.-</span><br></pre></td></tr></table></figure>
+<p>高维数据可视化需要通过降维的方式，而PCA、LDA等线性降维算法，忽视了数据点间的结构特征，本文介绍的局部线性嵌入<code>(LLE)</code>算法为非线性降维方法，基于谱的降维方法，所以很靠谱 :-)。</p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>设有$M$个$N$维数据点，构成矩阵$X$，如下</p>
+<script type="math/tex; mode=display">X = \left[ \begin{matrix} \bm{x}^{(1)} & \bm{x}^{(2)} & \cdots & \bm{x}^{(M)} \end{matrix} \right] \tag{1}</script><p>其中$\bm{x}^{(i)}$表示样本点向量</p>
+<script type="math/tex; mode=display">\bm{x}^{(i)} = \left[ \begin{matrix} x^{(i)}_1 & x^{(i)}_2 & \cdots & x^{(i)}_3 \end{matrix} \right]^T \tag{2}</script><p><strong><code>LLE</code>的基本思路：</strong> 任一数据点$\bm{x}^{(i)}$可由其的$K$个近邻点$\mathcal{N}_K(\bm{x}^{(i)})$线性表出，可作为数据样本的结构特征，即</p>
+<script type="math/tex; mode=display">\hat{\bm{x}}^{(i)} = \sum_{\bm{x}^{(j)} \in \mathcal{N}_K(\bm{x}^{(i)})} w_{ij} \bm{x}^{(j)} \tag{3.1}</script><p>其中</p>
+<script type="math/tex; mode=display">\bm{w_i} = \left[ \begin{matrix} w_{i1} & w_{i2} & \cdots & w_{ik} \end{matrix} \right]^T</script><p>若$\bm{x}^{(i)}$映射到低维空间中对应特征点为$\bm{y}^{(i)}$，对相同参数$w_{ij}$，$\bm{x}^{(i)}$也可由其K个近邻点$\mathcal{N}_K(\bm{y}^{(i)})$表出，即</p>
+<script type="math/tex; mode=display">\hat{\bm{y}}^{(i)} = \sum_{\bm{y}^{(j)} \in \mathcal{N}_K(\bm{y}^{(i)})} w_{ij} \bm{y}^{(j)} \tag{3.2}</script><h2 id="数据结构参数"><a href="#数据结构参数" class="headerlink" title="数据结构参数"></a>数据结构参数</h2><p>求解参数向量$\bm{w_i}$，可利用最小二乘法，即目标函数定义为</p>
+<script type="math/tex; mode=display">J(\bm{w_i}) = || \bm{x}^{(i)} - \sum_{\bm{x}^{(j)} \in \mathcal{N}_K(\bm{x}^{(i)})} w_{ij} \bm{x}^{(j)} ||_2^2 \tag{4.1}</script><p>对参数向量$\bm{w_i}$归一化，即加入约束项</p>
+<script type="math/tex; mode=display">\sum_{j=1}^K w_{ij} = 1 \quad \text{or} \quad \bm{w_i}^T \bm{1} = 1 \tag{4.2}</script><p>式$(4.1)$可作如下变换</p>
+<script type="math/tex; mode=display">J(\bm{w_i}) = || \bm{x}^{(i)} - \sum_{\bm{x}^{(j)} \in \mathcal{N}_K(\bm{x}^{(i)})} w_{ij} \bm{x}^{(j)} ||_2^2</script><script type="math/tex; mode=display">= || \sum_{j=1}^K w_{ij} \bm{x}^{(i)} - \sum_{j=1}^K w_{ij} \bm{x}^{(j)} ||_2^2</script><script type="math/tex; mode=display">= || \sum_{j=1}^K w_{ij} (\bm{x}^{(i)} - \bm{x}^{(j)}) ||_2^2</script><script type="math/tex; mode=display">= || (X^{(i)} - N^{(i)}) \bm{w_i} ||_2^2 \tag{5.1}</script><p>其中</p>
+<script type="math/tex; mode=display">X^{(i)} = \left[ \begin{matrix} \bm{x}^{(i)} & \bm{x}^{(i)} & \cdots & \bm{x}^{(i)} \end{matrix} \right] \tag{5.1.1}</script><script type="math/tex; mode=display">N^{(i)} = \left[ \begin{matrix} \bm{x}_N^{(1)} & \bm{x}_N^{(2)} & \cdots & \bm{x}_N^{(K)} \end{matrix} \right] \tag{5.1.2}</script><p>则</p>
+<script type="math/tex; mode=display">J(\bm{w_i}) = || (X^{(i)} - N^{(i)}) \bm{w_i} ||_2^2 \tag{5.1}</script><script type="math/tex; mode=display">= \left[ (X^{(i)} - N^{(i)}) \bm{w_i} \right]^T \left[ (X^{(i)} - N^{(i)}) \bm{w_i} \right]</script><script type="math/tex; mode=display">= \bm{w_i}^T (X^{(i)} - N^{(i)})^T (X^{(i)} - N^{(i)}) \bm{w_i} \tag{5.2}</script><p>记矩阵</p>
+<script type="math/tex; mode=display">Z^{(i)}_{K \times K} = (X^{(i)} - N^{(i)})^T (X^{(i)} - N^{(i)}) \tag{5.3}</script><p>最终优化目标为</p>
+<script type="math/tex; mode=display">J(\bm{w_i}) = \bm{w_i}^T Z^{(i)} \bm{w_i} \tag{*1}</script><script type="math/tex; mode=display">\text{s.t.} \quad \bm{w_i}^T \bm{1} = 1</script><p>利用拉格朗日乘子法，构造拉格朗日函数，有</p>
+<script type="math/tex; mode=display">L(\bm{w_i}) = \bm{w_i}^T Z^{(i)} \bm{w_i} + \lambda (\bm{w_i}^T \bm{1} - 1) \tag{6.1}</script><p>则</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    \frac{\nabla L(\bm{w_i})}{\nabla \bm{w_i}} = 2 Z^{(i)} \bm{w_i}  + \lambda \bm{1} = \bm{0} \\
+    \frac{\nabla L(\bm{w_i})}{\nabla \lambda} = \bm{w_i}^T \bm{1} - 1 = 0
+\end{cases} \tag{6.2}</script><p>由式$1$得到</p>
+<script type="math/tex; mode=display">\bm{w_i} = - \frac{\lambda}{2} Z^{(i)-1} \bm{1} \tag{6.3}</script><p>代入式$2$有</p>
+<script type="math/tex; mode=display">\left( - \frac{\lambda}{2} Z^{(i)-1} \bm{1} \right)^T \bm{1} = 1 \tag{6.4}</script><p>解得</p>
+<script type="math/tex; mode=display">\lambda = - \frac{2}{\bm{1}^T Z^{(i)-1} \bm{1}} \tag{6.5}</script><p>代回$(6.3)$得到</p>
+<script type="math/tex; mode=display">\bm{w_i} = \frac{Z^{(i)-1} \bm{1}}{\bm{1}^T Z^{(i)-1} \bm{1}} \tag{*2}</script><h2 id="低维数据的求解"><a href="#低维数据的求解" class="headerlink" title="低维数据的求解"></a>低维数据的求解</h2><p>由式$(3.2)$，即</p>
+<script type="math/tex; mode=display">\hat{\bm{y}}^{(i)} = \sum_{\bm{y}^{(j)} \in \mathcal{N}_K(\bm{y}^{(i)})} w_{ij} \bm{y}^{(j)} \tag{3.2}</script><p>同样的，利用最小二乘法，构建目标函数为</p>
+<script type="math/tex; mode=display">J(Y) = \sum_{i=1}^M || \bm{y}^{(i)} - \sum_{\bm{y}^{(j)} \in \mathcal{N}_K(\bm{y}^{(i)})} w_{ij} \bm{y}^{(j)} ||_2^2 \tag{7.1}</script><p>对低维数据进行标准化，即加入约束</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    \sum_{i=1}^M \bm{y}^{(i)} = \bm{0} \\
+    \frac{1}{M} \sum_{i=1}^M \bm{y}^{(i)} \bm{y}^{(i)T} = I
+\end{cases} \tag{7.2}</script><p>矩阵形式为</p>
+<script type="math/tex; mode=display">Y Y^T = M·I \tag{7.3}</script><p>由于当前数据点具体分布未知，故$\bm{y}^{(i)}$的近邻点$\mathcal{N}_K(\bm{y}^{(i)})$无法得知，故将矩阵$W_{M \times K}$补全为矩阵$\dot{W}_{M \times M}$，即</p>
+<script type="math/tex; mode=display">
+\dot{w}_{ij} = 
+\begin{cases}
+    w_{ik}  & x^{(j)} = N^{(i)}_k \\
+    0       & \text{otherwise}
+\end{cases} \tag{8}</script><blockquote>
+<p>相当于邻接矩阵。</p>
 </blockquote>
+<p>同样的，$\bm{y}^{(i)}$也需在维度上进行补全为$\dot{\bm{y}}^{(i)}$，记</p>
+<script type="math/tex; mode=display">\dot{Y}_{M \times M} = \left[ \begin{matrix} \dot{\bm{y}}^{(1)} & \dot{\bm{y}}^{(2)} & \cdots & \dot{\bm{y}}^{(M)} \end{matrix} \right] \tag{9}</script><p>则</p>
+<script type="math/tex; mode=display">J(\dot{Y}) = \sum_{i=1}^M || \dot{\bm{y}}^{(i)} - \sum_{\dot{\bm{y}}^{(j)} \in \mathcal{N}_K(\dot{\bm{y}}^{(i)})} w_{ij} \dot{\bm{y}}^{(j)} ||_2^2 \tag{7.1}</script><script type="math/tex; mode=display">= \sum_{i=1}^M || \dot{Y} \bm{1}_i - \dot{Y} \dot{\bm{w}_i} ||_2^2 = \sum_{i=1}^M || \dot{Y} (\bm{1}_i - \dot{\bm{w}_i}) ||_2^2 \tag{10.1}</script><script type="math/tex; mode=display">= \text{tr} \left[ \dot{Y} (I - \dot{W}) (I - \dot{W})^T \dot{Y}^T \right] \tag{10.2}</script><blockquote>
+<script type="math/tex; mode=display">(10.1) \rightarrow (10.2): \mathcal{WTF}</script></blockquote>
+<p>实际上</p>
+<blockquote>
+<p>由于</p>
+<script type="math/tex; mode=display">d_i = \sum_{j=1}^M \dot{w}_{ij} = 1</script><p>所以由拉普拉斯矩阵定义</p>
+<script type="math/tex; mode=display">L = D - W</script><p>$I - \dot{W}$即邻接矩阵$\dot{W}$的拉普拉斯矩阵。</p>
+</blockquote>
+<p>其中</p>
+<script type="math/tex; mode=display">\bm{1}_i = \left[ \begin{matrix} 0 & \cdots & 1_i & \cdots & 0 \end{matrix} \right]^T</script><script type="math/tex; mode=display">I = \left[\begin{matrix}
+    1 &         &   \\
+      & \cdots  &   \\
+      &         & 1 
+\end{matrix}\right]</script><p>记$A = (I - \dot{W}) (I - \dot{W})^T$, 最终优化目标为</p>
+<script type="math/tex; mode=display">J(\dot{Y}) = \text{tr} \left[ \dot{Y} A \dot{Y}^T \right] \tag{*3}</script><script type="math/tex; mode=display">\text{s.t.} \quad \dot{Y} \dot{Y}^T = M·I</script><p>构造拉格朗日函数</p>
+<script type="math/tex; mode=display">L(\dot{Y}) = \text{tr} \left[ \dot{Y} A \dot{Y}^T \right] + \lambda (\dot{Y} \dot{Y}^T - M · I) \tag{11}</script><script type="math/tex; mode=display">
+\begin{cases}
+    \frac{\nabla L(\dot{Y})}{\nabla \dot{Y}} = 2 A \dot{Y}^T + 2 \lambda \dot{Y}^T = 0 \\
+    \frac{\nabla L(\dot{Y})}{\nabla \lambda} = \dot{Y} \dot{Y}^T - M · I = 0\\
+\end{cases}</script><blockquote>
+<script type="math/tex; mode=display">\frac{\nabla \text{tr}[F(\bm{x})]}{\nabla \bm{x}} = f(\bm{x})^T</script></blockquote>
+<p>注意$1$式，可变换为</p>
+<script type="math/tex; mode=display">A \dot{Y}^T = \hat{\lambda} \dot{Y}^T \tag{12.1}</script><p>其中$\hat{\lambda} = - \lambda$，又$\dot{Y} \dot{Y}^T = M·I$，为<strong>正交相似变换</strong>，所以</p>
+<script type="math/tex; mode=display">\dot{Y}^T = P = \left[ \begin{matrix} \bm{\alpha}_1 & \bm{\alpha}_2 & \cdots & \bm{\alpha}_M \end{matrix} \right] \tag{12.2}</script><p>由于最小化目标为</p>
+<script type="math/tex; mode=display">J(\dot{Y}) = \text{tr} \left[ \dot{Y} A \dot{Y}^T \right] = \text{tr} (\Lambda) = \sum_{i=1}^M \lambda_i</script><p>故选择最小的特征值$\lambda_i$及其对应的特征向量$\alpha_i$，要得到$D$维数据集，将$\dot{Y}^T$进行约化，即</p>
+<script type="math/tex; mode=display">Y^T = \left[ \begin{matrix} \bm{\alpha}_{M + 1 - D} & \cdots & \bm{\alpha}_M \end{matrix} \right] \tag{13}</script><p>由于$\bm{w_i}^T \bm{1} = 1$，即</p>
+<script type="math/tex; mode=display">\dot{W}^T \bm{1} = \bm{1} \tag{14.1}</script><p>移项整理得</p>
+<script type="math/tex; mode=display">(\dot{W} - I)^T \bm{1} = \bm{0}</script><p>$\bm{1} \neq \bm{0}$，所以</p>
+<script type="math/tex; mode=display">(\dot{W} - I)^T = 0 \tag{14.2}</script><p>左边同乘$\dot{W} - I$得到</p>
+<script type="math/tex; mode=display">(\dot{W} - I) (\dot{W} - I)^T \bm{1} = A · \bm{1} = 0 · \bm{1} \tag{14.3}</script><p>所以</p>
+<script type="math/tex; mode=display">\lambda_M = 0, \quad \alpha_M = \bm{1} \tag{14.4}</script><p>特征值为$0$表示不能反映数据特征，故低维数据应为</p>
+<script type="math/tex; mode=display">Y^T = \left[ \begin{matrix} \bm{\alpha}_{M - D} & \cdots & \bm{\alpha}_{M-1} \end{matrix} \right] \tag{*4}</script><h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><ol>
+<li><p>计算原始样本空间中，每个样本$x^{(i)}$的近邻点$N^{(i)}$，并求取权值$w_{ij}$作为邻接权重，存储为矩阵$\dot{W}_{M \times M}$；</p>
+<script type="math/tex; mode=display">Z^{(i)}_{K \times K} = (X^{(i)} - N^{(i)})^T (X^{(i)} - N^{(i)}) \tag{5.3}</script><script type="math/tex; mode=display">\bm{w_i} = \frac{Z^{(i)-1} \bm{1}}{\bm{1}^T Z^{(i)-1} \bm{1}} \tag{*2}</script><script type="math/tex; mode=display">
+ \dot{w}_{ij} = 
+ \begin{cases}
+     w_{ik}  & x^{(j)} = N^{(i)}_k \\
+     0       & \text{otherwise}
+ \end{cases} \tag{8}</script></li>
+<li><p>求取矩阵$A$，并将其特征分解</p>
+<script type="math/tex; mode=display">A = (I - \dot{W}) (I - \dot{W})^T</script><script type="math/tex; mode=display">A \dot{Y}^T = \hat{\lambda} \dot{Y}^T \tag{12.1}</script></li>
+<li><p>选择最小的特征值$\lambda_i$及其对应的特征向量$\alpha_i$，约化为$D$维数据，作为低维特征点</p>
+<script type="math/tex; mode=display">Y^T = \left[ \begin{matrix} \bm{\alpha}_{M - D} & \cdots & \bm{\alpha}_{M-1} \end{matrix} \right] \tag{*4}</script></li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LocallyLinearEmbedding</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">""" Locally Linear Embedding</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Attributes:</span></span><br><span class="line"><span class="string">        n_neighbors:  &#123;int&#125;</span></span><br><span class="line"><span class="string">        n_components: &#123;int&#125;</span></span><br><span class="line"><span class="string">        W: &#123;ndarray&#125;</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, n_neighbors, n_components=<span class="number">2</span>)</span>:</span></span><br><span class="line">        </span><br><span class="line">        self.n_neighbors  = n_neighbors</span><br><span class="line">        self.n_components = n_components</span><br><span class="line">        self.W = <span class="keyword">None</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fit</span><span class="params">(self, X)</span>:</span></span><br><span class="line">        <span class="string">""" </span></span><br><span class="line"><span class="string">        Params:</span></span><br><span class="line"><span class="string">            X: &#123;ndarray(n_samples, n_features)&#125;</span></span><br><span class="line"><span class="string">        Returns:</span></span><br><span class="line"><span class="string">            W: &#123;ndarray(n_samples, n_samples)&#125;</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        n_samples, n_features = X.shape</span><br><span class="line">        self.W = np.zeros((n_samples, n_samples))</span><br><span class="line"></span><br><span class="line">        kdtree = KDTree(X, metric=<span class="string">'euclidean'</span>)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(n_samples):</span><br><span class="line"></span><br><span class="line">            <span class="comment">## 获取近邻样本点</span></span><br><span class="line">            x = X[i]</span><br><span class="line">            idx = kdtree.query(x.reshape(<span class="number">1</span>, <span class="number">-1</span>), self.n_neighbors + <span class="number">1</span>, return_distance=<span class="keyword">False</span>)[<span class="number">0</span>][<span class="number">1</span>: ]</span><br><span class="line"></span><br><span class="line">            <span class="comment">## 求取矩阵 Z = (x - N).dot((x - N).T)</span></span><br><span class="line">            N = X[idx]</span><br><span class="line">            Z = (x - N).dot((x - N).T)</span><br><span class="line"></span><br><span class="line">            <span class="comment">## 求取权重 w_i</span></span><br><span class="line">            Z_inv = np.linalg.inv(Z + <span class="number">1e-16</span>*np.eye(self.n_neighbors))</span><br><span class="line">            w = np.sum(Z_inv, axis=<span class="number">1</span>) / np.sum(Z_inv)</span><br><span class="line">            </span><br><span class="line">            <span class="comment">## 保存至 W</span></span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(self.n_neighbors):</span><br><span class="line">                self.W[i, idx[j]] = w[j]</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> self.W</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">transform</span><span class="params">(self, X)</span>:</span></span><br><span class="line">        <span class="string">""" </span></span><br><span class="line"><span class="string">        Params:</span></span><br><span class="line"><span class="string">            X: &#123;ndarray(n_samples, n_features)&#125;</span></span><br><span class="line"><span class="string">        Returns:</span></span><br><span class="line"><span class="string">            Y: &#123;ndarray(n_samples, n_components)&#125;</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        n_samples, n_features = X.shape</span><br><span class="line"></span><br><span class="line">        <span class="comment">## 求取矩阵 A = (I - W)(I - W)^T</span></span><br><span class="line">        I = np.eye(n_samples)</span><br><span class="line">        A = (I - self.W).dot((I - self.W).T)</span><br><span class="line"></span><br><span class="line">        <span class="comment">## 对 A 进行特征分解，并按特征值升序排序</span></span><br><span class="line">        eigval, eigvec = np.linalg.eig(A)</span><br><span class="line">        eigvec = eigvec[:, np.argsort(eigval)]</span><br><span class="line"></span><br><span class="line">        <span class="comment">## 选取 D 维</span></span><br><span class="line">        Y = eigvec[:, <span class="number">1</span>: self.n_components + <span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> Y</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fit_transform</span><span class="params">(self, X)</span>:</span></span><br><span class="line">        <span class="string">""" </span></span><br><span class="line"><span class="string">        Params:</span></span><br><span class="line"><span class="string">            X: &#123;ndarray(n_samples, n_features)&#125;</span></span><br><span class="line"><span class="string">        Returns:</span></span><br><span class="line"><span class="string">            Y: &#123;ndarray(n_samples, n_components)&#125;</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        </span><br><span class="line">        self.fit(X)</span><br><span class="line">        Y = self.transform(X)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> Y</span><br></pre></td></tr></table></figure>
+<h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><p>在<code>scikit learn</code>官网有具体实现<a href="https://scikit-learn.org/stable/auto_examples/manifold/plot_lle_digits.html#sphx-glr-auto-examples-manifold-plot-lle-digits-py" target="_blank" rel="noopener">基于手写数据集的几种基于谱的降维方法对比</a>。</p>
+<p><img src="/2019/08/09/Locally-Linear-Embedding/sphx_glr_plot_lle_digits_008.png" alt="sphx_glr_plot_lle_digits_008"></p>
+<h1 id="Reference-1"><a href="#Reference-1" class="headerlink" title="Reference"></a>Reference</h1><ol>
+<li><a href="https://www.jianshu.com/p/25a2a47bb60b" target="_blank" rel="noopener">(十二)LLE局部线性嵌入降维算法 - 简书</a></li>
+<li><a href="https://scikit-learn.org/stable/modules/manifold.html#locally-linear-embedding" target="_blank" rel="noopener">2.2.3. Locally Linear Embedding - scikit learn</a></li>
+<li><a href="https://cs.nyu.edu/~roweis/lle/papers/lleintro.pdf" target="_blank" rel="noopener">An Introduction to Locally Linear Embedding</a></li>
+</ol>
 
       
     </div>
@@ -545,6 +613,14 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/降维/" rel="tag"># 降维</a>
+          
+            <a href="/tags/manifold/" rel="tag"># manifold</a>
+          
+        </div>
+      
 
       
       
@@ -554,8 +630,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/02/18/Python命令行参数解析/" rel="next" title="Python命令行参数解析">
-                <i class="fa fa-chevron-left"></i> Python命令行参数解析
+              <a href="/2019/08/09/Git工具-submodules/" rel="next" title="Git工具-submodules">
+                <i class="fa fa-chevron-left"></i> Git工具-submodules
               </a>
             
           </div>
@@ -563,10 +639,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/04/18/n-dim-Array-PCA/" rel="prev" title="N-dim Array PCA">
-                N-dim Array PCA <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -774,7 +846,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#通过格式符"><span class="nav-number">2.</span> <span class="nav-text">通过格式符</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#通过format"><span class="nav-number">3.</span> <span class="nav-text">通过format</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#位置传递"><span class="nav-number">3.1.</span> <span class="nav-text">位置传递</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#格式限定"><span class="nav-number">3.2.</span> <span class="nav-text">格式限定</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#前言-1"><span class="nav-number">3.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#原理"><span class="nav-number">4.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据结构参数"><span class="nav-number">4.1.</span> <span class="nav-text">数据结构参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#低维数据的求解"><span class="nav-number">4.2.</span> <span class="nav-text">低维数据的求解</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实现"><span class="nav-number">5.</span> <span class="nav-text">实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验"><span class="nav-number">6.</span> <span class="nav-text">实验</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference-1"><span class="nav-number">7.</span> <span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>
@@ -1338,6 +1410,30 @@
   
   
 
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
   
 
 
