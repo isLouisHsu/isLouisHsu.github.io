@@ -108,19 +108,19 @@
 
 
 
-  <meta name="description" content="前言Reference前言在Locally Linear Embedding一节中介绍了非线性降维方法LLE，原数据到低维数据没有指定映射方法，故不适用于新数据点。本文介绍的NPE是在其基础上的改进。 原理设有$M$个$N$维数据，构成矩阵$X$ X_{N \times M} = \left[ \begin{matrix}     |             &amp; |             &amp;">
+  <meta name="description" content="前言在Locally Linear Embedding一节中介绍了非线性降维方法LLE，原数据到低维数据没有指定映射方法，故不适用于新数据点。本文介绍的NPE是在其基础上的改进。 原理设有$M$个$N$维数据，构成矩阵$X$ X_{N \times M} = \left[ \begin{matrix}     |             &amp; |             &amp;        &amp; |">
 <meta name="keywords" content="降维,manifold">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Neighborhood Preserving Embedding">
 <meta property="og:url" content="http://yoursite.com/2019/08/12/Neighborhood-Preserving-Embedding/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="前言Reference前言在Locally Linear Embedding一节中介绍了非线性降维方法LLE，原数据到低维数据没有指定映射方法，故不适用于新数据点。本文介绍的NPE是在其基础上的改进。 原理设有$M$个$N$维数据，构成矩阵$X$ X_{N \times M} = \left[ \begin{matrix}     |             &amp; |             &amp;">
+<meta property="og:description" content="前言在Locally Linear Embedding一节中介绍了非线性降维方法LLE，原数据到低维数据没有指定映射方法，故不适用于新数据点。本文介绍的NPE是在其基础上的改进。 原理设有$M$个$N$维数据，构成矩阵$X$ X_{N \times M} = \left[ \begin{matrix}     |             &amp; |             &amp;        &amp; |">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/2019/08/12/Neighborhood-Preserving-Embedding/Figure_1.png">
-<meta property="og:updated_time" content="2019-08-12T04:10:53.094Z">
+<meta property="og:updated_time" content="2019-08-12T05:08:03.339Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Neighborhood Preserving Embedding">
-<meta name="twitter:description" content="前言Reference前言在Locally Linear Embedding一节中介绍了非线性降维方法LLE，原数据到低维数据没有指定映射方法，故不适用于新数据点。本文介绍的NPE是在其基础上的改进。 原理设有$M$个$N$维数据，构成矩阵$X$ X_{N \times M} = \left[ \begin{matrix}     |             &amp; |             &amp;">
+<meta name="twitter:description" content="前言在Locally Linear Embedding一节中介绍了非线性降维方法LLE，原数据到低维数据没有指定映射方法，故不适用于新数据点。本文介绍的NPE是在其基础上的改进。 原理设有$M$个$N$维数据，构成矩阵$X$ X_{N \times M} = \left[ \begin{matrix}     |             &amp; |             &amp;        &amp; |">
 <meta name="twitter:image" content="http://yoursite.com/2019/08/12/Neighborhood-Preserving-Embedding/Figure_1.png">
 
 
@@ -403,7 +403,7 @@
                 
               
 
-              <time title="创建时间：2019-08-12 10:44:05 / 修改时间：12:10:53" itemprop="dateCreated datePublished" datetime="2019-08-12T10:44:05+08:00">2019-08-12</time>
+              <time title="创建时间：2019-08-12 10:44:05 / 修改时间：13:08:03" itemprop="dateCreated datePublished" datetime="2019-08-12T10:44:05+08:00">2019-08-12</time>
             
 
             
@@ -466,16 +466,16 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><h1 id="前言-1"><a href="#前言-1" class="headerlink" title="前言"></a>前言</h1><p>在<a href="https://louishsu.xyz/2019/08/09/Locally-Linear-Embedding/" target="_blank" rel="noopener">Locally Linear Embedding</a>一节中介绍了非线性降维方法<code>LLE</code>，原数据到低维数据没有指定映射方法，故不适用于新数据点。本文介绍的<code>NPE</code>是在其基础上的改进。</p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在<a href="https://louishsu.xyz/2019/08/09/Locally-Linear-Embedding/" target="_blank" rel="noopener">Locally Linear Embedding</a>一节中介绍了非线性降维方法<code>LLE</code>，原数据到低维数据没有指定映射方法，故不适用于新数据点。本文介绍的<code>NPE</code>是在其基础上的改进。</p>
 <h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>设有$M$个$N$维数据，构成矩阵$X$</p>
 <script type="math/tex; mode=display">X_{N \times M} = \left[ \begin{matrix}
     |             & |             &        & |              \\
     \vec{x}^{(1)} & \vec{x}^{(2)} & \cdots & \vec{x}^{(M)}  \\
     |             & |             &        & |
-\end{matrix} \right] \tag{1.1}</script><h2 id="高维到低维的映射"><a href="#高维到低维的映射" class="headerlink" title="高维到低维的映射"></a>高维到低维的映射</h2><p>其中</p>
+\end{matrix} \right] \tag{1.1}</script><p>其中</p>
 <script type="math/tex; mode=display">\vec{x}^{(i)}_{N \times 1} = \left[ \begin{matrix}
     \vec{x}^{(i)}_1 & \vec{x}^{(i)}_2 & \cdots & \vec{x}^{(i)}_N 
-\end{matrix} \right] ^T \tag{1.2}</script><p>在<code>LLE</code>基础上，将数据的映射方法指定为</p>
+\end{matrix} \right] ^T \tag{1.2}</script><h2 id="高维到低维的映射"><a href="#高维到低维的映射" class="headerlink" title="高维到低维的映射"></a>高维到低维的映射</h2><p>在<code>LLE</code>基础上，将数据的映射方法指定为</p>
 <script type="math/tex; mode=display">\vec{y}^{(i)} = P^T · \vec{x}^{(i)} \tag{*1}</script><blockquote>
 <script type="math/tex; mode=display">\vec{y}^{(i)}_j = \vec{p}_j^T · \vec{x}^{(i)}</script></blockquote>
 <p>其中</p>
@@ -601,6 +601,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2019/08/20/Eigenface-and-Fisherface/" rel="prev" title="Eigenface and Fisherface">
+                Eigenface and Fisherface <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -675,7 +679,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">56</span>
+                    <span class="site-state-item-count">57</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -722,6 +726,8 @@
                 <div class="site-state-item site-state-tags">
                   <a href="/tags/index.html">
                     
+                    
+                      
                     
                       
                     
@@ -806,7 +812,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#前言-1"><span class="nav-number">3.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#原理"><span class="nav-number">4.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#高维到低维的映射"><span class="nav-number">4.1.</span> <span class="nav-text">高维到低维的映射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高维空间的空间结构特征"><span class="nav-number">4.2.</span> <span class="nav-text">高维空间的空间结构特征</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#低维空间保持同样的空间结构"><span class="nav-number">4.3.</span> <span class="nav-text">低维空间保持同样的空间结构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实现"><span class="nav-number">5.</span> <span class="nav-text">实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验"><span class="nav-number">6.</span> <span class="nav-text">实验</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#原理"><span class="nav-number">2.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#高维到低维的映射"><span class="nav-number">2.1.</span> <span class="nav-text">高维到低维的映射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高维空间的空间结构特征"><span class="nav-number">2.2.</span> <span class="nav-text">高维空间的空间结构特征</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#低维空间保持同样的空间结构"><span class="nav-number">2.3.</span> <span class="nav-text">低维空间保持同样的空间结构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实现"><span class="nav-number">3.</span> <span class="nav-text">实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验"><span class="nav-number">4.</span> <span class="nav-text">实验</span></a></li></ol></div>
             
 
           </div>
