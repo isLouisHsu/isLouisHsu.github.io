@@ -119,8 +119,8 @@
 <meta property="og:image" content="http://yoursite.com/2019/08/20/Eigenface-and-Fisherface/markdown/output_30_0.png">
 <meta property="og:image" content="http://yoursite.com/2019/08/20/Eigenface-and-Fisherface/markdown/output_33_0.png">
 <meta property="og:image" content="http://yoursite.com/2019/08/20/Eigenface-and-Fisherface/faces.gif">
-<meta property="og:image" content="http://yoursite.com/2019/08/20/Eigenface-and-Fisherface/markdown/output_30_0.png">
-<meta property="og:updated_time" content="2019-08-21T09:47:41.789Z">
+<meta property="og:image" content="http://yoursite.com/2019/08/20/Eigenface-and-Fisherface/output_30_0.png">
+<meta property="og:updated_time" content="2019-08-21T11:13:20.553Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Eigenface and Fisherface">
 <meta name="twitter:description" content="前言在众多人脸图像中，能否找到特一组特征脸，用于表征其他人脸呢？在PCA和LDA中分别介绍了两种线性降维方法，本文介绍一种使用以上两种算法的特征提取方法。 原理EigenfaceEigenface由Sirovich与Kirby在1987年提出，认为人脸图像可由一系列特征图加权组合重构而成，即 F = F_m + \sum_i w_i F_i \tag{1}Eigenface可通过PCA生成，在大量">
@@ -423,7 +423,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-08-21 17:47:41" itemprop="dateModified" datetime="2019-08-21T17:47:41+08:00">2019-08-21</time>
+                <time title="修改时间：2019-08-21 19:13:20" itemprop="dateModified" datetime="2019-08-21T19:13:20+08:00">2019-08-21</time>
               
             
           </span>
@@ -558,7 +558,7 @@
 <ol>
 <li><p>Eigenface</p>
  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pca = PCA(n_components=n_features); pca.fit(X)</span><br><span class="line">show_features(pca.components_, DSIZE, title=<span class="string">"Eigenface &#123;&#125;"</span>.format(repr(DSIZE)))</span><br></pre></td></tr></table></figure>
-<p> <img src="/2019/08/20/Eigenface-and-Fisherface/markdown/output_30_0.png" alt="output_30_0"></p>
+<p> <img src="/2019/08/20/Eigenface-and-Fisherface/output_30_0.png" alt="output_30_0"></p>
 </li>
 <li><p>FisherFace</p>
  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">n_decomposed = n_samples - n_classes - <span class="number">1</span></span><br><span class="line"></span><br><span class="line">pca = PCA(n_components=n_decomposed)</span><br><span class="line">X_decomposed = pca.fit_transform(X)</span><br><span class="line"></span><br><span class="line">lda = LDA(n_components=n_classes - <span class="number">1</span>)</span><br><span class="line">lda.fit(X_decomposed, y)</span><br><span class="line"></span><br><span class="line">components_ = pca.transform_inv(lda.components_)</span><br><span class="line">show_features(components_, DSIZE, title=<span class="string">"Fisherface &#123;&#125; &#123;&#125;"</span>.format(repr(DSIZE), n_decomposed))</span><br></pre></td></tr></table></figure>
@@ -567,11 +567,11 @@
 <pre><code>为减少计算量，将原始数据`PCA`降维后，再用于`LDA`计算`FisherFace`，故维度数目选取会影响实验结果，以下分别选择不同维数时产生的`FisherFace`序列，显示前9个特征脸。可见主分量数目越少，特征脸越清晰，但包含的细节也越少。
 
 - 199
-    ![output_33_0](/Eigenface-and-Fisherface/markdown/output_33_0.png)
+    ![output_33_0](/Eigenface-and-Fisherface/output_33_0.png)
 - 279
-    ![output_33_2](/Eigenface-and-Fisherface/markdown/output_33_2.png)
+    ![output_33_2](/Eigenface-and-Fisherface/output_33_2.png)
 - 359
-    ![output_33_4](/Eigenface-and-Fisherface/markdown/output_33_4.png)
+    ![output_33_4](/Eigenface-and-Fisherface/output_33_4.png)
 </code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
 <li><a href="https://www.cl.cam.ac.uk/research/dtg/attarchive/facedatabase.html" target="_blank" rel="noopener">The Database of Faces</a></li>
 <li><a href="https://www.xuebuyuan.com/3231919.html" target="_blank" rel="noopener">人脸识别之—-FisherFace - 学步园</a></li>
