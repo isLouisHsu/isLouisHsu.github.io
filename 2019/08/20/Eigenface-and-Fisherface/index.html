@@ -108,17 +108,23 @@
 
 
 
-  <meta name="description" content="前言Reference前言Reference">
+  <meta name="description" content="前言在众多人脸图像中，能否找到特一组特征脸，用于表征其他人脸呢？在PCA和LDA中分别介绍了两种线性降维方法，本文介绍一种使用以上两种算法的特征提取方法。 原理EigenfaceEigenface由Sirovich与Kirby在1987年提出，认为人脸图像可由一系列特征图加权组合重构而成，即 F = F_m + \sum_i w_i F_i \tag{1}Eigenface可通过PCA生成，在大量">
+<meta name="keywords" content="特征提取">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Eigenface and Fisherface">
 <meta property="og:url" content="http://yoursite.com/2019/08/20/Eigenface-and-Fisherface/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="前言Reference前言Reference">
+<meta property="og:description" content="前言在众多人脸图像中，能否找到特一组特征脸，用于表征其他人脸呢？在PCA和LDA中分别介绍了两种线性降维方法，本文介绍一种使用以上两种算法的特征提取方法。 原理EigenfaceEigenface由Sirovich与Kirby在1987年提出，认为人脸图像可由一系列特征图加权组合重构而成，即 F = F_m + \sum_i w_i F_i \tag{1}Eigenface可通过PCA生成，在大量">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-08-20T07:49:23.833Z">
+<meta property="og:image" content="http://yoursite.com/2019/08/20/Eigenface-and-Fisherface/markdown/output_30_0.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/20/Eigenface-and-Fisherface/markdown/output_33_0.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/20/Eigenface-and-Fisherface/faces.gif">
+<meta property="og:image" content="http://yoursite.com/2019/08/20/Eigenface-and-Fisherface/markdown/output_30_0.png">
+<meta property="og:updated_time" content="2019-08-21T09:47:41.789Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Eigenface and Fisherface">
-<meta name="twitter:description" content="前言Reference前言Reference">
+<meta name="twitter:description" content="前言在众多人脸图像中，能否找到特一组特征脸，用于表征其他人脸呢？在PCA和LDA中分别介绍了两种线性降维方法，本文介绍一种使用以上两种算法的特征提取方法。 原理EigenfaceEigenface由Sirovich与Kirby在1987年提出，认为人脸图像可由一系列特征图加权组合重构而成，即 F = F_m + \sum_i w_i F_i \tag{1}Eigenface可通过PCA生成，在大量">
+<meta name="twitter:image" content="http://yoursite.com/2019/08/20/Eigenface-and-Fisherface/markdown/output_30_0.png">
 
 
 
@@ -400,16 +406,46 @@
                 
               
 
-              <time title="创建时间：2019-08-20 15:48:55 / 修改时间：15:49:23" itemprop="dateCreated datePublished" datetime="2019-08-20T15:48:55+08:00">2019-08-20</time>
+              <time title="创建时间：2019-08-20 15:48:55" itemprop="dateCreated datePublished" datetime="2019-08-20T15:48:55+08:00">2019-08-20</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-08-21 17:47:41" itemprop="dateModified" datetime="2019-08-21T17:47:41+08:00">2019-08-21</time>
               
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -445,7 +481,103 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><h1 id="前言-1"><a href="#前言-1" class="headerlink" title="前言"></a>前言</h1><h1 id="Reference-1"><a href="#Reference-1" class="headerlink" title="Reference"></a>Reference</h1>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在众多人脸图像中，能否找到特一组特征脸，用于表征其他人脸呢？在<a href="https://louishsu.xyz/2018/10/22/PCA/" target="_blank" rel="noopener">PCA</a>和<a href="https://louishsu.xyz/2019/04/22/LDA/" target="_blank" rel="noopener">LDA</a>中分别介绍了两种线性降维方法，本文介绍一种使用以上两种算法的特征提取方法。</p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><h2 id="Eigenface"><a href="#Eigenface" class="headerlink" title="Eigenface"></a>Eigenface</h2><p><code>Eigenface</code>由Sirovich与Kirby在1987年提出，认为人脸图像可由一系列特征图加权组合重构而成，即</p>
+<script type="math/tex; mode=display">F = F_m + \sum_i w_i F_i \tag{1}</script><p><code>Eigenface</code>可通过<code>PCA</code>生成，在大量的人脸数据图像上进行分析，选取主分量作为特征脸，详细步骤如下</p>
+<ol>
+<li><p>假设有图像尺寸为$(H, W)$的人脸数据，共$N$张。将单张的灰度图片展开成为维数为$H \times W$的向量$x^{(i)}$，构成数据矩阵$X$</p>
+<script type="math/tex; mode=display">X_{(H \times W) \times N} = \begin{bmatrix} x^{(1)} & x^{(2)} & \ldots & x^{(N)} \end{bmatrix} \tag{2.1}</script></li>
+<li><p>计算各样本向量的均值$\mu$，将各样本去均值化，生成数据矩阵$\overline{X}$</p>
+<script type="math/tex; mode=display">\mu = \frac{1}{N} \sum_{i=1}^{N} x^{(i)}; \quad \overline{x}^{(i)} = x^{(i)} - \mu \tag{2.2}</script></li>
+<li><p>计算协方差矩阵$C$</p>
+<script type="math/tex; mode=display">C = \frac{1}{N} \overline{X} \cdot \overline{X}^T \tag{2.3}</script></li>
+<li><p>将协方差矩阵进行特征值分解</p>
+<script type="math/tex; mode=display">C \alpha_i = \lambda_i \alpha_i \tag{2.4}</script><blockquote>
+<p>注意到，在图像尺寸为$(H, W)$的情况下，协方差矩阵的尺寸为$(H \times W, H \times W)$，本文使用数据库内图像为$112 \times 92$，存储为浮点类型<code>(4 byte)</code>，也就是说，该协方差矩阵所占内存</p>
+<script type="math/tex; mode=display">(112 \times 92)^2 \text{pixel} \times 4 \text{byte/pixel} = \ldots \text{(阵亡。。。)}</script><p>因此，需要转换一下求解问题，查看<a href="#eigenface%e6%b1%82%e8%a7%a3">Eigenface求解</a>。</p>
+</blockquote>
+</li>
+<li><p>按特征值降序，重新排列特征对$(\lambda_i, \alpha_i)$，选取前$K$个特征向量作为<code>Eigenface</code></p>
+<script type="math/tex; mode=display">E_{(H \times W) \times K} = \begin{bmatrix} \alpha_1 & \alpha_2 & \ldots & \alpha_K \end{bmatrix} \tag{2.5}</script></li>
+</ol>
+<p>此时将人脸数据$x$投影到各主分量上，可获得相应系数，该系数向量可用于表征该人脸的特征，即</p>
+<script type="math/tex; mode=display">\vec{w} = \begin{bmatrix} w_1 & w_2 & \cdots & w_K \end{bmatrix} \tag{3}</script><p>其中$w_i = x^T \alpha_i$。</p>
+<p>将各主轴恢复原图像尺寸后，其可视化输出如下<br><img src="/2019/08/20/Eigenface-and-Fisherface/markdown/output_30_0.png" alt="output_30_0"></p>
+<h2 id="FisherFace"><a href="#FisherFace" class="headerlink" title="FisherFace"></a>FisherFace</h2><p><code>Fisherface</code>基本思路与<code>Eigenface</code>一致，也是寻找一组特征脸，用于表征人脸特征。可通过<code>LDA</code>生成，<code>LDA</code>考虑类内与类间散布，与<code>PCA</code>不同，为有监督学习。详细步骤如下</p>
+<ol>
+<li><p>同样的，获取数据矩阵$X$</p>
+<script type="math/tex; mode=display">X_{(H \times W) \times N} = \begin{bmatrix} x^{(1)} & x^{(2)} & \ldots & x^{(N)} \end{bmatrix} \tag{4.1}</script></li>
+<li><p>计算所有数据的均值向量$\mu$与各类别的均值向量$\mu_j$</p>
+<script type="math/tex; mode=display">\mu = \frac{1}{N} \sum_{i=1}^{N} x^{(i)}; \quad \mu_j = \frac{1}{N_j} \sum_{i=1}^{N_j} x^{(i)}, x^{(i)} \in C_j \tag{4.2}</script></li>
+<li><p>计算类内离散度矩阵$S_W$与类间离散度矩阵$S_B$</p>
+<script type="math/tex; mode=display">
+ \begin{aligned} 
+ S_W = \sum_{j=1}^{C} \frac{N_j}{N} \left[ \frac{1}{N_j} \sum_{i=1}^{N_j} (x^{(i)} - \mu_j) (x^{(i)} - \mu_j)^T \right] \\
+ = \frac{1}{N} \sum_{j=1}^{C} \sum_{i=1}^{N_j} (x^{(i)} - \mu_j) (x^{(i)} - \mu_j)^T; \quad x^{(i)} \in C_j
+ \end{aligned} \tag{4.3}</script><script type="math/tex; mode=display">S_B = \sum_{j=1}^{C} \frac{N_j}{N} (\mu_j - \mu) (\mu_j - \mu)^T \tag{4.4}</script></li>
+<li><p>求解广义特征值问题</p>
+<script type="math/tex; mode=display">S_B \alpha_i = \lambda_i S_W \alpha_i \tag{4.5}</script><blockquote>
+<p>通常该问题可通过分解矩阵$S_W^{-1} S_B$进行求解</p>
+<script type="math/tex; mode=display">S_W^{-1} S_B \alpha_i = \lambda_i \alpha_i</script><p>但由于函数<code>numpy.linalg.eig(a)</code>问题，在求解$S_W^{-1} S_B$特征对时出现复数。更加令人疑惑的是，作为实对称矩阵$S_W^{-1}$，其特征对用该函数求解时，也会出现复数。实际上，<code>numpy</code>提供了函数<code>numpy.linalg.eigh(a)</code>专门求解实对称矩阵或<code>Hermite</code>矩阵的特征对，故需要对该特征求解进行一定处理，查看<a href="#%e5%b9%bf%e4%b9%89%e7%89%b9%e5%be%81%e5%80%bc%e9%97%ae%e9%a2%98sb-alphai--lambdai-sw-alphai">广义特征值问题$S_B \alpha_i = \lambda_i S_W \alpha_i$</a>。<br><strong>性质1：</strong> 实对称矩阵(满足$A^T = A$)的特征值都是实数。<br><strong>性质2：</strong> 实对称矩阵(满足$A^T = A$)属于不同特征值的特征向量正交。</p>
+</blockquote>
+</li>
+<li><p>按特征值降序，重新排列特征对$(\lambda_i, \alpha_i)$，选取前$K$个特征向量作为<code>FisherFace</code></p>
+<script type="math/tex; mode=display">F_{(H \times W) \times K} = \begin{bmatrix} \alpha_1 & \alpha_2 & \ldots & \alpha_K \end{bmatrix} \tag{4.6}</script></li>
+</ol>
+<p>类似的，将人脸数据$x$投影到各主分量上，可获得相应系数，该系数向量可用于表征该人脸的特征，即</p>
+<script type="math/tex; mode=display">\vec{w} = \begin{bmatrix} w_1 & w_2 & \cdots & w_K \end{bmatrix} \tag{5}</script><p>其中$w_i = x^T \alpha_i$。</p>
+<p>将各主轴恢复原图像尺寸后，其可视化输出如下<br><img src="/2019/08/20/Eigenface-and-Fisherface/markdown/output_33_0.png" alt="output_33_0"></p>
+<p>实际上，若输入的数据矩阵$X$不做降维处理，计算得到矩阵$S_W$与$S_B$尺寸为$(H \times W) \times (H \times W)$，也是一个令人头疼的计算量问题。而与<a href="#eigenface">上面</a>不同，这是无法避免的。所以考虑到这一点，需要对原始数据进行降维，可利用<code>PCA</code></p>
+<script type="math/tex; mode=display">\tilde{X}_{D \times N} = \text{pca}(X_{(H \times W) \times N}) \tag{6.1}</script><p>对矩阵$\tilde{X}$进行<code>LDA</code>计算后，得到<code>Fisherface</code>序列$\{\alpha_1, \alpha_2, \ldots\}$，其中$\alpha_i$维度为$D \times 1$，若需可视化结果，利用计算得到的<code>PCA</code>模型将其重建即可</p>
+<script type="math/tex; mode=display">A_i = \text{pca}^{-1}(\alpha_i) \tag{6.2}</script><h1 id="技巧"><a href="#技巧" class="headerlink" title="技巧"></a>技巧</h1><h2 id="Eigenface求解"><a href="#Eigenface求解" class="headerlink" title="Eigenface求解"></a>Eigenface求解</h2><p>矩阵$\overline{X}$可经$SVD$分解为</p>
+<script type="math/tex; mode=display">\overline{X} = U \Sigma V^T \tag{7}</script><p>对于协方差矩阵$C_{(H \times W) \times (H \times W)} = \frac{1}{N} \overline{X} \cdot \overline{X}^T$，对其进行特征值分解如下</p>
+<script type="math/tex; mode=display">\overline{X} \cdot \overline{X}^T u_i = \lambda_i u_i \tag{8}</script><p>实际上，$(8)$为求解矩阵$\overline{X}$左奇异向量$u_i, i = 1, 2, \ldots, H \times W$的过程，然而其计算量过大，考虑矩阵$\overline{X}$右奇异向量$v_i, i = 1, 2, \ldots, N$。</p>
+<script type="math/tex; mode=display">\overline{X}^T \overline{X} v_i = \lambda_i v_i \tag{9}</script><p>由$(7)$可得</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \overline{X} V = U \Sigma & 或 & \overline{X} v_i = \sigma_i u_i 
+\end{aligned}</script><p>所以</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    u_i = \frac{1}{\sigma_i} \overline{X} v_i & 或 & U = \overline{X} V \Sigma^{-1}
+\end{aligned} \tag{10}</script><p>其中$V$与$\Lambda$由式$(9)$已知，奇异值$\sigma_i = \sqrt{\lambda_i}$，故</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    u_i = \frac{1}{\sqrt{\lambda_i}} \overline{X} v_i & 或 & U = \overline{X} V \Lambda^{-\frac{1}{2}}
+\end{aligned} \tag{11}</script><p>实际上，由于$\text{rank}(\overline{X}) \leq N$，故后$(H \times W) - N$个特征值均为$0$，对应特征向量无意义，不予求解。</p>
+<h2 id="广义特征值问题-S-B-alpha-i-lambda-i-S-W-alpha-i"><a href="#广义特征值问题-S-B-alpha-i-lambda-i-S-W-alpha-i" class="headerlink" title="广义特征值问题$S_B \alpha_i = \lambda_i S_W \alpha_i$"></a>广义特征值问题$S_B \alpha_i = \lambda_i S_W \alpha_i$</h2><p>由于函数<code>numpy.linalg.eig(a)</code>问题，在求解$S_W^{-1} S_B$特征对时出现复数。故作如下处理</p>
+<p>$S_W$为实对称矩阵，故可使用函数<code>numpy.linalg.eigh(a)</code>解得其特征对，即</p>
+<script type="math/tex; mode=display">S_W = P \Lambda P^T \tag{12}</script><p>代入$S_W^{-1} S_B \alpha_i = \lambda_i \alpha_i$并作相应变换</p>
+<script type="math/tex; mode=display">(P \Lambda P^T)^{-1} S_B \alpha_i = \lambda_i \alpha_i</script><script type="math/tex; mode=display">\underbrace{P \Lambda^{-\frac{1}{2}} \Lambda^{-\frac{1}{2}} P^T}_{S_W} \cdot S_B \cdot \underbrace{P \Lambda^{-\frac{1}{2}} \Lambda^{\frac{1}{2}} P^T}_I \cdot \alpha_i = \lambda_i \alpha_i</script><script type="math/tex; mode=display">\underbrace{\Lambda^{-\frac{1}{2}} P \cdot S_B \cdot P \Lambda^{-\frac{1}{2}}}_{A} \underbrace{\Lambda^{\frac{1}{2}} P^T \cdot \alpha_i}_{\beta_i} = \lambda_i \underbrace{\Lambda^{\frac{1}{2}} P^T \cdot \alpha_i}_{\beta_i} \tag{13}</script><p>其中$A = \Lambda^{-\frac{1}{2}} P \cdot S_B \cdot P \Lambda^{-\frac{1}{2}}$也为对称矩阵，可由用函数<code>numpy.linalg.eigh(a)</code>解得其特征对$(\lambda_i, \beta_i)$，则</p>
+<script type="math/tex; mode=display">\beta_i = \Lambda^{\frac{1}{2}} P^T \cdot \alpha_i</script><script type="math/tex; mode=display">\alpha_i = P \Lambda^{-\frac{1}{2}} \beta_i \tag{14}</script><h1 id="实现及实验"><a href="#实现及实验" class="headerlink" title="实现及实验"></a>实现及实验</h1><h2 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h2><p>实验中数据集选用<a href="https://www.cl.cam.ac.uk/research/dtg/attarchive/facedatabase.html" target="_blank" rel="noopener">ORL Face</a>，包含40名人员的10份人脸数据，包括拍摄时间、光照、表情(睁/闭眼、笑/不笑)、面部细节(眼镜)的变化。图片保存为<code>.pgm</code>格式，可用<code>OpenCV</code>进行读取。</p>
+<p>其数据预览如下</p>
+<p><img src="/2019/08/20/Eigenface-and-Fisherface/faces.gif" alt="preview"></p>
+<h2 id="PCA"><a href="#PCA" class="headerlink" title="PCA"></a>PCA</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PCA</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">""" Principal Components Analysis</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Attributes:</span></span><br><span class="line"><span class="string">        components_: &#123;ndarray(n_components, n_features)&#125;</span></span><br><span class="line"><span class="string">        means_:      &#123;ndarray(n_components)&#125;</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, n_components)</span>:</span></span><br><span class="line"></span><br><span class="line">        self.n_components = n_components</span><br><span class="line">        self.components_  = <span class="keyword">None</span></span><br><span class="line">        self.means_       = <span class="keyword">None</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fit</span><span class="params">(self, X)</span>:</span></span><br><span class="line">        <span class="string">''' train the model</span></span><br><span class="line"><span class="string">        Params:</span></span><br><span class="line"><span class="string">            X: &#123;ndarray(n_samples, n_features)&#125;</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">        n_samples, n_features = X.shape</span><br><span class="line"></span><br><span class="line">        self.means_ = np.mean(X, axis=<span class="number">0</span>)</span><br><span class="line">        X_ = X - self.means_</span><br><span class="line">        eigval, eigvec = <span class="keyword">None</span>, <span class="keyword">None</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> n_samples &lt; n_features:</span><br><span class="line">            eigval, u = np.linalg.eig(X_.dot(X_.T))</span><br><span class="line">            eigvec = X_.T.dot(u).dot(np.diag(<span class="number">1</span> / eigval))</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            covar_ = X_.T.dot(X_)</span><br><span class="line">            eigval, eigvec = np.linalg.eig(covar_)</span><br><span class="line"></span><br><span class="line">        order = np.argsort(eigval)[::<span class="number">-1</span>]</span><br><span class="line">        eigval = eigval[order]</span><br><span class="line">        eigvec = eigvec.T[order].T</span><br><span class="line"></span><br><span class="line">        self.components_ = eigvec[:, :self.n_components].T</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">transform</span><span class="params">(self, X)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        Params:</span></span><br><span class="line"><span class="string">            X: &#123;ndarray(n_samples, n_features)&#125;</span></span><br><span class="line"><span class="string">        Returns:</span></span><br><span class="line"><span class="string">            X_:&#123;ndarray(n_samples, n_components)&#125;</span></span><br><span class="line"><span class="string">        Notes:</span></span><br><span class="line"><span class="string">            X'_&#123;nxk'&#125; · V_&#123;kxk'&#125;^T = X''_&#123;nxk&#125;</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        X_ = X - self.means_</span><br><span class="line">        X_ = X_.dot(self.components_.T)</span><br><span class="line">        <span class="keyword">return</span> X_</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fit_transform</span><span class="params">(self, X)</span>:</span></span><br><span class="line">        self.fit(X)</span><br><span class="line">        <span class="keyword">return</span> self.transform(X)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">transform_inv</span><span class="params">(self, X)</span>:</span></span><br><span class="line">        <span class="string">""" </span></span><br><span class="line"><span class="string">        Params:</span></span><br><span class="line"><span class="string">            X: &#123;ndarray(n_samples, n_components)&#125;</span></span><br><span class="line"><span class="string">        Returns:</span></span><br><span class="line"><span class="string">            X_:&#123;ndarray(n_samples, n_features)&#125;</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        X_ = X.dot(self.components_) + self.means_</span><br><span class="line">        <span class="keyword">return</span> X_</span><br></pre></td></tr></table></figure>
+<h2 id="LDA"><a href="#LDA" class="headerlink" title="LDA"></a>LDA</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LDA</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="string">""" </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Attributes:</span></span><br><span class="line"><span class="string">        n_components: &#123;int&#125;</span></span><br><span class="line"><span class="string">        components_:  &#123;ndarray(n_components, n_features)&#125;</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, n_components=<span class="number">-1</span>)</span>:</span></span><br><span class="line">        self.n_components = n_components</span><br><span class="line">        self.components_ = <span class="keyword">None</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fit</span><span class="params">(self, X, y)</span>:</span></span><br><span class="line">        <span class="string">""" train the model</span></span><br><span class="line"><span class="string">        Params:</span></span><br><span class="line"><span class="string">            X:      &#123;ndarray(n_samples, n_features)&#125;</span></span><br><span class="line"><span class="string">            y:      &#123;ndarray(n_samples)&#125;</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        labels = list(set(list(y)))</span><br><span class="line">        n_class = len(labels)</span><br><span class="line">        n_samples, n_feats = X.shape</span><br><span class="line"></span><br><span class="line">        S_W = np.zeros(shape=(n_feats, n_feats))</span><br><span class="line">        S_B = np.zeros(shape=(n_feats, n_feats))</span><br><span class="line">        mean_ = np.mean(X, axis=<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">for</span> i_class <span class="keyword">in</span> range(n_class):</span><br><span class="line">            X_ = X[y==labels[i_class]]</span><br><span class="line">            means_ = np.mean(X_, axis=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">            X_ = X_ - means_</span><br><span class="line">            means_ = (means_ - mean_).reshape(<span class="number">1</span>, <span class="number">-1</span>)</span><br><span class="line"></span><br><span class="line">            S_W += (X_.T).dot(X_) * (<span class="number">1</span> / n_samples)</span><br><span class="line">            S_B += (means_.T).dot(means_) * (X_.shape[<span class="number">0</span>] / n_samples)</span><br><span class="line"></span><br><span class="line">        s, u = np.linalg.eigh(S_W)</span><br><span class="line">        s_sqrt = np.diag(np.sqrt(s))</span><br><span class="line">        s_sqrt_inv = np.linalg.inv(s_sqrt)</span><br><span class="line"></span><br><span class="line">        A = s_sqrt_inv.dot(u.T).dot(S_B).dot(u).dot(s_sqrt_inv)</span><br><span class="line">        eigval, P = np.linalg.eigh(A)</span><br><span class="line">        eigvec = u.dot(s_sqrt_inv).dot(P)</span><br><span class="line"></span><br><span class="line">        order = np.argsort(eigval)[::<span class="number">-1</span>]</span><br><span class="line">        eigval = eigval[order]</span><br><span class="line">        eigvec = eigvec[:, order]</span><br><span class="line"></span><br><span class="line">        self.components_ = eigvec[:, :self.n_components].T</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">transform</span><span class="params">(self, X)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        Params:</span></span><br><span class="line"><span class="string">            X:  &#123;ndarray(n_samples, n_features)&#125;</span></span><br><span class="line"><span class="string">        Returns:</span></span><br><span class="line"><span class="string">            X:  &#123;ndarray(n_samples, n_components)&#125;</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        X_ = X.dot(self.components_.T)</span><br><span class="line">        <span class="keyword">return</span> X_</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fit_transform</span><span class="params">(self, X, y)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        Params:</span></span><br><span class="line"><span class="string">            X:  &#123;ndarray(n_samples, n_features)&#125;</span></span><br><span class="line"><span class="string">        Returns:</span></span><br><span class="line"><span class="string">            X:  &#123;ndarray(n_samples, n_components)&#125;</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        self.fit(X, y)</span><br><span class="line">        X_ = self.transform(X)</span><br><span class="line">        <span class="keyword">return</span> X_</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">transform_inv</span><span class="params">(self, X)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        Params:</span></span><br><span class="line"><span class="string">            X:  &#123;ndarray(n_samples, n_components)&#125;</span></span><br><span class="line"><span class="string">        Returns:</span></span><br><span class="line"><span class="string">            X:  &#123;ndarray(n_samples, n_features)&#125;</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        X_ = X.dot(self.components_)</span><br><span class="line">        <span class="keyword">return</span> X_</span><br></pre></td></tr></table></figure>
+<h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show_features</span><span class="params">(X, dsize, title=<span class="string">"features"</span>)</span>:</span></span><br><span class="line">    <span class="string">""" Show features</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Params:</span></span><br><span class="line"><span class="string">        X: &#123;ndarray(N, n_features)&#125;</span></span><br><span class="line"><span class="string">        dsize: &#123;tuple(H, W)&#125;</span></span><br><span class="line"><span class="string">        title: &#123;str&#125;</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    SUBPLOT = <span class="string">"19&#123;&#125;"</span></span><br><span class="line"></span><br><span class="line">    plt.figure(figsize=(<span class="number">18</span>, <span class="number">2</span>))</span><br><span class="line">    plt.title(title)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">9</span>):</span><br><span class="line">        plt.subplot(int(SUBPLOT.format(i+<span class="number">1</span>)))</span><br><span class="line">        plt.imshow(X[i].reshape(dsize), cmap=<span class="string">"gray"</span>)</span><br><span class="line">    plt.show()</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>Eigenface</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pca = PCA(n_components=n_features); pca.fit(X)</span><br><span class="line">show_features(pca.components_, DSIZE, title=<span class="string">"Eigenface &#123;&#125;"</span>.format(repr(DSIZE)))</span><br></pre></td></tr></table></figure>
+<p> <img src="/2019/08/20/Eigenface-and-Fisherface/markdown/output_30_0.png" alt="output_30_0"></p>
+</li>
+<li><p>FisherFace</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">n_decomposed = n_samples - n_classes - <span class="number">1</span></span><br><span class="line"></span><br><span class="line">pca = PCA(n_components=n_decomposed)</span><br><span class="line">X_decomposed = pca.fit_transform(X)</span><br><span class="line"></span><br><span class="line">lda = LDA(n_components=n_classes - <span class="number">1</span>)</span><br><span class="line">lda.fit(X_decomposed, y)</span><br><span class="line"></span><br><span class="line">components_ = pca.transform_inv(lda.components_)</span><br><span class="line">show_features(components_, DSIZE, title=<span class="string">"Fisherface &#123;&#125; &#123;&#125;"</span>.format(repr(DSIZE), n_decomposed))</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<pre><code>为减少计算量，将原始数据`PCA`降维后，再用于`LDA`计算`FisherFace`，故维度数目选取会影响实验结果，以下分别选择不同维数时产生的`FisherFace`序列，显示前9个特征脸。可见主分量数目越少，特征脸越清晰，但包含的细节也越少。
+
+- 199
+    ![output_33_0](/Eigenface-and-Fisherface/markdown/output_33_0.png)
+- 279
+    ![output_33_2](/Eigenface-and-Fisherface/markdown/output_33_2.png)
+- 359
+    ![output_33_4](/Eigenface-and-Fisherface/markdown/output_33_4.png)
+</code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
+<li><a href="https://www.cl.cam.ac.uk/research/dtg/attarchive/facedatabase.html" target="_blank" rel="noopener">The Database of Faces</a></li>
+<li><a href="https://www.xuebuyuan.com/3231919.html" target="_blank" rel="noopener">人脸识别之—-FisherFace - 学步园</a></li>
+<li><a href="https://bytefish.de/pdf/facerec_python.pdf" target="_blank" rel="noopener">Face Recognition with Python, by Philipp Wagner</a></li>
+</ol>
+
       
     </div>
 
@@ -487,6 +619,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/特征提取/" rel="tag"># 特征提取</a>
+          
+        </div>
+      
 
       
       
@@ -505,6 +643,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/08/21/Eigenface-and-Fisherface/markdown/main/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -580,7 +722,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">57</span>
+                    <span class="site-state-item-count">58</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -648,7 +790,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                    <span class="site-state-item-count">9</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -713,7 +857,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#前言-1"><span class="nav-number">3.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference-1"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#原理"><span class="nav-number">2.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Eigenface"><span class="nav-number">2.1.</span> <span class="nav-text">Eigenface</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FisherFace"><span class="nav-number">2.2.</span> <span class="nav-text">FisherFace</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#技巧"><span class="nav-number">3.</span> <span class="nav-text">技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Eigenface求解"><span class="nav-number">3.1.</span> <span class="nav-text">Eigenface求解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#广义特征值问题-S-B-alpha-i-lambda-i-S-W-alpha-i"><span class="nav-number">3.2.</span> <span class="nav-text">广义特征值问题$S_B \alpha_i = \lambda_i S_W \alpha_i$</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实现及实验"><span class="nav-number">4.</span> <span class="nav-text">实现及实验</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据集"><span class="nav-number">4.1.</span> <span class="nav-text">数据集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PCA"><span class="nav-number">4.2.</span> <span class="nav-text">PCA</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LDA"><span class="nav-number">4.3.</span> <span class="nav-text">LDA</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结果"><span class="nav-number">4.4.</span> <span class="nav-text">结果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>
@@ -1256,6 +1400,30 @@
   
   
 
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
   
 
 
