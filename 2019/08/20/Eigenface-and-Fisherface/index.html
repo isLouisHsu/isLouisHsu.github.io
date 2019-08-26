@@ -116,15 +116,18 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="前言在众多人脸图像中，能否找到特一组特征脸，用于表征其他人脸呢？在PCA和LDA中分别介绍了两种线性降维方法，本文介绍一种使用以上两种算法的特征提取方法。 原理EigenfaceEigenface由Sirovich与Kirby在1987年提出，认为人脸图像可由一系列特征图加权组合重构而成，即 F = F_m + \sum_i w_i F_i \tag{1}Eigenface可通过PCA生成，在大量">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/2019/08/20/Eigenface-and-Fisherface/markdown/output_30_0.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/20/Eigenface-and-Fisherface/output_30_0.png">
 <meta property="og:image" content="http://yoursite.com/2019/08/20/Eigenface-and-Fisherface/markdown/output_33_0.png">
 <meta property="og:image" content="http://yoursite.com/2019/08/20/Eigenface-and-Fisherface/faces.gif">
 <meta property="og:image" content="http://yoursite.com/2019/08/20/Eigenface-and-Fisherface/output_30_0.png">
-<meta property="og:updated_time" content="2019-08-21T11:13:20.553Z">
+<meta property="og:image" content="http://yoursite.com/2019/08/20/Eigenface-and-Fisherface/output_33_0.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/20/Eigenface-and-Fisherface/output_33_2.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/20/Eigenface-and-Fisherface/output_33_4.png">
+<meta property="og:updated_time" content="2019-08-24T02:37:03.661Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Eigenface and Fisherface">
 <meta name="twitter:description" content="前言在众多人脸图像中，能否找到特一组特征脸，用于表征其他人脸呢？在PCA和LDA中分别介绍了两种线性降维方法，本文介绍一种使用以上两种算法的特征提取方法。 原理EigenfaceEigenface由Sirovich与Kirby在1987年提出，认为人脸图像可由一系列特征图加权组合重构而成，即 F = F_m + \sum_i w_i F_i \tag{1}Eigenface可通过PCA生成，在大量">
-<meta name="twitter:image" content="http://yoursite.com/2019/08/20/Eigenface-and-Fisherface/markdown/output_30_0.png">
+<meta name="twitter:image" content="http://yoursite.com/2019/08/20/Eigenface-and-Fisherface/output_30_0.png">
 
 
 
@@ -205,7 +208,7 @@
     </div>
     
       
-        <p class="site-subtitle">人生苦短，不如不管，继续任性。</p>
+        <p class="site-subtitle">大龄工科伪文青</p>
       
     
   </div>
@@ -423,7 +426,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-08-21 19:13:20" itemprop="dateModified" datetime="2019-08-21T19:13:20+08:00">2019-08-21</time>
+                <time title="修改时间：2019-08-24 10:37:03" itemprop="dateModified" datetime="2019-08-24T10:37:03+08:00">2019-08-24</time>
               
             
           </span>
@@ -494,7 +497,7 @@
 <li><p>将协方差矩阵进行特征值分解</p>
 <script type="math/tex; mode=display">C \alpha_i = \lambda_i \alpha_i \tag{2.4}</script><blockquote>
 <p>注意到，在图像尺寸为$(H, W)$的情况下，协方差矩阵的尺寸为$(H \times W, H \times W)$，本文使用数据库内图像为$112 \times 92$，存储为浮点类型<code>(4 byte)</code>，也就是说，该协方差矩阵所占内存</p>
-<script type="math/tex; mode=display">(112 \times 92)^2 \text{pixel} \times 4 \text{byte/pixel} = \ldots \text{(阵亡。。。)}</script><p>因此，需要转换一下求解问题，查看<a href="#eigenface%e6%b1%82%e8%a7%a3">Eigenface求解</a>。</p>
+<script type="math/tex; mode=display">(112 \times 92)^2 \text{pixel} \times 4 \text{byte/pixel} = 441 \rm{kb} \text{(阵亡。。。)}</script><p>因此，需要转换一下求解问题，查看<a href="#eigenface%e6%b1%82%e8%a7%a3">Eigenface求解</a>。</p>
 </blockquote>
 </li>
 <li><p>按特征值降序，重新排列特征对$(\lambda_i, \alpha_i)$，选取前$K$个特征向量作为<code>Eigenface</code></p>
@@ -502,7 +505,7 @@
 </ol>
 <p>此时将人脸数据$x$投影到各主分量上，可获得相应系数，该系数向量可用于表征该人脸的特征，即</p>
 <script type="math/tex; mode=display">\vec{w} = \begin{bmatrix} w_1 & w_2 & \cdots & w_K \end{bmatrix} \tag{3}</script><p>其中$w_i = x^T \alpha_i$。</p>
-<p>将各主轴恢复原图像尺寸后，其可视化输出如下<br><img src="/2019/08/20/Eigenface-and-Fisherface/markdown/output_30_0.png" alt="output_30_0"></p>
+<p>将各主轴恢复原图像尺寸后，其可视化输出如下<br><img src="/2019/08/20/Eigenface-and-Fisherface/output_30_0.png" alt="output_30_0"></p>
 <h2 id="FisherFace"><a href="#FisherFace" class="headerlink" title="FisherFace"></a>FisherFace</h2><p><code>Fisherface</code>基本思路与<code>Eigenface</code>一致，也是寻找一组特征脸，用于表征人脸特征。可通过<code>LDA</code>生成，<code>LDA</code>考虑类内与类间散布，与<code>PCA</code>不同，为有监督学习。详细步骤如下</p>
 <ol>
 <li><p>同样的，获取数据矩阵$X$</p>
@@ -561,18 +564,16 @@
 <p> <img src="/2019/08/20/Eigenface-and-Fisherface/output_30_0.png" alt="output_30_0"></p>
 </li>
 <li><p>FisherFace</p>
+<p> 为减少计算量，将原始数据<code>PCA</code>降维后，再用于<code>LDA</code>计算<code>FisherFace</code>，故维度数目选取会影响实验结果，以下分别选择不同维数时产生的<code>FisherFace</code>序列，显示前9个特征脸。可见主分量数目越少，特征脸越清晰，但包含的细节也越少。</p>
  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">n_decomposed = n_samples - n_classes - <span class="number">1</span></span><br><span class="line"></span><br><span class="line">pca = PCA(n_components=n_decomposed)</span><br><span class="line">X_decomposed = pca.fit_transform(X)</span><br><span class="line"></span><br><span class="line">lda = LDA(n_components=n_classes - <span class="number">1</span>)</span><br><span class="line">lda.fit(X_decomposed, y)</span><br><span class="line"></span><br><span class="line">components_ = pca.transform_inv(lda.components_)</span><br><span class="line">show_features(components_, DSIZE, title=<span class="string">"Fisherface &#123;&#125; &#123;&#125;"</span>.format(repr(DSIZE), n_decomposed))</span><br></pre></td></tr></table></figure>
+<ul>
+<li>199<br><img src="/2019/08/20/Eigenface-and-Fisherface/output_33_0.png" alt="output_33_0"></li>
+<li>279<br><img src="/2019/08/20/Eigenface-and-Fisherface/output_33_2.png" alt="output_33_2"></li>
+<li>359<br><img src="/2019/08/20/Eigenface-and-Fisherface/output_33_4.png" alt="output_33_4"></li>
+</ul>
 </li>
 </ol>
-<pre><code>为减少计算量，将原始数据`PCA`降维后，再用于`LDA`计算`FisherFace`，故维度数目选取会影响实验结果，以下分别选择不同维数时产生的`FisherFace`序列，显示前9个特征脸。可见主分量数目越少，特征脸越清晰，但包含的细节也越少。
-
-- 199
-    ![output_33_0](/Eigenface-and-Fisherface/output_33_0.png)
-- 279
-    ![output_33_2](/Eigenface-and-Fisherface/output_33_2.png)
-- 359
-    ![output_33_4](/Eigenface-and-Fisherface/output_33_4.png)
-</code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
 <li><a href="https://www.cl.cam.ac.uk/research/dtg/attarchive/facedatabase.html" target="_blank" rel="noopener">The Database of Faces</a></li>
 <li><a href="https://www.xuebuyuan.com/3231919.html" target="_blank" rel="noopener">人脸识别之—-FisherFace - 学步园</a></li>
 <li><a href="https://bytefish.de/pdf/facerec_python.pdf" target="_blank" rel="noopener">Face Recognition with Python, by Philipp Wagner</a></li>
