@@ -112,23 +112,23 @@
 <meta name="keywords" content="Module Layer">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Batch Normalization">
-<meta property="og:url" content="http://yoursite.com/2019/08/20/Batch-Normalization/index.html">
+<meta property="og:url" content="http://yoursite.com/2019/08/27/Batch-Normalization/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="前言深度学习网络可通过mini-batch随机梯度下降的方式进行优化，然而在优化过程中，存在梯度消失、收敛不稳定的问题。 原理机器学习中，假定训练数据与测试数据独立同分布(independent and identical independent)，当输入数据进行白化操作后，可使模型收敛速度加快，这被称作Covariate Shift。 而在神经网络内部，各层的特征图数据分布不均匀，称为Inter">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/2019/08/20/Batch-Normalization/emoji.jpg">
-<meta property="og:updated_time" content="2019-08-27T10:12:24.647Z">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/Batch-Normalization/emoji.jpg">
+<meta property="og:updated_time" content="2019-08-28T04:53:33.453Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Batch Normalization">
 <meta name="twitter:description" content="前言深度学习网络可通过mini-batch随机梯度下降的方式进行优化，然而在优化过程中，存在梯度消失、收敛不稳定的问题。 原理机器学习中，假定训练数据与测试数据独立同分布(independent and identical independent)，当输入数据进行白化操作后，可使模型收敛速度加快，这被称作Covariate Shift。 而在神经网络内部，各层的特征图数据分布不均匀，称为Inter">
-<meta name="twitter:image" content="http://yoursite.com/2019/08/20/Batch-Normalization/emoji.jpg">
+<meta name="twitter:image" content="http://yoursite.com/2019/08/27/Batch-Normalization/emoji.jpg">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/08/20/Batch-Normalization/">
+  <link rel="canonical" href="http://yoursite.com/2019/08/27/Batch-Normalization/">
 
 
 
@@ -361,7 +361,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/20/Batch-Normalization/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/27/Batch-Normalization/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Louis Hsu">
@@ -403,7 +403,7 @@
                 
               
 
-              <time title="创建时间：2019-08-20 18:20:55" itemprop="dateCreated datePublished" datetime="2019-08-20T18:20:55+08:00">2019-08-20</time>
+              <time title="创建时间：2019-08-27 18:20:55" itemprop="dateCreated datePublished" datetime="2019-08-27T18:20:55+08:00">2019-08-27</time>
             
 
             
@@ -420,7 +420,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-08-27 18:12:24" itemprop="dateModified" datetime="2019-08-27T18:12:24+08:00">2019-08-27</time>
+                <time title="修改时间：2019-08-28 12:53:33" itemprop="dateModified" datetime="2019-08-28T12:53:33+08:00">2019-08-28</time>
               
             
           </span>
@@ -485,7 +485,7 @@
 <li>为防止网络发散，网络参数初始化一般服从均值为$0$的正态分布；</li>
 <li>激活函数敏感区域一般定义在零点位置，如<code>logistic</code>函数，在零点出该处梯度最大，而其他位置容易出现梯度消失问题；</li>
 </ol>
-<p><img src="/2019/08/20/Batch-Normalization/emoji.jpg" alt="emoji"></p>
+<p><img src="/2019/08/27/Batch-Normalization/emoji.jpg" alt="emoji"></p>
 <p>内部白化后，输出数据近似服从标准正态分布。一般用于卷积层后、激活函数前。</p>
 <h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><p>Batch Normalization层通常包含参数<code>mean</code>, <code>variance</code>, <code>rolling_mean</code>, <code>rolling_variance</code>，其中<code>mean</code>与<code>variance</code>为训练时根据批次数据计算得到，在训练阶段使用以归一化批次数据；<code>rolling_mean</code>与<code>rolling_variance</code>为该层实际学习的参数，在测试阶段使用以归一化批次数据。</p>
 <p>对于某批次输入的数据$X_{\mathcal{B}}$，尺寸为$(N, H, W, C)$，计算该批次数据每个维度上的均值<code>mean</code>与方差<code>variance</code>，尺寸均为$(H, W, C)$，即</p>
