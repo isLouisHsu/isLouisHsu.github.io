@@ -136,7 +136,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/09/01/YOLO-v1-v2-v3/YOLOv2-Figure5.png">
 <meta property="og:image" content="http://yoursite.com/2019/09/01/YOLO-v1-v2-v3/YOLOv3-Darknet-53.png">
 <meta property="og:image" content="http://yoursite.com/2019/09/01/YOLO-v1-v2-v3/YOLOv3-Figure3.png">
-<meta property="og:updated_time" content="2019-09-01T09:50:11.666Z">
+<meta property="og:updated_time" content="2019-09-01T09:52:57.073Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="YOLO! v1, v2, v3">
 <meta name="twitter:description" content="前言YOLO是You Only Look Once的简称，是one-stage检测算法，在2016年刚提出时风靡一时，现在看可能存在一些缺点，后续有许多one-stage检测算法都参考YOLO的思路，如SSD。目前位置，YOLO共发布了3代，论文链接在Reference中。 YOLOv1YOLO的一个关键点是，将目标检测作为回归任务，将分离的边界框回归和分类联合起来，可进行端到端的优化。  We">
@@ -422,7 +422,7 @@
                 
               
 
-              <time title="创建时间：2019-09-01 17:48:27 / 修改时间：17:50:11" itemprop="dateCreated datePublished" datetime="2019-09-01T17:48:27+08:00">2019-09-01</time>
+              <time title="创建时间：2019-09-01 17:48:27 / 修改时间：17:52:57" itemprop="dateCreated datePublished" datetime="2019-09-01T17:48:27+08:00">2019-09-01</time>
             
 
             
@@ -519,7 +519,7 @@
 <p><img src="/2019/09/01/YOLO-v1-v2-v3/groudtruth.jpg" alt="groudtruth"></p>
 <p>类别特征图$(S \times S \times C)$比较好理解，在上图中用颜色表示，展开为张量即可。</p>
 <h2 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h2><p><img src="/2019/09/01/YOLO-v1-v2-v3/YOLOv1-architecture.PNG" alt="YOLOv1-architecture"></p>
-<p>网络共包含24个卷积层与2个全连接层。卷积的基本结构是先通过$1 \times 1$卷积层减少前层输出特征图的通道数，再紧接用$3 \times 3$卷积层进行运算。其使用darknet训练的配置文件如<a href="https://github.com/pjreddie/darknet/blob/master/cfg/yolov1.cfg" target="_blank" rel="noopener">yolov1.cfg</a>，PyTorch实现可查看<a href="TODO:" target="_blank" rel="noopener">yolo.py</a>，文中插代码很不地道。</p>
+<p>网络共包含24个卷积层与2个全连接层。卷积的基本结构是先通过$1 \times 1$卷积层减少前层输出特征图的通道数，再紧接用$3 \times 3$卷积层进行运算。其使用darknet训练的配置文件如<a href="https://github.com/pjreddie/darknet/blob/master/cfg/yolov1.cfg" target="_blank" rel="noopener">yolov1.cfg</a>，PyTorch实现可查看<a href="https://github.com/isLouisHsu/isLouisHsu.github.io/blob/master/2019/09/01/YOLO-v1-v2-v3/yolo.py" target="_blank" rel="noopener">yolo.py</a>，文中插代码很不地道。</p>
 <h2 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h2><p>损失函数由三部分组成，使用sum-square error作为误差函数，因为易于优化</p>
 <script type="math/tex; mode=display">L = \sum_i (y_i - \hat{y_i})^2</script><p>定义</p>
 <script type="math/tex; mode=display">
