@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言YOLO是You Only Look Once的简称，是one-stage检测算法，在2016年刚提出时风靡一时，现在看可能存在一些缺点，后续有许多one-stage检测算法都参考YOLO的思路，如SSD。目前位置，YOLO共发布了3代，论文链接在Reference中。 YOLOv1YOLO的一个关键点是，将目标检测作为回归任务，将分离的边界框回归和分类联合起来，可进行端到端的优化。  We">
+<meta name="keywords" content="Object Detection">
+<meta property="og:type" content="article">
+<meta property="og:title" content="YOLO! v1, v2, v3">
+<meta property="og:url" content="http://yoursite.com/2019/09/01/YOLO-v1-v2-v3/index.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="前言YOLO是You Only Look Once的简称，是one-stage检测算法，在2016年刚提出时风靡一时，现在看可能存在一些缺点，后续有许多one-stage检测算法都参考YOLO的思路，如SSD。目前位置，YOLO共发布了3代，论文链接在Reference中。 YOLOv1YOLO的一个关键点是，将目标检测作为回归任务，将分离的边界框回归和分类联合起来，可进行端到端的优化。  We">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/09/01/YOLO-v1-v2-v3/prepareDataV1.png">
+<meta property="og:image" content="http://yoursite.com/2019/09/01/YOLO-v1-v2-v3/dog.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/09/01/YOLO-v1-v2-v3/resized.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/09/01/YOLO-v1-v2-v3/annotated.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/09/01/YOLO-v1-v2-v3/groudtruth.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/09/01/YOLO-v1-v2-v3/YOLOv1-architecture.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/01/YOLO-v1-v2-v3/test_step.png">
+<meta property="og:image" content="http://yoursite.com/2019/09/01/YOLO-v1-v2-v3/VOC2012_Leaderboard.png">
+<meta property="og:image" content="http://yoursite.com/2019/09/01/YOLO-v1-v2-v3/YOLOv2-Table2.png">
+<meta property="og:image" content="http://yoursite.com/2019/09/01/YOLO-v1-v2-v3/anchor.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/09/01/YOLO-v1-v2-v3/groudtruth_32x32.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/09/01/YOLO-v1-v2-v3/groudtruth_24x48.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/09/01/YOLO-v1-v2-v3/groudtruth_48x24.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/09/01/YOLO-v1-v2-v3/YOLOv2-Figure2.png">
+<meta property="og:image" content="http://yoursite.com/2019/09/01/YOLO-v1-v2-v3/groudtruth_32x32_new.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/09/01/YOLO-v1-v2-v3/groudtruth_24x48_new.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/09/01/YOLO-v1-v2-v3/groudtruth_48x24_new.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/09/01/YOLO-v1-v2-v3/YOLOv2-Figure5.png">
+<meta property="og:image" content="http://yoursite.com/2019/09/01/YOLO-v1-v2-v3/YOLOv3-Darknet-53.png">
+<meta property="og:image" content="http://yoursite.com/2019/09/01/YOLO-v1-v2-v3/YOLOv3-Figure3.png">
+<meta property="og:updated_time" content="2019-09-01T09:50:11.666Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="YOLO! v1, v2, v3">
+<meta name="twitter:description" content="前言YOLO是You Only Look Once的简称，是one-stage检测算法，在2016年刚提出时风靡一时，现在看可能存在一些缺点，后续有许多one-stage检测算法都参考YOLO的思路，如SSD。目前位置，YOLO共发布了3代，论文链接在Reference中。 YOLOv1YOLO的一个关键点是，将目标检测作为回归任务，将分离的边界框回归和分类联合起来，可进行端到端的优化。  We">
+<meta name="twitter:image" content="http://yoursite.com/2019/09/01/YOLO-v1-v2-v3/prepareDataV1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/09/01/YOLO-v1-v2-v3/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>YOLO! v1, v2, v3 | LOUIS' BLOG</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LOUIS' BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">大龄工科伪文青</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-guestbook">
+    <a href="/guestbook" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-guest"></i> <br>留言</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/01/YOLO-v1-v2-v3/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="技术博客？">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">YOLO! v1, v2, v3
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-01 17:48:27 / 修改时间：17:50:11" itemprop="dateCreated datePublished" datetime="2019-09-01T17:48:27+08:00">2019-09-01</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>YOLO是You Only Look Once的简称，是one-stage检测算法，在2016年刚提出时风靡一时，现在看可能存在一些缺点，后续有许多one-stage检测算法都参考YOLO的思路，如SSD。目前位置，YOLO共发布了3代，论文链接在<a href="#reference">Reference</a>中。</p>
+<h1 id="YOLOv1"><a href="#YOLOv1" class="headerlink" title="YOLOv1"></a>YOLOv1</h1><p>YOLO的一个关键点是，将目标检测作为回归任务，将分离的边界框回归和分类联合起来，可进行端到端的优化。</p>
+<blockquote>
+<p>We reframe object detection as a single regression problem, straight from image pixels to bounding box coordinates and class probabilities. Using our system, you only look once (YOLO) at an image to predict what objects are present and where they are.</p>
+</blockquote>
+<p>YOLO算法具有以下几个特性</p>
+<ol>
+<li><strong>Extremely fast.</strong> 将检测作为回归问题后，不需要候选框生成、分类、回归框矫正等几个步骤，可达到45FPS的速度，Fast YOLO甚至能达到155FPS；</li>
+<li><strong>Reasons globally.</strong> YOLO接受整个图像的输入，而不是将感兴趣区域单独提取，这相比于R-CNN算法，对上下文信息的使用更加全面；</li>
+<li><strong>Highly generalizable.</strong> 当在艺术图上进行识别时，也具有较好的识别效果。</li>
+</ol>
+<h2 id="数据准备"><a href="#数据准备" class="headerlink" title="数据准备"></a>数据准备</h2><p>YOLO的思路是，将一张指定尺寸输入的图片分割为$S \times S$个网格，每个网格负责落在它内部的物体的检测，并且每个网格将负责$B$个回归框的检测，每个回归框的参数包括$(x, y, w, h, c)$，$x, y$表示回归框的中心点坐标，$w, h$表示回归框的边长，$c$表示回归框的置信度表示cell内是否包含真实框中心点。此外，每个网格也负责$C$类的物体分类任务，输出$C$维的分类向量。因此输入图片经过深度卷积网络后，得到的特征图尺寸应为$S \times S \times [B \times (4 + 1) + C]$，如在论文中提到，在PSCAL VOC数据集上，指定$S=7, B=2, C=20$，则特征图尺寸为$7 \times 7 \times 30$。</p>
+<blockquote>
+<p>这里有个疑问，是训练样本confidence真实值如何确定，难道是计算cell与真实框的IoU？这样计算得到的值很小。</p>
+</blockquote>
+<p>下图为论文前3个版本中的示意图。</p>
+<p><img src="/2019/09/01/YOLO-v1-v2-v3/prepareDataV1.png" alt="prepareDataV1"></p>
+<p>上述说明比较抽象，用代码说明生成的target是个什么玩意。假如我们有图像如下</p>
+<p><img src="/2019/09/01/YOLO-v1-v2-v3/dog.jpg" alt="dog"></p>
+<p>首先将其裁剪为正方形，并缩放至$448 \times 448$，得到</p>
+<p><img src="/2019/09/01/YOLO-v1-v2-v3/resized.jpg" alt="resized"></p>
+<p>将图像分成$7 \times 7$个网格，并假设其标注位置为：狗$( 95, 295, 140, 250)$、自行车$(205, 212, 340, 214)$、汽车$(365,  92, 150,  64)$，在图上为</p>
+<p><img src="/2019/09/01/YOLO-v1-v2-v3/annotated.jpg" alt="annotated"></p>
+<p>假设在$7 \times 7$特征图上，某cell的位置为$(i, j)$，其中$0 \leq i, j &lt; 7$，应有$i = \lfloor\frac{x}{cellsize}\rfloor, j = \lfloor\frac{y}{cellsize}\rfloor$。若映射回原图后，该cell内包含某真实标记框$(x, y, h, w)$的中心，则置$c=1$，且对应类别的特征图上置$(i, j, class)$处类别信息为1。关于ground truth标记框相对于cell的各个偏移量计算与可视化输出如下</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    t_x = \frac{x - x'}{cellsize}, x' = (i + \frac{1}{2}) \times cellsize\\
+    t_y = \frac{y - y'}{cellsize}, y' = (j + \frac{1}{2}) \times cellsize\\
+    t_h = \frac{h}{cellsize} \\
+    t_w = \frac{w}{cellsize}
+\end{cases}</script><p>其中$x, y, cellsize$等都除以图像尺寸进行归一化。</p>
+<p><img src="/2019/09/01/YOLO-v1-v2-v3/groudtruth.jpg" alt="groudtruth"></p>
+<p>类别特征图$(S \times S \times C)$比较好理解，在上图中用颜色表示，展开为张量即可。</p>
+<h2 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h2><p><img src="/2019/09/01/YOLO-v1-v2-v3/YOLOv1-architecture.PNG" alt="YOLOv1-architecture"></p>
+<p>网络共包含24个卷积层与2个全连接层。卷积的基本结构是先通过$1 \times 1$卷积层减少前层输出特征图的通道数，再紧接用$3 \times 3$卷积层进行运算。其使用darknet训练的配置文件如<a href="https://github.com/pjreddie/darknet/blob/master/cfg/yolov1.cfg" target="_blank" rel="noopener">yolov1.cfg</a>，PyTorch实现可查看<a href="TODO:" target="_blank" rel="noopener">yolo.py</a>，文中插代码很不地道。</p>
+<h2 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h2><p>损失函数由三部分组成，使用sum-square error作为误差函数，因为易于优化</p>
+<script type="math/tex; mode=display">L = \sum_i (y_i - \hat{y_i})^2</script><p>定义</p>
+<script type="math/tex; mode=display">
+1^{\rm{condition}}_{\rm{index}} = 
+    \begin{cases}
+        1 & \text{if meets condition} \\
+        0 & \text{otherwise}
+    \end{cases}</script><ol>
+<li><p>坐标</p>
+<p> 考虑到，小物体定位惩罚应该比大物体的惩罚更大。所以在边长回归时，考虑回归边长的开方值，以平衡大小物体的惩罚。</p>
+<script type="math/tex; mode=display">
+ \begin{aligned}
+     L_{\rm{coord}} = \sum_{i=0}^{S^2} \sum_{j=0}^B 1^{\rm{obj}}_{\rm{ij}} \left[ (x_i - \hat{x}_i)^2 + (y_i - \hat{y}_i)^2 \right. \\
+     \left. + (\sqrt{w_i} - \sqrt{\hat{w}_i})^2 + (\sqrt{h_i} - \sqrt{\hat{h}_i})^2 \right]
+ \end{aligned}</script></li>
+<li><p>置信度</p>
+<p> 图像中具有物体的网格是非常稀疏的，导致正负样本数目不均衡，这些作为负样本的cell会将置信度分数推向$0$，影响网络模型的稳定性,通过系数$\lambda_{\rm{noobj}}$进行平衡</p>
+<script type="math/tex; mode=display">
+ \begin{aligned}
+     L_{\rm{confid}} = \sum_{i=0}^{S^2} \sum_{j=0}^B 1^{\rm{obj}}_{\rm{ij}} (C_i - \hat{C}_i)^2 \\
+     + \lambda_{\rm{noobj}} \sum_{i=0}^{S^2} \sum_{j=0}^B 1^{\rm{noobj}}_{\rm{ij}} (C_i - \hat{C}_i)^2
+ \end{aligned}</script></li>
+<li><p>类别</p>
+<p> 注意到，分类任务仅对包含物体的cell进行惩罚。</p>
+<script type="math/tex; mode=display">L_{\rm{classify}} = \sum_{i=0}^{S^2} 1^{\rm{obj}}_{\rm{i}} \sum_{c \in classes} (p_i(c) - \hat{p}_i(c))^2</script></li>
+</ol>
+<p>如果将定位误差和分类误差相等地加权，可能不理想。所以，通过设置系数$\lambda_{\rm{coord}}$进行平衡，增大边界框回归的惩罚，降低分类的惩罚。</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \lambda_{\rm{coord}} \underbrace{\sum_{i=0}^{S^2} \sum_{j=0}^B 1^{\rm{obj}}_{\rm{ij}} \left[ (x_i - \hat{x}_i)^2 + (y_i - \hat{y}_i)^2 + (\sqrt{w_i} - \sqrt{\hat{w}_i})^2 + (\sqrt{h_i} - \sqrt{\hat{h}_i})^2 \right]}_{L_{\rm{coord}}} \\
+    + \underbrace{\sum_{i=0}^{S^2} \sum_{j=0}^B 1^{\rm{obj}}_{\rm{ij}} (C_i - \hat{C}_i)^2 
+    + \lambda_{\rm{noobj}} \sum_{i=0}^{S^2} \sum_{j=0}^B 1^{\rm{noobj}}_{\rm{ij}} (C_i - \hat{C}_i)^2}_{L_{\rm{confid}}} \\
+    + \underbrace{\sum_{i=0}^{S^2} 1^{\rm{obj}}_{\rm{i}} \sum_{c \in classes} (p_i(c) - \hat{p}_i(c))^2}_{L_{\rm{classify}}}
+\end{aligned}</script><p>论文中设置$\lambda_{\rm{coord}}=5, \lambda_{\rm{noobj}}=0.5$。</p>
+<h2 id="训练步骤"><a href="#训练步骤" class="headerlink" title="训练步骤"></a>训练步骤</h2><p>首先，将网络的前20层卷积分离，添加全局均值池化与全连接层，在ImageNet数据集上进行预训练，输入图像的尺寸为$224 \times 224$。大约训练了一周，并取得了top-5达到$88\%$的准确率。</p>
+<p>之后，将模型用于检测的训练。Ren等人提出，全连接层可提高网络的performance，所以在预训练的20层卷积后，添加4层卷积层与2层全连接层，权值随机初始化。图像的分辨率升高到$448 \times 448$。</p>
+<p>在测试时，每个cell将负责多个框的生成；在训练时，每个cell对每个回归框负责，也就是说，如果某个cell内出现两个重复的真实标记框，将对这两个框分别计算损失并累加。</p>
+<p>训练超参数设置。在PASCAL VOC 2007和2012的训练集与验证集上进行训练，注意在测试2012数据集时，也包含2017测试数据。批次大小设置为$64$，动量(momentum)设置为$0.9$，权值衰减设置为$0.0005$。</p>
+<blockquote>
+<p>祖传参数。</p>
+</blockquote>
+<p>学习率调节。如果一开始设置较大的学习率，不稳定的梯度会导致网络发散。因此从第一个epoch开始，缓慢将学习率从$10^{-3}$升高到$10^{-2}$，之后在$10^{-2}$保持$75$代，然后在$10^{-3}$保持$30$代，最后在$10^{-4}$保持$30$代。</p>
+<h2 id="测试阶段"><a href="#测试阶段" class="headerlink" title="测试阶段"></a>测试阶段</h2><p>测试阶段，置信度的计算包含两个部分的乘积，即框内是否含物体$\rm{Pr}(\rm{object})$与候选框与真实框之间的交并比$\rm{IoU}(truth, pred)$，计算方法如下</p>
+<script type="math/tex; mode=display">
+\rm{Confidence} = \rm{Pr}(Class_i | Object) * \rm{Pr}(Object) * \rm{IoU}^{truth}_{pred} = \rm{Pr}(Class_i) * \rm{IoU}^{truth}_{pred}</script><p>根据置信度，先删除一些评分较低的候选框，之后用NMS算法删除冗余框。其最终输出可由下图说明</p>
+<p><img src="/2019/09/01/YOLO-v1-v2-v3/test_step.png" alt="test_step"></p>
+<h2 id="结果对比"><a href="#结果对比" class="headerlink" title="结果对比"></a>结果对比</h2><p><img src="/2019/09/01/YOLO-v1-v2-v3/VOC2012_Leaderboard.png" alt="VOC2012_Leaderboard"></p>
+<h2 id="缺点和限制"><a href="#缺点和限制" class="headerlink" title="缺点和限制"></a>缺点和限制</h2><ol>
+<li>每个单元网格只能预测两个框，且两个框同属于一类，这限制了模型对相邻物体的检测；</li>
+<li>另外，对于聚集的小物体，如鸟群等，很难检测到；</li>
+<li>由于网络经过已有标注训练，对于新的纵横比很难适应；</li>
+<li>网络多次进行下采样，特征较为粗略；</li>
+<li>小物体检测比大物体检测错误率高，这是由于错误定位造成的。</li>
+</ol>
+<h1 id="YOLOv2"><a href="#YOLOv2" class="headerlink" title="YOLOv2"></a>YOLOv2</h1><p>YOLOv2即YOLO9000，在上一代YOLO的基础上进行改进。首先，它可以接受任意尺寸图像的输入而不是固定的$448 \times 448$，速度更快。此外，一个比较重要的点是，在训练YOLO9000时，联合使用分类数据，用带标记的图像进行学习精确定位，而分类图像添加到样本集中，用作分类部分的训练。</p>
+<h2 id="Better"><a href="#Better" class="headerlink" title="Better"></a>Better</h2><p>YOLOv2进行了众多实验，添加别的组件，验证新模型在识别率上的表现，如下表</p>
+<p><img src="/2019/09/01/YOLO-v1-v2-v3/YOLOv2-Table2.png" alt="YOLOv2-Table2"></p>
+<ol>
+<li><p>Batch Normalization</p>
+<p> 添加批归一化层后，mAP升高$2\%$以上。并且可减少其他形式的正则化惩罚，如移除了dropout层。</p>
+</li>
+<li><p>High Resolution Classifier</p>
+<p> 在YOLOv1训练时，使用$224 \times 224$尺寸的图片进行模型预训练，之后用$448 \times 448$尺寸的图片进行检测网络的训练，也就是说，网络需要在学习检测任务的同时，适应新的输入分辨率。所以在YOLOv2训练时，先将预训练网络在$448 \times 448$尺寸的数据机上进行微调，共迭代10代。之后训练检测网络，这提升了$4\%$的mAP。</p>
+</li>
+<li><p>Convolutional With Anchor Boxes</p>
+<p> YOLOv2移除了全连接层，并添加了锚框。首先，移除一层最大池化层，使得特征图的分辨率升高，这样输出的特征图尺寸为$13 \times 13$。考虑到特征图的几何意义，最终层输出的特征图每个位置代表一个网格，也就是说，每个网格中心都应对应一个位置，但是$448/13$不为整数，故将图像分辨率调整至$416 \times 416$，网络下采样倍率为$\frac{416}{13}=32$。</p>
+<p> 在不添加锚框时，一个cell仅能输出$7 \times 7 \times 2 = 98$个候选框。而每个cell设置锚框后，对每个锚框均进行预测，而不是仅考虑cell的空间位置，可生成更多的候选框。</p>
+<p> 没有锚框的情况下，模型指标为$69.5$mAP与$81\%$的召回率，增加后，mAP降低为$69.2$，召回率上升到$88\%$，这说明模型还有较大空间可以调整。</p>
+<p> 对于锚框，文中没有提及，以下进行一些说明，现在每个cell的尺寸为$32\times32$，假定对单个cell设置$3$种纵横比的anchor，如$32 \times 32, 24 \times 48, 48 \times 24$，那么对于下图中包含物体的cell，锚框可视化为</p>
+<p> <img src="/2019/09/01/YOLO-v1-v2-v3/anchor.jpg" alt="anchor"></p>
+<p> 对于上述三个锚框，从上至下分别为$32 \times 32, 24 \times 48, 48 \times 24$的锚框对应的特征图显示如下</p>
+<p> <img src="/2019/09/01/YOLO-v1-v2-v3/groudtruth_32x32.jpg" alt="groudtruth_32x32"></p>
+<p> <img src="/2019/09/01/YOLO-v1-v2-v3/groudtruth_24x48.jpg" alt="groudtruth_24x48"></p>
+<p> <img src="/2019/09/01/YOLO-v1-v2-v3/groudtruth_48x24.jpg" alt="groudtruth_48x24"></p>
+<blockquote>
+<p>此外，每个纵横比下可分别设置$3$种尺度。</p>
+</blockquote>
+</li>
+<li><p>Dimension Clusters</p>
+<p> 至此遇到两个问题。第一，锚框的纵横比、尺度等是人为指定的，网络可以适应指定的锚框，但不是最优的，希望能够从数据中得到锚框的参数。所以对标注框的长宽尺寸进行K-Means聚类，注意到，如果使用欧式距离作为聚类指标，框越大它造成的误差也越大，希望的是IOU评分上升，所以定义指标为</p>
+<script type="math/tex; mode=display">d(\rm{box}, \rm{centroid}) = 1 - \rm{IoU}(\rm{box}, \rm{centroid})</script><p> 最终确定为$k=5$，在VOC和MSCOCO数据机上可能有所差异，详情查看下图<br> <img src="/2019/09/01/YOLO-v1-v2-v3/YOLOv2-Figure2.png" alt="YOLOv2-Figure2"></p>
+</li>
+<li><p>Direct location prediction</p>
+<p> 对于偏移量，如果延用一般的计算方法，则有</p>
+<script type="math/tex; mode=display">
+ \begin{cases}
+     t_x = \frac{x - x_a}{w_a}, x_a = (\lfloor\frac{x}{cellsize}\rfloor + \frac{1}{2}) \times w_a \\
+     t_y = \frac{y - y_a}{h_a}, y_a = (\lfloor\frac{y}{cellsize}\rfloor + \frac{1}{2}) \times h_a \\
+     t_w = \frac{w}{w_a} \\
+     t_h = \frac{h}{h_a} 
+ \end{cases}</script><p> 也即</p>
+<script type="math/tex; mode=display">
+ \begin{cases}
+     x = t_x \times w_a + x_a \\
+     y = t_y \times h_a + y_a \\
+     w = t_w \times w_a \\
+     h = t_h \times h_a 
+ \end{cases}</script><p> 当$t_x=1$时表示相对于锚框向右平移$w_a$的距离，$t_<em>=-1$时表示相对于锚框向左平移$w_a$的距离，上式中对$t_</em>$是没有限制作用的。现添加sigmoid函数处理，将值映射到$[0, 1]$范围内，并且直接预测坐标，而不是偏移量的方法，此外，利用指数函数$e^x$进行映射，平衡回归框尺寸对损失值的影响。如下</p>
+<script type="math/tex; mode=display">
+ \begin{cases}
+     b_x = \sigma(t_x) + c_x \\ 
+     b_y = \sigma(t_y) + c_y \\ 
+     b_w = p_w e^{t_w} \\
+     b_h = p_h e^{t_h}
+ \end{cases}</script><p> 其中$(c_x, c_y)$为特征图上相对于左上角的坐标，$\sigma(t_x), \sigma(t_y), t_w, t_h$是网络的输出，$p_*$为锚框的尺寸信息(除以图像边长归一化)。这种计算方法下，各锚框的ground truth应为</p>
+<script type="math/tex; mode=display">
+ \begin{cases}
+     \sigma(t_x) = \frac{x}{cellsize} - \lfloor\frac{x}{cellsize}\rfloor \\
+     \sigma(t_y) = \frac{y}{cellsize} - \lfloor\frac{y}{cellsize}\rfloor \\
+     t_w = \log \frac{b_w}{p_w} \\
+     t_h = \log \frac{b_h}{p_h} 
+ \end{cases}</script><p> <img src="/2019/09/01/YOLO-v1-v2-v3/groudtruth_32x32_new.jpg" alt="groudtruth_32x32_new"></p>
+<p> <img src="/2019/09/01/YOLO-v1-v2-v3/groudtruth_24x48_new.jpg" alt="groudtruth_24x48_new"></p>
+<p> <img src="/2019/09/01/YOLO-v1-v2-v3/groudtruth_48x24_new.jpg" alt="groudtruth_48x24_new"></p>
+</li>
+<li><p>Fine-Grained Features</p>
+<p> 为获得更细粒度的特征，用于小物体的检测，如Faster-RCNN与SSD是在各层特征图上进行候选框的生成。YOLOv2添加了passthrough层，将浅层特征与深层特征堆叠起来。这提升了$1\%$的表现。</p>
+</li>
+<li><p>Multi-Scale Training</p>
+<p> 由于YOLOv2中仅包含卷积层与池化层，所以可接受任意尺寸的输入，为使得网络对各尺寸均有良好的鲁棒性，在尺寸为$\{320, 352, \cdots, 608\}$时都进行训练。这样做可以使图像尺寸减小以加快计算速度，减少显存消耗，并且不降低准确率，在$288 \times 288$的尺寸时，可达到$90$FPS。</p>
+</li>
+</ol>
+<h2 id="Faster"><a href="#Faster" class="headerlink" title="Faster"></a>Faster</h2><ol>
+<li><p>Darknet-19</p>
+<p> 大多数检测器用VGG-16作为特征提取网络结构，但是它参数量众多，且运算量很大，即使输入为$224 \times 224$也需要千万级别的FLOPS。新设计的Darknet-19架构，仅需要$5.58$百万级别的FLOPS，达到了72.9% top-1和91.2% top-5的准确率。</p>
+</li>
+<li><p>Training for classification</p>
+<p> 首先，在ImageNet上进行1000类的图像分类模型训练，共迭代160代，初始学习率为$0.1$，多项式学习率衰减，权值衰减设置为$4e-5$，动量$0.9$。之后，将图像分辨率提高到$448 \times 448$，学习率0.001，进行10个周期的迭代，来微调网络，使其适应该分辨率。</p>
+</li>
+<li><p>Training for detection</p>
+<p> 将预训练模型的最后一层卷积层删除，添加$3 \times 3 \times 1024$卷积层与$1 \times 1 \times [(C + 4 + 1) \times B]$卷积层。注意到，与YOLOv1不同的是，每个框都会输出类别信息。在VOC数据集上，$C = 20, B = 5$。在$3 \times 3 \times 512$层的输出到最终的输出间设置passthrough，以更好地使用浅层特征。</p>
+<p> 共进行$160$个周期的迭代，初始学习率$0.001$，在第$60, 90$代时衰减$10\%$。权重衰减$5e-4$，动量$0.9$。</p>
+</li>
+</ol>
+<h2 id="Stronger"><a href="#Stronger" class="headerlink" title="Stronger"></a>Stronger</h2><p>在YOLO9000训练过程中，用到了一种联合分类数据的训练机制。将监测数据与分类数据混合，若训练过程中遇到检测数据，则计算全部的损失，而若遇到分类数据，仅计算分类的损失。但是这样做有一些挑战，检测数据集中对物体的标号仅仅包含dog、boat等，而分类数据标签划分更细，如dog可分为Norfolk terrier、Yorkshire terrier等。分类模型使用softmax作为损失函数，只能进行单标签的分类。一种解决方法是，采用多标签的模型来组合不假设互斥的数据集，这种方法忽略了我们对数据所知的所有结构，例如，MSCOCO的类别都是互斥的。</p>
+<ol>
+<li><p>Hierarchical classification</p>
+<p> ImageNet的标签来源于<a href="https://wordnet.princeton.edu/" target="_blank" rel="noopener">WordNet</a>，这是一个语言的数据集合，整理了语义关系。比如说，Norfolk terrier和Yorkshire terrier都是猎犬，都是犬等等。由于语言的复杂性，WordNet的结构是有向图，在训练YOLOv2时，并不需要完整的图结构，因此可通过这种非扁平的数据结构构建分层树形图来简化问题。</p>
+<p> 对于ImageNet中的视觉名词，许多同义词只有一条路径，所以首先将这些路径添加到树中，然后继续迭代剩下的名词。如果某个概念通往根节点有两条路径，那么其中一条会往树中添加3条边，另一条路径添加1条边，选择尽量短的边添加方案。最终形成层级的结构WordTree，这个树可用于计算条件概率，如</p>
+<script type="math/tex; mode=display">
+ \begin{aligned}
+     Pr(\rm{Norfolk terrier} | \rm{terrier}) \\
+     Pr(\rm{Yorkshire terrier} | \rm{terrier}) \\
+     Pr(\rm{Bedlington terrier} | \rm{terrier}) \\
+     \cdots
+ \end{aligned}</script><p> 对于某个类别的概率，其通过各条件概率累乘的方法，如</p>
+<script type="math/tex; mode=display">
+ \begin{aligned}
+     Pr(\rm{Norfolk terrier}) = \\
+     Pr(\rm{Norfolk terrier} | \rm{terrier}) \\
+     * Pr(\rm{terrier} | \rm{hunting dog}) \\
+     * \cdots \\
+     * Pr(\rm{mammal} | \rm{animal}) \\
+     * Pr(\rm{animal} | \rm{physical object}) \\
+     * Pr(\rm{physical object})
+ \end{aligned}</script><p> 注意$Pr(\rm{physical object})=1$。</p>
+</li>
+<li><p>Dataset combination with WordTree</p>
+<p> 借助于WordTree的多层级结构，构建多标签分类模型，如下图，进行多次softmax运算</p>
+<p> <img src="/2019/09/01/YOLO-v1-v2-v3/YOLOv2-Figure5.png" alt="YOLOv2-Figure5"></p>
+</li>
+<li><p>Joint classification and detection</p>
+<p> 在MSCOCO与ImageNet数据集上，产生了9000多个类别。此外我们需要对模型进行验证。</p>
+<blockquote>
+<p>We also need to evaluate our method so we add in any classes from the ImageNet detection challenge that were not already included. The corresponding WordTree for this dataset has 9418 classes.</p>
+</blockquote>
+<p> ImageNet是一个更大的数据集，所以通过对MSCOCO进行过采样来平衡数据，使ImageNet以4：1的比例增大。使用此数据集进行训练时，仅选用3个锚框以减少内存消耗，当网络遇到带检测标签的数据，进行全部的损失计算，而对于分类数据，仅对分类损失进行反传。值得注意的是，如果标签为dog，仅对该层次进行反传，因为再向下没有细化信息，如这是德国牧羊犬还是金毛犬。</p>
+</li>
+</ol>
+<h1 id="YOLOv3"><a href="#YOLOv3" class="headerlink" title="YOLOv3"></a>YOLOv3</h1><p>YOLOv3相比较于YOLO9000没有过大的改变：</p>
+<ul>
+<li>边界框回归值同YOLO9000；</li>
+<li>仍进行多标签的分类；</li>
+<li>关于锚框，共3种尺度$(S=3)$，类似特征金字塔的概念，则最终层输出为$N \times N \times [(4 + 1 + C) \times B \times S]$；</li>
+<li>将多个浅层的特征层上采样后进行组合，用于候选框的生成；</li>
+<li>仍使用K-Means确定锚框的纵横比，最终确定9种纵横比$10 \times 13, 16 \times 30, 33 \times 23, 30 \times 61, 62 \times 45, 59 \times 119, 116 \times 90, 156 \times 198, 373 \times 326$，每个纵横比下3种尺度，共27个锚框。</li>
+</ul>
+<p>网络仍使用$3 \times 3$与$1 \times 1$卷积层的堆叠，加入shortcut使深度大大增加，最终形成Darknet-53。</p>
+<p><img src="/2019/09/01/YOLO-v1-v2-v3/YOLOv3-Darknet-53.png" alt="YOLOv3-Darknet-53"></p>
+<p>YOLOv3运算速度相当快，准确率也可以</p>
+<p><img src="/2019/09/01/YOLO-v1-v2-v3/YOLOv3-Figure3.png" alt="YOLOv3-Figure3"></p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
+<li><a href="https://pjreddie.com/darknet/yolo/" target="_blank" rel="noopener">YOLO: Real Time Object Detection</a></li>
+<li><a href="https://arxiv.org/abs/1506.02640" target="_blank" rel="noopener">You Only Look Once: Unified, Real-Time Object Detection</a></li>
+<li><a href="https://arxiv.org/abs/1612.08242" target="_blank" rel="noopener">YOLO9000: Better, Faster, Stronger</a></li>
+<li><a href="https://arxiv.org/abs/1804.02767" target="_blank" rel="noopener">YOLOv3: An Incremental Improvement</a></li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Object-Detection/" rel="tag"># Object Detection</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/31/解读-Recent-Advances-in-Deep-Learning-for-Object-Detection/" rel="next" title="[解读] Recent Advances in Deep Learning for Object Detection">
+                <i class="fa fa-chevron-left"></i> [解读] Recent Advances in Deep Learning for Object Detection
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Louis Hsu">
+            
+              <p class="site-author-name" itemprop="name">Louis Hsu</p>
+              <p class="site-description motion-element" itemprop="description">技术博客？</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">60</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/isLouisHsu" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://is.louishsu@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/islouishsu" target="_blank" title="Zhihu"><i class="fa fa-fw fa-zhihu"></i>Zhihu</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/islouishsu" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          <div id="music163player">
+            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="110" src="//music.163.com/outchain/player?type=0&id=2703291040&auto=1&height=90">
+            </iframe>
+          </div>
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#YOLOv1"><span class="nav-number">2.</span> <span class="nav-text">YOLOv1</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据准备"><span class="nav-number">2.1.</span> <span class="nav-text">数据准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络结构"><span class="nav-number">2.2.</span> <span class="nav-text">网络结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#损失函数"><span class="nav-number">2.3.</span> <span class="nav-text">损失函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#训练步骤"><span class="nav-number">2.4.</span> <span class="nav-text">训练步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试阶段"><span class="nav-number">2.5.</span> <span class="nav-text">测试阶段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结果对比"><span class="nav-number">2.6.</span> <span class="nav-text">结果对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缺点和限制"><span class="nav-number">2.7.</span> <span class="nav-text">缺点和限制</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#YOLOv2"><span class="nav-number">3.</span> <span class="nav-text">YOLOv2</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Better"><span class="nav-number">3.1.</span> <span class="nav-text">Better</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Faster"><span class="nav-number">3.2.</span> <span class="nav-text">Faster</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stronger"><span class="nav-number">3.3.</span> <span class="nav-text">Stronger</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#YOLOv3"><span class="nav-number">4.</span> <span class="nav-text">YOLOv3</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Louis Hsu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: 'e65d27f7cf5c62feaf97',
+          clientSecret: '356386826698e8b817ca076b08d7c0e9814f52ea',
+          repo: 'isLouisHsu.github.io',
+          owner: 'isLouisHsu',
+          admin: ['isLouisHsu'],
+          id: md5(window.location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+
+  <script type="text/javascript" src="/js/click_show_text.js"></script>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
