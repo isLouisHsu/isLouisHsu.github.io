@@ -117,7 +117,7 @@
 <meta property="og:description" content="前言深度学习网络可通过mini-batch随机梯度下降的方式进行优化，然而在优化过程中，存在梯度消失、收敛不稳定的问题。 原理机器学习中，假定训练数据与测试数据独立同分布(independent and identical independent)，当输入数据进行白化操作后，可使模型收敛速度加快，这被称作Covariate Shift。 而在神经网络内部，各层的特征图数据分布不均匀，称为Inter">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/2019/08/27/Batch-Normalization/emoji.jpg">
-<meta property="og:updated_time" content="2019-08-28T04:53:33.453Z">
+<meta property="og:updated_time" content="2019-09-02T07:45:02.048Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Batch Normalization">
 <meta name="twitter:description" content="前言深度学习网络可通过mini-batch随机梯度下降的方式进行优化，然而在优化过程中，存在梯度消失、收敛不稳定的问题。 原理机器学习中，假定训练数据与测试数据独立同分布(independent and identical independent)，当输入数据进行白化操作后，可使模型收敛速度加快，这被称作Covariate Shift。 而在神经网络内部，各层的特征图数据分布不均匀，称为Inter">
@@ -420,7 +420,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-08-28 12:53:33" itemprop="dateModified" datetime="2019-08-28T12:53:33+08:00">2019-08-28</time>
+                <time title="修改时间：2019-09-02 15:45:02" itemprop="dateModified" datetime="2019-09-02T15:45:02+08:00">2019-09-02</time>
               
             
           </span>
@@ -492,7 +492,7 @@
 <script type="math/tex; mode=display">\mu = \frac{1}{N} \sum_{i=1}^N X^{(i)}</script><script type="math/tex; mode=display">\sigma^2 = \frac{1}{N} \sum_{i=1}^N (X^{(i)} - \mu)^2</script><p>更新参数<code>rolling_mean</code>与<code>rolling_variance</code>，以动量方式更新，可取$\gamma=0.01$</p>
 <script type="math/tex; mode=display">\tilde{\mu} := \gamma \cdot \mu + (1 - \gamma) \cdot \tilde{\mu}</script><script type="math/tex; mode=display">\tilde{\sigma^2} := \gamma \cdot \sigma^2 + (1 - \gamma) \cdot \tilde{\sigma^2}</script><p>值得注意的是，在训练阶段前向计算时</p>
 <script type="math/tex; mode=display">\hat{X^{(i)}} = \frac{X^{(i)} - \mu}{\sqrt{\sigma^2 + \epsilon}}</script><p>而测试阶段</p>
-<script type="math/tex; mode=display">\hat{X^{(i)}} = \frac{X^{(i)} - \tilde{\mu}}{\sqrt{\tilde{\sigma^2} + \epsilon}}</script><p>以下为[darknet/src/batchnorm_layer.c]前向与反向传播计算的具体实现</p>
+<script type="math/tex; mode=display">\hat{X^{(i)}} = \frac{X^{(i)} - \tilde{\mu}}{\sqrt{\tilde{\sigma^2} + \epsilon}}</script><p>以下为<a href="https://github.com/pjreddie/darknet/blob/master/src/batchnorm_layer.c" target="_blank" rel="noopener">darknet/src/batchnorm_layer.c</a>前向与反向传播计算的具体实现</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">forward_batchnorm_layer</span><span class="params">(layer l, network net)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(l.type == BATCHNORM) copy_cpu(l.outputs*l.batch, net.input, <span class="number">1</span>, l.output, <span class="number">1</span>);</span><br><span class="line">    copy_cpu(l.outputs*l.batch, l.output, <span class="number">1</span>, l.x, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">if</span>(net.train)&#123;</span><br><span class="line">        mean_cpu(l.output, l.batch, l.out_c, l.out_h*l.out_w, l.mean);</span><br><span class="line">        variance_cpu(l.output, l.mean, l.batch, l.out_c, l.out_h*l.out_w, l.variance);</span><br><span class="line"></span><br><span class="line">        scal_cpu(l.out_c, <span class="number">.99</span>, l.rolling_mean, <span class="number">1</span>);</span><br><span class="line">        axpy_cpu(l.out_c, <span class="number">.01</span>, l.mean, <span class="number">1</span>, l.rolling_mean, <span class="number">1</span>);</span><br><span class="line">        scal_cpu(l.out_c, <span class="number">.99</span>, l.rolling_variance, <span class="number">1</span>);</span><br><span class="line">        axpy_cpu(l.out_c, <span class="number">.01</span>, l.variance, <span class="number">1</span>, l.rolling_variance, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        normalize_cpu(l.output, l.mean, l.variance, l.batch, l.out_c, l.out_h*l.out_w);   </span><br><span class="line">        copy_cpu(l.outputs*l.batch, l.output, <span class="number">1</span>, l.x_norm, <span class="number">1</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        normalize_cpu(l.output, l.rolling_mean, l.rolling_variance, l.batch, l.out_c, l.out_h*l.out_w);</span><br><span class="line">    &#125;</span><br><span class="line">    scale_bias(l.output, l.scales, l.batch, l.out_c, l.out_h*l.out_w);</span><br><span class="line">    add_bias(l.output, l.biases, l.batch, l.out_c, l.out_h*l.out_w);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">backward_batchnorm_layer</span><span class="params">(layer l, network net)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!net.train)&#123;</span><br><span class="line">        l.mean = l.rolling_mean;</span><br><span class="line">        l.variance = l.rolling_variance;</span><br><span class="line">    &#125;</span><br><span class="line">    backward_bias(l.bias_updates, l.delta, l.batch, l.out_c, l.out_w*l.out_h);</span><br><span class="line">    backward_scale_cpu(l.x_norm, l.delta, l.batch, l.out_c, l.out_w*l.out_h, l.scale_updates);</span><br><span class="line"></span><br><span class="line">    scale_bias(l.delta, l.scales, l.batch, l.out_c, l.out_h*l.out_w);</span><br><span class="line"></span><br><span class="line">    mean_delta_cpu(l.delta, l.variance, l.batch, l.out_c, l.out_w*l.out_h, l.mean_delta);</span><br><span class="line">    variance_delta_cpu(l.x, l.delta, l.mean, l.variance, l.batch, l.out_c, l.out_w*l.out_h, l.variance_delta);</span><br><span class="line">    normalize_delta_cpu(l.x, l.mean, l.variance, l.mean_delta, l.variance_delta, l.batch, l.out_c, l.out_w*l.out_h, l.delta);</span><br><span class="line">    <span class="keyword">if</span>(l.type == BATCHNORM) copy_cpu(l.outputs*l.batch, l.delta, <span class="number">1</span>, net.delta, <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
 <li><a href="https://arxiv.org/abs/1502.03167" target="_blank" rel="noopener">Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift - arXiv.org</a></li>
@@ -644,7 +644,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">61</span>
+                    <span class="site-state-item-count">62</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -679,7 +679,7 @@
                     
                       
                     
-                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -691,6 +691,8 @@
                 <div class="site-state-item site-state-tags">
                   <a href="/tags/index.html">
                     
+                    
+                      
                     
                       
                     

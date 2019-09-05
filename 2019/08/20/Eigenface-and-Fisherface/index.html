@@ -117,13 +117,13 @@
 <meta property="og:description" content="前言在众多人脸图像中，能否找到特一组特征脸，用于表征其他人脸呢？在PCA和LDA中分别介绍了两种线性降维方法，本文介绍一种使用以上两种算法的特征提取方法。 原理EigenfaceEigenface由Sirovich与Kirby在1987年提出，认为人脸图像可由一系列特征图加权组合重构而成，即 F = F_m + \sum_i w_i F_i \tag{1}Eigenface可通过PCA生成，在大量">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/2019/08/20/Eigenface-and-Fisherface/output_30_0.png">
-<meta property="og:image" content="http://yoursite.com/2019/08/20/Eigenface-and-Fisherface/markdown/output_33_0.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/20/Eigenface-and-Fisherface/output_33_0.png">
 <meta property="og:image" content="http://yoursite.com/2019/08/20/Eigenface-and-Fisherface/faces.gif">
 <meta property="og:image" content="http://yoursite.com/2019/08/20/Eigenface-and-Fisherface/output_30_0.png">
 <meta property="og:image" content="http://yoursite.com/2019/08/20/Eigenface-and-Fisherface/output_33_0.png">
 <meta property="og:image" content="http://yoursite.com/2019/08/20/Eigenface-and-Fisherface/output_33_2.png">
 <meta property="og:image" content="http://yoursite.com/2019/08/20/Eigenface-and-Fisherface/output_33_4.png">
-<meta property="og:updated_time" content="2019-08-24T02:37:03.661Z">
+<meta property="og:updated_time" content="2019-09-02T07:43:37.752Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Eigenface and Fisherface">
 <meta name="twitter:description" content="前言在众多人脸图像中，能否找到特一组特征脸，用于表征其他人脸呢？在PCA和LDA中分别介绍了两种线性降维方法，本文介绍一种使用以上两种算法的特征提取方法。 原理EigenfaceEigenface由Sirovich与Kirby在1987年提出，认为人脸图像可由一系列特征图加权组合重构而成，即 F = F_m + \sum_i w_i F_i \tag{1}Eigenface可通过PCA生成，在大量">
@@ -426,7 +426,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-08-24 10:37:03" itemprop="dateModified" datetime="2019-08-24T10:37:03+08:00">2019-08-24</time>
+                <time title="修改时间：2019-09-02 15:43:37" itemprop="dateModified" datetime="2019-09-02T15:43:37+08:00">2019-09-02</time>
               
             
           </span>
@@ -529,7 +529,7 @@
 </ol>
 <p>类似的，将人脸数据$x$投影到各主分量上，可获得相应系数，该系数向量可用于表征该人脸的特征，即</p>
 <script type="math/tex; mode=display">\vec{w} = \begin{bmatrix} w_1 & w_2 & \cdots & w_K \end{bmatrix} \tag{5}</script><p>其中$w_i = x^T \alpha_i$。</p>
-<p>将各主轴恢复原图像尺寸后，其可视化输出如下<br><img src="/2019/08/20/Eigenface-and-Fisherface/markdown/output_33_0.png" alt="output_33_0"></p>
+<p>将各主轴恢复原图像尺寸后，其可视化输出如下<br><img src="/2019/08/20/Eigenface-and-Fisherface/output_33_0.png" alt="output_33_0"></p>
 <p>实际上，若输入的数据矩阵$X$不做降维处理，计算得到矩阵$S_W$与$S_B$尺寸为$(H \times W) \times (H \times W)$，也是一个令人头疼的计算量问题。而与<a href="#eigenface">上面</a>不同，这是无法避免的。所以考虑到这一点，需要对原始数据进行降维，可利用<code>PCA</code></p>
 <script type="math/tex; mode=display">\tilde{X}_{D \times N} = \text{pca}(X_{(H \times W) \times N}) \tag{6.1}</script><p>对矩阵$\tilde{X}$进行<code>LDA</code>计算后，得到<code>Fisherface</code>序列$\{\alpha_1, \alpha_2, \ldots\}$，其中$\alpha_i$维度为$D \times 1$，若需可视化结果，利用计算得到的<code>PCA</code>模型将其重建即可</p>
 <script type="math/tex; mode=display">A_i = \text{pca}^{-1}(\alpha_i) \tag{6.2}</script><h1 id="技巧"><a href="#技巧" class="headerlink" title="技巧"></a>技巧</h1><h2 id="Eigenface求解"><a href="#Eigenface求解" class="headerlink" title="Eigenface求解"></a>Eigenface求解</h2><p>矩阵$\overline{X}$可经$SVD$分解为</p>
@@ -723,7 +723,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">61</span>
+                    <span class="site-state-item-count">62</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -758,7 +758,7 @@
                     
                       
                     
-                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -770,6 +770,8 @@
                 <div class="site-state-item site-state-tags">
                   <a href="/tags/index.html">
                     
+                    
+                      
                     
                       
                     

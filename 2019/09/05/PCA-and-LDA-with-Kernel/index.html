@@ -108,24 +108,29 @@
 
 
 
-  <meta name="description" content="“有时候不是由于算法好赢了。而是由于拥有很多其它的数据才赢了。”  数据集扩增在深度学习中,很多训练数据意味着能够用更深的网络，训练出更好的模型。既然这样，收集很多其它的数据不即可啦？假设能够收集很多其它能够用的数据当然好，比如ImageNet上图像数据量已达到$1400$万张，可是非常多时候，收集很多其它的数据意味着须要耗费很多其它的人力物力，这就需要使用一定的方法扩增数据集。 图像扩增大部分">
+  <meta name="description" content="前言核函数可将数据进行升维，在更高维度的空间进行数据分析，可以将线性不可分问题转换为线性可分问题，关于核函数，详细可查看Support Vector Machine 2.2核技巧。在PCA与LDA中分别介绍了主成分分析与线性鉴别分析，但这两种均为线性方法，本文利用核技巧将数据映射到高维空间，然后再用两种降维方法进行降维。 先升维再降维！ 原理假设有$M$个$N$维样本组成数据矩阵$X_{N \ti">
+<meta name="keywords" content="降维">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Data Augmentation">
-<meta property="og:url" content="http://yoursite.com/2018/11/02/Data-Augmentation/index.html">
+<meta property="og:title" content="PCA and LDA with Kernel">
+<meta property="og:url" content="http://yoursite.com/2019/09/05/PCA-and-LDA-with-Kernel/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="“有时候不是由于算法好赢了。而是由于拥有很多其它的数据才赢了。”  数据集扩增在深度学习中,很多训练数据意味着能够用更深的网络，训练出更好的模型。既然这样，收集很多其它的数据不即可啦？假设能够收集很多其它能够用的数据当然好，比如ImageNet上图像数据量已达到$1400$万张，可是非常多时候，收集很多其它的数据意味着须要耗费很多其它的人力物力，这就需要使用一定的方法扩增数据集。 图像扩增大部分">
+<meta property="og:description" content="前言核函数可将数据进行升维，在更高维度的空间进行数据分析，可以将线性不可分问题转换为线性可分问题，关于核函数，详细可查看Support Vector Machine 2.2核技巧。在PCA与LDA中分别介绍了主成分分析与线性鉴别分析，但这两种均为线性方法，本文利用核技巧将数据映射到高维空间，然后再用两种降维方法进行降维。 先升维再降维！ 原理假设有$M$个$N$维样本组成数据矩阵$X_{N \ti">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-07-17T12:13:50.346Z">
+<meta property="og:image" content="http://yoursite.com/2019/09/05/PCA-and-LDA-with-Kernel/data.png">
+<meta property="og:image" content="http://yoursite.com/2019/09/05/PCA-and-LDA-with-Kernel/kpca.png">
+<meta property="og:image" content="http://yoursite.com/2019/09/05/PCA-and-LDA-with-Kernel/kfda.png">
+<meta property="og:updated_time" content="2019-09-05T13:07:59.052Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Data Augmentation">
-<meta name="twitter:description" content="“有时候不是由于算法好赢了。而是由于拥有很多其它的数据才赢了。”  数据集扩增在深度学习中,很多训练数据意味着能够用更深的网络，训练出更好的模型。既然这样，收集很多其它的数据不即可啦？假设能够收集很多其它能够用的数据当然好，比如ImageNet上图像数据量已达到$1400$万张，可是非常多时候，收集很多其它的数据意味着须要耗费很多其它的人力物力，这就需要使用一定的方法扩增数据集。 图像扩增大部分">
+<meta name="twitter:title" content="PCA and LDA with Kernel">
+<meta name="twitter:description" content="前言核函数可将数据进行升维，在更高维度的空间进行数据分析，可以将线性不可分问题转换为线性可分问题，关于核函数，详细可查看Support Vector Machine 2.2核技巧。在PCA与LDA中分别介绍了主成分分析与线性鉴别分析，但这两种均为线性方法，本文利用核技巧将数据映射到高维空间，然后再用两种降维方法进行降维。 先升维再降维！ 原理假设有$M$个$N$维样本组成数据矩阵$X_{N \ti">
+<meta name="twitter:image" content="http://yoursite.com/2019/09/05/PCA-and-LDA-with-Kernel/data.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/11/02/Data-Augmentation/">
+  <link rel="canonical" href="http://yoursite.com/2019/09/05/PCA-and-LDA-with-Kernel/">
 
 
 
@@ -135,7 +140,7 @@
   };
 </script>
 
-  <title>Data Augmentation | LOUIS' BLOG</title>
+  <title>PCA and LDA with Kernel | LOUIS' BLOG</title>
   
 
 
@@ -358,7 +363,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/02/Data-Augmentation/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/05/PCA-and-LDA-with-Kernel/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Louis Hsu">
@@ -375,7 +380,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Data Augmentation
+          <h1 class="post-title" itemprop="name headline">PCA and LDA with Kernel
               
             
           </h1>
@@ -400,24 +405,12 @@
                 
               
 
-              <time title="创建时间：2018-11-02 13:13:10" itemprop="dateCreated datePublished" datetime="2018-11-02T13:13:10+08:00">2018-11-02</time>
+              <time title="创建时间：2019-09-05 14:11:35 / 修改时间：21:07:59" itemprop="dateCreated datePublished" datetime="2019-09-05T14:11:35+08:00">2019-09-05</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-07-17 20:13:50" itemprop="dateModified" datetime="2019-07-17T20:13:50+08:00">2019-07-17</time>
               
             
           </span>
@@ -434,7 +427,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
 
                 
                 
@@ -475,26 +468,304 @@
       
 
       
-        <blockquote>
-<p>“有时候不是由于算法好赢了。而是由于拥有很多其它的数据才赢了。”</p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>核函数可将数据进行升维，在更高维度的空间进行数据分析，可以将线性不可分问题转换为线性可分问题，关于核函数，详细可查看<a href="https://louishsu.xyz/2019/05/27/Support-Vector-Machine/" target="_blank" rel="noopener">Support Vector Machine 2.2核技巧</a>。在<a href="https://louishsu.xyz/2018/10/22/PCA/" target="_blank" rel="noopener">PCA</a>与<a href="https://louishsu.xyz/2019/04/22/LDA/" target="_blank" rel="noopener">LDA</a>中分别介绍了主成分分析与线性鉴别分析，但这两种均为线性方法，本文利用核技巧将数据映射到高维空间，然后再用两种降维方法进行降维。</p>
+<p><strong>先升维再降维！</strong></p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>假设有$M$个$N$维样本组成数据矩阵$X_{N \times M}$</p>
+<script type="math/tex; mode=display">
+X = \begin{bmatrix} 
+        | & | &   & | \\
+        x^{(1)} & x^{(2)} & \cdots & x^{(M)} \\
+        | & | &   & |
+    \end{bmatrix} \tag{1}</script><p>其中$x^{(i)} = \begin{bmatrix} x^{(i)}_1 &amp; x^{(i)}_2 &amp; \cdots &amp; x^{(i)}_N \end{bmatrix}^T$，属于$C$个类别，第$j$类的样本数为$M_j$。</p>
+<p>核函数一般定义为$\kappa(x, y) = \Phi(x)^T \Phi(y) $，注意到，核函数是升维后数据的<strong>内积形式</strong>，利用隐式映射$\Phi(x)$将样本维度增加。</p>
+<h2 id="Kernel-PCA"><a href="#Kernel-PCA" class="headerlink" title="Kernel PCA"></a>Kernel PCA</h2><p>同样地，求取升维后数据的协方差矩阵，需要对样本去均值化，即</p>
+<script type="math/tex; mode=display">C = \frac{1}{M} \sum_{i=1}^M \left[\Phi(x^{(i)}) - \Phi(\mu)\right] \left[\Phi(x^{(i)}) - \Phi(\mu)\right]^T \tag{2}</script><p>其中$\Phi(\mu) = \frac{1}{M} \sum_{i=1}^M \Phi(x^{(i)})$。将其特征分解，记高维空间的第一主轴为$\Phi(u_1)$，有</p>
+<script type="math/tex; mode=display">C \Phi(u_1) = \lambda_1 \Phi(u_1) \tag{3}</script><p>现在有个问题，由于$\Phi(x)$为隐式映射，<strong>实际上$C$是不能直接求解的</strong>。将$(2)$代入$(3)$，有</p>
+<script type="math/tex; mode=display">
+\underbrace{
+        \frac{1}{M} \sum_{i=1}^M 
+        \left[\Phi(x^{(i)}) - \Phi(\mu)\right]
+        \left[\Phi(x^{(i)}) - \Phi(\mu)\right]^T
+    }_C \Phi(u_1) = \lambda_1 \Phi(u_1) \tag{4}</script><p>其中$\left[\Phi(x^{(i)}) - \Phi(\mu)\right]^T \Phi(u_1)$部分为参数，可记作$a^{(i)}_1$，所以</p>
+<script type="math/tex; mode=display">
+\frac{1}{M} \sum_{i=1}^M 
+    \left[\Phi(x^{(i)}) - \Phi(\mu)\right]
+    a^{(i)}_1 = \lambda_1 \Phi(u_1)</script><p>记$\Psi(x^{(i)})=\Phi(x^{(i)}) - \Phi(\mu)$，也即</p>
+<script type="math/tex; mode=display">
+\Phi(u_1) = \frac{1}{\lambda_1 M} \sum_{i=1}^M 
+    a^{(i)}_1 \Psi(x^{(i)}) \tag{5}</script><p>所以可以看到，主轴$\Phi(u_1)$是由高维空间样本去均值化后的数据点$\Psi(x^{(i)})$<strong>张成</strong>的，这个式子很重要，<strong>只需求出$a^{(i)}_1$，即可表示出主轴</strong>，用于高维数据$\Phi(x^{(i)})$的降维。继续，将式$(1), (5)$代入$C \Phi(u_1) = \lambda_1 \Phi(u_1)$，得到</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \underbrace{
+        \frac{1}{M} \sum_{i=1}^M 
+            \Psi(x^{(i)})
+            \Psi(x^{(i)})^T
+    }_C 
+    \underbrace{
+        \cancel{\frac{1}{\lambda_1 M}} 
+        \sum_{i=1}^M \Psi(x^{(i)}) a^{(i)}_1
+    }_{\Phi(u_1)} 
+    = \lambda_1 
+    \underbrace{
+        \cancel{\frac{1}{\lambda_1 M}} 
+        \sum_{i=1}^M \Psi(x^{(i)}) a^{(i)}_1
+    }_{\Phi(u_1)} \\
+    \frac{1}{M} \sum_{i=1}^M 
+        \Psi(x^{(i)})
+    \sum_{j=1}^M 
+        a^{(j)}_1 \Psi(x^{(i)})^T \Psi(x^{(j)})
+    = \lambda_1 \sum_{i=1}^M a^{(i)}_1 \Psi(x^{(i)})
+\end{aligned}</script><p>上式左右同乘$\Psi(x^{(l)})^T$，凑出核函数的形式，得到</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \frac{1}{M} \Psi(x^{(l)})^T
+    \left[
+        \sum_{i=1}^M 
+            \Psi(x^{(i)})
+        \sum_{j=1}^M 
+            a^{(j)}_1 \Psi(x^{(i)})^T \Psi(x^{(j)})
+    \right]
+    = \lambda_1 \Psi(x^{(l)})^T
+    \left[
+        \sum_{i=1}^M a^{(i)}_1 \Psi(x^{(i)})
+    \right] \\
+    \frac{1}{M}
+        \sum_{i=1}^M 
+            \underbrace{\Psi(x^{(l)})^T \Psi(x^{(i)})}_{\kappa(x^{(l)}, x^{(i)}))}
+        \sum_{j=1}^M 
+            a^{(j)}_1 \underbrace{\Psi(x^{(i)})^T \Psi(x^{(j)})}_{\kappa(x^{(i)}, x^{(j)}))}
+    = \lambda_1 
+        \sum_{i=1}^M 
+            a^{(i)}_1 \underbrace{\Psi(x^{(l)})^T \Psi(x^{(i)})}_{\kappa(x^{(l)}, x^{(i)}))} \\
+    \frac{1}{M}
+        \sum_{i=1}^M 
+            \kappa(x^{(l)}, x^{(i)})
+        \underbrace{
+            \sum_{j=1}^M 
+                a^{(j)}_1 \kappa(x^{(i)}, x^{(j)})
+        }
+    = \lambda_1 
+        \underbrace{
+            \sum_{i=1}^M 
+                a^{(i)}_1 \kappa(x^{(l)}, x^{(i)})
+        }
+\end{aligned}</script><p>记$a_1 = \begin{bmatrix} a^{(1)}_1 &amp; a^{(2)}_1 &amp; \cdots &amp; a^{(M)}_1 \end{bmatrix}^T$，核矩阵$K = \begin{bmatrix} \kappa(x^{(i)}, x^{(j)}) \end{bmatrix}, i, j \in \{1, 2, \cdots, M\}$，则有</p>
+<script type="math/tex; mode=display">\sum_{i=1}^M a^{(i)}_1 \kappa(x^{(j)}, x^{(i)}) = K_{j} a_1 (K的第j行) \tag{6}</script><p>代入后</p>
+<script type="math/tex; mode=display">\sum_{i=1}^M \kappa(x^{(l)}, x^{(i)}) K_{i} a_1 = \lambda_1 M K_{l} a_1</script><p>等号左边再使用一次$(6)$，有</p>
+<script type="math/tex; mode=display">K_l \begin{bmatrix} K_1 a_1 \\ K_2 a_1 \\ \cdots \\ K_M a_1 \end{bmatrix} = \lambda_1 M K_{l} a_1</script><p>其中$K a_1 = \begin{bmatrix} K_1 a_1 &amp; K_2 a_1 &amp; \cdots &amp; K_M a_1 \end{bmatrix}^T$，故$K_l K a_1 = \lambda_1 M K_{l} a_1$，由于$K_l \neq 0$，所以</p>
+<script type="math/tex; mode=display">K a_1 = \lambda_1 M a_1 \tag{7}</script><p>所以<strong>对矩阵$K$进行特征分解即可计算得到$a_1$</strong>，同PCA一样，按特征值降序对特征向量排序，选取前$k$个<strong>主轴对应的权值向量</strong>$\{a_1, a_2, \cdots, a_k\}$，注意$a_k=\Psi(x^{(i)})^T \Phi(u_1)$并不是投影的轴，那么对于输入的样本点$x$进行降维时，应有</p>
+<script type="math/tex; mode=display">y = \Phi(u_1)^T \Phi(x)</script><p>其中$\Phi(u_1) = \frac{1}{\lambda_1 M} \sum_{i=1}^M a^{(i)}_1 \Psi(x^{(i)})$，，仅考虑方向省略$\frac{1}{\lambda_1 M}$，所以</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    y_1 = \left[\sum_{i=1}^M a^{(i)}_1 \Psi(x^{(i)})\right]^T \Phi(x) \\
+    = \sum_{i=1}^M a^{(i)}_1 \kappa(x^{(i)}, x)
+\end{aligned} \tag{8}</script><p>至于数据的重建，应该有$\hat{\Phi}(x) = \sum y_k \Phi(u_k)$，而$\Phi(u_k)$未知，故只能通过迭代优化的形式进行重建，最小化目标可使用MSE，即最小化</p>
+<script type="math/tex; mode=display">J = \min \{|| \Phi(x) - \hat{\Phi}(x) ||^2\} \tag{9}</script><p><strong>整理一下上面的算法</strong></p>
+<ol>
+<li>选择核函数，如高斯核$\kappa(x, y) = - \frac{||x - y||^2}{2 \sigma^2}$，多项式核$\kappa(x, y) = (x^T y + c)^d$；</li>
+<li>根据选用的核函数，计算核矩阵$K_{M \times M} = \begin{bmatrix} \kappa(x^{(i)}, x^{(j)}) \end{bmatrix}, i, j \in \{1, 2, \cdots, M\}$；</li>
+<li>对$K$进行特征分解，根据特征值降序对特征向量进行排序，计算得到各个主轴方向上的权重参数$\{a_1, a_2, \cdots, a_k\}$；</li>
+<li>对于输入的样本点$x$，根据$y_1 = \sum_{i=1}^M a^{(i)}_1 \kappa(x^{(i)}, x)$进行降维，可以看到，Kernel PCA主轴的计算与训练样本$x^{(i)}$有关，需要进行保存。</li>
+</ol>
+<h2 id="Kernel-LDA"><a href="#Kernel-LDA" class="headerlink" title="Kernel LDA"></a>Kernel LDA</h2><p>对于<strong>映射后数据$\Phi(x)$</strong> ，其类内离差阵$S_W$与类间离差阵$S_B$为</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    S_W = \sum_{j=1}^C \frac{M_j}{M} 
+        \left\{
+            \frac{1}{M_j} \sum_{i=1}^{M_j} 
+                \left[\Phi(x^{(i)}) - \Phi(\mu^{(j)})\right]
+                \left[\Phi(x^{(i)}) - \Phi(\mu^{(j)})\right]^T
+        \right\} \\
+    S_B = \sum_{j=1}^C \frac{M_j}{M} 
+        \left\{
+                \left[\Phi(\mu^{(j)}) - \Phi(\mu)\right]
+                \left[\Phi(\mu^{(j)}) - \Phi(\mu)\right]^T
+        \right\}
+\end{aligned} \tag{10}</script><p>其中$\Phi(\mu^{(j)}) = \frac{1}{M_j} \sum_{i=1} \Phi(x^{(i)}), \Phi(\mu) = \frac{1}{C} \sum_{j} \Phi(\mu^{(j)})$。现以第一主轴为例，$\tilde{S_W}$与$\tilde{S_B}$分别表示<strong>映射后数据$\Phi(x)$</strong> 在第$1$主轴$\Phi(u_1)$上分布的类内离差阵与类间离差阵，即</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \tilde{S_W} = \sum_{j=1}^C \frac{M_j}{M} 
+        \left\{
+            \frac{1}{M_j} \sum_{i=1}^{M_j} 
+                \left[\tilde{\Phi}(x^{(i)}) - \tilde{\Phi}(\mu^{(j)})\right]
+                \left[\tilde{\Phi}(x^{(i)}) - \tilde{\Phi}(\mu^{(j)})\right]^T
+        \right\} \\
+    \tilde{S_B} = \sum_{j=1}^C \frac{M_j}{M} 
+        \left\{
+                \left[\tilde{\Phi}(\mu^{(j)}) - \tilde{\Phi}(\mu)\right]
+                \left[\tilde{\Phi}(\mu^{(j)}) - \tilde{\Phi}(\mu)\right]^T
+        \right\}
+\end{aligned} \tag{11}</script><p>其中$\tilde{\Phi}(\mu^{(j)}) = \frac{1}{M_j} \sum_{i=1} \tilde{\Phi}(x^{(i)}), \tilde{\Phi}(\mu) = \frac{1}{C} \sum_{j} \tilde{\Phi}(\mu^{(j)})$，且由投影可知</p>
+<script type="math/tex; mode=display">
+\tilde{\Phi} (x^{(i)}) = \Phi(u_1)^T \Phi(x^{(i)});\quad 
+\tilde{\Phi} (\mu^{(j)}) = \Phi(u_1)^T \Phi(\mu^{(j)});\quad 
+\tilde{\Phi} (\mu) = \Phi(u_1)^T \Phi(\mu)</script><p>将以上代入$\tilde{S_W}$与$\tilde{S_B}$，有</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \tilde{S_W} = \Phi(u_1)^T S_W \Phi(u_1) \\
+    \tilde{S_B} = \Phi(u_1)^T S_B \Phi(u_1)
+\end{aligned} \tag{12}</script><p>与LDA思路一致，定义优化目标为</p>
+<script type="math/tex; mode=display">
+J = \min\left\{
+            \frac{\tilde{S_W}}{\tilde{S_B}}
+        \right\} = 
+    \min\left\{
+            \frac{\Phi(u_1)^T S_W \Phi(u_1)}{\Phi(u_1)^T S_B \Phi(u_1)} 
+        \right\} \tag{13}</script><p>最终同LDA，有$S_B \Phi(u_1) = \lambda_1 S_W \Phi(u_1)$或$S_W^{-1} S_B \Phi(u_1) = \lambda_1 \Phi(u_1)$，但是有同样的问题，<strong>由于隐式映射$\Phi(x)$，$S_W, S_B$不能直接求解</strong>。由PCA可知，<strong>主轴$\Phi(u_1)$一定由高维数据样本点$\Phi(x^{(i)})$张成</strong>，即</p>
+<script type="math/tex; mode=display">\Phi(u_1) = \sum_{i=1}^M a^{(i)}_1 \Phi(x^{(i)}) \tag{14}</script><p>$(10), (15)$代入$\Phi(u_1)^T S_W \Phi(u_1), \Phi(u_1)^T S_B \Phi(u_1)$，有</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \Phi(u_1)^T S_W \Phi(u_1) = 
+        \underbrace{
+            \left[
+                \sum_{i=1}^M a^{(i)}_1 \Phi(x^{(i)})
+            \right]^T
+        }_{\Phi(u_1)^T}
+        \underbrace{
+            \frac{1}{M} \sum_{j=1}^C \sum_{i=1}^{M_j}
+            \left\{
+                \left[\Phi(x^{(i)}_j) - \Phi(\mu^{(j)})\right]
+                \left[\Phi(x^{(i)}_j) - \Phi(\mu^{(j)})\right]^T
+            \right\}
+        }_{S_W}
+        \underbrace{
+            \left[
+                \sum_{i=1}^M a^{(i)}_1 \Phi(x^{(i)})
+            \right]
+        }_{\Phi(u_1)} \\
+            \frac{1}{M} \sum_{j=1}^C \sum_{i=1}^{M_j}
+            \left\{
+                \underbrace{
+                    \left[
+                        \sum_{k=1}^M a^{(k)}_1 \Phi(x^{(k)})
+                    \right]^T
+                    \left[\Phi(x^{(i)}_j) - \Phi(\mu^{(j)})\right]
+                }
+                \underbrace{
+                    \left[\Phi(x^{(i)}_j) - \Phi(\mu^{(j)})\right]^T
+                    \left[
+                        \sum_{k=1}^M a^{(k)}_1 \Phi(x^{(k)})
+                    \right]
+                }
+            \right\}
+\end{aligned}</script><p>其中</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \left[
+        \sum_{k=1}^M a^{(k)}_1 \Phi(x^{(k)})
+    \right]^T
+    \left[
+        \Phi(x^{(i)}_j) - \Phi(\mu^{(j)})
+    \right] \\ 
+    = \sum_{k=1}^M a^{(k)}_1 \kappa(x^{(k)}, x^{(i)}_j) - 
+        \left[
+            \sum_{k=1}^M a^{(k)}_1 \Phi(x^{(k)})
+        \right]^T 
+        \left[
+            \frac{1}{M_j} \sum_{i=1}^{M_j} \Phi(x^{(i)}_j)
+        \right] \\
+    = \sum_{k=1}^M a^{(k)}_1 \kappa(x^{(k)}, x^{(i)}_j)
+        - \sum_{k=1}^M a^{(k)}_1 \frac{1}{M_j} \sum_{i=1}^{M_j} \kappa(x^{(k)}, x^{(i)}_j) \\
+    = \sum_{k=1}^M a^{(k)}_1 \left[
+            \underbrace{
+                \kappa(x^{(k)}, x^{(i)}_j)
+            }_{K^{(j)}_{k, i}} - 
+            \underbrace{
+                \frac{1}{M_j} \sum_{i=1}^{M_j} \kappa(x^{(k)}, x^{(i)}_j)
+            }_{\mu_{\kappa^{(j)} k}}
+        \right] 
+    = a_1^T (K^{(j)}_i - \mu_{\kappa^{(j)}})
+\end{aligned}</script><blockquote>
+<p>$K^{(k)}_{:, i}$表示第$k$类的第$i$列，为列向量；$K^{(k)}_i$表示第$k$类的第$i$行，为行向量。</p>
 </blockquote>
-<h1 id="数据集扩增"><a href="#数据集扩增" class="headerlink" title="数据集扩增"></a>数据集扩增</h1><p>在深度学习中,很多训练数据意味着能够用更深的网络，训练出更好的模型。既然这样，收集很多其它的数据不即可啦？假设能够收集很多其它能够用的数据当然好，比如<a href="http://www.image-net.org/" target="_blank" rel="noopener">ImageNet</a>上图像数据量已达到$1400$万张，可是非常多时候，收集很多其它的数据意味着须要耗费很多其它的人力物力，这就需要使用一定的方法扩增数据集。</p>
-<h1 id="图像扩增"><a href="#图像扩增" class="headerlink" title="图像扩增"></a>图像扩增</h1><p>大部分借助<code>OpenCV</code>库，这里推荐一位学长的博客，整理了大量的<code>OpenCV</code>使用方法.</p>
-<blockquote>
-<p><a href="http://ex2tron.wang/" target="_blank" rel="noopener">Ex2tron’s Blog</a></p>
-</blockquote>
-<p><code>TensorFlow</code>也提供相应图像处理方法<br><a href="https://tensorflow.google.cn/api_docs/python/tf/image" target="_blank" rel="noopener">Module: tf.image | TensorFlow </a></p>
-<p>需要注意的是，扩增过程中，需注意图像数据类型，可以将数据归一化到$(0, 1)$间再进行处理</p>
-<h2 id="翻转"><a href="#翻转" class="headerlink" title="翻转"></a>翻转</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">flip</span><span class="params">(image)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Parameters:</span></span><br><span class="line"><span class="string">        image &#123;ndarray(H, W, C)&#125;</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    rand_var = np.random.random()</span><br><span class="line">    image = image[:, ::<span class="number">-1</span>, :] <span class="keyword">if</span> rand_var &gt; <span class="number">0.5</span> <span class="keyword">else</span> image</span><br><span class="line">    <span class="keyword">return</span> image</span><br></pre></td></tr></table></figure>
-<h2 id="旋转"><a href="#旋转" class="headerlink" title="旋转"></a>旋转</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">rotate</span><span class="params">(image, degree)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Parameters:</span></span><br><span class="line"><span class="string">        image &#123;ndarray(H, W, C)&#125;</span></span><br><span class="line"><span class="string">        degree &#123;float&#125;</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    (h, w) = image.shape[:<span class="number">2</span>]</span><br><span class="line">    center = (w // <span class="number">2</span>, h // <span class="number">2</span>)</span><br><span class="line">    random_angel = np.random.randint(-degree, degree)</span><br><span class="line">    M = cv2.getRotationMatrix2D(center, random_angel, <span class="number">1.0</span>)</span><br><span class="line">    image = cv2.warpAffine(image, M, (w, h))</span><br><span class="line">    <span class="keyword">return</span> image</span><br></pre></td></tr></table></figure>
-<h2 id="噪声"><a href="#噪声" class="headerlink" title="噪声"></a>噪声</h2><p>可手动实现，如椒盐噪声代码如下<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">saltnoise</span><span class="params">(image, salt=<span class="number">0.0</span>)</span>:</span></span><br><span class="line">    <span class="string">""" add salt &amp; pepper and gaussian noise</span></span><br><span class="line"><span class="string">    Parameters:</span></span><br><span class="line"><span class="string">        image &#123;ndarray(H, W, C)&#125;</span></span><br><span class="line"><span class="string">        salt &#123;float(0, 1)&#125; number of salt pixel = salt*h*w</span></span><br><span class="line"><span class="string">    Notes:</span></span><br><span class="line"><span class="string">        TODO: gaussain noise</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    (h, w) = image.shape[:<span class="number">2</span>]</span><br><span class="line">    n_salt = int(salt * h * w)</span><br><span class="line">    <span class="keyword">for</span> n <span class="keyword">in</span> range(n_salt):</span><br><span class="line">        hr = np.random.randint(<span class="number">0</span>, h)</span><br><span class="line">        wr = np.random.randint(<span class="number">0</span>, w)</span><br><span class="line">        issalt = (np.random.rand(<span class="number">1</span>) &gt; <span class="number">0.5</span>)</span><br><span class="line">        image[hr, wr] = <span class="number">255</span> <span class="keyword">if</span> issalt <span class="keyword">else</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">return</span> image</span><br></pre></td></tr></table></figure></p>
-<p>也可调用<code>scikit-image</code>库，需要注意的是，<code>skimage.util.random_noise()</code>会将原图数据转换为$(0, 1)$间的浮点数<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">noise</span><span class="params">(image, gaussian, salt, seed=None)</span>:</span></span><br><span class="line">    <span class="string">""" add noise to image TODO</span></span><br><span class="line"><span class="string">    Parameters:</span></span><br><span class="line"><span class="string">        image &#123;ndarray(H, W, C)&#125;</span></span><br><span class="line"><span class="string">        gaussian &#123;bool&#125;: </span></span><br><span class="line"><span class="string">        salt &#123;bool&#125;: </span></span><br><span class="line"><span class="string">    Notes:</span></span><br><span class="line"><span class="string">        Function to add random noise of various types to a floating-point image.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    dtype = image.dtype</span><br><span class="line">    <span class="keyword">if</span> gaussian:</span><br><span class="line">        image = skimage.util.random_noise(image, mode=<span class="string">'gaussian'</span>, seed=seed)</span><br><span class="line">    <span class="keyword">if</span> salt:</span><br><span class="line">        image = skimage.util.random_noise(image, mode=<span class="string">'s&amp;p'</span>, seed=seed)</span><br><span class="line"></span><br><span class="line">    image = (image * <span class="number">255</span>).astype(dtype)</span><br><span class="line">    <span class="keyword">return</span> image</span><br></pre></td></tr></table></figure></p>
-<h2 id="亮度与对比度调整"><a href="#亮度与对比度调整" class="headerlink" title="亮度与对比度调整"></a>亮度与对比度调整</h2><p>考虑到数据溢出，先转换为整形数据，再限制其值到$[0, 255]$</p>
-<blockquote>
-<p>注意数据类型</p>
-</blockquote>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">brightcontrast</span><span class="params">(image, brtadj=<span class="number">0</span>, cstadj=<span class="number">1.0</span>)</span>:</span></span><br><span class="line">    <span class="string">""" adjust bright and contrast value</span></span><br><span class="line"><span class="string">    Parameters:</span></span><br><span class="line"><span class="string">        image &#123;ndarray(H, W, C)&#125;</span></span><br><span class="line"><span class="string">        brtadj &#123;int&#125;    if true, adjust bright</span></span><br><span class="line"><span class="string">        cstadj &#123;float&#125;  if true, adjust contrast</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    dtype = image.dtype</span><br><span class="line">    image = image.astype(<span class="string">'int'</span>)*cstadj + brtadj</span><br><span class="line">    image = np.clip(image, <span class="number">0</span>, <span class="number">255</span>).astype(dtype)</span><br><span class="line">    <span class="keyword">return</span> image</span><br></pre></td></tr></table></figure>
-<h2 id="投射变换"><a href="#投射变换" class="headerlink" title="投射变换"></a>投射变换</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">perspective</span><span class="params">(image, prop)</span>:</span></span><br><span class="line">    <span class="string">""" 透射变换</span></span><br><span class="line"><span class="string">    Parameters:</span></span><br><span class="line"><span class="string">        image &#123;ndarray(H, W, C)&#125;</span></span><br><span class="line"><span class="string">        prop &#123;float&#125;: 在四个顶点多大的方格内选取新顶点，方格大小为(H*prop, W*prop)</span></span><br><span class="line"><span class="string">    Notes:</span></span><br><span class="line"><span class="string">        在四个顶点周围随机选取新的点进行仿射变换，四个点对应左上、右上、左下、右下</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    (h, w) = image.shape[:<span class="number">2</span>]</span><br><span class="line"></span><br><span class="line">    ptsrc = np.zeros(shape=(<span class="number">4</span>, <span class="number">2</span>))</span><br><span class="line">    ptdst = np.array([[<span class="number">0</span>, <span class="number">0</span>], [<span class="number">0</span>, w], [h, <span class="number">0</span>], [h, w]])</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">4</span>):</span><br><span class="line">        hr = np.random.randint(<span class="number">0</span>, int(h*prop))</span><br><span class="line">        wr = np.random.randint(<span class="number">0</span>, int(w*prop))</span><br><span class="line">        <span class="keyword">if</span> i == <span class="number">0</span>:</span><br><span class="line">            ptsrc[i] = np.array([hr, wr])</span><br><span class="line">        <span class="keyword">elif</span> i == <span class="number">1</span>:</span><br><span class="line">            ptsrc[i] = np.array([hr, w - wr])</span><br><span class="line">        <span class="keyword">elif</span> i == <span class="number">2</span>:</span><br><span class="line">            ptsrc[i] = np.array([h - hr, wr])</span><br><span class="line">        <span class="keyword">elif</span> i == <span class="number">3</span>:</span><br><span class="line">            ptsrc[i] = np.array([h - hr, w - wr])</span><br><span class="line">    M = cv2.getPerspectiveTransform(ptsrc.astype(<span class="string">'float32'</span>), ptdst.astype(<span class="string">'float32'</span>))</span><br><span class="line">    image = cv2.warpPerspective(image, M, (w, h))</span><br><span class="line">    <span class="keyword">return</span> image</span><br></pre></td></tr></table></figure>
+<p>所以</p>
+<script type="math/tex; mode=display">\Phi(u_1)^T S_W \Phi(u_1) = \frac{1}{M} \sum_{j=1}^C \sum_{i=1}^{M_j} a_1^T (K^{(j)}_i - \mu_{\kappa^{(j)}}) (K^{(j)}_i - \mu_{\kappa^{(j)}})^T a_1 \tag{15}</script><p>记$M = \frac{1}{M} \sum_{j=1}^C \sum_{i=1}^{M_j}(K^{(j)}_i - \mu_{\kappa^{(j)}}) (K^{(j)}_i - \mu_{\kappa^{(j)}})^T$，则</p>
+<script type="math/tex; mode=display">\Phi(u_1)^T S_W \Phi(u_1) = a_1^T M a_1 \tag{16}</script><p>同理</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \Phi(u_1)^T S_B \Phi(u_1) = 
+        \underbrace{
+            \left[
+                \sum_{i=1}^M a^{(i)}_1 \Phi(x^{(i)})
+            \right]^T
+        }_{\Phi(u_1)^T}
+        \underbrace{
+            \sum_{j=1}^C \frac{M_j}{M} 
+            \left\{
+                    \left[\Phi(\mu^{(j)}) - \Phi(\mu)\right]
+                    \left[\Phi(\mu^{(j)}) - \Phi(\mu)\right]^T
+            \right\}
+        }_{S_B}
+        \underbrace{
+            \left[
+                \sum_{i=1}^M a^{(i)}_1 \Phi(x^{(i)})
+            \right]
+        }_{\Phi(u_1)} \\
+        \sum_{j=1}^C \frac{M_j}{M} 
+        \left\{
+            \underbrace{
+                \left[
+                    \sum_{i=1}^M a^{(i)}_1 \Phi(x^{(i)})
+                \right]^T
+                \left[\Phi(\mu^{(j)}) - \Phi(\mu)\right]
+            }
+            \underbrace{
+                \left[\Phi(\mu^{(j)}) - \Phi(\mu)\right]^T
+                \left[
+                    \sum_{i=1}^M a^{(i)}_1 \Phi(x^{(i)})
+                \right]
+            }
+        \right\}
+\end{aligned}</script><p>其中</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \left[\sum_{k=1}^M a^{(k)}_1 \Phi(x^{(k)})\right]^T
+    \left[\Phi(\mu^{(j)}) - \Phi(\mu)\right] \\
+    = \left[\sum_{k=1}^M a^{(k)}_1 \Phi(x^{(k)})\right]^T
+    \left[
+        \frac{1}{M_j} \sum_{i=1}^{M_j} \Phi(x^{(i)}_j) - \frac{1}{M} \sum_{i=1}^M \Phi(x^{(i)})
+    \right] \\
+    = \sum_{k=1}^M a^{(k)}_1 \frac{1}{M_j} \sum_{i=1}^{M_j} \kappa(x^{(k)}, x^{(i)}_j) -
+        \sum_{k=1}^M a^{(k)}_1 \frac{1}{M} \sum_{i=1}^M \kappa(x^{(k)}, x^{(i)}) \\
+    = \sum_{k=1}^M a^{(k)}_1 \left[
+            \underbrace{
+                \frac{1}{M_j} \sum_{i=1}^{M_j} \kappa(x^{(k)}, x^{(i)}_j)
+            }_{\mu_{\kappa^{(j)} k}}
+            - \underbrace{
+                \frac{1}{M} \sum_{i=1}^M \kappa(x^{(k)}, x^{(i)})
+            }_{\mu_{\kappa k}}
+        \right] \\
+    = a_1^T (\mu_{\kappa^{(j)}} - \mu_{\kappa})
+\end{aligned}</script><p>所以</p>
+<script type="math/tex; mode=display">\Phi(u_1)^T S_B \Phi(u_1) = \sum_{j=1}^C \frac{M_j}{M} a_1^T (\mu_{\kappa^{(j)}} - \mu_{\kappa}) (\mu_{\kappa^{(j)}} - \mu_{\kappa})^T a_1</script><p>记$N = \sum_{j=1}^C \frac{M_j}{M} (\mu_{\kappa^{(j)}} - \mu_{\kappa}) (\mu_{\kappa^{(j)}} - \mu_{\kappa})^T$，则</p>
+<script type="math/tex; mode=display">\Phi(u_1)^T S_B \Phi(u_1) = a_1^T N a_1 \tag{17}</script><p>所以优化目标改为</p>
+<script type="math/tex; mode=display">J = \min \left\{\frac{a_1^T M a_1} {a_1^T N a_1}\right\} \tag{18}</script><p>即求解</p>
+<script type="math/tex; mode=display">M^{-1} N a_1 = \lambda_1 a_1 \tag{19}</script><p>对于新的投影数据，同Kernel PCA，有</p>
+<script type="math/tex; mode=display">y_1 = \sum_{i=1}^M a^{(i)}_1 \kappa(x^{(i)}, x)</script><p><strong>整理一下上述算法</strong></p>
+<ol>
+<li>选择核函数$\kappa(x, y)$；</li>
+<li>计算整体的核矩阵$K_{M \times M}$，利用类别标签从中截取每个类别下的核矩阵$K^{(j)}_{M \times M_j}$；</li>
+<li><p>根据下式计算$M$与$N$；</p>
+<script type="math/tex; mode=display">M = \frac{1}{M} \sum_{j=1}^C \sum_{i=1}^{M_j}(K^{(j)}_i - \mu_{\kappa^{(j)}}) (K^{(j)}_i - \mu_{\kappa^{(j)}})^T</script><script type="math/tex; mode=display">N = \sum_{j=1}^C \frac{M_j}{M} (\mu_{\kappa^{(j)}} - \mu_{\kappa}) (\mu_{\kappa^{(j)}} - \mu_{\kappa})^T</script></li>
+<li><p>对矩阵$M^{-1}N$进行特征分解，将特征向量按特征值降序排序，选择$k$个主分量对于的权值$\{a_1, a_2, \cdots, a_k\}$；</p>
+<script type="math/tex; mode=display">M^{-1} N a_k = \lambda_k a_k</script></li>
+<li><p>对于需要降维的数据$x$，计算各维度上的坐标，同样的，主轴的计算与训练样本$x^{(i)}$有关，需要进行保存。</p>
+<script type="math/tex; mode=display">y_k = \sum_{i=1}^M a^{(i)}_k \kappa(x^{(i)}, x)</script></li>
+</ol>
+<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><p>详细代码见<a href="https://github.com/isLouisHsu/Basic-Machine-Learning-Algorithm/blob/master/algorithm/kernelPCA.py" target="_blank" rel="noopener">Basic-Machine-Learning-Algorithm/algorithm/kernelPCA.py</a>与<a href="https://github.com/isLouisHsu/Basic-Machine-Learning-Algorithm/blob/master/algorithm/kernelFDA.py" target="_blank" rel="noopener">Basic-Machine-Learning-Algorithm/algorithm/kernelFDA.py</a>。</p>
+<h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><p>构造下图数据，明显为非线性数据，利用线性方法不能提取有效性息用于分类。</p>
+<p><img src="/2019/09/05/PCA-and-LDA-with-Kernel/data.png" alt="data"></p>
+<p>利用Kernel PCA进行降维结果如下</p>
+<p><img src="/2019/09/05/PCA-and-LDA-with-Kernel/kpca.png" alt="kpca"></p>
+<p>利用Kernel FDA进行降维结果如下</p>
+<p><img src="/2019/09/05/PCA-and-LDA-with-Kernel/kfda.png" alt="kfda"></p>
+<p>相比较于PCA，FDA效果更好。</p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
+<li>G. Baudat and F. Anouar. Generalized discriminant analysis using a kernel approach. Neural Computation, 12:2385-2404, 2000.</li>
+<li><a href="https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&amp;arnumber=788121&amp;tag=1" target="_blank" rel="noopener">S. Mika, G. Ratsch, J. Weston, B. Scholkopf, and K. Muller. Fisher discriminant analysis with kernels. In IEEE Neural Networks for Signal Processing Workshop, pages 41-48, 1999.</a></li>
+<li>Wang Q . Kernel Principal Component Analysis and its Applications in Face Recognition and Active Shape Models[J]. Computer Science, 2012.</li>
+</ol>
+
       
     </div>
 
@@ -536,6 +807,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/降维/" rel="tag"># 降维</a>
+          
+        </div>
+      
 
       
       
@@ -545,8 +822,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/29/二次入坑raspberry-pi/" rel="next" title="二次入坑raspberry-pi">
-                <i class="fa fa-chevron-left"></i> 二次入坑raspberry-pi
+              <a href="/2019/09/02/SSD-Single-Shot-MultiBox-Detector/" rel="next" title="SSD: Single Shot MultiBox Detector">
+                <i class="fa fa-chevron-left"></i> SSD: Single Shot MultiBox Detector
               </a>
             
           </div>
@@ -554,10 +831,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/11/12/EM-GMM/" rel="prev" title="EM & GMM">
-                EM & GMM <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -772,7 +1045,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据集扩增"><span class="nav-number">1.</span> <span class="nav-text">数据集扩增</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#图像扩增"><span class="nav-number">2.</span> <span class="nav-text">图像扩增</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#翻转"><span class="nav-number">2.1.</span> <span class="nav-text">翻转</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#旋转"><span class="nav-number">2.2.</span> <span class="nav-text">旋转</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#噪声"><span class="nav-number">2.3.</span> <span class="nav-text">噪声</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#亮度与对比度调整"><span class="nav-number">2.4.</span> <span class="nav-text">亮度与对比度调整</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#投射变换"><span class="nav-number">2.5.</span> <span class="nav-text">投射变换</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#原理"><span class="nav-number">2.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Kernel-PCA"><span class="nav-number">2.1.</span> <span class="nav-text">Kernel PCA</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kernel-LDA"><span class="nav-number">2.2.</span> <span class="nav-text">Kernel LDA</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码"><span class="nav-number">3.</span> <span class="nav-text">代码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验"><span class="nav-number">4.</span> <span class="nav-text">实验</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>

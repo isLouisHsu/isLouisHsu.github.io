@@ -120,7 +120,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/09/02/SSD-Single-Shot-MultiBox-Detector/Fig2.png">
 <meta property="og:image" content="http://yoursite.com/2019/09/02/SSD-Single-Shot-MultiBox-Detector/Tab1.png">
 <meta property="og:image" content="http://yoursite.com/2019/09/02/SSD-Single-Shot-MultiBox-Detector/Fig3.png">
-<meta property="og:updated_time" content="2019-09-02T07:31:27.003Z">
+<meta property="og:updated_time" content="2019-09-02T07:35:45.947Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SSD: Single Shot MultiBox Detector">
 <meta name="twitter:description" content="IntroductionSSD主要做了以下工作  设计了one-stage检测算法，比同样是one-stage的YOLOv1更快更准确，相比较Faster R-CNN等two-stage检测算法，在不降低准确率的情况下速度更快； 其核心是用小卷积核，对特征图进行卷积运算，通过一系列的固定回归框进行预测； 用不同尺度的特征图产生不同尺度的预测，并且明确指定多种纵横比； 可进行端到端训练，即使是低分辨">
@@ -406,7 +406,7 @@
                 
               
 
-              <time title="创建时间：2019-09-02 09:28:53 / 修改时间：15:31:27" itemprop="dateCreated datePublished" datetime="2019-09-02T09:28:53+08:00">2019-09-02</time>
+              <time title="创建时间：2019-09-02 09:28:53 / 修改时间：15:35:45" itemprop="dateCreated datePublished" datetime="2019-09-02T09:28:53+08:00">2019-09-02</time>
             
 
             
@@ -513,7 +513,7 @@ L_{total} = \frac{1}{N} \left[\alpha \underbrace{\sum_{i, j, k, l} 1^{ij_k}_l \s
 <li>随机采样截取。</li>
 </ol>
 <p>随机产生的patch边长在原始边长的$[0.1, 1]$范围内，纵横比范围为$[0.5, 2]$。此外依照$50\%$的概率进行水平翻转，并添加其余干扰。</p>
-<p>用SGD进行优化，批次大小32，初始学习了0.001，动量0.9，权重衰减0.0005。</p>
+<p>用SGD进行优化，批次大小32，初始学习率0.001，动量0.9，权重衰减0.0005。</p>
 <h1 id="Results"><a href="#Results" class="headerlink" title="Results"></a>Results</h1><p><img src="/2019/09/02/SSD-Single-Shot-MultiBox-Detector/Tab1.png" alt="Tab1"></p>
 <p><img src="/2019/09/02/SSD-Single-Shot-MultiBox-Detector/Fig3.png" alt="Fig3"></p>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
@@ -587,6 +587,10 @@ L_{total} = \frac{1}{N} \left[\alpha \underbrace{\sum_{i, j, k, l} 1^{ij_k}_l \s
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/05/PCA-and-LDA-with-Kernel/" rel="prev" title="PCA and LDA with Kernel">
+                PCA and LDA with Kernel <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -662,7 +666,7 @@ L_{total} = \frac{1}{N} \left[\alpha \underbrace{\sum_{i, j, k, l} 1^{ij_k}_l \s
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">61</span>
+                    <span class="site-state-item-count">62</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -697,7 +701,7 @@ L_{total} = \frac{1}{N} \left[\alpha \underbrace{\sum_{i, j, k, l} 1^{ij_k}_l \s
                     
                       
                     
-                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -709,6 +713,8 @@ L_{total} = \frac{1}{N} \left[\alpha \underbrace{\sum_{i, j, k, l} 1^{ij_k}_l \s
                 <div class="site-state-item site-state-tags">
                   <a href="/tags/index.html">
                     
+                    
+                      
                     
                       
                     
