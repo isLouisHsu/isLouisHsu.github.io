@@ -86,7 +86,7 @@
     root: '/',
     scheme: 'Gemini',
     version: '6.4.2',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
     fancybox: false,
     fastclick: false,
     lazyload: false,
@@ -845,6 +845,13 @@ f(iou(\mathcal{M}, b_i)) = \exp (-\frac{iou(\mathcal{M}, b_i)^2}{\sigma}), \fora
       
 
       
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
 
     </div>
   </aside>
@@ -908,11 +915,6 @@ f(iou(\mathcal{M}, b_i)) = \exp (-\frac{iou(\mathcal{M}, b_i)^2}{\sigma}), \fora
       </div>
     </footer>
 
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
     
 
     
@@ -1253,7 +1255,7 @@ f(iou(\mathcal{M}, b_i)) = \exp (-\frac{iou(\mathcal{M}, b_i)^2}{\sigma}), \fora
 
                   // select top N slices in content
 
-                  var upperBound = parseInt('1');
+                  var upperBound = parseInt('3');
                   if (upperBound >= 0) {
                     slicesOfContent = slicesOfContent.slice(0, upperBound);
                   }
