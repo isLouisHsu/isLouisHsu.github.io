@@ -108,23 +108,23 @@
 
 
 
-  <meta name="description" content="前言目前大多检测算法将物体视作边界框进行检测，并采用锚框(Anchor)，能很大程度提升检测算法的表现，但是Anchor难以确定参数，且增加大量网络运算量。目前的物体检测算法开始向无Anchor的方向发展，如本文的CenterNet，是把物体所在包围框作为点，并结合热图的形式进行。除物体检测外，此算法还可用于人体姿态识别、3D物体检测等。 论文阅读Introduction In this pape">
+  <meta name="description" content="前言目前大多检测算法将物体视作边界框进行检测，并采用锚框(Anchor)，能很大程度提升检测算法的表现，但是Anchor难以确定参数，且增加大量网络运算量。目前的物体检测算法开始向无Anchor的方向发展，如本文的CenterNet，是把物体所在包围框作为点，并结合热图的形式进行。除物体检测外，此算法还可用于人体姿态识别、3D物体检测等。 个人理解，采用热图的形式，是将Anchor一定程度地连续化">
 <meta name="keywords" content="Object Detection">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CenterNet - Objects as Points">
 <meta property="og:url" content="http://yoursite.com/2019/10/09/CenterNet-Objects-as-Points/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="前言目前大多检测算法将物体视作边界框进行检测，并采用锚框(Anchor)，能很大程度提升检测算法的表现，但是Anchor难以确定参数，且增加大量网络运算量。目前的物体检测算法开始向无Anchor的方向发展，如本文的CenterNet，是把物体所在包围框作为点，并结合热图的形式进行。除物体检测外，此算法还可用于人体姿态识别、3D物体检测等。 论文阅读Introduction In this pape">
+<meta property="og:description" content="前言目前大多检测算法将物体视作边界框进行检测，并采用锚框(Anchor)，能很大程度提升检测算法的表现，但是Anchor难以确定参数，且增加大量网络运算量。目前的物体检测算法开始向无Anchor的方向发展，如本文的CenterNet，是把物体所在包围框作为点，并结合热图的形式进行。除物体检测外，此算法还可用于人体姿态识别、3D物体检测等。 个人理解，采用热图的形式，是将Anchor一定程度地连续化">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/2019/10/09/CenterNet-Objects-as-Points/Fig2.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/09/CenterNet-Objects-as-Points/Fig3.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/09/CenterNet-Objects-as-Points/Fig4.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/09/CenterNet-Objects-as-Points/Tab1.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/09/CenterNet-Objects-as-Points/Tab2.png">
-<meta property="og:updated_time" content="2019-10-09T09:49:00.468Z">
+<meta property="og:updated_time" content="2019-10-09T09:57:57.374Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CenterNet - Objects as Points">
-<meta name="twitter:description" content="前言目前大多检测算法将物体视作边界框进行检测，并采用锚框(Anchor)，能很大程度提升检测算法的表现，但是Anchor难以确定参数，且增加大量网络运算量。目前的物体检测算法开始向无Anchor的方向发展，如本文的CenterNet，是把物体所在包围框作为点，并结合热图的形式进行。除物体检测外，此算法还可用于人体姿态识别、3D物体检测等。 论文阅读Introduction In this pape">
+<meta name="twitter:description" content="前言目前大多检测算法将物体视作边界框进行检测，并采用锚框(Anchor)，能很大程度提升检测算法的表现，但是Anchor难以确定参数，且增加大量网络运算量。目前的物体检测算法开始向无Anchor的方向发展，如本文的CenterNet，是把物体所在包围框作为点，并结合热图的形式进行。除物体检测外，此算法还可用于人体姿态识别、3D物体检测等。 个人理解，采用热图的形式，是将Anchor一定程度地连续化">
 <meta name="twitter:image" content="http://yoursite.com/2019/10/09/CenterNet-Objects-as-Points/Fig2.png">
 
 
@@ -407,7 +407,7 @@
                 
               
 
-              <time title="创建时间：2019-10-09 15:22:49 / 修改时间：17:49:00" itemprop="dateCreated datePublished" datetime="2019-10-09T15:22:49+08:00">2019-10-09</time>
+              <time title="创建时间：2019-10-09 15:22:49 / 修改时间：17:57:57" itemprop="dateCreated datePublished" datetime="2019-10-09T15:22:49+08:00">2019-10-09</time>
             
 
             
@@ -471,6 +471,7 @@
 
       
         <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>目前大多检测算法将物体视作边界框进行检测，并采用锚框(Anchor)，能很大程度提升检测算法的表现，但是Anchor难以确定参数，且增加大量网络运算量。目前的物体检测算法开始向无Anchor的方向发展，如本文的CenterNet，是把物体所在包围框作为点，并结合热图的形式进行。除物体检测外，此算法还可用于人体姿态识别、3D物体检测等。</p>
+<p>个人理解，采用热图的形式，是将Anchor一定程度地连续化了。</p>
 <h1 id="论文阅读"><a href="#论文阅读" class="headerlink" title="论文阅读"></a>论文阅读</h1><h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><blockquote>
 <p>In this paper, we provide a much simpler and more efficient alternative. We <strong>represent objects by a single point at their bounding box center</strong> (see Figure 2). Other properties, such as object size, dimension, 3D extent, orientation, and pose are then <strong>regressed directly from image features at the center location</strong>. Object detection is then a standard keypoint estimation problem [3,39,60]. We simply feed the input image to a fully convolutional network [37, 40] that generates a heatmap. <strong>Peaks in this heatmap correspond to object centers</strong>. Image features at each peak predict the objects bounding box height and weight. The model trains using standard dense supervised learning [39,60]. Inference is a single network forward-pass, <strong>without non-maximal suppression for post-processing</strong>.<br><img src="/2019/10/09/CenterNet-Objects-as-Points/Fig2.png" alt="Figure 2"><br><img src="/2019/10/09/CenterNet-Objects-as-Points/Fig3.png" alt="Figure 3"></p>
 </blockquote>
