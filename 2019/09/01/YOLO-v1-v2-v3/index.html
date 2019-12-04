@@ -136,7 +136,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/09/01/YOLO-v1-v2-v3/YOLOv2-Figure5.png">
 <meta property="og:image" content="http://yoursite.com/2019/09/01/YOLO-v1-v2-v3/YOLOv3-Darknet-53.png">
 <meta property="og:image" content="http://yoursite.com/2019/09/01/YOLO-v1-v2-v3/YOLOv3-Figure3.png">
-<meta property="og:updated_time" content="2019-09-01T09:52:57.073Z">
+<meta property="og:updated_time" content="2019-11-16T03:45:27.939Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="YOLO! v1, v2, v3">
 <meta name="twitter:description" content="前言YOLO是You Only Look Once的简称，是one-stage检测算法，在2016年刚提出时风靡一时，现在看可能存在一些缺点，后续有许多one-stage检测算法都参考YOLO的思路，如SSD。目前位置，YOLO共发布了3代，论文链接在Reference中。 YOLOv1YOLO的一个关键点是，将目标检测作为回归任务，将分离的边界框回归和分类联合起来，可进行端到端的优化。  We">
@@ -422,12 +422,24 @@
                 
               
 
-              <time title="创建时间：2019-09-01 17:48:27 / 修改时间：17:52:57" itemprop="dateCreated datePublished" datetime="2019-09-01T17:48:27+08:00">2019-09-01</time>
+              <time title="创建时间：2019-09-01 17:48:27" itemprop="dateCreated datePublished" datetime="2019-09-01T17:48:27+08:00">2019-09-01</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-11-16 11:45:27" itemprop="dateModified" datetime="2019-11-16T11:45:27+08:00">2019-11-16</time>
               
             
           </span>
@@ -603,7 +615,7 @@
 <script type="math/tex; mode=display">d(\rm{box}, \rm{centroid}) = 1 - \rm{IoU}(\rm{box}, \rm{centroid})</script><p> 最终确定为$k=5$，在VOC和MSCOCO数据机上可能有所差异，详情查看下图<br> <img src="/2019/09/01/YOLO-v1-v2-v3/YOLOv2-Figure2.png" alt="YOLOv2-Figure2"></p>
 </li>
 <li><p>Direct location prediction</p>
-<p> 对于偏移量，如果延用一般的计算方法，则有</p>
+<p> 对于偏移量，如果沿用一般的计算方法，则有</p>
 <script type="math/tex; mode=display">
  \begin{cases}
      t_x = \frac{x - x_a}{w_a}, x_a = (\lfloor\frac{x}{cellsize}\rfloor + \frac{1}{2}) \times w_a \\
@@ -617,7 +629,7 @@
      y = t_y \times h_a + y_a \\
      w = t_w \times w_a \\
      h = t_h \times h_a 
- \end{cases}</script><p> 当$t_x=1$时表示相对于锚框向右平移$w_a$的距离，$t_<em>=-1$时表示相对于锚框向左平移$w_a$的距离，上式中对$t_</em>$是没有限制作用的。现添加sigmoid函数处理，将值映射到$[0, 1]$范围内，并且直接预测坐标，而不是偏移量的方法，此外，利用指数函数$e^x$进行映射，平衡回归框尺寸对损失值的影响。如下</p>
+ \end{cases}</script><p> 当$t_x=1$时表示相对于锚框向右平移$w_a$的距离，$t_x=-1$时表示相对于锚框向左平移$w_a$的距离，上式中对$t_x$是没有限制作用的。现添加sigmoid函数处理，将值映射到$[0, 1]$范围内，并且直接预测坐标，而不是偏移量的方法，此外，利用指数函数$e^x$进行映射，平衡回归框尺寸对损失值的影响。如下</p>
 <script type="math/tex; mode=display">
  \begin{cases}
      b_x = \sigma(t_x) + c_x \\ 
@@ -852,7 +864,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">65</span>
+                    <span class="site-state-item-count">66</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -864,10 +876,6 @@
                 <div class="site-state-item site-state-categories">
                   <a href="/categories/index.html">
                     
-                    
-                      
-                    
-                      
                     
                       
                     
