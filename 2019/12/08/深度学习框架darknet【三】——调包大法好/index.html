@@ -1,0 +1,2335 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言本节以YOLO为例，介绍如何调用darknet函数来进行网络训练和测试，对框架有一个整体的认识。 Main主函数入口在examples/darknet.c/main，命令行指定参数yolo即可进入yolo的运行函数段12$ ./darknet yolousage: ./darknet yolo [train/test/valid] [cfg] [weights (optional)] 由以下代">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习框架darknet【三】——调包大法好">
+<meta property="og:url" content="http://yoursite.com/2019/12/08/深度学习框架darknet【三】——调包大法好/index.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="前言本节以YOLO为例，介绍如何调用darknet函数来进行网络训练和测试，对框架有一个整体的认识。 Main主函数入口在examples/darknet.c/main，命令行指定参数yolo即可进入yolo的运行函数段12$ ./darknet yolousage: ./darknet yolo [train/test/valid] [cfg] [weights (optional)] 由以下代">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/12/08/深度学习框架darknet【三】——调包大法好/cfg.jpg">
+<meta property="og:updated_time" content="2019-12-08T12:51:01.929Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深度学习框架darknet【三】——调包大法好">
+<meta name="twitter:description" content="前言本节以YOLO为例，介绍如何调用darknet函数来进行网络训练和测试，对框架有一个整体的认识。 Main主函数入口在examples/darknet.c/main，命令行指定参数yolo即可进入yolo的运行函数段12$ ./darknet yolousage: ./darknet yolo [train/test/valid] [cfg] [weights (optional)] 由以下代">
+<meta name="twitter:image" content="http://yoursite.com/2019/12/08/深度学习框架darknet【三】——调包大法好/cfg.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/12/08/深度学习框架darknet【三】——调包大法好/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>深度学习框架darknet【三】——调包大法好 | LOUIS' BLOG</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LOUIS' BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">大龄工科伪文青</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-guestbook">
+    <a href="/guestbook" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-guest"></i> <br>留言</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/08/深度学习框架darknet【三】——调包大法好/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="技术博客？">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">深度学习框架darknet【三】——调包大法好
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-12-08 20:34:22 / 修改时间：20:51:01" itemprop="dateCreated datePublished" datetime="2019-12-08T20:34:22+08:00">2019-12-08</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本节以YOLO为例，介绍如何调用darknet函数来进行网络训练和测试，对框架有一个整体的认识。</p>
+<h1 id="Main"><a href="#Main" class="headerlink" title="Main"></a>Main</h1><p>主函数入口在<code>examples/darknet.c/main</code>，命令行指定参数<code>yolo</code>即可进入yolo的运行函数段<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> ./darknet yolo</span><br><span class="line">usage: ./darknet yolo [train/test/valid] [cfg] [weights (optional)]</span><br></pre></td></tr></table></figure></p>
+<p>由以下代码可知，可选参数2有</p>
+<ul>
+<li><code>test</code>：测试</li>
+<li><code>train</code>：训练</li>
+<li><code>valid</code>：验证</li>
+<li><code>recall</code>：验证，计算召回率等指标</li>
+<li><code>demo</code>：样机，视频演示，需OpenCV支持</li>
+</ul>
+<details>
+<summary><font color="darkred">void run_yolo(int argc, char **argv)</font></summary>
+<pre><code>
+void run_yolo(int argc, char **argv)
+{
+    char *prefix = find_char_arg(argc, argv, "-prefix", 0);
+    float thresh = find_float_arg(argc, argv, "-thresh", .2);
+    int cam_index = find_int_arg(argc, argv, "-c", 0);
+    int frame_skip = find_int_arg(argc, argv, "-s", 0);
+    if(argc < 4){
+        fprintf(stderr, "usage: %s %s [train/test/valid] [cfg] [weights (optional)]\n", argv[0], argv[1]);
+        return;
+    }
+    int avg = find_int_arg(argc, argv, "-avg", 1);
+    char *cfg = argv[3];
+    char *weights = (argc > 4) ? argv[4] : 0;
+    char *filename = (argc > 5) ? argv[5]: 0;
+    if(0==strcmp(argv[2], "test")) test_yolo(cfg, weights, filename, thresh);
+    else if(0==strcmp(argv[2], "train")) train_yolo(cfg, weights);
+    else if(0==strcmp(argv[2], "valid")) validate_yolo(cfg, weights);
+    else if(0==strcmp(argv[2], "recall")) validate_yolo_recall(cfg, weights);
+    else if(0==strcmp(argv[2], "demo")) demo(cfg, weights, thresh, cam_index, filename, voc_names, 20, frame_skip, prefix, avg, .5, 0,0,0,0);
+}
+</code></pre>
+</details>
+
+<p><strong>本节只介绍基本的训练(train)与测试(test)，其余均为拓展。</strong></p>
+<h1 id="Training-Stage"><a href="#Training-Stage" class="headerlink" title="Training Stage"></a>Training Stage</h1><p>指定参数2为<code>train</code>，即可进入训练函数段，提示无训练数据<code>/data/voc/train.txt</code><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> ./darknet yolo train cfg/yolov3.cfg yolov3.weights</span><br><span class="line">yolov3</span><br><span class="line">layer     filters    size              input                output</span><br><span class="line">    0 conv     32  3 x 3 / 1   608 x 608 x   3   -&gt;   608 x 608 x  32  0.639 BFLOPs</span><br><span class="line">    1 conv     64  3 x 3 / 2   608 x 608 x  32   -&gt;   304 x 304 x  64  3.407 BFLOPs</span><br><span class="line">... # 略</span><br><span class="line">  105 conv    255  1 x 1 / 1    76 x  76 x 256   -&gt;    76 x  76 x 255  0.754 BFLOPs</span><br><span class="line">  106 yolo</span><br><span class="line">Loading weights from yolov3.weights...Done!</span><br><span class="line">Learning Rate: 0.001, Momentum: 0.9, Decay: 0.0005</span><br><span class="line">Couldn't open file: /data/voc/train.txt</span><br></pre></td></tr></table></figure></p>
+<p>在训练函数段内，主要做的工作有以下几个部分，分别进行说明</p>
+<ul>
+<li>网络构建</li>
+<li>数据载入</li>
+<li>训练，包括前向、反向、参数更新</li>
+</ul>
+<details>
+<summary><font color="darkred">void train_yolo(char *cfgfile, char *weightfile)</font></summary>
+<pre><code>
+void train_yolo(char *cfgfile, char *weightfile)
+{
+    char *train_images = "/data/voc/train.txt";
+    char *backup_directory = "/home/pjreddie/backup/";
+    srand(time(0));
+    char *base = basecfg(cfgfile);
+    printf("%s\n", base);
+    float avg_loss = -1;
+    // 网络构建
+    network *net = load_network(cfgfile, weightfile, 0);
+    printf("Learning Rate: %g, Momentum: %g, Decay: %g\n", net->learning_rate, net->momentum, net->decay);
+    // 数据载入
+    int imgs = net->batch*net->subdivisions;
+    int i = *net->seen/imgs;
+    data train, buffer;
+    layer l = net->layers[net->n - 1];
+    int side = l.side;
+    int classes = l.classes;
+    float jitter = l.jitter;
+    list *plist = get_paths(train_images);
+    //int N = plist->size;
+    char **paths = (char **)list_to_array(plist);
+    load_args args = {0};
+    args.w = net->w;
+    args.h = net->h;
+    args.paths = paths;
+    args.n = imgs;
+    args.m = plist->size;
+    args.classes = classes;
+    args.jitter = jitter;
+    args.num_boxes = side;
+    args.d = &buffer;
+    args.type = REGION_DATA;
+    args.angle = net->angle;
+    args.exposure = net->exposure;
+    args.saturation = net->saturation;
+    args.hue = net->hue;
+    pthread_t load_thread = load_data_in_thread(args);
+    // 开始训练
+    clock_t time;
+    while(get_current_batch(net) < net->max_batches){
+        i += 1;
+        time=clock();
+        pthread_join(load_thread, 0);
+        train = buffer;
+        load_thread = load_data_in_thread(args);
+        printf("Loaded: %lf seconds\n", sec(clock()-time));
+        time=clock();
+        float loss = train_network(net, train);
+        if (avg_loss < 0) avg_loss = loss;
+        avg_loss = avg_loss*.9 + loss*.1;
+        printf("%d: %f, %f avg, %f rate, %lf seconds, %d images\n", i, loss, avg_loss, get_current_rate(net), sec(clock()-time), i*imgs);
+        if(i%1000==0 || (i < 1000 && i%100 == 0)){
+            char buff[256];
+            sprintf(buff, "%s/%s_%d.weights", backup_directory, base, i);
+            save_weights(net, buff);
+        }
+        free_data(train);
+    }
+    char buff[256];
+    sprintf(buff, "%s/%s_final.weights", backup_directory, base);
+    save_weights(net, buff);
+}
+</code></pre>
+</details>
+
+<h2 id="Load-Network"><a href="#Load-Network" class="headerlink" title="Load Network"></a>Load Network</h2><p>通过<code>load_network</code>可快速构建网络，来看一下该函数做了哪些事情<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">network *net = load_network(cfgfile, weightfile, <span class="number">0</span>);</span><br></pre></td></tr></table></figure></p>
+<details>
+<summary><font color="darkred"> network *load_network(char *cfg, char *weights, int clear) </font></summary>
+<pre><code>
+network *load_network(char *cfg, char *weights, int clear)
+{
+    network *net = parse_network_cfg(cfg);
+    if(weights && weights[0] != 0){
+        load_weights(net, weights);
+    }
+    if(clear) (*net->seen) = 0;
+    return net;
+}
+</code></pre>
+</details>
+
+<ol>
+<li><p>构建框架</p>
+ <details>
+ <summary><font color="darkred"> network *parse_network_cfg(char *filename) </font></summary>
+ <pre><code>
+ network *parse_network_cfg(char *filename)
+ {
+     list *sections = read_cfg(filename);
+     node *n = sections->front;
+     if(!n) error("Config file has no sections");
+     network *net = make_network(sections->size - 1);
+     net->gpu_index = gpu_index;
+     size_params params;
+     section *s = (section *)n->val;
+     list *options = s->options;
+     if(!is_network(s)) error("First section must be [net] or [network]");
+     parse_net_options(options, net);
+     params.h = net->h;
+     params.w = net->w;
+     params.c = net->c;
+     params.inputs = net->inputs;
+     params.batch = net->batch;
+     params.time_steps = net->time_steps;
+     params.net = net;
+     size_t workspace_size = 0;
+     n = n->next;
+     int count = 0;
+     free_section(s);
+     fprintf(stderr, "layer     filters    size              input                output\n");
+     while(n){
+         params.index = count;
+         fprintf(stderr, "%5d ", count);
+         s = (section *)n->val;
+         options = s->options;
+         layer l = {0};
+         LAYER_TYPE lt = string_to_layer_type(s->type);
+         if(lt == CONVOLUTIONAL){
+             l = parse_convolutional(options, params);
+         }else if(lt == DECONVOLUTIONAL){
+             l = parse_deconvolutional(options, params);
+         }else if(lt == LOCAL){
+             l = parse_local(options, params);
+         }else if(lt == ACTIVE){
+             l = parse_activation(options, params);
+         }else if(lt == LOGXENT){
+             l = parse_logistic(options, params);
+         }else if(lt == L2NORM){
+             l = parse_l2norm(options, params);
+         }else if(lt == RNN){
+             l = parse_rnn(options, params);
+         }else if(lt == GRU){
+             l = parse_gru(options, params);
+         }else if (lt == LSTM) {
+             l = parse_lstm(options, params);
+         }else if(lt == CRNN){
+             l = parse_crnn(options, params);
+         }else if(lt == CONNECTED){
+             l = parse_connected(options, params);
+         }else if(lt == CROP){
+             l = parse_crop(options, params);
+         }else if(lt == COST){
+             l = parse_cost(options, params);
+         }else if(lt == REGION){
+             l = parse_region(options, params);
+         }else if(lt == YOLO){
+             l = parse_yolo(options, params);
+         }else if(lt == ISEG){
+             l = parse_iseg(options, params);
+         }else if(lt == DETECTION){
+             l = parse_detection(options, params);
+         }else if(lt == SOFTMAX){
+             l = parse_softmax(options, params);
+             net->hierarchy = l.softmax_tree;
+         }else if(lt == NORMALIZATION){
+             l = parse_normalization(options, params);
+         }else if(lt == BATCHNORM){
+             l = parse_batchnorm(options, params);
+         }else if(lt == MAXPOOL){
+             l = parse_maxpool(options, params);
+         }else if(lt == REORG){
+             l = parse_reorg(options, params);
+         }else if(lt == AVGPOOL){
+             l = parse_avgpool(options, params);
+         }else if(lt == ROUTE){
+             l = parse_route(options, params, net);
+         }else if(lt == UPSAMPLE){
+             l = parse_upsample(options, params, net);
+         }else if(lt == SHORTCUT){
+             l = parse_shortcut(options, params, net);
+         }else if(lt == DROPOUT){
+             l = parse_dropout(options, params);
+             l.output = net->layers[count-1].output;
+             l.delta = net->layers[count-1].delta;
+ #ifdef GPU
+             l.output_gpu = net->layers[count-1].output_gpu;
+             l.delta_gpu = net->layers[count-1].delta_gpu;
+ #endif
+         }else{
+             fprintf(stderr, "Type not recognized: %s\n", s->type);
+         }
+         l.clip = net->clip;
+         l.truth = option_find_int_quiet(options, "truth", 0);
+         l.onlyforward = option_find_int_quiet(options, "onlyforward", 0);
+         l.stopbackward = option_find_int_quiet(options, "stopbackward", 0);
+         l.dontsave = option_find_int_quiet(options, "dontsave", 0);
+         l.dontload = option_find_int_quiet(options, "dontload", 0);
+         l.numload = option_find_int_quiet(options, "numload", 0);
+         l.dontloadscales = option_find_int_quiet(options, "dontloadscales", 0);
+         l.learning_rate_scale = option_find_float_quiet(options, "learning_rate", 1);
+         l.smooth = option_find_float_quiet(options, "smooth", 0);
+         option_unused(options);
+         net->layers[count] = l;
+         if (l.workspace_size > workspace_size) workspace_size = l.workspace_size;
+         free_section(s);
+         n = n->next;
+         ++count;
+         if(n){
+             params.h = l.out_h;
+             params.w = l.out_w;
+             params.c = l.out_c;
+             params.inputs = l.outputs;
+         }
+     }
+     free_list(sections);
+     layer out = get_network_output_layer(net);
+     net->outputs = out.outputs;
+     net->truths = out.outputs;
+     if(net->layers[net->n-1].truths) net->truths = net->layers[net->n-1].truths;
+     net->output = out.output;
+     net->input = calloc(net->inputs*net->batch, sizeof(float));
+     net->truth = calloc(net->truths*net->batch, sizeof(float));
+ #ifdef GPU
+     net->output_gpu = out.output_gpu;
+     net->input_gpu = cuda_make_array(net->input, net->inputs*net->batch);
+     net->truth_gpu = cuda_make_array(net->truth, net->truths*net->batch);
+ #endif
+     if(workspace_size){
+         //printf("%ld\n", workspace_size);
+ #ifdef GPU
+         if(gpu_index >= 0){
+             net->workspace = cuda_make_array(0, (workspace_size-1)/sizeof(float)+1);
+         }else {
+             net->workspace = calloc(1, workspace_size);
+         }
+ #else
+         net->workspace = calloc(1, workspace_size);
+ #endif
+     }
+     return net;
+ }
+ </code></pre>
+ </details>
+
+<ul>
+<li><p>首先调用<code>read_cfg</code>读取<code>*.cfg</code>文件，解析为链表结构</p>
+  <details>
+  <summary><font color="darkred"> list *read_cfg(char *filename) </font></summary>
+  <pre><code>
+  list *read_cfg(char *filename)
+  {
+      FILE *file = fopen(filename, "r");
+      if(file == 0) file_error(filename);
+      char *line;
+      int nu = 0;
+      list *options = make_list();
+      section *current = 0;
+      while((line=fgetl(file)) != 0){
+          ++ nu;
+          strip(line);
+          switch(line[0]){
+              case '[':
+                  current = malloc(sizeof(section));
+                  list_insert(options, current);
+                  current->options = make_list();
+                  current->type = line;
+                  break;
+              case '\0':
+              case '#':
+              case ';':
+                  free(line);
+                  break;
+              default:
+                  if(!read_option(line, current->options)){
+                      fprintf(stderr, "Config file error line %d, could parse: %s\n", nu, line);
+                      free(line);
+                  }
+                  break;
+          }
+      }
+      fclose(file);
+      return options;
+  }
+  </code></pre>
+  </details>
+
+<p>  例如，对于内容为以下的文件</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[net]</span><br><span class="line">batch=1</span><br><span class="line">height=227</span><br><span class="line">width=227</span><br><span class="line">channels=3</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">filters=96</span><br><span class="line">size=11</span><br><span class="line">stride=4</span><br><span class="line">pad=0</span><br><span class="line">activation=relu</span><br><span class="line"></span><br><span class="line">[maxpool]</span><br><span class="line">size=3</span><br><span class="line">stride=2</span><br><span class="line">padding=0</span><br></pre></td></tr></table></figure>
+<p>  该函数将其解析为链表<code>list* sections</code>，其元素为<code>section*</code></p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span>&#123;</span></span><br><span class="line">    <span class="keyword">char</span> *type;     <span class="comment">// 记录`[xxx]`</span></span><br><span class="line">    <span class="built_in">list</span> *options;  <span class="comment">// 记录选项</span></span><br><span class="line">&#125;section;</span><br></pre></td></tr></table></figure>
+<p>  <code>sections -&gt; s -&gt; options</code>也为链表，其元素为<code>kvp*</code>，用以存储键值对</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span>&#123;</span></span><br><span class="line">    <span class="keyword">char</span> *key;</span><br><span class="line">    <span class="keyword">char</span> *val;</span><br><span class="line">    <span class="keyword">int</span> used;</span><br><span class="line">&#125; kvp;</span><br></pre></td></tr></table></figure>
+<p>  示意图如下<br>  <img src="/2019/12/08/深度学习框架darknet【三】——调包大法好/cfg.jpg" alt="cfg"></p>
+</li>
+<li><p>之后按上述输出的参数，构建网络</p>
+<ul>
+<li><p>解析网络参数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">network *net = make_network(sections-&gt;size - <span class="number">1</span>);</span><br><span class="line">section *s = (section *)n-&gt;val;</span><br><span class="line"><span class="built_in">list</span> *options = s-&gt;options;</span><br><span class="line"><span class="keyword">if</span>(!is_network(s)) error(<span class="string">"First section must be [net] or [network]"</span>);</span><br><span class="line">parse_net_options(options, net);</span><br></pre></td></tr></table></figure>
+<details>
+<summary><font color="darkred"> void parse_net_options(list *options, network *net) </font></summary>
+<pre><code>
+void parse_net_options(list *options, network *net)
+{
+    net->batch = option_find_int(options, "batch",1);
+    net->learning_rate = option_find_float(options, "learning_rate", .001);
+    net->momentum = option_find_float(options, "momentum", .9);
+    net->decay = option_find_float(options, "decay", .0001);
+    int subdivs = option_find_int(options, "subdivisions",1);
+    net->time_steps = option_find_int_quiet(options, "time_steps",1);
+    net->notruth = option_find_int_quiet(options, "notruth",0);
+    net->batch /= subdivs;
+    net->batch *= net->time_steps;
+    net->subdivisions = subdivs;
+    net->random = option_find_int_quiet(options, "random", 0);
+    net->adam = option_find_int_quiet(options, "adam", 0);
+    if(net->adam){
+        net->B1 = option_find_float(options, "B1", .9);
+        net->B2 = option_find_float(options, "B2", .999);
+        net->eps = option_find_float(options, "eps", .0000001);
+    }
+    net->h = option_find_int_quiet(options, "height",0);
+    net->w = option_find_int_quiet(options, "width",0);
+    net->c = option_find_int_quiet(options, "channels",0);
+    net->inputs = option_find_int_quiet(options, "inputs", net->h * net->w * net->c);
+    net->max_crop = option_find_int_quiet(options, "max_crop",net->w*2);
+    net->min_crop = option_find_int_quiet(options, "min_crop",net->w);
+    net->max_ratio = option_find_float_quiet(options, "max_ratio", (float) net->max_crop / net->w);
+    net->min_ratio = option_find_float_quiet(options, "min_ratio", (float) net->min_crop / net->w);
+    net->center = option_find_int_quiet(options, "center",0);
+    net->clip = option_find_float_quiet(options, "clip", 0);
+    net->angle = option_find_float_quiet(options, "angle", 0);
+    net->aspect = option_find_float_quiet(options, "aspect", 1);
+    net->saturation = option_find_float_quiet(options, "saturation", 1);
+    net->exposure = option_find_float_quiet(options, "exposure", 1);
+    net->hue = option_find_float_quiet(options, "hue", 0);
+    if(!net->inputs && !(net->h && net->w && net->c)) error("No input parameters supplied");
+    char *policy_s = option_find_str(options, "policy", "constant");
+    net->policy = get_policy(policy_s);
+    net->burn_in = option_find_int_quiet(options, "burn_in", 0);
+    net->power = option_find_float_quiet(options, "power", 4);
+    if(net->policy == STEP){
+        net->step = option_find_int(options, "step", 1);
+        net->scale = option_find_float(options, "scale", 1);
+    } else if (net->policy == STEPS){
+        char *l = option_find(options, "steps");
+        char *p = option_find(options, "scales");
+        if(!l || !p) error("STEPS policy must have steps and scales in cfg file");
+        int len = strlen(l);
+        int n = 1;
+        int i;
+        for(i = 0; i < len; ++i){
+            if (l[i] == ',') ++n;
+        }
+        int *steps = calloc(n, sizeof(int));
+        float *scales = calloc(n, sizeof(float));
+        for(i = 0; i < n; ++i){
+            int step    = atoi(l);
+            float scale = atof(p);
+            l = strchr(l, ',')+1;
+            p = strchr(p, ',')+1;
+            steps[i] = step;
+            scales[i] = scale;
+        }
+        net->scales = scales;
+        net->steps = steps;
+        net->num_steps = n;
+    } else if (net->policy == EXP){
+        net->gamma = option_find_float(options, "gamma", 1);
+    } else if (net->policy == SIG){
+        net->gamma = option_find_float(options, "gamma", 1);
+        net->step = option_find_int(options, "step", 1);
+    } else if (net->policy == POLY || net->policy == RANDOM){
+    }
+    net->max_batches = option_find_int(options, "max_batches", 0);
+}
+</code></pre>
+</details>
+</li>
+<li><p>解析各层参数<br>根据不同类型构建网络，注意不同类型的网络层需定义<code>layer parse_[lt](list *options, size_params params)</code>函数，以申请内存资源等</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">size_params params;</span><br><span class="line">...                         <span class="comment">// 尺寸参数</span></span><br><span class="line"></span><br><span class="line">n = n-&gt;next;</span><br><span class="line"><span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">free_section(s);</span><br><span class="line"><span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"layer     filters    size              input                output\n"</span>);</span><br><span class="line"><span class="keyword">while</span>(n)&#123;                   <span class="comment">// 各层遍历</span></span><br><span class="line">    params.index = count;</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"%5d "</span>, count);</span><br><span class="line">    s = (section *)n-&gt;val;</span><br><span class="line">    options = s-&gt;options;</span><br><span class="line"></span><br><span class="line">    layer l = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    LAYER_TYPE lt = string_to_layer_type(s-&gt;type);</span><br><span class="line">    <span class="keyword">if</span>(lt == CONVOLUTIONAL)&#123;</span><br><span class="line">        l = parse_convolutional(options, params);</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(...)&#123;</span><br><span class="line">    ...                     <span class="comment">// 判断类型并构建对应网络层</span></span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Type not recognized: %s\n"</span>, s-&gt;type);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 一些其他参数</span></span><br><span class="line">    l.clip = net-&gt;clip;</span><br><span class="line">    ...</span><br><span class="line">    l.smooth = option_find_float_quiet(options, <span class="string">"smooth"</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    option_unused(options);</span><br><span class="line">    net-&gt;layers[count] = l;</span><br><span class="line">    <span class="keyword">if</span> (l.workspace_size &gt; workspace_size) workspace_size = l.workspace_size;</span><br><span class="line">    free_section(s);</span><br><span class="line">    n = n-&gt;next;</span><br><span class="line">    ++count;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 更新特征图尺寸，用做下一层网络层的输入尺寸</span></span><br><span class="line">    <span class="keyword">if</span>(n)&#123;</span><br><span class="line">        params.h = l.out_h;</span><br><span class="line">        params.w = l.out_w;</span><br><span class="line">        params.c = l.out_c;</span><br><span class="line">        params.inputs = l.outputs;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">free_list(sections);</span><br></pre></td></tr></table></figure>
+<p>以卷积层为例</p>
+<details>
+<summary><font color="darkred"> convolutional_layer parse_convolutional(list *options, size_params params) </font></summary>
+<pre><code>
+convolutional_layer parse_convolutional(list *options, size_params params)
+{
+    // 寻找参数，若无指定使用默认值
+    int n = option_find_int(options, "filters",1);
+    int size = option_find_int(options, "size",1);
+    int stride = option_find_int(options, "stride",1);
+    int pad = option_find_int_quiet(options, "pad",0);
+    int padding = option_find_int_quiet(options, "padding",0);
+    int groups = option_find_int_quiet(options, "groups", 1);
+    if(pad) padding = size/2;
+    char *activation_s = option_find_str(options, "activation", "logistic");
+    ACTIVATION activation = get_activation(activation_s);
+    // 输入尺寸参数
+    int batch,h,w,c;
+    h = params.h;
+    w = params.w;
+    c = params.c;
+    batch=params.batch;
+    if(!(h && w && c)) error("Layer before convolutional layer must output image.");
+    int batch_normalize = option_find_int_quiet(options, "batch_normalize", 0);
+    int binary = option_find_int_quiet(options, "binary", 0);
+    int xnor = option_find_int_quiet(options, "xnor", 0);
+    // 创建网络层
+    convolutional_layer layer = make_convolutional_layer(batch,h,w,c,n,groups,size,stride,padding,activation, batch_normalize, binary, xnor, params.net->adam);
+    layer.flipped = option_find_int_quiet(options, "flipped", 0);
+    layer.dot = option_find_float_quiet(options, "dot", 0);
+    return layer;
+}
+</code></pre>
+</details>
+</li>
+<li><p>内存指针分配<br>网络输出即最后一层<code>out</code>输出，两者共享内存</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">layer out = get_network_output_layer(net);</span><br><span class="line">net-&gt;outputs = out.outputs;</span><br><span class="line">net-&gt;truths = out.outputs;</span><br><span class="line"><span class="keyword">if</span>(net-&gt;layers[net-&gt;n<span class="number">-1</span>].truths) net-&gt;truths = net-&gt;layers[net-&gt;n<span class="number">-1</span>].truths;</span><br><span class="line">net-&gt;output = out.output;</span><br><span class="line">net-&gt;input = <span class="built_in">calloc</span>(net-&gt;inputs*net-&gt;batch, <span class="keyword">sizeof</span>(<span class="keyword">float</span>));</span><br><span class="line">net-&gt;truth = <span class="built_in">calloc</span>(net-&gt;truths*net-&gt;batch, <span class="keyword">sizeof</span>(<span class="keyword">float</span>));</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(workspace_size)&#123;</span><br><span class="line">    net-&gt;workspace = <span class="built_in">calloc</span>(<span class="number">1</span>, workspace_size);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>载入权值</p>
+ <details>
+ <summary><font color="darkred"> load_weights(network *net, char *filename) </font></summary>
+ <pre><code>
+ void load_weights(network *net, char *filename)
+ {
+     load_weights_upto(net, filename, 0, net->n);
+ }
+ void load_weights_upto(network *net, char *filename, int start, int cutoff)
+ {
+     fprintf(stderr, "Loading weights from %s...", filename);
+     fflush(stdout);
+     FILE *fp = fopen(filename, "rb");
+     if(!fp) file_error(filename);
+     int major;
+     int minor;
+     int revision;
+     fread(&major, sizeof(int), 1, fp);
+     fread(&minor, sizeof(int), 1, fp);
+     fread(&revision, sizeof(int), 1, fp);
+     if ((major*10 + minor) >= 2 && major < 1000 && minor < 1000){
+         fread(net->seen, sizeof(size_t), 1, fp);
+     } else {
+         int iseen = 0;
+         fread(&iseen, sizeof(int), 1, fp);
+         *net->seen = iseen;
+     }
+     int transpose = (major > 1000) || (minor > 1000);
+     int i;
+     for(i = start; i < net->n && i < cutoff; ++i){
+         layer l = net->layers[i];
+         if (l.dontload) continue;
+         if(l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL){
+             load_convolutional_weights(l, fp);
+         }
+         if(l.type == CONNECTED){
+             load_connected_weights(l, fp, transpose);
+         }
+         if(l.type == BATCHNORM){
+             load_batchnorm_weights(l, fp);
+         }
+         if(l.type == CRNN){
+             load_convolutional_weights(*(l.input_layer), fp);
+             load_convolutional_weights(*(l.self_layer), fp);
+             load_convolutional_weights(*(l.output_layer), fp);
+         }
+         if(l.type == RNN){
+             load_connected_weights(*(l.input_layer), fp, transpose);
+             load_connected_weights(*(l.self_layer), fp, transpose);
+             load_connected_weights(*(l.output_layer), fp, transpose);
+         }
+         if (l.type == LSTM) {
+             load_connected_weights(*(l.wi), fp, transpose);
+             load_connected_weights(*(l.wf), fp, transpose);
+             load_connected_weights(*(l.wo), fp, transpose);
+             load_connected_weights(*(l.wg), fp, transpose);
+             load_connected_weights(*(l.ui), fp, transpose);
+             load_connected_weights(*(l.uf), fp, transpose);
+             load_connected_weights(*(l.uo), fp, transpose);
+             load_connected_weights(*(l.ug), fp, transpose);
+         }
+         if (l.type == GRU) {
+             if(1){
+                 load_connected_weights(*(l.wz), fp, transpose);
+                 load_connected_weights(*(l.wr), fp, transpose);
+                 load_connected_weights(*(l.wh), fp, transpose);
+                 load_connected_weights(*(l.uz), fp, transpose);
+                 load_connected_weights(*(l.ur), fp, transpose);
+                 load_connected_weights(*(l.uh), fp, transpose);
+             }else{
+                 load_connected_weights(*(l.reset_layer), fp, transpose);
+                 load_connected_weights(*(l.update_layer), fp, transpose);
+                 load_connected_weights(*(l.state_layer), fp, transpose);
+             }
+         }
+         if(l.type == LOCAL){
+             int locations = l.out_w*l.out_h;
+             int size = l.size*l.size*l.c*l.n*locations;
+             fread(l.biases, sizeof(float), l.outputs, fp);
+             fread(l.weights, sizeof(float), size, fp);
+         }
+     }
+     fprintf(stderr, "Done!\n");
+     fclose(fp);
+ }
+ </code></pre>
+ </details>
+
+<p> 权值载入比较简单，根据每层的网络参数格式，以二进制格式读取即可。需要注意的是，文件头需读写4个整形<code>int</code>的数据</p>
+ <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> major;</span><br><span class="line"><span class="keyword">int</span> minor;</span><br><span class="line"><span class="keyword">int</span> revision;</span><br><span class="line">fread(&amp;major, <span class="keyword">sizeof</span>(<span class="keyword">int</span>), <span class="number">1</span>, fp);</span><br><span class="line">fread(&amp;minor, <span class="keyword">sizeof</span>(<span class="keyword">int</span>), <span class="number">1</span>, fp);</span><br><span class="line">fread(&amp;revision, <span class="keyword">sizeof</span>(<span class="keyword">int</span>), <span class="number">1</span>, fp);</span><br><span class="line"><span class="keyword">if</span> ((major*<span class="number">10</span> + minor) &gt;= <span class="number">2</span> &amp;&amp; major &lt; <span class="number">1000</span> &amp;&amp; minor &lt; <span class="number">1000</span>)&#123;</span><br><span class="line">    fread(net-&gt;seen, <span class="keyword">sizeof</span>(<span class="keyword">size_t</span>), <span class="number">1</span>, fp);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">int</span> iseen = <span class="number">0</span>;</span><br><span class="line">    fread(&amp;iseen, <span class="keyword">sizeof</span>(<span class="keyword">int</span>), <span class="number">1</span>, fp);</span><br><span class="line">    *net-&gt;seen = iseen;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 以卷积层为例，需要读取卷积核<code>weights</code>、偏置<code>biases</code>，在无批归一<code>batchnorm</code>的情况下，其读取函数为</p>
+ <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">load_convolutional_weights</span><span class="params">(layer l, FILE *fp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(l.numload) l.n = l.numload;</span><br><span class="line">    <span class="keyword">int</span> num = l.c/l.groups*l.n*l.size*l.size;</span><br><span class="line">    fread(l.biases, <span class="keyword">sizeof</span>(<span class="keyword">float</span>), l.n, fp);</span><br><span class="line">    fread(l.weights, <span class="keyword">sizeof</span>(<span class="keyword">float</span>), num, fp);</span><br><span class="line">    <span class="keyword">if</span> (l.flipped) &#123;</span><br><span class="line">        transpose_matrix(l.weights, l.c*l.size*l.size, l.n);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="Load-Data"><a href="#Load-Data" class="headerlink" title="Load Data"></a>Load Data</h2><p>训练过程中关于数据载入的代码整理如下，通过多线程的方式进行数据读取。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> *train_images = <span class="string">"/data/voc/train.txt"</span>;</span><br><span class="line"><span class="keyword">int</span> imgs = net-&gt;batch*net-&gt;subdivisions;</span><br><span class="line"><span class="keyword">int</span> i = *net-&gt;seen/imgs;</span><br><span class="line">data train, buffer;</span><br><span class="line"></span><br><span class="line">layer l = net-&gt;layers[net-&gt;n - <span class="number">1</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 读取文件列表</span></span><br><span class="line"><span class="built_in">list</span> *plist = get_paths(train_images);</span><br><span class="line"><span class="keyword">char</span> **paths = (<span class="keyword">char</span> **)list_to_array(plist);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 数据读取参数</span></span><br><span class="line">load_args args  = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">args.paths      = paths;</span><br><span class="line">args.w          = net-&gt;w;</span><br><span class="line">args.h          = net-&gt;h;</span><br><span class="line">args.n          = imgs;</span><br><span class="line">args.m          = plist-&gt;size;</span><br><span class="line">args.classes    = l.classes;</span><br><span class="line">args.jitter     = l.jitter;</span><br><span class="line">args.num_boxes  = l.side;</span><br><span class="line">args.d          = &amp;buffer;</span><br><span class="line">args.type       = REGION_DATA;</span><br><span class="line">args.angle      = net-&gt;angle;</span><br><span class="line">args.exposure   = net-&gt;exposure;</span><br><span class="line">args.saturation = net-&gt;saturation;</span><br><span class="line">args.hue        = net-&gt;hue;</span><br><span class="line"><span class="keyword">pthread_t</span> load_thread = load_data_in_thread(args);</span><br><span class="line"></span><br><span class="line"><span class="keyword">clock_t</span> time;</span><br><span class="line"><span class="keyword">while</span>(get_current_batch(net) &lt; net-&gt;max_batches)&#123;</span><br><span class="line">    i += <span class="number">1</span>;</span><br><span class="line">    time = clock();</span><br><span class="line">    pthread_join(load_thread, <span class="number">0</span>);           <span class="comment">// 主线程阻塞，等待load_thread线程结束</span></span><br><span class="line">    train = buffer;</span><br><span class="line">    load_thread = load_data_in_thread(args);<span class="comment">// 创建新线程</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"Loaded: %lf seconds\n"</span>, sec(clock()-time));</span><br><span class="line">    </span><br><span class="line">    ... <span class="comment">// 网络训练</span></span><br><span class="line"></span><br><span class="line">    free_data(train);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以下两个函数用于读取文本文件，每行存储对应的样本路径，<code>char **paths</code>每个内存单元指向字符串首地址。</p>
+<details>
+<summary><font color="darkred"> list *get_paths(char *filename) </font></summary>
+<pre><code>
+list *get_paths(char *filename)
+{
+    char *path;
+    FILE *file = fopen(filename, "r");
+    if(!file) file_error(filename);
+    list *lines = make_list();
+    while((path=fgetl(file))){
+        list_insert(lines, path);
+    }
+    fclose(file);
+    return lines;
+}
+</code></pre>
+</details>
+
+<details>
+<summary><font color="darkred"> void **list_to_array(list *l) </font></summary>
+<pre><code>
+void **list_to_array(list *l)
+{
+    void **a = calloc(l->size, sizeof(void*));
+    int count = 0;
+    node *n = l->front;
+    while(n){
+        a[count++] = n->val;
+        n = n->next;
+    }
+    return a;
+}
+</code></pre>
+</details>
+
+<p>重点关注多线程数据载入的部分，先介绍Linux系统下线程控制的函数，以下资料来源于百度百科<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">函数定义：<span class="function"><span class="keyword">int</span> <span class="title">pthread_join</span><span class="params">(<span class="keyword">pthread_t</span> thread, <span class="keyword">void</span> **retval)</span></span>;</span><br><span class="line">描述：pthread_join()函数，以阻塞的方式等待thread指定的线程结束。当函数返回时，被等待线程的资源被收回。如果线程已经结束，那么该函数会立即返回。并且thread指定的线程必须是joinable的</span><br><span class="line">参数：</span><br><span class="line">    - thread: 线程标识符，即线程ID，标识唯一线程；</span><br><span class="line">    - retval: 用户定义的指针，用来存储被等待线程的返回值。</span><br><span class="line">返回值：<span class="number">0</span>代表成功，若失败则返回错误号</span><br><span class="line"></span><br><span class="line">函数定义：<span class="function"><span class="keyword">int</span> <span class="title">pthread_create</span><span class="params">(<span class="keyword">pthread_t</span> *tidp, <span class="keyword">const</span> <span class="keyword">pthread_attr_t</span> *attr, (<span class="keyword">void</span>*)(*start_rtn)(<span class="keyword">void</span>*),<span class="keyword">void</span> *arg)</span></span>;</span><br><span class="line">描述：pthread_create是类Unix操作系统（Unix、Linux、Mac OS X等）的创建线程的函数。它的功能是创建线程（实际上就是确定调用该线程函数的入口点），在线程创建以后，就开始运行相关的线程函数。</span><br><span class="line">参数：</span><br><span class="line">    - tidp: 指向线程标识符的指针；</span><br><span class="line">    - attr: 设置线程属性；</span><br><span class="line">    - start_rtn: 线程运行函数的起始地址；</span><br><span class="line">    - arg: 运行函数的参数。</span><br><span class="line">返回值：表示成功，返回<span class="number">0</span>；表示出错，返回<span class="number">-1</span>。</span><br></pre></td></tr></table></figure></p>
+<details>
+<summary><font color="darkred"> pthread_t load_data_in_thread(load_args args) </font></summary>
+<pre><code>
+pthread_t load_data_in_thread(load_args args)
+{
+    pthread_t thread;
+    struct load_args *ptr = calloc(1, sizeof(struct load_args));
+    *ptr = args;
+    if(pthread_create(&thread, 0, load_thread, ptr)) error("Thread creation failed");
+    return thread;
+}
+</code></pre>
+</details>
+
+<p>以上函数用于线程启动，在某批次数据读取结束前，主线程将被阻塞。读取结束后，<code>train = buffer</code>将缓冲区指针传递给<code>train</code>，再重新启动线程。注意在线程函数内，缓冲区<code>buffer</code>各指针将被分配新的内存地址，以防止下一批数据对当前批数据造成影响，因此当前批数据所占内存资源需要通过<code>free_data(train)</code>来释放。</p>
+<details>
+<summary><font color="darkred"> void *load_thread(void *ptr) </font></summary>
+<pre><code>
+void *load_thread(void *ptr)
+{
+    load_args a = *(struct load_args*)ptr;
+    if(a.exposure == 0) a.exposure = 1;
+    if(a.saturation == 0) a.saturation = 1;
+    if(a.aspect == 0) a.aspect = 1;
+    if (a.type == OLD_CLASSIFICATION_DATA){
+        *a.d = load_data_old(a.paths, a.n, a.m, a.labels, a.classes, a.w, a.h);
+    } else if (a.type == REGRESSION_DATA){
+        *a.d = load_data_regression(a.paths, a.n, a.m, a.classes, a.min, a.max, a.size, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
+    } else if (a.type == CLASSIFICATION_DATA){
+        *a.d = load_data_augment(a.paths, a.n, a.m, a.labels, a.classes, a.hierarchy, a.min, a.max, a.size, a.angle, a.aspect, a.hue, a.saturation, a.exposure, a.center);
+    } else if (a.type == SUPER_DATA){
+        *a.d = load_data_super(a.paths, a.n, a.m, a.w, a.h, a.scale);
+    } else if (a.type == WRITING_DATA){
+        *a.d = load_data_writing(a.paths, a.n, a.m, a.w, a.h, a.out_w, a.out_h);
+    } else if (a.type == ISEG_DATA){
+        *a.d = load_data_iseg(a.n, a.paths, a.m, a.w, a.h, a.classes, a.num_boxes, a.scale, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
+    } else if (a.type == INSTANCE_DATA){
+        *a.d = load_data_mask(a.n, a.paths, a.m, a.w, a.h, a.classes, a.num_boxes, a.coords, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
+    } else if (a.type == SEGMENTATION_DATA){
+        *a.d = load_data_seg(a.n, a.paths, a.m, a.w, a.h, a.classes, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure, a.scale);
+    } else if (a.type == REGION_DATA){
+        *a.d = load_data_region(a.n, a.paths, a.m, a.w, a.h, a.num_boxes, a.classes, a.jitter, a.hue, a.saturation, a.exposure);
+    } else if (a.type == DETECTION_DATA){
+        *a.d = load_data_detection(a.n, a.paths, a.m, a.w, a.h, a.num_boxes, a.classes, a.jitter, a.hue, a.saturation, a.exposure);
+    } else if (a.type == SWAG_DATA){
+        *a.d = load_data_swag(a.paths, a.n, a.classes, a.jitter);
+    } else if (a.type == COMPARE_DATA){
+        *a.d = load_data_compare(a.n, a.paths, a.m, a.classes, a.w, a.h);
+    } else if (a.type == IMAGE_DATA){
+        *(a.im) = load_image_color(a.path, 0, 0);
+        *(a.resized) = resize_image(*(a.im), a.w, a.h);
+    } else if (a.type == LETTERBOX_DATA){
+        *(a.im) = load_image_color(a.path, 0, 0);
+        *(a.resized) = letterbox_image(*(a.im), a.w, a.h);
+    } else if (a.type == TAG_DATA){
+        *a.d = load_data_tag(a.paths, a.n, a.m, a.classes, a.min, a.max, a.size, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
+    }
+    free(ptr);
+    return 0;
+}
+</code></pre>
+</details>
+
+<p>那么线程启动后，执行的函数<code>void *load_thread(void *ptr)</code>做了哪些工作呢？首先初始化数据读取参数，对应不同类型的数据，分别进入对应的数据读取子函数，例如分类、检测、图像等等，读取的数据以指针的形式存放在<code>a.d</code>中，最后释放在线程创建时申请的参数指针<code>ptr</code>。</p>
+<details>
+<summary><font color="darkred"> data load_data_region(int n, char **paths, int m, int w, int h, int size, int classes, float jitter, float hue, float saturation, float exposure) </font></summary>
+<pre><code>
+data load_data_region(int n, char **paths, int m, int w, int h, int size, int classes, float jitter, float hue, float saturation, float exposure)
+{
+    char **random_paths = get_random_paths(paths, n, m);
+    int i;
+    data d = {0};
+    d.shallow = 0;
+    d.X.rows = n;
+    d.X.vals = calloc(d.X.rows, sizeof(float*));
+    d.X.cols = h*w*3;
+    int k = size*size*(5+classes);
+    d.y = make_matrix(n, k);
+    for(i = 0; i < n; ++i){
+        image orig = load_image_color(random_paths[i], 0, 0);
+        int oh = orig.h;
+        int ow = orig.w;
+        int dw = (ow*jitter);
+        int dh = (oh*jitter);
+        int pleft  = rand_uniform(-dw, dw);
+        int pright = rand_uniform(-dw, dw);
+        int ptop   = rand_uniform(-dh, dh);
+        int pbot   = rand_uniform(-dh, dh);
+        int swidth =  ow - pleft - pright;
+        int sheight = oh - ptop - pbot;
+        float sx = (float)swidth  / ow;
+        float sy = (float)sheight / oh;
+        int flip = rand()%2;
+        image cropped = crop_image(orig, pleft, ptop, swidth, sheight);
+        float dx = ((float)pleft/ow)/sx;
+        float dy = ((float)ptop /oh)/sy;
+        image sized = resize_image(cropped, w, h);
+        if(flip) flip_image(sized);
+        random_distort_image(sized, hue, saturation, exposure);
+        d.X.vals[i] = sized.data;
+        fill_truth_region(random_paths[i], d.y.vals[i], classes, size, flip, dx, dy, 1./sx, 1./sy);
+        free_image(orig);
+        free_image(cropped);
+    }
+    free(random_paths);
+    return d;
+}
+</code></pre>
+</details>
+
+<p>对于YOLO，其载入的数据类型为<code>REGION_DATA</code>，所以进入到<code>load_data_region</code>函数，这里需要关注的为数据存放的格式。可以看到，<code>d.X</code>为<code>matrix</code>类型，其行数<code>rows</code>与列数<code>cols</code>在下面函数中分别指定为<code>n</code>与<code>h*w*3</code>，即尺寸为<code>n × h*w*3</code>，每行表示一副图像数据。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">d.X.rows = n;</span><br><span class="line">d.X.cols = h*w*<span class="number">3</span>;</span><br><span class="line">d.X.vals = <span class="built_in">calloc</span>(d.X.rows, <span class="keyword">sizeof</span>(<span class="keyword">float</span>*));    <span class="comment">// 该指针用于存放内存空间的首地址，即“指针的指针”</span></span><br><span class="line"><span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; n; ++i)&#123;</span><br><span class="line">    image orig = load_image_color(random_paths[i], <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    ...     <span class="comment">// 数据扩增、缩放等常规操作</span></span><br><span class="line">    d.X.vals[i] = sized.data;</span><br><span class="line">    fill_truth_region(random_paths[i], d.y.vals[i], classes, size, flip, dx, dy, <span class="number">1.</span>/sx, <span class="number">1.</span>/sy); <span class="comment">// 获取groundtrurh，存储在`d.y`中</span></span><br><span class="line">    ...     <span class="comment">// 内存释放</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Forward-Backward-and-Update"><a href="#Forward-Backward-and-Update" class="headerlink" title="Forward, Backward and Update"></a>Forward, Backward and Update</h2><p>读取数据后，训练网络已被包装为函数<code>train_network</code><br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">float</span> loss = train_network(net, train);</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">train_network</span><span class="params">(network *net, data d)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    assert(d.X.rows % net-&gt;batch == <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">int</span> batch = net-&gt;batch;</span><br><span class="line">    <span class="keyword">int</span> n = d.X.rows / batch;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">float</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; n; ++i)&#123;</span><br><span class="line">        get_next_batch(d, batch, i*batch, net-&gt;input, net-&gt;truth);  <span class="comment">// 获取下一批次数据</span></span><br><span class="line">        <span class="keyword">float</span> err = train_network_datum(net);                       <span class="comment">// 前向、反向、更新</span></span><br><span class="line">        sum += err;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">float</span>)sum/(n*batch);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中获取数据部分，将<code>d.X.vals</code>与<code>d.y.vals</code>内容分别拷贝至<code>net-&gt;input</code>与<code>net-&gt;truth</code></p>
+<details>
+<summary><font color="darkred"> void get_next_batch(data d, int n, int offset, float *X, float *y) </font></summary>
+<pre><code>
+void get_next_batch(data d, int n, int offset, float *X, float *y)
+{
+    int j;
+    for(j = 0; j < n; ++j){
+        int index = offset + j;
+        memcpy(X+j*d.X.cols, d.X.vals[index], d.X.cols*sizeof(float));
+        if(y) memcpy(y+j*d.y.cols, d.y.vals[index], d.y.cols*sizeof(float));
+    }
+}
+</code></pre>
+</details>
+
+<p>训练部分，<code>net-&gt;input</code>作为输入，前向计算得到<code>net-&gt;cost</code>，再反向计算得到各层梯度，之后梯度累加到各层参数上进行参数更新</p>
+<details>
+<summary><font color="darkred"> float train_network_datum(network *net) </font></summary>
+<pre><code>
+float train_network_datum(network *net)
+{
+    *net->seen += net->batch;
+    net->train = 1;
+    forward_network(net);
+    backward_network(net);
+    float error = *net->cost;
+    if(((*net->seen)/net->batch)%net->subdivisions == 0) update_network(net);
+    return error;
+}
+</code></pre>
+</details>
+
+<p>依次调用各层的<code>l.forward</code>，<code>l.backward</code>，<code>l.update</code></p>
+<details>
+<summary><font color="darkred"> forward, backward, update </font></summary>
+<pre><code>
+void forward_network(network *netp)
+{
+    network net = *netp;
+    int i;
+    for(i = 0; i < net.n; ++i){
+        net.index = i;
+        layer l = net.layers[i];
+        if(l.delta){
+            fill_cpu(l.outputs * l.batch, 0, l.delta, 1);
+        }
+        l.forward(l, net);
+        net.input = l.output;
+        if(l.truth) {
+            net.truth = l.output;
+        }
+    }
+    calc_network_cost(netp);
+}
+void backward_network(network *netp)
+{
+    network net = *netp;
+    int i;
+    network orig = net;
+    for(i = net.n-1; i >= 0; --i){
+        layer l = net.layers[i];
+        if(l.stopbackward) break;
+        if(i == 0){
+            net = orig;
+        }else{
+            layer prev = net.layers[i-1];
+            net.input = prev.output;
+            net.delta = prev.delta;
+        }
+        net.index = i;
+        l.backward(l, net);
+    }
+}
+void update_network(network *netp)
+{
+    network net = *netp;
+    int i;
+    update_args a = {0};
+    a.batch = net.batch*net.subdivisions;
+    a.learning_rate = get_current_rate(netp);
+    a.momentum = net.momentum;
+    a.decay = net.decay;
+    a.adam = net.adam;
+    a.B1 = net.B1;
+    a.B2 = net.B2;
+    a.eps = net.eps;
+    ++*net.t;
+    a.t = *net.t;
+    for(i = 0; i < net.n; ++i){
+        layer l = net.layers[i];
+        if(l.update){
+            l.update(l, a);
+        }
+    }
+}
+</code></pre>
+</details>
+
+<p>注意在初始化网络层时，结构体<code>struct layer</code>中已初始化三个函数指针<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">layer</span>&#123;</span></span><br><span class="line">    ...             <span class="comment">// 略</span></span><br><span class="line">    <span class="keyword">void</span> (*forward)   (struct layer, struct network);</span><br><span class="line">    <span class="keyword">void</span> (*backward)  (struct layer, struct network);</span><br><span class="line">    <span class="keyword">void</span> (*update)    (struct layer, update_args);</span><br><span class="line">    ...             <span class="comment">// 略</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>以卷积层为例，<code>make_convolutional_layer</code>中<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">l.forward  = forward_convolutional_layer;</span><br><span class="line">l.backward = backward_convolutional_layer;</span><br><span class="line">l.update   = update_convolutional_layer;</span><br></pre></td></tr></table></figure></p>
+<h1 id="Test-Stage"><a href="#Test-Stage" class="headerlink" title="Test Stage"></a>Test Stage</h1><p>指定参数2为<code>test</code>，可进入测试函数段，提示输入图片路径<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> ./darknet yolo test cfg/yolov3.cfg yolov3.weights</span><br><span class="line">layer     filters    size              input                output</span><br><span class="line">    0 conv     32  3 x 3 / 1   608 x 608 x   3   -&gt;   608 x 608 x  32  0.639 BFLOPs</span><br><span class="line">    1 conv     64  3 x 3 / 2   608 x 608 x  32   -&gt;   304 x 304 x  64  3.407 BFLOPs</span><br><span class="line">... # 略</span><br><span class="line">  105 conv    255  1 x 1 / 1    76 x  76 x 256   -&gt;    76 x  76 x 255  0.754 BFLOPs</span><br><span class="line">  106 yolo</span><br><span class="line">Loading weights from yolov3.weights...Done!</span><br><span class="line">Enter Image Path:</span><br></pre></td></tr></table></figure></p>
+<p>原始测试函数<code>examples/yolo.c/test_yolo</code>并不能实现检测功能(<code>detector.c/test_detector</code>可以使用)，所以将其修改为以下</p>
+<details>
+<summary><font color="darkred"> void test_yolo(char *cfgfile, char *weightfile, char *filename, float thresh) </font></summary>
+<pre><code>
+void test_yolo(char *cfgfile, char *weightfile, char *filename, float thresh)
+{
+    // 获取标签名称、字母表等
+    list *options = read_data_cfg("cfg/coco.data");
+    char *name_list = option_find_str(options, "names", "data/names.list");
+    char **names = get_labels(name_list);
+    image **alphabet = load_alphabet();
+    // 构建网络
+    network *net = load_network(cfgfile, weightfile, 0);
+    set_batch_network(net, 1);
+    // 一些参数。。。
+    srand(2222222);
+    double time;
+    char buff[256];
+    char *input = buff;
+    float nms=.45;
+    while(1){
+        if(filename){
+            strncpy(input, filename, 256);
+        } else {
+            printf("Enter Image Path: ");
+            fflush(stdout);
+            input = fgets(input, 256, stdin);
+            if(!input) return;
+            strtok(input, "\n");
+        }
+        image im = load_image_color(input,0,0);
+        image sized = letterbox_image(im, net->w, net->h);
+        layer l = net->layers[net->n-1];
+        float *X = sized.data;
+        time=what_time_is_it_now();
+        network_predict(net, X);
+        printf("%s: Predicted in %f seconds.\n", input, what_time_is_it_now()-time);
+        int nboxes = 0;
+        detection *dets = get_network_boxes(net, im.w, im.h, thresh, 0, 0, 1, &nboxes);
+        if (nms) do_nms_sort(dets, nboxes, l.classes, nms);
+        draw_detections(im, dets, nboxes, thresh, names, alphabet, l.classes);
+        free_detections(dets, nboxes);
+        save_image(im, "predictions");
+#ifdef OPENCV
+        make_window("predictions", 512, 512, 0);
+        show_image(im, "predictions", 0);
+#endif
+        free_image(im);
+        free_image(sized);
+        if(filename) break;
+    }
+}
+</code></pre>
+</details>
+
+<p>主要的过程如下</p>
+<ol>
+<li><p>读取图像、裁剪并缩放</p>
+ <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">image im = load_image_color(input,<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">image sized = letterbox_image(im, net-&gt;w, net-&gt;h);</span><br></pre></td></tr></table></figure>
+ <details>
+ <summary><font color="darkred"> image letterbox_image(image im, int w, int h) </font></summary>
+ <pre><code>
+ image letterbox_image(image im, int w, int h)
+ {
+     int new_w = im.w;
+     int new_h = im.h;
+     if (((float)w/im.w) < ((float)h/im.h)) {
+         new_w = w;
+         new_h = (im.h * w)/im.w;
+     } else {
+         new_h = h;
+         new_w = (im.w * h)/im.h;
+     }
+     image resized = resize_image(im, new_w, new_h);
+     image boxed = make_image(w, h, im.c);
+     fill_image(boxed, .5);
+     //int i;
+     //for(i = 0; i < boxed.w*boxed.h*boxed.c; ++i) boxed.data[i] = 0;
+     embed_image(resized, boxed, (w-new_w)/2, (h-new_h)/2); 
+     free_image(resized);
+     return boxed;
+ }
+ </code></pre>
+ </details>
+</li>
+<li><p>前向运算</p>
+ <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">layer l  = net-&gt;layers[net-&gt;n<span class="number">-1</span>];</span><br><span class="line"><span class="keyword">float</span> *X = sized.data;</span><br><span class="line">time = what_time_is_it_now();</span><br><span class="line">network_predict(net, X);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"%s: Predicted in %f seconds.\n"</span>, input, what_time_is_it_now()-time);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>根据结果生成候选框</p>
+ <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> nboxes = <span class="number">0</span>;   </span><br><span class="line">detection *dets = get_network_boxes(net, im.w, im.h, thresh, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, &amp;nboxes);</span><br></pre></td></tr></table></figure>
+ <details>
+ <summary><font color="darkred"> detection *get_network_boxes(network *net, int w, int h, float thresh, float hier, int *map, int relative, int *num) </font></summary>
+ <pre><code>
+ detection *get_network_boxes(network *net, int w, int h, float thresh, float hier, int *map, int relative, int *num)
+ {
+     detection *dets = make_network_boxes(net, thresh, num);
+     fill_network_boxes(net, w, h, thresh, hier, map, relative, dets);
+     return dets;
+ }
+ </code></pre>
+ </details>
+
+<p> YOLO详细算法不过多介绍。</p>
+</li>
+<li><p>非极大值抑制(NMS)</p>
+ <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (nms) do_nms_sort(dets, nboxes, l.classes, nms);</span><br></pre></td></tr></table></figure>
+ <details>
+ <summary><font color="darkred"> void do_nms_sort(detection *dets, int total, int classes, float thresh) </font></summary>
+ <pre><code>
+ void do_nms_sort(detection *dets, int total, int classes, float thresh)
+ {
+     int i, j, k;
+     k = total-1;
+     for(i = 0; i <= k;="" ++i){="" if(dets[i].objectness="=" 0){="" detection="" swap="dets[i];" dets[i]="dets[k];" dets[k]="swap;" --k;="" --i;="" }="" total="k+1;" for(k="0;" k="" <="" classes;="" ++k){="" for(i="0;" i="" total;="" dets[i].sort_class="k;" qsort(dets,="" total,="" sizeof(detection),="" nms_comparator);="" if(dets[i].prob[k]="=" 0)="" continue;="" box="" a="dets[i].bbox;" for(j="i+1;" j="" ++j){="" b="dets[j].bbox;" if="" (box_iou(a,="" b)=""> thresh){
+                     dets[j].prob[k] = 0;
+                 }
+             }
+         }
+     }
+ }
+ </=></code></pre>
+ </details>
+</li>
+<li><p>绘制并显示</p>
+ <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">draw_detections(im, dets, nboxes, thresh, names, alphabet, l.classes);</span><br><span class="line">save_image(im, <span class="string">"predictions"</span>);</span><br><span class="line">make_window(<span class="string">"predictions"</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="number">0</span>);</span><br><span class="line">show_image(im, <span class="string">"predictions"</span>, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>释放资源</p>
+ <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">free_detections(dets, nboxes);</span><br><span class="line">free_image(im);</span><br><span class="line">free_image(sized);</span><br></pre></td></tr></table></figure></li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/08/深度学习框架darknet【二】——目录结构/" rel="next" title="深度学习框架darknet【二】——目录结构">
+                <i class="fa fa-chevron-left"></i> 深度学习框架darknet【二】——目录结构
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/08/深度学习框架darknet【四】——网络配置选项/" rel="prev" title="深度学习框架darknet【四】——网络配置选项">
+                深度学习框架darknet【四】——网络配置选项 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Louis Hsu">
+            
+              <p class="site-author-name" itemprop="name">Louis Hsu</p>
+              <p class="site-description motion-element" itemprop="description">技术博客？</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">72</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/isLouisHsu" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://is.louishsu@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/islouishsu" target="_blank" title="Zhihu"><i class="fa fa-fw fa-zhihu"></i>Zhihu</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/islouishsu" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          <div id="music163player">
+            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="110" src="//music.163.com/outchain/player?type=0&id=2703291040&auto=1&height=90">
+            </iframe>
+          </div>
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Main"><span class="nav-number">2.</span> <span class="nav-text">Main</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Training-Stage"><span class="nav-number">3.</span> <span class="nav-text">Training Stage</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Load-Network"><span class="nav-number">3.1.</span> <span class="nav-text">Load Network</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Load-Data"><span class="nav-number">3.2.</span> <span class="nav-text">Load Data</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Forward-Backward-and-Update"><span class="nav-number">3.3.</span> <span class="nav-text">Forward, Backward and Update</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Test-Stage"><span class="nav-number">4.</span> <span class="nav-text">Test Stage</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Louis Hsu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: 'e65d27f7cf5c62feaf97',
+          clientSecret: '356386826698e8b817ca076b08d7c0e9814f52ea',
+          repo: 'isLouisHsu.github.io',
+          owner: 'isLouisHsu',
+          admin: ['isLouisHsu'],
+          id: md5(window.location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('3');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+
+  <script type="text/javascript" src="/js/click_show_text.js"></script>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

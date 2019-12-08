@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言前一节介绍了如何调用函数进行网络的训练，本节扒一扒源码，详细介绍前向、反向、更新部分。查看本节内容要有BP算法的基础，以全连接网络为例，详细查看全连接网络BP算法推导【矩阵形式】。 Dataflow运算过程中最重要的是数据的传递，在整个过程中，向系统申请的内存资源(部分)列表如下| 内存地址指针        | 类型 | 功能  || :———————— | :—- | :—- || dat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习框架darknet【五】——训练解析">
+<meta property="og:url" content="http://yoursite.com/2019/12/08/深度学习框架darknet【五】——训练解析/index.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="前言前一节介绍了如何调用函数进行网络的训练，本节扒一扒源码，详细介绍前向、反向、更新部分。查看本节内容要有BP算法的基础，以全连接网络为例，详细查看全连接网络BP算法推导【矩阵形式】。 Dataflow运算过程中最重要的是数据的传递，在整个过程中，向系统申请的内存资源(部分)列表如下| 内存地址指针        | 类型 | 功能  || :———————— | :—- | :—- || dat">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/12/08/深度学习框架darknet【五】——训练解析/network.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/12/08/深度学习框架darknet【五】——训练解析/forward_layer_0.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/12/08/深度学习框架darknet【五】——训练解析/forward_layer_i.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/12/08/深度学习框架darknet【五】——训练解析/forward_layer_cost.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/12/08/深度学习框架darknet【五】——训练解析/backward_layer_cost_1.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/12/08/深度学习框架darknet【五】——训练解析/backward_layer_cost_2.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/12/08/深度学习框架darknet【五】——训练解析/backward_layer_i_1.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/12/08/深度学习框架darknet【五】——训练解析/backward_layer_i_2.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/12/08/深度学习框架darknet【五】——训练解析/update_layer_0.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/12/08/深度学习框架darknet【五】——训练解析/update_layer_n_1.jpg">
+<meta property="og:updated_time" content="2019-12-08T13:03:14.950Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深度学习框架darknet【五】——训练解析">
+<meta name="twitter:description" content="前言前一节介绍了如何调用函数进行网络的训练，本节扒一扒源码，详细介绍前向、反向、更新部分。查看本节内容要有BP算法的基础，以全连接网络为例，详细查看全连接网络BP算法推导【矩阵形式】。 Dataflow运算过程中最重要的是数据的传递，在整个过程中，向系统申请的内存资源(部分)列表如下| 内存地址指针        | 类型 | 功能  || :———————— | :—- | :—- || dat">
+<meta name="twitter:image" content="http://yoursite.com/2019/12/08/深度学习框架darknet【五】——训练解析/network.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/12/08/深度学习框架darknet【五】——训练解析/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>深度学习框架darknet【五】——训练解析 | LOUIS' BLOG</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LOUIS' BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">大龄工科伪文青</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-guestbook">
+    <a href="/guestbook" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-guest"></i> <br>留言</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/08/深度学习框架darknet【五】——训练解析/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="技术博客？">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">深度学习框架darknet【五】——训练解析
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-12-08 20:35:21 / 修改时间：21:03:14" itemprop="dateCreated datePublished" datetime="2019-12-08T20:35:21+08:00">2019-12-08</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>前一节介绍了如何<strong>调用函数</strong>进行网络的训练，本节扒一扒源码，详细介绍前向、反向、更新部分。查看本节内容要有BP算法的基础，以全连接网络为例，详细查看<a href="https://louishsu.xyz/2019/12/08/%E5%85%A8%E8%BF%9E%E6%8E%A5%E7%BD%91%E7%BB%9CBP%E7%AE%97%E6%B3%95%E6%8E%A8%E5%AF%BC%E3%80%90%E7%9F%A9%E9%98%B5%E5%BD%A2%E5%BC%8F%E3%80%91/" target="_blank" rel="noopener">全连接网络BP算法推导【矩阵形式】</a>。</p>
+<h1 id="Dataflow"><a href="#Dataflow" class="headerlink" title="Dataflow"></a>Dataflow</h1><p>运算过程中最重要的是数据的传递，在整个过程中，向系统申请的内存资源(部分)列表如下<br>| 内存地址指针        | 类型 | 功能  |<br>| :———————— | :—- | :—- |<br>| <code>data.X</code>          | matrix | 输入数据，以二维矩阵存储，每行表示一个样本 |<br>| <code>data.y</code>          | matrix | 真实标签，以二维矩阵存储，每行表示一个样本 |<br>| <code>net-&gt;input</code>      | float<em> | 用于层间<strong>输入数据传递</strong>的指针：(1)初始化为数据读取地址<code>d.X</code>； (2)在forward时更新为第i层输出作为第i+1层输入； (3)在backward时更新为第i+1层输出用于第i层的参数梯度计算。若为特征图，以<code>CHW</code>格式储存 |<br>| <code>net-&gt;delta</code>      | float</em> | 用于层间<strong>输出梯度传递</strong>的指针，实现链式求导：在backward时更新为第i+1层输出梯度用于第i层的参数梯度计算 |<br>| <code>net-&gt;truth</code>      | float<em> | <strong>真实标签</strong>数据指针：初始化为<code>d.y</code>(groundtruth)；在损失函数层进行损失计算 |<br>| <code>net-&gt;workspace</code>  | float</em> | 运算时可使用的<strong>临时工作区</strong>，如在卷积运算时需要将特征图展开为矩阵形式 |<br>| <code>l.output</code>        | float<em> | 网络层的输出，若为特征图，以<code>CHW</code>格式储存 |<br>| <code>l.delta</code>         | float</em> | 网络层<strong>输出对输入</strong>的梯度 |<br>| <code>l.weights</code>       | float<em> | 网络层的权重，若为特征图，以<code>CHW</code>格式储存 |<br>| <code>l.weight_updates</code>| float</em> | 网络层权重的梯度值，由链式法则可知由<code>l.delta</code>与<code>l.weights</code>计算得到 |<br>| <code>l.biases</code>        | float<em> | 网络层的偏置 |<br>| <code>l.bias_updates</code>  | float</em> | 网络层偏置的梯度值 |</p>
+<p>示意图如下<br><img src="/2019/12/08/深度学习框架darknet【五】——训练解析/network.jpg" alt="network"></p>
+<h1 id="Entry"><a href="#Entry" class="headerlink" title="Entry"></a>Entry</h1><p>训练的入口函数为<code>train_netwok</code>，获取一批次数据并进行训练，数据由<code>(float*)d.X</code>、<code>(float*)d.y</code>拷贝至<code>(float*)net-&gt;input</code>、<code>(float*)net-&gt;truth</code>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">train_network</span><span class="params">(network *net, data d)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    assert(d.X.rows % net-&gt;batch == <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">int</span> batch = net-&gt;batch;</span><br><span class="line">    <span class="keyword">int</span> n = d.X.rows / batch;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">float</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; n; ++i)&#123;</span><br><span class="line">        get_next_batch(d, batch, i*batch, net-&gt;input, net-&gt;truth);  <span class="comment">// d.X =&gt; net-&gt;input; d.y =&gt; net-&gt;truth</span></span><br><span class="line">        <span class="keyword">float</span> err = train_network_datum(net);</span><br><span class="line">        sum += err;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">float</span>)sum/(n*batch);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">train_network_datum</span><span class="params">(network *net)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    *net-&gt;seen += net-&gt;batch;</span><br><span class="line">    net-&gt;train = <span class="number">1</span>;</span><br><span class="line">    forward_network(net);       <span class="comment">// 网络前向，计算各层输出</span></span><br><span class="line">    backward_network(net);      <span class="comment">// 网络反向，计算各层参数梯度</span></span><br><span class="line">    <span class="keyword">float</span> error = *net-&gt;cost;</span><br><span class="line">    <span class="keyword">if</span>(((*net-&gt;seen)/net-&gt;batch)%net-&gt;subdivisions == <span class="number">0</span>) </span><br><span class="line">        update_network(net);    <span class="comment">// 更新各层参数</span></span><br><span class="line">    <span class="keyword">return</span> error;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Forward"><a href="#Forward" class="headerlink" title="Forward"></a>Forward</h1><p>网络前向运算会依次调用各层的<code>forward</code>函数，通过指针<code>net-&gt;input</code>实现两层间数据传递，第$i$层将<code>net-&gt;input</code>作为输入进行运算，结果保存在<code>l.output</code>，之后将<code>net-&gt;input</code>更新为<code>l.output</code>完成地址传递，用作第$i+1$层的输入。</p>
+<p>那么有疑问，<code>net-&gt;input</code>在创建网络时是分配了空间的，直接替换指针不会造成内存泄露吗？注意到<code>network* netp</code>是原始网络，在前向运算前先定义了局部变量<code>network net</code>，所以运算结束改变的是<code>net.input</code>而不是<code>netp-&gt;input</code>。</p>
+<p>在第$1$层时，先读取<code>d.X</code>作为输入，第$i$层接受第$i-1$层输出<code>net-&gt;input</code>，与自身参数<code>l.weights</code>、<code>l.biases</code>运算得到输出，结果保存在<code>l.output</code>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">forward_network</span><span class="params">(network *netp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> GPU</span></span><br><span class="line">    <span class="keyword">if</span>(netp-&gt;gpu_index &gt;= <span class="number">0</span>)&#123;</span><br><span class="line">        forward_network_gpu(netp);   </span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    network net = *netp;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; net.n; ++i)&#123;</span><br><span class="line">        net.index = i;</span><br><span class="line">        layer l = net.layers[i];</span><br><span class="line">        <span class="keyword">if</span>(l.delta)&#123;</span><br><span class="line">            fill_cpu(l.outputs * l.batch, <span class="number">0</span>, l.delta, <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        l.forward(l, net);      <span class="comment">// 各层前向</span></span><br><span class="line">        net.input = l.output;   <span class="comment">// 指针传递</span></span><br><span class="line">        <span class="keyword">if</span>(l.truth) &#123;</span><br><span class="line">            net.truth = l.output;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    calc_network_cost(netp);    <span class="comment">// 获取总体损失</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/12/08/深度学习框架darknet【五】——训练解析/forward_layer_0.jpg" alt="forward_layer_0"></p>
+<p><img src="/2019/12/08/深度学习框架darknet【五】——训练解析/forward_layer_i.jpg" alt="forward_layer_i"></p>
+<p>以全连接层为例，在线性运算后经激活函数得到最终输出，<code>gemm</code>为BLAS函数，为通用的矩阵乘法接口</p>
+<script type="math/tex; mode=display">l.output_{l.batch \times l.outputs} = net.input_{l.batch \times l.inputs} l.weights_{l.outputs \times l.inputs}^T + l.biases_{l.outputs, broadcast}</script><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">forward_connected_layer</span><span class="params">(layer l, network net)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    fill_cpu(l.outputs*l.batch, <span class="number">0</span>, l.output, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">int</span> m = l.batch;</span><br><span class="line">    <span class="keyword">int</span> k = l.inputs;</span><br><span class="line">    <span class="keyword">int</span> n = l.outputs;</span><br><span class="line">    <span class="keyword">float</span> *a = net.input;</span><br><span class="line">    <span class="keyword">float</span> *b = l.weights;</span><br><span class="line">    <span class="keyword">float</span> *c = l.output;</span><br><span class="line">    gemm(<span class="number">0</span>,<span class="number">1</span>,m,n,k,<span class="number">1</span>,a,k,b,k,<span class="number">1</span>,c,n);</span><br><span class="line">    <span class="keyword">if</span>(l.batch_normalize)&#123;</span><br><span class="line">        forward_batchnorm_layer(l, net);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        add_bias(l.output, l.biases, l.batch, l.outputs, <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    activate_array(l.output, l.outputs*l.batch, l.activation);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>损失函数层有所不同，运算示意图如下，除计算该层输出(损失)保存于<code>l.output</code>，最终损失<code>l.cost</code>为该批次样本损失的总和，计算<strong>输出对输入的梯度</strong>保存于<code>l.delta</code><br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">forward_cost_layer</span><span class="params">(cost_layer l, network net)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!net.truth) <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">if</span>(l.cost_type == MASKED)&#123;</span><br><span class="line">        <span class="keyword">int</span> i;</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; l.batch*l.inputs; ++i)&#123;</span><br><span class="line">            <span class="keyword">if</span>(net.truth[i] == SECRET_NUM) net.input[i] = SECRET_NUM;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(l.cost_type == SMOOTH)&#123;</span><br><span class="line">        smooth_l1_cpu(l.batch*l.inputs, net.input, net.truth, l.delta, l.output);</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(l.cost_type == L1)&#123;</span><br><span class="line">        l1_cpu(l.batch*l.inputs, net.input, net.truth, l.delta, l.output);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        l2_cpu(l.batch*l.inputs, net.input, net.truth, l.delta, l.output);</span><br><span class="line">    &#125;</span><br><span class="line">    l.cost[<span class="number">0</span>] = sum_array(l.output, l.batch*l.inputs);  <span class="comment">// 各样本损失总和</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/12/08/深度学习框架darknet【五】——训练解析/forward_layer_cost.jpg" alt="forward_layer_cost"></p>
+<h1 id="Backward"><a href="#Backward" class="headerlink" title="Backward"></a>Backward</h1><p>依次调用各层的<code>backward</code>函数，对于第$i$层的反向运算，需要将第$i-1$层输出<code>prev.output</code>与梯度<code>prev.delta</code>传递到<code>net.input</code>与<code>net.delta</code>。实际上，由于<strong>指针的特性</strong>，此时<code>net.input</code>即前层输出<code>prev.output</code>，<code>net.delta</code>即前层梯度<code>prev.delta</code>，<strong>在第$i$层反向时，需依靠第$i-1$层输出，并对第$i-1$层梯度进行更新</strong>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">backward_network</span><span class="params">(network *netp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> GPU</span></span><br><span class="line">    <span class="keyword">if</span>(netp-&gt;gpu_index &gt;= <span class="number">0</span>)&#123;</span><br><span class="line">        backward_network_gpu(netp);   </span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    network net = *netp;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    network orig = net;</span><br><span class="line">    <span class="keyword">for</span>(i = net.n<span class="number">-1</span>; i &gt;= <span class="number">0</span>; --i)&#123;</span><br><span class="line">        layer l = net.layers[i];</span><br><span class="line">        <span class="keyword">if</span>(l.stopbackward) <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">if</span>(i == <span class="number">0</span>)&#123;</span><br><span class="line">            net = orig;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            layer prev = net.layers[i<span class="number">-1</span>];</span><br><span class="line">            net.input = prev.output;</span><br><span class="line">            net.delta = prev.delta;</span><br><span class="line">        &#125;</span><br><span class="line">        net.index = i;</span><br><span class="line">        l.backward(l, net);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>损失函数层为反向运算时的第$1$层，运算较简单</p>
+<script type="math/tex; mode=display">net.delta += l.scale \times l.delta</script><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">backward_cost_layer</span><span class="params">(<span class="keyword">const</span> cost_layer l, network net)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    axpy_cpu(l.batch*l.inputs, l.scale, l.delta, <span class="number">1</span>, net.delta, <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>示意图如下<br><img src="/2019/12/08/深度学习框架darknet【五】——训练解析/backward_layer_cost_1.jpg" alt="backward_layer_cost_1"></p>
+<p>如果省略指针传递，那么简化的运算如下</p>
+<script type="math/tex; mode=display">l^{prev}.delta += l.scale \times l.delta</script><p><img src="/2019/12/08/深度学习框架darknet【五】——训练解析/backward_layer_cost_2.jpg" alt="backward_layer_cost_2"></p>
+<p>其余各层调用各自的反传函数，先计算输出对输入的梯度<code>l.delta</code>，利用<code>net.input</code>与<code>l.delta</code>计算<code>l.weight_updates</code>、<code>l.bias_updates</code>，之后更新<code>net.delta</code>，示意图如下<br><img src="/2019/12/08/深度学习框架darknet【五】——训练解析/backward_layer_i_1.jpg" alt="backward_layer_i_1"></p>
+<p>如果省略指针传递，那么简化的运算如下<br><img src="/2019/12/08/深度学习框架darknet【五】——训练解析/backward_layer_i_2.jpg" alt="backward_layer_i_2"></p>
+<p>以全连接层为例</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    l.weight\_updates_{l.outputs \times l.inputs} = l.delta_{l.batch \times l.outputs}^T net.input_{l.batch \times l.inputs} \\
+    l.bias\_updates_{l.outputs} += \sum_{i}^{l.batch} (l.delta^{(i)}_{l.outputs}) \\
+    l^{prev}.delta_{l.batch \times l.inputs} = l.delta_{l.batch \times l.outputs} l.weights_{l.outputs \times l.inputs}
+\end{cases}</script><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">backward_connected_layer</span><span class="params">(layer l, network net)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    gradient_array(l.output, l.outputs*l.batch, l.activation, l.delta);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(l.batch_normalize)&#123;</span><br><span class="line">        backward_batchnorm_layer(l, net);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        backward_bias(l.bias_updates, l.delta, l.batch, l.outputs, <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> m = l.outputs;</span><br><span class="line">    <span class="keyword">int</span> k = l.batch;</span><br><span class="line">    <span class="keyword">int</span> n = l.inputs;</span><br><span class="line">    <span class="keyword">float</span> *a = l.delta;</span><br><span class="line">    <span class="keyword">float</span> *b = net.input;</span><br><span class="line">    <span class="keyword">float</span> *c = l.weight_updates;</span><br><span class="line">    gemm(<span class="number">1</span>,<span class="number">0</span>,m,n,k,<span class="number">1</span>,a,m,b,n,<span class="number">1</span>,c,n);</span><br><span class="line"></span><br><span class="line">    m = l.batch;</span><br><span class="line">    k = l.outputs;</span><br><span class="line">    n = l.inputs;</span><br><span class="line"></span><br><span class="line">    a = l.delta;</span><br><span class="line">    b = l.weights;</span><br><span class="line">    c = net.delta;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(c) gemm(<span class="number">0</span>,<span class="number">0</span>,m,n,k,<span class="number">1</span>,a,k,b,n,<span class="number">1</span>,c,n);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Update"><a href="#Update" class="headerlink" title="Update"></a>Update</h1><p>更新这一步比较简单，调用优化器参数，将当前已计算得到的参数梯度累加到网络层参数上即可</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">update_network</span><span class="params">(network *netp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> GPU</span></span><br><span class="line">    <span class="keyword">if</span>(netp-&gt;gpu_index &gt;= <span class="number">0</span>)&#123;</span><br><span class="line">        update_network_gpu(netp);   </span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    network net = *netp;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    update_args a = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    a.batch = net.batch*net.subdivisions;</span><br><span class="line">    a.learning_rate = get_current_rate(netp);</span><br><span class="line">    a.momentum = net.momentum;</span><br><span class="line">    a.decay = net.decay;</span><br><span class="line">    a.adam = net.adam;</span><br><span class="line">    a.B1 = net.B1;</span><br><span class="line">    a.B2 = net.B2;</span><br><span class="line">    a.eps = net.eps;</span><br><span class="line">    ++*net.t;</span><br><span class="line">    a.t = *net.t;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; net.n; ++i)&#123;</span><br><span class="line">        layer l = net.layers[i];</span><br><span class="line">        <span class="keyword">if</span>(l.update)&#123;</span><br><span class="line">            l.update(l, a);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/12/08/深度学习框架darknet【五】——训练解析/update_layer_0.jpg" alt="update_layer_0"></p>
+<p><img src="/2019/12/08/深度学习框架darknet【五】——训练解析/update_layer_n_1.jpg" alt="update_layer_n_1"></p>
+<p>以全连接层为例</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    l.biases_{l.outputs} += l.bias\_updates_{l.outputs} \times \frac{learning\_rate}{batch} \\
+    l.weight\_updates_{l.outputs \times l.inputs} -= l.weights_{l.outputs \times l.inputs} \times decay \times batch \\
+    l.weights_{l.outputs \times l.inputs} += l.weight\_updates_{l.outputs \times l.inputs} \times \frac{learning\_rate}{batch} \\
+    l.weight\_updates_{l.outputs \times l.inputs} *= momentum \\
+    l.bias\_updates_{l.outputs} *= momentum
+\end{cases}</script><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">update_connected_layer</span><span class="params">(layer l, update_args a)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">float</span> learning_rate = a.learning_rate*l.learning_rate_scale;</span><br><span class="line">    <span class="keyword">float</span> momentum = a.momentum;</span><br><span class="line">    <span class="keyword">float</span> decay = a.decay;</span><br><span class="line">    <span class="keyword">int</span> batch = a.batch;</span><br><span class="line">    axpy_cpu(l.outputs, learning_rate/batch, l.bias_updates, <span class="number">1</span>, l.biases, <span class="number">1</span>);</span><br><span class="line">    scal_cpu(l.outputs, momentum, l.bias_updates, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(l.batch_normalize)&#123;</span><br><span class="line">        axpy_cpu(l.outputs, learning_rate/batch, l.scale_updates, <span class="number">1</span>, l.scales, <span class="number">1</span>);</span><br><span class="line">        scal_cpu(l.outputs, momentum, l.scale_updates, <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    axpy_cpu(l.inputs*l.outputs, -decay*batch, l.weights, <span class="number">1</span>, l.weight_updates, <span class="number">1</span>);</span><br><span class="line">    axpy_cpu(l.inputs*l.outputs, learning_rate/batch, l.weight_updates, <span class="number">1</span>, l.weights, <span class="number">1</span>);</span><br><span class="line">    scal_cpu(l.inputs*l.outputs, momentum, l.weight_updates, <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/08/深度学习框架darknet【四】——网络配置选项/" rel="next" title="深度学习框架darknet【四】——网络配置选项">
+                <i class="fa fa-chevron-left"></i> 深度学习框架darknet【四】——网络配置选项
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Louis Hsu">
+            
+              <p class="site-author-name" itemprop="name">Louis Hsu</p>
+              <p class="site-description motion-element" itemprop="description">技术博客？</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">72</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/isLouisHsu" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://is.louishsu@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/islouishsu" target="_blank" title="Zhihu"><i class="fa fa-fw fa-zhihu"></i>Zhihu</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/islouishsu" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          <div id="music163player">
+            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="110" src="//music.163.com/outchain/player?type=0&id=2703291040&auto=1&height=90">
+            </iframe>
+          </div>
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Dataflow"><span class="nav-number">2.</span> <span class="nav-text">Dataflow</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Entry"><span class="nav-number">3.</span> <span class="nav-text">Entry</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Forward"><span class="nav-number">4.</span> <span class="nav-text">Forward</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Backward"><span class="nav-number">5.</span> <span class="nav-text">Backward</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Update"><span class="nav-number">6.</span> <span class="nav-text">Update</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Louis Hsu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: 'e65d27f7cf5c62feaf97',
+          clientSecret: '356386826698e8b817ca076b08d7c0e9814f52ea',
+          repo: 'isLouisHsu.github.io',
+          owner: 'isLouisHsu',
+          admin: ['isLouisHsu'],
+          id: md5(window.location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('3');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+
+  <script type="text/javascript" src="/js/click_show_text.js"></script>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
