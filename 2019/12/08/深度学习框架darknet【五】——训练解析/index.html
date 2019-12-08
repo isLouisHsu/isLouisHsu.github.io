@@ -108,12 +108,12 @@
 
 
 
-  <meta name="description" content="前言前一节介绍了如何调用函数进行网络的训练，本节扒一扒源码，详细介绍前向、反向、更新部分。查看本节内容要有BP算法的基础，以全连接网络为例，详细查看全连接网络BP算法推导【矩阵形式】。 Dataflow运算过程中最重要的是数据的传递，在整个过程中，向系统申请的内存资源(部分)列表如下| 内存地址指针        | 类型 | 功能  || :———————— | :—- | :—- || dat">
+  <meta name="description" content="前言第三节介绍了如何调用函数进行网络的训练，本节扒一扒源码，详细介绍前向、反向、更新部分。查看本节内容要有BP算法的基础，以全连接网络为例详细推导过程查看全连接网络BP算法推导【矩阵形式】。 Dataflow运算过程中最重要的是数据的传递，在整个过程中，向系统申请的内存资源(部分)列表如下     内存地址指针 类型 功能     data.X matrix 输入数据，以二维矩阵存储，每行表示一个">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深度学习框架darknet【五】——训练解析">
 <meta property="og:url" content="http://yoursite.com/2019/12/08/深度学习框架darknet【五】——训练解析/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="前言前一节介绍了如何调用函数进行网络的训练，本节扒一扒源码，详细介绍前向、反向、更新部分。查看本节内容要有BP算法的基础，以全连接网络为例，详细查看全连接网络BP算法推导【矩阵形式】。 Dataflow运算过程中最重要的是数据的传递，在整个过程中，向系统申请的内存资源(部分)列表如下| 内存地址指针        | 类型 | 功能  || :———————— | :—- | :—- || dat">
+<meta property="og:description" content="前言第三节介绍了如何调用函数进行网络的训练，本节扒一扒源码，详细介绍前向、反向、更新部分。查看本节内容要有BP算法的基础，以全连接网络为例详细推导过程查看全连接网络BP算法推导【矩阵形式】。 Dataflow运算过程中最重要的是数据的传递，在整个过程中，向系统申请的内存资源(部分)列表如下     内存地址指针 类型 功能     data.X matrix 输入数据，以二维矩阵存储，每行表示一个">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/2019/12/08/深度学习框架darknet【五】——训练解析/network.jpg">
 <meta property="og:image" content="http://yoursite.com/2019/12/08/深度学习框架darknet【五】——训练解析/forward_layer_0.jpg">
@@ -125,10 +125,10 @@
 <meta property="og:image" content="http://yoursite.com/2019/12/08/深度学习框架darknet【五】——训练解析/backward_layer_i_2.jpg">
 <meta property="og:image" content="http://yoursite.com/2019/12/08/深度学习框架darknet【五】——训练解析/update_layer_0.jpg">
 <meta property="og:image" content="http://yoursite.com/2019/12/08/深度学习框架darknet【五】——训练解析/update_layer_n_1.jpg">
-<meta property="og:updated_time" content="2019-12-08T13:03:14.950Z">
+<meta property="og:updated_time" content="2019-12-08T13:16:33.634Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深度学习框架darknet【五】——训练解析">
-<meta name="twitter:description" content="前言前一节介绍了如何调用函数进行网络的训练，本节扒一扒源码，详细介绍前向、反向、更新部分。查看本节内容要有BP算法的基础，以全连接网络为例，详细查看全连接网络BP算法推导【矩阵形式】。 Dataflow运算过程中最重要的是数据的传递，在整个过程中，向系统申请的内存资源(部分)列表如下| 内存地址指针        | 类型 | 功能  || :———————— | :—- | :—- || dat">
+<meta name="twitter:description" content="前言第三节介绍了如何调用函数进行网络的训练，本节扒一扒源码，详细介绍前向、反向、更新部分。查看本节内容要有BP算法的基础，以全连接网络为例详细推导过程查看全连接网络BP算法推导【矩阵形式】。 Dataflow运算过程中最重要的是数据的传递，在整个过程中，向系统申请的内存资源(部分)列表如下     内存地址指针 类型 功能     data.X matrix 输入数据，以二维矩阵存储，每行表示一个">
 <meta name="twitter:image" content="http://yoursite.com/2019/12/08/深度学习框架darknet【五】——训练解析/network.jpg">
 
 
@@ -411,7 +411,7 @@
                 
               
 
-              <time title="创建时间：2019-12-08 20:35:21 / 修改时间：21:03:14" itemprop="dateCreated datePublished" datetime="2019-12-08T20:35:21+08:00">2019-12-08</time>
+              <time title="创建时间：2019-12-08 20:35:21 / 修改时间：21:16:33" itemprop="dateCreated datePublished" datetime="2019-12-08T20:35:21+08:00">2019-12-08</time>
             
 
             
@@ -474,8 +474,81 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>前一节介绍了如何<strong>调用函数</strong>进行网络的训练，本节扒一扒源码，详细介绍前向、反向、更新部分。查看本节内容要有BP算法的基础，以全连接网络为例，详细查看<a href="https://louishsu.xyz/2019/12/08/%E5%85%A8%E8%BF%9E%E6%8E%A5%E7%BD%91%E7%BB%9CBP%E7%AE%97%E6%B3%95%E6%8E%A8%E5%AF%BC%E3%80%90%E7%9F%A9%E9%98%B5%E5%BD%A2%E5%BC%8F%E3%80%91/" target="_blank" rel="noopener">全连接网络BP算法推导【矩阵形式】</a>。</p>
-<h1 id="Dataflow"><a href="#Dataflow" class="headerlink" title="Dataflow"></a>Dataflow</h1><p>运算过程中最重要的是数据的传递，在整个过程中，向系统申请的内存资源(部分)列表如下<br>| 内存地址指针        | 类型 | 功能  |<br>| :———————— | :—- | :—- |<br>| <code>data.X</code>          | matrix | 输入数据，以二维矩阵存储，每行表示一个样本 |<br>| <code>data.y</code>          | matrix | 真实标签，以二维矩阵存储，每行表示一个样本 |<br>| <code>net-&gt;input</code>      | float<em> | 用于层间<strong>输入数据传递</strong>的指针：(1)初始化为数据读取地址<code>d.X</code>； (2)在forward时更新为第i层输出作为第i+1层输入； (3)在backward时更新为第i+1层输出用于第i层的参数梯度计算。若为特征图，以<code>CHW</code>格式储存 |<br>| <code>net-&gt;delta</code>      | float</em> | 用于层间<strong>输出梯度传递</strong>的指针，实现链式求导：在backward时更新为第i+1层输出梯度用于第i层的参数梯度计算 |<br>| <code>net-&gt;truth</code>      | float<em> | <strong>真实标签</strong>数据指针：初始化为<code>d.y</code>(groundtruth)；在损失函数层进行损失计算 |<br>| <code>net-&gt;workspace</code>  | float</em> | 运算时可使用的<strong>临时工作区</strong>，如在卷积运算时需要将特征图展开为矩阵形式 |<br>| <code>l.output</code>        | float<em> | 网络层的输出，若为特征图，以<code>CHW</code>格式储存 |<br>| <code>l.delta</code>         | float</em> | 网络层<strong>输出对输入</strong>的梯度 |<br>| <code>l.weights</code>       | float<em> | 网络层的权重，若为特征图，以<code>CHW</code>格式储存 |<br>| <code>l.weight_updates</code>| float</em> | 网络层权重的梯度值，由链式法则可知由<code>l.delta</code>与<code>l.weights</code>计算得到 |<br>| <code>l.biases</code>        | float<em> | 网络层的偏置 |<br>| <code>l.bias_updates</code>  | float</em> | 网络层偏置的梯度值 |</p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>第三节介绍了如何<strong>调用函数</strong>进行网络的训练，本节扒一扒源码，详细介绍前向、反向、更新部分。查看本节内容要有BP算法的基础，以全连接网络为例详细推导过程查看<a href="https://louishsu.xyz/2019/12/08/%E5%85%A8%E8%BF%9E%E6%8E%A5%E7%BD%91%E7%BB%9CBP%E7%AE%97%E6%B3%95%E6%8E%A8%E5%AF%BC%E3%80%90%E7%9F%A9%E9%98%B5%E5%BD%A2%E5%BC%8F%E3%80%91/" target="_blank" rel="noopener">全连接网络BP算法推导【矩阵形式】</a>。</p>
+<h1 id="Dataflow"><a href="#Dataflow" class="headerlink" title="Dataflow"></a>Dataflow</h1><p>运算过程中最重要的是数据的传递，在整个过程中，向系统申请的内存资源(部分)列表如下</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">内存地址指针</th>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>data.X</code></td>
+<td style="text-align:left">matrix</td>
+<td style="text-align:left">输入数据，以二维矩阵存储，每行表示一个样本</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>data.y</code></td>
+<td style="text-align:left">matrix</td>
+<td style="text-align:left">真实标签，以二维矩阵存储，每行表示一个样本</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>net-&gt;input</code></td>
+<td style="text-align:left">float*</td>
+<td style="text-align:left">用于层间<strong>输入数据传递</strong>的指针：(1)初始化为数据读取地址<code>d.X</code>； (2)在forward时更新为第i层输出作为第i+1层输入； (3)在backward时更新为第i+1层输出用于第i层的参数梯度计算。若为特征图，以<code>CHW</code>格式储存</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>net-&gt;delta</code></td>
+<td style="text-align:left">float*</td>
+<td style="text-align:left">用于层间<strong>输出梯度传递</strong>的指针，实现链式求导：在backward时更新为第i+1层输出梯度用于第i层的参数梯度计算</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>net-&gt;truth</code></td>
+<td style="text-align:left">float*</td>
+<td style="text-align:left"><strong>真实标签</strong>数据指针：初始化为<code>d.y</code>(groundtruth)；在损失函数层进行损失计算</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>net-&gt;workspace</code></td>
+<td style="text-align:left">float*</td>
+<td style="text-align:left">运算时可使用的<strong>临时工作区</strong>，如在卷积运算时需要将特征图展开为矩阵形式</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>l.output</code></td>
+<td style="text-align:left">float*</td>
+<td style="text-align:left">网络层的输出，若为特征图，以<code>CHW</code>格式储存</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>l.delta</code></td>
+<td style="text-align:left">float*</td>
+<td style="text-align:left">网络层<strong>输出对输入</strong>的梯度</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>l.weights</code></td>
+<td style="text-align:left">float*</td>
+<td style="text-align:left">网络层的权重，若为特征图，以<code>CHW</code>格式储存</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>l.weight_updates</code></td>
+<td style="text-align:left">float*</td>
+<td style="text-align:left">网络层权重的梯度值，由链式法则可知由<code>l.delta</code>与<code>l.weights</code>计算得到</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>l.biases</code></td>
+<td style="text-align:left">float*</td>
+<td style="text-align:left">网络层的偏置</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>l.bias_updates</code></td>
+<td style="text-align:left">float*</td>
+<td style="text-align:left">网络层偏置的梯度值</td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>示意图如下<br><img src="/2019/12/08/深度学习框架darknet【五】——训练解析/network.jpg" alt="network"></p>
 <h1 id="Entry"><a href="#Entry" class="headerlink" title="Entry"></a>Entry</h1><p>训练的入口函数为<code>train_netwok</code>，获取一批次数据并进行训练，数据由<code>(float*)d.X</code>、<code>(float*)d.y</code>拷贝至<code>(float*)net-&gt;input</code>、<code>(float*)net-&gt;truth</code>。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">train_network</span><span class="params">(network *net, data d)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    assert(d.X.rows % net-&gt;batch == <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">int</span> batch = net-&gt;batch;</span><br><span class="line">    <span class="keyword">int</span> n = d.X.rows / batch;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">float</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; n; ++i)&#123;</span><br><span class="line">        get_next_batch(d, batch, i*batch, net-&gt;input, net-&gt;truth);  <span class="comment">// d.X =&gt; net-&gt;input; d.y =&gt; net-&gt;truth</span></span><br><span class="line">        <span class="keyword">float</span> err = train_network_datum(net);</span><br><span class="line">        sum += err;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">float</span>)sum/(n*batch);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">train_network_datum</span><span class="params">(network *net)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    *net-&gt;seen += net-&gt;batch;</span><br><span class="line">    net-&gt;train = <span class="number">1</span>;</span><br><span class="line">    forward_network(net);       <span class="comment">// 网络前向，计算各层输出</span></span><br><span class="line">    backward_network(net);      <span class="comment">// 网络反向，计算各层参数梯度</span></span><br><span class="line">    <span class="keyword">float</span> error = *net-&gt;cost;</span><br><span class="line">    <span class="keyword">if</span>(((*net-&gt;seen)/net-&gt;batch)%net-&gt;subdivisions == <span class="number">0</span>) </span><br><span class="line">        update_network(net);    <span class="comment">// 更新各层参数</span></span><br><span class="line">    <span class="keyword">return</span> error;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>

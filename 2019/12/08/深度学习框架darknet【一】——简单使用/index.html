@@ -108,12 +108,12 @@
 
 
 
-  <meta name="description" content="前言目前可用于深度学习的著名框架有  tensorflow pytorch keras theano caffe …  这些给广大调参狗带来便利，但不利于学生党理解底层实现，例如神经网络的BP算法。 darknet是C语言实现的深度学习开源代码，细细品读，收获颇丰，开源万岁！  附上官网链接和Github地址  YOLO: Real-Time Object Detection pjreddie/d">
+  <meta name="description" content="深度学习框架darknet【一】——简单使用 深度学习框架darknet【二】——目录结构 深度学习框架darknet【三】——调包大法好 深度学习框架darknet【四】——网络配置选项 深度学习框架darknet【五】——训练解析  前言目前可用于深度学习的著名框架有  tensorflow pytorch keras theano caffe …  这些给广大调参狗带来便利，但不利于学生党">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深度学习框架darknet【一】——简单使用">
 <meta property="og:url" content="http://yoursite.com/2019/12/08/深度学习框架darknet【一】——简单使用/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="前言目前可用于深度学习的著名框架有  tensorflow pytorch keras theano caffe …  这些给广大调参狗带来便利，但不利于学生党理解底层实现，例如神经网络的BP算法。 darknet是C语言实现的深度学习开源代码，细细品读，收获颇丰，开源万岁！  附上官网链接和Github地址  YOLO: Real-Time Object Detection pjreddie/d">
+<meta property="og:description" content="深度学习框架darknet【一】——简单使用 深度学习框架darknet【二】——目录结构 深度学习框架darknet【三】——调包大法好 深度学习框架darknet【四】——网络配置选项 深度学习框架darknet【五】——训练解析  前言目前可用于深度学习的著名框架有  tensorflow pytorch keras theano caffe …  这些给广大调参狗带来便利，但不利于学生党">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/2019/12/08/深度学习框架darknet【一】——简单使用/darknet.png">
 <meta property="og:image" content="http://yoursite.com/2019/12/08/深度学习框架darknet【一】——简单使用/fastfurious.jpeg">
@@ -123,10 +123,10 @@
 <meta property="og:image" content="http://yoursite.com/2019/12/08/深度学习框架darknet【一】——简单使用/darknet_build_win_build.png">
 <meta property="og:image" content="http://yoursite.com/2019/12/08/深度学习框架darknet【一】——简单使用/darknet_build_win_success.png">
 <meta property="og:image" content="http://yoursite.com/2019/12/08/深度学习框架darknet【一】——简单使用/darknet_build_win_predict_dog.png">
-<meta property="og:updated_time" content="2019-12-08T13:10:30.399Z">
+<meta property="og:updated_time" content="2019-12-08T13:18:08.821Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深度学习框架darknet【一】——简单使用">
-<meta name="twitter:description" content="前言目前可用于深度学习的著名框架有  tensorflow pytorch keras theano caffe …  这些给广大调参狗带来便利，但不利于学生党理解底层实现，例如神经网络的BP算法。 darknet是C语言实现的深度学习开源代码，细细品读，收获颇丰，开源万岁！  附上官网链接和Github地址  YOLO: Real-Time Object Detection pjreddie/d">
+<meta name="twitter:description" content="深度学习框架darknet【一】——简单使用 深度学习框架darknet【二】——目录结构 深度学习框架darknet【三】——调包大法好 深度学习框架darknet【四】——网络配置选项 深度学习框架darknet【五】——训练解析  前言目前可用于深度学习的著名框架有  tensorflow pytorch keras theano caffe …  这些给广大调参狗带来便利，但不利于学生党">
 <meta name="twitter:image" content="http://yoursite.com/2019/12/08/深度学习框架darknet【一】——简单使用/darknet.png">
 
 
@@ -409,7 +409,7 @@
                 
               
 
-              <time title="创建时间：2019-12-08 20:34:00 / 修改时间：21:10:30" itemprop="dateCreated datePublished" datetime="2019-12-08T20:34:00+08:00">2019-12-08</time>
+              <time title="创建时间：2019-12-08 20:34:00 / 修改时间：21:18:08" itemprop="dateCreated datePublished" datetime="2019-12-08T20:34:00+08:00">2019-12-08</time>
             
 
             
@@ -472,7 +472,14 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>目前可用于深度学习的著名框架有</p>
+        <ul>
+<li><a href="https://louishsu.xyz/2019/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E4%B8%80%E3%80%91%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/" target="_blank" rel="noopener">深度学习框架darknet【一】——简单使用</a></li>
+<li><a href="https://louishsu.xyz/2019/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E4%BA%8C%E3%80%91%E2%80%94%E2%80%94%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84/" target="_blank" rel="noopener">深度学习框架darknet【二】——目录结构</a></li>
+<li><a href="https://louishsu.xyz/2019/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E4%B8%89%E3%80%91%E2%80%94%E2%80%94%E8%B0%83%E5%8C%85%E5%A4%A7%E6%B3%95%E5%A5%BD/" target="_blank" rel="noopener">深度学习框架darknet【三】——调包大法好</a></li>
+<li><a href="https://louishsu.xyz/2019/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E5%9B%9B%E3%80%91%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE%E9%80%89%E9%A1%B9/" target="_blank" rel="noopener">深度学习框架darknet【四】——网络配置选项</a></li>
+<li><a href="https://louishsu.xyz/2019/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E4%BA%94%E3%80%91%E2%80%94%E2%80%94%E8%AE%AD%E7%BB%83%E8%A7%A3%E6%9E%90/" target="_blank" rel="noopener">深度学习框架darknet【五】——训练解析</a></li>
+</ul>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>目前可用于深度学习的著名框架有</p>
 <ul>
 <li>tensorflow</li>
 <li>pytorch</li>
