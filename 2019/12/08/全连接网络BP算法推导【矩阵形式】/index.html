@@ -117,7 +117,7 @@
 <meta property="og:description" content="前言在Feedforward Neural Network/5. 梯度推导中介绍了前馈神经网络的BP算法，但是推导结果为对元素的梯度，不便于编程且影响计算效率。本节以3层前馈全连接神经网络为例，介绍矩阵形式的BP算法推导。 网络定义定义多层全连接网络：【输入(input)】 -&amp;gt; 全连接层 -&amp;gt; sigmoid -&amp;gt; 【隐藏层(hidden)】-&amp;gt; 全连接层 -&amp;gt; 【">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/2019/12/08/全连接网络BP算法推导【矩阵形式】/nn.svg">
-<meta property="og:updated_time" content="2019-12-08T09:52:16.743Z">
+<meta property="og:updated_time" content="2019-12-08T13:32:26.495Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="全连接网络BP算法推导【矩阵形式】">
 <meta name="twitter:description" content="前言在Feedforward Neural Network/5. 梯度推导中介绍了前馈神经网络的BP算法，但是推导结果为对元素的梯度，不便于编程且影响计算效率。本节以3层前馈全连接神经网络为例，介绍矩阵形式的BP算法推导。 网络定义定义多层全连接网络：【输入(input)】 -&amp;gt; 全连接层 -&amp;gt; sigmoid -&amp;gt; 【隐藏层(hidden)】-&amp;gt; 全连接层 -&amp;gt; 【">
@@ -403,7 +403,7 @@
                 
               
 
-              <time title="创建时间：2019-12-08 17:43:23 / 修改时间：17:52:16" itemprop="dateCreated datePublished" datetime="2019-12-08T17:43:23+08:00">2019-12-08</time>
+              <time title="创建时间：2019-12-08 17:43:23 / 修改时间：21:32:26" itemprop="dateCreated datePublished" datetime="2019-12-08T17:43:23+08:00">2019-12-08</time>
             
 
             
@@ -472,19 +472,19 @@
 <p><img src="/2019/12/08/全连接网络BP算法推导【矩阵形式】/nn.svg" alt="nn"></p>
 <p>其<strong>符号定义</strong>为</p>
 <ul>
-<li>$\bm{x}^{(l-1)}$: 第$l$层的输入向量，维度为$n_{l-1} \times 1$；</li>
-<li>$\bm{x}^{(l)}$: 第$l$层的输出向量，维度为$n_l \times 1$；</li>
-<li><p>$f^{(l)}(\bm{x})$: 第$l$层输入输出映射，即</p>
-<script type="math/tex; mode=display">\bm{x}^{(l)} = f^{(l)}(\bm{x}_{l-1}) \tag{1}</script><ul>
+<li>$\vec{x}^{(l-1)}$: 第$l$层的输入向量，维度为$n_{l-1} \times 1$；</li>
+<li>$\vec{x}^{(l)}$: 第$l$层的输出向量，维度为$n_l \times 1$；</li>
+<li><p>$f^{(l)}(\vec{x})$: 第$l$层输入输出映射，即</p>
+<script type="math/tex; mode=display">\vec{x}^{(l)} = f^{(l)}(\vec{x}_{l-1}) \tag{1}</script><ul>
 <li><p>全连接层: </p>
-<script type="math/tex; mode=display">f^{(l)}(\bm{x}) = W^{(l)} \bm{x} + \bm{b}^{(l)} \tag{1.1}</script><p>  其中$W^{(l)}$, $\bm{b}^{(l)}$分别表示权重与偏置，维度分别为$n_l \times n_{l-1}$, $n_l \times 1$；</p>
+<script type="math/tex; mode=display">f^{(l)}(\vec{x}) = W^{(l)} \vec{x} + \vec{b}^{(l)} \tag{1.1}</script><p>  其中$W^{(l)}$, $\vec{b}^{(l)}$分别表示权重与偏置，维度分别为$n_l \times n_{l-1}$, $n_l \times 1$；</p>
 </li>
 <li><p>激活函数层: </p>
-<script type="math/tex; mode=display">f^{(l)}(\bm{x}) = \sigma(\bm{x}) \tag{1.2.1}</script><p>  当激活函数采用sigmoid函数时，有</p>
+<script type="math/tex; mode=display">f^{(l)}(\vec{x}) = \sigma(\vec{x}) \tag{1.2.1}</script><p>  当激活函数采用sigmoid函数时，有</p>
 <script type="math/tex; mode=display">f^{(l)}(x_j) = \frac{1}{1 + e^{- x_j}} \tag{1.2.2}</script></li>
 <li><p>损失函数层：</p>
-<script type="math/tex; mode=display">f^{(l)}(\bm{x}) = L(\bm{x}, \bm{t}) \tag{1.3.1}</script><p>  取MSE损失时，有</p>
-<script type="math/tex; mode=display">L(\bm{x}, \bm{t}) = \frac{1}{2} ||\bm{x} - \bm{t}||_2^2 = \frac{1}{2} (\bm{x} - \bm{t})^T (\bm{x} - \bm{t}) \tag{1.3.2}</script><p>  其中$\bm{t}$表示groudtruth，$\bm{x}$表示网络的输出。</p>
+<script type="math/tex; mode=display">f^{(l)}(\vec{x}) = L(\vec{x}, \vec{t}) \tag{1.3.1}</script><p>  取MSE损失时，有</p>
+<script type="math/tex; mode=display">L(\vec{x}, \vec{t}) = \frac{1}{2} ||\vec{x} - \vec{t}||_2^2 = \frac{1}{2} (\vec{x} - \vec{t})^T (\vec{x} - \vec{t}) \tag{1.3.2}</script><p>  其中$\vec{t}$表示groudtruth，$\vec{x}$表示网络的输出。</p>
 </li>
 </ul>
 </li>
@@ -492,13 +492,13 @@
 <p>则有</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-    \bm{x}^{(1)} = W^{(1)} \bm{x}^{(0)} + \bm{b}^{(1)} \\
-    \bm{x}^{(2)} = \sigma(\bm{x}^{(1)}) \\
-    \bm{x}^{(3)} = W^{(3)} \bm{x}^{(2)} + \bm{b}^{(3)} \\
-    x^{(4)} = L(\bm{x}^{(3)}, \bm{t}) \\
+    \vec{x}^{(1)} = W^{(1)} \vec{x}^{(0)} + \vec{b}^{(1)} \\
+    \vec{x}^{(2)} = \sigma(\vec{x}^{(1)}) \\
+    \vec{x}^{(3)} = W^{(3)} \vec{x}^{(2)} + \vec{b}^{(3)} \\
+    x^{(4)} = L(\vec{x}^{(3)}, \vec{t}) \\
 \end{aligned} \tag{2}</script><blockquote>
 <script type="math/tex; mode=display">
-W^{(l)} \bm{x}^{(l-1)} + \bm{b}^{(l)} = 
+W^{(l)} \vec{x}^{(l-1)} + \vec{b}^{(l)} = 
 \begin{bmatrix}
   W^{(l)}_{11} & W^{(l)}_{12} & \cdots & W^{(l)}_{1n_{l-1}} \\
   \vdots & \vdots & \ddots & \vdots \\
@@ -510,115 +510,115 @@ W^{(l)} \bm{x}^{(l-1)} + \bm{b}^{(l)} =
   x^{(l-1)}_{n_{l-1}} \\
 \end{bmatrix} + 
 \begin{bmatrix}
-  \bm{b}^{(l)}_1 \\
+  \vec{b}^{(l)}_1 \\
   \vdots \\
-  \bm{b}^{(l)}_{n_l} \\
+  \vec{b}^{(l)}_{n_l} \\
 \end{bmatrix}</script></blockquote>
 <h1 id="梯度推导"><a href="#梯度推导" class="headerlink" title="梯度推导"></a>梯度推导</h1><blockquote>
 <p>标量对矩阵、向量的梯度见<a href="#%e9%99%84%e5%bd%95">附录</a>。</p>
 </blockquote>
-<p>每层输出$\bm{x}^{(l)} = f^{(l)}(\bm{x}^{(l-1)})$对输入$\bm{x}^{(l-1)}$的梯度为$f’^{(l)}(\bm{x}^{(l-1)})$(雅可比矩阵)，记作$p^{(l)}$，即</p>
-<script type="math/tex; mode=display">p^{(l)} = \frac{\partial f^{(l)}(\bm{x}^{(l-1)})}{\partial \bm{x}^{(l-1)T}} \tag{3}</script><p>则对于已定义的网络，有</p>
+<p>每层输出$\vec{x}^{(l)} = f^{(l)}(\vec{x}^{(l-1)})$对输入$\vec{x}^{(l-1)}$的梯度为$f’^{(l)}(\vec{x}^{(l-1)})$(雅可比矩阵)，记作$p^{(l)}$，即</p>
+<script type="math/tex; mode=display">p^{(l)} = \frac{\partial f^{(l)}(\vec{x}^{(l-1)})}{\partial \vec{x}^{(l-1)T}} \tag{3}</script><p>则对于已定义的网络，有</p>
 <ul>
 <li><p>全连接层(1)(向量对向量的梯度)：</p>
 <script type="math/tex; mode=display">
-  p^{(1)} = \frac{\partial }{\partial \bm{x}^{(0)T}} (W^{(1)} \bm{x}^{(0)} + \bm{b}^{(1)}) = \frac{\partial \bm{x}^{(1)}}{\partial \bm{x}^{(0)T}} = W^{(1)} \tag{3.1}</script></li>
+  p^{(1)} = \frac{\partial }{\partial \vec{x}^{(0)T}} (W^{(1)} \vec{x}^{(0)} + \vec{b}^{(1)}) = \frac{\partial \vec{x}^{(1)}}{\partial \vec{x}^{(0)T}} = W^{(1)} \tag{3.1}</script></li>
 <li><p>激活函数层(2)(向量对向量的梯度)：</p>
 <script type="math/tex; mode=display">
-  p^{(2)} = \frac{\partial }{\partial \bm{x}^{(1)T}} \sigma(\bm{x}^{(1)}) = \frac{\partial \bm{x}^{(2)}}{\partial \bm{x}^{(1)T}} = \rm{diag}[\sigma(\bm{x}^{(1)}) \odot (1 - \sigma(\bm{x}^{(1)}))] \tag{3.2}</script></li>
+  p^{(2)} = \frac{\partial }{\partial \vec{x}^{(1)T}} \sigma(\vec{x}^{(1)}) = \frac{\partial \vec{x}^{(2)}}{\partial \vec{x}^{(1)T}} = \rm{diag}[\sigma(\vec{x}^{(1)}) \odot (1 - \sigma(\vec{x}^{(1)}))] \tag{3.2}</script></li>
 <li><p>全连接层(3)(向量对向量的梯度)：</p>
 <script type="math/tex; mode=display">
-  p^{(3)} = \frac{\partial }{\partial \bm{x}^{(2)T}} (W^{(3)} \bm{x}^{(2)} + \bm{b}^{(3)}) = \frac{\partial \bm{x}^{(3)}}{\partial \bm{x}^{(2)T}} = W^{(3)} \tag{3.3}</script></li>
+  p^{(3)} = \frac{\partial }{\partial \vec{x}^{(2)T}} (W^{(3)} \vec{x}^{(2)} + \vec{b}^{(3)}) = \frac{\partial \vec{x}^{(3)}}{\partial \vec{x}^{(2)T}} = W^{(3)} \tag{3.3}</script></li>
 <li><p>损失函数层(4)(标量对向量的梯度)：</p>
 <script type="math/tex; mode=display">
-  p^{(4)} = \frac{\partial }{\partial \bm{x}^{(3)}} [\frac{1}{2} (\bm{x}^{(3)} - \bm{t})^T (\bm{x}^{(3)} - \bm{t})] = \frac{\partial x^{(4)}}{\partial \bm{x}^{(3)}} = \bm{x}^{(3)} - \bm{t} \tag{3.4}</script></li>
+  p^{(4)} = \frac{\partial }{\partial \vec{x}^{(3)}} [\frac{1}{2} (\vec{x}^{(3)} - \vec{t})^T (\vec{x}^{(3)} - \vec{t})] = \frac{\partial x^{(4)}}{\partial \vec{x}^{(3)}} = \vec{x}^{(3)} - \vec{t} \tag{3.4}</script></li>
 </ul>
 <blockquote>
 <script type="math/tex; mode=display">n_1 = n_2; \quad n_4 = 1</script></blockquote>
-<p>待更新参数为$W^{(1)}, \bm{b}^{(1)}, W^{(3)}, \bm{b}^{(3)}$。</p>
+<p>待更新参数为$W^{(1)}, \vec{b}^{(1)}, W^{(3)}, \vec{b}^{(3)}$。</p>
 <ol>
-<li><p>损失函数$L$对第$3$层参数$W^{(3)}, \bm{b}^{(3)}$的梯度，有</p>
+<li><p>损失函数$L$对第$3$层参数$W^{(3)}, \vec{b}^{(3)}$的梯度，有</p>
 <script type="math/tex; mode=display">
- \frac{\partial L(\bm{x}^{(3)}, \bm{t})}{\partial W^{(3)}} = 
- \frac{\partial x^{(4)}}{\partial \bm{x}^{(3)}}
- \frac{\partial f^{(3)}(\bm{x}^{(2)})}{\partial W^{(3)}} = 
+ \frac{\partial L(\vec{x}^{(3)}, \vec{t})}{\partial W^{(3)}} = 
+ \frac{\partial x^{(4)}}{\partial \vec{x}^{(3)}}
+ \frac{\partial f^{(3)}(\vec{x}^{(2)})}{\partial W^{(3)}} = 
  \underbrace{p^{(4)}}_{n_3 \times 1} 
- \underbrace{\frac{\partial}{\partial W^{(3)}} (W^{(3)} \bm{x}^{(2)} + \bm{b}^{(3)})}_{1 \times n_2} = 
- p^{(4)} \bm{x}^{(2)T} \tag{4.1}</script><script type="math/tex; mode=display">
- \frac{\partial L(\bm{x}^{(3)}, \bm{t})}{\partial \bm{b}^{(3)}} = 
- (\frac{\partial f^{(3)}(\bm{x}^{(2)})}{\partial \bm{b}^{(3)T}})^T
- \frac{\partial x^{(4)}}{\partial \bm{x}^{(3)}} =
- \underbrace{\frac{\partial}{\partial \bm{b}^{(3)T}} (W^{(3)} \bm{x}^{(2)} + \bm{b}^{(3)})}_{I_{n_3 \times n_3}} \underbrace{p^{(4)}}_{n_3 \times 1} = p^{(4)} \tag{4.2}</script></li>
-<li><p>损失函数$L$对第$1$层参数$W^{(1)}, \bm{b}^{(1)}$的梯度，有</p>
+ \underbrace{\frac{\partial}{\partial W^{(3)}} (W^{(3)} \vec{x}^{(2)} + \vec{b}^{(3)})}_{1 \times n_2} = 
+ p^{(4)} \vec{x}^{(2)T} \tag{4.1}</script><script type="math/tex; mode=display">
+ \frac{\partial L(\vec{x}^{(3)}, \vec{t})}{\partial \vec{b}^{(3)}} = 
+ (\frac{\partial f^{(3)}(\vec{x}^{(2)})}{\partial \vec{b}^{(3)T}})^T
+ \frac{\partial x^{(4)}}{\partial \vec{x}^{(3)}} =
+ \underbrace{\frac{\partial}{\partial \vec{b}^{(3)T}} (W^{(3)} \vec{x}^{(2)} + \vec{b}^{(3)})}_{I_{n_3 \times n_3}} \underbrace{p^{(4)}}_{n_3 \times 1} = p^{(4)} \tag{4.2}</script></li>
+<li><p>损失函数$L$对第$1$层参数$W^{(1)}, \vec{b}^{(1)}$的梯度，有</p>
 <script type="math/tex; mode=display">
- \frac{\partial L(\bm{x}^{(3)}, \bm{t})}{\partial W^{(1)}} = 
- \frac{\partial x^{(4)}}{\partial \bm{x}^{(1)}}
- \frac{\partial f^{(1)}(\bm{x}^{(0)})}{\partial W^{(1)}} \tag{5.1}</script><p> 其中$\frac{\partial x^{(4)}}{\partial \bm{x}^{(1)}}$为标量对向量的梯度，由式$(7.2)$可得</p>
+ \frac{\partial L(\vec{x}^{(3)}, \vec{t})}{\partial W^{(1)}} = 
+ \frac{\partial x^{(4)}}{\partial \vec{x}^{(1)}}
+ \frac{\partial f^{(1)}(\vec{x}^{(0)})}{\partial W^{(1)}} \tag{5.1}</script><p> 其中$\frac{\partial x^{(4)}}{\partial \vec{x}^{(1)}}$为标量对向量的梯度，由式$(7.2)$可得</p>
 <script type="math/tex; mode=display">
- \frac{\partial x^{(4)}}{\partial \bm{x}^{(1)}} = 
- (\frac{\partial \bm{x}^{(3)}}{\partial \bm{x}^{(1)}})^T 
- \frac{\partial x^{(4)}}{\partial \bm{x}^{(3)}} = 
- (\frac{\partial \bm{x}^{(3)}}{\partial \bm{x}^{(2)}} 
- \frac{\partial \bm{x}^{(2)}}{\partial \bm{x}^{(1)}})^T 
- \frac{\partial x^{(4)}}{\partial \bm{x}^{(3)}} \tag{5.2}</script><p> 代入式$(5.1)$得</p>
+ \frac{\partial x^{(4)}}{\partial \vec{x}^{(1)}} = 
+ (\frac{\partial \vec{x}^{(3)}}{\partial \vec{x}^{(1)}})^T 
+ \frac{\partial x^{(4)}}{\partial \vec{x}^{(3)}} = 
+ (\frac{\partial \vec{x}^{(3)}}{\partial \vec{x}^{(2)}} 
+ \frac{\partial \vec{x}^{(2)}}{\partial \vec{x}^{(1)}})^T 
+ \frac{\partial x^{(4)}}{\partial \vec{x}^{(3)}} \tag{5.2}</script><p> 代入式$(5.1)$得</p>
 <script type="math/tex; mode=display">
  \begin{aligned}
-     \frac{\partial L(\bm{x}^{(3)}, \bm{t})}{\partial W^{(1)}} \\
+     \frac{\partial L(\vec{x}^{(3)}, \vec{t})}{\partial W^{(1)}} \\
      = \left[
-         (\frac{\partial \bm{x}^{(3)}}{\partial \bm{x}^{(2)}} 
-         \frac{\partial \bm{x}^{(2)}}{\partial \bm{x}^{(1)}})^T 
-         \frac{\partial x^{(4)}}{\partial \bm{x}^{(3)}} 
+         (\frac{\partial \vec{x}^{(3)}}{\partial \vec{x}^{(2)}} 
+         \frac{\partial \vec{x}^{(2)}}{\partial \vec{x}^{(1)}})^T 
+         \frac{\partial x^{(4)}}{\partial \vec{x}^{(3)}} 
      \right]
-     \frac{\partial f^{(1)}(\bm{x}^{(0)})}{\partial W^{(1)}} \\
+     \frac{\partial f^{(1)}(\vec{x}^{(0)})}{\partial W^{(1)}} \\
      = \underbrace{p^{(2)T}}_{n_2 \times n_2}
      \underbrace{p^{(3)T}}_{n_2 \times n_3}
      \underbrace{p^{(4)}}_{n_3 \times 1}
-     \underbrace{\frac{\partial}{\partial W^{(1)}} (W^{(1)} \bm{x}^{(0)} + \bm{b}^{(1)})}_{1 \times n_0} = 
-     p^{(2)T} p^{(3)T} p^{(4)} \bm{x}^{(0)T}
+     \underbrace{\frac{\partial}{\partial W^{(1)}} (W^{(1)} \vec{x}^{(0)} + \vec{b}^{(1)})}_{1 \times n_0} = 
+     p^{(2)T} p^{(3)T} p^{(4)} \vec{x}^{(0)T}
  \end{aligned} \tag{5.3}</script><script type="math/tex; mode=display">
  \begin{aligned}
-     \frac{\partial L(\bm{x}^{(3)}, \bm{t})}{\partial \bm{b}^{(1)}} 
-     = \frac{\partial x^{(4)}}{\partial \bm{x}^{(3)}} \\
+     \frac{\partial L(\vec{x}^{(3)}, \vec{t})}{\partial \vec{b}^{(1)}} 
+     = \frac{\partial x^{(4)}}{\partial \vec{x}^{(3)}} \\
      = \left[
-         (\frac{\partial \bm{x}^{(3)}}{\partial \bm{x}^{(2)}} 
-         \frac{\partial \bm{x}^{(2)}}{\partial \bm{x}^{(1)}})^T 
-         \frac{\partial x^{(4)}}{\partial \bm{x}^{(3)}} 
+         (\frac{\partial \vec{x}^{(3)}}{\partial \vec{x}^{(2)}} 
+         \frac{\partial \vec{x}^{(2)}}{\partial \vec{x}^{(1)}})^T 
+         \frac{\partial x^{(4)}}{\partial \vec{x}^{(3)}} 
      \right]
-     \frac{\partial f^{(1)}(\bm{x}^{(0)})}{\partial \bm{b}^{(1)}} \\
+     \frac{\partial f^{(1)}(\vec{x}^{(0)})}{\partial \vec{b}^{(1)}} \\
      = \underbrace{p^{(2)T}}_{n_2 \times n_2}
      \underbrace{p^{(3)T}}_{n_2 \times n_3}
      \underbrace{p^{(4)}}_{n_3 \times 1}
-     \underbrace{\frac{\partial}{\partial \bm{b}^{(1)}} (W^{(1)} \bm{x}^{(0)} + \bm{b}^{(1)})}_{I_{n_0 \times n_0}} =
+     \underbrace{\frac{\partial}{\partial \vec{b}^{(1)}} (W^{(1)} \vec{x}^{(0)} + \vec{b}^{(1)})}_{I_{n_0 \times n_0}} =
      p^{(2)T} p^{(3)T} p^{(4)}
  \end{aligned} \tag{5.4}</script></li>
 </ol>
 <p>如果记</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-    \bm{\delta}^{(4)} = p^{(4)} = \bm{x}^{(3)} - \bm{t} \\
-    \bm{\delta}^{(3)} = p^{(3)T} \bm{\delta}^{(4)} = W^{(3)T} \bm{\delta}^{(4)} \\
-    \bm{\delta}^{(2)} = p^{(2)T} \bm{\delta}^{(3)} = \rm{diag}[\sigma(\bm{x}^{(1)}) \odot (1 - \bm{x}^{(1)})]^T \bm{\delta}^{(3)} \\
+    \vec{\delta}^{(4)} = p^{(4)} = \vec{x}^{(3)} - \vec{t} \\
+    \vec{\delta}^{(3)} = p^{(3)T} \vec{\delta}^{(4)} = W^{(3)T} \vec{\delta}^{(4)} \\
+    \vec{\delta}^{(2)} = p^{(2)T} \vec{\delta}^{(3)} = \rm{diag}[\sigma(\vec{x}^{(1)}) \odot (1 - \vec{x}^{(1)})]^T \vec{\delta}^{(3)} \\
 \end{aligned}</script><p>最终得到梯度表达式</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-    \frac{\partial L(\bm{x}^{(3)}, \bm{t})}{\partial W^{(3)}} = \bm{\delta}^{(4)} x^{(2)T} \\
-    \frac{\partial L(\bm{x}^{(3)}, \bm{t})}{\partial \bm{b}^{(3)}} = \bm{\delta}^{(4)} \\
-    \frac{\partial L(\bm{x}^{(3)}, \bm{t})}{\partial W^{(1)}} = 
-        \bm{\delta}^{(2)} \bm{x}^{(0)T} \\
-    \frac{\partial L(\bm{x}^{(3)}, \bm{t})}{\partial \bm{b}^{(1)}} = 
-       \bm{\delta}^{(2)}
+    \frac{\partial L(\vec{x}^{(3)}, \vec{t})}{\partial W^{(3)}} = \vec{\delta}^{(4)} x^{(2)T} \\
+    \frac{\partial L(\vec{x}^{(3)}, \vec{t})}{\partial \vec{b}^{(3)}} = \vec{\delta}^{(4)} \\
+    \frac{\partial L(\vec{x}^{(3)}, \vec{t})}{\partial W^{(1)}} = 
+        \vec{\delta}^{(2)} \vec{x}^{(0)T} \\
+    \frac{\partial L(\vec{x}^{(3)}, \vec{t})}{\partial \vec{b}^{(1)}} = 
+       \vec{\delta}^{(2)}
 \end{aligned} \tag{*}</script><h1 id="附录：矩阵形式的链式求导"><a href="#附录：矩阵形式的链式求导" class="headerlink" title="附录：矩阵形式的链式求导"></a>附录：矩阵形式的链式求导</h1><ol>
-<li><p>向量对向量<br> 假设三个向量满足依赖关系$\bm{x} \rightarrow \bm{y} \rightarrow \bm{z}$，分别为$m, n, p$维向量，则满足</p>
+<li><p>向量对向量<br> 假设三个向量满足依赖关系$\vec{x} \rightarrow \vec{y} \rightarrow \vec{z}$，分别为$m, n, p$维向量，则满足</p>
 <script type="math/tex; mode=display">
- \underbrace{\frac{\partial \bm{z}}{\partial \bm{x}}}_{p \times m} = 
- \underbrace{\frac{\partial \bm{z}}{\partial \bm{y}}}_{p \times n} 
- \underbrace{\frac{\partial \bm{y}}{\partial \bm{x}}}_{n \times m} \tag{7.1}</script><p> 注意：若其中任意变量为矩阵时上式子不成立，如$\bm{x} \rightarrow Y \rightarrow \bm{z}$</p>
+ \underbrace{\frac{\partial \vec{z}}{\partial \vec{x}}}_{p \times m} = 
+ \underbrace{\frac{\partial \vec{z}}{\partial \vec{y}}}_{p \times n} 
+ \underbrace{\frac{\partial \vec{y}}{\partial \vec{x}}}_{n \times m} \tag{7.1}</script><p> 注意：若其中任意变量为矩阵时上式子不成立，如$\vec{x} \rightarrow Y \rightarrow \vec{z}$</p>
 </li>
-<li><p>标量对向量<br> 假设有依赖关系$\bm{\bm{x}} \rightarrow \bm{\bm{y}} \rightarrow z$，分别为$m, n$维向量与标量，则$\frac{\partial z}{\partial \bm{x}}$维度为$m \times 1$，$\frac{\partial z}{\partial \bm{y}}$维度为$n \times 1$，$\frac{\partial \bm{y}}{\partial \bm{x}}$维度为$n \times m$，为保证矩阵维度相容，需增加转置</p>
+<li><p>标量对向量<br> 假设有依赖关系$\vec{\vec{x}} \rightarrow \vec{\vec{y}} \rightarrow z$，分别为$m, n$维向量与标量，则$\frac{\partial z}{\partial \vec{x}}$维度为$m \times 1$，$\frac{\partial z}{\partial \vec{y}}$维度为$n \times 1$，$\frac{\partial \vec{y}}{\partial \vec{x}}$维度为$n \times m$，为保证矩阵维度相容，需增加转置</p>
 <script type="math/tex; mode=display">
- \underbrace{\frac{\partial z}{\partial \bm{x}}}_{m \times 1} = 
- \underbrace{(\frac{\partial \bm{y}}{\partial \bm{x}})^T}_{m \times n}
- \underbrace{\frac{\partial z}{\partial \bm{y}}}_{n \times 1} \tag{7.2}</script></li>
+ \underbrace{\frac{\partial z}{\partial \vec{x}}}_{m \times 1} = 
+ \underbrace{(\frac{\partial \vec{y}}{\partial \vec{x}})^T}_{m \times n}
+ \underbrace{\frac{\partial z}{\partial \vec{y}}}_{n \times 1} \tag{7.2}</script></li>
 <li><p>标量对矩阵<br> 矩阵对矩阵求导定义复杂，不给出整体的求导法则，仅对矩阵中某元素进行求导。假设有依赖关系$X \rightarrow Y \rightarrow z$，则满足</p>
 <script type="math/tex; mode=display">
  \frac{\partial z}{\partial X_{ij}} = \sum_{k, l} \frac{\partial z}{\partial Y_{kl}} \frac{\partial Y_{kl}}{\partial X_{ij}} \tag{7.3}</script></li>
@@ -640,10 +640,10 @@ W^{(l)} \bm{x}^{(l-1)} + \bm{b}^{(l)} =
 \frac{\partial z}{\partial X_{ij}} = 
 \sum_{k, l} \frac{\partial z}{\partial Y_{kl}} A_{ki} \delta_{lj} =
 \sum_{k} \frac{\partial z}{\partial Y_{kj}} A_{ki}</script><p>也即$A^T$第$i$行与$\frac{\partial z}{\partial Y}$第$j$列内积，即</p>
-<script type="math/tex; mode=display">\frac{\partial z}{\partial X} = A^T \frac{\partial z}{\partial Y} \tag{8.1}</script><p>类似的，对于$z = f(\bm{y}), \bm{y} = A\bm{x} + \bm{b}$</p>
-<script type="math/tex; mode=display">\frac{\partial z}{\partial \bm{x}} = A^T \frac{\partial z}{\partial \bm{y}} \tag{8.2}</script><p>对于$z = f(Y), Y = XA + B$</p>
-<script type="math/tex; mode=display">\frac{\partial z}{X} = \frac{\partial z}{\partial Y} A^T \tag{8.3}</script><p>对于$z = f(\bm{y}), \bm{y} = X\bm{a} + \bm{b}$</p>
-<script type="math/tex; mode=display">\frac{\partial z}{\partial X} = \frac{\partial z}{\partial \bm{y}} \bm{a}^T \tag{8.4}</script>
+<script type="math/tex; mode=display">\frac{\partial z}{\partial X} = A^T \frac{\partial z}{\partial Y} \tag{8.1}</script><p>类似的，对于$z = f(\vec{y}), \vec{y} = A\vec{x} + \vec{b}$</p>
+<script type="math/tex; mode=display">\frac{\partial z}{\partial \vec{x}} = A^T \frac{\partial z}{\partial \vec{y}} \tag{8.2}</script><p>对于$z = f(Y), Y = XA + B$</p>
+<script type="math/tex; mode=display">\frac{\partial z}{X} = \frac{\partial z}{\partial Y} A^T \tag{8.3}</script><p>对于$z = f(\vec{y}), \vec{y} = X\vec{a} + \vec{b}$</p>
+<script type="math/tex; mode=display">\frac{\partial z}{\partial X} = \frac{\partial z}{\partial \vec{y}} \vec{a}^T \tag{8.4}</script>
       
     </div>
 
