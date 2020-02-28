@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="字典定义及抽象数据描述定义：字典(dictionary)是由一些形如$(k, v)$的数对所组成的集合，其中$k$为关键字，$v$是与关键字$k$对应的值。 抽象数据描述：1234567891011抽象数据类型 dictionary&amp;#123;    实例:        关键字各不相同的一组数据对；    操作：        empty();        // 判断是否为空        s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【数据结构】跳表和散列">
+<meta property="og:url" content="http://yoursite.com/2020/02/24/【数据结构】跳表和散列/index.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="字典定义及抽象数据描述定义：字典(dictionary)是由一些形如$(k, v)$的数对所组成的集合，其中$k$为关键字，$v$是与关键字$k$对应的值。 抽象数据描述：1234567891011抽象数据类型 dictionary&amp;#123;    实例:        关键字各不相同的一组数据对；    操作：        empty();        // 判断是否为空        s">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2020/02/24/【数据结构】跳表和散列/skiplist.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/02/24/【数据结构】跳表和散列/hashtabel_insert.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/02/24/【数据结构】跳表和散列/hashchain_insert.jpg">
+<meta property="og:updated_time" content="2020-02-28T06:26:39.279Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【数据结构】跳表和散列">
+<meta name="twitter:description" content="字典定义及抽象数据描述定义：字典(dictionary)是由一些形如$(k, v)$的数对所组成的集合，其中$k$为关键字，$v$是与关键字$k$对应的值。 抽象数据描述：1234567891011抽象数据类型 dictionary&amp;#123;    实例:        关键字各不相同的一组数据对；    操作：        empty();        // 判断是否为空        s">
+<meta name="twitter:image" content="http://yoursite.com/2020/02/24/【数据结构】跳表和散列/skiplist.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/02/24/【数据结构】跳表和散列/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>【数据结构】跳表和散列 | LOUIS' BLOG</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LOUIS' BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">大龄工科伪文青</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-guestbook">
+    <a href="/guestbook" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-guest"></i> <br>留言</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/24/【数据结构】跳表和散列/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="技术博客？">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【数据结构】跳表和散列
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-02-24 13:29:43" itemprop="dateCreated datePublished" datetime="2020-02-24T13:29:43+08:00">2020-02-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-02-28 14:26:39" itemprop="dateModified" datetime="2020-02-28T14:26:39+08:00">2020-02-28</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h1><h2 id="定义及抽象数据描述"><a href="#定义及抽象数据描述" class="headerlink" title="定义及抽象数据描述"></a>定义及抽象数据描述</h2><p>定义：<strong>字典</strong>(dictionary)是由一些形如$(k, v)$的数对所组成的集合，其中$k$为<strong>关键字</strong>，$v$是与关键字$k$对应的<strong>值</strong>。</p>
+<p>抽象数据描述：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">抽象数据类型 dictionary</span><br><span class="line">&#123;</span><br><span class="line">    实例:</span><br><span class="line">        关键字各不相同的一组数据对；</span><br><span class="line">    操作：</span><br><span class="line">        empty();        <span class="comment">// 判断是否为空</span></span><br><span class="line">        size();         <span class="comment">// 返回字典内数对个数</span></span><br><span class="line">        find(k);        <span class="comment">// 返回关键字为k的数对</span></span><br><span class="line">        insert(k, v);   <span class="comment">// 插入数据对</span></span><br><span class="line">        erase(k);       <span class="comment">// 删除关键字为k的数对</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="线性表描述"><a href="#线性表描述" class="headerlink" title="线性表描述"></a>线性表描述</h2><p>将字典保存在线性表$p_0, p_1, \dots$中，其中$p_is$是字典中<strong>按关键字递增次序排列</strong>的数对。利用二分查找进行数据对的插入、查询与删除操作。其时间复杂度为$O(\log n)$。</p>
+<p>在插入数据对时，首先对关键字进行查询，若未找到数对则创建新的数对，插入到对应位置；否则更新已有数对。</p>
+<p>若采用数组描述的线性表，其二分查找较容易实现(实现略)。而对于链表描述的线性表，可引入跳表(<a href="#%e8%b7%b3%e8%a1%a8%e6%8f%8f%e8%bf%b0">跳表描述</a>)减少时间复杂度，</p>
+<h2 id="跳表描述"><a href="#跳表描述" class="headerlink" title="跳表描述"></a>跳表描述</h2><p>对于线性表描述(链表描述)的字典，对$n$个数对进行查找，至多需要$n$此关键字比较。若添加中间节点的指针信息，其比较次数可减少到$(n/2 + 1)$。由此引入<strong>跳表</strong>(skiplist)，在不同的节点位置处添加多级指针信息。</p>
+<p>跳表可用<strong>对数形式</strong>进行<strong>级的分配</strong>。例如，对于$n$个数，$0$级链表包括所有数对，$1$级链表每$2$个数对取一个，$2$级链表每$4$个数对取一个，以此类推。那么对于一个<strong>属于$i$级链表的数对</strong>，当且仅当它属于$0~i$级链表，但不属于$i+1$级链表。如下图所示，键为$20$的数对属于$0,1$级链表，不属于$2$级链表。</p>
+<p><img src="/2020/02/24/【数据结构】跳表和散列/skiplist.jpg" alt="skiplist"></p>
+<p>但是采用对数形式描述跳表，需在插入或删除数对后更新各级链表，其<strong>指针不易维护</strong>。对于该问题，可采用<strong>概率形式</strong>解决，<strong>在查询位置处(仍需满足有序线性表)</strong>插入结点时生成随机数判定级别，使s它属于$i-1$级链表的情况下，又属于$i$级链表的概率服从<strong>均匀分布</strong>，使$n$个数对在各级中分布是均匀的，即</p>
+<script type="math/tex; mode=display">P(属于i级链表|属于i-1级链表) = p</script><p>具体实现如下，构造键值对对象<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//linkeddictionary.h</span></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Pair</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	Pair() &#123; m_key = <span class="keyword">new</span> K; m_value = <span class="keyword">new</span> V; &#125;;</span><br><span class="line">	Pair(<span class="keyword">const</span> K k, <span class="keyword">const</span> V v) &#123; m_key = <span class="keyword">new</span> K; *m_key = k;  m_value = <span class="keyword">new</span> V; *m_value = v; &#125;;</span><br><span class="line">	~Pair() &#123; <span class="keyword">delete</span> m_key; <span class="keyword">delete</span> m_value; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">setKey</span><span class="params">(<span class="keyword">const</span> K k)</span> </span>&#123; *m_key = k; &#125;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">setVal</span><span class="params">(<span class="keyword">const</span> V v)</span> </span>&#123; *m_value = v; &#125;</span><br><span class="line">	<span class="function">K <span class="title">getKey</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> *m_key; &#125;</span><br><span class="line">	<span class="function">V <span class="title">getVal</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> *m_value; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	K* m_key;</span><br><span class="line">	V* m_value;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>以下几点说明：</p>
+<ul>
+<li>跳表内各级链表为<code>ChainList&lt;T&gt;</code>模板类的实例，将键值对<code>Pair&lt;K, V&gt;*</code>视作各节点的值，即实例为<code>ChainList&lt;Pair&lt;K, V&gt;* &gt;</code>；</li>
+<li>指定最大级数，各级链表地址存储在<code>ChainList&lt;Pair&lt;K, V&gt;*&gt;** m_kvp</code>中；</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//linkeddictionary.h</span></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SkipList</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	SkipList(<span class="keyword">int</span> maxLevel=<span class="number">3</span>, <span class="keyword">float</span> p=<span class="number">0.5</span>);</span><br><span class="line">	~SkipList();</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">bool</span> <span class="title">empty</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> size() == <span class="number">0</span>;  &#125;</span><br><span class="line">	<span class="function"><span class="keyword">int</span>  <span class="title">size</span><span class="params">()</span>  <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> m_kvp[<span class="number">0</span>]-&gt;size(); &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="keyword">const</span> K&amp; k, <span class="keyword">const</span> V&amp; v)</span></span>;</span><br><span class="line">	<span class="function">V <span class="title">get</span>  <span class="params">(<span class="keyword">const</span> K&amp; k)</span> <span class="keyword">const</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">erase</span><span class="params">(<span class="keyword">const</span> K&amp; k)</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	ChainNode&lt;Pair&lt;K, V&gt;*&gt;* find(<span class="keyword">const</span> K&amp; k) <span class="keyword">const</span>;</span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">level</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> lv = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span> (; <span class="built_in">std</span>::rand() &gt; m_iCutoff; lv++);</span><br><span class="line">		<span class="keyword">return</span> (lv &gt; m_iMaxLevel - <span class="number">1</span>) ? (m_iMaxLevel - <span class="number">1</span>) : lv;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">int</span> m_iCutoff;			<span class="comment">// 条件概率，截断</span></span><br><span class="line">	<span class="keyword">int</span> m_iMaxLevel;		<span class="comment">// 最大链表层数</span></span><br><span class="line">	ChainList&lt;Pair&lt;K, V&gt;*&gt;** m_kvp;	<span class="comment">// 多层链表数组</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line">SkipList&lt;K, V&gt;::SkipList(<span class="keyword">int</span> maxLevel, <span class="keyword">float</span> p) : </span><br><span class="line">	m_iMaxLevel(maxLevel), m_iCutoff(p * RAND_MAX)</span><br><span class="line">&#123;</span><br><span class="line">	m_kvp = <span class="keyword">new</span> ChainList&lt;Pair&lt;K, V&gt;*&gt; * [maxLevel];</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m_iMaxLevel; i++)</span><br><span class="line">		m_kvp[i] = <span class="keyword">new</span> ChainList&lt;Pair&lt;K, V&gt;*&gt;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line">SkipList&lt;K, V&gt;::~SkipList()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m_iMaxLevel; i++)</span><br><span class="line">		<span class="keyword">delete</span> m_kvp[i];</span><br><span class="line">	<span class="keyword">delete</span>[] m_kvp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line"><span class="keyword">void</span> SkipList&lt;K, V&gt;::print() <span class="keyword">const</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m_iMaxLevel; i++) &#123;</span><br><span class="line">		ChainNode&lt;Pair&lt;K, V&gt;*&gt;* pn = m_kvp[i]-&gt;getNode(<span class="number">0</span>);	<span class="comment">// 当前级链表的首节点</span></span><br><span class="line"></span><br><span class="line">		<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Level ["</span> &lt;&lt; i &lt;&lt; <span class="string">"]: "</span>;</span><br><span class="line">		<span class="keyword">while</span> (pn-&gt;ptr &amp;&amp; pn-&gt;next) &#123;</span><br><span class="line">			Pair&lt;K, V&gt;* kvp = pn-&gt;getVal();</span><br><span class="line">			<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; kvp-&gt;getKey() &lt;&lt; <span class="string">": "</span> &lt;&lt; kvp-&gt;getVal() &lt;&lt; <span class="string">" -&gt; "</span>;</span><br><span class="line">			pn = pn-&gt;next;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在搜索时，自最高级链表向低级搜索，因为若高级链表中存在某键值对，那么低级链表中必定存在，此时可调用<code>ChainList&lt;T&gt;::indexOf(T)</code>直接获取起始搜索位置，实现二分搜索降低时间复杂度</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line">ChainNode&lt;Pair&lt;K, V&gt;*&gt;* SkipList&lt;K, V&gt;::find(<span class="keyword">const</span> K&amp; k) <span class="keyword">const</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// 若字典内无数对，返回空</span></span><br><span class="line">	<span class="keyword">if</span> (empty()) <span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">	</span><br><span class="line">	ChainNode&lt;Pair&lt;K, V&gt;*&gt;* ret = m_kvp[<span class="number">0</span>]-&gt;getNode(<span class="number">0</span>);			<span class="comment">// 初始化为0级链表首节点</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = m_iMaxLevel - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;				<span class="comment">// 由高级向低级搜索</span></span><br><span class="line">		<span class="keyword">if</span> (m_kvp[i]-&gt;empty()) <span class="keyword">continue</span>;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">int</span> index = m_kvp[i]-&gt;indexOf(ret-&gt;getVal());			<span class="comment">// 查找当前节点</span></span><br><span class="line">		ChainNode&lt;Pair&lt;K, V&gt;*&gt; * pn = (index == <span class="number">-1</span>)? \</span><br><span class="line">			m_kvp[i]-&gt;getNode(<span class="number">0</span>): \</span><br><span class="line">            m_kvp[i]-&gt;getNode(index);		                    <span class="comment">// 当前级链表开始搜索的位置</span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">while</span> ((pn-&gt;getVal()-&gt;getKey() &lt; k) &amp;&amp; pn-&gt;next-&gt;ptr) &#123;</span><br><span class="line">			pn = pn-&gt;next; ret = pn;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (!pn-&gt;next-&gt;ptr) <span class="keyword">continue</span>;							<span class="comment">// 已为尾节点</span></span><br><span class="line">		<span class="keyword">if</span> (pn-&gt;next-&gt;getVal()-&gt;getKey() == ret-&gt;getVal()-&gt;getKey()) </span><br><span class="line">			<span class="keyword">return</span> pn-&gt;next;									<span class="comment">// 后一节点是否符合</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line">V SkipList&lt;K, V&gt;::get(<span class="keyword">const</span> K&amp; k) <span class="keyword">const</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// 查找</span></span><br><span class="line">	ChainNode&lt;Pair&lt;K, V&gt;*&gt;* found = find(k);</span><br><span class="line">	<span class="keyword">if</span> (found) <span class="keyword">return</span> found-&gt;getVal()-&gt;getVal();</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>插入时，需确定插入键值对的级数<code>level()</code>，依次插入链表即可，注意<strong>有序插入</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line"><span class="keyword">void</span> SkipList&lt;K, V&gt;::insert(<span class="keyword">const</span> K&amp; k, <span class="keyword">const</span> V&amp; v)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// 先进行查找，若找到节点则不添加键，仅修改值</span></span><br><span class="line">	ChainNode&lt;Pair&lt;K, V&gt;*&gt; * found = find(k);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// ----- 若字典为空，直接插入键值对 -----</span></span><br><span class="line">	<span class="keyword">if</span> (!found) &#123;</span><br><span class="line">		<span class="comment">// 创建节点</span></span><br><span class="line">		Pair&lt;K, V&gt;* pn = <span class="keyword">new</span> Pair&lt;K, V&gt;(k, v);</span><br><span class="line">		<span class="comment">// 确定层级</span></span><br><span class="line">		<span class="keyword">int</span> lv = level();</span><br><span class="line">		<span class="comment">// 插入各级链表</span></span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= lv; i++) </span><br><span class="line">			m_kvp[i]-&gt;insert(<span class="number">0</span>, pn);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// ----- 若找到节点则不添加键，仅修改值 -----</span></span><br><span class="line">	<span class="keyword">if</span> (found-&gt;getVal()-&gt;getKey() == k) &#123; found-&gt;getVal()-&gt;setVal(v); <span class="keyword">return</span>; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// ----- 若未找到，在标志节点附近有序插入 -----</span></span><br><span class="line">	Pair&lt;K, V&gt;* pn = <span class="keyword">new</span> Pair&lt;K, V&gt;(k, v);</span><br><span class="line">	<span class="comment">// 确定层级</span></span><br><span class="line">	<span class="keyword">int</span> lv = level();</span><br><span class="line">	<span class="comment">// 插入各级链表</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= lv; i++) &#123;</span><br><span class="line">		<span class="comment">// 当前链表空</span></span><br><span class="line">		<span class="keyword">if</span> (m_kvp[i]-&gt;empty()) &#123; m_kvp[i]-&gt;insert(<span class="number">0</span>, pn); <span class="keyword">continue</span>; &#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">int</span> index = <span class="number">0</span>;</span><br><span class="line">		ChainNode&lt;Pair&lt;K, V&gt;*&gt;* lvn = m_kvp[i]-&gt;getNode(<span class="number">0</span>);		<span class="comment">// 当前级链表的首节点</span></span><br><span class="line">		<span class="keyword">while</span> (lvn) &#123;</span><br><span class="line">			<span class="keyword">if</span> (!lvn-&gt;ptr) &#123;					                <span class="comment">// 尾节点</span></span><br><span class="line">				m_kvp[i]-&gt;insert(index, pn);</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">				<span class="keyword">if</span> (lvn-&gt;ptr &amp;&amp; lvn-&gt;getVal()-&gt;getKey() &gt; k) &#123;	<span class="comment">// 当前节点的键大于k</span></span><br><span class="line">					m_kvp[i]-&gt;insert(index, pn);</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">					lvn = lvn-&gt;next; index++;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>删除结点时，从高级链表至低级的顺序释放，因为若从低级链表至高级的顺序释放，某节点在调用<code>ChainList&lt;T&gt;::erase(int)</code>后，内存被释放导致高级链表中<code>ChainList&lt;T&gt;::indexOf(T)</code>难以定位</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line"><span class="keyword">void</span> SkipList&lt;K, V&gt;::erase(<span class="keyword">const</span> K&amp; k)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// 先进行查找</span></span><br><span class="line">	ChainNode&lt;Pair&lt;K, V&gt;*&gt;* found = find(k);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// ----- 若未找到 ----</span></span><br><span class="line">	<span class="keyword">if</span> (!found) <span class="keyword">return</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// ----- 若找到，删除各级链中的该数对-----</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = m_iMaxLevel - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">		ChainList&lt;Pair&lt;K, V&gt;*&gt;* pc = m_kvp[i];		<span class="comment">// 当前级链表</span></span><br><span class="line">		<span class="keyword">int</span> index = pc-&gt;indexOf(found-&gt;getVal());</span><br><span class="line">		<span class="keyword">if</span> (index == <span class="number">-1</span>) <span class="keyword">continue</span>;</span><br><span class="line">		pc-&gt;erase(index);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>主函数测试及输出如下<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>** argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    SkipList&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; dict(<span class="number">3</span>, <span class="number">0.5</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"insert: "</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">        dict.insert(i % <span class="number">6</span>, i);</span><br><span class="line">        dict.print();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"erase: "</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) &#123;</span><br><span class="line">        dict.erase(i);</span><br><span class="line">        dict.print();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">insert:</span><br><span class="line">Level [0]: 0: 0 -&gt;</span><br><span class="line">Level [1]:</span><br><span class="line">Level [2]:</span><br><span class="line"></span><br><span class="line">Level [0]: 0: 0 -&gt; 1: 1 -&gt;</span><br><span class="line">Level [1]: 1: 1 -&gt;</span><br><span class="line">Level [2]:</span><br><span class="line"></span><br><span class="line">Level [0]: 0: 0 -&gt; 1: 1 -&gt; 2: 2 -&gt;</span><br><span class="line">Level [1]: 1: 1 -&gt; 2: 2 -&gt;</span><br><span class="line">Level [2]: 2: 2 -&gt;</span><br><span class="line"></span><br><span class="line">Level [0]: 0: 0 -&gt; 1: 1 -&gt; 2: 2 -&gt; 3: 3 -&gt;</span><br><span class="line">Level [1]: 1: 1 -&gt; 2: 2 -&gt;</span><br><span class="line">Level [2]: 2: 2 -&gt;</span><br><span class="line"></span><br><span class="line">Level [0]: 0: 0 -&gt; 1: 1 -&gt; 2: 2 -&gt; 3: 3 -&gt; 4: 4 -&gt;</span><br><span class="line">Level [1]: 1: 1 -&gt; 2: 2 -&gt; 4: 4 -&gt;</span><br><span class="line">Level [2]: 2: 2 -&gt; 4: 4 -&gt;</span><br><span class="line"></span><br><span class="line">Level [0]: 0: 0 -&gt; 1: 1 -&gt; 2: 2 -&gt; 3: 3 -&gt; 4: 4 -&gt; 5: 5 -&gt;</span><br><span class="line">Level [1]: 1: 1 -&gt; 2: 2 -&gt; 4: 4 -&gt; 5: 5 -&gt;</span><br><span class="line">Level [2]: 2: 2 -&gt; 4: 4 -&gt; 5: 5 -&gt;</span><br><span class="line"></span><br><span class="line">Level [0]: 0: 6 -&gt; 1: 1 -&gt; 2: 2 -&gt; 3: 3 -&gt; 4: 4 -&gt; 5: 5 -&gt;</span><br><span class="line">Level [1]: 1: 1 -&gt; 2: 2 -&gt; 4: 4 -&gt; 5: 5 -&gt;</span><br><span class="line">Level [2]: 2: 2 -&gt; 4: 4 -&gt; 5: 5 -&gt;</span><br><span class="line"></span><br><span class="line">Level [0]: 0: 6 -&gt; 1: 7 -&gt; 2: 2 -&gt; 3: 3 -&gt; 4: 4 -&gt; 5: 5 -&gt;</span><br><span class="line">Level [1]: 1: 7 -&gt; 2: 2 -&gt; 4: 4 -&gt; 5: 5 -&gt;</span><br><span class="line">Level [2]: 2: 2 -&gt; 4: 4 -&gt; 5: 5 -&gt;</span><br><span class="line"></span><br><span class="line">Level [0]: 0: 6 -&gt; 1: 7 -&gt; 2: 8 -&gt; 3: 3 -&gt; 4: 4 -&gt; 5: 5 -&gt;</span><br><span class="line">Level [1]: 1: 7 -&gt; 2: 8 -&gt; 4: 4 -&gt; 5: 5 -&gt;</span><br><span class="line">Level [2]: 2: 8 -&gt; 4: 4 -&gt; 5: 5 -&gt;</span><br><span class="line"></span><br><span class="line">Level [0]: 0: 6 -&gt; 1: 7 -&gt; 2: 8 -&gt; 3: 3 -&gt; 3: 9 -&gt; 4: 4 -&gt; 5: 5 -&gt;</span><br><span class="line">Level [1]: 1: 7 -&gt; 2: 8 -&gt; 4: 4 -&gt; 5: 5 -&gt;</span><br><span class="line">Level [2]: 2: 8 -&gt; 4: 4 -&gt; 5: 5 -&gt;</span><br><span class="line"></span><br><span class="line">erase:</span><br><span class="line">Level [0]: 1: 7 -&gt; 2: 8 -&gt; 3: 3 -&gt; 3: 9 -&gt; 4: 4 -&gt; 5: 5 -&gt;</span><br><span class="line">Level [1]: 1: 7 -&gt; 2: 8 -&gt; 4: 4 -&gt; 5: 5 -&gt;</span><br><span class="line">Level [2]: 2: 8 -&gt; 4: 4 -&gt; 5: 5 -&gt;</span><br><span class="line"></span><br><span class="line">Level [0]: 2: 8 -&gt; 3: 3 -&gt; 3: 9 -&gt; 4: 4 -&gt; 5: 5 -&gt;</span><br><span class="line">Level [1]: 2: 8 -&gt; 4: 4 -&gt; 5: 5 -&gt;</span><br><span class="line">Level [2]: 2: 8 -&gt; 4: 4 -&gt; 5: 5 -&gt;</span><br><span class="line"></span><br><span class="line">Level [0]: 3: 3 -&gt; 3: 9 -&gt; 4: 4 -&gt; 5: 5 -&gt;</span><br><span class="line">Level [1]: 4: 4 -&gt; 5: 5 -&gt;</span><br><span class="line">Level [2]: 4: 4 -&gt; 5: 5 -&gt;</span><br><span class="line"></span><br><span class="line">Level [0]: 3: 3 -&gt; 4: 4 -&gt; 5: 5 -&gt;</span><br><span class="line">Level [1]: 4: 4 -&gt; 5: 5 -&gt;</span><br><span class="line">Level [2]: 4: 4 -&gt; 5: 5 -&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="散列描述"><a href="#散列描述" class="headerlink" title="散列描述"></a>散列描述</h2><h3 id="散列函数和散列表"><a href="#散列函数和散列表" class="headerlink" title="散列函数和散列表"></a>散列函数和散列表</h3><p>字典的另一种表示方法是<strong>散列</strong>(hashing)。它用一个<strong>散列函数(哈希函数)</strong>把字典的数对映射到一个<strong>散列表(哈希表)</strong>的具体位置。若关键字范围过大，可将若干个不同的关键字映射到散列表的同一位置。散列表的每个位置称作<strong>桶</strong>(bucket)，桶的数目等于散列表的长度。对于关键字为$k$的数对，$f(k)$为<strong>起始桶</strong>(home bucket)。</p>
+<p>当两个不同关键字所对应的起始桶相同，产生<strong>冲突</strong>(collision)，但一个桶内可存放多个数位，但若存储桶内没有空间存储新数对，则发生<strong>溢出</strong>(overflow)。当冲突和溢出同时发生，可采用<a href="#%e7%ba%bf%e6%80%a7%e6%8e%a2%e6%9f%a5">线性探查法</a>、平法探查法、双重散列法等解决。</p>
+<p>可采取<strong>均匀散列函数</strong>(uniform hash function)，使映射到散列表中各个桶的关键字数量大致相同，此时冲突和溢出发生的平均数最少。在实际应用中性能表现良好的均匀散列函数被称作<strong>良好散列函数</strong>(good hash function)。</p>
+<ol>
+<li>均匀散列函数输入值应依赖关键字的所有位；</li>
+<li>要使得<strong>除法散列函数</strong>成为良好散列函数，$D$应取素数，且不能被小于$20$的整数除。<script type="math/tex; mode=display">f(k) = k \% D</script></li>
+</ol>
+<p>以下为STL模板类<code>hash&lt;T&gt;</code>的专业实现版本<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;&gt;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">hash</span>&lt;string&gt;</span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="keyword">size_t</span> <span class="keyword">operator</span>() (<span class="keyword">const</span> <span class="built_in">string</span> key) <span class="keyword">const</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">unsigned</span> <span class="keyword">long</span> hashVal = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; key.size(); i++)</span><br><span class="line">			hashVal = <span class="number">5</span> * hashVal + key.at(i);</span><br><span class="line">		<span class="keyword">return</span> hashVal;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="线性探查"><a href="#线性探查" class="headerlink" title="线性探查"></a>线性探查</h3><p><strong>线性探查</strong>(Linear Probing)是指，在某数对插入时。键所对应的桶满时，向哈希表往后找到下一个可用的桶。对于关键字为$k$的数据对，其具体插入步骤如下</p>
+<ol>
+<li>搜索起始桶$f(k)$，若为空，则插入并退出，否则进入2；</li>
+<li>将散列表当作环表继续搜索下一个可用的桶，直至以下情况发生：a)存有关键字$k$的桶已找到，修改其数值；b)到达一个空桶，插入后退出；c)回到起始桶，冲突和溢出同时发生。</li>
+</ol>
+<p>设散列表中有$n$条数据，桶数为$b$，散列函数的除数为$D$且$D=b$</p>
+<ul>
+<li>散列表初始化时间为$O(b)$；</li>
+<li>最坏情况下(关键字都对应同一起始桶)插入和查找时间均为$\Theta(n)$；</li>
+<li>平均性能而言，散列远优于线性表。一次成功搜索和不成功搜索平均搜索桶数分别记作$U_n$与$S_n$，则有<script type="math/tex; mode=display">U_n \approxeq \frac{1}{2} \left( 1 + \frac{1}{(1 - \alpha)^2} \right)</script><script type="math/tex; mode=display">S_n \approxeq \frac{1}{2} \left( 1 + \frac{1}{(1 - \alpha)  } \right)</script>  其中$\alpha = n / b$，称作负载因子，当负载因子比较小是，线性探查使得散列的平均性能比线性表优越许多。</li>
+</ul>
+<p>基于线性探查实现的字典如下<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HashTabel</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	HashTabel(<span class="keyword">int</span> length = <span class="number">50</span>, <span class="keyword">int</span> d = <span class="number">23</span>);</span><br><span class="line">	~HashTabel();</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">bool</span> <span class="title">empty</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> size() == <span class="number">0</span>; &#125;</span><br><span class="line">	<span class="function"><span class="keyword">int</span>  <span class="title">size</span><span class="params">()</span>  <span class="keyword">const</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> cnt = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m_iLength; i++)</span><br><span class="line">			<span class="keyword">if</span> (m_listIsEmpty[i]) cnt++;</span><br><span class="line">		<span class="keyword">return</span> cnt;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="keyword">const</span> K&amp; k, <span class="keyword">const</span> V&amp; v)</span></span>;</span><br><span class="line">	<span class="function">V <span class="title">get</span><span class="params">(<span class="keyword">const</span> K&amp; k)</span> <span class="keyword">const</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">erase</span><span class="params">(<span class="keyword">const</span> K&amp; k)</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="keyword">size_t</span> hash(<span class="keyword">const</span> K k) <span class="keyword">const</span> &#123; <span class="keyword">return</span> k % m_iD; &#125;</span><br><span class="line">	Pair&lt;K, V&gt;* find(<span class="keyword">const</span> K&amp; k, <span class="keyword">bool</span> insert = <span class="literal">true</span>) <span class="keyword">const</span>;</span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">indexOf</span><span class="params">(<span class="keyword">const</span> Pair&lt;K, V&gt;* p)</span> <span class="keyword">const</span> </span>&#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m_iLength; i++)</span><br><span class="line">			<span class="keyword">if</span> (m_listTable[i] == p) <span class="keyword">return</span> i;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">int</span> m_iD;</span><br><span class="line">	Pair&lt;K, V&gt;** m_listTable;</span><br><span class="line">	<span class="keyword">bool</span>* m_listIsEmpty;</span><br><span class="line">	<span class="keyword">int</span> m_iLength;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li><p>关键的线性探查步骤如下</p>
+ <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line">Pair&lt;K, V&gt;* HashTabel&lt;K, V&gt;::find(<span class="keyword">const</span> K&amp; k, <span class="keyword">bool</span> insert) <span class="keyword">const</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">int</span> hv = hash(k);	<span class="comment">// 求取hash值</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 从初始桶开始查找</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m_iLength; i++) &#123;</span><br><span class="line">		<span class="keyword">int</span> index = (hv + i) % m_iLength;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 回到初始位置，同时发生冲突与溢出，返回空</span></span><br><span class="line">		<span class="keyword">if</span> (i != <span class="number">0</span> &amp;&amp; index == hv) <span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 在插入操作时，可返回空桶</span></span><br><span class="line">		<span class="keyword">if</span> (insert &amp;&amp; m_listIsEmpty[index]) <span class="keyword">return</span> m_listTable[index];</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 查找到相同键的桶</span></span><br><span class="line">		<span class="keyword">if</span> (m_listTable[index]-&gt;getKey() == k)</span><br><span class="line">			<span class="keyword">return</span> m_listTable[index];</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>构造函数、析构函数、输出函数</p>
+ <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line">	<span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line">	HashTabel&lt;K, V&gt;::HashTabel(<span class="keyword">int</span> length, <span class="keyword">int</span> d) :</span><br><span class="line">		m_iLength(length), m_iD(d)</span><br><span class="line">	&#123;</span><br><span class="line">		m_listTable = <span class="keyword">new</span> Pair&lt;K, V&gt;* [m_iLength];</span><br><span class="line">		m_listIsEmpty = <span class="keyword">new</span> <span class="keyword">bool</span> [m_iLength];</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m_iLength; i++) &#123;</span><br><span class="line">			m_listTable[i] = <span class="keyword">new</span> Pair&lt;K, V&gt;;</span><br><span class="line">			m_listIsEmpty[i] = <span class="literal">true</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line">	HashTabel&lt;K, V&gt;::~HashTabel()</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m_iLength; i++) &#123;</span><br><span class="line">			<span class="keyword">delete</span> m_listTable[i];</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">delete</span>[] m_listTable;</span><br><span class="line">		<span class="keyword">delete</span>[] m_listIsEmpty;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line">	<span class="keyword">void</span> HashTabel&lt;K, V&gt;::print() <span class="keyword">const</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m_iLength; i++) &#123;</span><br><span class="line">			<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"|["</span> &lt;&lt;  i &lt;&lt; <span class="string">"]"</span>;</span><br><span class="line">			<span class="keyword">if</span> (!m_listIsEmpty[i])</span><br><span class="line">				<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt;  m_listTable[i]-&gt;getKey() &lt;&lt; <span class="string">": "</span> &lt;&lt; \</span><br><span class="line">							m_listTable[i]-&gt;getVal() &lt;&lt; <span class="string">"| -&gt;"</span>;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">				<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">" -&gt; "</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	``` </span><br><span class="line"></span><br><span class="line"><span class="number">3.</span> 插入、查询、删除</span><br><span class="line">	``` c++</span><br><span class="line">	<span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line">	<span class="keyword">void</span> HashTabel&lt;K, V&gt;::insert(<span class="keyword">const</span> K&amp; k, <span class="keyword">const</span> V&amp; v)</span><br><span class="line">	&#123;</span><br><span class="line">		Pair&lt;K, V&gt;* found = find(k);</span><br><span class="line">		<span class="keyword">if</span> (!found) &#123;</span><br><span class="line">			<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"哈希表已满"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 反查位置</span></span><br><span class="line">		<span class="keyword">int</span> index = indexOf(found);</span><br><span class="line">		<span class="comment">// 若为空，设置键</span></span><br><span class="line">		<span class="keyword">if</span> (m_listIsEmpty[index]) found-&gt;setKey(k);</span><br><span class="line">		<span class="comment">// 设置值</span></span><br><span class="line">		found-&gt;setVal(v); </span><br><span class="line">		m_listIsEmpty[index] = <span class="literal">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line">	V HashTabel&lt;K, V&gt;::get(<span class="keyword">const</span> K&amp; k) <span class="keyword">const</span></span><br><span class="line">	&#123;</span><br><span class="line">		Pair&lt;K, V&gt;* found = find(k);</span><br><span class="line">		<span class="keyword">if</span> (found) <span class="keyword">return</span> found-&gt;getVal();</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line">	<span class="keyword">void</span> HashTabel&lt;K, V&gt;::erase(<span class="keyword">const</span> K&amp; k)</span><br><span class="line">	&#123;</span><br><span class="line">		Pair&lt;K, V&gt;* found = find(k, <span class="literal">false</span>);</span><br><span class="line">		<span class="keyword">if</span> (!found) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 反查位置</span></span><br><span class="line">		<span class="keyword">int</span> index = indexOf(found);</span><br><span class="line">		<span class="comment">// 设置为空</span></span><br><span class="line">		m_listIsEmpty[index] = <span class="literal">true</span>;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>主函数测试如下<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>** argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    HashTabel&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; dict(<span class="number">10</span>, <span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"insert: "</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++) &#123;</span><br><span class="line">        </span><br><span class="line">        dict.insert(<span class="number">2</span> * i, i);</span><br><span class="line">        dict.print();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"erase: "</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">4</span>; i &lt; <span class="number">8</span>; i++) &#123;</span><br><span class="line">        dict.erase(<span class="number">2</span> * i);</span><br><span class="line">        dict.print();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>插入过程如下图所示<br><img src="/2020/02/24/【数据结构】跳表和散列/hashtabel_insert.jpg" alt="hashtabel_insert"></p>
+<blockquote>
+<p>输出格式为<code>|[index] key: value| -&gt; ...</code><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">insert:</span><br><span class="line">|[0]0: 0| -&gt;|[1] -&gt; |[2] -&gt; |[3] -&gt; |[4] -&gt; |[5] -&gt; |[6] -&gt; |[7] -&gt; |[8] -&gt; |[9] -&gt;</span><br><span class="line">|[0]0: 0| -&gt;|[1] -&gt; |[2]2: 1| -&gt;|[3] -&gt; |[4] -&gt; |[5] -&gt; |[6] -&gt; |[7] -&gt; |[8] -&gt; |[9] -&gt;</span><br><span class="line">|[0]0: 0| -&gt;|[1]4: 2| -&gt;|[2]2: 1| -&gt;|[3] -&gt; |[4] -&gt; |[5] -&gt; |[6] -&gt; |[7] -&gt; |[8] -&gt; |[9] -&gt;</span><br><span class="line">|[0]0: 0| -&gt;|[1]4: 2| -&gt;|[2]2: 1| -&gt;|[3]6: 3| -&gt;|[4] -&gt; |[5] -&gt; |[6] -&gt; |[7] -&gt; |[8] -&gt; |[9] -&gt;</span><br><span class="line">|[0]0: 0| -&gt;|[1]4: 2| -&gt;|[2]2: 1| -&gt;|[3]6: 3| -&gt;|[4]8: 4| -&gt;|[5] -&gt; |[6] -&gt; |[7] -&gt; |[8] -&gt; |[9] -&gt;</span><br><span class="line">|[0]0: 0| -&gt;|[1]4: 2| -&gt;|[2]2: 1| -&gt;|[3]6: 3| -&gt;|[4]8: 4| -&gt;|[5]10: 5| -&gt;|[6] -&gt; |[7] -&gt; |[8] -&gt; |[9] -&gt;</span><br><span class="line">|[0]0: 0| -&gt;|[1]4: 2| -&gt;|[2]2: 1| -&gt;|[3]6: 3| -&gt;|[4]8: 4| -&gt;|[5]10: 5| -&gt;|[6]12: 6| -&gt;|[7] -&gt; |[8] -&gt; |[9] -&gt;</span><br><span class="line">|[0]0: 0| -&gt;|[1]4: 2| -&gt;|[2]2: 1| -&gt;|[3]6: 3| -&gt;|[4]8: 4| -&gt;|[5]10: 5| -&gt;|[6]12: 6| -&gt;|[7]14: 7| -&gt;|[8] -&gt; |[9] -&gt;</span><br><span class="line">erase:</span><br><span class="line">|[0]0: 0| -&gt;|[1]4: 2| -&gt;|[2]2: 1| -&gt;|[3]6: 3| -&gt;|[4] -&gt; |[5]10: 5| -&gt;|[6]12: 6| -&gt;|[7]14: 7| -&gt;|[8] -&gt; |[9] -&gt;</span><br><span class="line">|[0]0: 0| -&gt;|[1]4: 2| -&gt;|[2]2: 1| -&gt;|[3]6: 3| -&gt;|[4] -&gt; |[5] -&gt; |[6]12: 6| -&gt;|[7]14: 7| -&gt;|[8] -&gt; |[9] -&gt;</span><br><span class="line">|[0]0: 0| -&gt;|[1]4: 2| -&gt;|[2]2: 1| -&gt;|[3]6: 3| -&gt;|[4] -&gt; |[5] -&gt; |[6] -&gt; |[7]14: 7| -&gt;|[8] -&gt; |[9] -&gt;</span><br><span class="line">|[0]0: 0| -&gt;|[1]4: 2| -&gt;|[2]2: 1| -&gt;|[3]6: 3| -&gt;|[4] -&gt; |[5] -&gt; |[6] -&gt; |[7] -&gt; |[8] -&gt; |[9] -&gt;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h3 id="链式散列"><a href="#链式散列" class="headerlink" title="链式散列"></a>链式散列</h3><p>链式散列是指，给散列表的每一个桶配置一个链式线性表，那么每个桶可以容纳无限多个容量，那么便不存在溢出问题。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HashChains</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	HashChains(<span class="keyword">int</span> length = <span class="number">50</span>, <span class="keyword">int</span> d = <span class="number">23</span>);</span><br><span class="line">	~HashChains();</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">bool</span> <span class="title">empty</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> size() == <span class="number">0</span>; &#125;</span><br><span class="line">	<span class="function"><span class="keyword">int</span>  <span class="title">size</span><span class="params">()</span>  <span class="keyword">const</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> cnt = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m_iLength; i++)</span><br><span class="line">			cnt += m_listChains[i]-&gt;size();</span><br><span class="line">		<span class="keyword">return</span> cnt;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="keyword">const</span> K&amp; k, <span class="keyword">const</span> V&amp; v)</span></span>;</span><br><span class="line">	<span class="function">V <span class="title">get</span><span class="params">(<span class="keyword">const</span> K&amp; k)</span> <span class="keyword">const</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">erase</span><span class="params">(<span class="keyword">const</span> K&amp; k)</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="keyword">size_t</span> hash(<span class="keyword">const</span> K k) <span class="keyword">const</span> &#123; <span class="keyword">return</span> k % m_iD; &#125;</span><br><span class="line">	Pair&lt;K, V&gt;* find(<span class="keyword">const</span> K&amp; k, <span class="keyword">bool</span> insert = <span class="literal">true</span>) <span class="keyword">const</span>;</span><br><span class="line">	ChainList&lt;Pair&lt;K, V&gt;*&gt;* findChain(<span class="keyword">const</span> K&amp; k) <span class="keyword">const</span> &#123; <span class="keyword">return</span> m_listChains[hash(k)]; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">int</span> m_iD;</span><br><span class="line">	ChainList&lt;Pair&lt;K, V&gt;*&gt;** m_listChains;</span><br><span class="line">	<span class="keyword">int</span> m_iLength;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>构造函数、析构函数、打印输出</p>
+ <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line">HashChains&lt;K, V&gt;::HashChains(<span class="keyword">int</span> length, <span class="keyword">int</span> d) :</span><br><span class="line">	m_iLength(length), m_iD(d)</span><br><span class="line">&#123;</span><br><span class="line">	m_listChains = <span class="keyword">new</span> ChainList&lt;Pair&lt;K, V&gt;*&gt;* [m_iLength];</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m_iLength; i++)</span><br><span class="line">		m_listChains[i] = <span class="keyword">new</span> ChainList&lt;Pair&lt;K, V&gt;*&gt;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line">HashChains&lt;K, V&gt;::~HashChains()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m_iLength; i++)</span><br><span class="line">		<span class="keyword">delete</span> m_listChains[i];</span><br><span class="line">	<span class="keyword">delete</span>[] m_listChains;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line"><span class="keyword">void</span> HashChains&lt;K, V&gt;::print() <span class="keyword">const</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m_iLength; i++) &#123;</span><br><span class="line">		ChainList&lt;Pair&lt;K, V&gt;*&gt;* chain = m_listChains[i];</span><br><span class="line">		ChainNode&lt;Pair&lt;K, V&gt;*&gt;* node = chain-&gt;getNode(<span class="number">0</span>);</span><br><span class="line">		<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"["</span> &lt;&lt; i &lt;&lt; <span class="string">"]"</span>;</span><br><span class="line">		<span class="keyword">while</span> (node &amp;&amp; node-&gt;ptr) &#123;</span><br><span class="line">			Pair&lt;K, V&gt;* p = node-&gt;getVal();</span><br><span class="line">			<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; p-&gt;getKey() &lt;&lt; <span class="string">":"</span> &lt;&lt; p-&gt;getVal() &lt;&lt; <span class="string">" -&gt; "</span>;</span><br><span class="line">			node = node-&gt;next;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">" | "</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在各桶内查找</p>
+ <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line">Pair&lt;K, V&gt;* HashChains&lt;K, V&gt;::find(<span class="keyword">const</span> K&amp; k, <span class="keyword">bool</span> insert) <span class="keyword">const</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">int</span> hv = hash(k);	<span class="comment">// 求取hash值</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 获取哈希值对应的桶</span></span><br><span class="line">	ChainList&lt;Pair&lt;K, V&gt;*&gt;* chain = m_listChains[hv];</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 在桶内依次查找</span></span><br><span class="line">	ChainNode&lt;Pair&lt;K, V&gt;*&gt;* node = chain-&gt;getNode(<span class="number">0</span>);</span><br><span class="line">	<span class="keyword">while</span> (node) &#123;</span><br><span class="line">		<span class="comment">// 已到达链尾</span></span><br><span class="line">		<span class="keyword">if</span> (!node-&gt;next) &#123;</span><br><span class="line">			<span class="keyword">if</span> (!insert) <span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">			<span class="comment">// 插入操作时，创建节点</span></span><br><span class="line">			Pair&lt;K, V&gt;* p = <span class="keyword">new</span> Pair&lt;K, V&gt;;</span><br><span class="line">			chain-&gt;insert(chain-&gt;size(), p);</span><br><span class="line">			<span class="keyword">return</span> p;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// 找到对应键</span></span><br><span class="line">		<span class="keyword">if</span> (node-&gt;getVal()-&gt;getKey() == k)</span><br><span class="line">			<span class="keyword">return</span> node-&gt;getVal();</span><br><span class="line">		node = node-&gt;next;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>插入、查询、删除操作</p>
+ <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line"><span class="keyword">void</span> HashChains&lt;K, V&gt;::insert(<span class="keyword">const</span> K&amp; k, <span class="keyword">const</span> V&amp; v)</span><br><span class="line">&#123;</span><br><span class="line">	Pair&lt;K, V&gt;* p = find(k);</span><br><span class="line">	<span class="keyword">if</span> (p-&gt;getKey() != k) p-&gt;setKey(k);</span><br><span class="line">	p-&gt;setVal(v);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line">V HashChains&lt;K, V&gt;::get(<span class="keyword">const</span> K&amp; k) <span class="keyword">const</span></span><br><span class="line">&#123;</span><br><span class="line">	Pair&lt;K, V&gt;* p = find(k, <span class="literal">false</span>);</span><br><span class="line">	<span class="keyword">if</span> (p) <span class="keyword">return</span> p-&gt;getVal();</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line"><span class="keyword">void</span> HashChains&lt;K, V&gt;::erase(<span class="keyword">const</span> K&amp; k)</span><br><span class="line">&#123;</span><br><span class="line">	ChainList&lt;Pair&lt;K, V&gt;*&gt;* chain = findChain(k);</span><br><span class="line">	Pair&lt;K, V&gt;* p = find(k, <span class="literal">false</span>);</span><br><span class="line">	chain-&gt;erase(chain-&gt;indexOf(p));</span><br><span class="line">	<span class="keyword">delete</span> p;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>主函数测试如下<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>** argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    HashChains&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; dict(<span class="number">10</span>, <span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"insert: "</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++) &#123;</span><br><span class="line">        </span><br><span class="line">        dict.insert(<span class="number">2</span> * i, i);</span><br><span class="line">        dict.print();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"erase: "</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">4</span>; i &lt; <span class="number">8</span>; i++) &#123;</span><br><span class="line">        dict.erase(<span class="number">2</span> * i);</span><br><span class="line">        dict.print();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>分析：插入过程如下图<br><img src="/2020/02/24/【数据结构】跳表和散列/hashchain_insert.jpg" alt="hashchain_insert"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">insert:</span><br><span class="line">[0]0:0 -&gt;  | [1] | [2] | [3] | [4] | [5] | [6] | [7] | [8] | [9] |</span><br><span class="line">[0]0:0 -&gt;  | [1] | [2]2:1 -&gt;  | [3] | [4] | [5] | [6] | [7] | [8] | [9] |</span><br><span class="line">[0]0:0 -&gt;  | [1]4:2 -&gt;  | [2]2:1 -&gt;  | [3] | [4] | [5] | [6] | [7] | [8] | [9] |</span><br><span class="line">[0]6:3 -&gt; 0:0 -&gt;  | [1]4:2 -&gt;  | [2]2:1 -&gt;  | [3] | [4] | [5] | [6] | [7] | [8] | [9] |</span><br><span class="line">[0]6:3 -&gt; 0:0 -&gt;  | [1]4:2 -&gt;  | [2]8:4 -&gt; 2:1 -&gt;  | [3] | [4] | [5] | [6] | [7] | [8] | [9] |</span><br><span class="line">[0]6:3 -&gt; 0:0 -&gt;  | [1]10:5 -&gt; 4:2 -&gt;  | [2]8:4 -&gt; 2:1 -&gt;  | [3] | [4] | [5] | [6] | [7] | [8] | [9] |</span><br><span class="line">[0]12:6 -&gt; 6:3 -&gt; 0:0 -&gt;  | [1]10:5 -&gt; 4:2 -&gt;  | [2]8:4 -&gt; 2:1 -&gt;  | [3] | [4] | [5] | [6] | [7] | [8] | [9] |</span><br><span class="line">[0]12:6 -&gt; 6:3 -&gt; 0:0 -&gt;  | [1]10:5 -&gt; 4:2 -&gt;  | [2]14:7 -&gt; 8:4 -&gt; 2:1 -&gt;  | [3] | [4] | [5] | [6] | [7] | [8] | [9] |</span><br><span class="line">erase:</span><br><span class="line">[0]12:6 -&gt; 6:3 -&gt; 0:0 -&gt;  | [1]10:5 -&gt; 4:2 -&gt;  | [2]14:7 -&gt; 2:1 -&gt;  | [3] | [4] | [5] | [6] | [7] | [8] | [9] |</span><br><span class="line">[0]12:6 -&gt; 6:3 -&gt; 0:0 -&gt;  | [1]4:2 -&gt;  | [2]14:7 -&gt; 2:1 -&gt;  | [3] | [4] | [5] | [6] | [7] | [8] | [9] |</span><br><span class="line">[0]6:3 -&gt; 0:0 -&gt;  | [1]4:2 -&gt;  | [2]14:7 -&gt; 2:1 -&gt;  | [3] | [4] | [5] | [6] | [7] | [8] | [9] |</span><br><span class="line">[0]6:3 -&gt; 0:0 -&gt;  | [1]4:2 -&gt;  | [2]2:1 -&gt;  | [3] | [4] | [5] | [6] | [7] | [8] | [9] |</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/21/【数据结构】栈与队列/" rel="next" title="【数据结构】栈与队列">
+                <i class="fa fa-chevron-left"></i> 【数据结构】栈与队列
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Louis Hsu">
+            
+              <p class="site-author-name" itemprop="name">Louis Hsu</p>
+              <p class="site-description motion-element" itemprop="description">技术博客？</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">75</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/isLouisHsu" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://is.louishsu@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/islouishsu" target="_blank" title="Zhihu"><i class="fa fa-fw fa-zhihu"></i>Zhihu</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/islouishsu" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          <div id="music163player">
+            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="110" src="//music.163.com/outchain/player?type=0&id=2703291040&auto=1&height=90">
+            </iframe>
+          </div>
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#字典"><span class="nav-number">1.</span> <span class="nav-text">字典</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#定义及抽象数据描述"><span class="nav-number">1.1.</span> <span class="nav-text">定义及抽象数据描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线性表描述"><span class="nav-number">1.2.</span> <span class="nav-text">线性表描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#跳表描述"><span class="nav-number">1.3.</span> <span class="nav-text">跳表描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#散列描述"><span class="nav-number">1.4.</span> <span class="nav-text">散列描述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#散列函数和散列表"><span class="nav-number">1.4.1.</span> <span class="nav-text">散列函数和散列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线性探查"><span class="nav-number">1.4.2.</span> <span class="nav-text">线性探查</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#链式散列"><span class="nav-number">1.4.3.</span> <span class="nav-text">链式散列</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Louis Hsu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: 'e65d27f7cf5c62feaf97',
+          clientSecret: '356386826698e8b817ca076b08d7c0e9814f52ea',
+          repo: 'isLouisHsu.github.io',
+          owner: 'isLouisHsu',
+          admin: ['isLouisHsu'],
+          id: md5(window.location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('3');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+
+  <script type="text/javascript" src="/js/click_show_text.js"></script>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
