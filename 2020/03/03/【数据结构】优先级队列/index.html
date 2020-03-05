@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="定义及抽象数据类型优先级队列(priority queue)是$0$个或多个元素的集合，每个元素都有一个优先权或值，在最小优先级队列(min priority queue)中，对其进行的元素操作都是当前优先级最小的，最大优先级队列(max priority queue)则相反。优先级队列的元素可以有相同的优先级，对这些元素其顺序任意。优先级队列的操作有  查找一个元素； 插入一个元素； 删除一个元">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【数据结构】优先级队列">
+<meta property="og:url" content="http://yoursite.com/2020/03/03/【数据结构】优先级队列/index.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="定义及抽象数据类型优先级队列(priority queue)是$0$个或多个元素的集合，每个元素都有一个优先权或值，在最小优先级队列(min priority queue)中，对其进行的元素操作都是当前优先级最小的，最大优先级队列(max priority queue)则相反。优先级队列的元素可以有相同的优先级，对这些元素其顺序任意。优先级队列的操作有  查找一个元素； 插入一个元素； 删除一个元">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2020/03/03/【数据结构】优先级队列/students.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/03/03/【数据结构】优先级队列/students_push_node.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/03/03/【数据结构】优先级队列/students_push.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/03/03/【数据结构】优先级队列/students_pop_node.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/03/03/【数据结构】优先级队列/students_pop.jpg">
+<meta property="og:updated_time" content="2020-03-05T08:30:23.922Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【数据结构】优先级队列">
+<meta name="twitter:description" content="定义及抽象数据类型优先级队列(priority queue)是$0$个或多个元素的集合，每个元素都有一个优先权或值，在最小优先级队列(min priority queue)中，对其进行的元素操作都是当前优先级最小的，最大优先级队列(max priority queue)则相反。优先级队列的元素可以有相同的优先级，对这些元素其顺序任意。优先级队列的操作有  查找一个元素； 插入一个元素； 删除一个元">
+<meta name="twitter:image" content="http://yoursite.com/2020/03/03/【数据结构】优先级队列/students.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/03/03/【数据结构】优先级队列/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>【数据结构】优先级队列 | LOUIS' BLOG</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LOUIS' BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">大龄工科伪文青</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-guestbook">
+    <a href="/guestbook" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-guest"></i> <br>留言</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/03/【数据结构】优先级队列/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="技术博客？">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【数据结构】优先级队列
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-03-03 13:30:14" itemprop="dateCreated datePublished" datetime="2020-03-03T13:30:14+08:00">2020-03-03</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-03-05 16:30:23" itemprop="dateModified" datetime="2020-03-05T16:30:23+08:00">2020-03-05</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="定义及抽象数据类型"><a href="#定义及抽象数据类型" class="headerlink" title="定义及抽象数据类型"></a>定义及抽象数据类型</h1><p><strong>优先级队列</strong>(priority queue)是$0$个或多个元素的集合，每个元素都有一个优先权或值，在<strong>最小优先级队列</strong>(min priority queue)中，对其进行的元素操作都是当前优先级最小的，<strong>最大优先级队列</strong>(max priority queue)则相反。优先级队列的元素可以有相同的优先级，对这些元素其顺序任意。优先级队列的操作有</p>
+<ul>
+<li>查找一个元素；</li>
+<li>插入一个元素；</li>
+<li>删除一个元素。</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">抽象数据类型 PriorityQueue</span><br><span class="line">&#123;</span><br><span class="line">实例：</span><br><span class="line"></span><br><span class="line">操作：</span><br><span class="line">    empty():    队列是否为空</span><br><span class="line">    size():     队列的元素个数</span><br><span class="line">    top():      返回当前优先级最大/最小的元素</span><br><span class="line">    push(x, p): 插入元素，根据优先级调整队列顺序</span><br><span class="line">    pop():      删除并返回当前优先级最大/最小的元素</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="大根堆-小根堆"><a href="#大根堆-小根堆" class="headerlink" title="大根堆/小根堆"></a>大根堆/小根堆</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p><strong>定义</strong>：<strong>大根树/小根树</strong>是指每个节点的值都大于其子节点的值的树，节点的子节点个数可以任意。<br><strong>定义</strong>：<strong>大根堆/小根堆</strong>即是大根树/小根数，也是<strong>完全二叉树</strong>。</p>
+<p>利用二叉树的特性，用节点在数组描述中的位置来表示它在堆中的位置。堆作为完全二叉树，具有$n$个元素时高度为$\lceil\log_2(n+1)\rceil$。因此如果能够在$O(height)$时间内完成插入和删除操作，那么操作的复杂度为$O(\log n)$。</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h3 id="元素的声明与定义"><a href="#元素的声明与定义" class="headerlink" title="元素的声明与定义"></a>元素的声明与定义</h3><p>优先级队列的元素，不仅包含存储的数据/对象，还需指定优先级，故元素的声明与定义如下<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Element</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	Element(<span class="keyword">const</span> T&amp; value, <span class="keyword">const</span> <span class="keyword">int</span> priority) &#123;</span><br><span class="line">		v = <span class="keyword">new</span> T; *v = value;</span><br><span class="line">		p = <span class="keyword">new</span> <span class="keyword">int</span>; *p = priority;</span><br><span class="line">	&#125;</span><br><span class="line">	~Element() &#123; </span><br><span class="line">		<span class="keyword">delete</span> p; <span class="keyword">delete</span> v; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">setPriority</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span> priority)</span> </span>&#123; *p = priority; &#125;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">setValue</span><span class="params">(<span class="keyword">const</span> T&amp; value)</span> </span>&#123; *v = value; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">getPriority</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> *p; &#125;</span><br><span class="line">	<span class="function">T   <span class="title">getValue</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> *v; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	T* v;</span><br><span class="line">	<span class="keyword">int</span>* p;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<h3 id="大根堆-小根堆的链表描述"><a href="#大根堆-小根堆的链表描述" class="headerlink" title="大根堆/小根堆的链表描述"></a>大根堆/小根堆的链表描述</h3><h4 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h4><p>最大堆可采用链表描述的二叉树实现，由<code>LinkedBinaryTree&lt;Element&lt;T&gt;*&gt;</code>派生，实现抽象类中的函数，声明如下<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MaxHeap</span> :</span> <span class="keyword">public</span> LinkedBinaryTree&lt;Element&lt;T&gt;*&gt;</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	MaxHeap() : LinkedBinaryTree&lt;Element&lt;T&gt;*&gt;() &#123;&#125;</span><br><span class="line">	~MaxHeap() &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">push</span><span class="params">(<span class="keyword">const</span> T&amp; value, <span class="keyword">const</span> <span class="keyword">int</span> priority)</span></span>;</span><br><span class="line">	<span class="function">T <span class="title">pop</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="function">T <span class="title">top</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>-&gt;m_tnRoot-&gt;get()-&gt;getValue(); &#125;</span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">maxPriority</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>-&gt;m_tnRoot-&gt;get()-&gt;getPriority(); &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	<span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(BinaryTreeNode&lt;Element&lt;T&gt;*&gt;*, BinaryTreeNode&lt;Element&lt;T&gt;*&gt;**)</span></span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>使用数组描述更为简单，但插入操作时，数组时间复杂度为$O(n)$，二叉树描述时间复杂度更低为$O(\log n)$。</p>
+</blockquote>
+<h4 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h4><p>比较关键的是静态保护成员函数<code>insert()</code>，其作用是将已初始化的节点<code>node</code>，插入已定义的树<code>tree</code>。该函数需满足以下要求</p>
+<ol>
+<li><strong>最大堆是完全二叉树</strong>，进行节点的插入时，需满足完全二叉树的特性。<strong>一棵高度为$H$的完全二叉树，第h(h&lt;H)$层的节点不存在空子节点</strong>。故只需找到第一个存在空子节点的节点<code>N</code>，将元素放入<code>N</code>的空节点即可(左子树优先)；</li>
+<li>调整节点的顺序。即“<strong>气泡操作</strong>”，保证该二叉树每个节点的优先级均大于其子节点优先级；</li>
+<li>在调整节点顺序的过程中，需要<strong>维护二叉树的结构</strong>，即修改节点间“父子关系”、“兄弟关系”等，通过指针的修改实现。</li>
+</ol>
+<blockquote>
+<ul>
+<li>需要修改树<code>tree</code>的结构，故参数$2$为<strong>二级指针</strong>；</li>
+<li>为使函数更通用，将<code>tree</code>根节点信息保存后置为空，<strong>不作为子树</strong>，在函数退出时恢复其子树信息。</li>
+</ul>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">void</span> MaxHeap&lt;T&gt;::insert(BinaryTreeNode&lt;Element&lt;T&gt;*&gt;* node, BinaryTreeNode&lt;Element&lt;T&gt;*&gt;** tree)</span><br><span class="line">&#123;</span><br><span class="line">	BinaryTreeNode&lt;Element&lt;T&gt;*&gt;* root = (*tree)-&gt;parent; (*tree)-&gt;parent = <span class="literal">nullptr</span>;				<span class="comment">// 保存根节点信息，不将tree视作子树</span></span><br><span class="line"></span><br><span class="line">	LinkedQueue&lt;BinaryTreeNode&lt;Element&lt;T&gt;*&gt;**&gt;* <span class="built_in">queue</span> = MaxHeap&lt;T&gt;::tree2flattenQueue(tree);	<span class="comment">// 调用继承的父类静态函数</span></span><br><span class="line">	<span class="keyword">while</span> (<span class="built_in">queue</span>-&gt;size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">		<span class="comment">// 根据完全二叉树，寻找堆的最后一个位置</span></span><br><span class="line">		BinaryTreeNode&lt;Element&lt;T&gt;*&gt;* parent = *<span class="built_in">queue</span>-&gt;pop();</span><br><span class="line"></span><br><span class="line">		<span class="comment">/************************** 插入节点 **************************/</span></span><br><span class="line">		<span class="comment">// 无子树空，不进行节点插入</span></span><br><span class="line">		<span class="keyword">if</span> (parent-&gt;left &amp;&amp; parent-&gt;right) <span class="keyword">continue</span>;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 存在子树为空，优先对左子树进行插入</span></span><br><span class="line">		<span class="keyword">if</span> (!parent-&gt;left) &#123;</span><br><span class="line">			parent-&gt;left = node;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (!parent-&gt;right) &#123;</span><br><span class="line">			parent-&gt;right = node;</span><br><span class="line">		&#125;</span><br><span class="line">		node-&gt;parent = parent;</span><br><span class="line">		<span class="comment">/************************** 插入节点 **************************/</span></span><br><span class="line"></span><br><span class="line">		<span class="comment">/************************ 调整节点顺序 ************************/</span></span><br><span class="line">		<span class="keyword">while</span> (node-&gt;get()-&gt;getPriority() &gt; parent-&gt;get()-&gt;getPriority()) &#123;</span><br><span class="line"></span><br><span class="line">			<span class="comment">/************ 修改节点间的链接关系 **************/</span></span><br><span class="line">			<span class="comment">// 1. 修改插入节点的父节点信息</span></span><br><span class="line">			node-&gt;parent = parent-&gt;parent;</span><br><span class="line">			<span class="comment">// 2. 修改父节点的父节点的子树信息</span></span><br><span class="line">			<span class="keyword">if</span> (parent-&gt;parent) &#123;</span><br><span class="line">				<span class="comment">// 2.1 父节点不为根节点，则将祖父节点作为父节点</span></span><br><span class="line">				<span class="keyword">if</span> (parent-&gt;parent-&gt;left == parent) &#123;</span><br><span class="line">					parent-&gt;parent-&gt;left = node;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">else</span> &#123;</span><br><span class="line">					parent-&gt;parent-&gt;right = node;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span> &#123;</span><br><span class="line">				<span class="comment">// 2.2 若父节点是树的根节点，则修改为根节点</span></span><br><span class="line">				*tree = node;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="comment">// 3. 修改插入节点的子树信息、父节点的子树信息</span></span><br><span class="line">			BinaryTreeNode&lt;Element&lt;T&gt;*&gt;* temp;</span><br><span class="line">			<span class="keyword">if</span> (parent-&gt;left == node) &#123;</span><br><span class="line">				<span class="comment">// 3.1 插入节点为父节点的左子节点</span></span><br><span class="line">				<span class="comment">// 3.1.1 左子树更新</span></span><br><span class="line">				temp = node-&gt;left;</span><br><span class="line">				node-&gt;left = parent;</span><br><span class="line">				parent-&gt;left = temp;</span><br><span class="line">				<span class="comment">// 3.1.2 右子树互换</span></span><br><span class="line">				temp = node-&gt;right;</span><br><span class="line">				node-&gt;right = parent-&gt;right;</span><br><span class="line">				parent-&gt;right = temp;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span> &#123;</span><br><span class="line">				<span class="comment">// 3.2 插入节点为父节点的右子节点</span></span><br><span class="line">				<span class="comment">// 3.2.1 右子树更新</span></span><br><span class="line">				temp = node-&gt;right;</span><br><span class="line">				node-&gt;right = parent;</span><br><span class="line">				parent-&gt;right = temp;</span><br><span class="line">				<span class="comment">// 3.1.2 左子树互换</span></span><br><span class="line">				temp = node-&gt;left;</span><br><span class="line">				node-&gt;left = parent-&gt;left;</span><br><span class="line">				parent-&gt;left = temp;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="comment">// 4. 修改父节点的父节点信息</span></span><br><span class="line">			parent-&gt;parent = node;</span><br><span class="line">			<span class="comment">/************ 修改节点间的链接关系 **************/</span></span><br><span class="line"></span><br><span class="line">			<span class="comment">/******* 更新node的父节点，多次“气泡”操作 *******/</span></span><br><span class="line">			parent = node-&gt;parent;</span><br><span class="line">			<span class="keyword">if</span> (!parent) <span class="keyword">break</span>;</span><br><span class="line">			<span class="comment">/******* 更新node的父节点，多次“气泡”操作 *******/</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">/************************ 调整节点顺序 ************************/</span></span><br><span class="line"></span><br><span class="line">	(*tree)-&gt;parent = root;	<span class="comment">// 恢复子树身份</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>插入与删除节点时，均调用上述函数。插入函数结构较为简单，只需将初始化完成的节点<code>node</code>插入以根节点<code>m_tnRoot</code>表示的完全二叉树即可。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">void</span> MaxHeap&lt;T&gt;::push(<span class="keyword">const</span> T&amp; value, <span class="keyword">const</span> <span class="keyword">int</span> priority)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// 创建一个节点</span></span><br><span class="line">	Element&lt;T&gt;* element = <span class="keyword">new</span> Element&lt;T&gt;(value, priority);</span><br><span class="line">	BinaryTreeNode&lt;Element&lt;T&gt;*&gt;* node = <span class="keyword">this</span>-&gt;createNode(); node-&gt;<span class="built_in">set</span>(element);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 无元素时，直接放在根节点，退出函数</span></span><br><span class="line">	<span class="keyword">if</span> (<span class="keyword">this</span>-&gt;empty()) &#123; <span class="keyword">this</span>-&gt;m_tnRoot = node; <span class="keyword">return</span>; &#125;</span><br><span class="line"></span><br><span class="line">	insert(node, &amp;<span class="keyword">this</span>-&gt;m_tnRoot);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>由于每次出队列操作时，都将释放二叉树的根节点，它的左右子树此时为两棵单独的完全二叉树，<strong>需重新组织两棵子树的节点组成一棵新的二叉树</strong>。以下采用的解决方案是<strong>将一棵树每个节点依次插入另一棵子树中</strong>，一些细节总结如下</p>
+<ol>
+<li>考虑到时间复杂度，<strong>选择结点数较多的子树的作为<code>trunk</code>分支，另一棵为<code>branch</code></strong>，将<code>branch</code>转化为队列，依次将各节点插入主分支<code>trunk</code>；</li>
+<li><p>在插入<code>queue</code>队首节点时，需要将该节点的父、子节点置为<code>nullptr</code>，如果直接对<code>LinkedQueue&lt;BinaryTreeNode&lt;Element&lt;T&gt;*&gt;**&gt;*</code>队列弹出的二级指针<code>BinaryTreeNode&lt;Element&lt;T&gt;*&gt;**</code>解引用后得到的节点进行空指针赋值，<strong>会使树节点丢失</strong>，所以先将节点解引用转化为<code>LinkedQueue&lt;BinaryTreeNode&lt;Element&lt;T&gt;*&gt;*&gt;*</code>后进行操作；</p>
+<blockquote>
+<p>以下两句的差别，非常的<strong>迷惑</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; BinaryTreeNode&lt;Element&lt;T&gt;*&gt;* node = *<span class="built_in">queue</span>-&gt;pop();	<span class="comment">// 会造成节点丢失</span></span><br><span class="line">&gt; BinaryTreeNode&lt;Element&lt;T&gt;*&gt;* node = nodes-&gt;pop();</span><br><span class="line">&gt; node-&gt;parent = node-&gt;left = node-&gt;right = <span class="literal">nullptr</span>;</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+<li><p><code>insert()</code>函数将<strong>自动组织调整节点间的关系</strong>；</p>
+</li>
+<li>注意<strong>根节点<code>m_tnRoot</code>的修改</strong>，不可遗漏。</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line">T MaxHeap&lt;T&gt;::pop()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span> (<span class="keyword">this</span>-&gt;empty()) <span class="keyword">throw</span> <span class="string">"堆为空！"</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**************** 取出根节点与左右子树 ****************/</span></span><br><span class="line">	BinaryTreeNode&lt;Element&lt;T&gt;*&gt;* toDel = <span class="keyword">this</span>-&gt;m_tnRoot;</span><br><span class="line">	T value = toDel-&gt;get()-&gt;getValue();</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 若根节点已经是叶节点，返回值并退出</span></span><br><span class="line">	<span class="keyword">if</span> (<span class="keyword">this</span>-&gt;m_tnRoot-&gt;isLeaf()) &#123;</span><br><span class="line">		<span class="keyword">this</span>-&gt;m_tnRoot = <span class="literal">nullptr</span>;	<span class="comment">// 注意根节点的变更</span></span><br><span class="line">		<span class="keyword">delete</span> toDel; <span class="keyword">return</span> value;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	BinaryTreeNode&lt;Element&lt;T&gt;*&gt;* left  = <span class="keyword">this</span>-&gt;m_tnRoot-&gt;left ;</span><br><span class="line">	BinaryTreeNode&lt;Element&lt;T&gt;*&gt;* right = <span class="keyword">this</span>-&gt;m_tnRoot-&gt;right;</span><br><span class="line">	<span class="comment">/**************** 取出根节点与左右子树 ****************/</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">/********************* 选择枝干 **********************/</span></span><br><span class="line">	BinaryTreeNode&lt;Element&lt;T&gt;*&gt;* trunk = <span class="literal">nullptr</span>;</span><br><span class="line">	BinaryTreeNode&lt;Element&lt;T&gt;*&gt;* branch = <span class="literal">nullptr</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (!right) &#123;</span><br><span class="line">		trunk = left;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="comment">// 将节点多的作为主枝</span></span><br><span class="line">		<span class="keyword">if</span> (LinkedBinaryTree&lt;Element&lt;T&gt;*&gt;::sizeofNode(left) &lt; \</span><br><span class="line">			LinkedBinaryTree&lt;Element&lt;T&gt;*&gt;::sizeofNode(right)) &#123;</span><br><span class="line">			trunk = right; branch = left;</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			branch = right; trunk = left;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	trunk-&gt;parent = <span class="literal">nullptr</span>; </span><br><span class="line">	<span class="keyword">this</span>-&gt;m_tnRoot = trunk;			<span class="comment">// 注意根节点的变更</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 若只包含主枝干，则无需进行插入操作</span></span><br><span class="line">	<span class="keyword">if</span> (!branch) &#123;</span><br><span class="line">		<span class="keyword">delete</span> toDel; <span class="keyword">return</span> value;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">/********************* 选择枝干 **********************/</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">/**************** 将branch插入master *****************/</span></span><br><span class="line">	<span class="comment">// 创建节点链表，解引用后再插入节点，防止</span></span><br><span class="line">	LinkedQueue&lt;BinaryTreeNode&lt;Element&lt;T&gt;*&gt;**&gt;* <span class="built_in">queue</span> = \</span><br><span class="line">				LinkedBinaryTree&lt;Element&lt;T&gt;*&gt;::tree2flattenQueue(&amp;branch);</span><br><span class="line">	LinkedQueue&lt;BinaryTreeNode&lt;Element&lt;T&gt;*&gt;*&gt;* nodes = \</span><br><span class="line">				<span class="keyword">new</span> LinkedQueue&lt;BinaryTreeNode&lt;Element&lt;T&gt;*&gt;*&gt;;</span><br><span class="line">	<span class="keyword">while</span> (<span class="built_in">queue</span>-&gt;size() &gt; <span class="number">0</span>) nodes-&gt;push(*<span class="built_in">queue</span>-&gt;pop());</span><br><span class="line">	<span class="keyword">delete</span> <span class="built_in">queue</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 依次插入</span></span><br><span class="line">	<span class="keyword">while</span> (nodes-&gt;size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">		BinaryTreeNode&lt;Element&lt;T&gt;*&gt;* node = nodes-&gt;pop();</span><br><span class="line">		<span class="comment">// BinaryTreeNode&lt;Element&lt;T&gt;*&gt;* node = *queue-&gt;pop();	// 该操作会导致，后续置`nullptr`时节点丢失</span></span><br><span class="line">		<span class="keyword">if</span> (!node) <span class="keyword">continue</span>;</span><br><span class="line"></span><br><span class="line">		node-&gt;parent = node-&gt;left = node-&gt;right = <span class="literal">nullptr</span>;</span><br><span class="line">		insert(node, &amp;<span class="keyword">this</span>-&gt;m_tnRoot);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">delete</span> nodes;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 释放节点，返回值</span></span><br><span class="line">	<span class="keyword">delete</span> toDel; <span class="keyword">return</span> value;</span><br><span class="line">	<span class="comment">/**************** 将branch插入master *****************/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>打印函数如下<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">void</span> MaxHeap&lt;T&gt;::print()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span> (<span class="keyword">this</span>-&gt;empty()) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 根据优先级打印堆</span></span><br><span class="line">	LinkedQueue&lt;BinaryTreeNode&lt;Element&lt;T&gt;*&gt;**&gt;* <span class="built_in">queue</span> = <span class="keyword">this</span>-&gt;tree2flattenQueue(&amp;<span class="keyword">this</span>-&gt;m_tnRoot);</span><br><span class="line">	<span class="keyword">while</span> (<span class="built_in">queue</span>-&gt;size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">		Element&lt;T&gt;* element = (*(<span class="built_in">queue</span>-&gt;pop()))-&gt;get();</span><br><span class="line">		<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">'['</span> &lt;&lt; element-&gt;getPriority() &lt;&lt; <span class="string">']'</span> \</span><br><span class="line">			&lt;&lt; element-&gt;getValue() &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="图解算法"><a href="#图解算法" class="headerlink" title="图解算法"></a>图解算法</h3><p>假设有以下$6$名同学，参加某活动时，主办方给他们分配了不同的优先级，如下表<br>| 编号 | 1 | 2 | 3 | 4 | 5 | 6 |<br>| :—: | — | — | — | — | — | — |<br>| 姓名 | 刘一 | 陈二 | 张三 | 李四 | 王五 | 赵六 |<br>| 优先级 | 14 | 15 | 10 | 21 | 20 | 2|<br>根据编号顺序依次进入某准备室，进入后根据优先级进行排列，优先级越大的先参加活动。下图中，每个节点内的三个小圆点分别表示父节点、左子树节点、右子树节点。</p>
+<p><img src="/2020/03/03/【数据结构】优先级队列/students.jpg" alt="students"></p>
+<p>主函数如下<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>** argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> P[<span class="number">6</span>] = &#123;<span class="number">14</span>, <span class="number">15</span>, <span class="number">10</span>, <span class="number">21</span>, <span class="number">20</span>, <span class="number">2</span>&#125;;</span><br><span class="line">	<span class="built_in">string</span> N[<span class="number">6</span>] = &#123;<span class="string">"刘一"</span>, <span class="string">"陈二"</span>, <span class="string">"张三"</span>, <span class="string">"李四"</span>, <span class="string">"王五"</span>, <span class="string">"赵六"</span>&#125;;</span><br><span class="line">	MaxHeap&lt;<span class="built_in">string</span>&gt; maxHeap;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"开始插入。。。"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">6</span>; i++) &#123;</span><br><span class="line">		maxHeap.push(N[i], P[i]);</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"当前树结构: "</span>;</span><br><span class="line">		maxHeap.print();</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"当前优先级最高的节点: ["</span> &lt;&lt; maxHeap.maxPriority() &lt;&lt; <span class="string">']'</span> &lt;&lt; maxHeap.top() &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span> &lt;&lt; <span class="string">"开始删除。。。"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">6</span>; i++) &#123;</span><br><span class="line">		<span class="built_in">string</span> value = maxHeap.pop();</span><br><span class="line">		<span class="keyword">if</span> (maxHeap.empty()) <span class="keyword">continue</span>;</span><br><span class="line"></span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"当前树结构: "</span>;</span><br><span class="line">		maxHeap.print();</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"当前优先级最高的节点: ["</span> &lt;&lt; maxHeap.maxPriority() &lt;&lt; <span class="string">']'</span> &lt;&lt; maxHeap.top() &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	system(<span class="string">"pause"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>单个节点的插入，以李四同学为例，图中黑色表示更改的部分<br><img src="/2020/03/03/【数据结构】优先级队列/students_push_node.jpg" alt="students_push_node"></p>
+<p>所以插入过程，二叉树结构调整如下，图中黑色节点表示插入的节点<br><img src="/2020/03/03/【数据结构】优先级队列/students_push.jpg" alt="students_push"></p>
+<p>单个节点的删除，以陈二同学为例，图中黑色表示更改的部分<br><img src="/2020/03/03/【数据结构】优先级队列/students_pop_node.jpg" alt="students_pop_node"></p>
+<p>删除过程，二叉树结构调整如下，图中第$i(i&gt;1)$棵树的根节点在第$(i-1)$棵树中的位置已用相同颜色注明，黑色节点表示删除的节点<br><img src="/2020/03/03/【数据结构】优先级队列/students_pop.jpg" alt="students_pop"></p>
+<p>主函数输出结果如下，正确<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">开始插入。。。</span><br><span class="line">当前树结构: [14]刘一</span><br><span class="line">当前优先级最高的节点: [14]刘一</span><br><span class="line">当前树结构: [15]陈二 [14]刘一</span><br><span class="line">当前优先级最高的节点: [15]陈二</span><br><span class="line">当前树结构: [15]陈二 [14]刘一 [10]张三</span><br><span class="line">当前优先级最高的节点: [15]陈二</span><br><span class="line">当前树结构: [21]李四 [15]陈二 [10]张三 [14]刘一</span><br><span class="line">当前优先级最高的节点: [21]李四</span><br><span class="line">当前树结构: [21]李四 [20]王五 [10]张三 [14]刘一 [15]陈二</span><br><span class="line">当前优先级最高的节点: [21]李四</span><br><span class="line">当前树结构: [21]李四 [20]王五 [10]张三 [14]刘一 [15]陈二 [2]赵六</span><br><span class="line">当前优先级最高的节点: [21]李四</span><br><span class="line"></span><br><span class="line">开始删除。。。</span><br><span class="line">当前树结构: [20]王五 [14]刘一 [15]陈二 [10]张三 [2]赵六</span><br><span class="line">当前优先级最高的节点: [20]王五</span><br><span class="line">当前树结构: [15]陈二 [14]刘一 [2]赵六 [10]张三</span><br><span class="line">当前优先级最高的节点: [15]陈二</span><br><span class="line">当前树结构: [14]刘一 [10]张三 [2]赵六</span><br><span class="line">当前优先级最高的节点: [14]刘一</span><br><span class="line">当前树结构: [10]张三 [2]赵六</span><br><span class="line">当前优先级最高的节点: [10]张三</span><br><span class="line">当前树结构: [2]赵六</span><br><span class="line">当前优先级最高的节点: [2]赵六</span><br><span class="line">请按任意键继续. . .</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/29/【数据结构】二叉树及其他树/" rel="next" title="【数据结构】二叉树及其他树">
+                <i class="fa fa-chevron-left"></i> 【数据结构】二叉树及其他树
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Louis Hsu">
+            
+              <p class="site-author-name" itemprop="name">Louis Hsu</p>
+              <p class="site-description motion-element" itemprop="description">技术博客？</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">77</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/isLouisHsu" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://is.louishsu@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/islouishsu" target="_blank" title="Zhihu"><i class="fa fa-fw fa-zhihu"></i>Zhihu</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/islouishsu" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          <div id="music163player">
+            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="110" src="//music.163.com/outchain/player?type=0&id=2703291040&auto=1&height=90">
+            </iframe>
+          </div>
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#定义及抽象数据类型"><span class="nav-number">1.</span> <span class="nav-text">定义及抽象数据类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#大根堆-小根堆"><span class="nav-number">2.</span> <span class="nav-text">大根堆/小根堆</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#定义"><span class="nav-number">2.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现"><span class="nav-number">2.2.</span> <span class="nav-text">实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#元素的声明与定义"><span class="nav-number">2.2.1.</span> <span class="nav-text">元素的声明与定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#大根堆-小根堆的链表描述"><span class="nav-number">2.2.2.</span> <span class="nav-text">大根堆/小根堆的链表描述</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#声明"><span class="nav-number">2.2.2.1.</span> <span class="nav-text">声明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#定义-1"><span class="nav-number">2.2.2.2.</span> <span class="nav-text">定义</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#图解算法"><span class="nav-number">2.2.3.</span> <span class="nav-text">图解算法</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Louis Hsu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: 'e65d27f7cf5c62feaf97',
+          clientSecret: '356386826698e8b817ca076b08d7c0e9814f52ea',
+          repo: 'isLouisHsu.github.io',
+          owner: 'isLouisHsu',
+          admin: ['isLouisHsu'],
+          id: md5(window.location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('3');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+
+  <script type="text/javascript" src="/js/click_show_text.js"></script>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
