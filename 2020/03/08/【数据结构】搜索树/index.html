@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="定义与概念考虑用散列表述的字典，字典插入、查找和删除等操作所需要的平均时间为$\Theta(1)$，最坏情况下时间与元素个数呈线性关系。若给字典添加如下操作，那么散列便不再具有良好的平均性能  按关键字的升序输出字典元素； 按升序找到第$k$各元素； 删除第$k$个元素。  定义：二叉搜索树(binary search tree)是一棵二叉树，可能为空；一棵非空的二叉搜索树满足以下特征  每个元素">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【数据结构】搜索树">
+<meta property="og:url" content="http://yoursite.com/2020/03/08/【数据结构】搜索树/index.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="定义与概念考虑用散列表述的字典，字典插入、查找和删除等操作所需要的平均时间为$\Theta(1)$，最坏情况下时间与元素个数呈线性关系。若给字典添加如下操作，那么散列便不再具有良好的平均性能  按关键字的升序输出字典元素； 按升序找到第$k$各元素； 删除第$k$个元素。  定义：二叉搜索树(binary search tree)是一棵二叉树，可能为空；一棵非空的二叉搜索树满足以下特征  每个元素">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2020/03/08/【数据结构】搜索树/indexed_binary_search_tree.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/03/08/【数据结构】搜索树/find.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/03/08/【数据结构】搜索树/erase.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/03/08/【数据结构】搜索树/bst1.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/03/08/【数据结构】搜索树/index.jpg">
+<meta property="og:updated_time" content="2020-03-09T08:24:43.151Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【数据结构】搜索树">
+<meta name="twitter:description" content="定义与概念考虑用散列表述的字典，字典插入、查找和删除等操作所需要的平均时间为$\Theta(1)$，最坏情况下时间与元素个数呈线性关系。若给字典添加如下操作，那么散列便不再具有良好的平均性能  按关键字的升序输出字典元素； 按升序找到第$k$各元素； 删除第$k$个元素。  定义：二叉搜索树(binary search tree)是一棵二叉树，可能为空；一棵非空的二叉搜索树满足以下特征  每个元素">
+<meta name="twitter:image" content="http://yoursite.com/2020/03/08/【数据结构】搜索树/indexed_binary_search_tree.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/03/08/【数据结构】搜索树/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>【数据结构】搜索树 | LOUIS' BLOG</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LOUIS' BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">大龄工科伪文青</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-guestbook">
+    <a href="/guestbook" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-guest"></i> <br>留言</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/08/【数据结构】搜索树/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="技术博客？">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【数据结构】搜索树
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-03-08 15:25:22" itemprop="dateCreated datePublished" datetime="2020-03-08T15:25:22+08:00">2020-03-08</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-03-09 16:24:43" itemprop="dateModified" datetime="2020-03-09T16:24:43+08:00">2020-03-09</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="定义与概念"><a href="#定义与概念" class="headerlink" title="定义与概念"></a>定义与概念</h1><p>考虑用散列表述的字典，字典插入、查找和删除等操作所需要的平均时间为$\Theta(1)$，最坏情况下时间与元素个数呈线性关系。若给字典添加如下操作，那么散列便不再具有良好的平均性能</p>
+<ul>
+<li>按关键字的升序输出字典元素；</li>
+<li>按升序找到第$k$各元素；</li>
+<li>删除第$k$个元素。</li>
+</ul>
+<p><strong>定义</strong>：<strong>二叉搜索树</strong>(binary search tree)是一棵二叉树，可能为空；一棵非空的二叉搜索树满足以下特征</p>
+<ol>
+<li>每个元素对应一个关键字，且所有<strong>关键字都唯一</strong>；</li>
+<li>根节点的<strong>左子树</strong>中，元素关键字都<strong>小于</strong>根节点的关键字；</li>
+<li>根节点的<strong>右子树</strong>中，元素关键字都<strong>大于</strong>根节点的关键字；</li>
+<li>根节点的<strong>左、右子树</strong>也是二叉搜索树。</li>
+</ol>
+<blockquote>
+<ul>
+<li>由$2, 3$可知，某节点$\mathcal{N}$的键，<strong>大于</strong>该节点的左子树元素的键，<strong>小于</strong>该节点的右子树的键；</li>
+<li>以节点$\mathcal{N}$为根节点的树的<strong>最小值</strong>位于最左端的叶子节点，<strong>最大值</strong>位于最右端的叶子节点；</li>
+<li>当节点$\mathcal{N}$的<strong>左子树的键最大节点或右子树的键最小节点</strong>替换该结点时，该树仍满足二叉搜索树的特性。</li>
+</ul>
+</blockquote>
+<p>若条件$1$弱化，即不同元素可包含相同的关键字，且$2, 3$中小于/大于改为不大于/不小于，这样的树称为<strong>有重复值的二叉搜索树</strong>(binary search tree with duplicates)。</p>
+<p><strong>定义</strong>：<strong>索引二叉搜索树</strong>(indexed binary search tree)源于普通二叉搜索树，是在每个节点中添加$leftSize$域，记录<strong>该节点左子树的元素个数</strong>。</p>
+<blockquote>
+<ul>
+<li>节点$\mathcal{N}$的$leftSize$与索引$index$比较大小，判断<strong>向左或向右</strong>搜索；</li>
+<li>某节点$\mathcal{N}$的$leftSize$视为<strong>该节点在以该节点为根节点的树$\mathcal{T}_{\mathcal{N}}$中的索引</strong>，如下图$20$在树中索引为$5$，$15$在左子树中，索引为$1$等，以此类推；</li>
+</ul>
+<p>下图中元素按照升序排列时$12, 15, 16, 18, 19, 20, 25, 30$<br><img src="/2020/03/08/【数据结构】搜索树/indexed_binary_search_tree.jpg" alt="indexed_binary_search_tree"></p>
+</blockquote>
+<h1 id="抽象数据类型"><a href="#抽象数据类型" class="headerlink" title="抽象数据类型"></a>抽象数据类型</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">抽象数据类型 BSTree</span><br><span class="line">&#123;</span><br><span class="line">    实例:</span><br><span class="line">        二叉树，每个节点包含数值对；满足二叉搜索树的特征；</span><br><span class="line">    操作：</span><br><span class="line">        find(k)：返回关键字为k的数对</span><br><span class="line">        insert(p)：插入数对p</span><br><span class="line">        erase(k)：删除关键字为k的数对</span><br><span class="line">        ascend()：按关键字升序输出所有数对</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>索引二叉搜索树支持二叉搜索树的所有操作，另外它还支持按名字进行的查找和删除操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">抽象数据类型 IndexedBSTree</span><br><span class="line">&#123;</span><br><span class="line">    实例:</span><br><span class="line">        二叉树，每个节点包含数值对；满足二叉搜索树的特征；</span><br><span class="line">    操作：</span><br><span class="line">        find(k)：返回关键字为k的数对</span><br><span class="line">        get(index)：返回第index个数对</span><br><span class="line">        insert(p)：插入数对p</span><br><span class="line">        erase(k)：删除关键字为k的数对</span><br><span class="line">        ascend()：按关键字升序输出所有数对</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h1><h2 id="二叉搜索树"><a href="#二叉搜索树" class="headerlink" title="二叉搜索树"></a>二叉搜索树</h2><h3 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BinarySearchTree</span> :</span> </span><br><span class="line">	<span class="keyword">public</span> LinkedBinaryTree&lt;Pair&lt;K, V&gt;*&gt;</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	BinarySearchTree() : LinkedBinaryTree&lt;Pair&lt;K, V&gt;*&gt;() &#123;&#125;</span><br><span class="line">	~BinarySearchTree() &#123;&#125;</span><br><span class="line"></span><br><span class="line">	BinaryTreeNode&lt; Pair&lt;K, V&gt;*&gt;* find(<span class="keyword">const</span> K&amp;, <span class="keyword">bool</span> insert=<span class="literal">false</span>);</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="keyword">const</span> K&amp;, <span class="keyword">const</span> V&amp;)</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">erase</span><span class="params">(<span class="keyword">const</span> K&amp;)</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span>;	<span class="comment">// 注意</span></span><br><span class="line">					<span class="comment">// - 不能声明为const，否则无法调用非const的printPairNode；</span></span><br><span class="line">					<span class="comment">// - 类的静态成员无法声明为const。</span></span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">ascending</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	<span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printPairNode</span><span class="params">(BinaryTreeNode&lt; Pair&lt;K, V&gt;*&gt;*)</span></span>;</span><br><span class="line">	<span class="keyword">static</span> BinaryTreeNode&lt; Pair&lt;K, V&gt;*&gt;* max(BinaryTreeNode&lt; Pair&lt;K, V&gt;*&gt;*);</span><br><span class="line">	<span class="keyword">static</span> BinaryTreeNode&lt; Pair&lt;K, V&gt;*&gt;* min(BinaryTreeNode&lt; Pair&lt;K, V&gt;*&gt;*);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><ol>
+<li><p>查找</p>
+<p> 根据搜索二叉树特性，当搜索到达节点$\mathcal{N}$时，<strong>若查找值小于当前节点的键，则向其左子树搜索，否则向右子树搜索</strong>，直至找到对应键(找到)，或直至叶子节点(未找到)；在<strong>插入模式</strong>(<code>bool insert=true</code>)下查找时，若不存在则创建新节点并返回。</p>
+<p> <img src="/2020/03/08/【数据结构】搜索树/find.jpg" alt="find"></p>
+ <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line">BinaryTreeNode&lt; Pair&lt;K, V&gt;*&gt;* BinarySearchTree&lt;K, V&gt;::find(<span class="keyword">const</span> K&amp; key, <span class="keyword">bool</span> insert)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 若树为空</span></span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">this</span>-&gt;m_tnRoot) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!insert) <span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line"></span><br><span class="line">        Pair&lt;K, V&gt;* p = <span class="keyword">new</span> Pair&lt;K, V&gt;;</span><br><span class="line">        <span class="keyword">this</span>-&gt;m_tnRoot = <span class="keyword">new</span> BinaryTreeNode&lt; Pair&lt;K, V&gt;*&gt;;</span><br><span class="line">        <span class="keyword">this</span>-&gt;m_tnRoot-&gt;<span class="built_in">set</span>(p); <span class="keyword">return</span> <span class="keyword">this</span>-&gt;m_tnRoot;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 树不为空</span></span><br><span class="line">    BinaryTreeNode&lt; Pair&lt;K, V&gt;*&gt;* node = <span class="keyword">this</span>-&gt;m_tnRoot;</span><br><span class="line">    <span class="keyword">bool</span> toLeft = <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">while</span> (node) &#123;</span><br><span class="line">        <span class="comment">// 找到对应键的数值对</span></span><br><span class="line">        <span class="keyword">if</span> (node-&gt;get()-&gt;getKey() == key) <span class="keyword">return</span> node;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 当前节点的键比搜查键更大，则向左子树搜索</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (node-&gt;get()-&gt;getKey() &gt; key) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!node-&gt;left) &#123;		<span class="comment">// 左子树为空</span></span><br><span class="line">                toLeft = <span class="literal">true</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            node = node-&gt;left;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 当前节点的键比搜查键更小，则向右子树搜索</span></span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (!node-&gt;right) &#123;		<span class="comment">// 右子树为空</span></span><br><span class="line">                toLeft = <span class="literal">false</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            node = node-&gt;right;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 未找到</span></span><br><span class="line">    <span class="keyword">if</span> (!insert) <span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建新节点n</span></span><br><span class="line">    Pair&lt;K, V&gt;* p = <span class="keyword">new</span> Pair&lt;K, V&gt;;</span><br><span class="line">    BinaryTreeNode&lt; Pair&lt;K, V&gt;*&gt;* n = \</span><br><span class="line">        <span class="keyword">new</span> BinaryTreeNode&lt; Pair&lt;K, V&gt;*&gt;(node);</span><br><span class="line">    n-&gt;<span class="built_in">set</span>(p);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 将节点加入搜索树</span></span><br><span class="line">    <span class="keyword">if</span> (toLeft)</span><br><span class="line">        node-&gt;left = n;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        node-&gt;right = n;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> n;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>插入</p>
+<p> 调用函数<code>find</code>(插入模式)查找结果，设置搜查到的节点的数值对即可。</p>
+ <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line"><span class="keyword">void</span> BinarySearchTree&lt;K, V&gt;::insert(<span class="keyword">const</span> K&amp; key, <span class="keyword">const</span> V&amp; value)</span><br><span class="line">&#123;</span><br><span class="line">    BinaryTreeNode&lt; Pair&lt;K, V&gt;*&gt;* node = find(key, <span class="literal">true</span>);</span><br><span class="line">    Pair&lt;K, V&gt;* p = node-&gt;get();</span><br><span class="line">    <span class="keyword">if</span> (p-&gt;getKey() != key)</span><br><span class="line">        p-&gt;setKey(key);</span><br><span class="line">    p-&gt;setVal(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>删除</p>
+<p> 删除结点时，需考虑剩余节点的重组织问题，与<a href="https://louishsu.xyz/2020/03/03/%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%91%E4%BC%98%E5%85%88%E7%BA%A7%E9%98%9F%E5%88%97/" target="_blank" rel="noopener">最大堆</a>不同，二叉搜索树具有良好的结构特性，故删除某节点$\mathcal{N}$时，只需将其<strong>左子树元素中键最大的，或右子树中元素键最小的</strong>与该节点位置替换即可。考虑到节点间拓扑关系修改复杂，以下仅<strong>修改</strong>节点$\mathcal{N}$的键值对，且继续搜索直至找到叶子节点作为<strong>替换节点</strong>并释放节点内存。</p>
+<p> 例如删除键为$20$的节点$\mathcal{N}_{20}$时，查找左子树中键最大的节点$\mathcal{N}_{19}$，或右子树中键最小的节点$\mathcal{N}_{25}$(<strong>由于$\mathcal{N}_{25}$非叶子节点</strong>，需查找$\mathcal{N}_{25}$为根节点的树$\mathcal{T}_{\mathcal{N}_{25}}$中最大左子树节点或最小右子树节点进行替换)，代替$\mathcal{N}_{20}$，如下图</p>
+<p> <img src="/2020/03/08/【数据结构】搜索树/erase.jpg" alt="erase"></p>
+ <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line"><span class="keyword">void</span> BinarySearchTree&lt;K, V&gt;::erase(<span class="keyword">const</span> K&amp; key)</span><br><span class="line">&#123;</span><br><span class="line">    BinaryTreeNode&lt; Pair&lt;K, V&gt;*&gt;* node = find(key, <span class="literal">false</span>);</span><br><span class="line">    <span class="keyword">if</span> (!node) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ------------------ 重新组织二叉树 ------------------</span></span><br><span class="line">    <span class="comment">// 查找左子树的最大值，或右子树的最小值</span></span><br><span class="line">    BinaryTreeNode&lt; Pair&lt;K, V&gt;*&gt;* replace = <span class="literal">nullptr</span>;</span><br><span class="line">    <span class="keyword">while</span> (!node-&gt;isLeaf())	&#123;			<span class="comment">// 直到搜索到叶节点为止</span></span><br><span class="line">        <span class="keyword">if</span> (node-&gt;left) &#123;</span><br><span class="line">            replace = max(node-&gt;left);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (node-&gt;right) &#123;</span><br><span class="line">            replace = min(node-&gt;right);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (replace) &#123;					<span class="comment">// 找到可替换子节点</span></span><br><span class="line">            Pair&lt;K, V&gt;* np = node-&gt;get();</span><br><span class="line">            Pair&lt;K, V&gt;* rp = replace-&gt;get();</span><br><span class="line">            np-&gt;setKey(rp-&gt;getKey());</span><br><span class="line">            np-&gt;setVal(rp-&gt;getVal());</span><br><span class="line">            node = replace;             <span class="comment">// 替换节点node</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (node-&gt;parent) &#123;				<span class="comment">// 修改父节点信息</span></span><br><span class="line">        <span class="keyword">if</span> (node == node-&gt;parent-&gt;left)</span><br><span class="line">            node-&gt;parent-&gt;left = <span class="literal">nullptr</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            node-&gt;parent-&gt;right = <span class="literal">nullptr</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;						<span class="comment">// 无父节点，即整棵树只有一个根节点，则修改根节点为空</span></span><br><span class="line">        <span class="keyword">this</span>-&gt;m_tnRoot = <span class="literal">nullptr</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ------------------ 释放资源 ------------------</span></span><br><span class="line">    Pair&lt;K, V&gt;* pair = node-&gt;get();</span><br><span class="line">    <span class="keyword">delete</span> pair; <span class="keyword">delete</span> node;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line">BinaryTreeNode&lt; Pair&lt;K, V&gt;*&gt;* BinarySearchTree&lt;K, V&gt;::max(BinaryTreeNode&lt; Pair&lt;K, V&gt;*&gt;* node)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">while</span> (node-&gt;right) </span><br><span class="line">        node = node-&gt;right;</span><br><span class="line">    <span class="keyword">return</span> node;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line">BinaryTreeNode&lt; Pair&lt;K, V&gt;*&gt;* BinarySearchTree&lt;K, V&gt;::min(BinaryTreeNode&lt; Pair&lt;K, V&gt;*&gt;* node)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">while</span> (node-&gt;left)</span><br><span class="line">        node = node-&gt;left;</span><br><span class="line">    <span class="keyword">return</span> node;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>升序打印</p>
+<p> 将元素按<strong>中序遍历</strong>进行打印即可</p>
+ <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line"><span class="keyword">void</span> BinarySearchTree&lt;K, V&gt;::ascending() </span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">this</span>-&gt;inOrder(&amp;printPairNode, <span class="keyword">this</span>-&gt;m_tnRoot);</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> <code>print</code>实现将元素按<strong>层次遍历</strong>的顺序打印</p>
+ <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line"><span class="keyword">void</span> BinarySearchTree&lt;K, V&gt;::print()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">this</span>-&gt;levelOrder(&amp;printPairNode, <span class="keyword">this</span>-&gt;m_tnRoot);</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line"><span class="keyword">void</span> BinarySearchTree&lt;K, V&gt;::printPairNode(BinaryTreeNode&lt; Pair&lt;K, V&gt;*&gt;* node)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (!node) <span class="keyword">return</span>;</span><br><span class="line">    Pair&lt;K, V&gt;* p = node-&gt;get();</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">'['</span> &lt;&lt; p-&gt;getKey() &lt;&lt; <span class="string">']'</span> &lt;&lt; p-&gt;getVal() &lt;&lt; <span class="string">' '</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>** argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">string</span> names[<span class="number">8</span>] = &#123;</span><br><span class="line">		<span class="string">"甲"</span>, <span class="string">"乙"</span>, <span class="string">"丙"</span>, <span class="string">"丁"</span>, <span class="string">"戊"</span>, <span class="string">"己"</span>, <span class="string">"庚"</span>, <span class="string">"辛"</span> &#125;;</span><br><span class="line">	<span class="keyword">int</span> numbers[<span class="number">8</span>] = &#123; <span class="number">20</span>, <span class="number">15</span>, <span class="number">25</span>, <span class="number">12</span>, <span class="number">18</span>, <span class="number">30</span>, <span class="number">16</span>, <span class="number">19</span> &#125;;</span><br><span class="line"></span><br><span class="line">	BinarySearchTree&lt;<span class="keyword">int</span>, <span class="built_in">string</span>&gt; tree;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 插入键值对</span></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span> &lt;&lt; <span class="string">"插入"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++) &#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"插入"</span> &lt;&lt; numbers[i] &lt;&lt; <span class="string">": "</span>;</span><br><span class="line">		tree.insert(numbers[i], names[i]);</span><br><span class="line">		tree.print();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"升序排列: "</span>;</span><br><span class="line">	tree.ascending();</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 删除键值对</span></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span> &lt;&lt; <span class="string">"删除"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	tree.erase(<span class="number">10</span>);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++) &#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"删除"</span> &lt;&lt; numbers[i] &lt;&lt; <span class="string">": "</span>;</span><br><span class="line">		tree.erase(numbers[i]);</span><br><span class="line">		tree.print();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	system(<span class="string">"pause"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">插入</span><br><span class="line">插入20: [20]甲</span><br><span class="line">插入15: [20]甲 [15]乙</span><br><span class="line">插入25: [20]甲 [15]乙 [25]丙</span><br><span class="line">插入12: [20]甲 [15]乙 [25]丙 [12]丁</span><br><span class="line">插入18: [20]甲 [15]乙 [25]丙 [12]丁 [18]戊</span><br><span class="line">插入30: [20]甲 [15]乙 [25]丙 [12]丁 [18]戊 [30]己</span><br><span class="line">插入16: [20]甲 [15]乙 [25]丙 [12]丁 [18]戊 [30]己 [16]庚</span><br><span class="line">插入19: [20]甲 [15]乙 [25]丙 [12]丁 [18]戊 [30]己 [16]庚 [19]辛</span><br><span class="line">升序排列: [12]丁 [15]乙 [16]庚 [18]戊 [19]辛 [20]甲 [25]丙 [30]己</span><br><span class="line"></span><br><span class="line">删除</span><br><span class="line">删除20: [19]辛 [15]乙 [25]丙 [12]丁 [18]戊 [30]己 [16]庚</span><br><span class="line">删除15: [19]辛 [12]丁 [25]丙 [18]戊 [30]己 [16]庚</span><br><span class="line">删除25: [19]辛 [12]丁 [30]己 [18]戊 [16]庚</span><br><span class="line">删除12: [19]辛 [16]庚 [30]己 [18]戊</span><br><span class="line">删除18: [19]辛 [16]庚 [30]己</span><br><span class="line">删除30: [19]辛 [16]庚</span><br><span class="line">删除16: [19]辛</span><br><span class="line">删除19:</span><br><span class="line">请按任意键继续. . .</span><br></pre></td></tr></table></figure>
+<p>删除时节点的重组织示意图如下</p>
+<p><img src="/2020/03/08/【数据结构】搜索树/bst1.jpg" alt="bst1"></p>
+<h2 id="索引二叉搜索树"><a href="#索引二叉搜索树" class="headerlink" title="索引二叉搜索树"></a>索引二叉搜索树</h2><h3 id="声明-1"><a href="#声明-1" class="headerlink" title="声明"></a>声明</h3><p>由<code>BinarySearchTree&lt;K, V&gt;</code>派生而来，添加操作符<code>[]</code>的重载</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IndexedBinarySearchTree</span> :</span></span><br><span class="line">	<span class="keyword">public</span> BinarySearchTree&lt;K, V&gt;</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	IndexedBinarySearchTree() : BinarySearchTree&lt;K, V&gt;() &#123;&#125;</span><br><span class="line">	~IndexedBinarySearchTree() &#123;&#125;</span><br><span class="line"></span><br><span class="line">	BinaryTreeNode&lt; Pair&lt;K, V&gt;*&gt;* <span class="keyword">operator</span>[] (<span class="keyword">int</span> index);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h3><p>初始化偏置$offset = 0$，在向右搜索时，需更新偏置$offset$使右子树中各节点的$leafSize$仍能用于索引</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line">BinaryTreeNode&lt; Pair&lt;K, V&gt;*&gt;* IndexedBinarySearchTree&lt;K, V&gt;::<span class="keyword">operator</span>[] (<span class="keyword">int</span> index)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span> (index &lt; <span class="number">0</span>) <span class="keyword">throw</span> <span class="string">"索引必须大于0！"</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> leftSize = <span class="number">-1</span>; <span class="keyword">int</span> offset = <span class="number">0</span>;</span><br><span class="line">	BinaryTreeNode&lt; Pair&lt;K, V&gt;*&gt;* node = <span class="keyword">this</span>-&gt;m_tnRoot;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">while</span> (leftSize != index &amp;&amp; node) &#123;</span><br><span class="line">		leftSize = IndexedBinarySearchTree&lt;K, V&gt;::sizeofNode(node-&gt;left);</span><br><span class="line">		<span class="keyword">if</span> (offset + leftSize == index) &#123;</span><br><span class="line">			IndexedBinarySearchTree&lt;K, V&gt;::printPairNode(node);</span><br><span class="line">			<span class="keyword">return</span> node;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (offset + leftSize &gt; index)</span><br><span class="line">			node = node-&gt;left;</span><br><span class="line">		<span class="keyword">else</span> &#123;</span><br><span class="line">			node = node-&gt;right;</span><br><span class="line">			offset += (leftSize + <span class="number">1</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="测试-1"><a href="#测试-1" class="headerlink" title="测试"></a>测试</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>** argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">string</span> names[<span class="number">8</span>] = &#123;</span><br><span class="line">		<span class="string">"甲"</span>, <span class="string">"乙"</span>, <span class="string">"丙"</span>, <span class="string">"丁"</span>, <span class="string">"戊"</span>, <span class="string">"己"</span>, <span class="string">"庚"</span>, <span class="string">"辛"</span> &#125;;</span><br><span class="line">	<span class="keyword">int</span> numbers[<span class="number">8</span>] = &#123; <span class="number">20</span>, <span class="number">15</span>, <span class="number">25</span>, <span class="number">12</span>, <span class="number">18</span>, <span class="number">30</span>, <span class="number">16</span>, <span class="number">19</span> &#125;;</span><br><span class="line"></span><br><span class="line">	IndexedBinarySearchTree&lt;<span class="keyword">int</span>, <span class="built_in">string</span>&gt; tree;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 插入键值对</span></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span> &lt;&lt; <span class="string">"插入"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++) &#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"插入"</span> &lt;&lt; numbers[i] &lt;&lt; <span class="string">": "</span>;</span><br><span class="line">		tree.insert(numbers[i], names[i]);</span><br><span class="line">		tree.print();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"升序排列: "</span>;</span><br><span class="line">	tree.ascending();</span><br><span class="line"></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span> &lt;&lt; <span class="string">"索引"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++) &#123;</span><br><span class="line">		tree[i];</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">	system(<span class="string">"pause"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以下图为例，讲解索引$index=2$的过程</p>
+<ol>
+<li>初始化$offset = 0$；</li>
+<li>$index = 2$时，首先在节点$\mathcal{N}_{20}$比较$2 + offset &lt; 5$，向左搜索；</li>
+<li>在节点$\mathcal{N}_{15}$处$2 + offset&gt; 1$，向右搜索，并更新$offset = offset + \mathcal{N}_{15}.leafSize + 1 = 2$；</li>
+<li>节点$\mathcal{N}_{18}$处$2 &lt; 1 + offset$，向左搜索；在节点$\mathcal{N}_{16}$处$2 = 0 + offset$，返回该节点。</li>
+</ol>
+<p><img src="/2020/03/08/【数据结构】搜索树/index.jpg" alt="index"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">插入</span><br><span class="line">插入20: [20]甲</span><br><span class="line">插入15: [20]甲 [15]乙</span><br><span class="line">插入25: [20]甲 [15]乙 [25]丙</span><br><span class="line">插入12: [20]甲 [15]乙 [25]丙 [12]丁</span><br><span class="line">插入18: [20]甲 [15]乙 [25]丙 [12]丁 [18]戊</span><br><span class="line">插入30: [20]甲 [15]乙 [25]丙 [12]丁 [18]戊 [30]己</span><br><span class="line">插入16: [20]甲 [15]乙 [25]丙 [12]丁 [18]戊 [30]己 [16]庚</span><br><span class="line">插入19: [20]甲 [15]乙 [25]丙 [12]丁 [18]戊 [30]己 [16]庚 [19]辛</span><br><span class="line">升序排列: [12]丁 [15]乙 [16]庚 [18]戊 [19]辛 [20]甲 [25]丙 [30]己</span><br><span class="line"></span><br><span class="line">索引</span><br><span class="line">[12]丁 [15]乙 [16]庚 [18]戊 [19]辛 [20]甲 [25]丙 [30]己</span><br><span class="line"></span><br><span class="line">请按任意键继续. . .</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/06/【数据结构】竞赛树/" rel="next" title="【数据结构】竞赛树">
+                <i class="fa fa-chevron-left"></i> 【数据结构】竞赛树
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Louis Hsu">
+            
+              <p class="site-author-name" itemprop="name">Louis Hsu</p>
+              <p class="site-description motion-element" itemprop="description">技术博客？</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">79</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/isLouisHsu" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://is.louishsu@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/islouishsu" target="_blank" title="Zhihu"><i class="fa fa-fw fa-zhihu"></i>Zhihu</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/islouishsu" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          <div id="music163player">
+            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="110" src="//music.163.com/outchain/player?type=0&id=2703291040&auto=1&height=90">
+            </iframe>
+          </div>
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#定义与概念"><span class="nav-number">1.</span> <span class="nav-text">定义与概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#抽象数据类型"><span class="nav-number">2.</span> <span class="nav-text">抽象数据类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#具体实现"><span class="nav-number">3.</span> <span class="nav-text">具体实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#二叉搜索树"><span class="nav-number">3.1.</span> <span class="nav-text">二叉搜索树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#声明"><span class="nav-number">3.1.1.</span> <span class="nav-text">声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定义"><span class="nav-number">3.1.2.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试"><span class="nav-number">3.1.3.</span> <span class="nav-text">测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#索引二叉搜索树"><span class="nav-number">3.2.</span> <span class="nav-text">索引二叉搜索树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#声明-1"><span class="nav-number">3.2.1.</span> <span class="nav-text">声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定义-1"><span class="nav-number">3.2.2.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试-1"><span class="nav-number">3.2.3.</span> <span class="nav-text">测试</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Louis Hsu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: 'e65d27f7cf5c62feaf97',
+          clientSecret: '356386826698e8b817ca076b08d7c0e9814f52ea',
+          repo: 'isLouisHsu.github.io',
+          owner: 'isLouisHsu',
+          admin: ['isLouisHsu'],
+          id: md5(window.location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('3');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+
+  <script type="text/javascript" src="/js/click_show_text.js"></script>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
