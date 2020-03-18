@@ -108,31 +108,24 @@
 
 
 
-  <meta name="description" content="前言目前大多检测算法将物体视作边界框进行检测，并采用锚框(Anchor)，能很大程度提升检测算法的表现，但是Anchor难以确定参数，且增加大量网络运算量。目前的物体检测算法开始向无Anchor的方向发展，如本文的CenterNet，是把物体所在包围框作为点，并结合热图的形式进行。除物体检测外，此算法还可用于人体姿态识别、3D物体检测等。 个人理解，采用热图的形式，是将Anchor一定程度地连续化">
-<meta name="keywords" content="Object Detection">
+  <meta name="description" content="程序性能程序性能(performance of a program)是指运行这个程序所需要的内存和时间的多少。 空间复杂度定义：空间复杂度(space complexity)是该程序的运行所需内存的大小。 程序需要的空间主要以以下部分组成  指令空间(instruction space) 是指编译后的程序指令所需要的存储空间，取决于以下因素  编译器； 编译选项； 目标计算机。   数据空间(da">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CenterNet - Objects as Points">
-<meta property="og:url" content="http://yoursite.com/2019/10/09/CenterNet-Objects-as-Points/index.html">
+<meta property="og:title" content="【算法】程序性能分析与渐近记号">
+<meta property="og:url" content="http://yoursite.com/2020/02/16/【算法】程序性能分析与渐近记号/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="前言目前大多检测算法将物体视作边界框进行检测，并采用锚框(Anchor)，能很大程度提升检测算法的表现，但是Anchor难以确定参数，且增加大量网络运算量。目前的物体检测算法开始向无Anchor的方向发展，如本文的CenterNet，是把物体所在包围框作为点，并结合热图的形式进行。除物体检测外，此算法还可用于人体姿态识别、3D物体检测等。 个人理解，采用热图的形式，是将Anchor一定程度地连续化">
+<meta property="og:description" content="程序性能程序性能(performance of a program)是指运行这个程序所需要的内存和时间的多少。 空间复杂度定义：空间复杂度(space complexity)是该程序的运行所需内存的大小。 程序需要的空间主要以以下部分组成  指令空间(instruction space) 是指编译后的程序指令所需要的存储空间，取决于以下因素  编译器； 编译选项； 目标计算机。   数据空间(da">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/2019/10/09/CenterNet-Objects-as-Points/Fig2.png">
-<meta property="og:image" content="http://yoursite.com/2019/10/09/CenterNet-Objects-as-Points/Fig3.png">
-<meta property="og:image" content="http://yoursite.com/2019/10/09/CenterNet-Objects-as-Points/Fig4.png">
-<meta property="og:image" content="http://yoursite.com/2019/10/09/CenterNet-Objects-as-Points/Tab1.png">
-<meta property="og:image" content="http://yoursite.com/2019/10/09/CenterNet-Objects-as-Points/Tab2.png">
-<meta property="og:updated_time" content="2019-10-09T09:57:57.374Z">
+<meta property="og:updated_time" content="2020-03-18T06:36:19.801Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CenterNet - Objects as Points">
-<meta name="twitter:description" content="前言目前大多检测算法将物体视作边界框进行检测，并采用锚框(Anchor)，能很大程度提升检测算法的表现，但是Anchor难以确定参数，且增加大量网络运算量。目前的物体检测算法开始向无Anchor的方向发展，如本文的CenterNet，是把物体所在包围框作为点，并结合热图的形式进行。除物体检测外，此算法还可用于人体姿态识别、3D物体检测等。 个人理解，采用热图的形式，是将Anchor一定程度地连续化">
-<meta name="twitter:image" content="http://yoursite.com/2019/10/09/CenterNet-Objects-as-Points/Fig2.png">
+<meta name="twitter:title" content="【算法】程序性能分析与渐近记号">
+<meta name="twitter:description" content="程序性能程序性能(performance of a program)是指运行这个程序所需要的内存和时间的多少。 空间复杂度定义：空间复杂度(space complexity)是该程序的运行所需内存的大小。 程序需要的空间主要以以下部分组成  指令空间(instruction space) 是指编译后的程序指令所需要的存储空间，取决于以下因素  编译器； 编译选项； 目标计算机。   数据空间(da">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/10/09/CenterNet-Objects-as-Points/">
+  <link rel="canonical" href="http://yoursite.com/2020/02/16/【算法】程序性能分析与渐近记号/">
 
 
 
@@ -142,7 +135,7 @@
   };
 </script>
 
-  <title>CenterNet - Objects as Points | LOUIS' BLOG</title>
+  <title>【算法】程序性能分析与渐近记号 | LOUIS' BLOG</title>
   
 
 
@@ -365,7 +358,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/09/CenterNet-Objects-as-Points/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/16/【算法】程序性能分析与渐近记号/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Louis Hsu">
@@ -382,7 +375,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">CenterNet - Objects as Points
+          <h1 class="post-title" itemprop="name headline">【算法】程序性能分析与渐近记号
               
             
           </h1>
@@ -407,12 +400,24 @@
                 
               
 
-              <time title="创建时间：2019-10-09 15:22:49 / 修改时间：17:57:57" itemprop="dateCreated datePublished" datetime="2019-10-09T15:22:49+08:00">2019-10-09</time>
+              <time title="创建时间：2020-02-16 18:27:00" itemprop="dateCreated datePublished" datetime="2020-02-16T18:27:00+08:00">2020-02-16</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-03-18 14:36:19" itemprop="dateModified" datetime="2020-03-18T14:36:19+08:00">2020-03-18</time>
               
             
           </span>
@@ -429,7 +434,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a></span>
 
                 
                 
@@ -470,63 +475,116 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>目前大多检测算法将物体视作边界框进行检测，并采用锚框(Anchor)，能很大程度提升检测算法的表现，但是Anchor难以确定参数，且增加大量网络运算量。目前的物体检测算法开始向无Anchor的方向发展，如本文的CenterNet，是把物体所在包围框作为点，并结合热图的形式进行。除物体检测外，此算法还可用于人体姿态识别、3D物体检测等。</p>
-<p>个人理解，采用热图的形式，是将Anchor一定程度地连续化了。</p>
-<h1 id="论文阅读"><a href="#论文阅读" class="headerlink" title="论文阅读"></a>论文阅读</h1><h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><blockquote>
-<p>In this paper, we provide a much simpler and more efficient alternative. We <strong>represent objects by a single point at their bounding box center</strong> (see Figure 2). Other properties, such as object size, dimension, 3D extent, orientation, and pose are then <strong>regressed directly from image features at the center location</strong>. Object detection is then a standard keypoint estimation problem [3,39,60]. We simply feed the input image to a fully convolutional network [37, 40] that generates a heatmap. <strong>Peaks in this heatmap correspond to object centers</strong>. Image features at each peak predict the objects bounding box height and weight. The model trains using standard dense supervised learning [39,60]. Inference is a single network forward-pass, <strong>without non-maximal suppression for post-processing</strong>.<br><img src="/2019/10/09/CenterNet-Objects-as-Points/Fig2.png" alt="Figure 2"><br><img src="/2019/10/09/CenterNet-Objects-as-Points/Fig3.png" alt="Figure 3"></p>
-</blockquote>
-<h2 id="Preliminary"><a href="#Preliminary" class="headerlink" title="Preliminary"></a>Preliminary</h2><p>若有某三通道图片$I \in \mathcal{R}^{W \times H \times 3}$，经卷积神经网络后得到输出特征图$\left[\hat{Y} || \hat{O} || \hat{S} \right] \in [0, 1]^{\frac{W}{R} \times \frac{H}{R} \times (C + 4)}$。其中$R$为降采样系数，表示特征图上单个位置处的点映射回原图后网格的大小，文中默认为$R=4$；$C$可根据关键点类型指定，如人体姿态估计时指定$C=17$(17个关键点)，物体检测时指定$C=80$(80类物体)。$\hat{Y}_{x, y, c} = 1$表示对应关键点，$\hat{Y}_{x, y, c} = 0$表示为背景。</p>
-<p><img src="/2019/10/09/CenterNet-Objects-as-Points/Fig4.png" alt="Figure 4"></p>
-<p>ground truth设置为热图(heatmap)的形式，采用高斯核</p>
-<script type="math/tex; mode=display">
-Y_{x, y, c} = 
-    \exp\left(
-        - \frac{(x - \tilde{p}_x)^2 + (y - \tilde{p}_y)^2}{2 \sigma_p^2}
-    \right) \tag{1}</script><p>其中$\tilde{p} = \lfloor \frac{p}{R} \rfloor$，$p$为物体中心点在原图中的坐标；$\sigma_p$称对象尺寸自适应标准差(object size-adaptive standard deviation)，以解决物体尺寸不一致的问题。若两个同类别对象相距过近，其对应类别特征图上重叠部分用逐元素取大的策略(element-wise maximun)。</p>
-<p><strong>关键点</strong>为热图的回归(keypoint regression)，损失函数参考Focal Loss，添加$(1 - Y_{x, y, z})^{\beta}$项，使其适应回归任务</p>
-<script type="math/tex; mode=display">
-L_k = - \frac{1}{N} \sum_{x, y, z}
-\begin{cases}
-    (1 - \hat{Y}_{x, y, z})^{\alpha} \log (\hat{Y}_{x, y, z}) & Y_{x, y, z} = 1 \\
-    (1 - Y_{x, y, z})^{\beta} (\hat{Y}_{x, y, z})^{\alpha} \log (1 - \hat{Y}_{x, y, z}) & \rm{otherwsie} \\
-\end{cases} \tag{2.1}</script><p>其中$\alpha, \beta$为超参数，文中指定$\alpha=2, \beta=4$；$N$为图片$I$中关键点的个数。</p>
-<blockquote>
-<p>Focal Loss定义为</p>
-<script type="math/tex; mode=display">FL(p_t) = - \alpha_t (1 - p_t)^{\gamma} \log p_t</script><p>其中$\gamma &gt; 0$</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-    p_t =      \begin{cases} p      & y = 1 \\ 1 - p      & \rm{otherwsie} \end{cases} \in [0, 1] \\
-    \alpha_t = \begin{cases} \alpha & y = 1 \\ 1 - \alpha & \rm{otherwsie} \end{cases} \in [0, 1]
-\end{aligned}</script></blockquote>
-<p>由于网络的降采样，设置物体坐标偏置(local offset)<strong>修正物体中心坐标</strong>，即特征图$\hat{O} \in \mathcal{R}^{\frac{W}{R} \times \frac{H}{R} \times 2}$，该特征图所有类别共享。采用$L_1$损失，且仅对包含关键点的位置计算损失值。</p>
-<script type="math/tex; mode=display">L_{off} = \frac{1}{N} \sum_p \left| \hat{O}_{\tilde{p}} - \left( \frac{p}{R} - \tilde{p} \right) \right| \tag{2.2}</script><p>同样地，物体的<strong>边界框尺寸回归</strong>设置特征图$\hat{S} \in \mathcal{R}^{\frac{W}{R} \times \frac{H}{R} \times 2}$，$s_k = (x^{(k)}_2 - x^{(k)}_1, y^{(k)}_2 - y^{(k)}_1)$，也采用$L_1$损失，那么</p>
-<script type="math/tex; mode=display">L_{size} = \frac{1}{N} \sum_k \left| \hat{S}_{p_k} - s_k \right| \tag{2.3}</script><p>总体损失为以上几项的加权和，原文中$\lambda_{off} = 1, \lambda_{size} = 0.1$。</p>
-<script type="math/tex; mode=display">L = L_k + \lambda_{off} L_{off} + \lambda_{size} L_{size} \tag{2}</script><p>基于以上，在测试阶段时，先在类别输出特征图$\hat{Y}$上确定位置，即保留100个峰(peak)(某处值在比其8领域值都大)的坐标$(\hat{x}_i, \hat{y}_i), i = 1, \cdots, 100$，各位置处的预测输出为</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-    \begin{cases}
-        \hat{O}_{\hat{x}_i, \hat{y}_i} = (\delta_{\hat{x}_i}, \delta_{\hat{y}_i}) \\
-        \hat{S}_{\hat{x}_i, \hat{y}_i} = (\hat{w}_i, \hat{h}_i)
-    \end{cases}
-    \Rightarrow \\
-    (
-        \hat{x}_i + \delta_{\hat{x}_i} - \hat{w}_i / 2, 
-        \hat{y}_i + \delta_{\hat{y}_i} - \hat{h}_i / 2, \\
-        \hat{x}_i + \delta_{\hat{x}_i} + \hat{w}_i / 2, 
-        \hat{y}_i + \delta_{\hat{y}_i} + \hat{h}_i / 2
-    )
-\end{aligned} \tag{3}</script><h2 id="Implementation-details"><a href="#Implementation-details" class="headerlink" title="Implementation details"></a>Implementation details</h2><p>原文中分别采用ResNet-18, ResNet101, DLA-34, and Hourglass-104作为网络框架进行实验，效果对比如下<br><img src="/2019/10/09/CenterNet-Objects-as-Points/Tab1.png" alt="Table 1"></p>
-<p>训练细节如下</p>
+        <h1 id="程序性能"><a href="#程序性能" class="headerlink" title="程序性能"></a>程序性能</h1><p><strong>程序性能</strong>(performance of a program)是指运行这个程序所需要的内存和时间的多少。</p>
+<h2 id="空间复杂度"><a href="#空间复杂度" class="headerlink" title="空间复杂度"></a>空间复杂度</h2><p><strong>定义</strong>：<strong>空间复杂度</strong>(space complexity)是该程序的运行所需内存的大小。</p>
+<p>程序需要的空间主要以以下部分组成</p>
 <ol>
-<li>输入图像分辨率为$512 \times 512$，输出特征图分辨率为$128 \times 128$；</li>
-<li>数据集扩增：随机翻转、尺度缩放($0.6$~$1.3$)、随即裁剪、颜色抖动；</li>
-<li>使用Adam优化器，批次大小、初始学习率、学习率调整策略与不同网络框架相关。</li>
+<li><p>指令空间(instruction space)<br> 是指编译后的程序指令所需要的存储空间，取决于以下因素</p>
+<ul>
+<li>编译器；</li>
+<li>编译选项；</li>
+<li>目标计算机。</li>
+</ul>
+</li>
+<li><p>数据空间(data space)<br>是所有常量和变量值所需要的存储空间，由</p>
+<ul>
+<li>常量和简单变量所需要的存储空间；</li>
+<li>动态数组和动态类实例等动态对象所需要的空间。</li>
+</ul>
+</li>
+<li><p>环境栈空间(environment stack space)<br> 保存暂停的函数和方法在恢复运行时所需要的信息：</p>
+<ul>
+<li>返回地址；</li>
+<li>正在调用的函数的所有局部变量的值以及形式参数的值(仅对递归函数而言)。</li>
+</ul>
+</li>
 </ol>
-<h2 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h2><p><img src="/2019/10/09/CenterNet-Objects-as-Points/Tab2.png" alt="Table 2"></p>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
-<li><a href="https://arxiv.org/abs/1904.07850v1" target="_blank" rel="noopener">Objects as Points - arXiv</a></li>
-<li><a href="https://arxiv.org/abs/1708.02002" target="_blank" rel="noopener">Focal Loss for Dense Object Detection - arXiv</a></li>
+<p>程序所需要的空间可分成两部分</p>
+<ol>
+<li>固定部分，独立于实例特征，包括上述指令空间、简单变量空间、常量空间等；</li>
+<li>可变部分，由动态分配空间(某种程度上依赖实力特征)和递归栈空间(依赖实力特征)构成。</li>
 </ol>
+<p>将空间需求的固定部分记作$c$，可变部分记作$S_p$，那么所需空间为$c + S_p(实例特征)$。</p>
+<h2 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h2><p><strong>定义</strong>：<strong>时间复杂度</strong>(time complexity)是该程序的运行所需要的时间。</p>
+<h3 id="操作计数"><a href="#操作计数" class="headerlink" title="操作计数"></a>操作计数</h3><p>估算程序或函数的时间复杂度，一种方法是选择一种或多种<strong>关键操作</strong>，如加、乘、比较等，确定每一种操作的<strong>执行次数</strong>，注意操作计数忽视了其他操作。以选择排序和冒泡排序为例，选择排序与冒泡排序都需要$\sum_{i=1}^{n-1} i = n(n-1)/2$次比较和$3(n-1)$次移动。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">selectionSort</span><span class="params">(T a[], <span class="keyword">int</span> n)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = n - <span class="number">1</span>; i &gt;= <span class="number">1</span>; i--) &#123;	    <span class="comment">// n - 1次</span></span><br><span class="line">		<span class="keyword">int</span> index = i;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = i - <span class="number">1</span>; j &gt;= <span class="number">0</span>; j--)&#123;   <span class="comment">// i次比较</span></span><br><span class="line">			<span class="keyword">if</span> (a[j] &gt; a[index]) index = j;</span><br><span class="line">        &#125;</span><br><span class="line">		T temp = a[i];                      <span class="comment">// 3次移动</span></span><br><span class="line">        a[i] = a[index]; </span><br><span class="line">        a[index] = temp;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">bubbleSort</span><span class="params">(T a[], <span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = n - <span class="number">1</span>; i &gt;= <span class="number">1</span>; i--) &#123;      <span class="comment">// n - 1次循环</span></span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; i; j++) &#123; </span><br><span class="line">			<span class="keyword">if</span> (a[j] &gt; a[j + <span class="number">1</span>]) &#123;          <span class="comment">// i次比较</span></span><br><span class="line">				T temp = a[j];              <span class="comment">// 3次移动</span></span><br><span class="line">                a[j] = a[j + <span class="number">1</span>]; </span><br><span class="line">                a[j + <span class="number">1</span>] = temp;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>操作计数不总是由实例特征唯一确定</strong>，如冒泡排序中，交换次数不仅依赖于实例特征$n$，还依赖于数组元素的具体值，所以就要估算最好、最坏和平均操作计数。</p>
+<h3 id="步数"><a href="#步数" class="headerlink" title="步数"></a>步数</h3><p><strong>步数</strong>(step-count)方法中，将程序/函数的所有操作部分都进行统计。<strong>步数也是实例特征的函数</strong>，为确定程序的步数，必须<strong>先确定所采用的实例特征</strong>，如输入个数、输出个数、输入或输出的大小，不仅<strong>确定步数计算表达式中的变量</strong>，还确定了<strong>一步应该包含多少次计算</strong>。<strong>一步</strong>(a step)是独立于所选定实例特征的一个计算单位，例如$100$次乘法可视作一步，但$n$次乘法包含实例特征不能视作一步。</p>
+<p><strong>定义</strong>：<strong>程序步</strong>(a program step)可以大概定义为<strong>一个语法或语义上的程序片段</strong>，该片段执行时间独立于实例特征，例如下面语句中变量均独立于实例特征，可视作一个程序步：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> a + b + b * c + (a + b - c) / (a + b) + <span class="number">4</span>;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<ul>
+<li>故而相同步数的程序可能差别很大；</li>
+<li>步数与时间复杂度是同义词。</li>
+</ul>
+</blockquote>
+<p>用剖析法计算程序步数时，记$s/e$为每条语句每次执行所需要的步数(steps pre execution)，$f$为语句的执行次数或频率，进行列表计算，例如对于冒泡排序<br>| 程序语句 | s/e | 频率 | 总步数 |<br>| ———- | —- | —— | ——- |<br>| template\<typename t\=""> | / | / | / |<br>| void bubbleSort(T a[], int n) { | / | / | / |<br>|      for (int i = n - 1; i &gt;= 1; i—) { | $1$ | $(n - 1) + 1$ | $n$ |<br>|         for (int j = 0; j &lt; i; j++) {  | $i+1$ | $n-1$ | $n(n-1)/2 + (n-1)$ |<br>|             if (a[j] &gt; a[j + 1]) { T temp = a[j]; a[j] = a[j + 1];  a[j + 1] = temp; } | $i$ | $n-1$ | $n(n-1)/2$ |<br>|         }}} | / | / | / |<br>| 总计 | / | / | $n^2 + n - 1$ |</typename></p>
+<h1 id="渐近记号"><a href="#渐近记号" class="headerlink" title="渐近记号"></a>渐近记号</h1><p>当<strong>实例特征$n$很大($n \rightarrow \infty$)时</strong>，使用步数可以准确地预计运行时间的增长，以比较两个程序的性能。当$n \rightarrow \infty$时，最高次项在整个多项式中占主导，可省略$c_2 n + c_3$两项。<strong>渐近分析主要确定的时复杂函数中的最大项</strong>。</p>
+<blockquote>
+<p>例如，对于任何具有形式$c_1 n^2 + c_3 + c_2 n + c_3$,($c_1 &gt; 0$且$c_1, c_2, c_3$为常数)的步数的程序，都有</p>
+<script type="math/tex; mode=display">\lim_{n \rightarrow \infty} \frac{c_2 n + c_3}{c_1 n^2} = 0</script></blockquote>
+<p><strong>定义</strong>：令$p(n)$和$q(n)$是两个<strong>非负函数</strong>，那么当且仅当</p>
+<script type="math/tex; mode=display">\lim_{n \rightarrow \infty} \frac{q(n)}{p(n)} = 0</script><p>称$p(n)$<strong>渐近地大于</strong>$q(n)$($p(n)$渐近地优于$q(n)$)，或$q(n)$<strong>渐近地小于</strong>$p(n)$；当且仅当任何一个都不是渐近大于另一个时，称$p(n)$<strong>渐近地等于</strong>$q(n)$。</p>
+<p>步数分析中常见的项如下标，<strong>大小关系</strong>从上往下依次减小<br>| 项 | 名称 |<br>| — | —- |<br>| $1$ | 常量 |<br>| $\log n$ | 对数 |<br>| $n$ | 线性 |<br>| $n \log n$ | $n$倍对数 |<br>| $n^2$ | 平方 |<br>| $n^3$ | 立方 |<br>| $2^n$ | 指数 |<br>| $n!$ | 阶乘 |</p>
+<p><strong>定义</strong>：<strong>渐近记法</strong>(asymptotic notation)描述的是大实例特征的时间或空间复杂度，用步数中<strong>渐近最大</strong>的一项的<strong>单位项</strong>来描述复杂度。<strong>几种常见的渐近记法</strong>如下<br>| 表示法 | 读法 | 含义 | 例 |<br>| ——- | —— | —— | — |<br>| $f(n) = O(g(n))$ | $f(n)$ is big O of $g(n)$ | $f(n)$渐近小于或等于$f(n)$，$g(n)$是$f(n)$的上限 | $100n^2 - 20 n + 3 = O(n^2) \neq O(n)$ |<br>| $f(n) = \Omega(g(n))$ | $f(n)$ is big omega of $g(n)$ | $f(n)$渐近大于或等于$f(n)$，$g(n)$是$f(n)$的下限 | $100n^2 - 20 n + 3 = \Omega(n^2) = \Omega(n) \neq \Omega(n^3)$ |<br>| $f(n) = \Theta(g(n))$ | $f(n)$ is big theta of $g(n)$ | $f(n)$渐近等于$f(n)$，$g(n)$是$f(n)$的上限 | $100n^2 - 20 n + 3 = \Theta(n^2) \neq \Theta(n) \neq \Theta(n^3)$ | </p>
+<blockquote>
+<p>注意$f(n) = O(g(n))$与$O(g(n)) = f(n)$含义不同。</p>
+</blockquote>
+<p>仍以冒泡排序为例，总的时间复杂度为$\Theta(n^2)$。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>程序语句</th>
+<th>s/e</th>
+<th>频率</th>
+<th>总步数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>template\<typename t\=""></typename></td>
+<td>/</td>
+<td>/</td>
+<td>/</td>
+</tr>
+<tr>
+<td>void bubbleSort(T a[], int n) {</td>
+<td>/</td>
+<td>/</td>
+<td>/</td>
+</tr>
+<tr>
+<td>for (int i = n - 1; i &gt;= 1; i—) {</td>
+<td>$1$</td>
+<td>$(n - 1) + 1$</td>
+<td>$\Theta(n)$</td>
+</tr>
+<tr>
+<td>for (int j = 0; j &lt; i; j++) {</td>
+<td>$i+1$</td>
+<td>$n-1$</td>
+<td>$\Theta(n^2)$</td>
+</tr>
+<tr>
+<td>if (a[j] &gt; a[j + 1]) { T temp = a[j]; a[j] = a[j + 1];  a[j + 1] = temp; }</td>
+<td>$i$</td>
+<td>$n-1$</td>
+<td>$\Theta(n^2)$</td>
+</tr>
+<tr>
+<td>}}}</td>
+<td>/</td>
+<td>/</td>
+<td>/</td>
+</tr>
+<tr>
+<td>总计</td>
+<td>/</td>
+<td>/</td>
+<td>$\Theta(n^2)$</td>
+</tr>
+</tbody>
+</table>
+</div>
 
       
     </div>
@@ -569,12 +627,6 @@ L_k = - \frac{1}{N} \sum_{x, y, z}
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/Object-Detection/" rel="tag"># Object Detection</a>
-          
-        </div>
-      
 
       
       
@@ -584,8 +636,8 @@ L_k = - \frac{1}{N} \sum_{x, y, z}
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/10/05/《教父》三部曲：充满腐败而不失庄重的资本主义气息/" rel="next" title="《教父》三部曲：充满腐败而不失庄重的资本主义气息">
-                <i class="fa fa-chevron-left"></i> 《教父》三部曲：充满腐败而不失庄重的资本主义气息
+              <a href="/2019/12/08/深度学习框架darknet【五】——训练解析/" rel="next" title="深度学习框架darknet【五】——训练解析">
+                <i class="fa fa-chevron-left"></i> 深度学习框架darknet【五】——训练解析
               </a>
             
           </div>
@@ -594,8 +646,8 @@ L_k = - \frac{1}{N} \sum_{x, y, z}
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/11/10/详细！MTCNN训练全过程！/" rel="prev" title="详细！MTCNN训练全过程！">
-                详细！MTCNN训练全过程！ <i class="fa fa-chevron-right"></i>
+              <a href="/2020/02/17/【数据结构】线性表/" rel="prev" title="【数据结构】线性表">
+                【数据结构】线性表 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -809,7 +861,7 @@ L_k = - \frac{1}{N} \sum_{x, y, z}
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#论文阅读"><span class="nav-number">2.</span> <span class="nav-text">论文阅读</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction"><span class="nav-number">2.1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Preliminary"><span class="nav-number">2.2.</span> <span class="nav-text">Preliminary</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Implementation-details"><span class="nav-number">2.3.</span> <span class="nav-text">Implementation details</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Experiments"><span class="nav-number">2.4.</span> <span class="nav-text">Experiments</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#程序性能"><span class="nav-number">1.</span> <span class="nav-text">程序性能</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#空间复杂度"><span class="nav-number">1.1.</span> <span class="nav-text">空间复杂度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#时间复杂度"><span class="nav-number">1.2.</span> <span class="nav-text">时间复杂度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#操作计数"><span class="nav-number">1.2.1.</span> <span class="nav-text">操作计数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#步数"><span class="nav-number">1.2.2.</span> <span class="nav-text">步数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#渐近记号"><span class="nav-number">2.</span> <span class="nav-text">渐近记号</span></a></li></ol></div>
             
 
           </div>

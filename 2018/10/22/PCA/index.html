@@ -125,7 +125,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/10/22/PCA/face_origin.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/22/PCA/face_reduced.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/22/PCA/face_restructed.png">
-<meta property="og:updated_time" content="2019-07-17T12:12:22.217Z">
+<meta property="og:updated_time" content="2020-03-17T15:53:51.338Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PCA">
 <meta name="twitter:description" content="引言PCA全称Principal Component Analysis，即主成分分析，是一种常用的数据降维方法。它可以通过线性变换将原始数据变换为一组各维度线性无关的表示，以此来提取数据的主要线性分量。 向量的投影现有两个任意不共线向量$\vec{u}, \vec{v}$，将$\vec{u}$投射到$\vec{v}$上 投影后，可以得到两个正交向量  \vec{u}&apos; · (\vec{u} - \">
@@ -428,7 +428,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-17 20:12:22" itemprop="dateModified" datetime="2019-07-17T20:12:22+08:00">2019-07-17</time>
+                <time title="修改时间：2020-03-17 23:53:51" itemprop="dateModified" datetime="2020-03-17T23:53:51+08:00">2020-03-17</time>
               
             
           </span>
@@ -643,7 +643,7 @@ X^{(i)} \approx \sum_{k=1}^K S^{(i)}_k \beta_k</script><p>以上就是样本点�
 <p>考虑到已去均值化，故</p>
 <script type="math/tex; mode=display">
 \hat{X}_j \approx \hat{X}_j + \mu_j</script><h2 id="证明"><a href="#证明" class="headerlink" title="证明"></a>证明</h2><blockquote>
-<p>投影向量的$2$范数最大，或者说，投影后的坐标平方和最大</p>
+<p>投影向量的$2$范数最大，或者说，投影后的坐标平方和(方差)最大</p>
 </blockquote>
 <p>当所有样本$X$投射到第一主轴$\beta_1$上，其坐标为</p>
 <script type="math/tex; mode=display">
@@ -711,7 +711,7 @@ L(\beta_1, \lambda_1) = \beta_1^T X X^T \beta_1 + \lambda_1 (1 - \beta_1^T \beta
 <script type="math/tex; mode=display">
 X X^T \beta_1 = \lambda_1 \beta_1</script><p>可见$\beta_1$即方阵$X X^T$的特征向量</p>
 </blockquote>
-<p>当我们希望用更多的主成分刻画数据，如已经求得主成分$\beta_1, …, \beta_{r-1}$，先需求解$\beta_r$，引入正交约束$\beta_r^T \beta_i = 0$，即目标函数为</p>
+<p>当我们希望用更多的主成分刻画数据，如已经求得主成分$\beta_1, …, \beta_{r-1}$，现需求解$\beta_r$，引入正交约束$\beta_r^T \beta_i = 0$，即目标函数为</p>
 <script type="math/tex; mode=display">
 ||S_r||_2^2 = \beta_r^T C \beta_r</script><script type="math/tex; mode=display">
 s.t.　\beta_r^T \beta_i = 0, i = 1, ..., r-1</script><script type="math/tex; mode=display">
@@ -719,17 +719,17 @@ s.t.　\beta_r^T \beta_i = 0, i = 1, ..., r-1</script><script type="math/tex; mo
 <script type="math/tex; mode=display">
 ||S_r||_2^2
 = \alpha_r^T \Lambda \alpha_r
-= \sum_i \lambda_i \alpha_{ri}^2</script><p>而根据正交约束</p>
+= \sum_i \lambda_i \alpha_{ri}^2 \tag{7}</script><p>而根据正交约束</p>
 <script type="math/tex; mode=display">
-0 = \beta_r^T \beta_i = \alpha_r^T W^T w_i = \alpha_{ri},　
-i = 1, ..., r-1</script><blockquote>
+0 = \beta_r^T \beta_i = (\alpha_r^T W^T) w_i = \alpha_{ri},　
+i = 1, ..., r-1 \tag{8}</script><blockquote>
 <p>$ W^T w_i = \left[0, …, 1_i, …, 0\right]^T$</p>
 </blockquote>
-<p>所以</p>
+<p>$(8)$代入$(7)$后得到</p>
 <script type="math/tex; mode=display">
-||S_r||_2^2 = \sum_i \lambda_i \alpha_{ri}^2 = \lambda_r \alpha_{rr}^2 \tag{5}</script><p>又因为$\beta_r^T \beta_r = 1$(单位向量)，故</p>
+||S_r||_2^2 = \sum_i \lambda_i \alpha_{ri}^2 = \lambda_r \alpha_{rr}^2 \tag{9}</script><p>又因为$\beta_r^T \beta_r = 1$(单位向量)，故</p>
 <script type="math/tex; mode=display">
-\beta_r^T \beta_r = \alpha_r^T W^T W \alpha_r = \alpha_r^T \alpha_r = \sum_i \alpha_{ri}^2 = 1</script><p>于是类似的，为使$(5)$取最大，取</p>
+\beta_r^T \beta_r = \alpha_r^T W^T W \alpha_r = \alpha_r^T \alpha_r = \sum_i \alpha_{ri}^2 = 1 \tag{10}</script><p>那么类似的，为使$(9)$取最大，取</p>
 <script type="math/tex; mode=display">
 \begin{cases}
     \alpha_{rr} = 1\\
@@ -981,7 +981,7 @@ P = X (X^TX+\lambda I)^{-1} X^T</script></blockquote>
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">82</span>
+                    <span class="site-state-item-count">83</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
