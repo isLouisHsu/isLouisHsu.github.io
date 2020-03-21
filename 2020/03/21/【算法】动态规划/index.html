@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="动态规划和贪婪算法一样，对一个问题的解是一系列抉择的结果。在贪婪算法中已做出的抉择是不可更改的，而动态规划需考察一个最优抉择序列是否包含最优抉择子序列。称无论第一次选择是什么，接下来的选择一定是当前状态下的最优选择为最优原则(principal of optimality)。 用动态规划求解的步骤如下  证实最优原则适用，否则不能使用动态规划； 建立动态规划递归方程(dynamic-program">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【算法】动态规划">
+<meta property="og:url" content="http://yoursite.com/2020/03/21/【算法】动态规划/index.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="动态规划和贪婪算法一样，对一个问题的解是一系列抉择的结果。在贪婪算法中已做出的抉择是不可更改的，而动态规划需考察一个最优抉择序列是否包含最优抉择子序列。称无论第一次选择是什么，接下来的选择一定是当前状态下的最优选择为最优原则(principal of optimality)。 用动态规划求解的步骤如下  证实最优原则适用，否则不能使用动态规划； 建立动态规划递归方程(dynamic-program">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2020/03/21/【算法】动态规划/01bag.jpg">
+<meta property="og:updated_time" content="2020-03-21T02:56:47.560Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【算法】动态规划">
+<meta name="twitter:description" content="动态规划和贪婪算法一样，对一个问题的解是一系列抉择的结果。在贪婪算法中已做出的抉择是不可更改的，而动态规划需考察一个最优抉择序列是否包含最优抉择子序列。称无论第一次选择是什么，接下来的选择一定是当前状态下的最优选择为最优原则(principal of optimality)。 用动态规划求解的步骤如下  证实最优原则适用，否则不能使用动态规划； 建立动态规划递归方程(dynamic-program">
+<meta name="twitter:image" content="http://yoursite.com/2020/03/21/【算法】动态规划/01bag.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/03/21/【算法】动态规划/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>【算法】动态规划 | LOUIS' BLOG</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LOUIS' BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">To be better</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-guestbook">
+    <a href="/guestbook" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-guest"></i> <br>留言</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/21/【算法】动态规划/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="技术博客？">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【算法】动态规划
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-03-21 09:27:38 / 修改时间：10:56:47" itemprop="dateCreated datePublished" datetime="2020-03-21T09:27:38+08:00">2020-03-21</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>动态规划和贪婪算法一样，对一个问题的解是一系列抉择的结果。在贪婪算法中已做出的抉择是不可更改的，而动态规划需考察<strong>一个最优抉择序列是否包含最优抉择子序列</strong>。称<strong>无论第一次选择是什么，接下来的选择一定是当前状态下的最优选择</strong>为<strong>最优原则</strong>(principal of optimality)。</p>
+<p><strong>用动态规划求解的步骤</strong>如下</p>
+<ol>
+<li>证实最优原则适用，否则不能使用动态规划；</li>
+<li>建立<strong>动态规划递归方程</strong>(dynamic-programming recurrence equation)；</li>
+<li>求解动态规划的递归方程式获得<strong>最优解</strong>；</li>
+<li>沿最优解生成过程进行<strong>回溯</strong>(traceback)。</li>
+</ol>
+<p><strong>例(0/1背包问题)：设物品$i, 1 \leq i \leq n$的重量为$w_i$，价值为$p_i$，放入总容量为$c$的背包中，求最优解$x = [x_1, x_2, \cdots, x_n], x_i \in \{0, 1\}$使总价值$\sum_i p_i x_i$最大。</strong></p>
+<p><strong>分析</strong>：物品按次序拜访，当需要对第$i$个物品进行抉择时，可以对存在的两种可能(放入$i$/不放入$i$)下，规划前$i-1$个物品的抉择。</p>
+<p>设$f(i, y)$表示<strong>问题状态</strong>为剩余容量为$y$时，确定物品$1, 2, \cdots, i$的的最优规划下的准则，那么对于物品$i$，可以<strong>不放入</strong>，前$i-1$个物品可以在背包容量为$c$的状态下进行最优选择，且不包含本物品价值，设$f(n-1, c)$；而$i$<strong>放入</strong>时，前$i-1$个物品只能在背包容量为$c - w_i$的状态下进行最优选择，包含本物品价值，设$f(n-1, c - w_i) + p_i$。根据$f(n-1, c)$与$f(n-1, c - w_i) + p_i$的大小，确定物品$i$的最优抉择，如下</p>
+<script type="math/tex; mode=display">
+f(i, y) = \begin{cases}
+    \max\{ f(i - 1, y), f(i - 1, y - w_i) + p_i \} & y \geq w_i \\
+    f(i - 1, y) & 0 \leq y < w_i
+\end{cases}</script><p>其中$f(i - 1, y)， f(i - 1, y - w_i) + p_i$分别表示在不放入/放入物品$i$的问题状态下求解的价值，<strong>递归的终止条件</strong>为$i=1$时</p>
+<script type="math/tex; mode=display">
+f(1, y) = \begin{cases}
+    p_n & y \geq w_n \\
+    0 & 0 \leq y < w_n
+\end{cases}</script><blockquote>
+<p>如$n=3, w = [10, 3, 2], p = [20, 18, 15], c = 14$时，有</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    f(1, y) = \begin{cases} 15 & y \geq 10 \\ 0 & 0 \leq y < 10 \end{cases} \\
+    f(2, y) = \begin{cases}  \max\{ f(1, y), f(1, y - 3) + 18 \} & y \geq 3 \\ f(1, y) & 0 \leq y < 3 \end{cases} \\ 
+    f(3, y) = \begin{cases} \max\{ f(2, y), f(2, y - 2) + 20 \} & y \geq 2 \\ f(2, y) & 0 \leq y < 2 \end{cases}
+\end{aligned}</script><p>那么在初始情况下$y=14$时，代入有</p>
+<script type="math/tex; mode=display">f(3, 116) = 38</script></blockquote>
+<p>用表格的形式求解，<strong>表格元素<code>table[i][y]</code>表示在背包容量为$y$的情况下，物品子集和$\{0(无物品), 1, 2, \cdots, i\}$的最优装载总价值</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">solve</span><span class="params">(<span class="keyword">int</span>* w, <span class="keyword">int</span>* p, <span class="keyword">int</span> n, <span class="keyword">int</span> c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 初始化 (n + 1) × (c + 1) 表格</span></span><br><span class="line">    <span class="keyword">int</span>** table = <span class="keyword">new</span> <span class="keyword">int</span>* [n + <span class="number">1</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n + <span class="number">1</span>; i++) &#123;</span><br><span class="line">        table[i] = <span class="keyword">new</span> <span class="keyword">int</span>[c + <span class="number">1</span>];</span><br><span class="line">        <span class="built_in">memset</span>(table[i], <span class="number">0</span>, <span class="keyword">sizeof</span>(<span class="keyword">int</span>) * (c + <span class="number">1</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 开始填表</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n + <span class="number">1</span>; i++) &#123;	        <span class="comment">// 已经判定是否装入背包的物品依次增加，即`1, 2, ..., i-1`已装入</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> y = <span class="number">1</span>; y &lt; c + <span class="number">1</span>; y++) &#123;       <span class="comment">// 剩余容量依次增加，即剩余容量为`y`</span></span><br><span class="line">            <span class="keyword">if</span> (y &lt; w[i - <span class="number">1</span>]) &#123;	        <span class="comment">// 容量不够，物品`i`不装入</span></span><br><span class="line">                table[i][y] = table[i - <span class="number">1</span>][y];	</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;                    <span class="comment">// 容量够</span></span><br><span class="line">                <span class="keyword">int</span> p1 = table[i - <span class="number">1</span>][y];   <span class="comment">// 不装入物品`i`</span></span><br><span class="line">                <span class="keyword">int</span> p2 = table[i - <span class="number">1</span>][y - w[i - <span class="number">1</span>]] + p[i - <span class="number">1</span>];	<span class="comment">// 前`i-1`个物品在容量为`y - w[i]`下的最优装载 + 物品`i`价值</span></span><br><span class="line">                table[i][y] = p1 &gt; p2 ? p1 : p2;    <span class="comment">// 取大</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 打印结果</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n + <span class="number">1</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; c + <span class="number">1</span>; j++) &#123;</span><br><span class="line">            <span class="built_in">cout</span> &lt;&lt; table[i][j] &lt;&lt; <span class="string">'\t'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 释放内存</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n + <span class="number">1</span>; i++) </span><br><span class="line">    <span class="keyword">delete</span>[] table[i];</span><br><span class="line">    <span class="keyword">delete</span>[] table;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>** argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> w[<span class="number">3</span>] = &#123;<span class="number">10</span>, <span class="number">3</span>, <span class="number">2</span>&#125;;</span><br><span class="line">	<span class="keyword">int</span> p[<span class="number">3</span>] = &#123; <span class="number">20</span>, <span class="number">18</span>, <span class="number">15</span> &#125;;</span><br><span class="line">	solve(w, p, <span class="number">3</span>, <span class="number">14</span>);</span><br><span class="line"></span><br><span class="line">    system(<span class="string">"pause"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>当$n=3, c=14, p=[20, 18, 15], w=[10, 3, 2]$时，最优装载价值为$38$<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       </span><br><span class="line">0       0       0       0       0       0       0       0       0       0       20      20      20      20      20      </span><br><span class="line">0       0       0       18      18      18      18      18      18      18      20      20      20      38      38      </span><br><span class="line">0       0       15      18      18      33      33      33      33      33      33      33      35      38      38      </span><br><span class="line">请按任意键继续. . .</span><br></pre></td></tr></table></figure></p>
+<p><strong>例(优惠券问题)：有一张满$100$可减免$20$的优惠券，从价格为$\{30, 20, 35, 55, 45\}$的物件商品中选择合适的子集，使商品价格总和超过$100$但又最小。</strong></p>
+<p>原问题有两个约束：1) 商品价格最小；2) 商品价格超过$100$。将原问题修改为：从物品中删除若干件，使删除的物品价格总和不超过$\sum_i p_i - 100 = 85$，此时约束只有上限。$f(i, y)$表示在剩余可删除价格为$y$的状态下，前$0, \cdots, i$的最大价格总和，那么</p>
+<script type="math/tex; mode=display">
+f(i, y)
+\begin{cases}
+    \max\{ f(i-1, y), f(i-1, y-p_i) + p_i \} & y \geq p_i \\
+    f(i-1, y) & y < p_i
+\end{cases}</script><p>用表格的形式求解，得最多删除$85$元<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">solve</span><span class="params">(<span class="keyword">int</span>* p, <span class="keyword">int</span> n, <span class="keyword">int</span> c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 初始化 (n + 1) × (c + 1) 表格</span></span><br><span class="line">    <span class="keyword">int</span>** table = <span class="keyword">new</span> <span class="keyword">int</span>* [n + <span class="number">1</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n + <span class="number">1</span>; i++) &#123;</span><br><span class="line">        table[i] = <span class="keyword">new</span> <span class="keyword">int</span>[c + <span class="number">1</span>];</span><br><span class="line">        <span class="built_in">memset</span>(table[i], <span class="number">0</span>, <span class="keyword">sizeof</span>(<span class="keyword">int</span>) * (c + <span class="number">1</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 开始填表</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n + <span class="number">1</span>; i++) &#123;			<span class="comment">// 已经判定是否删除物品依次增加，即`1, 2, ..., i-1`中的某些组合</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> y = <span class="number">1</span>; y &lt; c + <span class="number">1</span>; y++) &#123;		<span class="comment">// 剩余价格为`y`</span></span><br><span class="line">            <span class="keyword">if</span> (y &lt; p[i - <span class="number">1</span>]) &#123;					<span class="comment">// 剩余价格不够，物品`i`不删除</span></span><br><span class="line">                table[i][y] = table[i - <span class="number">1</span>][y];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;							<span class="comment">// 价格够</span></span><br><span class="line">                <span class="keyword">int</span> p1 = table[i - <span class="number">1</span>][y];						<span class="comment">// 不删除物品`i`</span></span><br><span class="line">                <span class="keyword">int</span> p2 = table[i - <span class="number">1</span>][y - p[i - <span class="number">1</span>]] + p[i - <span class="number">1</span>];	<span class="comment">// 前`i-1`个物品在剩余价格为`y - p[i - 1]`下最多的删除总价 + 物品`i`价格</span></span><br><span class="line">                table[i][y] = p1 &gt; p2 ? p1 : p2;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 打印结果</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n + <span class="number">1</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; c + <span class="number">1</span>; j++) &#123;</span><br><span class="line">            <span class="built_in">cout</span> &lt;&lt; table[i][j] &lt;&lt; <span class="string">'\t'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 释放内存</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n + <span class="number">1</span>; i++)</span><br><span class="line">        <span class="keyword">delete</span>[] table[i];</span><br><span class="line">    <span class="keyword">delete</span>[] table;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0</span><br><span class="line">0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30</span><br><span class="line">0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       20      20      20      20      20      20      20      20      20      20      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      30      50      50      50      50      50      50      50      50      50      50      50      50      50      50      50      50      50      50      50      50      50      50      50      50      50      50      50      50      50      50      50      50      50      50      50      50</span><br><span class="line">0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       20      20      20      20      20      20      20      20      20      20      30      30      30      30      30      35      35      35      35      35      35      35      35      35      35      35      35      35      35      35      50      50      50      50      50      55      55      55      55      55      55      55      55      55      55      65      65      65      65      65      65      65      65      65      65      65      65      65      65      65      65      65      65      65      65      85</span><br><span class="line">0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       20      20      20      20      20      20      20      20      20      20      30      30      30      30      30      35      35      35      35      35      35      35      35      35      35      35      35      35      35      35      50      50      50      50      50      55      55      55      55      55      55      55      55      55      55      65      65      65      65      65      65      65      65      65      65      75      75      75      75      75      75      75      75      75      75      85</span><br><span class="line">0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       20      20      20      20      20      20      20      20      20      20      30      30      30      30      30      35      35      35      35      35      35      35      35      35      35      45      45      45      45      45      50      50      50      50      50      55      55      55      55      55      55      55      55      55      55      65      65      65      65      65      65      65      65      65      65      75      75      75      75      75      80      80      80      80      80      85</span><br><span class="line">请按任意键继续. . .</span><br></pre></td></tr></table></figure>
+<p><strong>例(<a href="https://www.lintcode.com/problem/binary-tree-maximum-path-sum/description" target="_blank" rel="noopener">二叉树中的最大路径和</a>)：给出一棵二叉树，寻找一条路径使其路径和最大，路径可以在任一节点中开始和结束（路径和为两个节点之间所在路径上的节点权值之和。</strong></p>
+<blockquote>
+<p>例如给定$\{1, 2, 3, 4, 2, 5, 10, #, #, #, #, 7, 18, #, #, 20\}$，最大路径和为$20 + 7 + 5 + 18$</p>
+</blockquote>
+<p><strong>分析：</strong></p>
+<ul>
+<li><strong>分治策略</strong>，查找子树的最大路径和；</li>
+<li><strong>动态规划策略</strong>，对于高为$h$的二叉树，以第$i(i=1, \cdots, h-1)$层节点为起始的<strong>单边路径和最大路径</strong>，一定包含以第$i+1(i=1, \cdots, h-1)$层节点为起始的单边路径和最大路径，且$i=h$时路径仅包含叶子节点；</li>
+<li>每条最长路径都肯定会以某个顶点为根，然后两边是以那个节点为跟到叶子节点的最长路径(<strong>“八”字形</strong>，除根节点外每个节点最多包含一个孩子)，故只需比较每棵树这种情况下路径和；</li>
+<li>某节点处的上述路径，是由<strong>该节点的值、左右子树的最大路径</strong>组成的；</li>
+<li>注意<strong>负数的处理</strong>，负数添加到路径中必定会使路径和减小，故用<code>max(0, x)</code>处理；</li>
+</ul>
+<p>将所有内部节点按深度优先进行标号，设<strong>节点$i$到所有叶子节点的单边路径中，最大路径和</strong>为$f(i)$。考虑到$f(i.child)$可能为负值，将小于$0$的单边路径加入后，该单边路径不可能是最大，所以本节点加上单边路径时，考虑$\max\{0, f(i.child)\}$</p>
+<script type="math/tex; mode=display">
+f(i) = \begin{cases}
+    i.val + \max \{ \max\{0, f(i.left)\}, \max\{0, f(i.right)\} \}  & i不是叶子节点 \\
+    i.val & i是叶子节点
+\end{cases}</script><blockquote>
+<script type="math/tex; mode=display">\max\{0, f(i.left)\}, \max\{0, f(i.right)\} = \max \{ 0, \max\{ f(i.left), f(i, i.right) \} \}</script></blockquote>
+<p>设<strong>节点$i$处“八”字形最大路径和为</strong>$g(i)$，</p>
+<script type="math/tex; mode=display">g(i) = i.val +  \max\{0, f(i.left)\} +  \max\{0, f(i.right)\}</script><p>最优为</p>
+<script type="math/tex; mode=display">G = \max g(i)</script><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition of TreeNode:</span></span><br><span class="line"><span class="comment"> * class TreeNode &#123;</span></span><br><span class="line"><span class="comment"> * public:</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left, *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int val) &#123;</span></span><br><span class="line"><span class="comment"> *         this-&gt;val = val;</span></span><br><span class="line"><span class="comment"> *         this-&gt;left = this-&gt;right = NULL;</span></span><br><span class="line"><span class="comment"> *     &#125;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * @param root: The root of binary tree.</span></span><br><span class="line"><span class="comment">     * @return: An integer</span></span><br><span class="line"><span class="comment">     * @description: 返回整棵树中最大路径和</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxPathSum</span><span class="params">(TreeNode * root)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// write your code here</span></span><br><span class="line">        <span class="keyword">if</span> (!root) <span class="keyword">return</span> INT_MIN;</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> psRoot  = maxBinaryLeafPathSum(root);   <span class="comment">// 以root为根，两边到叶子节点的最长路径</span></span><br><span class="line">        <span class="keyword">int</span> psLeft  = maxPathSum(root-&gt;left);       <span class="comment">// 左子节点的以root为根，两边到叶子节点的最长路径</span></span><br><span class="line">        <span class="keyword">int</span> psRight = maxPathSum(root-&gt;right);      <span class="comment">// 右子节点的以root为根，两边到叶子节点的最长路径</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> max(max(psRoot, psLeft), psRight);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * @param root: The root of binary tree.</span></span><br><span class="line"><span class="comment">     * @return: An integer</span></span><br><span class="line"><span class="comment">     * @description: 返回以root为根，两边到叶子节点的最大路径和</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxBinaryLeafPathSum</span><span class="params">(TreeNode * root)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!root) <span class="keyword">return</span> INT_MIN;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> lpsL = maxLeafPathSum(root-&gt;left);</span><br><span class="line">        <span class="keyword">int</span> lpsR = maxLeafPathSum(root-&gt;right);</span><br><span class="line">        <span class="keyword">return</span> root-&gt;val + max(<span class="number">0</span>, lpsL) + max(<span class="number">0</span>, lpsR);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * @param root: The root of binary tree.</span></span><br><span class="line"><span class="comment">     * @return: An integer</span></span><br><span class="line"><span class="comment">     * @description: 返回节点root跟到叶子节点的最大路径和，包含root</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxLeafPathSum</span><span class="params">(TreeNode * root)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!root) <span class="keyword">return</span> INT_MIN;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> lpsL = maxLeafPathSum(root-&gt;left);</span><br><span class="line">        <span class="keyword">int</span> lpsR = maxLeafPathSum(root-&gt;right);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> root-&gt;val + max(<span class="number">0</span>, max(lpsL, lpsR));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>以上解法的缺陷是，在计算某节点的“八”自行树时，对其子节点进行了遍历，但该节点回溯后，即计算更高层节点时，到该节点仍需要节点遍历，造成许多不必要的计算浪费，采用<strong>指针</strong>可以改进算法，如下<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * @param root: The root of binary tree.</span></span><br><span class="line"><span class="comment">     * @return: An integer</span></span><br><span class="line"><span class="comment">     * @description: 返回整棵树中最大路径和</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxPathSum</span><span class="params">(TreeNode * root)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// write your code here</span></span><br><span class="line">        <span class="keyword">if</span> (!root) <span class="keyword">return</span> INT_MIN;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> ret = INT_MIN;</span><br><span class="line">        maxLeafPathSum(root, ret);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * @param root: The root of binary tree.</span></span><br><span class="line"><span class="comment">     * @return: An integer</span></span><br><span class="line"><span class="comment">     * @description: 返回单边节点root跟到叶子节点的最大路径和，包含root</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxLeafPathSum</span><span class="params">(TreeNode * root, <span class="keyword">int</span>&amp; ret)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!root) <span class="keyword">return</span> INT_MIN;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> lpsL = maxLeafPathSum(root-&gt;left, ret);         <span class="comment">// `root-&gt;left`为起始的单边路径和最大路径</span></span><br><span class="line">        <span class="keyword">int</span> lpsR = maxLeafPathSum(root-&gt;right, ret);        <span class="comment">// `root-&gt;right`为起始的单边路径和最大路径</span></span><br><span class="line">        </span><br><span class="line">        ret = max(ret, root-&gt;val + max(<span class="number">0</span>, lpsL) + max(<span class="number">0</span>, lpsR));     <span class="comment">// `root`为根节点的"八"字形子树</span></span><br><span class="line">        <span class="keyword">return</span> root-&gt;val + max(max(<span class="number">0</span>, lpsL), max(<span class="number">0</span>, lpsR));          <span class="comment">// 该路径满足：`root`为起始的、单边路径和最大的</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p><strong>例(最大子数组)：给定一个整数数组，找到一个具有最大和的子数组，返回其最大和。</strong></p>
+<blockquote>
+<p>输入：[−2,2,−3,4,−1,2,1,−5,3]<br>输出：6<br>解释：符合要求的子数组为[4,−1,2,1]，其最大和为 6。</p>
+</blockquote>
+<p>这一题的关键点是<strong>数组连续的判定</strong>。</p>
+<p>考虑$\{4, -3, 2, 3\}$与$\{4, -5, 2, 3\}$，可以看到，<strong>连续子数组只会以大于$0$的数开始，在小于$0$的元素处断开</strong>。一旦“<strong>在第$i$个数添加时，出现该数与之前数的最大和子数组小于$0$</strong>”这一条件触发，有两层含义：<strong>1) 在此之前数组连续；2) 之前连续的数组在该值处断开</strong>。</p>
+<p><strong>证明</strong>：$\{s_1, v, s_2\}, \sum s_1 &gt; 0，\sum s_2 &gt; 0$的形式下，只有</p>
+<script type="math/tex; mode=display">\begin{cases}\sum s_1 + v + \sum s_2 \geq \sum s_1 \\ \sum s_1 + v + \sum s_2 \geq \sum s_2\end{cases}</script><p>时，$\{s_1, v, s_2\}$才有可能是最大连续数组，那么</p>
+<script type="math/tex; mode=display">\begin{cases}v \geq - \sum s_1 \\ v \geq -\sum s_2\end{cases}</script><p>所以$v &lt; - \sum s_1 \Rightarrow \sum s_1 + v &lt; 0$时，$\{s_1, v, s_2\}$必定不是最大和子数组，连续数组$s_1$和也达到最大，可重新累加新的连续数组的和。</p>
+<p>设$f(i)$为<strong>前$1, \cdots, i-1$不小于$0$的累加，与第$i$个数的和</strong>，那么有</p>
+<script type="math/tex; mode=display">
+f(i) = 
+\begin{cases}
+    nums[i] & i = 1 \\
+    nums[i] + \max\{ 0, f(i-1) \}  & i > 1
+\end{cases}</script><p>那么就有($i \geq 1$)</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    f(i) < 0 \Rightarrow f(i+1) = nums[i+1] & nums[i]是上述v \\
+    f(i) < 0 \Rightarrow f(i+1) = nums[i+1] + f(i) & nums[i]不是上述v，可视作当前连续数组(包括nums[i]不包括nums[i+1])的持续累加**。
+\end{cases}</script><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * @param nums: A list of integers</span></span><br><span class="line"><span class="comment">     * @return: An integer indicate the sum of max subarray</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxSubArray</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// write your code here</span></span><br><span class="line">        <span class="keyword">int</span> ret = INT_MIN;</span><br><span class="line">        f(nums, nums.size(), &amp;ret);</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">f</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> n, <span class="keyword">int</span>* ret)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> a = <span class="number">0</span>, b = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (n == <span class="number">1</span>) &#123;</span><br><span class="line">            a = b = nums[<span class="number">0</span>];</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            a = f(nums, n - <span class="number">1</span>, ret);</span><br><span class="line">            b = max(<span class="number">0</span>, a) + nums[n - <span class="number">1</span>];    <span class="comment">// a &lt; 0时，数组不连续，nums[n - 1]作为新的连续数组的起始</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        *ret = max(*ret, max(a, b));        <span class="comment">// 记录最大连续数组和</span></span><br><span class="line">        <span class="keyword">return</span> b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h1 id="感受"><a href="#感受" class="headerlink" title="感受"></a>感受</h1><p>动态规划可以理解为<strong>根据当前的选择，调整过去的抉择，获得未来的最优</strong>。在问题中，需要确定<strong>优化目标</strong>，以及<strong>问题的约束</strong>。在约束下，确定一个抉择序列“抉择$1$ $\rightarrow$ 抉择$2$ $\rightarrow$ … $\rightarrow$ 抉择$n$”，在进行第$i$个抉择时，可以对其$m$个<strong>可能性</strong>$c_{i1}, c_{i2}, \cdots, c_{im}$进行假设，<strong>每次假设中，抉择$1 \sim i$中唯一确定的只有抉择$i$，$1 \sim i-1$需要根据抉择$i$引起的约束变更进行最优规划</strong>，而这些规划可通过<strong>递归</strong>求解。实际上，这些一系列的抉择，可构成一个树型结构。</p>
+<p><strong>以$0/1$背包为例</strong>，约束是背包容量，优化目标是总价值。在确定第$n$个物品是否放入时，需要考虑放入后对剩余背包容量$y$的更改，即$y - w_n$。那么假设第$n$个物品放入，规划子问题就变成$1, \cdots, n-1$物品在背包容量为$y - w_n$下的最优规划；假设第$n$个物品不放入，<strong>规划子问题</strong>就变成$1, \cdots, n-1$物品在背包容量为$y $下的最优规划。仍旧以$n=3, w = [10, 3, 2], p = [20, 18, 15], c = 14$为例，用树形图可表示如下</p>
+<p><img src="/2020/03/21/【算法】动态规划/01bag.jpg" alt="01bag"></p>
+<p>在<strong>最大连续子数组</strong>中，条件进行了更改，数字是必须加入数组的，约束是“连续”，优化目标是最大和。需要进行判别，确定第$i$个数字是否会引起之前连续数组的“断裂”，<strong>这个影响是确定的</strong>，不需要对多种可能性假设，那么只需记录当前连续数组的累加即可。</p>
+<p>那么哪些问题是适用动态规划的呢？个人理解，在<strong>前后决策会相互影响，需要在限制条件下求取最优搭配的问题</strong>中，动态规划是可以求取最优的。如果说贪婪算法是在贪婪准则下的最优抉择，那么动态规划可以视作在<strong>假设搜索空间</strong>内的贪婪算法。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/16/【数据结构】图/" rel="next" title="【数据结构】图">
+                <i class="fa fa-chevron-left"></i> 【数据结构】图
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Louis Hsu">
+            
+              <p class="site-author-name" itemprop="name">Louis Hsu</p>
+              <p class="site-description motion-element" itemprop="description">技术博客？</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">84</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/isLouisHsu" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://is.louishsu@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/islouishsu" target="_blank" title="Zhihu"><i class="fa fa-fw fa-zhihu"></i>Zhihu</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/islouishsu" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          <div id="music163player">
+            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="110" src="//music.163.com/outchain/player?type=0&id=2703291040&auto=1&height=90">
+            </iframe>
+          </div>
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#感受"><span class="nav-number">1.</span> <span class="nav-text">感受</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Louis Hsu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: 'e65d27f7cf5c62feaf97',
+          clientSecret: '356386826698e8b817ca076b08d7c0e9814f52ea',
+          repo: 'isLouisHsu.github.io',
+          owner: 'isLouisHsu',
+          admin: ['isLouisHsu'],
+          id: md5(window.location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('3');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+
+  <script type="text/javascript" src="/js/click_show_text.js"></script>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

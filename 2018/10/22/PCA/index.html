@@ -125,7 +125,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/10/22/PCA/face_origin.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/22/PCA/face_reduced.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/22/PCA/face_restructed.png">
-<meta property="og:updated_time" content="2020-03-17T15:53:51.338Z">
+<meta property="og:updated_time" content="2020-03-19T05:05:27.047Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PCA">
 <meta name="twitter:description" content="引言PCA全称Principal Component Analysis，即主成分分析，是一种常用的数据降维方法。它可以通过线性变换将原始数据变换为一组各维度线性无关的表示，以此来提取数据的主要线性分量。 向量的投影现有两个任意不共线向量$\vec{u}, \vec{v}$，将$\vec{u}$投射到$\vec{v}$上 投影后，可以得到两个正交向量  \vec{u}&apos; · (\vec{u} - \">
@@ -428,7 +428,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-03-17 23:53:51" itemprop="dateModified" datetime="2020-03-17T23:53:51+08:00">2020-03-17</time>
+                <time title="修改时间：2020-03-19 13:05:27" itemprop="dateModified" datetime="2020-03-19T13:05:27+08:00">2020-03-19</time>
               
             
           </span>
@@ -676,7 +676,7 @@ W = \left[\begin{matrix}
 ||S_1||_2^2
 = \alpha_1^T \Lambda \alpha_1 \tag{3}</script><p>即</p>
 <script type="math/tex; mode=display">
-||S_1||_2^2 = \sum_{i=1}^M \lambda_i \alpha_{1i}^2 \tag{4}</script><p>进一步</p>
+||S_1||_2^2 = \sum_{i=1}^M \lambda_i \alpha_{1i}^2 \tag{4}</script><p>假设特征值已降序排序，那么进一步</p>
 <script type="math/tex; mode=display">
 \sum_{i=1}^M \lambda_i \alpha_{1i}^2
 \leq \lambda_1 \sum_{i=1}^M \alpha_{1i}^2 \tag{5}</script><p>且由于$\beta_1^T\beta_1 = 1$，故</p>
@@ -719,7 +719,7 @@ s.t.　\beta_r^T \beta_i = 0, i = 1, ..., r-1</script><script type="math/tex; mo
 <script type="math/tex; mode=display">
 ||S_r||_2^2
 = \alpha_r^T \Lambda \alpha_r
-= \sum_i \lambda_i \alpha_{ri}^2 \tag{7}</script><p>而根据正交约束</p>
+= \sum_i \lambda_i \alpha_{ri}^2 \tag{7}</script><p>而根据正交约束，$\beta_r = W \alpha_r, \beta_i = w_i$代入后有</p>
 <script type="math/tex; mode=display">
 0 = \beta_r^T \beta_i = (\alpha_r^T W^T) w_i = \alpha_{ri},　
 i = 1, ..., r-1 \tag{8}</script><blockquote>
@@ -981,7 +981,7 @@ P = X (X^TX+\lambda I)^{-1} X^T</script></blockquote>
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">83</span>
+                    <span class="site-state-item-count">84</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
