@@ -108,28 +108,29 @@
 
 
 
-  <meta name="description" content="前言高维数据可视化需要通过降维的方式，而PCA、LDA等线性降维算法，忽视了数据点间的空间结构特征，本文介绍的局部线性嵌入(LLE)算法为非线性降维方法，基于谱的降维方法，所以很靠谱 :-)。 原理设有$M$个$N$维数据点，构成矩阵$X$，如下 X = \left[ \begin{matrix} \vec{x}^{(1)} &amp; \vec{x}^{(2)} &amp; \cdots &amp; \vec{x}^{">
-<meta name="keywords" content="manifold,降维">
+  <meta name="description" content="回溯法回溯法(backtracking)是对候选集进行系统检查的两种方法，该算法策略有以下几步  定义问题的解空间(solution space)，这个空间至少包含一个问题的(最优的)解； 组织解空间，使解空间便于搜索，典型的组织方法是图和树； 例如迷宫老鼠问题：指定$3 \times 3$的迷宫，部分位置不可通行，求解最短的通行路径。该问题如果用树描述，那么不考虑是否能通行，每个节点处有$4$个">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Locally Linear Embedding">
-<meta property="og:url" content="http://yoursite.com/2019/08/09/Locally-Linear-Embedding/index.html">
+<meta property="og:title" content="【算法】回溯法与分支定界法">
+<meta property="og:url" content="http://yoursite.com/2020/03/23/【算法】回溯法与分支定界法/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="前言高维数据可视化需要通过降维的方式，而PCA、LDA等线性降维算法，忽视了数据点间的空间结构特征，本文介绍的局部线性嵌入(LLE)算法为非线性降维方法，基于谱的降维方法，所以很靠谱 :-)。 原理设有$M$个$N$维数据点，构成矩阵$X$，如下 X = \left[ \begin{matrix} \vec{x}^{(1)} &amp; \vec{x}^{(2)} &amp; \cdots &amp; \vec{x}^{">
+<meta property="og:description" content="回溯法回溯法(backtracking)是对候选集进行系统检查的两种方法，该算法策略有以下几步  定义问题的解空间(solution space)，这个空间至少包含一个问题的(最优的)解； 组织解空间，使解空间便于搜索，典型的组织方法是图和树； 例如迷宫老鼠问题：指定$3 \times 3$的迷宫，部分位置不可通行，求解最短的通行路径。该问题如果用树描述，那么不考虑是否能通行，每个节点处有$4$个">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/2019/08/09/Locally-Linear-Embedding/sklearn.png">
-<meta property="og:image" content="http://yoursite.com/2019/08/09/Locally-Linear-Embedding/custom.png">
-<meta property="og:updated_time" content="2019-08-12T03:40:19.507Z">
+<meta property="og:image" content="http://yoursite.com/2020/03/23/【算法】回溯法与分支定界法/maze_eg.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/03/23/【算法】回溯法与分支定界法/maze_dfs.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/03/23/【算法】回溯法与分支定界法/tsp_eg.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/03/23/【算法】回溯法与分支定界法/maze_bfs.jpg">
+<meta property="og:updated_time" content="2020-03-23T05:34:00.409Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Locally Linear Embedding">
-<meta name="twitter:description" content="前言高维数据可视化需要通过降维的方式，而PCA、LDA等线性降维算法，忽视了数据点间的空间结构特征，本文介绍的局部线性嵌入(LLE)算法为非线性降维方法，基于谱的降维方法，所以很靠谱 :-)。 原理设有$M$个$N$维数据点，构成矩阵$X$，如下 X = \left[ \begin{matrix} \vec{x}^{(1)} &amp; \vec{x}^{(2)} &amp; \cdots &amp; \vec{x}^{">
-<meta name="twitter:image" content="http://yoursite.com/2019/08/09/Locally-Linear-Embedding/sklearn.png">
+<meta name="twitter:title" content="【算法】回溯法与分支定界法">
+<meta name="twitter:description" content="回溯法回溯法(backtracking)是对候选集进行系统检查的两种方法，该算法策略有以下几步  定义问题的解空间(solution space)，这个空间至少包含一个问题的(最优的)解； 组织解空间，使解空间便于搜索，典型的组织方法是图和树； 例如迷宫老鼠问题：指定$3 \times 3$的迷宫，部分位置不可通行，求解最短的通行路径。该问题如果用树描述，那么不考虑是否能通行，每个节点处有$4$个">
+<meta name="twitter:image" content="http://yoursite.com/2020/03/23/【算法】回溯法与分支定界法/maze_eg.jpg">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/08/09/Locally-Linear-Embedding/">
+  <link rel="canonical" href="http://yoursite.com/2020/03/23/【算法】回溯法与分支定界法/">
 
 
 
@@ -139,7 +140,7 @@
   };
 </script>
 
-  <title>Locally Linear Embedding | LOUIS' BLOG</title>
+  <title>【算法】回溯法与分支定界法 | LOUIS' BLOG</title>
   
 
 
@@ -362,7 +363,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/09/Locally-Linear-Embedding/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/23/【算法】回溯法与分支定界法/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Louis Hsu">
@@ -379,7 +380,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Locally Linear Embedding
+          <h1 class="post-title" itemprop="name headline">【算法】回溯法与分支定界法
               
             
           </h1>
@@ -404,24 +405,12 @@
                 
               
 
-              <time title="创建时间：2019-08-09 14:41:55" itemprop="dateCreated datePublished" datetime="2019-08-09T14:41:55+08:00">2019-08-09</time>
+              <time title="创建时间：2020-03-23 12:39:06 / 修改时间：13:34:00" itemprop="dateCreated datePublished" datetime="2020-03-23T12:39:06+08:00">2020-03-23</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-08-12 11:40:19" itemprop="dateModified" datetime="2019-08-12T11:40:19+08:00">2019-08-12</time>
               
             
           </span>
@@ -438,7 +427,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a></span>
 
                 
                 
@@ -479,102 +468,44 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>高维数据可视化需要通过降维的方式，而PCA、LDA等线性降维算法，忽视了数据点间的空间结构特征，本文介绍的局部线性嵌入<code>(LLE)</code>算法为非线性降维方法，基于谱的降维方法，所以很靠谱 :-)。</p>
-<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>设有$M$个$N$维数据点，构成矩阵$X$，如下</p>
-<script type="math/tex; mode=display">X = \left[ \begin{matrix} \vec{x}^{(1)} & \vec{x}^{(2)} & \cdots & \vec{x}^{(M)} \end{matrix} \right] \tag{1}</script><p>其中$\vec{x}^{(i)}$表示样本点向量</p>
-<script type="math/tex; mode=display">\vec{x}^{(i)} = \left[ \begin{matrix} x^{(i)}_1 & x^{(i)}_2 & \cdots & x^{(i)}_3 \end{matrix} \right]^T \tag{2}</script><p><strong><code>LLE</code>的基本思路：</strong> 任一数据点$\vec{x}^{(i)}$可由其的$K$个近邻点$\mathcal{N}_K(\vec{x}^{(i)})$线性表出，可作为数据样本的结构特征，即</p>
-<script type="math/tex; mode=display">\hat{\vec{x}}^{(i)} = \sum_{\vec{x}^{(j)} \in \mathcal{N}_K(\vec{x}^{(i)})} w_{ij} \vec{x}^{(j)} \tag{3.1}</script><p>其中</p>
-<script type="math/tex; mode=display">\vec{w}_i = \left[ \begin{matrix} w_{i1} & w_{i2} & \cdots & w_{ik} \end{matrix} \right]^T</script><p>若$\vec{x}^{(i)}$映射到低维空间中对应特征点为$\vec{y}^{(i)}$，对相同参数$w_{ij}$，$\vec{x}^{(i)}$也可由其K个近邻点$\mathcal{N}_K(\vec{y}^{(i)})$表出，即</p>
-<script type="math/tex; mode=display">\hat{\vec{y}}^{(i)} = \sum_{\vec{y}^{(j)} \in \mathcal{N}_K(\vec{y}^{(i)})} w_{ij} \vec{y}^{(j)} \tag{3.2}</script><h2 id="数据结构参数"><a href="#数据结构参数" class="headerlink" title="数据结构参数"></a>数据结构参数</h2><p>求解参数向量$\vec{w}_i$，可利用最小二乘法，即目标函数定义为</p>
-<script type="math/tex; mode=display">J(\vec{w}_i) = || \vec{x}^{(i)} - \sum_{\vec{x}^{(j)} \in \mathcal{N}_K(\vec{x}^{(i)})} w_{ij} \vec{x}^{(j)} ||_2^2 \tag{4.1}</script><p>对参数向量$\vec{w}_i$归一化，即加入约束项</p>
-<script type="math/tex; mode=display">\sum_{j=1}^K w_{ij} = 1 \quad \text{or} \quad \vec{w}_i^T \vec{1} = 1 \tag{4.2}</script><p>式$(4.1)$可作如下变换</p>
-<script type="math/tex; mode=display">J(\vec{w}_i) = || \vec{x}^{(i)} - \sum_{\vec{x}^{(j)} \in \mathcal{N}_K(\vec{x}^{(i)})} w_{ij} \vec{x}^{(j)} ||_2^2</script><script type="math/tex; mode=display">= || \sum_{j=1}^K w_{ij} \vec{x}^{(i)} - \sum_{j=1}^K w_{ij} \vec{x}^{(j)} ||_2^2</script><script type="math/tex; mode=display">= || \sum_{j=1}^K w_{ij} (\vec{x}^{(i)} - \vec{x}^{(j)}) ||_2^2</script><script type="math/tex; mode=display">= || (X^{(i)} - N^{(i)}) \vec{w}_i ||_2^2 \tag{5.1}</script><p>其中</p>
-<script type="math/tex; mode=display">X^{(i)} = \left[ \begin{matrix} \vec{x}^{(i)} & \vec{x}^{(i)} & \cdots & \vec{x}^{(i)} \end{matrix} \right] \tag{5.1.1}</script><script type="math/tex; mode=display">N^{(i)} = \left[ \begin{matrix} \vec{x}_N^{(1)} & \vec{x}_N^{(2)} & \cdots & \vec{x}_N^{(K)} \end{matrix} \right] \tag{5.1.2}</script><p>则</p>
-<script type="math/tex; mode=display">J(\vec{w}_i) = || (X^{(i)} - N^{(i)}) \vec{w}_i ||_2^2 \tag{5.1}</script><script type="math/tex; mode=display">= \left[ (X^{(i)} - N^{(i)}) \vec{w}_i \right]^T \left[ (X^{(i)} - N^{(i)}) \vec{w}_i \right]</script><script type="math/tex; mode=display">= \vec{w}_i^T (X^{(i)} - N^{(i)})^T (X^{(i)} - N^{(i)}) \vec{w}_i \tag{5.2}</script><p>记矩阵</p>
-<script type="math/tex; mode=display">Z^{(i)}_{K \times K} = (X^{(i)} - N^{(i)})^T (X^{(i)} - N^{(i)}) \tag{5.3}</script><p>最终优化目标为</p>
-<script type="math/tex; mode=display">J(\vec{w}_i) = \vec{w}_i^T Z^{(i)} \vec{w}_i \tag{*1}</script><script type="math/tex; mode=display">\text{s.t.} \quad \vec{w}_i^T \vec{1} = 1</script><p>利用拉格朗日乘子法，构造拉格朗日函数，有</p>
-<script type="math/tex; mode=display">L(\vec{w}_i) = \vec{w}_i^T Z^{(i)} \vec{w}_i + \lambda (\vec{w}_i^T \vec{1} - 1) \tag{6.1}</script><p>则</p>
-<script type="math/tex; mode=display">
-\begin{cases}
-    \frac{\nabla L(\vec{w}_i)}{\nabla \vec{w}_i} = 2 Z^{(i)} \vec{w}_i  + \lambda \vec{1} = \vec{0} \\
-    \frac{\nabla L(\vec{w}_i)}{\nabla \lambda} = \vec{w}_i^T \vec{1} - 1 = 0
-\end{cases} \tag{6.2}</script><p>由式$1$得到</p>
-<script type="math/tex; mode=display">\vec{w}_i = - \frac{\lambda}{2} Z^{(i)-1} \vec{1} \tag{6.3}</script><p>代入式$2$有</p>
-<script type="math/tex; mode=display">\left( - \frac{\lambda}{2} Z^{(i)-1} \vec{1} \right)^T \vec{1} = 1 \tag{6.4}</script><p>解得</p>
-<script type="math/tex; mode=display">\lambda = - \frac{2}{\vec{1}^T Z^{(i)-1} \vec{1}} \tag{6.5}</script><p>代回$(6.3)$得到</p>
-<script type="math/tex; mode=display">\vec{w}_i = \frac{Z^{(i)-1} \vec{1}}{\vec{1}^T Z^{(i)-1} \vec{1}} \tag{*2}</script><h2 id="低维数据的求解"><a href="#低维数据的求解" class="headerlink" title="低维数据的求解"></a>低维数据的求解</h2><p>由式$(3.2)$，即</p>
-<script type="math/tex; mode=display">\hat{\vec{y}}^{(i)} = \sum_{\vec{y}^{(j)} \in \mathcal{N}_K(\vec{y}^{(i)})} \dot{w}_{ij} \vec{y}^{(j)} \tag{3.2}</script><p>同样的，利用最小二乘法，构建目标函数为</p>
-<script type="math/tex; mode=display">J(Y) = \sum_{i=1}^M || \vec{y}^{(i)} - \sum_{\vec{y}^{(j)} \in \mathcal{N}_K(\vec{y}^{(i)})} \dot{w}_{ij} \vec{y}^{(j)} ||_2^2 \tag{7.1}</script><p>对低维数据进行标准化，即加入约束</p>
-<script type="math/tex; mode=display">
-\begin{cases}
-    \sum_{i=1}^M \vec{y}^{(i)} = \vec{0} \\
-    \frac{1}{M} \sum_{i=1}^M \vec{y}^{(i)} \vec{y}^{(i)T} = I
-\end{cases} \tag{7.2}</script><p>矩阵形式为</p>
-<script type="math/tex; mode=display">Y Y^T = M·I \tag{7.3}</script><p>由于当前数据点具体分布未知，故$\vec{y}^{(i)}$的近邻点$\mathcal{N}_K(\vec{y}^{(i)})$无法得知，故将矩阵$W_{M \times K}$补全为矩阵$\dot{W}_{M \times M}$，即</p>
-<script type="math/tex; mode=display">
-\dot{w}_{ij} = 
-\begin{cases}
-    w_{ik}  & x^{(j)} = N^{(i)}_k \\
-    0       & \text{otherwise}
-\end{cases} \tag{8}</script><blockquote>
-<p>相当于邻接矩阵。</p>
-</blockquote>
-<p>同样的，$\vec{y}^{(i)}$也需在维度上进行补全为$\dot{\vec{y}}^{(i)}$，记</p>
-<script type="math/tex; mode=display">\dot{Y}_{M \times M} = \left[ \begin{matrix} \dot{\vec{y}}^{(1)} & \dot{\vec{y}}^{(2)} & \cdots & \dot{\vec{y}}^{(M)} \end{matrix} \right] \tag{9}</script><p>则</p>
-<script type="math/tex; mode=display">J(\dot{Y}) = \sum_{i=1}^M || \dot{\vec{y}}^{(i)} - \sum_{\dot{\vec{y}}^{(j)} \in \mathcal{N}_K(\dot{\vec{y}}^{(i)})} \dot{w}_{ij} \dot{\vec{y}}^{(j)} ||_2^2 \tag{7.1}</script><script type="math/tex; mode=display">= \sum_{i=1}^M || \dot{Y} \vec{1}_i - \dot{Y} \dot{\vec{w}_i} ||_2^2 = \sum_{i=1}^M || \dot{Y} (\vec{1}_i - \dot{\vec{w}_i}) ||_2^2 \tag{10.1}</script><script type="math/tex; mode=display">= \text{tr} \left[ \dot{Y} (I - \dot{W}) (I - \dot{W})^T \dot{Y}^T \right] \tag{10.2}</script><blockquote>
-<script type="math/tex; mode=display">(10.1) \rightarrow (10.2): \mathcal{WTF}</script></blockquote>
-<p>实际上</p>
+        <h1 id="回溯法"><a href="#回溯法" class="headerlink" title="回溯法"></a>回溯法</h1><p><strong>回溯法</strong>(backtracking)是对候选集进行系统检查的两种方法，该算法策略有以下几步</p>
+<ol>
+<li>定义问题的<strong>解空间</strong>(solution space)，这个空间至少包含一个问题的(最优的)解；</li>
+<li><strong>组织解空间</strong>，使解空间便于搜索，典型的组织方法是图和树；<br> 例如<strong>迷宫老鼠问题</strong>：指定$3 \times 3$的迷宫，部分位置不可通行，求解最短的通行路径。该问题如果用树描述，那么不考虑是否能通行，每个节点处有$4$个抉择，树结构较大，用图描述较为简便，如下<br> <img src="/2020/03/23/【算法】回溯法与分支定界法/maze_eg.jpg" alt="maze_eg"></li>
+<li>在确定解空间的组织方法后，这个空间可以按<strong>深度优先方式</strong>进行搜索。<ol>
+<li>初始化<strong>E-结点</strong>(expansion node)为起始点，标记搜索过程中经过的节点为<strong>活动节点</strong>(live node)，那么起始点也是一个活动节点；</li>
+<li>在E-节点处，尝试可能的选择节点并移动：1) <strong>若存在这样的节点</strong>，将当前E-节点新到达节点成为E-节点，并标记新节点也为活动节点；2)<strong>若不存在这样的节点</strong>(<strong>没有可供选择的节点，或超过约束限制</strong>)，将当前E-节点标记为死节点(用来杀死该节点的策略称为<strong>界定函数</strong>(bounding function))，并将E-节点返回至最近的活动节点(<strong>回溯</strong>)；</li>
+<li>循环步骤2直至遍历节空间，在搜索过程中，实时更新最优解。</li>
+</ol>
+</li>
+</ol>
 <blockquote>
-<p>由于</p>
-<script type="math/tex; mode=display">d_i = \sum_{j=1}^M \dot{w}_{ij} = 1</script><p>所以由拉普拉斯矩阵定义</p>
-<script type="math/tex; mode=display">L = D - W</script><p>$I - \dot{W}$即邻接矩阵$\dot{W}$的拉普拉斯矩阵。</p>
+<p>以迷宫老鼠为例，初始节点$(1, 1)$标记为活动节点，同时也为E-节点，在该节点处可达节点为$(1,2),(2,1)$，那么标记$(1,2)$为活动节点，E-节点更新为$(1,2)$。当E-节点为$(1,3)$时，该节点无可达节点(即界定函数)，标记为死结点，并更新E-节点为最近的活动节点，即$(1,2)$，此时该节点也被标记为死结点，E-节点更新为$(1,1)$。此时存在可达节点$(2,1)$，将其标记为活动节点，并更新E-节点。以此类推，当E-节点为出口$(3,3)$时，结束算法。<br>注：此时活动节点有$(1,1), (2,1), (3,1), (3,2), (3,3)$。<br><img src="/2020/03/23/【算法】回溯法与分支定界法/maze_dfs.jpg" alt="maze_dfs"></p>
 </blockquote>
-<p>其中</p>
-<script type="math/tex; mode=display">\vec{1}_i = \left[ \begin{matrix} 0 & \cdots & 1_i & \cdots & 0 \end{matrix} \right]^T</script><script type="math/tex; mode=display">I = \left[\begin{matrix}
-    1 &         &   \\
-      & \cdots  &   \\
-      &         & 1 
-\end{matrix}\right]</script><p>记$A = (I - \dot{W}) (I - \dot{W})^T$, 最终优化目标为</p>
-<script type="math/tex; mode=display">J(\dot{Y}) = \text{tr} \left[ \dot{Y} A \dot{Y}^T \right] \tag{*3}</script><script type="math/tex; mode=display">\text{s.t.} \quad \dot{Y} \dot{Y}^T = M·I</script><p>构造拉格朗日函数</p>
-<script type="math/tex; mode=display">L(\dot{Y}) = \text{tr} \left[ \dot{Y} A \dot{Y}^T \right] + \lambda (\dot{Y} \dot{Y}^T - M · I) \tag{11}</script><script type="math/tex; mode=display">
-\begin{cases}
-    \frac{\nabla L(\dot{Y})}{\nabla \dot{Y}} = 2 A \dot{Y}^T + 2 \lambda \dot{Y}^T = 0 \\
-    \frac{\nabla L(\dot{Y})}{\nabla \lambda} = \dot{Y} \dot{Y}^T - M · I = 0\\
-\end{cases}</script><blockquote>
-<script type="math/tex; mode=display">\frac{\nabla \text{tr}[F(\vec{x})]}{\nabla \vec{x}} = f(\vec{x})^T</script></blockquote>
-<p>注意$1$式，可变换为</p>
-<script type="math/tex; mode=display">A \dot{Y}^T = \hat{\lambda} \dot{Y}^T \tag{12.1}</script><p>其中$\hat{\lambda} = - \lambda$，又$\dot{Y} \dot{Y}^T = M·I$，为<strong>正交相似变换</strong>，所以</p>
-<script type="math/tex; mode=display">\dot{Y}^T = P = \left[ \begin{matrix} \vec{\alpha}_1 & \vec{\alpha}_2 & \cdots & \vec{\alpha}_M \end{matrix} \right] \tag{12.2}</script><p>由于最小化目标为</p>
-<script type="math/tex; mode=display">J(\dot{Y}) = \text{tr} \left[ \dot{Y} A \dot{Y}^T \right] = \text{tr} (\Lambda) = \sum_{i=1}^M \lambda_i</script><p>故选择最小的特征值$\lambda_i$及其对应的特征向量$\alpha_i$，要得到$D$维数据集，将$\dot{Y}^T$进行约化，即</p>
-<script type="math/tex; mode=display">Y^T = \left[ \begin{matrix} \vec{\alpha}_{M + 1 - D} & \cdots & \vec{\alpha}_M \end{matrix} \right] \tag{13}</script><p>由于$\vec{w}_i^T \vec{1} = 1$，即</p>
-<script type="math/tex; mode=display">\dot{W}^T \vec{1} = \vec{1} \tag{14.1}</script><p>移项整理得</p>
-<script type="math/tex; mode=display">(\dot{W} - I)^T \vec{1} = \vec{0}</script><p>$\vec{1} \neq \vec{0}$，所以</p>
-<script type="math/tex; mode=display">(\dot{W} - I)^T = 0 \tag{14.2}</script><p>左边同乘$\dot{W} - I$得到</p>
-<script type="math/tex; mode=display">(\dot{W} - I) (\dot{W} - I)^T \vec{1} = A · \vec{1} = 0 · \vec{1} \tag{14.3}</script><p>所以</p>
-<script type="math/tex; mode=display">\lambda_M = 0, \quad \alpha_M = \vec{1} \tag{14.4}</script><p>特征值为$0$表示不能反映数据特征，故低维数据应为</p>
-<script type="math/tex; mode=display">Y^T = \left[ \begin{matrix} \vec{\alpha}_{M - D} & \cdots & \vec{\alpha}_{M-1} \end{matrix} \right] \tag{*4}</script><h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><ol>
-<li><p>计算原始样本空间中，每个样本$x^{(i)}$的近邻点$N^{(i)}$，并求取权值$w_{ij}$作为邻接权重，存储为矩阵$\dot{W}_{M \times M}$；</p>
-<script type="math/tex; mode=display">Z^{(i)}_{K \times K} = (X^{(i)} - N^{(i)})^T (X^{(i)} - N^{(i)}) \tag{5.3}</script><script type="math/tex; mode=display">\vec{w}_i = \frac{Z^{(i)-1} \vec{1}}{\vec{1}^T Z^{(i)-1} \vec{1}} \tag{*2}</script><script type="math/tex; mode=display">
- \dot{w}_{ij} = 
- \begin{cases}
-     w_{ik}  & x^{(j)} = N^{(i)}_k \\
-     0       & \text{otherwise}
- \end{cases} \tag{8}</script></li>
-<li><p>求取矩阵$A$，并将其特征分解</p>
-<script type="math/tex; mode=display">A = (I - \dot{W}) (I - \dot{W})^T</script><script type="math/tex; mode=display">A \dot{Y}^T = \hat{\lambda} \dot{Y}^T \tag{12.1}</script></li>
-<li><p>选择最小的特征值$\lambda_i$及其对应的特征向量$\alpha_i$，约化为$D$维数据，作为低维特征点</p>
-<script type="math/tex; mode=display">Y^T = \left[ \begin{matrix} \vec{\alpha}_{M - D} & \cdots & \vec{\alpha}_{M-1} \end{matrix} \right] \tag{*4}</script></li>
+<p>注意区别回溯法和动态规划，两者有一定程度的相似性。动态规划是自底向上的，回溯法是自顶向下的。</p>
+<p><strong>例(旅行商问题, TSP)：给定一个$n$顶点的有权网络(有向或无向)，找出一个包含$n$个顶点且具有最小耗费的环路，例如给定下图的网络：</strong><br><img src="/2020/03/23/【算法】回溯法与分支定界法/tsp_eg.jpg" alt="tsp_eg"></p>
+<p>该问题的<strong>约束条件</strong>是：1) 环路包含$n$个节点；2) 节点间拓扑结构已确定。<strong>优化目标</strong>是环路耗费最低，用矩阵描述该图为</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+    \infty & 30 & 35 & \infty & 20 \\
+    30 & \infty & 20 & 10 & \infty \\
+    35 & 20 & \infty & 5 & 15 \\
+    \infty & 10 & 5 & \infty & 25 \\
+    20 & \infty & 15 & 25 & \infty \\
+\end{bmatrix}</script><p>考虑分支问题可以用栈来解决，用递归的形式<strong>借助函数调用栈</strong>，求解指定节点$i$所能到达死结点的路径。考虑到已经过节点不能再次经过，<strong>将能到达$i$的路径全部删除(置为无穷大)</strong>。</p>
+<blockquote>
+<p>用下列函数求解得<code>(80.0, [0, 1, 3, 2, 4])</code>，即路径为$1 \rightarrow 2 \rightarrow 4 \rightarrow 3 \rightarrow 5 \rightarrow 1$，最小耗费为$80$。</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">solveTSP</span><span class="params">(A)</span>:</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 获取从节点0开始的，所有最深路径</span></span><br><span class="line">    path = getPath(A, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 删除不包含所有节点的路径</span></span><br><span class="line">    path = list(filter(<span class="keyword">lambda</span> x: len(x) == <span class="number">5</span>, path))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 计算每条路径的成本</span></span><br><span class="line">    cost = list(map(<span class="keyword">lambda</span> x: getCost(A, x), path))</span><br><span class="line">    </span><br><span class="line">    minCost = min(cost)</span><br><span class="line">    minPath = path[cost.index(minCost)]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> minCost, minPath</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getPath</span><span class="params">(A, i)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Params:</span></span><br><span class="line"><span class="string">        A: &#123;ndarray(n, n)&#125;</span></span><br><span class="line"><span class="string">        i: &#123;int&#125;</span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        path: &#123;list[list]&#125;</span></span><br><span class="line"><span class="string">    Notes:</span></span><br><span class="line"><span class="string">        - 深度优先遍历；</span></span><br><span class="line"><span class="string">        - 返回A为图下，以节点i为起始的最深路径，包含i；</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    n = A.shape[<span class="number">0</span>]</span><br><span class="line">    path = []</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 计算i能到达的每个节点的最深路径</span></span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(n):</span><br><span class="line">        <span class="keyword">if</span> np.isinf(A[i, j]): <span class="keyword">continue</span></span><br><span class="line">        </span><br><span class="line">        B = A.copy(); </span><br><span class="line">        B[:, i] = float(<span class="string">'inf'</span>)      <span class="comment"># 把所有能到达i的路径删除，使i不重复经过</span></span><br><span class="line">        path += getPath(B, j)       <span class="comment"># 在不能到达i节点的情况下，求解j节点到达死结点的路径</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 添加节点i</span></span><br><span class="line">    <span class="keyword">if</span> len(path) == <span class="number">0</span>:              <span class="comment"># i不能到达任何节点，那么只返回1条包含i的路径</span></span><br><span class="line">        path = [[i]]</span><br><span class="line">    <span class="keyword">else</span>:                           <span class="comment"># i能到达其他死结点，那么每条路径前添加i节点</span></span><br><span class="line">        path = list(map(<span class="keyword">lambda</span> x: [i] + x, path))</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> path</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getCost</span><span class="params">(A, path)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Params:</span></span><br><span class="line"><span class="string">        A: &#123;ndarray(n, n)&#125;</span></span><br><span class="line"><span class="string">        path: &#123;list&#125;</span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        cost</span></span><br><span class="line"><span class="string">    Notes:</span></span><br><span class="line"><span class="string">        - 计算环路的耗费；</span></span><br><span class="line"><span class="string">        - path路径不包含头节点，即不为环路</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    cost = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(path) - <span class="number">1</span>):</span><br><span class="line">        cost += A[path[i], path[i+<span class="number">1</span>]]</span><br><span class="line">    cost += A[path[<span class="number">-1</span>], path[<span class="number">0</span>]]</span><br><span class="line">    <span class="keyword">return</span> cost</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    </span><br><span class="line">    A = np.array([</span><br><span class="line">        [float(<span class="string">'inf'</span>), <span class="number">30</span>, <span class="number">35</span>, float(<span class="string">'inf'</span>), <span class="number">20</span>],</span><br><span class="line">        [<span class="number">30</span>, float(<span class="string">'inf'</span>), <span class="number">20</span>, <span class="number">10</span>, float(<span class="string">'inf'</span>)],</span><br><span class="line">        [<span class="number">35</span>, <span class="number">20</span>, float(<span class="string">'inf'</span>), <span class="number">5</span>, <span class="number">15</span>],</span><br><span class="line">        [float(<span class="string">'inf'</span>), <span class="number">10</span>, <span class="number">5</span>, float(<span class="string">'inf'</span>), <span class="number">25</span>],</span><br><span class="line">        [<span class="number">20</span>, float(<span class="string">'inf'</span>), <span class="number">15</span>, <span class="number">25</span>, float(<span class="string">'inf'</span>)]</span><br><span class="line">    ])</span><br><span class="line">    print(solveTSP(A))</span><br></pre></td></tr></table></figure>
+<h1 id="分支定界法"><a href="#分支定界法" class="headerlink" title="分支定界法"></a>分支定界法</h1><p>和回溯法类似，分支定界法也经常把解空间组织成树或图的结构然后进行搜搜。<strong>回溯法使用先深搜索，而分支定界法采用先广搜索</strong>。每个节点只有一次机会成为E-节点，E-节点的可达节点都是生成的新节点，那些不可能到处(最优)可行解的节点被舍弃(死结点)。</p>
+<p>有两种常用的方法选择E-节点：</p>
+<ol>
+<li>先进先出(FIFO)：借助队列，可参考二叉树的层次遍历。将首个节点加入队列，然后依次出队列作为E-节点，将E-节点可达节点全部加入队列，直至队列为空；</li>
+<li>最小耗费或最大收益法：借助小根堆/大根堆，将堆顶节点弹出作为E-节点，并将其可达节点全部加入堆。</li>
 </ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LocallyLinearEmbedding</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">""" Locally Linear Embedding</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Attributes:</span></span><br><span class="line"><span class="string">        n_neighbors:  &#123;int&#125;</span></span><br><span class="line"><span class="string">        n_components: &#123;int&#125;</span></span><br><span class="line"><span class="string">        W: &#123;ndarray&#125; </span></span><br><span class="line"><span class="string">            $$ W = \left[ \begin&#123;matrix&#125; w_1 &amp; w_2 &amp; \cdots &amp; w_&#123;n_samples&#125; \end&#123;matrix&#125; \right] $$</span></span><br><span class="line"><span class="string">            $$ w_i = \left[ \begin&#123;matrix&#125; w_&#123;i1&#125; &amp; w_&#123;i2&#125; &amp; \cdots &amp; w_&#123;i, n_samples&#125; \end&#123;matrix&#125; \right]^T $$</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, n_neighbors, n_components=<span class="number">2</span>)</span>:</span></span><br><span class="line">        </span><br><span class="line">        self.n_neighbors  = n_neighbors</span><br><span class="line">        self.n_components = n_components</span><br><span class="line">        self.W = <span class="keyword">None</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fit</span><span class="params">(self, X)</span>:</span></span><br><span class="line">        <span class="string">""" </span></span><br><span class="line"><span class="string">        Params:</span></span><br><span class="line"><span class="string">            X: &#123;ndarray(n_samples, n_features)&#125;</span></span><br><span class="line"><span class="string">        Returns:</span></span><br><span class="line"><span class="string">            W: &#123;ndarray(n_samples, n_samples)&#125;</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">from</span> sklearn.neighbors <span class="keyword">import</span> KDTree</span><br><span class="line">        kdtree = KDTree(X, metric=<span class="string">'euclidean'</span>)</span><br><span class="line">        </span><br><span class="line">        n_samples, n_features = X.shape</span><br><span class="line">        self.W = np.zeros((n_samples, n_samples))</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(n_samples):</span><br><span class="line"></span><br><span class="line">            <span class="comment">## 获取近邻样本点</span></span><br><span class="line">            x = X[i]</span><br><span class="line">            idx = kdtree.query(x.reshape(<span class="number">1</span>, <span class="number">-1</span>), self.n_neighbors + <span class="number">1</span>, return_distance=<span class="keyword">False</span>)[<span class="number">0</span>][<span class="number">1</span>: ]</span><br><span class="line">            <span class="comment">## 求取矩阵 Z = (x - N).dot((x - N).T)</span></span><br><span class="line">            N = X[idx]</span><br><span class="line">            Z = (x - N).dot((x - N).T)</span><br><span class="line">            <span class="comment">## 求取权重 w_i</span></span><br><span class="line">            Z_inv = np.linalg.inv(Z + np.finfo(float).eps * np.eye(self.n_neighbors))</span><br><span class="line">            w = np.sum(Z_inv, axis=<span class="number">1</span>) / np.sum(Z_inv)</span><br><span class="line">            <span class="comment">## 保存至 W</span></span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(self.n_neighbors):</span><br><span class="line">                self.W[idx[j], i] = w[j]</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> self.W</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">transform</span><span class="params">(self, X)</span>:</span></span><br><span class="line">        <span class="string">""" </span></span><br><span class="line"><span class="string">        Params:</span></span><br><span class="line"><span class="string">            X: &#123;ndarray(n_samples, n_features)&#125;</span></span><br><span class="line"><span class="string">        Returns:</span></span><br><span class="line"><span class="string">            Y: &#123;ndarray(n_samples, n_components)&#125;</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        n_samples, n_features = X.shape</span><br><span class="line"></span><br><span class="line">        <span class="comment">## 求取矩阵 A = (I - W)(I - W)^T</span></span><br><span class="line">        I = np.eye(n_samples)</span><br><span class="line">        A = (I - self.W).dot((I - self.W).T)</span><br><span class="line"></span><br><span class="line">        <span class="comment">## 对 A 进行特征分解，并按特征值升序排序</span></span><br><span class="line">        eigval, eigvec = np.linalg.eig(A)</span><br><span class="line">        eigvec = eigvec[:, np.argsort(eigval)]</span><br><span class="line"></span><br><span class="line">        <span class="comment">## 选取 D 维</span></span><br><span class="line">        k_skip = <span class="number">1</span></span><br><span class="line">        Y = eigvec[:, k_skip: self.n_components + k_skip]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> Y</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fit_transform</span><span class="params">(self, X)</span>:</span></span><br><span class="line">        <span class="string">""" </span></span><br><span class="line"><span class="string">        Params:</span></span><br><span class="line"><span class="string">            X: &#123;ndarray(n_samples, n_features)&#125;</span></span><br><span class="line"><span class="string">        Returns:</span></span><br><span class="line"><span class="string">            Y: &#123;ndarray(n_samples, n_components)&#125;</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        </span><br><span class="line">        self.fit(X)</span><br><span class="line">        Y = self.transform(X)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> Y</span><br></pre></td></tr></table></figure>
-<h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><p>在<code>scikit learn</code>官网有具体实现<a href="https://scikit-learn.org/stable/auto_examples/manifold/plot_lle_digits.html#sphx-glr-auto-examples-manifold-plot-lle-digits-py" target="_blank" rel="noopener">基于手写数据集的几种基于谱的降维方法对比</a>。</p>
-<p><img src="/2019/08/09/Locally-Linear-Embedding/sklearn.png" alt="sphx_glr_plot_lle_digits_008"></p>
-<p>以下为上述代码实现的结果<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.datasets  <span class="keyword">import</span> load_digits</span><br><span class="line"></span><br><span class="line">digits = load_digits(n_class=<span class="number">6</span>)</span><br><span class="line">X = digits.data</span><br><span class="line">y = digits.target</span><br><span class="line">images = digits.images</span><br><span class="line"></span><br><span class="line">lle = LocallyLinearEmbedding(<span class="number">30</span>, <span class="number">2</span>)</span><br><span class="line">X_lle = lle.fit_transform(X)</span><br><span class="line"></span><br><span class="line">plot_embedding(X_lle, y, images, title=<span class="keyword">None</span>, t=<span class="number">2e-3</span>, figsize=(<span class="number">12</span>, <span class="number">9</span>))</span><br></pre></td></tr></table></figure></p>
-<p><img src="/2019/08/09/Locally-Linear-Embedding/custom.png" alt="custom"></p>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
-<li><a href="https://www.jianshu.com/p/25a2a47bb60b" target="_blank" rel="noopener">(十二)LLE局部线性嵌入降维算法 - 简书</a></li>
-<li><a href="https://scikit-learn.org/stable/modules/manifold.html#locally-linear-embedding" target="_blank" rel="noopener">2.2.3. Locally Linear Embedding - scikit learn</a></li>
-<li><a href="https://cs.nyu.edu/~roweis/lle/papers/lleintro.pdf" target="_blank" rel="noopener">An Introduction to Locally Linear Embedding</a></li>
-</ol>
+<blockquote>
+<p><img src="/2020/03/23/【算法】回溯法与分支定界法/maze_bfs.jpg" alt="maze_bfs"></p>
+</blockquote>
 
       
     </div>
@@ -617,14 +548,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/manifold/" rel="tag"># manifold</a>
-          
-            <a href="/tags/降维/" rel="tag"># 降维</a>
-          
-        </div>
-      
 
       
       
@@ -634,8 +557,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/08/09/Git工具-submodules/" rel="next" title="Git工具-submodules">
-                <i class="fa fa-chevron-left"></i> Git工具-submodules
+              <a href="/2020/03/21/【算法】动态规划/" rel="next" title="【算法】动态规划">
+                <i class="fa fa-chevron-left"></i> 【算法】动态规划
               </a>
             
           </div>
@@ -643,10 +566,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/08/10/挪威的森林/" rel="prev" title="挪威的森林">
-                挪威的森林 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -859,7 +778,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#原理"><span class="nav-number">2.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据结构参数"><span class="nav-number">2.1.</span> <span class="nav-text">数据结构参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#低维数据的求解"><span class="nav-number">2.2.</span> <span class="nav-text">低维数据的求解</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实现"><span class="nav-number">3.</span> <span class="nav-text">实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验"><span class="nav-number">4.</span> <span class="nav-text">实验</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#回溯法"><span class="nav-number">1.</span> <span class="nav-text">回溯法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分支定界法"><span class="nav-number">2.</span> <span class="nav-text">分支定界法</span></a></li></ol></div>
             
 
           </div>
