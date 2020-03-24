@@ -108,22 +108,22 @@
 
 
 
-  <meta name="description" content="引言线性回归可以说是机器学习最基础的算法 模型\hat{y}^{(i)} = w^Tx^{(i)}其中 x^{(i)}=[x_0^{(i)}, x_1^{(i)}, ..., x_n^{(i)}]^T, x_0^{(i)}=1这里$x_0^{(i)}=1$表示偏置$b$，即$b=w_0$ \hat{y}^{(i)} = w^Tx^{(i)} + b 注：对于非线性的数据，可构造高次特征。  损失函">
+  <meta name="description" content="引言线性回归可以说是机器学习最基础的算法 模型\hat{y}^{(i)} = w^Tx^{(i)}其中$x^{(i)}_{(n + 1) \times 1}$为第$i$个$n$维向量，$i = 1, \cdots, m$，$w_{(n + 1) \times 1}$为权值向量  \begin{cases}     x^{(i)}=\begin{bmatrix} x_0^{(i)} &amp; x_1^{(">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linear Regression">
 <meta property="og:url" content="http://yoursite.com/2018/10/18/Linear-Regression/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="引言线性回归可以说是机器学习最基础的算法 模型\hat{y}^{(i)} = w^Tx^{(i)}其中 x^{(i)}=[x_0^{(i)}, x_1^{(i)}, ..., x_n^{(i)}]^T, x_0^{(i)}=1这里$x_0^{(i)}=1$表示偏置$b$，即$b=w_0$ \hat{y}^{(i)} = w^Tx^{(i)} + b 注：对于非线性的数据，可构造高次特征。  损失函">
+<meta property="og:description" content="引言线性回归可以说是机器学习最基础的算法 模型\hat{y}^{(i)} = w^Tx^{(i)}其中$x^{(i)}_{(n + 1) \times 1}$为第$i$个$n$维向量，$i = 1, \cdots, m$，$w_{(n + 1) \times 1}$为权值向量  \begin{cases}     x^{(i)}=\begin{bmatrix} x_0^{(i)} &amp; x_1^{(">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/projection_linreg2.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/projection_linreg3.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/w_i_x_i.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/result_linreg_noreg.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/result_linreg_reg.png">
-<meta property="og:updated_time" content="2019-07-17T12:11:56.335Z">
+<meta property="og:updated_time" content="2020-03-23T10:59:57.954Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linear Regression">
-<meta name="twitter:description" content="引言线性回归可以说是机器学习最基础的算法 模型\hat{y}^{(i)} = w^Tx^{(i)}其中 x^{(i)}=[x_0^{(i)}, x_1^{(i)}, ..., x_n^{(i)}]^T, x_0^{(i)}=1这里$x_0^{(i)}=1$表示偏置$b$，即$b=w_0$ \hat{y}^{(i)} = w^Tx^{(i)} + b 注：对于非线性的数据，可构造高次特征。  损失函">
+<meta name="twitter:description" content="引言线性回归可以说是机器学习最基础的算法 模型\hat{y}^{(i)} = w^Tx^{(i)}其中$x^{(i)}_{(n + 1) \times 1}$为第$i$个$n$维向量，$i = 1, \cdots, m$，$w_{(n + 1) \times 1}$为权值向量  \begin{cases}     x^{(i)}=\begin{bmatrix} x_0^{(i)} &amp; x_1^{(">
 <meta name="twitter:image" content="http://yoursite.com/2018/10/18/Linear-Regression/projection_linreg2.png">
 
 
@@ -423,7 +423,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-17 20:11:56" itemprop="dateModified" datetime="2019-07-17T20:11:56+08:00">2019-07-17</time>
+                <time title="修改时间：2020-03-23 18:59:57" itemprop="dateModified" datetime="2020-03-23T18:59:57+08:00">2020-03-23</time>
               
             
           </span>
@@ -482,29 +482,40 @@
 
       
         <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>线性回归可以说是机器学习最基础的算法</p>
-<h1 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h1><script type="math/tex; mode=display">\hat{y}^{(i)} = w^Tx^{(i)}</script><p>其中</p>
-<script type="math/tex; mode=display">x^{(i)}=[x_0^{(i)}, x_1^{(i)}, ..., x_n^{(i)}]^T, x_0^{(i)}=1</script><p>这里$x_0^{(i)}=1$表示偏置$b$，即$b=w_0$</p>
-<script type="math/tex; mode=display">\hat{y}^{(i)} = w^Tx^{(i)} + b</script><blockquote>
-<p><code>注</code>：对于非线性的数据，可构造高次特征。</p>
+<h1 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h1><script type="math/tex; mode=display">\hat{y}^{(i)} = w^Tx^{(i)}</script><p>其中$x^{(i)}_{(n + 1) \times 1}$为第$i$个$n$维向量，$i = 1, \cdots, m$，$w_{(n + 1) \times 1}$为权值向量</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    x^{(i)}=\begin{bmatrix} x_0^{(i)} & x_1^{(i)} & ... & x_n^{(i)} \end{bmatrix}^T, x_0^{(i)}=1 \\ 
+    w = \begin{bmatrix} w_0 & w_1 & \cdots & w_n \end{bmatrix}^T
+\end{cases}</script><p>$x_0^{(i)}=1$项对应偏置项$b$，即$b=w_0$。</p>
+<blockquote>
+<p>注：若需要获得非线性特征，可构造高次特征如$x^{(i)}_{n+1} = (x^{(i)}_{j})^a, a \neq 0, 1$。</p>
 </blockquote>
 <h1 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h1><h2 id="定义误差"><a href="#定义误差" class="headerlink" title="定义误差"></a>定义误差</h2><script type="math/tex; mode=display">e^{(i)} = \hat{y}^{(i)} - y^{(i)}</script><p>其中$y^{(i)}$表示真实值</p>
 <h2 id="定义损失函数"><a href="#定义损失函数" class="headerlink" title="定义损失函数"></a>定义损失函数</h2><p>单个样本的误差定义为</p>
-<script type="math/tex; mode=display">L_{single}(\hat{y}^{(i)}, y^{(i)})=\frac{1}{2}||e^{(i)}||_2^2=\frac{1}{2}(\hat{y}^{(i)}-y^{(i)})^2</script><p>所有样本的误差定义为</p>
-<script type="math/tex; mode=display">L(y, t)=\frac{1}{2N}\sum_i (\hat{y}^{(i)}-y^{(i)})^2</script><p>也可以定义为误差的和而不是均值，对结果无影响，可视作学习率$α$除去一个常数</p>
-<h1 id="梯度推导"><a href="#梯度推导" class="headerlink" title="梯度推导"></a>梯度推导</h1><blockquote>
-<p>$\frac{∂L}{∂w_j}$<br>$= \frac{∂}{∂w_j}\frac{1}{2N}\sum_i(\hat{y}^{(i)}-y^{(i)})^2$<br>$= \frac{1}{2N} \sum_i \frac{∂}{∂w_j} (\hat{y}^{(i)}-y^{(i)})^2$<br>$= \frac{1}{N} \sum_i (\hat{y}^{(i)}-y^{(i)}) \frac{∂t^{(i)}}{∂w_j}$<br>$=  \frac{1}{N} \sum_i (\hat{y}^{(i)}-y^{(i)}) x_j^{(i)}$</p>
-</blockquote>
-<p>或者使用矩阵推导，记$X = [x_1, x_2, …, x_m]^T$，$x_i$为样本特征(列向量)</p>
+<script type="math/tex; mode=display">L_{single}(\hat{y}^{(i)}, y^{(i)})=\frac{1}{2}||e^{(i)}||_2^2=\frac{1}{2}(\hat{y}^{(i)}-y^{(i)})^2</script><p>所有样本的误差(<strong>经验误差/风险</strong>)定义为</p>
+<script type="math/tex; mode=display">L_{emp}(y, t)=\frac{1}{2N}\sum_i (\hat{y}^{(i)}-y^{(i)})^2</script><p>也可以定义为误差的和而不是均值，对结果无影响，可视作学习率$α$除去一个常数</p>
+<h1 id="梯度推导"><a href="#梯度推导" class="headerlink" title="梯度推导"></a>梯度推导</h1><script type="math/tex; mode=display">
+\begin{aligned}
+    \frac{∂L}{∂w_j} = \frac{∂}{∂w_j}\frac{1}{2N}\sum_i(\hat{y}^{(i)}-y^{(i)})^2 \\
+    = \frac{1}{2N} \sum_i \frac{∂}{∂w_j} (\hat{y}^{(i)}-y^{(i)})^2 \\
+    = \frac{1}{N} \sum_i (\hat{y}^{(i)}-y^{(i)}) \frac{∂t^{(i)}}{∂w_j} \\
+    =  \frac{1}{N} \sum_i (\hat{y}^{(i)}-y^{(i)}) x_j^{(i)}
+\end{aligned}</script><p>或者使用矩阵推导，记$m$个$n$维样本组成的样本矩阵为$X_{m \times (n+1)} = \begin{bmatrix} x^{(1)} &amp; x^{(2)} &amp; \cdots &amp; x^{(m)} \end{bmatrix}^T$，$x^{(i)}$为第$i$个样本的特征(行向量)，$Y_{m \times 1}$为$m$个样本groundtruth组成的向量，那么有</p>
+<script type="math/tex; mode=display">L = \frac{1}{2}(Xw-Y)^T(Xw-Y)</script><script type="math/tex; mode=display">∇_w L = X^T(\hat{Y}-Y)</script><blockquote>
 <script type="math/tex; mode=display">
-L = \frac{1}{2}(Xw-Y)^T(Xw-Y)</script><script type="math/tex; mode=display">
-∇_w L = X^T(\hat{Y}-Y)</script><blockquote>
-<p>$∇_w L$<br>$= \frac{1}{2} ∇_w (w^TX^TXw - Y^TXw - w^TX^TY + Y^TY)$<br>$= \frac{1}{2} (2X^TXw - X^TY - X^TY)$<br>$= X^T(Xw-Y) $</p>
-</blockquote>
+\begin{aligned}
+    ∇_w L = \frac{1}{2} ∇_w (w^TX^TXw - Y^TXw - w^TX^TY + Y^TY) \\
+    = \frac{1}{2} (2X^TXw - X^TY - X^TY) 
+    = X^T(Xw-Y)
+\end{aligned}</script></blockquote>
 <p>在梯度为$\vec{0}$的点，即$∇_w L = \vec{0}$时对应最优解</p>
 <script type="math/tex; mode=display">X^T(Xw-Y) = 0</script><blockquote>
-<p>令<script type="math/tex">X^T(Xw-Y) = 0</script></p>
-<p>有<script type="math/tex">X^TXw = X^TY</script></p>
-<script type="math/tex; mode=display">w^*=(X^TX+\lambda I)^{-1}X^TY</script></blockquote>
+<p>令$X^T(Xw-Y) = 0$，有</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+     X^TXw = X^TY \\ w^*=(X^TX+\lambda I)^{-1}X^TY
+\end{aligned}</script></blockquote>
 <p>其中$X^+=(X^TX+\lambda I)^{-1}X^T$，表示矩阵$X_{m×n}$的伪逆</p>
 <h2 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h2><p>采用梯度下降法求解</p>
 <script type="math/tex; mode=display">w := w - \alpha ∇_w L</script><p>其中$w$表示参数向量</p>
@@ -515,7 +526,7 @@ L = \frac{1}{2}(Xw-Y)^T(Xw-Y)</script><script type="math/tex; mode=display">
 </blockquote>
 <h1 id="从投影的角度理解线性回归"><a href="#从投影的角度理解线性回归" class="headerlink" title="从投影的角度理解线性回归"></a>从投影的角度理解线性回归</h1><p><img src="/2018/10/18/Linear-Regression/projection_linreg2.png" alt="投影理解"></p>
 <p><img src="/2018/10/18/Linear-Regression/projection_linreg3.png" alt="用投影推导最优解"></p>
-<h1 id="线性回归的正则化"><a href="#线性回归的正则化" class="headerlink" title="线性回归的正则化"></a>线性回归的正则化</h1><p>为克服过拟合问题，可加入正则化项$||w||_2^2$，此时损失函数定义为</p>
+<h1 id="线性回归的正则化"><a href="#线性回归的正则化" class="headerlink" title="线性回归的正则化"></a>线性回归的正则化</h1><p>为克服过拟合问题，可加入正则化项$||w||_2^2$，此时损失函数(<strong>结构误差/风险</strong>)定义为</p>
 <script type="math/tex; mode=display">L(\hat{y}, y)=\frac{1}{2N} ||\hat{y}^{(i)}-y^{(i)}||_2^2 + \lambda ||w||_2^2</script><p>或者</p>
 <script type="math/tex; mode=display">L(\hat{y}, y)=\frac{1}{2N} \sum_i (\hat{y}^{(i)}-y^{(i)})^2 +  \frac{\lambda}{2N}\sum_j w_j^2</script><p>其中$i = 1, …, N_{sample}; j = 1, …, N_{feature},j&gt;0 $</p>
 <p>此时梯度为</p>
