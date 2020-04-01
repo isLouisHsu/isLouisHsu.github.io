@@ -118,7 +118,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/10/18/Logistic-Regression/Sigmoid.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/18/Logistic-Regression/Sigmoid_gradient.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/18/Logistic-Regression/logistic_regression_result.png">
-<meta property="og:updated_time" content="2019-07-17T12:11:59.067Z">
+<meta property="og:updated_time" content="2020-03-27T13:40:00.961Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Logistic Regression">
 <meta name="twitter:description" content="引言逻辑回归（Logistic Regression）是用于处理因变量为分类变量的回归问题，常见的是二分类或二项分布问题，也可以处理多分类问题，它实际上是属于一种分类方法。 模型先给出模型，推导过程稍后给出，逻辑回归包含Sigmoid函数 f(z) = \frac{1}{1+e^{-z}}其图像如下 定义 z = w^Tx其中$x=[x_0, x_1, …, x_n]^T, x_0=1$ h_w(">
@@ -421,7 +421,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-17 20:11:59" itemprop="dateModified" datetime="2019-07-17T20:11:59+08:00">2019-07-17</time>
+                <time title="修改时间：2020-03-27 21:40:00" itemprop="dateModified" datetime="2020-03-27T21:40:00+08:00">2020-03-27</time>
               
             
           </span>
@@ -493,10 +493,9 @@
 <script type="math/tex; mode=display">L(\hat{y}, y)=- \frac{1}{N} \sum_i [y_i^{(i)} log(\hat{y}_i^{(i)})+(1 - y_i^{(i)})log(1-\hat{y}_i^{(i)})]</script><p>其中$y_i$表示真实值，$\hat{y}_i$表示预测值</p>
 <h2 id="从交叉熵理解"><a href="#从交叉熵理解" class="headerlink" title="从交叉熵理解"></a>从交叉熵理解</h2><p>已知交叉熵<code>cross entropy</code>定义如下</p>
 <script type="math/tex; mode=display">CrossEnt = \sum_i p_i log \frac{1}{q_i}</script><p>而对于样本$ (X_i, y_i) $，为确定事件，故标签概率的取值为$ p_i = y_i ∈ \{0,1\}$，$ q_i即预测输出的概率值\hat{y}_i $，可得到与上面相同的推导结论</p>
-<h2 id="从决策平面和贝叶斯决策理解"><a href="#从决策平面和贝叶斯决策理解" class="headerlink" title="从决策平面和贝叶斯决策理解"></a>从决策平面和贝叶斯决策理解</h2><p>相关内容查看<a href="https://louishsu.xyz/2018/10/19/%E5%88%86%E7%B1%BB%E9%97%AE%E9%A2%98%E7%9A%84%E5%86%B3%E7%AD%96%E5%B9%B3%E9%9D%A2/" target="_blank" rel="noopener">分类问题的决策平面</a>和<a href="https://louishsu.xyz/2018/10/18/%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%86%B3%E7%AD%96/" target="_blank" rel="noopener">贝叶斯决策</a>，逻辑回归考虑的一般是等先验概率问题，故决策函数定义为</p>
-<blockquote>
-<p>$if$ $P(c_i|x)&gt;P(c_j|x)$ $then$ $ x \in c_i $,  $ i, j = 1, 2 $</p>
-</blockquote>
+<h2 id="从决策平面和贝叶斯决策理解"><a href="#从决策平面和贝叶斯决策理解" class="headerlink" title="从决策平面和贝叶斯决策理解"></a>从决策平面和贝叶斯决策理解</h2><blockquote>
+<p>相关内容查看<a href="https://louishsu.xyz/2018/10/19/%E5%88%86%E7%B1%BB%E9%97%AE%E9%A2%98%E7%9A%84%E5%86%B3%E7%AD%96%E5%B9%B3%E9%9D%A2/" target="_blank" rel="noopener">分类问题的决策平面</a>和<a href="https://louishsu.xyz/2018/10/18/%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%86%B3%E7%AD%96/" target="_blank" rel="noopener">贝叶斯决策</a>，逻辑回归考虑的一般是等先验概率问题，故决策函数定义为</p>
+<script type="math/tex; mode=display">if \quad P(c_i|x)>P(c_j|x) \quad then \quad x \in c_i, \quad i, j = 1, 2</script></blockquote>
 <p>从贝叶斯决策可知，对于类别$c_1$，有</p>
 <script type="math/tex; mode=display">
 P(c_1|x) = \frac{P(x|c_1)}{P(x|c_1) + P(x|c_2)}</script><p>设在各个类别下，特征$x$服从正态分布</p>
@@ -534,10 +533,15 @@ f'(z)_{max} = f'(z)|_{z=0} = 0.25</script><script type="math/tex; mode=display">
 <p>$ f’(z) $<br>$ = (\frac{1}{1+e^{-z}})’ $<br>$ = \frac<br>​          {-(1+e^{-z})’}<br>​          {(1+e^{-z})^2} $<br>$ = \frac<br>​          {e^{-z}}<br>​          {(1+e^{-z})^2} $<br>$ = \frac<br>​          {e^{-z}}<br>​          {1+e^{-z}}<br>​    \frac<br>​          {1}<br>​          {1+e^{-z}}$<br>$ = (1 - f(z))f(z)$</p>
 </blockquote>
 <p>利用链式求导法则可得</p>
-<blockquote>
-<p>$\frac{∂L}{∂w_j}$<br>$= -\frac{∂}{∂w_j} \frac{1}{N} \sum_i [y^{(i)} log(\hat{y}^{(i)})+(1-y^{(i)})log(1-\hat{y}^{(i)})]$<br>$= - \frac{1}{N} \sum_i [y^{(i)} \frac{1}{\hat{y}^{(i)}}\frac{∂}{∂w_j}\hat{y}^{(i)}-(1-y^{(i)})\frac{1}{1-\hat{y}^{(i)}}\frac{∂}{∂w_j}\hat{y}^{(i)}]$<br>$= - \frac{1}{N} \sum_i [y^{(i)} \frac{1}{\hat{y}^{(i)}}\hat{y}^{(i)}(1-\hat{y}^{(i)})w_j-(1-y^{(i)})\frac{1}{1-\hat{y}^{(i)}}\hat{y}^{(i)}(1-\hat{y}^{(i)})w_j]$<br>$= - \frac{1}{N} \sum_i [y^{(i)} (1-\hat{y}^{(i)})w_j-(1-y^{(i)}) y^{(i)} w_j]$<br>$=  \frac{1}{N} \sum_i (\hat{y}^{(i)} - y^{(i)})w_j $</p>
-</blockquote>
-<p>写作矩阵形式，记$X = [x_1, x_2, …, x_m]^T$，$x_i$为样本特征(列向量)</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \frac{∂L}{∂w_j} 
+    = -\frac{∂}{∂w_j} \frac{1}{N} \sum_i [y^{(i)} log(\hat{y}^{(i)})+(1-y^{(i)})log(1-\hat{y}^{(i)})]  \\
+    = - \frac{1}{N} \sum_i [y^{(i)} \frac{1}{\hat{y}^{(i)}}\frac{∂\hat{y}^{(i)}}{∂w_j}-(1-y^{(i)})\frac{1}{1-\hat{y}^{(i)}}\frac{∂\hat{y}^{(i)}}{∂w_j}] \\
+    = - \frac{1}{N} \sum_i [y^{(i)} \frac{1}{\hat{y}^{(i)}}\hat{y}^{(i)}(1-\hat{y}^{(i)})x_j-(1-y^{(i)})\frac{1}{1-\hat{y}^{(i)}}\hat{y}^{(i)}(1-\hat{y}^{(i)})x_j] \\
+    = - \frac{1}{N} \sum_i [y^{(i)} (1-\hat{y}^{(i)})x_j-(1-y^{(i)}) y^{(i)} x_j] \\
+    =  \frac{1}{N} \sum_i (\hat{y}^{(i)} - y^{(i)})x_j 
+    \end{aligned}</script><p>写作矩阵形式，记$X = [x_1, x_2, …, x_m]^T$，$x_i$为样本特征(列向量)</p>
 <script type="math/tex; mode=display">
 ∇_w L = X^T (\hat{Y} - Y)</script><h1 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h1><p>和线性回归一样，采用梯度下降法求解</p>
 <script type="math/tex; mode=display">w := w - \alpha ∇_w L</script><h1 id="处理多分类问题"><a href="#处理多分类问题" class="headerlink" title="处理多分类问题"></a>处理多分类问题</h1><p>假设有$K$个类别，则依次以类别$c_i$为正样本训练模型，一共训练$K$个。测试样本在每个模型上计算，最终将概率最大的作为分类结果。</p>
