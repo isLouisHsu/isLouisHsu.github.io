@@ -117,7 +117,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/2018/11/12/EM-GMM/EM算法图解.png">
 <meta property="og:image" content="http://yoursite.com/2018/11/12/EM-GMM/gmm.gif">
-<meta property="og:updated_time" content="2019-07-17T12:13:52.959Z">
+<meta property="og:updated_time" content="2020-04-02T08:20:07.524Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="EM &amp; GMM">
 <meta name="twitter:description" content="EM算法Expectation Maximization Algorithm，是 Dempster, Laind, Rubin 于 1977 年提出的求参数极大似然估计的一种方法，它可以从非完整数据集中对参数进行 MLE 估计，是一种非常简单实用的学习算法。这种方法可以广泛地应用于处理缺损数据，截尾数据，带有噪声等所谓的不完全数据。 引例：先挖个坑给出李航《统计学习方法》的三硬币模型例子，假设有$">
@@ -420,7 +420,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-17 20:13:52" itemprop="dateModified" datetime="2019-07-17T20:13:52+08:00">2019-07-17</time>
+                <time title="修改时间：2020-04-02 16:20:07" itemprop="dateModified" datetime="2020-04-02T16:20:07+08:00">2020-04-02</time>
               
             
           </span>
@@ -494,7 +494,7 @@ P(X)
 P(\overline{X}) = P(\overline{X}|X_1)P(X_1) + P(\overline{X}|\overline{X_1})P(\overline{X_1})
 = \pi (1 - p) + (1 - \pi) (1 - q)</script><p>即</p>
 <script type="math/tex; mode=display">
-P(X) = [\pi p + (1 - \pi) q] ^ {X} [\pi (1 - p) + (1 - \pi) (1 - q)] ^ {1 - X}</script><p>利用最大似然估计，有</p>
+P(X) = [\pi p + (1 - \pi) q] ^ {X} [\pi (1 - p) + (1 - \pi) (1 - q)] ^ {1 - X} \tag{0}</script><p>利用<strong>最大似然估计</strong>，有</p>
 <script type="math/tex; mode=display">
 \log L(D | \theta) = 6 \log [\pi p + (1 - \pi) q] + 4 \log [\pi (1 - p) + (1 - \pi) (1 - q)]</script><p>至此，我们一定能想到通过求似然函数极值来求解参数</p>
 <script type="math/tex; mode=display">
@@ -503,18 +503,18 @@ P(X) = [\pi p + (1 - \pi) q] ^ {X} [\pi (1 - p) + (1 - \pi) (1 - q)] ^ {1 - X}</
 \frac{∂ }{∂ q} \log L = 0 \Rightarrow 5 \pi (p - q) + 5q - 3 = 0</script><p>但是好像出了问题，并不能求解，所以我们引入<code>EM算法</code>迭代求解。</p>
 <h2 id="推导"><a href="#推导" class="headerlink" title="推导"></a>推导</h2><p>以$x^{(i)}$表示训练数据，$w_k$表示类别，设当前迭代参数为$\theta^{(t)}$，则下一次迭代应有</p>
 <script type="math/tex; mode=display">
-\theta^{(t+1)} = \arg \max \sum_i \log P(x^{(i)}|\theta) \tag{1}</script><p>由边缘概率公式</p>
+\theta^{(t+1)} = \arg \max \sum_i \log P(x^{(i)}|\theta) \tag{1}</script><p>记<strong>隐变量</strong>为$w_k$，那么由<strong>边缘概率公式</strong></p>
 <script type="math/tex; mode=display">
 \sum_i \log P(x^{(i)}|\theta)
 = \sum_i \log \sum_k P(x^{(i)}, w_k^{(i)}|\theta) \tag{2}</script><blockquote>
 <p>$P(x^{(i)}, w_k^{(i)}|\theta) = P(x^{(i)} | w_k^{(i)}, \theta) P(w_k^{(i)}|x^{(i)}, \theta)$<br>至此已得出引例中的表达式，其中$P(w_k^{(i)}|x^{(i)}, \theta)$与$P(x^{(i)} | w_k^{(i)}, \theta)$均未知，而通过求极值不能解得参数。</p>
 </blockquote>
-<p>我们引入迭代参数$\theta^{(t)}$，即第$t$次迭代时的参数$\theta$，该参数为已知变量</p>
+<p>我们引入<strong>迭代参数</strong>$\theta^{(t)}$，即第$t$次迭代时的参数$\theta$，该参数为已知变量</p>
 <script type="math/tex; mode=display">
 \sum_i \log P(x^{(i)}|\theta)
 = \sum_i \log \sum_k P(x^{(i)}, w_k^{(i)}|\theta) 
 \frac{P(w_k^{(i)} | \theta^{(t)})}
-{P(w_k^{(i)} | \theta^{(t)})}</script><blockquote>
+{P(w_k^{(i)} | \theta^{(t)})} \tag{3}</script><blockquote>
 <p>$P(w_k^{(i)}|\theta^{(t)})$表示样本$x^{(i)}$类别为$w_k^{(i)}$的概率，注意上标。</p>
 </blockquote>
 <p>引入<code>Jensen不等式</code>：</p>
@@ -535,70 +535,81 @@ P(X) = [\pi p + (1 - \pi) q] ^ {X} [\pi (1 - p) + (1 - \pi) (1 - q)] ^ {1 - X}</
 = \sum_i \log \sum_k P(x^{(i)}, w_k^{(i)}|\theta) 
 \frac{P(w_k^{(i)}|\theta^{(t)})}
 {P(w_k^{(i)}|\theta^{(t)})}</script><script type="math/tex; mode=display">
-\geq \sum_i \sum_k P(w_k^{(i)}|\theta^{(t)}) \log \frac{P(x^{(i)}, w_k^{(i)}|\theta)}{P(w_k^{(i)}|\theta^{(t)})} \tag{3}</script><p>此时我们得到似然函数$\sum_i \log P(x^{(i)}|\theta)$的一个下界，但必须保证这个下界是紧的，也就是至少有点能使等号成立</p>
+\geq \sum_i \sum_k P(w_k^{(i)}|\theta^{(t)}) \log \frac{P(x^{(i)}, w_k^{(i)}|\theta)}{P(w_k^{(i)}|\theta^{(t)})} \tag{4}</script><p>由$Jensen$不等式，当且仅当$　P(x^{(i)}, w_k^{(i)}|\theta)=C　$时取等号。</p>
 <blockquote>
-<p>由<code>Jensen不等式</code>，当且仅当$　P(x^{(i)}, w_k^{(i)}|\theta)=C　$时取等号</p>
-</blockquote>
+<script type="math/tex; mode=display">\sum_i \underbrace{\log}_{\varphi} \frac{\sum_k P(x^{(i)}, w_k^{(i)}|\theta) \frac{\underbrace{P(w_k^{(i)}|\theta^{(t)})}_{a}} {P(w_k^{(i)}|\theta^{(t)})}}{\sum_k \underbrace{P(w_k^{(i)} | \theta^{(t)})}_{a}}</script></blockquote>
+<p>此时我们得到似然函数$\sum_i \log P(x^{(i)}|\theta)$的一个<strong>下界</strong>，但必须保证这个下界是<strong>紧的</strong>，也就是至少有点能使等号成立。</p>
 <p>定义</p>
 <script type="math/tex; mode=display">
 L(\theta|\theta^{(t)})
 = \sum_i \sum_k P(w_k^{(i)}|\theta^{(t)}) \log \frac{P(x^{(i)}, w_k^{(i)}|\theta)}{P(w_k^{(i)}|\theta^{(t)})}</script><script type="math/tex; mode=display">
 = \sum_i \sum_k P(w_k^{(i)}|\theta^{(t)}) \log P(x^{(i)}, w_k^{(i)}|\theta) - 
 P(w_k^{(i)}|\theta^{(t)}) 
-\log P(w_k^{(i)}|\theta^{(t)})</script><p>其中第一项即期望</p>
+\log P(w_k^{(i)}|\theta^{(t)}) \tag{5}</script><p>其中第一项即$\log P(X, w|\theta) | X, \theta^{(t)}$的<strong>期望</strong></p>
 <script type="math/tex; mode=display">
 E_w\left[
     \log P(X, w|\theta) | X, \theta^{(t)}
 \right] 
 = \sum_i \sum_k P(w_k^{(i)}|\theta^{(t)}) 
-\log P(x^{(i)}, w_k^{(i)}|\theta) \tag{4}</script><p>第二项为$P(w | X, \theta^{(t)})$的信息熵</p>
+\log P(x^{(i)}, w_k^{(i)}|\theta) \tag{5.1}</script><p>第二项为$P(w | X, \theta^{(t)})$的<strong>信息熵</strong></p>
 <script type="math/tex; mode=display">
 H[P(w | X, \theta^{(t)})] 
-= - \sum_i \sum_k P(w_k^{(i)}|\theta^{(t)}) \log P(w_k^{(i)}|\theta^{(t)}) \tag{5}</script><p>即</p>
+= - \sum_i \sum_k P(w_k^{(i)}|\theta^{(t)}) \log P(w_k^{(i)}|\theta^{(t)}) \tag{5.2}</script><p>即</p>
 <script type="math/tex; mode=display">
 L(\theta|\theta^{(t)})
 = E_w\left[
     \log P(X, w|\theta) | X, \theta^{(t)}
 \right] +
-H[P(w | X, \theta^{(t)})] \tag{E-step}</script><blockquote>
-<p>注意到$H[P(w | X, \theta^{(t)})]$项为常数，故也可设</p>
+H[P(w | X, \theta^{(t)})] \tag{E-step}</script><p>注意到$H[P(w | X, \theta^{(t)})]$项为常数，故也可设</p>
 <script type="math/tex; mode=display">
 Q(\theta|\theta^{(t)}) = 
 E_w\left[
-\log P(X, w|\theta) | X, \theta^{(t)} \right]</script></blockquote>
-<p>代回$(1)$，得到优化目标</p>
+\log P(X, w|\theta) | X, \theta^{(t)} \right]</script><p>代回$(1)$，得到<strong>最终的优化目标</strong></p>
 <script type="math/tex; mode=display">
 \theta^{(t+1)} 
-= \arg \max L(\theta|\theta^{(t)}) \tag{M-step}</script><p>我们需要不断最大化$L(\theta | \theta^{(t)})$来不断优化，这就是所谓的<code>EM算法</code>，<code>E-step</code>是指求出期望，<code>M-step</code>是指迭代更新参数<br><img src="/2018/11/12/EM-GMM/EM算法图解.png" alt="EM算法图解"></p>
+= \arg \max L(\theta|\theta^{(t)}) = \arg \max Q(\theta|\theta^{(t)}) \tag{M-step}</script><blockquote>
+<p>其中$x^{(i)}, w_k^{(i)}$的联合概率密度一般用<strong>条件概率</strong>计算</p>
+<script type="math/tex; mode=display">P(x^{(i)}, w_k^{(i)}|\theta) = P(x^{(i)} | w_k^{(i)}, \theta) P(w_k^{(i)} | \theta)</script><p>那么</p>
+<script type="math/tex; mode=display">
+Q(\theta | \theta^{(t)}) = 
+\sum_i \sum_k P(w_k^{(i)} | \theta^{(t)})
+\log \left[ 
+  P(x^{(i)} | w_k^{(i)}, \theta)
+  P(w_k^{(i)} | \theta)
+\right] \tag{*}</script><p>各部分解释如下</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    P(w_k^{(i)} | \theta^{(t)}): \theta^{(t)}参数下，由x^{(i)}求得的隐变量的概率 \\
+    P(x^{(i)} | w_k^{(i)}, \theta): \theta参数下，隐变量取值为w_k^{(i)}下，x^{(i)}的条件分布概率 \\
+    P(w_k^{(i)} | \theta): \theta参数下，由x^{(i)}求得的隐变量的分布 
+\end{cases}</script></blockquote>
+<p><strong>引入迭代变量，并经$Jensen$不等式处理后，各参数可通过迭代求解</strong>，需要不断最大化$L(\theta | \theta^{(t)})$来不断优化，这就是$EM$算法，$E-step$是指求出期望，$M-step$是指迭代更新参数</p>
+<p><img src="/2018/11/12/EM-GMM/EM算法图解.png" alt="EM算法图解"></p>
 <p>伪代码如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">According to prior knowledge set </span><br><span class="line">    $\theta$</span><br><span class="line">Repeat until convergence&#123;</span><br><span class="line">    E-step: The expectation of hidden variables</span><br><span class="line">    M-step: Finding the maximum of likelihood function</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>实际上，从边缘概率与条件概率入手</p>
+<p>实际上，从<strong>边缘概率与条件概率</strong>入手，类似的有</p>
 <script type="math/tex; mode=display">
 \sum_i \log P(x^{(i)}|\theta)
 = \sum_i \log \sum_k P(x^{(i)}, w_k^{(i)}|\theta)</script><script type="math/tex; mode=display">
 = \sum_i \log \sum_k P(x^{(i)} | w_k^{(i)}, \theta) P(w_k^{(i)} | \theta)</script><script type="math/tex; mode=display">
 \geq \sum_i \sum_k P(w_k^{(i)} | \theta) \log P(x^{(i)} | w_k^{(i)}, \theta) \tag{Jensen inequality}</script><script type="math/tex; mode=display">
-= \sum_i \sum_k P(w_k^{(i)} | \theta) \log \frac{P(x^{(i)}, w_k^{(i)}|\theta)}{P(w_k^{(i)}|\theta)}</script><p>而由$(3)$，引入迭代变量可以得到</p>
+= \sum_i \sum_k P(w_k^{(i)} | \theta) \log \frac{P(x^{(i)}, w_k^{(i)}|\theta)}{P(w_k^{(i)}|\theta)} \tag{6.1}</script><p>而由$(4)$，类似的，<strong>引入迭代变量</strong>可以得到</p>
 <script type="math/tex; mode=display">
 \sum_i \log P(x^{(i)}|\theta)
-\geq L(\theta|\theta^{(t)})</script><p>其中</p>
-<script type="math/tex; mode=display">
-L(\theta|\theta^{(t)})
-= \sum_i \sum_k P(w_k^{(i)}|\theta^{(t)}) \log \frac{P(x^{(i)}, w_k^{(i)}|\theta)}{P(w_k^{(i)}|\theta^{(t)})}</script><p>则</p>
+\geq L(\theta|\theta^{(t)}) \tag{6.2}</script><blockquote>
+<script type="math/tex; mode=display">L(\theta|\theta^{(t)}) = \sum_i \sum_k P(w_k^{(i)}|\theta^{(t)}) \log \frac{P(x^{(i)}, w_k^{(i)}|\theta)}{P(w_k^{(i)}|\theta^{(t)})} \tag{5}</script></blockquote>
+<p>则</p>
 <script type="math/tex; mode=display">
 \sum_i \log P(x^{(i)}|\theta) - L(\theta|\theta^{(t)})</script><script type="math/tex; mode=display">
 = \sum_i \sum_k P(w_k^{(i)} | \theta) \log \frac{P(x^{(i)}, w_k^{(i)}|\theta)}{P(w_k^{(i)}|\theta)} -
 \sum_i \sum_k P(w_k^{(i)}|\theta^{(t)}) \log \frac{P(x^{(i)}, w_k^{(i)}|\theta)}{P(w_k^{(i)}|\theta^{(t)})}</script><script type="math/tex; mode=display">
-= \sum_i \sum_k P(w_k^{(i)}|\theta^{(t)}) \log \frac{P(w_k^{(i)}|\theta^{(t)})}{P(w_k^{(i)}|\theta)}</script><p>而由<code>KL散度( Kullback–Leibler divergence)</code>(又称<code>相对熵(relative entropy)</code>)定义</p>
+= \sum_i \sum_k P(w_k^{(i)}|\theta^{(t)}) \log \frac{P(w_k^{(i)}|\theta^{(t)})}{P(w_k^{(i)}|\theta)} \tag{6.3}</script><p>而由<code>KL散度( Kullback–Leibler divergence)</code>(又称<code>相对熵(relative entropy)</code>)定义</p>
 <blockquote>
 <script type="math/tex; mode=display">
 D(P||Q) = \sum P(x) \log \frac{P(x)}{Q(x)}</script></blockquote>
 <p>可知</p>
 <script type="math/tex; mode=display">
 \sum_i \log P(x^{(i)}|\theta) - L(\theta|\theta^{(t)}) 
-= D\left[ P(w_k^{(i)}|\theta^{(t)}) || P(w_k^{(i)}|\theta) \right]</script><p>即迭代的$P(w_k^{(i)}|\theta^{(t)})$与真实的$P(w_k^{(i)}|\theta)$之间的相对熵！</p>
-<blockquote>
-<p>这里关于<code>K-L散度</code>的困扰了$N$久，终于搞出来了。</p>
-</blockquote>
+= D\left[ P(w_k^{(i)}|\theta^{(t)}) || P(w_k^{(i)}|\theta) \right] \tag{6.4}</script><p><strong>即迭代的$P(w_k^{(i)}|\theta^{(t)})$与真实的$P(w_k^{(i)}|\theta)$之间的相对熵！</strong></p>
 <!-- 另外，附上证明一则
 > 证明对数似然函数$\sum_i \log P(x^{(i)} | \theta)$满足
 > $$
@@ -626,108 +637,134 @@ D(P||Q) = \sum P(x) \log \frac{P(x)}{Q(x)}</script></blockquote>
 > \geq \sum_i \log P(x^{(i)} | \theta^{(t)})
 > $$ -->
 <h2 id="引例的求解"><a href="#引例的求解" class="headerlink" title="引例的求解"></a>引例的求解</h2><blockquote>
-<p>$Q(\theta|\theta^{(t)}) = \sum_i \sum_k P(w_k^{(i)}|\theta^{(t)}) \log P(x^{(i)}, w_k^{(i)}|\theta)$</p>
-</blockquote>
+<script type="math/tex; mode=display">Q(\theta|\theta^{(t)}) = \sum_i \sum_k P(w_k^{(i)}|\theta^{(t)}) \log P(x^{(i)} | w_k^{(i)}, \theta) P(w_k^{(i)} | \theta)</script></blockquote>
 <p>此题中</p>
 <script type="math/tex; mode=display">
-P(w_k|\pi) = \pi^{w_k}(1-\pi)^{1-w_k}</script><script type="math/tex; mode=display">
-P(x | w_1, p) = p^{x^{(i)}}(1-p)^{1-x^{(i)}}</script><script type="math/tex; mode=display">
-P(x | w_2, q) = q^{x^{(i)}}(1-q)^{1-x^{(i)}}</script><ul>
+\begin{cases}
+    P(w_k|\pi) = \pi^{w_k}(1-\pi)^{1-w_k} \\
+    P(x | w_1, p) = p^{x^{(i)}}(1-p)^{1-x^{(i)}} \\
+    P(x | w_2, q) = q^{x^{(i)}}(1-q)^{1-x^{(i)}}
+\end{cases} \tag{7}</script><ul>
 <li><p>$E-step$</p>
 <script type="math/tex; mode=display">
-  Q(\pi, p, q | \pi^{(t)}, p^{(t)}, q^{(t)})
-  = \sum_i \sum_k P(w_k^{(i)}|\pi^{(t)}, p^{(t)}, q^{(t)}) 
-  \log P(x^{(i)}, w_k^{(i)} | \pi, p, q)</script><p>  先求$P(w_k^{(i)}|\pi^{(t)}, p^{(t)}, q^{(t)})$，即第一次投掷结果为$w_k$的概率</p>
+  \begin{aligned}
+      Q(\pi, p, q | \pi^{(t)}, p^{(t)}, q^{(t)})
+      = \sum_i \sum_k P(w_k^{(i)}|\pi^{(t)}, p^{(t)}, q^{(t)}) \times \\ 
+      \log P(x^{(i)} | w_k^{(i)}, \pi, p, q) P(w_k^{(i)} | \pi, p, q) 
+  \end{aligned} \tag{8}</script><ol>
+<li><p>先求$P(w_k^{(i)}|\pi^{(t)}, p^{(t)}, q^{(t)})$，即第一次投掷结果为$w_k$的概率</p>
 <script type="math/tex; mode=display">
-  P(w_k^{(i)}|\pi^{(t)}, p^{(t)}, q^{(t)})
-  = \frac
-  {\left[\pi^{(t)}p^{(t)x^{(i)}}(1-p^{(t)})^{1-x^{(i)}}\right]^{w_k}
-  \left[(1-\pi^{(t)})q^{(t)x^{(i)}}(1-q^{(t)})^{1-x^{(i)}}\right]^{1-w_k}}
-  {\sum_j \left[\pi^{(t)}p^{(t)x^{(i)}}(1-p^{(t)})^{1-x^{(i)}}\right]^{w_j}
-  \left[(1-\pi^{(t)})q^{(t)x^{(i)}}(1-q^{(t)})^{1-x^{(i)}}\right]^{1-w_j}}</script><p>  即</p>
+ P(w_k^{(i)}|\pi^{(t)}, p^{(t)}, q^{(t)})
+ = \frac
+ {\left[\pi^{(t)}p^{(t)x^{(i)}}(1-p^{(t)})^{1-x^{(i)}}\right]^{w_k}
+ \left[(1-\pi^{(t)})q^{(t)x^{(i)}}(1-q^{(t)})^{1-x^{(i)}}\right]^{1-w_k}}
+ {\sum_j \left[\pi^{(t)}p^{(t)x^{(i)}}(1-p^{(t)})^{1-x^{(i)}}\right]^{w_j}
+ \left[(1-\pi^{(t)})q^{(t)x^{(i)}}(1-q^{(t)})^{1-x^{(i)}}\right]^{1-w_j}} \tag{8.1}</script><blockquote>
+<script type="math/tex; mode=display">\frac{A正面， 投掷结果为x^{(i)}}{A正面， 投掷结果为x^{(i)} + A反面， 投掷结果为x^{(i)}}</script></blockquote>
+<p> 即</p>
 <script type="math/tex; mode=display">
-  \begin{cases}
-      P(w_1^{(i)}|\pi^{(t)}, p^{(t)}, q^{(t)}) = \frac
-          {\pi^{(t)}p^{(t)x^{(i)}}(1-p^{(t)})^{1-x^{(i)}}}
-          {\pi^{(t)}p^{(t)x^{(i)}}(1-p^{(t)})^{1-x^{(i)}} + 
-          (1-\pi^{(t)})q^{(t)x^{(i)}}(1-q^{(t)})^{1-x^{(i)}}} \\
-      P(w_2^{(i)}|\pi^{(t)}, p^{(t)}, q^{(t)}) = \frac
-          {(1-\pi^{(t)})q^{(t)x^{(i)}}(1-q^{(t)})^{1-x^{(i)}}}
-          {\pi^{(t)}p^{(t)x^{(i)}}(1-p^{(t)})^{1-x^{(i)}} + 
-          (1-\pi^{(t)})q^{(t)x^{(i)}}(1-q^{(t)})^{1-x^{(i)}}}
-  \end{cases}</script><p>  记</p>
-<script type="math/tex; mode=display">\mu_1^{(i)} = P(w_1^{(i)}|\pi^{(t)}, p^{(t)}, q^{(t)})</script><script type="math/tex; mode=display">\mu_2^{(i)} = 1 - \mu_1^{(i)}</script><blockquote>
+ \begin{cases}
+     P(w_1^{(i)}|\pi^{(t)}, p^{(t)}, q^{(t)}) = \frac
+         {\pi^{(t)}p^{(t)x^{(i)}}(1-p^{(t)})^{1-x^{(i)}}}
+         {\pi^{(t)}p^{(t)x^{(i)}}(1-p^{(t)})^{1-x^{(i)}} + 
+         (1-\pi^{(t)})q^{(t)x^{(i)}}(1-q^{(t)})^{1-x^{(i)}}} \\
+     P(w_2^{(i)}|\pi^{(t)}, p^{(t)}, q^{(t)}) = \frac
+         {(1-\pi^{(t)})q^{(t)x^{(i)}}(1-q^{(t)})^{1-x^{(i)}}}
+         {\pi^{(t)}p^{(t)x^{(i)}}(1-p^{(t)})^{1-x^{(i)}} + 
+         (1-\pi^{(t)})q^{(t)x^{(i)}}(1-q^{(t)})^{1-x^{(i)}}}
+ \end{cases}</script><p> 记</p>
+<script type="math/tex; mode=display">
+ \begin{cases}
+     \mu_1^{(i)} = P(w_1^{(i)}|\pi^{(t)}, p^{(t)}, q^{(t)}) \\
+     \mu_2^{(i)} = 1 - \mu_1^{(i)}
+ \end{cases}</script><blockquote>
 <p>注意$w^{(i)}_k$上标<code>^{(i)}</code></p>
 </blockquote>
-<p>  再求$P(x^{(i)}, w_k^{(i)} | \pi, p, q)$，已知</p>
+</li>
+<li><p>再求$P(x^{(i)}, w_k^{(i)} | \pi, p, q)$，已知</p>
 <script type="math/tex; mode=display">
-  P(x^{(i)}, w_k^{(i)} | \pi, p, q)
-  = P(x^{(i)} | w_k^{(i)}, \pi, p, q)
-  P(w_k^{(i)} | \pi, p, q)</script><p>  所以</p>
+ P(x^{(i)}, w_k^{(i)} | \pi, p, q)
+ = P(x^{(i)} | w_k^{(i)}, \pi, p, q)
+ P(w_k^{(i)} | \pi, p, q)</script><blockquote>
+<p>$P(x^{(i)} | w_k^{(i)}, \pi, p, q)$为$A$取正/反面下，得到结果$x^{(i)}$的概率；$P(w_k^{(i)} | \pi, p, q)$同$P(w_k^{(i)}|\pi^{(t)}, p^{(t)}, q^{(t)})$。</p>
+</blockquote>
+<p> 所以</p>
 <script type="math/tex; mode=display">
-  P(x^{(i)}, w_k^{(i)} | \pi, p,q)
-  = \left[\pi p^{x^{(i)}}(1-p)^{1-x^{(i)}}\right]^{w_k}
-  \left[(1-\pi)q^{x^{(i)}}(1-q)^{1-x^{(i)}}\right]^{1-w_k}</script><p>  综上</p>
+ P(x^{(i)}, w_k^{(i)} | \pi, p,q)
+ = \left[\pi p^{x^{(i)}}(1-p)^{1-x^{(i)}}\right]^{w_k}
+ \left[(1-\pi)q^{x^{(i)}}(1-q)^{1-x^{(i)}}\right]^{1-w_k} \tag{8.2}</script><p>综上</p>
 <script type="math/tex; mode=display">
-  Q(\pi, p, q | \pi^{(t)}, p^{(t)}, q^{(t)})
-  = \sum_i \sum_{k=1}^2 \mu^{(i)}_k \left[\pi p^{x^{(i)}}(1-p)^{1-x^{(i)}}\right]^{w_k}
-  \left[(1-\pi)q^{x^{(i)}}(1-q)^{1-x^{(i)}}\right]^{1-w_k}</script><script type="math/tex; mode=display">
-  = \sum_i \mu_1^{(i)} \log \pi p^{x^{(i)}}(1-p)^{1-x^{(i)}} + (1 - \mu_1^{(i)}) \log (1-\pi) q^{x^{(i)}}(1-q)^{1-x^{(i)}}</script></li>
+\begin{aligned}
+ Q(\pi, p, q | \pi^{(t)}, p^{(t)}, q^{(t)}) \\
+ = \sum_i \sum_{k=1}^2 \mu^{(i)}_k \log \{ \left[\pi p^{x^{(i)}}(1-p)^{1-x^{(i)}}\right]^{w_k}
+ \left[(1-\pi)q^{x^{(i)}}(1-q)^{1-x^{(i)}}\right]^{1-w_k} \} \\
+ = \sum_i \mu_1^{(i)} \log \pi p^{x^{(i)}}(1-p)^{1-x^{(i)}} + (1 - \mu_1^{(i)}) \log (1-\pi) q^{x^{(i)}}(1-q)^{1-x^{(i)}}
+\end{aligned} \tag{9}</script></li>
+</ol>
+</li>
 <li><p>$M-step$</p>
 <ul>
 <li><p>$\frac{∂Q}{∂\pi} = 0$</p>
 <script type="math/tex; mode=display">
-  \frac{∂Q}{∂\pi}
-  = \sum_i \mu_1^{(i)} 
-  \frac
-  {p^{x^{(i)}}(1-p)^{1-x^{(i)}}}
-  {\pi p^{x^{(i)}}(1-p)^{1-x^{(i)}}} + 
-  (1 - \mu_1^{(i)})
-  \frac
-  {- q^{x^{(i)}}(1-q)^{1-x^{(i)}}}
-  {(1-\pi) q^{x^{(i)}}(1-q)^{1-x^{(i)}}}</script><script type="math/tex; mode=display">
-  = \sum_i \frac{\mu_1^{(i)}}{\pi} + \frac{\mu_1^{(i)} - 1}{1 - \pi}
-  = \sum_i \frac{\mu_1^{(i)} - \pi}{\pi(1 - \pi)}
-  = \frac{\sum_i \mu_1^{(i)} - n\pi}{\pi(1 - \pi)} = 0</script><script type="math/tex; mode=display">
-  \Rightarrow \pi^{(t+1)} = \frac{1}{n} \sum_i \mu_1^{(i)}</script></li>
+  \begin{aligned}
+      \frac{∂Q}{∂\pi}
+      = \sum_i \mu_1^{(i)} 
+      \frac {p^{x^{(i)}}(1-p)^{1-x^{(i)}}}
+      {\pi p^{x^{(i)}}(1-p)^{1-x^{(i)}}} + 
+      (1 - \mu_1^{(i)}) \frac {- q^{x^{(i)}}(1-q)^{1-x^{(i)}}}
+      {(1-\pi) q^{x^{(i)}}(1-q)^{1-x^{(i)}}} \\
+      = \sum_i \frac{\mu_1^{(i)}}{\pi} + \frac{\mu_1^{(i)} - 1}{1 - \pi} \\
+      = \sum_i \frac{\mu_1^{(i)} - \pi}{\pi(1 - \pi)}
+      = \frac{\sum_i \mu_1^{(i)} - n\pi}{\pi(1 - \pi)} \\ = 0 \\
+      \Rightarrow \pi^{(t+1)} = \frac{1}{n} \sum_i \mu_1^{(i)} 
+  \end{aligned} \tag{10.1}</script></li>
 <li><p>$\frac{∂Q}{∂p} = 0$</p>
 <script type="math/tex; mode=display">
+  \begin{aligned}
   \frac{∂Q}{∂p}
   = \sum_i \mu_1^{(i)} 
   \left[
       \frac{x^{(i)}}{p} - \frac{1 - x^{(i)}}{1 - p}
-  \right]</script><script type="math/tex; mode=display">
+  \right] \\
   = \frac{1}{p(1 - p)} 
-  \sum_i \mu_1^{(i)} (x^{(i)} - p)
+  \sum_i \mu_1^{(i)} (x^{(i)} - p) \\
   = \frac{1}{p(1 - p)}
   \left[
       \sum_i \mu_1^{(i)} x^{(i)} - p \sum_i \mu_1^{(i)}
-  \right] = 0</script><script type="math/tex; mode=display">
-  \Rightarrow p^{(t+1)} = \frac{\sum_i \mu_1^{(i)} x^{(i)}}{\sum_i \mu_1^{(i)}}</script></li>
+  \right] \\ = 0 \\
+  \Rightarrow p^{(t+1)} = \frac{\sum_i \mu_1^{(i)} x^{(i)}}{\sum_i \mu_1^{(i)}} 
+  \end{aligned}\tag{10.2}</script></li>
 <li><p>$\frac{∂Q}{∂q} = 0$</p>
 <script type="math/tex; mode=display">
-  \frac{∂Q}{∂q}
-  = \sum_i (1 - \mu_1^{(i)}) 
-  \left[
-      \frac{x^{(i)}}{q} - \frac{1 - x^{(i)}}{1 - q}
-  \right]</script><script type="math/tex; mode=display">
-  = \frac{1}{q(1 - q)}
-  \sum_i (1 - \mu_1^{(i)}) 
-  (x^{(i)} - q)</script><script type="math/tex; mode=display">
-  = \frac{1}{q(1 - q)}
-  \left[
-      \sum_i (1 - \mu_1^{(i)}) x^{(i)} -
-      q \sum_i (1 - \mu_1^{(i)})
-  \right] = 0</script><script type="math/tex; mode=display">
-  \Rightarrow q^{(t+1)} = \frac{\sum_i (1 - \mu_1^{(i)}) x^{(i)}}{\sum_i (1 - \mu_1^{(i)})}</script></li>
+  \begin{aligned}
+      \frac{∂Q}{∂q}
+      = \sum_i (1 - \mu_1^{(i)}) 
+      \left[
+          \frac{x^{(i)}}{q} - \frac{1 - x^{(i)}}{1 - q}
+      \right] \\
+      = \frac{1}{q(1 - q)}
+      \sum_i (1 - \mu_1^{(i)}) 
+      (x^{(i)} - q) \\
+      = \frac{1}{q(1 - q)}
+      \left[
+          \sum_i (1 - \mu_1^{(i)}) x^{(i)} -
+          q \sum_i (1 - \mu_1^{(i)})
+      \right] \\ = 0 \\
+      \Rightarrow q^{(t+1)} = \frac{\sum_i (1 - \mu_1^{(i)}) x^{(i)}}{\sum_i (1 - \mu_1^{(i)})} 
+  \end{aligned} \tag{10.3}</script></li>
 </ul>
 </li>
 </ul>
-<p>多次迭代即可求解，终止条件可设置为</p>
+<p>综上</p>
 <script type="math/tex; mode=display">
-|| \theta^{(t+1)} - \theta^{(t)} || < \epsilon</script><p>或</p>
+\begin{cases}
+    \mu_1^{(i)} = P(w_1^{(i)}|\pi^{(t)}, p^{(t)}, q^{(t)}) \\
+    \pi^{(t+1)} = \frac{1}{n} \sum_i \mu_1^{(i)} \\
+    p^{(t+1)} = \frac{\sum_i \mu_1^{(i)} x^{(i)}}{\sum_i \mu_1^{(i)}} \\
+    q^{(t+1)} = \frac{\sum_i (1 - \mu_1^{(i)}) x^{(i)}}{\sum_i (1 - \mu_1^{(i)})} \\
+\end{cases} \tag{10}</script><p>多次迭代即可求解，终止条件可设置为</p>
 <script type="math/tex; mode=display">
-||Q(\theta^{(t+1)} | \theta^{(t)}) - Q(\theta^{(t)} |\theta^{(t)})|| < \epsilon</script><h1 id="GMM模型"><a href="#GMM模型" class="headerlink" title="GMM模型"></a>GMM模型</h1><p><code>Gaussian Mixture Model</code>，是一种无监督学习算法，常用于聚类。当聚类问题中各个类别的尺寸不同、聚类间有相关关系的时候，往往使用<code>GMM</code>更合适。对一个样本来说，<code>GMM</code>得到的是其属于各个类的概率(通过计算后验概率得到)，而不是完全的属于某个类，这种聚类方法被成为软聚类。一般说来， 任意形状的概率分布都可以用多个高斯分布函数去近似，因而，<code>GMM</code>的应用也比较广泛。</p>
+|| \theta^{(t+1)} - \theta^{(t)} || < \epsilon \quad 或 \quad ||Q(\theta^{(t+1)} | \theta^{(t)}) - Q(\theta^{(t)} |\theta^{(t)})|| < \epsilon</script><h1 id="GMM模型"><a href="#GMM模型" class="headerlink" title="GMM模型"></a>GMM模型</h1><p><code>Gaussian Mixture Model</code>，是一种无监督学习算法，常用于聚类。<strong>当聚类问题中各个类别的尺寸不同、聚类间有相关关系的时候，往往使用<code>GMM</code>更合适</strong>。对一个样本来说，<code>GMM</code>得到的是其属于各个类的概率(通过计算后验概率得到)，而不是完全的属于某个类，这种聚类方法被成为<strong>软聚类</strong>。一般说来， 任意形状的概率分布都可以用多个高斯分布函数去近似，因而，<code>GMM</code>的应用也比较广泛。</p>
 <p>高斯混合模型，指具有如下形式的概率分布模型：</p>
 <script type="math/tex; mode=display">
 P(x|\mu_k, \Sigma_k)
@@ -829,34 +866,40 @@ L(\pi, \mu, \sigma^2)
 </ul>
 <p>综上，我们得到$4$个用于迭代的计算式，将其推广至多维即</p>
 <script type="math/tex; mode=display">
-\gamma^{(i)}_k = \frac{\pi_k N(x^{(i)}|\mu_k, \Sigma_k)}{\sum_j \pi_j N(x^{(i)}|\mu_j, \Sigma_j)}</script><script type="math/tex; mode=display">
-\mu_k = \frac{\sum_i \gamma^{(i)}_k x^{(i)}}{\sum_i \gamma^{(i)}_k}</script><script type="math/tex; mode=display">
-\Sigma_k = \frac{\sum_i \gamma^{(i)}_k (x^{(i)} - \mu_k) (x^{(i)} - \mu_k)^T}{\sum_i \gamma^{(i)}_k}</script><script type="math/tex; mode=display">
-\pi_k = \frac{\sum_i \gamma^{(i)}_k}{N}</script><h3 id="用EM算法求解"><a href="#用EM算法求解" class="headerlink" title="用EM算法求解"></a>用<code>EM算法</code>求解</h3><blockquote>
-<p>$Q(\theta|\theta^{(t)}) = \sum_i \sum_k P(w_k^{(i)}|\theta^{(t)}) \log P(x^{(i)}, w_k^{(i)}|\theta)$</p>
-</blockquote>
+\begin{cases}
+    \gamma^{(i)}_k = \frac{\pi_k N(x^{(i)}|\mu_k, \Sigma_k)}{\sum_j \pi_j N(x^{(i)}|\mu_j, \Sigma_j)} \\
+    \mu_k = \frac{\sum_i \gamma^{(i)}_k x^{(i)}}{\sum_i \gamma^{(i)}_k} \\
+    \Sigma_k = \frac{\sum_i \gamma^{(i)}_k (x^{(i)} - \mu_k) (x^{(i)} - \mu_k)^T}{\sum_i \gamma^{(i)}_k} \\
+    \pi_k = \frac{\sum_i \gamma^{(i)}_k}{N}
+\end{cases}</script><h3 id="EM算法求解"><a href="#EM算法求解" class="headerlink" title="EM算法求解"></a>EM算法求解</h3><blockquote>
+<script type="math/tex; mode=display">Q(\theta|\theta^{(t)}) = \sum_i \sum_k P(w_k^{(i)}|\theta^{(t)}) \log P(x^{(i)} | w_k^{(i)}, \theta) P(w_k^{(i)} | \theta)</script></blockquote>
 <script type="math/tex; mode=display">
 Q(\mu_k, \Sigma_k|\mu_k^{(t)}, \Sigma_k^{(t)}) 
 = \sum_i \sum_k 
 P(w_k^{(i)}|\mu_k^{(t)}, \Sigma_k^{(t)})
-\log P(x^{(i)}, w_k^{(i)}|\mu_k, \Sigma_k)</script><ul>
+\log P(x^{(i)} | w_k^{(i)}, \mu_k, \Sigma_k) 
+P(w_k^{(i)} | \mu_k, \Sigma_k)</script><ul>
 <li><p>$ M-step $</p>
 <script type="math/tex; mode=display">
-  P(w_k^{(i)}|\mu_k^{(t)}, \Sigma_k^{(t)})
-  = \frac{\pi_k N(x^{(i)}|\mu_k, \Sigma_k)}{\sum_j \pi_j N(x^{(i)}|\mu_j, \Sigma_j)}
-  = \gamma^{(i)}_k</script><script type="math/tex; mode=display">
-  P(x^{(i)}, w_k^{(i)}|\mu_k, \Sigma_k)
-  = P(x^{(i)} | w_k^{(i)}, \mu_k, \Sigma_k) 
-  P(w_k^{(i)}|\mu_k, \Sigma_k)
-  = \pi_k N(x^{(i)}|\mu_k, \Sigma_k)</script><p>  故</p>
+  \begin{cases}
+      P(w_k^{(i)}|\mu_k^{(t)}, \Sigma_k^{(t)})
+      = \frac{\pi_k^{(t)} N(x^{(i)}|\mu_k^{(t)}, \Sigma_k^{(t)})}
+      {\sum_j \pi_j^{(t)} N(x^{(i)}|\mu_j^{(t)}, \Sigma_j^{(t)})}
+      = \gamma^{(i)}_k \\
+      P(x^{(i)} | w_k^{(i)}, \mu_k, \Sigma_k) 
+      P(w_k^{(i)}|\mu_k, \Sigma_k)
+      = \pi_k N(x^{(i)}|\mu_k, \Sigma_k)
+  \end{cases}</script><p>  故</p>
 <script type="math/tex; mode=display">
   Q(\mu_k, \Sigma_k|\mu_k^{(t)}, \Sigma_k^{(t)}) 
-  = \sum_i \sum_k \gamma^{(i)}_k \log \pi_k N(x^{(i)}|\mu_k, \Sigma_k)</script><p>  通过求解极值可得到与$\underline{暴力求解}$一样的等式，即</p>
+  = \sum_i \sum_k \gamma^{(i)}_k \log \pi_k N(x^{(i)}|\mu_k, \Sigma_k)</script><p>  通过求解极值可得</p>
 <script type="math/tex; mode=display">
-  \gamma^{(i)(t)}_k = \frac{\pi^{(t)}_k N(x^{(i)}|\mu_k^{(t)}, \Sigma_k^{(t)})}{\sum_j \pi_j^{(t)} N(x^{(i)}|\mu_j^{(t)}, \Sigma_j^{(t)})}</script><script type="math/tex; mode=display">
-  \mu_k^{(t+1)} = \frac{\sum_i \gamma^{(i)(t)}_k x^{(i)}}{\sum_i \gamma^{(i)(t)}_k}</script><script type="math/tex; mode=display">
-  \Sigma_k^{(t+1)} = \frac{\sum_i \gamma^{(i)(t)}_k (x^{(i)} - \mu_k) (x^{(i)} - \mu_k)^T}{\sum_i \gamma^{(i)(t)}_k}</script><script type="math/tex; mode=display">
-  \pi_k^{(t+1)} = \frac{\sum_i \gamma^{(i)(t)}_k}{N}</script><p>  伪代码为</p>
+  \begin{cases}
+      \gamma^{(i)(t)}_k = \frac{\pi^{(t)}_k N(x^{(i)}|\mu_k^{(t)}, \Sigma_k^{(t)})}{\sum_j \pi_j^{(t)} N(x^{(i)}|\mu_j^{(t)}, \Sigma_j^{(t)})} \\
+      \mu_k^{(t+1)} = \frac{\sum_i \gamma^{(i)(t)}_k x^{(i)}}{\sum_i \gamma^{(i)(t)}_k} \\
+      \Sigma_k^{(t+1)} = \frac{\sum_i \gamma^{(i)(t)}_k (x^{(i)} - \mu_k) (x^{(i)} - \mu_k)^T}{\sum_i \gamma^{(i)(t)}_k} \\
+      \pi_k^{(t+1)} = \frac{\sum_i \gamma^{(i)(t)}_k}{N}
+  \end{cases}</script><p>  伪代码为</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">According to prior knowledge set</span><br><span class="line">    \pi^&#123;(t)&#125;(n_clusters,)</span><br><span class="line">    \mu^&#123;(t)&#125;(n_clusters, n_features)</span><br><span class="line">    \Sigma^&#123;(t)&#125;(n_clusters, n_features, n_features)</span><br><span class="line">Repeat until convergence&#123;</span><br><span class="line">    # E-step: calculate \gamma^&#123;(t)&#125;</span><br><span class="line">        \gamma(n_samples, n_clusters)</span><br><span class="line">    # M-step: update \pi, \mu, \Sigma</span><br><span class="line">        \pi^&#123;(t+1)&#125;(n_clusters,)</span><br><span class="line">        \mu^&#123;(t+1)&#125;(n_clusters, n_features)</span><br><span class="line">        \Sigma^&#123;(t+1)&#125;(n_clusters, n_features, n_features)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>初始点的选择可以随机选择，也可使用<code>K-Means</code></p>
@@ -1141,7 +1184,7 @@ P(w_k^{(i)}|\mu_k^{(t)}, \Sigma_k^{(t)})
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#EM算法"><span class="nav-number">1.</span> <span class="nav-text">EM算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#引例：先挖个坑"><span class="nav-number">1.1.</span> <span class="nav-text">引例：先挖个坑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推导"><span class="nav-number">1.2.</span> <span class="nav-text">推导</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引例的求解"><span class="nav-number">1.3.</span> <span class="nav-text">引例的求解</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GMM模型"><span class="nav-number">2.</span> <span class="nav-text">GMM模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#推导-1"><span class="nav-number">2.1.</span> <span class="nav-text">推导</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#暴力求解"><span class="nav-number">2.1.1.</span> <span class="nav-text">暴力求解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用EM算法求解"><span class="nav-number">2.1.2.</span> <span class="nav-text">用EM算法求解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码"><span class="nav-number">2.2.</span> <span class="nav-text">代码</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#EM算法"><span class="nav-number">1.</span> <span class="nav-text">EM算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#引例：先挖个坑"><span class="nav-number">1.1.</span> <span class="nav-text">引例：先挖个坑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推导"><span class="nav-number">1.2.</span> <span class="nav-text">推导</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引例的求解"><span class="nav-number">1.3.</span> <span class="nav-text">引例的求解</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GMM模型"><span class="nav-number">2.</span> <span class="nav-text">GMM模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#推导-1"><span class="nav-number">2.1.</span> <span class="nav-text">推导</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#暴力求解"><span class="nav-number">2.1.1.</span> <span class="nav-text">暴力求解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#EM算法求解"><span class="nav-number">2.1.2.</span> <span class="nav-text">EM算法求解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码"><span class="nav-number">2.2.</span> <span class="nav-text">代码</span></a></li></ol></li></ol></div>
             
 
           </div>
