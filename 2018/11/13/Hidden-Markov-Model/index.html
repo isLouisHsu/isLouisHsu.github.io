@@ -108,28 +108,24 @@
 
 
 
-  <meta name="description" content="信息量概率$p$是对确定性的度量，那么信息量就是对不确定性的度量，公式定义为  I(x) = - \log p(x) \tag{1}信息量也被称为随机变量$x$的自信息(self-information)  底数为$2$时，单位为bit，底数为$e$时，单位为nat   信息熵信息熵(information entropy)定义为  H(X) = - \sum_{x} p(x) \log p(x)">
+  <meta name="description" content="前言隐马尔科夫模型(Hidden Markov Model, HMM)可用于标注问题，描述由隐藏的马尔科夫链随机生成观测序列的过程，属于生成模型。在语音识别、自然语言处理、生物信息等领域有广泛的应用。 基本概念定义定义：隐马尔科夫模型是关于时序的概率模型，描述有一个隐藏的马尔科夫链随机生成不可观测的状态随机序列(state sequence)，再由各个状态生成一个观测，多个时刻的观测组成观测随机序">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Entropy">
-<meta property="og:url" content="http://yoursite.com/2018/11/21/Entropy/index.html">
+<meta property="og:title" content="Hidden Markov Model">
+<meta property="og:url" content="http://yoursite.com/2018/11/13/Hidden-Markov-Model/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="信息量概率$p$是对确定性的度量，那么信息量就是对不确定性的度量，公式定义为  I(x) = - \log p(x) \tag{1}信息量也被称为随机变量$x$的自信息(self-information)  底数为$2$时，单位为bit，底数为$e$时，单位为nat   信息熵信息熵(information entropy)定义为  H(X) = - \sum_{x} p(x) \log p(x)">
+<meta property="og:description" content="前言隐马尔科夫模型(Hidden Markov Model, HMM)可用于标注问题，描述由隐藏的马尔科夫链随机生成观测序列的过程，属于生成模型。在语音识别、自然语言处理、生物信息等领域有广泛的应用。 基本概念定义定义：隐马尔科夫模型是关于时序的概率模型，描述有一个隐藏的马尔科夫链随机生成不可观测的状态随机序列(state sequence)，再由各个状态生成一个观测，多个时刻的观测组成观测随机序">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/2018/11/21/Entropy/信息量.png">
-<meta property="og:image" content="http://yoursite.com/2018/11/21/Entropy/entropy_of_01.png">
-<meta property="og:image" content="http://yoursite.com/2018/11/21/Entropy/xlogx.png">
-<meta property="og:updated_time" content="2019-07-17T12:13:55.356Z">
+<meta property="og:updated_time" content="2020-04-04T02:54:11.345Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Entropy">
-<meta name="twitter:description" content="信息量概率$p$是对确定性的度量，那么信息量就是对不确定性的度量，公式定义为  I(x) = - \log p(x) \tag{1}信息量也被称为随机变量$x$的自信息(self-information)  底数为$2$时，单位为bit，底数为$e$时，单位为nat   信息熵信息熵(information entropy)定义为  H(X) = - \sum_{x} p(x) \log p(x)">
-<meta name="twitter:image" content="http://yoursite.com/2018/11/21/Entropy/信息量.png">
+<meta name="twitter:title" content="Hidden Markov Model">
+<meta name="twitter:description" content="前言隐马尔科夫模型(Hidden Markov Model, HMM)可用于标注问题，描述由隐藏的马尔科夫链随机生成观测序列的过程，属于生成模型。在语音识别、自然语言处理、生物信息等领域有广泛的应用。 基本概念定义定义：隐马尔科夫模型是关于时序的概率模型，描述有一个隐藏的马尔科夫链随机生成不可观测的状态随机序列(state sequence)，再由各个状态生成一个观测，多个时刻的观测组成观测随机序">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/11/21/Entropy/">
+  <link rel="canonical" href="http://yoursite.com/2018/11/13/Hidden-Markov-Model/">
 
 
 
@@ -139,7 +135,7 @@
   };
 </script>
 
-  <title>Entropy | LOUIS' BLOG</title>
+  <title>Hidden Markov Model | LOUIS' BLOG</title>
   
 
 
@@ -362,7 +358,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/21/Entropy/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/13/Hidden-Markov-Model/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Louis Hsu">
@@ -379,7 +375,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Entropy
+          <h1 class="post-title" itemprop="name headline">Hidden Markov Model
               
             
           </h1>
@@ -404,7 +400,7 @@
                 
               
 
-              <time title="创建时间：2018-11-21 13:03:09" itemprop="dateCreated datePublished" datetime="2018-11-21T13:03:09+08:00">2018-11-21</time>
+              <time title="创建时间：2018-11-13 17:28:36" itemprop="dateCreated datePublished" datetime="2018-11-13T17:28:36+08:00">2018-11-13</time>
             
 
             
@@ -421,7 +417,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-17 20:13:55" itemprop="dateModified" datetime="2019-07-17T20:13:55+08:00">2019-07-17</time>
+                <time title="修改时间：2020-04-04 10:54:11" itemprop="dateModified" datetime="2020-04-04T10:54:11+08:00">2020-04-04</time>
               
             
           </span>
@@ -479,88 +475,196 @@
       
 
       
-        <h1 id="信息量"><a href="#信息量" class="headerlink" title="信息量"></a>信息量</h1><p>概率$p$是对确定性的度量，那么信息量就是对不确定性的度量，公式定义为</p>
-<script type="math/tex; mode=display">
-I(x) = - \log p(x) \tag{1}</script><p>信息量也被称为随机变量$x$的自信息<code>(self-information)</code></p>
-<blockquote>
-<p>底数为$2$时，单位为<code>bit</code>，底数为$e$时，单位为<code>nat</code></p>
-</blockquote>
-<p><img src="/2018/11/21/Entropy/信息量.png" alt="信息量"></p>
-<h1 id="信息熵"><a href="#信息熵" class="headerlink" title="信息熵"></a>信息熵</h1><p>信息熵<code>(information entropy)</code>定义为</p>
-<script type="math/tex; mode=display">
-H(X) = - \sum_{x} p(x) \log p(x) \tag{2}</script><p>可看作<strong>信息量的期望</strong>,在$0-1$分布的信息熵为</p>
-<script type="math/tex; mode=display">H(p) = - p \log p - (1 - p) \log (1 - p)</script><p>图像如下，可见在$p=0.5$时，熵最大。<br><img src="/2018/11/21/Entropy/entropy_of_01.png" alt="entropy_of_01"></p>
-<blockquote>
-<p>函数$y=x \log x$的图像<br><img src="/2018/11/21/Entropy/xlogx.png" alt="xlogx"><br>有</p>
-<script type="math/tex; mode=display">
-\lim_{x \rightarrow 0} y = \lim_{x \rightarrow 1} y = 0</script></blockquote>
-<h1 id="联合熵"><a href="#联合熵" class="headerlink" title="联合熵"></a>联合熵</h1><p>根据信息熵的定义，推广到多维随机变量，就得到联合熵的定义式，以$2$维随机变量为例</p>
-<script type="math/tex; mode=display">
-H(X, Y) = - \sum_{x, y} p(x, y) \log p(x, y) \tag{3}</script><p>可推广至多维。</p>
-<!-- 机器学习笔记十：各种熵总结 - 谢小小XH - CSDN博客 https://blog.csdn.net/xierhacker/article/details/53463567 -->
-<h1 id="交叉熵"><a href="#交叉熵" class="headerlink" title="交叉熵"></a>交叉熵</h1><p>现在有关于样本集的两个概率分布$p(x)$和$q(x)$，其中$p(x)$为真实分布，$q(x)$非真实分布。</p>
-<p>如果用真实分布$p(x)$来衡量识别别一个样本所需要编码长度的期望（平均编码长度）为:</p>
-<script type="math/tex; mode=display">
-H(p) = - \sum_x p(x) \log p(x)</script><p>如果用非真实分布$q(x)$来衡量识别别一个样本所需要编码长度的期望（平均编码长度）为:</p>
-<script type="math/tex; mode=display">
-H(p, q) = - \sum_x p(x) \log q(x) \tag{4}</script><p>注意</p>
-<script type="math/tex; mode=display">
-H(p, q) - H(p)
-= \sum_x p(x) \log \frac{p(x)}{q(x)}
-= D_{KL}(p||q)</script><p>当用非真实分布$q(x)$得到的平均码长比真实分布$p(x)$得到的平均码长多出的比特数就是相对熵。我们希望通过最小化相对熵$D_{KL}(p||q)$使$q(x)$尽量趋近$p(x)$，即</p>
-<script type="math/tex; mode=display">
-q(x) = \arg \min_{q(x)} D_{KL} (p||q)</script><p>而$H(p)$是样本集的熵，为固定的值，故</p>
-<script type="math/tex; mode=display">
-q(x) = \arg \min_{q(x)} H(p, q)</script><p>即等价于最小化交叉熵。</p>
-<h1 id="条件熵"><a href="#条件熵" class="headerlink" title="条件熵"></a>条件熵</h1><p>条件熵$H(Y|X)$表示在已知随机变量$X$的条件下随机变量$Y$的不确定性。定义为在给定$X$下$Y$的条件概率分布的熵对$X$的期望，即</p>
-<script type="math/tex; mode=display">
-H(Y|X) 
-= E_{p(x)} H(Y|X=x)
-= \sum_x p(x) H(Y|X=x) \tag{5}</script><p>其中</p>
-<script type="math/tex; mode=display">
-H(Y|X=x) = - \sum_y p(y|x) \log p(y|x)</script><p>故</p>
-<script type="math/tex; mode=display">
-H(Y|X) = \sum_x p(x) \left[- \sum_y p(y|x) \log p(y|x)\right]</script><script type="math/tex; mode=display">
-= - \sum_x \sum_y p(x, y) \log p(y|x)</script><p>即</p>
-<script type="math/tex; mode=display">
-H(Y|X) = - \sum_{x, y} p(x, y) \log p(y|x) \tag{6}</script><p>实际上，条件熵满足</p>
-<script type="math/tex; mode=display">
-H(Y|X) = H(X, Y) - H(X) \tag{7}</script><blockquote>
-<p>证明：<br>已知</p>
-<script type="math/tex; mode=display">
-H(X, Y) = - \sum_{x, y} p(x, y) \log p(x, y)</script><script type="math/tex; mode=display">
-H(X) = - \sum_{x} p(x) \log p(x)</script><p>则</p>
-<script type="math/tex; mode=display">
-H(X, Y) - H(X)</script><script type="math/tex; mode=display">
-= - \sum_{x, y} p(x, y) \log p(x, y) + \sum_{x} p(x) \log p(x)</script><script type="math/tex; mode=display">
-= - \sum_{x, y} p(x, y) \log p(x, y) + \sum_{x, y} p(x, y) \log p(x)</script><script type="math/tex; mode=display">
-= \sum_{x, y} p(x, y) \log \frac{p(x)}{p(x, y)}</script><script type="math/tex; mode=display">
-= \sum_{x, y} p(x, y) \log p(y|x)</script><script type="math/tex; mode=display">
-= H(Y|X)</script></blockquote>
-<h1 id="相对熵"><a href="#相对熵" class="headerlink" title="相对熵"></a>相对熵</h1><p>相对熵<code>(relative entropy)</code>，又称<code>KL</code>散度<code>(Kullback–Leibler divergence)</code>。可以用来衡量两个概率分布之间的差异，就是求$p(x)$与$q(x)$之间的对数差在 pp 上的期望值。</p>
-<script type="math/tex; mode=display">
-D_{KL} (p||q) 
-= E_{p(x)} \log \frac{p(x)}{q(x)}
-= \sum_x p(x) \log \frac{p(x)}{q(x)} \tag{8}</script><p>注意</p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p><strong>隐马尔科夫模型</strong>(Hidden Markov Model, HMM)可用于标注问题，描述由隐藏的马尔科夫链随机生成观测序列的过程，属于生成模型。在语音识别、自然语言处理、生物信息等领域有广泛的应用。</p>
+<h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p><strong>定义</strong>：隐马尔科夫模型是关于时序的概率模型，描述有一个隐藏的<strong>马尔科夫链随</strong>机生成不可观测的状态随机序列(state sequence)，再由各个状态生成一个观测，多个时刻的观测组成观测随机序列(observation sequence)的过程。</p>
+<p>隐马尔科夫模型由<strong>初始概率分布、状态转移概率分布、观测概率分布</strong>确定，形式定义如下</p>
 <ul>
-<li><p>相对熵不具有对称性，即</p>
-<script type="math/tex; mode=display">
-  D_{KL} (p||q) \neq D_{KL} (q||p)</script></li>
-<li><p>$D_{KL} (p||q) \geq 0$</p>
-<blockquote>
-<p>证明：</p>
-<script type="math/tex; mode=display">
-D_{KL} (p||q) = \sum_x p(x) \log \frac{p(x)}{q(x)} = - \sum_x p(x) \log \frac{q(x)}{p(x)}</script><p>由<code>Jensen inequality</code></p>
-<script type="math/tex; mode=display">
-\sum_x p(x) \log \frac{q(x)}{p(x)}
-\leq \log \sum_x p(x) \frac{q(x)}{p(x)}
-= \log \sum_x q(x)</script><p>所以</p>
-<script type="math/tex; mode=display">
-D_{KL} (p||q) \geq - \log \sum_x q(x)</script><p>而$0 \leq q(x) \leq 1$，故</p>
-<script type="math/tex; mode=display">
-D_{KL} (p||q) \geq 0</script></blockquote>
+<li><p><strong>状态集合与观测集合</strong>：$Q$是所有可能状态(共$N$个)的集合，$V$是所有可能观测(共$M$个)的集合，即</p>
+<script type="math/tex; mode=display">Q = \{q_1, q_2, \cdots, q_N\}, \quad V = \{v_1, v_2, \cdots, v_M\} \tag{1.1}</script></li>
+<li><p><strong>状态序列与观测序列</strong>：共进行$T$次观测，状态序列为$S$，观测序列为$O$，即</p>
+<script type="math/tex; mode=display">S = (s^{(1)}, s^{(2)}, \cdots, s^{(T)}), \quad O = (o^{(1)}, o^{(2)}, \cdots, o^{(T)}) \tag{1.2}</script></li>
+<li><p><strong>初始状态概率</strong>：时刻$t = 1$处于状态$q_i$的概率记作$\pi_i$，即</p>
+<script type="math/tex; mode=display">\pi_i = P(s^{(1)} = q_i) \tag{1.3.1}</script><p>  保存为初始状态概率向量$\pi$</p>
+<script type="math/tex; mode=display">\pi = \begin{bmatrix} \pi_1 & \pi_2 & \cdots & \pi_N \end{bmatrix}^T \tag{1.3.2}</script><blockquote>
+<p><strong>注意，$\pi$是“状态概率向量”，$q_i$是“状态向量”。</strong></p>
+</blockquote>
 </li>
+<li><p><strong>状态转移概率</strong>：时刻$t$处于状态$q_i$的条件下，在时刻$t + 1$转移到状态$q_j$的概率为</p>
+<script type="math/tex; mode=display">a_{ij} = P(s^{(t+1)} = q_j | s^{(t)} = q_i) \tag{1.4.1}</script><p>  保存为状态转移矩阵$A$</p>
+<script type="math/tex; mode=display">A_{N \times N} = \begin{bmatrix} a_{ij} \end{bmatrix} \tag{1.4.2}</script></li>
+<li><p><strong>观测概率</strong>：时刻$t$处于状态$q_i$的条件下，得到观测$v_j$的概率为</p>
+<script type="math/tex; mode=display">b_{ij} = P(o^{(t)} = v_j | s^{(t)} = q_i) \tag{1.5.1}</script><p>  保存为观测概率矩阵$B$</p>
+<script type="math/tex; mode=display">B_{N \times M} = \begin{bmatrix} b_{ij} \end{bmatrix} \tag{1.5.2}</script></li>
 </ul>
+<p>那么隐马尔科夫模型可<strong>由初始状态概率$\pi$、状态转移概率矩阵$A$、观测概率矩阵$B$描述</strong>。</p>
+<h2 id="基本假设"><a href="#基本假设" class="headerlink" title="基本假设"></a>基本假设</h2><ol>
+<li><p><strong>齐次马尔科夫性假设</strong>：在任意时刻$t$的状态只依赖于前一时刻$t-1$的状态，与其他时刻状态或观测无关；</p>
+<script type="math/tex; mode=display">P(s^{(t)} | s^{(1)}, o^{(1)}, \cdots, s^{(T)}, o^{(T)}) = P(s^{(t)} | s^{(t-1)}), \quad t = 1, 2, \cdots, T \tag{2.1}</script></li>
+<li><p><strong>观测独立性假设</strong>：在任意时刻$t$的观测只依赖于时刻$t$的状态，与其他时刻状态或观测无关；</p>
+<script type="math/tex; mode=display">P(o^{(t)} | s^{(1)}, o^{(1)}, \cdots, s^{(T)}, o^{(T)}) = P(o^{(t)} | s^{(t)}), \quad t = 1, 2, \cdots, T \tag{2.1}</script></li>
+</ol>
+<h2 id="基本问题"><a href="#基本问题" class="headerlink" title="基本问题"></a>基本问题</h2><p>在给定隐马尔科夫模型$\theta = (A, B, \pi)$下进行$T$次观测的过程如下：</p>
+<ol>
+<li>根据初始状态分布$\pi$产生状态$s^{(1)}$；</li>
+<li>根据状态$s^{(t - 1)}$与状态转移概率$a_{s^{(t)}}$，产生$s^{(t)}, t = 2, \cdots, T$；</li>
+<li>按照状态$s^{(t)}$与观测概率分布$b_{s^{(t)}}$产生观测$o^{(t)}$；</li>
+<li>重复2、3直至得到长度为$T$的观测序列。</li>
+</ol>
+<p>相应地，马尔可夫模型就产生了<strong>三个基本问题</strong>：</p>
+<ol>
+<li><strong>概率计算问题</strong>：给定模型$\theta = (A, B, \pi)$和观测序列$O = (o^{(1)}, o^{(2)}, \cdots, o^{(T)})$，计算该模型下出现该观测序列的概率$P(O | \theta)$；</li>
+<li><strong>学习问题</strong>：给定观测序列$O = (o^{(1)}, o^{(2)}, \cdots, o^{(T)})$，估计模型参数$\theta = (A, B, \pi)$；</li>
+<li><strong>预测问题</strong>：给定模型$\theta = (A, B, \pi)$和观测序列$O = (o^{(1)}, o^{(2)}, \cdots, o^{(T)})$，求给定观测序列$O$下，使$P(S | O)$最大的状态序列$S = (s^{(1)}, s^{(2)}, \cdots, s^{(T)})$。</li>
+</ol>
+<p>以下对上述三个问题分别进行求解。</p>
+<h1 id="概率计算问题"><a href="#概率计算问题" class="headerlink" title="概率计算问题"></a>概率计算问题</h1><h2 id="直接计算法"><a href="#直接计算法" class="headerlink" title="直接计算法"></a>直接计算法</h2><script type="math/tex; mode=display">P(O | \theta) = \sum_S P(O | S, \theta) P(S | \theta)</script><p>枚举$S = (s^{(1)}, \cdots, s^{(T)})$可能的组合，计算相应的观测，累加得到$P(O|\theta)$，这种方法计算时间复杂度为$O(TN^T)$阶，不可行。</p>
+<h2 id="前向-后向算法"><a href="#前向-后向算法" class="headerlink" title="前向-后向算法"></a>前向-后向算法</h2><ol>
+<li><p>前向算法</p>
+<p> 由概率乘法公式，可得各观测的联合分布满足</p>
+<script type="math/tex; mode=display">
+ \begin{aligned}
+     P(O | \theta) = P(o^{(1)}, \cdots, o^{(T)} | \theta) \\
+     = P(o^{(1)} | \theta) P(o^{(2)} | o^{(1)}, \theta) P(o^{(3)} | o^{(1)}, o^{(2)}, \theta) \cdots P(o^{(T)} | o^{(1)}, o^{(2)}, \cdots, o^{(T - 1)}, \theta) \\
+ \end{aligned}</script><p> 注意到</p>
+<script type="math/tex; mode=display">
+ \begin{cases}
+     \begin{aligned}
+         P(o^{(1)} | \theta) = 
+         \sum_{i = 1}^N P(s^{(1)} = q_i | \theta) P(o^{(1)} | s^{(1)} = q_i, \theta) 
+         = \sum_{i = 1}^N \pi_i b_{i, o^{(t)}} 
+     \end{aligned} \\
+     \begin{aligned}
+         P(o^{(2)} | o^{(1)}, \theta) = 
+         \sum_{i = 1}^N \underbrace{P(s^{(2)} = q_i | o^{(1)}, \theta)} 
+         P(o^{(2)} | s^{(2)} = q_i, o^{(1)}, \theta) \\
+         = \sum_{i = 1}^N \left( 
+                 \sum_{j=1}^N P(s^{(2)} = q_i | s^{(1)} = q_j, o^{(1)}, \theta ) 
+                 P(s^{(1)} = q_j | o^{(1)}, \theta ) 
+             \right)
+         P(o^{(2)} | s^{(2)} = q_i, o^{(1)}, \theta) \\
+         = \sum_{i=1}^N \left( \sum_{j=1}^N \pi_j a_{ji} \right) b_{i, o^{(2)}}
+     \end{aligned} \\
+     \cdots
+ \end{cases}</script><p> 由上式，可发现递归规律。</p>
+<p> <strong>定义(前向概率)</strong>：给定马尔科夫模型$\theta$，定义到时刻$t$时状态为$q_i$，且观测序列为$(o^{(1)}, \cdots, o^{(t)})$的概率为<strong>前向概率</strong>$\alpha^{(t)}_i$，即</p>
+<script type="math/tex; mode=display">\alpha^{(t)}_i = P(s^{(t)} = q_i, o^{(1)}, \cdots, o^{(t)} | \theta) \tag{3}</script><p> 那么<strong>初始状态</strong>下有</p>
+<script type="math/tex; mode=display">\alpha^{(1)}_i = P(s^{(1)} = q_i, o^{(1)} | \theta) = \pi_i b_{i, o^{(1)}} \tag{4.1}, \quad i = 1, 2, \cdots, N</script><p> 对于$t = 2, 3, T$时刻，由边缘概率公式和条件概率，得到<strong>递推公式</strong></p>
+<script type="math/tex; mode=display">
+ \begin{aligned}
+     \alpha^{(t)}_i = P(s^{(t)} = q_i, o^{(1)}, \cdots, o^{(t)} | \theta) \\ 
+     = P(s^{(t)} = q_i, o^{(1)}, \cdots, o^{(t-1)} | o^{(t)}, \theta) 
+     P(o^{(t)} | s^{(t)} = q_i, \theta) \\ 
+     = \left( 
+     \sum_{j=1}^N 
+     \underbrace{P(s^{(t - 1)} = q_j, o^{(1)}, \cdots, o^{(t - 1)} | o^{(t)}, \theta)}_{\alpha^{(t-1)}_j}
+     \underbrace{P(s^{(t)} = q_i | s^{(t - 1)} = q_j, o^{(t)}, \theta)}_{a_{ji}} \right)
+     \underbrace{P(o^{(t)} | s^{(t)} = q_i, \theta)}_{b_{i, o^{(t)}}} \\ 
+     = \left( \sum_{j=1}^N \alpha^{(t-1)}_j a_{ji} \right) b_{i, o^{(t)}}     
+ \end{aligned} \tag{4.2}</script><p> 那么到<strong>时刻$T$时</strong>，由边缘概率公式，可得到$P(O | \theta)$</p>
+<script type="math/tex; mode=display">
+ \begin{aligned}
+     P(O | \theta) = 
+     P(o^{(1)}, \cdots, o^{(T)} | \theta) = \\
+     \sum_{i=1}^N P(s^{(t)} = q_i, o^{(1)}, \cdots, o^{(t)} | \theta) = 
+     \sum_{i=1}^N \alpha^{(T)}_i \tag{4.3}
+ \end{aligned}</script></li>
+<li><p>后向算法<br> <strong>定义(后向概率)</strong>：给定马尔科夫模型$\theta$，定义到时刻$t$时状态为$q_i$的<strong>条件下</strong>，观测序列为$(o^{(t + 1)}, \cdots, o^{(T)})$的概率为<strong>后向概率</strong>$\beta^{(t)}_i$，即</p>
+<script type="math/tex; mode=display">\beta^{(t)}_i = P( o^{(t + 1)}, \cdots, o^{(T)} | s^{(t)} = q_i, \theta) \tag{5}</script><p> 在$T$时刻，有</p>
+<script type="math/tex; mode=display">\beta^{(T)}_i = 1, \quad i = 1, 2, \cdots, N \tag{6.1}</script><p> 对$t = T - 1, T - 2, \cdots, 1$，有<strong>递推公式</strong></p>
+<script type="math/tex; mode=display">
+ \begin{aligned}
+     \beta^{(t)}_i = P( o^{(t + 1)}, \cdots, o^{(T)} | s^{(t)} = q_i, \theta) \\
+     = \sum_{j=1}^N P(s^{(t + 1)} = q_j, o^{(t + 1)}, \cdots, o^{(T)} | s^{(t)} = q_i, \theta) \\
+     = \sum_{j=1}^N P(s^{(t + 1)} = q_j | s^{(t)} = q_i, \theta)
+     P(o^{(t + 1)}, \cdots, o^{(T)} | s^{(t + 1)} = q_j, s^{(t)} = q_i, \theta)  \\
+     = \sum_{j=1}^N 
+     \underbrace{P(s^{(t + 1)} = q_j | s^{(t)} = q_i, \theta)}_{a_{ij}}
+     \underbrace{P(o^{(t + 1)} | s^{(t + 1)} = q_j, s^{(t)} = q_i, \theta)}_{b_{j, o^{(t + 1)}}} \\
+     \underbrace{P(o^{(t + 2)}, \cdots, o^{(T)} | s^{(t + 1)} = q_j, s^{(t)} = q_i, o^{(t + 1)}, \theta)}_{\beta^{(t + 1)}_j} \\
+     = \sum_{j=1}^N a_{ij} b_{j, o^{(t + 1)}} \beta^{(t + 1)}_j 
+ \end{aligned} \tag{6.2}</script><p> 观测序列的概率用下式计算</p>
+<script type="math/tex; mode=display">
+ P(O | \theta) = \sum_{i=1}^N \pi_i b_{i, o^{(1)}} \beta^{(1)}_i \tag{6.3}</script></li>
+</ol>
+<p><strong>前向-后向计算可统一写成</strong></p>
+<script type="math/tex; mode=display">
+P(O | \theta) = \sum_{i=1}^N \sum_{j=1}^N \alpha^{(t)}_i a_{ij} b_{j, o^{(t + 1)}} \beta^{(t+1)}_j, \quad t = 1, 2, \cdots, T - 1 \tag{7}</script><script type="math/tex; mode=display">
+\begin{cases}
+    \alpha^{(t)}_i = P(s^{(t)} = q_i, o^{(1)}, \cdots, o^{(t)} | \theta) \\
+    \beta^{(t)}_i = P( o^{(t + 1)}, \cdots, o^{(T)} | s^{(t)} = q_i, \theta)
+\end{cases}</script><blockquote>
+<script type="math/tex; mode=display">\alpha^{(t)}_i \beta^{(t)}_i = P(s^{(t)} = q_i, O | \theta)</script></blockquote>
+<h1 id="学习问题"><a href="#学习问题" class="headerlink" title="学习问题"></a>学习问题</h1><h2 id="监督学习方法"><a href="#监督学习方法" class="headerlink" title="监督学习方法"></a>监督学习方法</h2><p>若训练数据包含若干个<strong>长度$T$相同</strong>的观测序列和对应的状态序列$\{(O_1, S_1), (O_2, S_2), \cdots\}$，那么可以用<strong>极大似然估计</strong>($MLE$)进行模型参数的学习。状态序列中时刻$t$为状态$q_i$转移到$t+1$时刻为$q_j$频数记作$A_{ij}$，时刻$t$为状态$q_i$并产生观测$v_j$的频数记作$B_{ij}$，初始状态$t=1$时状态为$q_i$的频数记作$\Pi_i$，那么各参数估计为</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    \hat{a}_{ij} = \frac{A_{ij}}{\sum_{j=1}^N A_{ij}} \\
+    \hat{b}_{ij} = \frac{B_{ij}}{\sum_{j=1}^M B_{ij}} \\
+    \hat{\pi}_i = \frac{\Pi_i}{\sum_{i=1} \Pi_i}
+\end{cases} \tag{8}</script><blockquote>
+<p>多项分布(nultinomial distribution)</p>
+</blockquote>
+<h2 id="无监督学习方法"><a href="#无监督学习方法" class="headerlink" title="无监督学习方法"></a>无监督学习方法</h2><p>若训练数据包含若干个<strong>长度$T$相同</strong>的观测序列$\{O_1, O_2, \cdots\}$，但无对应状态序列。此时将状态序列数据视作<strong>隐变量</strong>，可以用$EM$算法求解，<strong>即$Baum-Welch$算法</strong>。</p>
+<p>状态序列$S$与观测序列$O$在模型$\theta$下，<strong>联合概率分布</strong>为</p>
+<script type="math/tex; mode=display">P(O, S | \theta) = P(S | \theta) P(O | S, \theta) \tag{9.1}</script><p>其中</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    P(S | \theta) = P(s^{(1)} | \theta) P(s^{(2)} | s^{(1)}, \theta) \cdots P(s^{(T)} | s^{(1)}, s^{(2)}, \cdots, s^{(T - 1)}, \theta) = 
+    \pi_{s^{(1)}} a_{s^{(1)}s^{(2)}} \cdots a_{s^{(T - 1)}s^{(T)}} \\
+    P(O | S, \theta) = \sum _{t=1}^T P(o^{(t)} | s^{(t)}, \theta) = b_{s^{(1)}o^{(1)}} \cdots b_{s^{(T)}o^{(T)}}(观测独立性)
+\end{cases} \tag{9.2}</script><p>那么</p>
+<script type="math/tex; mode=display">P(O, S | \theta) = \pi_{s^{(1)}} a_{s^{(1)}s^{(2)}} b_{s^{(1)}o^{(1)}} \cdots a_{s^{(T - 1)}s^{(T)}} b_{s^{(T)}o^{(T)}} \tag{9}</script><p>确定$EM$算法的$E-step$，$Q$函数为</p>
+<script type="math/tex; mode=display">Q(\theta | \overline{\theta}) = \sum_S P(O, S | \overline{\theta}) \log P(O, S | \theta) \tag{10.1}</script><p>那么$(9)$代入后得到</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    Q(\theta | \overline{\theta}) = 
+    \sum_S P(O, S | \overline{\theta}) \log (\pi_{s^{(1)}} a_{s^{(1)}s^{(2)}} b_{s^{(1)}o^{(1)}} \cdots a_{s^{(T - 1)}s^{(T)}} b_{s^{(T)}o^{(T)}}) \\
+    = \sum_S P(O, S | \overline{\theta}) \log \pi_{s^{(1)}} + 
+    \sum_S P(O, S | \overline{\theta}) \log \prod_{t=1}^{T-1} a_{s^{(t)}s^{(t+1)}} + 
+    \sum_S P(O, S | \overline{\theta}) \log \prod_{t=1}^{T} b_{s^{(t)}o^{(t)}} \\
+    = \sum_{i=1}^N P(O, s^{(1)} = q_i | \theta) \log \pi_i + \\
+    \sum_{i=1}^N \sum_{j=1}^N \sum_{t=1}^{T-1} P(O, s^{(t)} = q_i, s^{(t+1)} = q_j | \overline{\theta}) \log a_{ij} + \\
+    \sum_{i=1}^N \sum_{t=1}^{T} P(O, s^{(t)} = q_i | \theta) \log b_{i,o^{(t)}}
+\end{aligned} \tag{10.2}</script><p>那么相应优化问题为</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \theta = \argmax_{\theta} Q(\theta | \overline{\theta}) \\
+    s.t. \begin{cases}
+        \sum_{i=1}^N \pi_i = 1 \\
+        \sum_{j=1}^N a_{ij} = 1 \\
+        \sum_{j=1}^M b_{ij} = 1 \\
+    \end{cases}
+\end{aligned} \tag{10.3}</script><p>并记</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    \gamma^{(t)}_i 
+    = P(S^{(t)} = q_i | O, \theta) 
+    = \frac{P(S^{(t)} = q_i, O | \theta)}{P(O | \theta)} 
+    = \frac{\alpha^{(t)}_i \beta^{(t)}_i}{\sum_{j=1}^N \alpha^{(t)}_j \beta^{(t)}_j} \\
+    \xi^{(t)}_{ij} 
+    = P(S^{(t)} = q_i, S^{(t+1)} = q_j | O, \theta)
+    = \frac{P(S^{(t)} = q_i, S^{(t+1)} = q_j, O |  \theta)}{P(O | \theta)} 
+    = \frac{\alpha^{(t)}_i a_{ij} b_{j,o^{(t+1)}} \beta^{(t+1)}_j}{\sum_{i=1}^N \sum_{j=1}^N \alpha^{(t)}_i a_{ij} b_{j,o^{(t+1)}} \beta^{(t+1)}_j}
+\end{cases} \tag{10.4}</script><p>用拉格朗日乘数法求解$(10.3)$，并将$(10.4)$代入，得</p>
+<script type="math/tex; mode=display">
+\Rightarrow
+\begin{cases}
+    a_{ij} = \frac{\sum_{t=1}^{T-1} \xi^{(t)}_{ij}}{\sum_{t=1}^{T-1} \gamma^{(t)}_i} \\
+    b_{ij} = \frac{\sum_{t=1, o^{(t)}=v_j}^T \gamma^{(t)}_i}{\sum_{t=1}^T \gamma^{(t)}_i} \\
+    \pi_i = \gamma^{(1)}_i
+\end{cases} \tag{10}</script><p>迭代求解参数$(A, B, \pi)$得到模型。</p>
+<h1 id="预测问题"><a href="#预测问题" class="headerlink" title="预测问题"></a>预测问题</h1><h2 id="贪婪策略"><a href="#贪婪策略" class="headerlink" title="贪婪策略"></a>贪婪策略</h2><p>在每个时刻$t$选择在该时刻最有可能出现的状态$s^{(t)<em>}$，从而得到状态序列$S^{</em>}$作为预测结果</p>
+<script type="math/tex; mode=display">S^{*} = (s^{(1)*}, \cdots, s^{(T)*}) \tag{11.1}</script><p>其中</p>
+<script type="math/tex; mode=display">s^{(t)*} = \argmax_{1 \leq i \leq N} \gamma^{(t)}_i \tag{11.2}</script><h2 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h2><p>用动态规划，在状态概率间求解概率最大路径，即<strong>维特比算法</strong>(Viterbi algorithm)，选择状态路径点$s^{(t)} \in Q$使得下式最大</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    P(s^{(1)}, \cdots, s^{(t)}, o^{(t)} | \theta)
+\end{aligned}</script><h1 id="例"><a href="#例" class="headerlink" title="例"></a>例</h1><p>假设有$4$个盒子，每个盒子装有红白两色<strong>比例一定</strong>的球若干，在某盒子取球后，以<strong>一定几率</strong>停留在该盒子或转移到另一盒子，转移概率未知，进行$10$次取球，在哪个盒子取球未知，球的颜色序列如下</p>
+<script type="math/tex; mode=display">(红，红，白，白，红，白，红，红，白，红)</script><ol>
+<li>用已知观测数据学习马尔可夫模型；</li>
+<li>用求得得马尔可夫模型计算出现该观测序列的概率$P(O | \theta)$；</li>
+<li>求取最优的状态转移过程。</li>
+</ol>
+<p><strong>解析</strong>：该例中可能的状态集合为$Q = \{q_1, q_2, q_3, q_4\}$，$q_i$表示在第$i$个盒子进行取球；观测集合为$V = \{v_1, v_2\}$，表示红、白二色。那么相应的有状态转移概率矩阵$A_{4 \times 4}$、观测概率矩阵$B_{4 \times 2}$、初始状态概率向量$\pi_{4 \times 1}$。由于取球的盒子序列未知，即状态序列未知，用$EM$算法迭代求解。</p>
 
       
     </div>
@@ -612,8 +716,8 @@ D_{KL} (p||q) \geq 0</script></blockquote>
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/19/Non-parameter-Estimation/" rel="next" title="Non-parameter Estimation">
-                <i class="fa fa-chevron-left"></i> Non-parameter Estimation
+              <a href="/2018/11/12/EM-GMM/" rel="next" title="EM & GMM">
+                <i class="fa fa-chevron-left"></i> EM & GMM
               </a>
             
           </div>
@@ -622,8 +726,8 @@ D_{KL} (p||q) \geq 0</script></blockquote>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/11/21/Metrics/" rel="prev" title="Metrics">
-                Metrics <i class="fa fa-chevron-right"></i>
+              <a href="/2018/11/16/Clustering/" rel="prev" title="Clustering">
+                Clustering <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -837,7 +941,7 @@ D_{KL} (p||q) \geq 0</script></blockquote>
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#信息量"><span class="nav-number">1.</span> <span class="nav-text">信息量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#信息熵"><span class="nav-number">2.</span> <span class="nav-text">信息熵</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#联合熵"><span class="nav-number">3.</span> <span class="nav-text">联合熵</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#交叉熵"><span class="nav-number">4.</span> <span class="nav-text">交叉熵</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#条件熵"><span class="nav-number">5.</span> <span class="nav-text">条件熵</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#相对熵"><span class="nav-number">6.</span> <span class="nav-text">相对熵</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基本概念"><span class="nav-number">2.</span> <span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#定义"><span class="nav-number">2.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本假设"><span class="nav-number">2.2.</span> <span class="nav-text">基本假设</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本问题"><span class="nav-number">2.3.</span> <span class="nav-text">基本问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#概率计算问题"><span class="nav-number">3.</span> <span class="nav-text">概率计算问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#直接计算法"><span class="nav-number">3.1.</span> <span class="nav-text">直接计算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#前向-后向算法"><span class="nav-number">3.2.</span> <span class="nav-text">前向-后向算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#学习问题"><span class="nav-number">4.</span> <span class="nav-text">学习问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#监督学习方法"><span class="nav-number">4.1.</span> <span class="nav-text">监督学习方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#无监督学习方法"><span class="nav-number">4.2.</span> <span class="nav-text">无监督学习方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#预测问题"><span class="nav-number">5.</span> <span class="nav-text">预测问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#贪婪策略"><span class="nav-number">5.1.</span> <span class="nav-text">贪婪策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态规划"><span class="nav-number">5.2.</span> <span class="nav-text">动态规划</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#例"><span class="nav-number">6.</span> <span class="nav-text">例</span></a></li></ol></div>
             
 
           </div>
