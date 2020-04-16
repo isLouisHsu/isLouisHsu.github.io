@@ -1,0 +1,1648 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言马尔科夫链蒙特卡罗法(Markov Chain Monte Carlo, MCMC)是以马尔可夫链为概率模型的蒙特卡罗法。通过构建马尔可夫链，基于该马尔可夫链进行随机游走，产生样本序列，并使用这些样本进行近似数值计算。 蒙特卡罗法蒙特卡罗法可应用在随机抽样、数学期望估计、定积分计算等方面。 随机抽样蒙特卡罗法需要解决的问题是，假设概率分布定义已知，通过抽样获得概率分布的随机样本，用这些随机样本">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Markov Chain Monte Carlo">
+<meta property="og:url" content="http://yoursite.com/2020/04/15/Markov-Chain-Monte-Carlo/index.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="前言马尔科夫链蒙特卡罗法(Markov Chain Monte Carlo, MCMC)是以马尔可夫链为概率模型的蒙特卡罗法。通过构建马尔可夫链，基于该马尔可夫链进行随机游走，产生样本序列，并使用这些样本进行近似数值计算。 蒙特卡罗法蒙特卡罗法可应用在随机抽样、数学期望估计、定积分计算等方面。 随机抽样蒙特卡罗法需要解决的问题是，假设概率分布定义已知，通过抽样获得概率分布的随机样本，用这些随机样本">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2020/04/15/Markov-Chain-Monte-Carlo/egGibbs.png">
+<meta property="og:updated_time" content="2020-04-16T07:21:58.479Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Markov Chain Monte Carlo">
+<meta name="twitter:description" content="前言马尔科夫链蒙特卡罗法(Markov Chain Monte Carlo, MCMC)是以马尔可夫链为概率模型的蒙特卡罗法。通过构建马尔可夫链，基于该马尔可夫链进行随机游走，产生样本序列，并使用这些样本进行近似数值计算。 蒙特卡罗法蒙特卡罗法可应用在随机抽样、数学期望估计、定积分计算等方面。 随机抽样蒙特卡罗法需要解决的问题是，假设概率分布定义已知，通过抽样获得概率分布的随机样本，用这些随机样本">
+<meta name="twitter:image" content="http://yoursite.com/2020/04/15/Markov-Chain-Monte-Carlo/egGibbs.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/04/15/Markov-Chain-Monte-Carlo/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Markov Chain Monte Carlo | LOUIS' BLOG</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LOUIS' BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">To be better</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-guestbook">
+    <a href="/guestbook" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-guest"></i> <br>留言</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/15/Markov-Chain-Monte-Carlo/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="技术博客？">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Markov Chain Monte Carlo
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-04-15 21:26:21" itemprop="dateCreated datePublished" datetime="2020-04-15T21:26:21+08:00">2020-04-15</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-04-16 15:21:58" itemprop="dateModified" datetime="2020-04-16T15:21:58+08:00">2020-04-16</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>马尔科夫链蒙特卡罗法(Markov Chain Monte Carlo, MCMC)是以马尔可夫链为概率模型的蒙特卡罗法。通过构建马尔可夫链，基于该马尔可夫链进行随机游走，产生样本序列，并使用这些样本进行<strong>近似数值计算</strong>。</p>
+<h1 id="蒙特卡罗法"><a href="#蒙特卡罗法" class="headerlink" title="蒙特卡罗法"></a>蒙特卡罗法</h1><p>蒙特卡罗法可应用在<strong>随机抽样、数学期望估计、定积分计算</strong>等方面。</p>
+<h2 id="随机抽样"><a href="#随机抽样" class="headerlink" title="随机抽样"></a>随机抽样</h2><p>蒙特卡罗法<strong>需要解决的问题</strong>是，假设概率分布定义已知，通过抽样获得概率分布的随机样本，用这些随机样本对概率分布特征进行分析。核心是<strong>随机抽样</strong>(random sampling)，例如</p>
+<ul>
+<li>从样本得到经验分布，从而估计总体分布；</li>
+<li>从样本计算样本均值，从而估计总体期望；</li>
+<li>……</li>
+</ul>
+<p>蒙特卡罗法有：</p>
+<ul>
+<li>直接抽样法；</li>
+<li>接受-拒绝抽样法；</li>
+<li>重要性抽样法；</li>
+<li>……</li>
+</ul>
+<p><strong>接受-拒绝抽样法</strong>基本思想如下：假设$p(x)$不可以直接抽样，寻找<strong>建议分布</strong>(proposal distribution)$q(x)$，使下式成立</p>
+<script type="math/tex; mode=display">c \cdot q(x) \geq p(x), \quad c > 0 \tag{1.1}</script><p>按照$q(x)$进行抽样，假设得到结果$x$，设置阈值$t \in [0, 1]$，在下式成立时接受该抽样</p>
+<script type="math/tex; mode=display">\frac{p(x)}{c \cdot q(x)} > t \tag{1.2}</script><h2 id="数学期望估计"><a href="#数学期望估计" class="headerlink" title="数学期望估计"></a>数学期望估计</h2><p>假设有随机变量$X \in \mathcal{X}$，概率密度为$p(x)$，定义$Y = f(X)$为在定义域$\mathcal{X}$上的函数，求$Y$的数学期望$EY$。</p>
+<p>回想一下学习概率论时这种问题的求解方法，通过代换$Y$的分布函数$F_Y(y)$，利用映射$Y = f(X)$将其转换到$X$的分布函数$F_X(x)$中进行求解，即</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    F_Y(y) = P(Y \leq y) = P\{f(X) \leq y\} \\
+    \Rightarrow P\{X \leq f^{-1}(y)\} = F_X(f^{-1}(y)) \tag{2.1}
+\end{aligned}</script><p>其中</p>
+<script type="math/tex; mode=display">F_X(x) = \int p(x) dx \tag{2.2}</script><p>$f^{-1}(y)$已知，求取$F_Y(y)$后，有</p>
+<script type="math/tex; mode=display">p(y) = \frac{d}{dy} F_Y(y) \tag{2.3}</script><script type="math/tex; mode=display">EY = \int y p(y) dy \tag{2.4}</script><p>在计算$(2.2)$时，若$p(x)$是非标准的，则难以求取积分，需通过数值方法求解近似。蒙特卡罗法可用于求取<strong>数学期望估计</strong>(estimation of mathematical expectation)：按照概率分布$p(x)$<strong>独立同分布</strong>地在定义域$\mathcal{X}$多次抽取，得到样本集$\{ x^{(1)}, x^{(2)}, \cdots, x^{(n)} \}$，由下式<strong>计算样本均值作为期望的估计</strong></p>
+<script type="math/tex; mode=display">EY \approx \frac{1}{n} \sum_{i = 1}^{n} f(x^{(i)}) \tag{3}</script><h2 id="积分计算"><a href="#积分计算" class="headerlink" title="积分计算"></a>积分计算</h2><p>假设有函数$f(x)$，需求取其在区间$\mathcal{X}$上的定积分</p>
+<script type="math/tex; mode=display">I = \int_{\mathcal{X}} f(x) dx \tag{4.1}</script><p>可将$f(x)$分解为一个函数$g(x)$与某概率密度$p(x)$的乘积</p>
+<script type="math/tex; mode=display">f(x) = g(x) \cdot p(x) \tag{4.2}</script><blockquote>
+<p>实际上，可指定任意概率密度函数$p(x)$得到$g(x)$，即<strong>任意定积分都可以表示为某函数的数学期望的形式</strong></p>
+<script type="math/tex; mode=display">g(x) = \frac{f(x)}{p(x)}</script></blockquote>
+<p>那么用计算期望的方法，有</p>
+<script type="math/tex; mode=display">I = \int_{\mathcal{X}} f(x) dx =  \int_{\mathcal{X}} g(x) \cdot p(x) dx = E[g(x)] \approx \rm{mean}(f(x^{(i)})) \tag{4.3}</script><h1 id="马尔可夫链"><a href="#马尔可夫链" class="headerlink" title="马尔可夫链"></a>马尔可夫链</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>设一随机变量$X$(<strong>离散或连续均可</strong>)，其取值集合称为<strong>状态空间</strong>$\mathcal{S}$，经过$T$次采样得到<strong>时间序列</strong>如下，该序列构成<strong>随机过程</strong>(stochastic process)</p>
+<script type="math/tex; mode=display">X = \{X^{(1)}, X^{(2)}, \cdots, X^{(t)}, \cdots, X^{(T)}\} \tag{5.1}</script><p>假设在时刻$0$，$X^{(0)}$服从<strong>初始状态分布</strong></p>
+<script type="math/tex; mode=display">P(X^{(0)}) = \pi(0) \tag{5.2}</script><p><strong>马尔可夫性</strong>：时刻$t(t \geq 1)$采样$X^{(t)}$只依赖于前一时刻$X^{(t - 1)}$，即</p>
+<script type="math/tex; mode=display">P(X^{(t)} | X^{(0)}, X^{(1)}, \cdots, X^{(t - 1)}) = P(X^{(t)} | X^{(t - 1)}) \tag{5.3}</script><p>具有马尔可夫性的随机序列称为<strong>马尔可夫链</strong>(Markov chain)，或<strong>马尔可夫过程</strong>(Markov process)，条件概率分布$P(X^{(t)} | X^{(t - 1)})$称作<strong>马尔可夫链的转移概率分布</strong>。拓展为$n$阶马尔可夫链，满足$n$阶马尔可夫性，则有</p>
+<script type="math/tex; mode=display">P(X^{(t)} | X^{(0)}X^{(1)} \cdots X^{(t-2)}X^{(t-1)}) = P(X^{(t)} | X^{(t-n)}X^{(t-n-1)} \cdots X^{(t-2)}X^{(t-1)}) \tag{5.4}</script><p>若马尔可夫链满足$P(X^{(t)} | X^{(t - 1)})$与时间$t$无关(常数)，称该马尔可夫链是<strong>时间齐次的</strong>(time homogeneous Markov chain)，即</p>
+<script type="math/tex; mode=display">P(X^{(t)} | X^{(t - 1)}) = P(X^{(t + s)} | X^{(t - 1 + s)}), \quad t = 1, 2, \cdots, \quad s = 1, 2, \cdots \tag{5.5}</script><blockquote>
+<p>关于马尔可夫模型的概念的可参考<a href="https://louishsu.xyz/2018/11/13/Hidden-Markov-Model/" target="_blank" rel="noopener">隐马尔可夫模型</a>。</p>
+</blockquote>
+<h2 id="离散与连续描述"><a href="#离散与连续描述" class="headerlink" title="离散与连续描述"></a>离散与连续描述</h2><h3 id="离散状态"><a href="#离散状态" class="headerlink" title="离散状态"></a>离散状态</h3><p><strong>离散状态的马尔可夫链，其概率转移分布可以用矩阵表示</strong>。记时刻$(t-1)$处于状态$s_j$转移到$t$时刻处于状态$s_i$的转移概率为</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    p_{ij} = P(X^{(t)} = s_i | X^{(t - 1)} = s_j), \quad i, j = 1, 2, \cdots \\
+    s.t. \quad p_{ij} \geq 0, \quad \sum_i p_{ij} = 1
+\end{aligned} \tag{6.1}</script><p>记作<strong>转移概率矩阵</strong>$P$，注意列和为$1$(转移到状态$s_i$概率和为$1$)</p>
+<script type="math/tex; mode=display">
+P_{|\mathcal{S}| \times |\mathcal{S}|} = 
+\begin{bmatrix}
+    p_{11} & p_{12} & \cdots \\
+    p_{21} & p_{22} & \cdots \\
+    \vdots & \vdots & \ddots \\
+\end{bmatrix} \tag{6.2}</script><p>在时刻$t$时，有$X^{(t)}$的<strong>状态分布</strong>$\pi(t)$，其中元素$\pi_i(t)$表示$X^{(t)}$位于状态$s_i$的概率$P(X^{(t)} = s_i)$</p>
+<script type="math/tex; mode=display">
+\pi(t) = \begin{bmatrix}
+    \pi_1(t) \\ \pi_2(t) \\ \vdots
+\end{bmatrix} \tag{7.1}</script><p>特别地，通常初始分布$\pi(0)$只有一个元素为$1$，其余都是$0$，表示马尔可夫链从某一具体状态开始。</p>
+<script type="math/tex; mode=display">
+\pi(0) = \begin{bmatrix}
+    \vdots \\ 1 \\ \vdots
+\end{bmatrix} \tag{7.2}</script><p>那么有递推公式</p>
+<script type="math/tex; mode=display">\pi(t) = P \cdot \pi(t - 1) \tag{8.1}</script><p>那么有$t$步转移概率矩阵$P^t$，使得下式成立</p>
+<script type="math/tex; mode=display">\pi(t) = P^t \cdot \pi(0) \tag{8.2}</script><p>若存在某分布$\pi$使下式成立，则称$\pi$为马尔可夫链的<strong>平稳分布</strong></p>
+<script type="math/tex; mode=display">\pi = P \cdot \pi \tag{8.3}</script><p>注意，当离散状态马尔可夫链有无穷个状态时，可能不存在平稳分布。</p>
+<h3 id="连续状态"><a href="#连续状态" class="headerlink" title="连续状态"></a>连续状态</h3><p><strong>连续状态的马尔可夫链，其概率转移分布可以用概率转移核(transition kernel)表示</strong>。设$\mathcal{S}$为连续状态空间，对任意$x \in \mathcal{S}, A \in \mathcal{S}$，从$x$转移到$A$的转移概率$P(X^{(t)} = A | X^{(t - 1)} = x)$，称为转移核</p>
+<script type="math/tex; mode=display">P(x, A) = P(X^{(t)} = A | X^{(t - 1)} = x) = \int_A p(x, y) dy \tag{9.1}</script><p>其中$p(x, y)$为概率密度函数(有时也被称为转移核)，且满足</p>
+<script type="math/tex; mode=display">
+p(x, y) \geq 0, \quad P(x, \mathcal{S}) = \int_{\mathcal{S}} p(x, y) dy = 1 \tag{9.2}</script><p>同样的，连续状态也存在平稳分布描述。若$\pi(x)$满足以下条件，称$\pi(x)$为该马尔可夫链的平稳分布</p>
+<script type="math/tex; mode=display">\pi(y) = \int p(x, y) \pi(x) dx, \quad \forall y \in \mathcal{S} \tag{10.1}</script><h2 id="性质"><a href="#性质" class="headerlink" title="性质"></a>性质</h2><p>以下均采用离散状态马尔可夫链进行性质描述，可推广至连续状态。</p>
+<h3 id="可约-不可约"><a href="#可约-不可约" class="headerlink" title="可约/不可约"></a>可约/不可约</h3><p>对于任意状态$s_i, s_j \in \mathcal{S}$，时刻$0$从$s_j$出发，时刻$t(t&gt;0)$到达状态$s_i$的概率$P(X^{(t)} = s_j | X^{(0)} = s_i) &gt; 0$，那么称此马尔可夫链是<strong>不可约的</strong>(irreducible)，否则称<strong>可约的</strong>(reducible)。</p>
+<blockquote>
+<p>不可约马尔可夫链，概率值恒不为$0$，从任意状态出发，<strong>充分长时间</strong>后可到达任意状态。</p>
+</blockquote>
+<p>例如以下转移概率矩阵对应的马尔可夫链，存在平稳分布$\pi = \begin{bmatrix}0 &amp; 0 &amp; 1\end{bmatrix}^T$，循环停留在状态$3$，故可约</p>
+<script type="math/tex; mode=display">
+P = \begin{bmatrix}
+    0 & 1/2 & 0 \\
+    1 & 0 & 0 \\
+    0 & 1/2 & 1 \\
+\end{bmatrix} \tag{11}</script><h3 id="周期-非周期"><a href="#周期-非周期" class="headerlink" title="周期/非周期"></a>周期/非周期</h3><p>时刻$0$从任意状态$s \in \mathcal{S}$出发，返回状态$s$的时刻$t$构成集合$\{t | P(X^{(t)} = s | X^{(0)} = s) &gt; 0\}$，其元素的最大公约数为$1$，则称该马尔可夫链是<strong>非周期的</strong>(aperiodic)，否则是<strong>周期的</strong>(periodic)。</p>
+<blockquote>
+<p>非周期马尔可夫链，不存在状态$s$，使从该状态出发回到该状态经历时间呈现一定的周期性。</p>
+</blockquote>
+<p>例如以下转移概率矩阵对应的马尔可夫链，存在平稳分布$\pi = \begin{bmatrix}1/3 &amp; 1/3 &amp; 1/3\end{bmatrix}^T$，从任意状态出发返回该状态的时刻为$\{3, 6, 9, \cdots\}$，呈现周期性</p>
+<script type="math/tex; mode=display">
+P = \begin{bmatrix}
+    0 & 0 & 1 \\
+    1 & 0 & 0 \\
+    0 & 1 & 0 \\
+\end{bmatrix} \tag{12}</script><h3 id="正常返-非正常返"><a href="#正常返-非正常返" class="headerlink" title="正常返/非正常返"></a>正常返/非正常返</h3><p>对于任意状态$s_i, s_j \in \mathcal{S}$，时刻$0$从$s_j$出发，在时刻$t$<strong>首次</strong>转移到状态$s_i$的概率记作$p_{ij}^t$，若对<strong>所有状态</strong>都满足$\lim_{t \rightarrow \infty} p_{ij}^t &gt; 0$，则称该马尔可夫链是<strong>正常返的</strong>(recurrent)。</p>
+<blockquote>
+<p>正常返马尔可夫链，从某一状态出发，<strong>时间趋于无穷时</strong>，到达其他任意状态的概率不为$0$。</p>
+</blockquote>
+<hr>
+<p>根据上述三条性质，可得以下两条定理</p>
+<ol>
+<li><strong>不可约</strong>、<strong>非周期</strong>的<strong>有限状态</strong>马尔可夫链，存在唯一平稳分布；</li>
+<li><strong>不可约</strong>、<strong>非周期</strong>、<strong>正常返</strong>的马尔可夫链，存在唯一平稳分布；</li>
+</ol>
+<hr>
+<h3 id="可逆-不可逆"><a href="#可逆-不可逆" class="headerlink" title="可逆/不可逆"></a>可逆/不可逆</h3><p>若某马尔可夫链$X$存在状态分布$\pi$，对于任意状态$s_i, s_j \in \mathcal{S}$，在任意时刻满足下式，则称此马尔可夫链是<strong>可逆的</strong>(reversible)</p>
+<script type="math/tex; mode=display">P(X^{(t)} = s_i | X^{(t-1)} = s_j) \cdot \pi_j = P(X^{(t-1)} = s_j | X^{(t)} = s_i) \cdot \pi_i, \quad i, j = 1, 2, \cdots \tag{12.1}</script><p>也即</p>
+<script type="math/tex; mode=display">p_{ji} \cdot \pi_j = p_{ij} \cdot \pi_i \tag{12.2}</script><p>$(13.2)$也被称作<strong>细致平衡方程</strong>(detailed balance equation)，并且<strong>满足细致平衡方程的状态分布$\pi$就是该马尔可夫链的平稳分布</strong>。也说明可逆马尔可夫链一定存在唯一平稳分布(充分条件)。</p>
+<p>证明：</p>
+<script type="math/tex; mode=display">(P \cdot \pi)_i = \sum_j p_{ij} \cdot \pi_j = \sum_j p_{ji} \cdot \pi_i = \pi_i \Rightarrow P \cdot \pi = \pi \tag{12.3}</script><blockquote>
+<p>以可逆马尔可夫链的平稳分布作为初始分布，进行随机状态转移，那么在过去或未来任意时刻的状态分布都是该平稳分布。</p>
+</blockquote>
+<h3 id="遍历定理"><a href="#遍历定理" class="headerlink" title="遍历定理"></a>遍历定理</h3><p>设有一<strong>不可约、非周期且正常返</strong>的马尔可夫链$X$，有<strong>唯一平稳分布</strong>$\pi$，那么<strong>转移概率的极限分布</strong>是马尔可夫链的平稳分布</p>
+<script type="math/tex; mode=display">\lim_{t \rightarrow \infty} P(X^{(t)} = s_i | X^{(0)} = s_j) = \pi_i > 0, \quad i, j = 1, 2, \cdots \tag{13.1}</script><blockquote>
+<p>该马尔可夫链在时间趋于无穷时，其状态分布趋向于平稳分布；<strong>不可约、非周期且正常返</strong>保证时间趋于无穷时，达到任意状态的概率不为$0$。</p>
+</blockquote>
+<p>若$f(X)$是定义在状态空间$\mathcal{S}$上的函数，且$E_{\pi}[f(x)] &lt; \infty$，那么依据<strong>大数定理</strong>，有</p>
+<script type="math/tex; mode=display">P\{\hat{f}^{(t)} \rightarrow E_{\pi}[f(x)]\} = 1 \tag{13.2}</script><blockquote>
+<p>在该马尔可夫链下，随机变量的函数的样本均值以概率$1$收敛于该函数的数学期望。</p>
+</blockquote>
+<p>其中$\hat{f}^{(t)}$为样本均值，$E_{\pi}[f(x)]$为待估期望，即</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    \hat{f}^{(t)} = \frac{1}{t} \sum_{s=1}^t f(x^{(s)}) \\
+    E_{\pi}[f(x)] = \sum_i f(s_i) \pi_i
+\end{cases} \tag{13.3}</script><blockquote>
+<p>该马尔可夫链可以用样本均值作为<strong>时间均值</strong>的估计，而数学期望是<strong>空间均值</strong>。</p>
+</blockquote>
+<p>可取<strong>足够大</strong>的整数$m$，认为满足要求的马尔可夫链经过$m$次迭代后，其状态分布即平稳分布，然后进行$n$次采样，<strong>计算样本均值作为期望的估计</strong></p>
+<script type="math/tex; mode=display">\hat{E}f = \frac{1}{n} \sum_{i=1}^n f(x^{(i)}) \tag{13.4}</script><h1 id="马尔可夫链蒙特卡罗法"><a href="#马尔可夫链蒙特卡罗法" class="headerlink" title="马尔可夫链蒙特卡罗法"></a>马尔可夫链蒙特卡罗法</h1><p>MCMC是蒙特卡罗法的一种，适用于<strong>随机变量是多元的、密度函数是非标准的、<u>随机变量各分量不独立</u>等</strong>情况。</p>
+<p>再次描述<strong>待求解问题</strong>：假设有多元随机变量$X \in \mathcal{X}$，概率密度为$p(x)$，定义$Y = f(X)$为在定义域$\mathcal{X}$上的函数，求$Y$的数学期望$EY$。</p>
+<p><strong>用MCMC解决该问题的方法</strong>是：在随机变量$X$的状态空间$\mathcal{S}$上定义满足<a href="#%e9%81%8d%e5%8e%86%e5%ae%9a%e7%90%86">遍历定理</a>要求(<strong>不可约、非周期、正常返的</strong>)的马尔可夫链$X$，<strong>使其平稳分布为抽样的目标分布</strong>。<strong>时间趋于无穷时</strong>，样本分布趋近平稳分布，<strong>根据<a href="#%e9%81%8d%e5%8e%86%e5%ae%9a%e7%90%86">遍历定理</a>可求解数学期望</strong>。</p>
+<blockquote>
+<p><strong>注意</strong>：马尔可夫链蒙特卡罗法中得到的样本序列，相邻的样本点是相关的，因此在需要独立样本时，可以在样本序列中再次抽样(如每隔一段时间抽样)，将子样本集作为独立样本集合。</p>
+</blockquote>
+<p>那么现在的<strong>关键问题</strong>是如何构建具体的马尔可夫链，即<strong>确定转移概率矩阵或转移核函数</strong>。可通过定义特殊的转移概率矩阵或转移核函数保证遍历定理成立。常用方法有<strong>Metropolis-Hastings算法、吉布斯抽样</strong>。</p>
+<h2 id="Metropolis-Hastings算法"><a href="#Metropolis-Hastings算法" class="headerlink" title="Metropolis-Hastings算法"></a>Metropolis-Hastings算法</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>假设要抽样的概率分布为$p(x)$，MH算法采用转移核为$p(x, x’)$的马尔可夫链</p>
+<script type="math/tex; mode=display">p(x, x') = q(x, x') \cdot \alpha(x, x') \tag{14.1}</script><p>其中</p>
+<ul>
+<li>$q(x, x’)$：称<strong>建议分布</strong>(proposal distribution)，是另一个马尔可夫链的转移核，且<strong>不可约</strong>(概率值恒不为$0$)，同时<strong>易采样</strong>；</li>
+<li>$\alpha(x, x’)$：称<strong>接受分布</strong>(acceptance distribution)，定义为<script type="math/tex; mode=display">
+  \alpha(x, x') = \min\left\{1, 
+      \frac{p(x') \cdot q(x', x)} {p(x) \cdot q(x, x')}
+  \right\} \tag{14.2}</script></li>
+</ul>
+<blockquote>
+<p><strong>定理</strong>：由$(14.1 \sim 14.2)$构建的马尔可夫链是可逆的，且$p(x)$是其平稳分布<br><strong>证明</strong>：<br>由$(12.2)$可证得可逆</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    p(x) \cdot p(x, x') =  
+    p(x) \cdot q(x, x') 
+    \min\left\{1, \frac{p(x') \cdot q(x', x)} {p(x) \cdot q(x, x')} \right\} = \\
+    \min\left\{p(x) \cdot q(x, x'), p(x') \cdot q(x', x) \right\} = \\
+    p(x') \cdot q(x', x)
+    \min\left\{\frac{p(x) \cdot q(x, x')} {p(x') \cdot q(x', x)}, 1\right\} = 
+    p(x') \cdot p(x', x)
+\end{aligned} 
+\Rightarrow 可逆</script><p>那么由$(10.1)$，$p(x)$为平稳分布</p>
+<script type="math/tex; mode=display">
+\int p(x) \cdot p(x, x') dx = \int p(x') \cdot p(x', x) dx = p(x') \int p(x', x) dx = p(x')</script></blockquote>
+<p>如果在时刻$(t-1)$处于状态$x$，先按建议分布$q(x, x’)$产生候选$x’$，按接受分布$\alpha(x, x’)$抽样，<strong>以概率$\alpha(x, x’)$接受$x’$，否则拒绝，时刻$t$仍停留在$x$</strong>。即在区间$(0, 1)$上的均匀分布中抽取随机数$u$，当$u \leq \alpha(x, x’)$时接受。</p>
+<h3 id="建议分布的选择及接受分布的确定"><a href="#建议分布的选择及接受分布的确定" class="headerlink" title="建议分布的选择及接受分布的确定"></a>建议分布的选择及接受分布的确定</h3><p>根据$(14.1 \sim 2)$，在选择建议分布$q(x, x’)$后，$\alpha(x, x’)$也随之确定</p>
+<script type="math/tex; mode=display">p(x, x') = q(x, x') \cdot \alpha(x, x') \tag{14.1}</script><script type="math/tex; mode=display">
+\alpha(x, x') = \min\left\{1, 
+    \frac{p(x') \cdot q(x', x)} {p(x) \cdot q(x, x')}
+\right\} \tag{14.2}</script><p>已证明以上两式构建的马尔可夫链是可逆的，存在唯一平稳分布$\pi = p(x)$。只需通过选择一个<strong>不可约、易采样</strong>的分布作为建议分布，有如下两种选择：</p>
+<ol>
+<li><p><strong>Metropolis-Hastings选择</strong>：假设分布是对称的，即对任意$x, x’$，有</p>
+<script type="math/tex; mode=display">
+ \begin{aligned}
+     q(x, x') = q(x', x) \\
+     \Rightarrow 
+     \alpha(x, x') = \min\left\{1, 
+         \frac{p(x')} {p(x)}
+     \right\}
+ \end{aligned} \tag{15.1}</script><p> 特点是当$x’$与$x$接近时，$q(x, x’)$概率高，即状态转移在附近点的可能性更大。有以下<strong>两个特例</strong>：</p>
+<ul>
+<li>$q(x, x’) = q(x’ | x)$，即条件概率分布，定义为均值为$x$，协方差矩阵是常数矩阵的多元正态分布；</li>
+<li>$q(x, x’) = q(|x, x’|)$，称<strong>随机游走Metropolis算法</strong>，例如<script type="math/tex; mode=display">q(x, x') \propto \exp(- \frac{(x' - x)^2}{2}) \tag{15.2}</script></li>
+</ul>
+</li>
+<li><p><strong>独立抽样</strong>：假设$q(x, x’)$与当前状态$x$无关，即</p>
+<script type="math/tex; mode=display">
+ \begin{aligned}
+     q(x, x') = q(x') \\
+     \Rightarrow 
+     \alpha(x, x') = \min\left\{1, 
+         \frac{p(x') / q(x')} {p(x) / q(x)}
+     \right\}
+ \end{aligned} \tag{15.3}</script><p> 独立抽样实现简单，但收敛速度慢，通常选择接近目标分布$p(x)$的分布作为建议分布。</p>
+</li>
+</ol>
+<h2 id="吉布斯抽样"><a href="#吉布斯抽样" class="headerlink" title="吉布斯抽样"></a>吉布斯抽样</h2><p>吉布斯抽样(Gibbs sampling)可视作Metropolis-Hastings算法的特殊情况，用于多元变量联合分布的抽样和估计。</p>
+<h3 id="满条件分布"><a href="#满条件分布" class="headerlink" title="满条件分布"></a>满条件分布</h3><p>首先介绍<strong>满条件分布</strong>(full conditional distribution)：MCMC的目标分布通常是多元联合概率分布$p(x)$，其中$x$为$k$维度随机变量，对于</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    I \subset K = \{1, 2, \cdots, k\} \\
+    x_I = \{x_i, i \in I\}, \quad x_{-I} = \{x_i, i \notin I\}
+\end{aligned} \tag{16.1}</script><p>若条件概率分布$p(x_I | x_{-I})$中$k$个维度全部出现，则<strong>称这种条件概率分布为满条件分布</strong>，有以下性质</p>
+<script type="math/tex; mode=display">p(x_I | x_{-I}) = \frac{p(x)}{\int p(x) dx_I} \propto p(x) \tag{16.2}</script><blockquote>
+<script type="math/tex; mode=display">p(x_{i \in I} | x_{i \notin I}) \propto p(x_1, x_2, \cdots, x_k)</script></blockquote>
+<p>那么相应地</p>
+<script type="math/tex; mode=display">\frac{ p(x_I' | x_{-I}')}{P(x_I | x_{-I})} = \frac{p(x')}{p(x)} \tag{16.3}</script><h3 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h3><p>吉布斯抽样是MH算法的特殊情况，假设多元变量$x$的联合概率密度为$p(x)$，<strong>定义建议分布为当前抽样维度$x_j, j = 1, 2, \cdots, k$的满条件分布</strong>，即</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    q(x, x') = p(x_J' | x_{-J}) \\ 
+    x_J = \{x_j\}, \quad x_{-J} = \{x_1, \cdots, x_{j-1}, x_{j+1}, \cdots, x_k\}
+\end{aligned} \tag{17.1}</script><p>相应地，此时<strong>接受概率分布</strong>为</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \alpha(x, x') = \min\left\{1, 
+        \frac{p(x') \cdot q(x', x)} {p(x) \cdot q(x, x')}
+    \right\} = \\
+    \min\left\{1, 
+        \frac{p(x') \cdot p(x_J | x_{-J}')} {p(x) \cdot p(x_J' | x_{-J})}
+    \right\} = \\
+    \min\left\{1, 
+        \frac{p(x')} {p(x)} \cdot \frac{p(x)}{p(x)'}
+    \right\} = 1 
+\end{aligned}
+\tag{17.2}</script><p>吉布斯抽样具体是这样的，从某个初始样本$x^{(0)}$出发，不断进行迭代，每次迭代得到$x^{(i)}$，从而获得样本序列$\{x^{(0)}, \cdots, x^{(i)}, \cdots\}$。在第$i(i &gt; 0)$次迭代时，对其第$j$个维度按以下满条件概率分布进行随机抽样</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    p(x_j | \underbrace{x^{(i-1)}_{j+1}, \cdots, x^{(i-1)}_k}_{x^{(i-1)}_{-J}}) & j = 1 \\
+    p(x_j | \underbrace{x^{(i)}_1, \cdots, x^{(i)}_{j-1}}, \underbrace{x^{(i-1)}_{j+1}, \cdots, x^{(i-1)}_k}) & j = 2, \cdots, k -1 \\
+    p(x_j | \underbrace{x^{(i)}_1, \cdots, x^{(i)}_{j-1}}_{x^{(i)}_{-J}}) & j = k 
+\end{cases} \tag{17.3}</script><p>与MH算法不同之处是，MH算法需要进行接受/拒绝判断，可能两次相邻的采样停留在同一状态。</p>
+<h3 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h3><p><strong>例</strong>：用吉布斯抽样从以下二元正态分布中抽取随机样本</p>
+<script type="math/tex; mode=display">
+x = \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} \sim 
+\mathcal{N}( \begin{bmatrix} 0 \\ 0 \end{bmatrix}, \begin{bmatrix} 1 & 0.5 \\ 0.5 & 1 \end{bmatrix})</script><p><strong>解</strong>：定义建议分布为维度$x_k, k = 1, 2$的条件概率分布，为一元正态分布</p>
+<script type="math/tex; mode=display">
+p(x_1 | x_2) = \frac{p(x_1, x_2)}{p(x_2)} = \frac{p(x)}{\int p(x) dx_1}</script><p>其中</p>
+<script type="math/tex; mode=display">
+p(x) = \frac{1}{\sqrt{3} \pi} 
+\exp \left( - \frac{2}{3} (x_1^2 - x_1 x_2 + x_2^2) \right)</script><blockquote>
+<p>多维正态分布$x \sim \mathcal{N}(\mu, \Sigma)$</p>
+<script type="math/tex; mode=display">p(x) = \frac{1}{(2\pi)^{n/2} |\Sigma|^{1/2}} \exp \left( -\frac{1}{2} (x - \mu)^T \Sigma^{-1} (x - \mu) \right)</script></blockquote>
+<p>那么</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    p(x_1 | x_2) \sim \mathcal{N}(0.5 x_2, 0.75) \\ 
+    p(x_2 | x_1) \sim \mathcal{N}(0.5 x_1, 0.75)
+\end{cases}</script><p>假设初始样本$x^{(0)} = \begin{bmatrix}0 &amp; 0\end{bmatrix}^T$，那么由下程序可获得相应序列<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">gaussian</span><span class="params">(x, mu, sigma)</span>:</span></span><br><span class="line"></span><br><span class="line">    a = np.sqrt(<span class="number">2</span> * np.pi) * sigma</span><br><span class="line">    b = (x - mu) / sigma</span><br><span class="line">    c = (<span class="number">1.</span> / a) * np.exp(<span class="number">-0.5</span> * (b**<span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> c / sum(c)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">egGibbs</span><span class="params">(m = <span class="number">2000</span>, n = <span class="number">100</span>, rho = <span class="number">0.1</span>, </span></span></span><br><span class="line"><span class="function"><span class="params">        state_space=[<span class="number">-10</span>, <span class="number">10</span>], init_state=[<span class="number">0</span>, <span class="number">0</span>])</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 状态空间</span></span><br><span class="line">    S = np.linspace(*state_space, num=<span class="number">1000</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 采样</span></span><br><span class="line">    samples = []</span><br><span class="line">    <span class="keyword">for</span> t <span class="keyword">in</span> range(m + n):</span><br><span class="line">        <span class="keyword">if</span> t == <span class="number">0</span>:</span><br><span class="line">            samples += [init_state]</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 两个维度采样</span></span><br><span class="line">        mu = rho * samples[<span class="number">-1</span>][<span class="number">-1</span>]</span><br><span class="line">        sigma = np.sqrt(<span class="number">1</span> - rho ** <span class="number">2</span>)</span><br><span class="line">        p = gaussian(S, mu, sigma)</span><br><span class="line">        x1 = np.random.choice(S, p=p)    </span><br><span class="line">        </span><br><span class="line">        mu = rho * x1</span><br><span class="line">        sigma = np.sqrt(<span class="number">1</span> - rho ** <span class="number">2</span>)</span><br><span class="line">        p = gaussian(S, mu, sigma)</span><br><span class="line">        x2 = np.random.choice(S, p=p)</span><br><span class="line"></span><br><span class="line">        samples += [[x1, x2]]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> np.array(samples)[m:]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line">    </span><br><span class="line">    samples = egGibbs()</span><br><span class="line">    plt.figure()</span><br><span class="line">    plt.scatter(*samples.T, c=<span class="string">'r'</span>)</span><br><span class="line">    plt.show()</span><br></pre></td></tr></table></figure></p>
+<p>样本点作图如下</p>
+<p><img src="/2020/04/15/Markov-Chain-Monte-Carlo/egGibbs.png" alt="egGibbs"></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/12/【算法】位运算的应用/" rel="next" title="【算法】位运算的应用">
+                <i class="fa fa-chevron-left"></i> 【算法】位运算的应用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Louis Hsu">
+            
+              <p class="site-author-name" itemprop="name">Louis Hsu</p>
+              <p class="site-description motion-element" itemprop="description">技术博客？</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">91</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/isLouisHsu" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://is.louishsu@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/islouishsu" target="_blank" title="Zhihu"><i class="fa fa-fw fa-zhihu"></i>Zhihu</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/islouishsu" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          <div id="music163player">
+            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="110" src="//music.163.com/outchain/player?type=0&id=2703291040&auto=1&height=90">
+            </iframe>
+          </div>
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#蒙特卡罗法"><span class="nav-number">2.</span> <span class="nav-text">蒙特卡罗法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#随机抽样"><span class="nav-number">2.1.</span> <span class="nav-text">随机抽样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数学期望估计"><span class="nav-number">2.2.</span> <span class="nav-text">数学期望估计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#积分计算"><span class="nav-number">2.3.</span> <span class="nav-text">积分计算</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#马尔可夫链"><span class="nav-number">3.</span> <span class="nav-text">马尔可夫链</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#定义"><span class="nav-number">3.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#离散与连续描述"><span class="nav-number">3.2.</span> <span class="nav-text">离散与连续描述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#离散状态"><span class="nav-number">3.2.1.</span> <span class="nav-text">离散状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#连续状态"><span class="nav-number">3.2.2.</span> <span class="nav-text">连续状态</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#性质"><span class="nav-number">3.3.</span> <span class="nav-text">性质</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#可约-不可约"><span class="nav-number">3.3.1.</span> <span class="nav-text">可约/不可约</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#周期-非周期"><span class="nav-number">3.3.2.</span> <span class="nav-text">周期/非周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#正常返-非正常返"><span class="nav-number">3.3.3.</span> <span class="nav-text">正常返/非正常返</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可逆-不可逆"><span class="nav-number">3.3.4.</span> <span class="nav-text">可逆/不可逆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#遍历定理"><span class="nav-number">3.3.5.</span> <span class="nav-text">遍历定理</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#马尔可夫链蒙特卡罗法"><span class="nav-number">4.</span> <span class="nav-text">马尔可夫链蒙特卡罗法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Metropolis-Hastings算法"><span class="nav-number">4.1.</span> <span class="nav-text">Metropolis-Hastings算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理"><span class="nav-number">4.1.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#建议分布的选择及接受分布的确定"><span class="nav-number">4.1.2.</span> <span class="nav-text">建议分布的选择及接受分布的确定</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#吉布斯抽样"><span class="nav-number">4.2.</span> <span class="nav-text">吉布斯抽样</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#满条件分布"><span class="nav-number">4.2.1.</span> <span class="nav-text">满条件分布</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原理-1"><span class="nav-number">4.2.2.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#举例"><span class="nav-number">4.2.3.</span> <span class="nav-text">举例</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Louis Hsu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: 'e65d27f7cf5c62feaf97',
+          clientSecret: '356386826698e8b817ca076b08d7c0e9814f52ea',
+          repo: 'isLouisHsu.github.io',
+          owner: 'isLouisHsu',
+          admin: ['isLouisHsu'],
+          id: md5(window.location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('3');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+
+  <script type="text/javascript" src="/js/click_show_text.js"></script>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
