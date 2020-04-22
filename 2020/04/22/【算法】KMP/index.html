@@ -108,24 +108,25 @@
 
 
 
-  <meta name="description" content="引言对于分类问题，计算结果一般为概率值，那么如何根据计算得的概率进行判别分类呢？  这部分理解后，Logistic回归与Softmax回归的模型就很容易推得。  判别函数对于一个类别为$K$的分类问题，如果对于所有的$ i,j=1,…,K, j\neq i$，有  g_i(x) &amp;gt; g_j(x)则此分类器将这个样本对应的特征向量$x$判别为$w_i$，则此分类器的作用是，计算$K$个判别函数并选取">
+  <meta name="description" content="前言字符串匹配问题是指，给定source字符串和一个target字符串，你应该在source字符串中找出target字符串出现的第一个位置(从$0$开始)。如果不存在，则返回$-1$，例如输入：source = &amp;quot;abcaabaabcaabcacabaa&amp;quot;，target = &amp;quot;abcacab&amp;quot;输出；$11$ 暴力匹配暴力匹配是指依次对source中的子字符串">
+<meta name="keywords" content="字符串">
 <meta property="og:type" content="article">
-<meta property="og:title" content="分类问题的决策平面">
-<meta property="og:url" content="http://yoursite.com/2018/10/19/分类问题的决策平面/index.html">
+<meta property="og:title" content="【算法】KMP">
+<meta property="og:url" content="http://yoursite.com/2020/04/22/【算法】KMP/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="引言对于分类问题，计算结果一般为概率值，那么如何根据计算得的概率进行判别分类呢？  这部分理解后，Logistic回归与Softmax回归的模型就很容易推得。  判别函数对于一个类别为$K$的分类问题，如果对于所有的$ i,j=1,…,K, j\neq i$，有  g_i(x) &amp;gt; g_j(x)则此分类器将这个样本对应的特征向量$x$判别为$w_i$，则此分类器的作用是，计算$K$个判别函数并选取">
+<meta property="og:description" content="前言字符串匹配问题是指，给定source字符串和一个target字符串，你应该在source字符串中找出target字符串出现的第一个位置(从$0$开始)。如果不存在，则返回$-1$，例如输入：source = &amp;quot;abcaabaabcaabcacabaa&amp;quot;，target = &amp;quot;abcacab&amp;quot;输出；$11$ 暴力匹配暴力匹配是指依次对source中的子字符串">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-07-17T12:13:21.310Z">
+<meta property="og:updated_time" content="2020-04-22T05:31:01.959Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="分类问题的决策平面">
-<meta name="twitter:description" content="引言对于分类问题，计算结果一般为概率值，那么如何根据计算得的概率进行判别分类呢？  这部分理解后，Logistic回归与Softmax回归的模型就很容易推得。  判别函数对于一个类别为$K$的分类问题，如果对于所有的$ i,j=1,…,K, j\neq i$，有  g_i(x) &amp;gt; g_j(x)则此分类器将这个样本对应的特征向量$x$判别为$w_i$，则此分类器的作用是，计算$K$个判别函数并选取">
+<meta name="twitter:title" content="【算法】KMP">
+<meta name="twitter:description" content="前言字符串匹配问题是指，给定source字符串和一个target字符串，你应该在source字符串中找出target字符串出现的第一个位置(从$0$开始)。如果不存在，则返回$-1$，例如输入：source = &amp;quot;abcaabaabcaabcacabaa&amp;quot;，target = &amp;quot;abcacab&amp;quot;输出；$11$ 暴力匹配暴力匹配是指依次对source中的子字符串">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/10/19/分类问题的决策平面/">
+  <link rel="canonical" href="http://yoursite.com/2020/04/22/【算法】KMP/">
 
 
 
@@ -135,7 +136,7 @@
   };
 </script>
 
-  <title>分类问题的决策平面 | LOUIS' BLOG</title>
+  <title>【算法】KMP | LOUIS' BLOG</title>
   
 
 
@@ -358,7 +359,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/19/分类问题的决策平面/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/22/【算法】KMP/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Louis Hsu">
@@ -375,7 +376,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">分类问题的决策平面
+          <h1 class="post-title" itemprop="name headline">【算法】KMP
               
             
           </h1>
@@ -400,24 +401,12 @@
                 
               
 
-              <time title="创建时间：2018-10-19 16:30:16" itemprop="dateCreated datePublished" datetime="2018-10-19T16:30:16+08:00">2018-10-19</time>
+              <time title="创建时间：2020-04-22 11:57:43 / 修改时间：13:31:01" itemprop="dateCreated datePublished" datetime="2020-04-22T11:57:43+08:00">2020-04-22</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-07-17 20:13:21" itemprop="dateModified" datetime="2019-07-17T20:13:21+08:00">2019-07-17</time>
               
             
           </span>
@@ -434,7 +423,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a></span>
 
                 
                 
@@ -475,86 +464,80 @@
       
 
       
-        <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>对于分类问题，计算结果一般为概率值，那么如何根据计算得的概率进行判别分类呢？</p>
-<blockquote>
-<p>这部分理解后，<a href="https://louishsu.xyz/2018/10/18/Logistic-Regression/" target="_blank" rel="noopener">Logistic回归</a>与<a href="https://louishsu.xyz/2018/10/18/Softmax-Regression/" target="_blank" rel="noopener">Softmax回归</a>的模型就很容易推得。</p>
-</blockquote>
-<h1 id="判别函数"><a href="#判别函数" class="headerlink" title="判别函数"></a>判别函数</h1><p>对于一个类别为$K$的分类问题，如果对于所有的$ i,j=1,…,K, j\neq i$，有</p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>字符串匹配问题是指，给定<code>source</code>字符串和一个<code>target</code>字符串，你应该在<code>source</code>字符串中找出<code>target</code>字符串出现的第一个位置(从$0$开始)。如果不存在，则返回$-1$，例如<br>输入：<code>source = &quot;abcaabaabcaabcacabaa&quot;</code>，<code>target = &quot;abcacab&quot;</code><br>输出；$11$</p>
+<h1 id="暴力匹配"><a href="#暴力匹配" class="headerlink" title="暴力匹配"></a>暴力匹配</h1><p>暴力匹配是指依次对<code>source</code>中的子字符串进行匹配，以<a href="#%e5%89%8d%e8%a8%80">前言</a>中case为例，匹配流程如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">注：&apos;[]&apos;表示已匹配字符串，&apos;&lt;&gt;&apos;表示不匹配字符</span><br><span class="line">=========================================================================</span><br><span class="line">第1次匹配：从souce第1个字符开始，&apos;a&apos;与&apos;c&apos;不匹配，中断</span><br><span class="line">[abca]&lt;a&gt;baabcaabcacabaa</span><br><span class="line">[abca]&lt;c&gt;ab</span><br><span class="line">-------------------------------------------------------------------------</span><br><span class="line">第2次匹配：从souce第2个字符开始，&apos;b&apos;与&apos;a&apos;不匹配，中断</span><br><span class="line">a&lt;b&gt;caabaabcaabcacabaa</span><br><span class="line"> &lt;a&gt;bcacab</span><br><span class="line">-------------------------------------------------------------------------</span><br><span class="line">第3次匹配：从souce第3个字符开始，&apos;c&apos;与&apos;a&apos;不匹配，中断</span><br><span class="line">ab&lt;c&gt;aabaabcaabcacabaa</span><br><span class="line">  &lt;a&gt;bcacab</span><br><span class="line">-------------------------------------------------------------------------</span><br><span class="line">...</span><br><span class="line">-------------------------------------------------------------------------</span><br><span class="line">最后一次匹配：从source第12个字符开始，匹配成功，返回索引11</span><br><span class="line">abcaabaabca[abcacab]aa</span><br><span class="line">           [abcacab]</span><br></pre></td></tr></table></figure></p>
+<p>以上算法的时间复杂度为$O(mn)$，其中$m,n$表示两字符串的长度。</p>
+<h1 id="KMP匹配"><a href="#KMP匹配" class="headerlink" title="KMP匹配"></a>KMP匹配</h1><p>KMP算法是一种改进的字符串匹配算法，由D.E.Knuth，J.H.Morris和V.R.Pratt提出的，简称KMP算法。它解决的问题是，<strong>在某次匹配过程中出现不匹配字符时，应如何跳转模板指针以减少重复匹配</strong>。</p>
+<p>在第一次匹配失败时，已知的信息是前$4$个字符成功匹配，且最后一个匹配字符为<code>a</code>，如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[abca]&lt;a&gt;baabcaabcacabaa</span><br><span class="line">[abca]&lt;c&gt;ab</span><br></pre></td></tr></table></figure></p>
+<p>注意到字符串<code>&quot;abca&quot;</code>存在相同的前缀和后缀<code>&#39;a&#39;</code>，那么只需将<code>target</code>后移$3$位，使前缀处于“已匹配”状态，然后从两字符串相应位置继续匹配。即可减少匹配，即<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">source: abc&#123;a&#125;abaabcaabcacabaa</span><br><span class="line">target: abc&#123;a&#125;cab</span><br><span class="line">moved:     &#123;a&#125;bcacab</span><br></pre></td></tr></table></figure></p>
+<h2 id="前缀、后缀"><a href="#前缀、后缀" class="headerlink" title="前缀、后缀"></a>前缀、后缀</h2><p>对于的字符串<code>&quot;abcdefgh&quot;</code>，其具有的前缀(prefix)、后缀(suffix)集合分别为<br>| 类别 | 集合 |<br>| —— | —— |<br>| 前缀 | <code>&quot;a&quot;, &quot;ab&quot;, &quot;abc&quot;, &quot;abcd&quot;, &quot;abcde&quot;, &quot;abcdef&quot;, &quot;abcdefg&quot;</code> |<br>| 后缀 | <code>&quot;bcdefgh&quot;, &quot;cdefgh&quot;, &quot;defgh&quot;, &quot;efgh&quot;, &quot;fgh&quot;, &quot;gh&quot;, &quot;h&quot;</code> |</p>
+<h2 id="部分匹配值"><a href="#部分匹配值" class="headerlink" title="部分匹配值"></a>部分匹配值</h2><p>给定字符串<code>target</code>后，可计算其子字符串的部分匹配值，即<strong>子字符串前后缀集合交集的字符串长度</strong>。例如<code>&quot;abcacab&quot;</code>的部分匹配值计算如下</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>子字符串</th>
+<th>前缀集合</th>
+<th>后缀集合</th>
+<th>部分匹配值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&quot;a&quot;</code></td>
+<td></td>
+<td></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>&quot;ab&quot;</code></td>
+<td><code>&quot;a&quot;</code></td>
+<td><code>&quot;b&quot;</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>&quot;abc&quot;</code></td>
+<td><code>&quot;a&quot;, &quot;ab&quot;</code></td>
+<td><code>&quot;bc&quot;, &quot;c&quot;</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>&quot;abca&quot;</code></td>
+<td><code>&quot;a&quot;, &quot;ab&quot;, &quot;abc&quot;</code></td>
+<td><code>&quot;bca&quot;, &quot;ca&quot;, &quot;a&quot;</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>&quot;abcac&quot;</code></td>
+<td><code>&quot;a&quot;, &quot;ab&quot;, &quot;abc&quot;, &quot;abca&quot;</code></td>
+<td><code>&quot;bcac&quot;, &quot;cac&quot;, &quot;ac&quot;, &quot;c&quot;</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>&quot;abcaca&quot;</code></td>
+<td><code>&quot;a&quot;, &quot;ab&quot;, &quot;abc&quot;, &quot;abca&quot;, &quot;abcac&quot;</code></td>
+<td><code>&quot;bcaca&quot;, &quot;caca&quot;, &quot;aca&quot;, &quot;ca&quot;, &quot;a&quot;</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>&quot;abcacab&quot;</code></td>
+<td><code>&quot;a&quot;, &quot;ab&quot;, &quot;abc&quot;, &quot;abca&quot;, &quot;abcac&quot;, &quot;abcaca&quot;</code></td>
+<td><code>&quot;bcacab&quot;, &quot;bcacab&quot;, &quot;cacab&quot;, &quot;acab&quot;, &quot;cab&quot;, &quot;ab&quot;, &quot;b&quot;</code></td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="匹配过程"><a href="#匹配过程" class="headerlink" title="匹配过程"></a>匹配过程</h2><p>经过上述说明后，<code>target</code><strong>后移位数</strong>可由下式计算</p>
 <script type="math/tex; mode=display">
-g_i(x) > g_j(x)</script><p>则此分类器将这个样本对应的特征向量$x$判别为$w_i$，则此分类器的作用是，计算$K$个判别函数并选取与最大判别值最大对应的类别。</p>
-<blockquote>
-<p>判别函数的形式并不唯一，可以将所有的判别函数乘上相同的正常数或者加上一个相同的常量而不影响其判决结果。更一般的情况下，我们使用单调递增函数$f(·)$进行映射，将每一个$g_i(x)$替换成$f(g_i(x))$，分类结果不变。</p>
-<div style="text-align: right"> ——《模式识别原理与应用课程笔记》</div>
+后移位数 = 已匹配位数(也即\rm{target}指针位置) - 已匹配子字符串的部分匹配值</script><p>实际编程中，修改<code>target</code>指针位置为<strong>已匹配子字符串的部分匹配值</strong>即可</p>
+<script type="math/tex; mode=display">
+指针位置 := 指针位置 - 后移位数 = 已匹配子字符串的部分匹配值</script><p>匹配流程如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">注：用i, j分别作为source, target的下标指针；&apos;|&apos;表示匹配开始的位置</span><br><span class="line">i = 0, j = 0 (初始化)</span><br><span class="line">=========================================================================</span><br><span class="line">第1次匹配：从souce第1(i+1)个字符开始，&apos;a&apos;与&apos;c&apos;不匹配，中断</span><br><span class="line">|[abca]&lt;a&gt;baabcaabcacabaa</span><br><span class="line">|[abca]&lt;c&gt;ab</span><br><span class="line">i = 4, j = 4</span><br><span class="line">已匹配4(j)个字符，子字符串&quot;abca&quot;的部分匹配值为1 =&gt; target后移3位，更新 j = 1</span><br><span class="line">-------------------------------------------------------------------------</span><br><span class="line">第2次匹配：从souce第5(i+1)个字符开始，&apos;a&apos;与&apos;b&apos;不匹配，中断</span><br><span class="line">abc[a]|&lt;a&gt;baabcaabcacabaa</span><br><span class="line">   [a]|&lt;b&gt;cacab</span><br><span class="line">i = 4, j = 1</span><br><span class="line">已匹配1(j)个字符，子字符串&quot;a&quot;的部分匹配值为0 =&gt; target后移1位，更新 j = 0</span><br><span class="line">-------------------------------------------------------------------------</span><br><span class="line">第3次匹配：从souce第5(i+1)个字符开始，&apos;a&apos;与&apos;c&apos;不匹配，中断</span><br><span class="line">abca|[ab]&lt;a&gt;abcaabcacabaa</span><br><span class="line">    |[ab]&lt;c&gt;acab</span><br><span class="line">i = 6, j = 2</span><br><span class="line">已匹配2(j)个字符，子字符串&quot;ab&quot;的部分匹配值为0 =&gt; target后移2位，更新 j = 0</span><br><span class="line">-------------------------------------------------------------------------</span><br><span class="line">第4次匹配：从souce第7(i+1)个字符开始，&apos;a&apos;与&apos;b&apos;不匹配，中断</span><br><span class="line">abcaab|[a]&lt;a&gt;bcaabcacabaa</span><br><span class="line">      |[a]&lt;b&gt;cacab</span><br><span class="line">i = 7, j = 1</span><br><span class="line">已匹配1(j)个字符，子字符串&quot;a&quot;的部分匹配值为0 =&gt; target后移1位，更新 j = 0</span><br><span class="line">-------------------------------------------------------------------------</span><br><span class="line">第5次匹配：从souce第8(i+1)个字符开始，&apos;a&apos;与&apos;c&apos;不匹配，中断</span><br><span class="line">abcaaba|[abca]&lt;a&gt;bcacabaa</span><br><span class="line">       |[abca]&lt;c&gt;ab</span><br><span class="line">i = 11, j = 4</span><br><span class="line">已匹配4(j)个字符，子字符串&quot;abca&quot;的部分匹配值为1 =&gt; target后移3位，更新 j = 1</span><br><span class="line">-------------------------------------------------------------------------</span><br><span class="line">第6次匹配：从souce第12(i+1)个字符开始，&apos;a&apos;与&apos;b&apos;不匹配，中断</span><br><span class="line">abcaabaabc[a]|&lt;a&gt;bcacabaa</span><br><span class="line">          [a]|&lt;b&gt;cacab</span><br><span class="line">i = 11, j = 1</span><br><span class="line">已匹配1(j)个字符，子字符串&quot;a&quot;的部分匹配值为0 =&gt; target后移1位，更新 j = 0</span><br><span class="line">-------------------------------------------------------------------------</span><br><span class="line">第7次匹配：从souce第12(i+1)个字符开始，匹配完成</span><br><span class="line">abcaabaabca|[abcacab]aa</span><br><span class="line">           |[abcacab]</span><br><span class="line">i = 18, j = 7</span><br><span class="line">返回 j - i = 11</span><br></pre></td></tr></table></figure></p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">kmp</span><span class="params">(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span>&amp; source, <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span>&amp; target)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> m = source.size();</span><br><span class="line">    <span class="keyword">int</span> n = target.size();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ======================= 计算部分匹配值 ======================= </span></span><br><span class="line">    <span class="keyword">int</span>* match = <span class="keyword">new</span> <span class="keyword">int</span>[n];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        match[i] = <span class="number">0</span>;</span><br><span class="line">        <span class="comment">// 截取子字符串</span></span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">string</span> subPattern = target.substr(<span class="number">0</span>, i + <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">int</span> _n = subPattern.size();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> _len = <span class="number">1</span>; _len &lt; i + <span class="number">1</span>; _len++) &#123;	<span class="comment">// 串前/后缀长度</span></span><br><span class="line">            <span class="built_in">std</span>::<span class="built_in">string</span> prefix = subPattern.substr(<span class="number">0</span>, _len);			<span class="comment">// 前缀</span></span><br><span class="line">            <span class="built_in">std</span>::<span class="built_in">string</span> suffix = subPattern.substr(_n - _len, _len);	<span class="comment">// 后缀</span></span><br><span class="line">            <span class="keyword">if</span> (prefix == suffix) &#123;</span><br><span class="line">                match[i] = _len;	<span class="comment">// 共有元素的长度</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ========================== 开始匹配 ========================== </span></span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (i &lt; m &amp;&amp; j &lt; n) &#123;</span><br><span class="line">        <span class="comment">// --- 字符相同，两个指针共同前进 --- </span></span><br><span class="line">        <span class="keyword">if</span> (source[i] == target[j]) &#123;</span><br><span class="line">            i++; j++;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125; </span><br><span class="line">        <span class="comment">// ------ 字符不相同需要跳转 -------</span></span><br><span class="line">        <span class="keyword">if</span> (j == <span class="number">0</span>) &#123;</span><br><span class="line">            i++;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (j &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            j = match[j - <span class="number">1</span>];	<span class="comment">// 后缀不匹配，但前缀可能匹配，移动到相同前缀后一位的位置</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// source已到末尾</span></span><br><span class="line">    <span class="keyword">if</span> (i == m) &#123;</span><br><span class="line">        <span class="comment">// target同时到末尾则匹配成功</span></span><br><span class="line">        <span class="keyword">return</span> j == n ? i - j : <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// source未到达末尾，target到达末尾</span></span><br><span class="line">    <span class="keyword">return</span> i - j;	<span class="comment">// 开始索引</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
+<li><a href="http://www.ruanyifeng.com/blog/2013/05/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm.html" target="_blank" rel="noopener">字符串匹配的KMP算法 - 阮一峰的网络日志</a>。</li>
+</ol>
 
-</blockquote>
-<p>例如<a href="https://louishsu.xyz/2018/10/18/Bayes-Decision/" target="_blank" rel="noopener">最小风险贝叶斯决策</a></p>
-<h1 id="正态分布下的判别函数"><a href="#正态分布下的判别函数" class="headerlink" title="正态分布下的判别函数"></a>正态分布下的判别函数</h1><blockquote>
-<p><a href="https://www.cnblogs.com/bingjianing/p/9117330.html" target="_blank" rel="noopener">多元高斯分布（The Multivariate normal distribution） - bingjianing - 博客园</a></p>
-</blockquote>
-<p>由大数定理可知，在样本足够的情况下，数据服从正态分布。多元正态分布形式如下</p>
-<script type="math/tex; mode=display">
-f(x) = \frac{1}{ (2\pi)^{\frac{n}{2}} |\Sigma|^{\frac{1}{2}}} 
-exp(-\frac{1}{2} (x-\mu)^T \Sigma^{-1} (x-\mu))</script><p>其中</p>
-<script type="math/tex; mode=display">x = [x_1, ..., x_n]^T</script><script type="math/tex; mode=display">\mu = [\mu_1, ..., \mu_n]^T</script><script type="math/tex; mode=display">\Sigma_{ij} = cov(x_i, x_j)</script><!-- $$
-\Sigma =  
-\left[
-​    \begin{matrix}
-​        1 & 2 & 3 \\
-​        4 & 5 & 6 \\
-​        7 & 8 & 9
-​    \end{matrix}
-\right] \tag{3}
-$$ -->
-<p>在<a href="https://louishsu.xyz/2018/10/19/%E5%88%86%E7%B1%BB%E9%97%AE%E9%A2%98%E7%9A%84%E5%86%B3%E7%AD%96%E5%B9%B3%E9%9D%A2/" target="_blank" rel="noopener">最小错误率判别</a>时</p>
-<script type="math/tex; mode=display">g_i(x) = P(x|c_i)P(c_i)</script><p>即</p>
-<script type="math/tex; mode=display">
-g_i(x) = 
-\frac{1}{ (2\pi)^{\frac{n}{2}} |\Sigma_i|^{\frac{1}{2}}}
-exp(-\frac{1}{2} (x-\mu_i)^T \Sigma^{-1} (x-\mu_i)) ·
-P(c_i)</script><p>取对数运算，并舍去常数项，展开整理得</p>
-<script type="math/tex; mode=display">g_i(x) = -\frac{1}{2}x^T \Sigma_i ^{-1} x + \mu_i^T \Sigma_i ^{-1} x  -\frac{1}{2} \mu_i ^T \Sigma_i ^{-1} \mu_i + ln P(c_i) \tag{0}</script><blockquote>
-<p><code>注：</code> 协方差矩阵 $ \Sigma^T = \Sigma $</p>
-</blockquote>
-<h2 id="1-Sigma-i-sigma-2-I"><a href="#1-Sigma-i-sigma-2-I" class="headerlink" title="1. $\Sigma_i = \sigma^2 I$"></a>1. $\Sigma_i = \sigma^2 I$</h2><p>$\Sigma_i^{-1} = \frac{1}{\sigma^2} I$代入$(0)$，有</p>
-<script type="math/tex; mode=display">
-g_i(x) = \frac{1}{\sigma^2}\mu_i^T x - \frac{1}{2\sigma^2} (x^Tx + \mu_i ^T \mu_i) + ln P(c_i)\tag{1}</script><p>定义</p>
-<script type="math/tex; mode=display">w_i = \frac{1}{\sigma^2}\mu_i^T</script><script type="math/tex; mode=display">w_0 =  - \frac{1}{2\sigma^2} (x^Tx + \mu_i ^T \mu_i) + ln P(c_i)</script><p>有一般形式如下，表示取$c_i$的概率</p>
-<script type="math/tex; mode=display">g_i(x) = w_i x + w_0\tag{2}</script><p>设决策平面为</p>
-<script type="math/tex; mode=display">w^T (x−x_0)=0\tag{3}</script><p>决策平面上，取$c_i$和$c_j$的概率相等，即</p>
-<script type="math/tex; mode=display">g_i(x) = g_j(x)</script><p>可得</p>
-<script type="math/tex; mode=display">(\mu_i - \mu_j)^Tx = \frac{1}{2} (\mu_i ^T \mu_i - \mu_j ^T \mu_j) -ln \frac{P(c_i)}{P(c_j)} \tag{4}</script><blockquote>
-<p>推导过程如下，将$(1)$代入上式<br>$ \frac{1}{\sigma^2}\mu_i^T x - \frac{1}{2\sigma^2} (x^Tx + \mu_i ^T \mu_i) + ln P(c_i) = \frac{1}{\sigma^2}\mu_j^T x - \frac{1}{2\sigma^2} (x^Tx + \mu_j ^T \mu_j) + ln P(c_j) $<br>$ \mu_i^T x - \frac{1}{2} \mu_i ^T \mu_i + ln P(c_i) = \mu_j^T x - \frac{1}{2} \mu_j ^T \mu_j + ln P(c_j) $<br>$ (\mu_i - \mu_j)^Tx = \frac{1}{2} (\mu_i ^T \mu_i - \mu_j ^T \mu_j) -ln \frac{P(c_i)}{P(c_j)} $</p>
-</blockquote>
-<p>由$(3)$$(4)$，利用待定系数法，可得</p>
-<script type="math/tex; mode=display">w = \mu_i - \mu_j</script><script type="math/tex; mode=display">
-w^T x_0 = \frac{1}{2} (\mu_i ^T \mu_i - \mu_j ^T \mu_j) -ln \frac{P(c_i)}{P(c_j)}</script><p>特别地，当等先验概率时，即$P(c_i) = P(c_j)$时</p>
-<script type="math/tex; mode=display">
-w^T x_0 = \frac{1}{2} (\mu_i ^T \mu_i - \mu_j ^T \mu_j)</script><p>故</p>
-<script type="math/tex; mode=display">
-x_0 = \frac{1}{2}(\mu_i + \mu_j)</script><p>结论：等先验概率时超平面$ w^T (x−x_0)=0 $平分判别空间</p>
-<blockquote>
-<p>$\mu_i$与$\mu_j$分别表示两个类别的中心，由向量运算，$x_0$为两类中心的连线的中点。</p>
-</blockquote>
-<h2 id="2-Sigma-i-Sigma"><a href="#2-Sigma-i-Sigma" class="headerlink" title="2. $\Sigma_i = \Sigma$"></a>2. $\Sigma_i = \Sigma$</h2><p>代入$(0)$后可得</p>
-<script type="math/tex; mode=display">g_i(x) =  \mu_i^T \Sigma ^{-1} x - \frac{1}{2}x^T \Sigma ^{-1} x   -\frac{1}{2} \mu_i ^T \Sigma ^{-1} \mu_i + ln P(c_i) \tag{5}</script><p>定义</p>
-<script type="math/tex; mode=display">w_i = \mu_i^T \Sigma ^{-1}</script><script type="math/tex; mode=display">w_0 = - \frac{1}{2}x^T \Sigma ^{-1} x   -\frac{1}{2} \mu_i ^T \Sigma ^{-1} \mu_i + ln P(c_i)</script><p>有一般形式如下，表示取$c_i$的概率</p>
-<script type="math/tex; mode=display">g_i(x) = w_i x + w_0\tag{6}</script><p>同样的，设决策平面为</p>
-<script type="math/tex; mode=display">w^T (x−x_0)=0\tag{7}</script><p>决策平面上，取$c_i$和$c_j$的概率相等，即</p>
-<script type="math/tex; mode=display">g_i(x) = g_j(x)</script><p>有</p>
-<script type="math/tex; mode=display">(\mu_i - \mu_j)^T \Sigma ^{-1} x = \frac{1}{2} (\mu_i - \mu_j)^T \Sigma ^{-1} (\mu_i - \mu_j) - ln \frac{P(c_i)}{P(c_j)}</script><blockquote>
-<p>$ \mu_i^T \Sigma ^{-1} x - \frac{1}{2}x^T \Sigma ^{-1} x   -\frac{1}{2} \mu_i ^T \Sigma ^{-1} \mu_i + ln P(c_i) = \mu_j^T \Sigma ^{-1} x - \frac{1}{2}x^T \Sigma ^{-1} x   -\frac{1}{2} \mu_j ^T \Sigma ^{-1} \mu_j + ln P(c_j) $<br>$ \mu_i^T \Sigma ^{-1} x -\frac{1}{2} \mu_i ^T \Sigma ^{-1} \mu_i + ln P(c_i) = \mu_j^T \Sigma ^{-1} x -\frac{1}{2} \mu_j ^T \Sigma ^{-1} \mu_j + ln P(c_j) $<br>$ (\mu_i - \mu_j)^T \Sigma ^{-1} x = \frac{1}{2} (\mu_i ^T \Sigma ^{-1} \mu_i + \mu_j ^T \Sigma ^{-1} \mu_j) - ln \frac{P(c_i)}{P(c_j)} $</p>
-</blockquote>
-<p>特别的，当取等先验概率时</p>
-<script type="math/tex; mode=display">
-(\mu_i - \mu_j)^T \Sigma ^{-1} x = \frac{1}{2} (\mu_i ^T \Sigma ^{-1} \mu_i + \mu_j ^T \Sigma ^{-1} \mu_j)</script><p>由$(7)$$(8)$，利用待定系数法</p>
-<script type="math/tex; mode=display">w^T = (\mu_i - \mu_j)^T \Sigma^{-1}</script><script type="math/tex; mode=display">w^T x_0 = \frac{1}{2} (\mu_i ^T \Sigma ^{-1} \mu_i + \mu_j ^T \Sigma ^{-1} \mu_j)</script><blockquote>
-<p><code>注：</code> 协方差矩阵 $ \Sigma^T = \Sigma $</p>
-</blockquote>
-<script type="math/tex; mode=display">w = \Sigma^{-1}(\mu_i - \mu_j)</script><script type="math/tex; mode=display">x_0 = \frac{1}{2} (\mu_i + \mu_j)</script><p>由于通常$w=Σ^{−1}(μ_i−μ_j)$并非朝着$(μ_i−μ_j)$的方向，因而通常分离两类的超平面也并非与均值的连线垂直正交。但是， 如果先验概率相等，其判定面确实是与均值连线交于中点$x_0$处的。如果先验概率不等，最优边界超平面将远离可能性较大的均值。同前，如果偏移量足够大，判定面可以不落在两个均值向量之间。</p>
-<h2 id="3-Sigma-i-Sigma-i-∀"><a href="#3-Sigma-i-Sigma-i-∀" class="headerlink" title="3. $\Sigma_i = \Sigma_i(∀) $"></a>3. $\Sigma_i = \Sigma_i(∀) $</h2><script type="math/tex; mode=display">g_i(x) =  -\frac{1}{2}x^T \Sigma_i ^{-1} x + \mu_i^T \Sigma_i ^{-1} x  -\frac{1}{2} \mu_i ^T \Sigma_i ^{-1} \mu_i + ln P(c_i)</script><p>定义</p>
-<script type="math/tex; mode=display">W_i = -\frac{1}{2} \Sigma_i ^{-1}</script><script type="math/tex; mode=display">w_i = \mu_i^T \Sigma_i ^{-1}</script><script type="math/tex; mode=display">w_0 = -\frac{1}{2} \mu_i ^T \Sigma_i ^{-1} \mu_i + ln P(c_i)</script><p>有</p>
-<script type="math/tex; mode=display">
-g_i(x) = x^TW_ix + w_ix + w_0</script>
       
     </div>
 
@@ -596,6 +579,12 @@ g_i(x) = x^TW_ix + w_ix + w_0</script>
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/字符串/" rel="tag"># 字符串</a>
+          
+        </div>
+      
 
       
       
@@ -605,8 +594,8 @@ g_i(x) = x^TW_ix + w_ix + w_0</script>
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/18/Bayes-Decision/" rel="next" title="Bayes Decision">
-                <i class="fa fa-chevron-left"></i> Bayes Decision
+              <a href="/2020/04/15/Markov-Chain-Monte-Carlo/" rel="next" title="Markov Chain Monte Carlo">
+                <i class="fa fa-chevron-left"></i> Markov Chain Monte Carlo
               </a>
             
           </div>
@@ -614,10 +603,6 @@ g_i(x) = x^TW_ix + w_ix + w_0</script>
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/10/20/Feedforward-Neural-Network/" rel="prev" title="Feedforward Neural Network">
-                Feedforward Neural Network <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -832,7 +817,7 @@ g_i(x) = x^TW_ix + w_ix + w_0</script>
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#判别函数"><span class="nav-number">2.</span> <span class="nav-text">判别函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#正态分布下的判别函数"><span class="nav-number">3.</span> <span class="nav-text">正态分布下的判别函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Sigma-i-sigma-2-I"><span class="nav-number">3.1.</span> <span class="nav-text">1. $\Sigma_i = \sigma^2 I$</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Sigma-i-Sigma"><span class="nav-number">3.2.</span> <span class="nav-text">2. $\Sigma_i = \Sigma$</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Sigma-i-Sigma-i-∀"><span class="nav-number">3.3.</span> <span class="nav-text">3. $\Sigma_i = \Sigma_i(∀) $</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#暴力匹配"><span class="nav-number">2.</span> <span class="nav-text">暴力匹配</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#KMP匹配"><span class="nav-number">3.</span> <span class="nav-text">KMP匹配</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#前缀、后缀"><span class="nav-number">3.1.</span> <span class="nav-text">前缀、后缀</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#部分匹配值"><span class="nav-number">3.2.</span> <span class="nav-text">部分匹配值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#匹配过程"><span class="nav-number">3.3.</span> <span class="nav-text">匹配过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现"><span class="nav-number">3.4.</span> <span class="nav-text">实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>
