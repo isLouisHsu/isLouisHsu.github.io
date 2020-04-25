@@ -115,7 +115,7 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="前言位运算在编程中有不少的应用，但没必要记太多的“奇淫巧计”。 英文字符转换 字符转小写  12&amp;apos;a&amp;apos; | &amp;apos; &amp;apos; = &amp;apos;a&amp;apos;&amp;apos;A&amp;apos; | &amp;apos; &amp;apos; = &amp;apos;a&amp;apos;  字符转大写  12&amp;apos;a&amp;apos; &amp;amp; &amp;apos;_&amp;apos; = &amp;apos;A&amp;apos;&amp;a">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-04-15T06:32:51.829Z">
+<meta property="og:updated_time" content="2020-04-23T04:01:26.503Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【算法】位运算的应用">
 <meta name="twitter:description" content="前言位运算在编程中有不少的应用，但没必要记太多的“奇淫巧计”。 英文字符转换 字符转小写  12&amp;apos;a&amp;apos; | &amp;apos; &amp;apos; = &amp;apos;a&amp;apos;&amp;apos;A&amp;apos; | &amp;apos; &amp;apos; = &amp;apos;a&amp;apos;  字符转大写  12&amp;apos;a&amp;apos; &amp;amp; &amp;apos;_&amp;apos; = &amp;apos;A&amp;apos;&amp;a">
@@ -417,7 +417,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-04-15 14:32:51" itemprop="dateModified" datetime="2020-04-15T14:32:51+08:00">2020-04-15</time>
+                <time title="修改时间：2020-04-23 12:01:26" itemprop="dateModified" datetime="2020-04-23T12:01:26+08:00">2020-04-23</time>
               
             
           </span>
@@ -514,7 +514,7 @@
 </li>
 <li><p>实现两个数字的加法</p>
 <ul>
-<li><strong>位的加法</strong>与异或一致；</li>
+<li><strong>位的加法</strong>与“异或”一致、<strong>进位</strong>与“与”一致；</li>
 <li>注意<strong>进位位</strong>的处理。<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bAdd</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> sum = <span class="number">0</span>, carry = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (b != <span class="number">0</span>) &#123;</span><br><span class="line">        sum = a ^ b;            <span class="comment">// 先求每位和</span></span><br><span class="line">        carry = (a &amp; b) &lt;&lt; <span class="number">1</span>;   <span class="comment">// 每位相加后的进位</span></span><br><span class="line">        a = sum; b = carry;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
