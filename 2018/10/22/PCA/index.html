@@ -125,7 +125,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/10/22/PCA/face_origin.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/22/PCA/face_reduced.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/22/PCA/face_restructed.png">
-<meta property="og:updated_time" content="2020-04-27T07:58:55.835Z">
+<meta property="og:updated_time" content="2020-04-27T13:35:11.944Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PCA">
 <meta name="twitter:description" content="引言PCA全称Principal Component Analysis，即主成分分析，是一种常用的数据降维方法。它可以通过线性变换将原始数据变换为一组各维度线性无关的表示，以此来提取数据的主要线性分量。 向量的投影现有两个任意不共线向量$\vec{u}, \vec{v}$，将$\vec{u}$投射到$\vec{v}$上 投影后，可以得到两个正交向量 \vec{u}&apos; · (\vec{u} - \v">
@@ -428,7 +428,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-04-27 15:58:55" itemprop="dateModified" datetime="2020-04-27T15:58:55+08:00">2020-04-27</time>
+                <time title="修改时间：2020-04-27 21:35:11" itemprop="dateModified" datetime="2020-04-27T21:35:11+08:00">2020-04-27</time>
               
             
           </span>
@@ -643,19 +643,19 @@ S_1 = X^T \beta_1</script><p>所有元素的平方和，或向量$S_1$的$2$范�
 = S_1^T S_1 = \beta_1^T X X^T \beta_1 \tag{1}</script><p>即优化目标为</p>
 <script type="math/tex; mode=display">
 \max ||S_1||_2^2</script><script type="math/tex; mode=display">
-s.t.　||\beta_1||_2^2 = 1</script><p>矩阵$C=XX^T$为对称矩阵，故可单位正交化</p>
+s.t.　||\beta_1||_2^2 = 1</script><p>矩阵$C_{N \times N}=XX^T$为对称矩阵，故可单位正交化(半正定)</p>
 <script type="math/tex; mode=display">
 C = W \Lambda W^T</script><script type="math/tex; mode=display">
 W = \left[\begin{matrix}
     | & & |\\
-    w_1 & ... & w_M\\
+    w_1 & ... & w_N\\
     | & & |\\
 \end{matrix}\right]　
 \Lambda = \left[\begin{matrix}
     \lambda_1 &  & \\
      & ... & \\
-     &  & \lambda_M\\
-\end{matrix}\right]</script><p>其中$\lambda_1 &gt; …&gt; \lambda_M$，$w_i(i=1,…,M)$为矩阵$C$的特征向量(单位向量，互相正交)</p>
+     &  & \lambda_N\\
+\end{matrix}\right]</script><p>其中$\lambda_1 &gt; …&gt; \lambda_N$，$w_i(i=1,…,N)$为矩阵$C$的特征向量(单位向量，互相正交)</p>
 <blockquote>
 <p>实际上$R(C) \leq (n-1)$，即最多有$(n-1)$个特征值大于$0$。</p>
 </blockquote>
@@ -666,21 +666,21 @@ W = \left[\begin{matrix}
 ||S_1||_2^2
 = \alpha_1^T \Lambda \alpha_1 \tag{3}</script><p>即</p>
 <script type="math/tex; mode=display">
-||S_1||_2^2 = \sum_{i=1}^M \lambda_i \alpha_{1i}^2 \tag{4}</script><p>假设特征值已降序排序，那么进一步</p>
+||S_1||_2^2 = \sum_{i=1}^N \lambda_i \alpha_{1i}^2 \tag{4}</script><p>假设特征值已降序排序，那么进一步</p>
 <script type="math/tex; mode=display">
-\sum_{i=1}^M \lambda_i \alpha_{1i}^2
-\leq \lambda_1 \sum_{i=1}^M \alpha_{1i}^2 \tag{5}</script><p>且由于$\beta_1^T\beta_1 = 1$，故</p>
+\sum_{i=1}^N \lambda_i \alpha_{1i}^2
+\leq \lambda_1 \sum_{i=1}^N \alpha_{1i}^2 \tag{5}</script><p>且由于$\beta_1^T\beta_1 = 1$，故</p>
 <script type="math/tex; mode=display">
 1 = \beta_1^T\beta_1 = \alpha_1^T W^T W \alpha = \alpha^T \alpha = 
-\sum_{i=1}^M \alpha_{1i}^2</script><p>可得</p>
+\sum_{i=1}^N \alpha_{1i}^2</script><p>可得</p>
 <script type="math/tex; mode=display">
 ||S_1||_2^2
-= \sum_{i=1}^M \lambda_i \alpha_{1i}^2
+= \sum_{i=1}^N \lambda_i \alpha_{1i}^2
 \leq \lambda_1  \tag{6}</script><p>为使$(6)$取等号，即达最大值，可使</p>
 <script type="math/tex; mode=display">
 \begin{cases}
     \alpha_{11} = 1 \\
-    \alpha_{12} = ... = \alpha_{1M} = 0
+    \alpha_{12} = ... = \alpha_{1N} = 0
 \end{cases}</script><p>即令</p>
 <script type="math/tex; mode=display">
 \beta_1 = W \alpha_1 = w_1</script><blockquote>
@@ -691,7 +691,7 @@ W = \left[\begin{matrix}
 ||S_1||_2^2 = \lambda_1</script><blockquote>
 <p>或者第一主成分的证明也可以这样，建立优化目标</p>
 <script type="math/tex; mode=display">
-\beta_1 = \arg \max　||S_1||_2^2</script><script type="math/tex; mode=display">s.t.　||\beta_1||_2^2 = 1</script><p>构造拉格朗日函数</p>
+\beta_1 = \arg \max　||S_1||_2^2</script><script type="math/tex; mode=display">s.t.　||\beta_1||_2^2 = 1</script><p>构造<strong>拉格朗日函数</strong></p>
 <script type="math/tex; mode=display">
 L(\beta_1, \lambda_1) = ||S_1||_2^2 + \lambda_1 (1 - ||\beta_1||_2^2)</script><p>也即</p>
 <script type="math/tex; mode=display">
@@ -719,11 +719,11 @@ i = 1, ..., r-1 \tag{8}</script><blockquote>
 <script type="math/tex; mode=display">
 ||S_r||_2^2 = \sum_i \lambda_i \alpha_{ri}^2 = \lambda_r \alpha_{rr}^2 \tag{9}</script><p>又因为$\beta_r^T \beta_r = 1$(单位向量)，故</p>
 <script type="math/tex; mode=display">
-\beta_r^T \beta_r = \alpha_r^T W^T W \alpha_r = \alpha_r^T \alpha_r = \sum_i \alpha_{ri}^2 = 1 \tag{10}</script><p>那么类似的，为使$(9)$取最大，取</p>
+\beta_r^T \beta_r = \alpha_r^T W^T W \alpha_r = \alpha_r^T \alpha_r = \sum_i \alpha_{ri}^2 = 1 \tag{10}</script><p>那么类似的，为在满足正交和单位约束下，使$(9)$取最大，取</p>
 <script type="math/tex; mode=display">
 \begin{cases}
     \alpha_{rr} = 1\\
-    \alpha_{ri} = 0,　i = 1, ..., M, i \neq r
+    \alpha_{ri} = 0,　i = 1, ..., N, i \neq r
 \end{cases}</script><blockquote>
 <p>$\alpha_r = [0, …, 1_r, …, 0]$</p>
 </blockquote>
@@ -732,7 +732,50 @@ i = 1, ..., r-1 \tag{8}</script><blockquote>
 \beta_r = W \alpha_r = w_r</script><p>且有</p>
 <script type="math/tex; mode=display">
 ||S_r||_2^2 = \lambda_r</script><p>证毕。</p>
-<h2 id="白化-whitening"><a href="#白化-whitening" class="headerlink" title="白化(whitening)"></a>白化(whitening)</h2><p><code>whitening</code>的目的是去掉数据之间的相关联度，是很多算法进行预处理的步骤。比如说当训练图片数据时，由于图片中相邻像素值有一定的关联，所以很多信息是冗余的。这时候去相关的操作就可以采用白化操作。</p>
+<p><strong>证明过程总结如下</strong></p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \left. \begin{aligned}
+        \left. \begin{aligned}
+            ||S_1||_2^2 = S_1^T S_1 \\
+            S_1 = X^T \beta_1
+        \end{aligned} \right\} \Rightarrow
+        ||S_1||_2^2 = \beta_1^T \underbrace{X X^T}_C \beta_1 \\
+        C = X X^T = W \Lambda W^T
+    \end{aligned} \right\} \Rightarrow \\
+    \left. \begin{aligned}
+        ||S_1||_2^2 = \beta_1^T W \Lambda \underbrace{W^T \beta_1}_{\alpha_1} = \sum_{i=1}^N \lambda_i \alpha_{1i} \leq \lambda_1 \sum_{i=1}^N \alpha_{1i} \\
+        \beta_1^T \beta_1 = \alpha_1^T W^T W \alpha = \alpha_1^T \alpha = \sum_{i=1}^N \alpha_{1i} = 1(单位约束)
+    \end{aligned} \right\} \Rightarrow \\
+    ||S_1||_2^2 \leq \lambda_1 \quad 为使||S_1||_2^2极大化，取 \\
+    \begin{cases}
+        \alpha_{11} = 1\\
+        \alpha_{1i} = 0, i = 2, 3, \cdots, N
+    \end{cases} \Rightarrow 
+    \beta_1 = W \alpha_1 = w_1
+\end{aligned} \tag{*1}</script><hr>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \left. \begin{aligned}
+        \left. \begin{aligned}
+            ||S_r||_2^2 = S_r^T S_r \\
+            S_r = X^T \beta_r
+        \end{aligned} \right\} \Rightarrow
+        ||S_r||_2^2 = \beta_r^T \underbrace{X X^T}_C \beta_r \\
+        C = X X^T = W \Lambda W^T
+    \end{aligned} \right\} \Rightarrow \\
+    \left. \begin{aligned}
+        ||S_r||_2^2 = \beta_r^T W \Lambda \underbrace{W^T \beta_r}_{\alpha_r} = \sum_{i=1}^N \lambda_i \alpha_{ri} \\
+        \beta_r^T \beta_i =(W \alpha_r)^T (w_i) = \alpha_{ri} = 0, i \neq r (正交约束) \\
+        \beta_r^T \beta_r = \alpha_r^T W^T W \alpha = \alpha_r^T \alpha = \sum_{i=1}^N \alpha_{1i} = 1(单位约束)
+    \end{aligned} \right\} \Rightarrow \\
+    ||S_r||_2^2 = \lambda_r \alpha_{rr} \quad 为使||S_r||_2^2极大化，取 \\
+    \begin{cases}
+        \alpha_{rr} = 1 \\
+        \alpha_{ri} = 0, i = \neq r
+    \end{cases} \Rightarrow 
+    \beta_r = W \alpha_r = w_r
+\end{aligned} \tag{*2}</script><h2 id="白化-whitening"><a href="#白化-whitening" class="headerlink" title="白化(whitening)"></a>白化(whitening)</h2><p><code>whitening</code>的目的是去掉数据之间的相关联度，是很多算法进行预处理的步骤。比如说当训练图片数据时，由于图片中相邻像素值有一定的关联，所以很多信息是冗余的。这时候去相关的操作就可以采用白化操作。</p>
 <p>数据的<code>whitening</code>必须满足两个条件：</p>
 <ol>
 <li>不同特征间相关性最小，接近$0$；</li>
