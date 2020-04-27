@@ -115,7 +115,7 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="程序性能程序性能(performance of a program)是指运行这个程序所需要的内存和时间的多少。 空间复杂度定义：空间复杂度(space complexity)是该程序的运行所需内存的大小。 程序需要的空间主要以以下部分组成  指令空间(instruction space) 是指编译后的程序指令所需要的存储空间，取决于以下因素  编译器； 编译选项； 目标计算机。   数据空间(da">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-03-18T06:36:19.801Z">
+<meta property="og:updated_time" content="2020-04-26T03:21:24.223Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【算法】程序性能分析与渐近记号">
 <meta name="twitter:description" content="程序性能程序性能(performance of a program)是指运行这个程序所需要的内存和时间的多少。 空间复杂度定义：空间复杂度(space complexity)是该程序的运行所需内存的大小。 程序需要的空间主要以以下部分组成  指令空间(instruction space) 是指编译后的程序指令所需要的存储空间，取决于以下因素  编译器； 编译选项； 目标计算机。   数据空间(da">
@@ -417,7 +417,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-03-18 14:36:19" itemprop="dateModified" datetime="2020-03-18T14:36:19+08:00">2020-03-18</time>
+                <time title="修改时间：2020-04-26 11:21:24" itemprop="dateModified" datetime="2020-04-26T11:21:24+08:00">2020-04-26</time>
               
             
           </span>
@@ -516,15 +516,147 @@
 <li>步数与时间复杂度是同义词。</li>
 </ul>
 </blockquote>
-<p>用剖析法计算程序步数时，记$s/e$为每条语句每次执行所需要的步数(steps pre execution)，$f$为语句的执行次数或频率，进行列表计算，例如对于冒泡排序<br>| 程序语句 | s/e | 频率 | 总步数 |<br>| ———- | —- | —— | ——- |<br>| template\<typename t\=""> | / | / | / |<br>| void bubbleSort(T a[], int n) { | / | / | / |<br>|      for (int i = n - 1; i &gt;= 1; i—) { | $1$ | $(n - 1) + 1$ | $n$ |<br>|         for (int j = 0; j &lt; i; j++) {  | $i+1$ | $n-1$ | $n(n-1)/2 + (n-1)$ |<br>|             if (a[j] &gt; a[j + 1]) { T temp = a[j]; a[j] = a[j + 1];  a[j + 1] = temp; } | $i$ | $n-1$ | $n(n-1)/2$ |<br>|         }}} | / | / | / |<br>| 总计 | / | / | $n^2 + n - 1$ |</typename></p>
+<p>用剖析法计算程序步数时，记$s/e$为每条语句每次执行所需要的步数(steps pre execution)，$f$为语句的执行次数或频率，进行列表计算，例如对于冒泡排序</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>程序语句</th>
+<th>s/e</th>
+<th>频率</th>
+<th>总步数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>template\<typename t\=""></typename></td>
+<td>/</td>
+<td>/</td>
+<td>/</td>
+</tr>
+<tr>
+<td>void bubbleSort(T a[], int n) {</td>
+<td>/</td>
+<td>/</td>
+<td>/</td>
+</tr>
+<tr>
+<td>for (int i = n - 1; i &gt;= 1; i—) {</td>
+<td>$1$</td>
+<td>$(n - 1) + 1$</td>
+<td>$n$</td>
+</tr>
+<tr>
+<td>for (int j = 0; j &lt; i; j++) {</td>
+<td>$i+1$</td>
+<td>$n-1$</td>
+<td>$n(n-1)/2 + (n-1)$</td>
+</tr>
+<tr>
+<td>if (a[j] &gt; a[j + 1]) { T temp = a[j]; a[j] = a[j + 1];  a[j + 1] = temp; }</td>
+<td>$i$</td>
+<td>$n-1$</td>
+<td>$n(n-1)/2$</td>
+</tr>
+<tr>
+<td>}}}</td>
+<td>/</td>
+<td>/</td>
+<td>/</td>
+</tr>
+<tr>
+<td>总计</td>
+<td>/</td>
+<td>/</td>
+<td>$n^2 + n - 1$</td>
+</tr>
+</tbody>
+</table>
+</div>
 <h1 id="渐近记号"><a href="#渐近记号" class="headerlink" title="渐近记号"></a>渐近记号</h1><p>当<strong>实例特征$n$很大($n \rightarrow \infty$)时</strong>，使用步数可以准确地预计运行时间的增长，以比较两个程序的性能。当$n \rightarrow \infty$时，最高次项在整个多项式中占主导，可省略$c_2 n + c_3$两项。<strong>渐近分析主要确定的时复杂函数中的最大项</strong>。</p>
 <blockquote>
 <p>例如，对于任何具有形式$c_1 n^2 + c_3 + c_2 n + c_3$,($c_1 &gt; 0$且$c_1, c_2, c_3$为常数)的步数的程序，都有</p>
 <script type="math/tex; mode=display">\lim_{n \rightarrow \infty} \frac{c_2 n + c_3}{c_1 n^2} = 0</script></blockquote>
 <p><strong>定义</strong>：令$p(n)$和$q(n)$是两个<strong>非负函数</strong>，那么当且仅当</p>
 <script type="math/tex; mode=display">\lim_{n \rightarrow \infty} \frac{q(n)}{p(n)} = 0</script><p>称$p(n)$<strong>渐近地大于</strong>$q(n)$($p(n)$渐近地优于$q(n)$)，或$q(n)$<strong>渐近地小于</strong>$p(n)$；当且仅当任何一个都不是渐近大于另一个时，称$p(n)$<strong>渐近地等于</strong>$q(n)$。</p>
-<p>步数分析中常见的项如下标，<strong>大小关系</strong>从上往下依次减小<br>| 项 | 名称 |<br>| — | —- |<br>| $1$ | 常量 |<br>| $\log n$ | 对数 |<br>| $n$ | 线性 |<br>| $n \log n$ | $n$倍对数 |<br>| $n^2$ | 平方 |<br>| $n^3$ | 立方 |<br>| $2^n$ | 指数 |<br>| $n!$ | 阶乘 |</p>
-<p><strong>定义</strong>：<strong>渐近记法</strong>(asymptotic notation)描述的是大实例特征的时间或空间复杂度，用步数中<strong>渐近最大</strong>的一项的<strong>单位项</strong>来描述复杂度。<strong>几种常见的渐近记法</strong>如下<br>| 表示法 | 读法 | 含义 | 例 |<br>| ——- | —— | —— | — |<br>| $f(n) = O(g(n))$ | $f(n)$ is big O of $g(n)$ | $f(n)$渐近小于或等于$f(n)$，$g(n)$是$f(n)$的上限 | $100n^2 - 20 n + 3 = O(n^2) \neq O(n)$ |<br>| $f(n) = \Omega(g(n))$ | $f(n)$ is big omega of $g(n)$ | $f(n)$渐近大于或等于$f(n)$，$g(n)$是$f(n)$的下限 | $100n^2 - 20 n + 3 = \Omega(n^2) = \Omega(n) \neq \Omega(n^3)$ |<br>| $f(n) = \Theta(g(n))$ | $f(n)$ is big theta of $g(n)$ | $f(n)$渐近等于$f(n)$，$g(n)$是$f(n)$的上限 | $100n^2 - 20 n + 3 = \Theta(n^2) \neq \Theta(n) \neq \Theta(n^3)$ | </p>
+<p>步数分析中常见的项如下标，<strong>大小关系</strong>从上往下依次减小</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>名称</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$1$</td>
+<td>常量</td>
+</tr>
+<tr>
+<td>$\log n$</td>
+<td>对数</td>
+</tr>
+<tr>
+<td>$n$</td>
+<td>线性</td>
+</tr>
+<tr>
+<td>$n \log n$</td>
+<td>$n$倍对数</td>
+</tr>
+<tr>
+<td>$n^2$</td>
+<td>平方</td>
+</tr>
+<tr>
+<td>$n^3$</td>
+<td>立方</td>
+</tr>
+<tr>
+<td>$2^n$</td>
+<td>指数</td>
+</tr>
+<tr>
+<td>$n!$</td>
+<td>阶乘</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>定义</strong>：<strong>渐近记法</strong>(asymptotic notation)描述的是大实例特征的时间或空间复杂度，用步数中<strong>渐近最大</strong>的一项的<strong>单位项</strong>来描述复杂度。<strong>几种常见的渐近记法</strong>如下</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>表示法</th>
+<th>读法</th>
+<th>含义</th>
+<th>例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$f(n) = O(g(n))$</td>
+<td>$f(n)$ is big O of $g(n)$</td>
+<td>$f(n)$渐近小于或等于$f(n)$，$g(n)$是$f(n)$的上限</td>
+<td>$100n^2 - 20 n + 3 = O(n^2) \neq O(n)$</td>
+</tr>
+<tr>
+<td>$f(n) = \Omega(g(n))$</td>
+<td>$f(n)$ is big omega of $g(n)$</td>
+<td>$f(n)$渐近大于或等于$f(n)$，$g(n)$是$f(n)$的下限</td>
+<td>$100n^2 - 20 n + 3 = \Omega(n^2) = \Omega(n) \neq \Omega(n^3)$</td>
+</tr>
+<tr>
+<td>$f(n) = \Theta(g(n))$</td>
+<td>$f(n)$ is big theta of $g(n)$</td>
+<td>$f(n)$渐近等于$f(n)$，$g(n)$是$f(n)$的上限</td>
+<td>$100n^2 - 20 n + 3 = \Theta(n^2) \neq \Theta(n) \neq \Theta(n^3)$</td>
+</tr>
+</tbody>
+</table>
+</div>
 <blockquote>
 <p>注意$f(n) = O(g(n))$与$O(g(n)) = f(n)$含义不同。</p>
 </blockquote>

@@ -118,7 +118,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/10/18/Logistic-Regression/Sigmoid.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/18/Logistic-Regression/Sigmoid_gradient.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/18/Logistic-Regression/logistic_regression_result.png">
-<meta property="og:updated_time" content="2020-03-27T13:40:00.961Z">
+<meta property="og:updated_time" content="2020-04-26T13:14:37.829Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Logistic Regression">
 <meta name="twitter:description" content="引言逻辑回归（Logistic Regression）是用于处理因变量为分类变量的回归问题，常见的是二分类或二项分布问题，也可以处理多分类问题，它实际上是属于一种分类方法。 模型先给出模型，推导过程稍后给出，逻辑回归包含Sigmoid函数 f(z) = \frac{1}{1+e^{-z}}其图像如下 定义 z = w^Tx其中$x=[x_0, x_1, …, x_n]^T, x_0=1$ h_w(">
@@ -421,7 +421,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-03-27 21:40:00" itemprop="dateModified" datetime="2020-03-27T21:40:00+08:00">2020-03-27</time>
+                <time title="修改时间：2020-04-26 21:14:37" itemprop="dateModified" datetime="2020-04-26T21:14:37+08:00">2020-04-26</time>
               
             
           </span>
@@ -485,12 +485,12 @@
 <p>定义</p>
 <script type="math/tex; mode=display">z = w^Tx</script><p>其中$x=[x_0, x_1, …, x_n]^T, x_0=1$</p>
 <script type="math/tex; mode=display">h_w(x) = g(z) =  \frac{1}{1+e^{-z}}</script><h1 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h1><h2 id="由最大似然估计推导"><a href="#由最大似然估计推导" class="headerlink" title="由最大似然估计推导"></a>由最大似然估计推导</h2><p>对于二元分类问题，其取值作为随机变量，服从二项分布 $B(1, p)$，其中$p$即为预测输出概率$\hat{y}$</p>
-<script type="math/tex; mode=display">P(y_i^{(i)}) = (\hat{y}_i^{(i)})^{y_i^{(i)}}(1-\hat{y}_i^{(i)})^{1-y_i^{(i)}}</script><p>由极大似然估计</p>
-<script type="math/tex; mode=display">L = \prod_{i=0}^N P(y_i^{(i)}) = \prod_{i=0}^N (\hat{y}_i^{(i)})^{y_i^{(i)}}(1-\hat{y}_i^{(i)})^{1-y_i^{(i)}}</script><p>取对数似然函数</p>
-<script type="math/tex; mode=display">logL = \sum_{i=0}^N [y_i^{(i)} log \hat{y}_i^{(i)} + (1-y_i^{(i)}) log (1-\hat{y}_i^{(i)})]</script><p>优化目标是</p>
+<script type="math/tex; mode=display">P(y^{(i)}) = (\hat{y}^{(i)})^{y^{(i)}}(1-\hat{y}^{(i)})^{1-y^{(i)}}</script><p>由极大似然估计</p>
+<script type="math/tex; mode=display">L = \prod_{i=1}^N P(y^{(i)}) = \prod_{i=1}^N (\hat{y}^{(i)})^{y^{(i)}}(1-\hat{y}^{(i)})^{1-y^{(i)}}</script><p>取对数似然函数</p>
+<script type="math/tex; mode=display">logL = \sum_{i=1}^N [y^{(i)} log \hat{y}^{(i)} + (1-y^{(i)}) log (1-\hat{y}^{(i)})]</script><p>优化目标是</p>
 <script type="math/tex; mode=display">w = argmax_w logL</script><p>优化问题一般表述成<code>minimize</code>问题，添加负号，构成<code>Neg Log Likelihood</code>损失</p>
 <script type="math/tex; mode=display">w = argmin_w (-logL)</script><p>一般取均值</p>
-<script type="math/tex; mode=display">L(\hat{y}, y)=- \frac{1}{N} \sum_i [y_i^{(i)} log(\hat{y}_i^{(i)})+(1 - y_i^{(i)})log(1-\hat{y}_i^{(i)})]</script><p>其中$y_i$表示真实值，$\hat{y}_i$表示预测值</p>
+<script type="math/tex; mode=display">L(\hat{y}, y)=- \frac{1}{N} \sum_i [y^{(i)} log(\hat{y}^{(i)})+(1 - y^{(i)})log(1-\hat{y}^{(i)})]</script><p>其中$y$表示真实值，$\hat{y}$表示预测值</p>
 <h2 id="从交叉熵理解"><a href="#从交叉熵理解" class="headerlink" title="从交叉熵理解"></a>从交叉熵理解</h2><p>已知交叉熵<code>cross entropy</code>定义如下</p>
 <script type="math/tex; mode=display">CrossEnt = \sum_i p_i log \frac{1}{q_i}</script><p>而对于样本$ (X_i, y_i) $，为确定事件，故标签概率的取值为$ p_i = y_i ∈ \{0,1\}$，$ q_i即预测输出的概率值\hat{y}_i $，可得到与上面相同的推导结论</p>
 <h2 id="从决策平面和贝叶斯决策理解"><a href="#从决策平面和贝叶斯决策理解" class="headerlink" title="从决策平面和贝叶斯决策理解"></a>从决策平面和贝叶斯决策理解</h2><blockquote>
