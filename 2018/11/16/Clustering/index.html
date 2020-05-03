@@ -129,7 +129,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/11/16/Clustering/DBSCAN1.jpg">
 <meta property="og:image" content="http://yoursite.com/2018/11/16/Clustering/DBSCAN2.jpg">
 <meta property="og:image" content="http://yoursite.com/2018/11/16/Clustering/层次聚类.png">
-<meta property="og:updated_time" content="2019-08-07T09:14:19.472Z">
+<meta property="og:updated_time" content="2020-05-01T07:35:47.225Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Clustering">
 <meta name="twitter:description" content="前言这是第一篇关于无监督学习的博文，无监督的学习则不是尝试预测任何东西，而是寻找数据中的特征，在无监督学习中，有一个重要的方法称为聚类，是把具有相同特征的数据聚集在一组。 基础知识距离度量方法机器学习中距离度量方法有很多，以下简单介绍几种。  机器学习常用的距离度量方法 - taotiezhengfeng的博客 - CSDN博客算法中的各种距离（欧式距离，马氏距离，闵可夫斯基距离……） - 啊哦1">
@@ -432,7 +432,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-08-07 17:14:19" itemprop="dateModified" datetime="2019-08-07T17:14:19+08:00">2019-08-07</time>
+                <time title="修改时间：2020-05-01 15:35:47" itemprop="dateModified" datetime="2020-05-01T15:35:47+08:00">2020-05-01</time>
               
             
           </span>
@@ -517,13 +517,15 @@ y = [y_1, y_2, ..., y_n]^T</script><ul>
 <script type="math/tex; mode=display">
 \cos \theta = \frac{a^2+b^2-c^2}{2ab}</script><p>其中</p>
 <script type="math/tex; mode=display">
-||\vec{a}|| = \sqrt{x_1^2 + y_1^2}</script><script type="math/tex; mode=display">
-||\vec{b}|| = \sqrt{x_2^2 + y_2^2}</script><script type="math/tex; mode=display">
-||\vec{c}|| = \sqrt{(x_1 - x_2)^2 + (x_2 - y_2)^2}</script><p>故</p>
+\begin{cases}
+    ||\vec{a}|| = \sqrt{x_1^2 + y_1^2} \\
+    ||\vec{b}|| = \sqrt{x_2^2 + y_2^2} \\
+    ||\vec{c}|| = \sqrt{(x_1 - x_2)^2 + (x_2 - y_2)^2}
+\end{cases}</script><p>故</p>
 <script type="math/tex; mode=display">
 \cos \theta = \frac
-  {(\sqrt{x_1^2 + y_1^2})^2 + (\sqrt{x_2^2 + y_2^2})^2 - (\sqrt{(x_1 - x_2)^2 + (x_2 - y_2))^2}}
-  {2 \sqrt{x_1^2 + y_1^2} \sqrt{x_2^2 + y_2^2}}</script><script type="math/tex; mode=display">
+{(\sqrt{x_1^2 + y_1^2})^2 + (\sqrt{x_2^2 + y_2^2})^2 - (\sqrt{(x_1 - x_2)^2 + (x_2 - y_2)})^2}
+{2 \sqrt{x_1^2 + y_1^2} \sqrt{x_2^2 + y_2^2}}</script><script type="math/tex; mode=display">
 = \frac
   {x_1 x_2 + y_1 y_2}
   {\sqrt{x_1^2 + y_1^2} \sqrt{x_2^2 + y_2^2}}
@@ -1042,7 +1044,7 @@ cut(V_i, \overline{V_i}) = W (V_i, \overline{V_i})</script><blockquote>
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">92</span>
+                    <span class="site-state-item-count">93</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1073,7 +1075,9 @@ cut(V_i, \overline{V_i}) = W (V_i, \overline{V_i})</script><blockquote>
                     
                       
                     
-                    <span class="site-state-item-count">9</span>
+                      
+                    
+                    <span class="site-state-item-count">10</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
