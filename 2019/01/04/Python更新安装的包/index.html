@@ -115,7 +115,7 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="pip不提供升级全部已安装模块的方法，以下指令可查看更新信息1$ pip list --outdate 得到输出信息如下123456789101112131415161718192021222324Package           Version   Latest     Type----------------- --------- ---------- -----absl-py">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-07-17T12:12:29.622Z">
+<meta property="og:updated_time" content="2020-05-18T08:55:35.610Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python更新安装的包">
 <meta name="twitter:description" content="pip不提供升级全部已安装模块的方法，以下指令可查看更新信息1$ pip list --outdate 得到输出信息如下123456789101112131415161718192021222324Package           Version   Latest     Type----------------- --------- ---------- -----absl-py">
@@ -417,7 +417,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-17 20:12:29" itemprop="dateModified" datetime="2019-07-17T20:12:29+08:00">2019-07-17</time>
+                <time title="修改时间：2020-05-18 16:55:35" itemprop="dateModified" datetime="2020-05-18T16:55:35+08:00">2020-05-18</time>
               
             
           </span>
@@ -477,7 +477,7 @@
       
         <p><code>pip</code>不提供升级全部已安装模块的方法，以下指令可查看更新信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pip list --outdate</span><br></pre></td></tr></table></figure></p>
 <p>得到输出信息如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">Package           Version   Latest     Type</span><br><span class="line">----------------- --------- ---------- -----</span><br><span class="line">absl-py           0.3.0     0.6.1      sdist</span><br><span class="line">autopep8          1.3.5     1.4.2      sdist</span><br><span class="line">bleach            2.1.4     3.0.2      wheel</span><br><span class="line">certifi           2018.8.24 2018.10.15 wheel</span><br><span class="line">dask              0.20.0    0.20.1     wheel</span><br><span class="line">grpcio            1.14.1    1.16.0     wheel</span><br><span class="line">ipykernel         5.0.0     5.1.0      wheel</span><br><span class="line">ipython           7.0.1     7.1.1      wheel</span><br><span class="line">jedi              0.12.1    0.13.1     wheel</span><br><span class="line">jupyter-console   5.2.0     6.0.0      wheel</span><br><span class="line">Markdown          2.6.11    3.0.1      wheel</span><br><span class="line">MarkupSafe        1.0       1.1.0      wheel</span><br><span class="line">matplotlib        2.2.2     3.0.2      wheel</span><br><span class="line">mistune           0.8.3     0.8.4      wheel</span><br><span class="line">numpy             1.14.5    1.15.4     wheel</span><br><span class="line">opencv-python     3.4.2.17  3.4.3.18   wheel</span><br><span class="line">Pillow            5.2.0     5.3.0      wheel</span><br><span class="line">prometheus-client 0.3.1     0.4.2      sdist</span><br><span class="line">pyparsing         2.2.0     2.3.0      wheel</span><br><span class="line">python-dateutil   2.7.3     2.7.5      wheel</span><br><span class="line">pytz              2018.5    2018.7     wheel</span><br><span class="line">urllib3           1.23      1.24.1     wheel</span><br></pre></td></tr></table></figure></p>
-<p>以下提供一键升级的方法，可能比较久hhhh<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">from pip._internal.utils.misc import get_installed_distributions</span><br><span class="line">from subprocess import call</span><br><span class="line"> </span><br><span class="line">for dist in get_installed_distributions():</span><br><span class="line">    modulename = dist.project_name</span><br><span class="line">    print(&apos;start processing module &apos; + modulename)</span><br><span class="line">    call(&quot;pip install --upgrade &quot; + modulename, shell=True)</span><br><span class="line">    print(&apos;module &apos; + modulename + &apos;done!&apos;)</span><br></pre></td></tr></table></figure></p>
+<p>以下提供一键升级的方法，可能比较久hhhh<br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> tqdm</span><br><span class="line"><span class="keyword">from</span> subprocess <span class="keyword">import</span> call</span><br><span class="line"><span class="keyword">from</span> pip._internal.utils.misc <span class="keyword">import</span> get_installed_distributions</span><br><span class="line"> </span><br><span class="line"><span class="keyword">for</span> dist <span class="keyword">in</span> tqdm(get_installed_distributions()):</span><br><span class="line">    call(<span class="string">"pip install --upgrade &#123;&#125;"</span>.format(dist.project_name), shell=<span class="keyword">True</span>)</span><br></pre></td></tr></table></figure></p>
 <p>另外，从已有的安装列表，安装所需要的包，可使用以下指令</p>
 <ul>
 <li><p>在已安装的机器中，生成列表</p>
@@ -661,6 +661,8 @@
                 <div class="site-state-item site-state-tags">
                   <a href="/tags/index.html">
                     
+                    
+                      
                     
                       
                     
