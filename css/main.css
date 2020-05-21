@@ -2075,7 +2075,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #e9a217;
+  background: #06ffff;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -3349,7 +3349,7 @@ body {
   opacity: 0.9;
 }
 body {
-  background: url("/images/cat.jpg");
+  background: url("/images/bird.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
