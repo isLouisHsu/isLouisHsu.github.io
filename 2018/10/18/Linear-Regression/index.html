@@ -117,10 +117,16 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/projection_linreg2.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/projection_linreg3.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/ridge_gragh.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/ridge_plot.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/ridge_param.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/lasso_graph.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/lar.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/contours.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/w_i_x_i.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/result_linreg_noreg.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/result_linreg_reg.png">
-<meta property="og:updated_time" content="2020-03-23T10:59:57.954Z">
+<meta property="og:updated_time" content="2020-05-24T15:38:05.859Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linear Regression">
 <meta name="twitter:description" content="引言线性回归可以说是机器学习最基础的算法 模型\hat{y}^{(i)} = w^Tx^{(i)}其中$x^{(i)}_{(n + 1) \times 1}$为第$i$个$n$维向量，$i = 1, \cdots, m$，$w_{(n + 1) \times 1}$为权值向量  \begin{cases}     x^{(i)}=\begin{bmatrix} x_0^{(i)} &amp; x_1^{(">
@@ -423,7 +429,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-03-23 18:59:57" itemprop="dateModified" datetime="2020-03-23T18:59:57+08:00">2020-03-23</time>
+                <time title="修改时间：2020-05-24 23:38:05" itemprop="dateModified" datetime="2020-05-24T23:38:05+08:00">2020-05-24</time>
               
             
           </span>
@@ -497,9 +503,9 @@
 <script type="math/tex; mode=display">L_{emp}(y, t)=\frac{1}{2N}\sum_i (\hat{y}^{(i)}-y^{(i)})^2</script><p>也可以定义为误差的和而不是均值，对结果无影响，可视作学习率$α$除去一个常数</p>
 <h1 id="梯度推导"><a href="#梯度推导" class="headerlink" title="梯度推导"></a>梯度推导</h1><script type="math/tex; mode=display">
 \begin{aligned}
-    \frac{∂L}{∂w_j} = \frac{∂}{∂w_j}\frac{1}{2N}\sum_i(\hat{y}^{(i)}-y^{(i)})^2 \\
-    = \frac{1}{2N} \sum_i \frac{∂}{∂w_j} (\hat{y}^{(i)}-y^{(i)})^2 \\
-    = \frac{1}{N} \sum_i (\hat{y}^{(i)}-y^{(i)}) \frac{∂t^{(i)}}{∂w_j} \\
+    \frac{\partial L}{\partial w_j} = \frac{\partial }{\partial w_j}\frac{1}{2N}\sum_i(\hat{y}^{(i)}-y^{(i)})^2 \\
+    = \frac{1}{2N} \sum_i \frac{\partial }{\partial w_j} (\hat{y}^{(i)}-y^{(i)})^2 \\
+    = \frac{1}{N} \sum_i (\hat{y}^{(i)}-y^{(i)}) \frac{\partial t^{(i)}}{\partial w_j} \\
     =  \frac{1}{N} \sum_i (\hat{y}^{(i)}-y^{(i)}) x_j^{(i)}
 \end{aligned}</script><p>或者使用矩阵推导，记$m$个$n$维样本组成的样本矩阵为$X_{m \times (n+1)} = \begin{bmatrix} x^{(1)} &amp; x^{(2)} &amp; \cdots &amp; x^{(m)} \end{bmatrix}^T$，$x^{(i)}$为第$i$个样本的特征(行向量)，$Y_{m \times 1}$为$m$个样本groundtruth组成的向量，那么有</p>
 <script type="math/tex; mode=display">L = \frac{1}{2}(Xw-Y)^T(Xw-Y)</script><script type="math/tex; mode=display">∇_w L = X^T(\hat{Y}-Y)</script><blockquote>
@@ -509,15 +515,22 @@
     = \frac{1}{2} (2X^TXw - X^TY - X^TY) 
     = X^T(Xw-Y)
 \end{aligned}</script></blockquote>
-<p>在梯度为$\vec{0}$的点，即$∇_w L = \vec{0}$时对应最优解</p>
-<script type="math/tex; mode=display">X^T(Xw-Y) = 0</script><blockquote>
-<p>令$X^T(Xw-Y) = 0$，有</p>
+<p>在梯度为$\vec{0}$的点，即$∇_w L = \vec{0}$时求解得$w$的<strong>无偏估计</strong>$\hat{w}$</p>
+<script type="math/tex; mode=display">$$
+
+令$X^T(Xw-Y) = 0$，有</script><p>\begin{aligned}<br>    X^T(Xw-Y) = 0 \Rightarrow \\ X^TXw = X^TY \Rightarrow \\ \hat{w} =(X^TX)^{-1} X^TY<br>\end{aligned} </p>
 <script type="math/tex; mode=display">
-\begin{aligned}
-     X^TXw = X^TY \\ w^*=(X^TX+\lambda I)^{-1}X^TY
-\end{aligned}</script></blockquote>
-<p>其中$X^+=(X^TX+\lambda I)^{-1}X^T$，表示矩阵$X_{m×n}$的伪逆</p>
-<h2 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h2><p>采用梯度下降法求解</p>
+
+
+其中$X^+=(X^TX)^{-1} X^T$，表示矩阵$X_{m×n}$的伪逆。但是当
+$$ rank(X_{m \times (n + 1)}) < n + 1</script><blockquote>
+<ol>
+<li>样本数$m$小于特征维度数$n+1$；</li>
+<li>存在多重共线性问题。</li>
+</ol>
+</blockquote>
+<p>$X^TX$<strong>奇异</strong>无法求逆，用<strong>岭回归</strong>可以解决这个问题，在后面介绍，求得<strong>岭回归估计</strong>如下</p>
+<script type="math/tex; mode=display">\hat{w}(\lambda) =(X^TX+\lambda I)^{-1}X^TY</script><h2 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h2><p>采用梯度下降法求解</p>
 <script type="math/tex; mode=display">w := w - \alpha ∇_w L</script><p>其中$w$表示参数向量</p>
 <blockquote>
 <p>进一步思考：为什么使用梯度下降可以求取最优解呢？</p>
@@ -526,11 +539,87 @@
 </blockquote>
 <h1 id="从投影的角度理解线性回归"><a href="#从投影的角度理解线性回归" class="headerlink" title="从投影的角度理解线性回归"></a>从投影的角度理解线性回归</h1><p><img src="/2018/10/18/Linear-Regression/projection_linreg2.png" alt="投影理解"></p>
 <p><img src="/2018/10/18/Linear-Regression/projection_linreg3.png" alt="用投影推导最优解"></p>
-<h1 id="线性回归的正则化"><a href="#线性回归的正则化" class="headerlink" title="线性回归的正则化"></a>线性回归的正则化</h1><p>为克服过拟合问题，可加入正则化项$||w||_2^2$，此时损失函数(<strong>结构误差/风险</strong>)定义为</p>
-<script type="math/tex; mode=display">L(\hat{y}, y)=\frac{1}{2N} ||\hat{y}^{(i)}-y^{(i)}||_2^2 + \lambda ||w||_2^2</script><p>或者</p>
-<script type="math/tex; mode=display">L(\hat{y}, y)=\frac{1}{2N} \sum_i (\hat{y}^{(i)}-y^{(i)})^2 +  \frac{\lambda}{2N}\sum_j w_j^2</script><p>其中$i = 1, …, N_{sample}; j = 1, …, N_{feature},j&gt;0 $</p>
-<p>此时梯度为</p>
-<script type="math/tex; mode=display">\frac{∂L}{∂w_j} = \frac{1}{N} \sum_i (\hat{y}^{(i)}-y^{(i)}) x_j^{(i)} + \frac{\lambda}{N}w_j</script><p>其中$j = 1, …, N_{feature},j&gt;0 $</p>
+<h1 id="线性回归的正则化"><a href="#线性回归的正则化" class="headerlink" title="线性回归的正则化"></a>线性回归的正则化</h1><p>添加$L_2$正则也称为<strong>岭回归</strong>(Ridge Regression)，添加$L_1$正则称为<strong>Lasso回归</strong>(一般用作特征选择)。</p>
+<h2 id="岭回归"><a href="#岭回归" class="headerlink" title="岭回归"></a>岭回归</h2><p>为克服过拟合问题，可加入正则化项$||w||_2^2$，此时损失函数(<strong>结构误差/风险</strong>)定义为</p>
+<script type="math/tex; mode=display">L(\hat{y}, y) = \frac{1}{2} ||\hat{y}^{(i)}-y^{(i)}||_2^2 + \lambda ||w||_2^2</script><p>那么<strong>优化问题</strong>如下</p>
+<script type="math/tex; mode=display">
+\hat{w}^{ridge} = \arg \min L(\hat{y}, y)</script><p>或者</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \hat{w}^{ridge} = \arg \min \left\{ \frac{1}{2} ||\hat{y}^{(i)}-y^{(i)}||_2^2 \right\} \\
+    s.t. \quad ||w||_2^2 \leq t(与\lambda有关)
+\end{aligned}</script><p>几何意义<br><img src="/2018/10/18/Linear-Regression/ridge_gragh.png" alt="ridge_gragh"></p>
+<p>梯度为</p>
+<script type="math/tex; mode=display">\frac{\partial L}{\partial w_j} = \frac{1}{N} \sum_i (\hat{y}^{(i)}-y^{(i)}) x_j^{(i)} + \frac{\lambda}{N}w_j, j = 1, ..., n + 1</script><p>此时对应的<strong>岭回归参数估计</strong>如下</p>
+<script type="math/tex; mode=display">\hat{w}(\lambda) =(X^TX+\lambda I)^{-1}X^TY</script><ul>
+<li>当$X^TX$出现奇异时，添加矩阵$\lambda I$可以使其<strong>奇异程度降低</strong>；</li>
+<li>岭回归估计比最小二乘估计稳定，后者是其特殊情况($\lambda=0$)。</li>
+</ul>
+<p><strong>性质</strong></p>
+<ul>
+<li>$\hat{w}(\lambda)$是$w$的<strong>有偏估计</strong>，残差平方和增大但是系数检验效果更好；</li>
+<li>当认为$\lambda$是与$y$无关的常数时，$\hat{w}(\lambda) =(X^TX+\lambda I)^{-1}X^TY = (X^TX+\lambda I)^{-1}X^T X \hat{w}$，即$\hat{w}(\lambda)$是$\hat{w}$的<strong>线性变换</strong>；</li>
+<li>对于<strong>任意</strong>$\lambda &gt; 0$，$||\hat{w}|| \neq 0$，总有$|| \hat{w}(\lambda) || &lt; ||\hat{w}||$；</li>
+<li><strong>存在</strong>$\lambda &gt; 0$，使得$MSE(\hat{w}(\lambda)) &lt; MSE(\hat{w})$。</li>
+</ul>
+<p>由于参数$\lambda$并不是唯一确定的，所以得到的$\hat{w}(\lambda)$是回归参数$w$的一个<strong>估计族</strong>，$\hat{w}_{j}(\lambda) - \lambda$图称为<strong>岭迹图</strong>。</p>
+<ul>
+<li>当$\lambda = 0$时为最小二乘估计，参数$\hat{w}_{j}$<strong>不应趋向无穷</strong>；</li>
+<li>当不存在奇异时，岭迹应<strong>稳定渐进趋向$0$</strong>；</li>
+<li><p>通过岭迹图可以剔除变量解决多重共线性问题(个别情形下适用)</p>
+<ul>
+<li>可以剔除掉标准化岭回归<strong>系数比较稳定且绝对值很小</strong>的自变量;</li>
+<li>随着$\lambda$的增加，回归系数不稳定，<strong>震荡趋于零</strong>的自变量也可以剔除;</li>
+<li>如果依照上述去掉变量的原则，有若干个回归系数不稳定，究竟去掉几个，去掉哪几个，这幵无一般原则可循，这需根据<strong>去掉某个变量后重新进行岭回归分析</strong>的效果来确定。</li>
+</ul>
+</li>
+</ul>
+<p>一些岭迹图<br><img src="/2018/10/18/Linear-Regression/ridge_plot.png" alt="ridge_plot"></p>
+<p>通过岭迹图<strong>选择参数$\lambda$的原则</strong></p>
+<ul>
+<li>各回归系数的岭估计基本稳定(如正负)；</li>
+<li>用最小二乘估计时符号不合理的回归系数，其岭估计的符号变得合理；</li>
+<li>回归系数没有不合乎实际意义的绝对值；</li>
+<li>残差平方和增大不太多。</li>
+</ul>
+<blockquote>
+<p>还有<strong>方差扩大因子法</strong>，注意不同方法建议的选择可能不一致。</p>
+</blockquote>
+<p><img src="/2018/10/18/Linear-Regression/ridge_param.png" alt="ridge_param"></p>
+<p>存在的问题</p>
+<ul>
+<li>岭参数$\lambda$计算方法太多且差异很大；</li>
+<li>用岭迹图进行变量筛选，随意性太大，且只能一定程度消除多重共线性，而不能解决其他问题；</li>
+<li>岭回归返回的模型若<strong>没有经过特征筛选</strong>，包含全部变量。</li>
+</ul>
+<h2 id="Lasso回归"><a href="#Lasso回归" class="headerlink" title="Lasso回归"></a>Lasso回归</h2><p><strong>Lasso</strong>(The Least Absolute Shrinkage and Selectionator operator)通过构造<strong>一阶惩罚函数</strong>获得一个精炼的模型，最终能确定<strong>一些指标的系数为$0$</strong>，擅长处理具有多重共线性的数据，与岭回归一样时<strong>有偏估计</strong>。</p>
+<p>Lasso回归的<strong>优化问题</strong>是</p>
+<script type="math/tex; mode=display">
+\hat{w}^{lasso} = \arg \min \left\{ \frac{1}{2} ||\hat{y}^{(i)}-y^{(i)}||_2^2 + \lambda ||w||_1 \right\}</script><p>或者</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \hat{w}^{lasso} = \arg \min \left\{ \frac{1}{2} ||\hat{y}^{(i)}-y^{(i)}||_2^2 \right\} \\
+    s.t. \quad ||w||_1 \leq t(与\lambda有关)
+\end{aligned}</script><p>几何意义<br><img src="/2018/10/18/Linear-Regression/lasso_graph.png" alt="lasso_graph"></p>
+<p>但是$L_1$范数不可导，优化目标问题很复杂，可以用最小角回归(Least Angle Regression, LAR)解决，通过收缩的(shrinkage)方法依次选择变量加入。</p>
+<p>首先介绍<strong>相关系数的几何意义</strong>，将$A, B$两个向量<strong>去中心化、单位化</strong>，即</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    \hat{a}_i = (a_i - \overline{A}) / \sigma_A \\
+    \hat{b}_i = (b_i - \overline{B}) / \sigma_B
+\end{cases}</script><p>那么相关系数也即这两个向量的<strong>余弦距离</strong></p>
+<script type="math/tex; mode=display">
+r_{AB} = \frac{\sum_{i=1}^n (a_i - \overline{A})(b_i - \overline{B})}{\sigma_A \sigma_B} = \frac{1}{n} \sum_{i=1}^n \hat{a}_i \hat{b}_i = \hat{A} \cdot \hat{B}= \cos<\hat{A}, \hat{B}></script><p>LAR<strong>具体算法</strong>如下</p>
+<ol>
+<li><strong>初始化</strong>：计算输出向量$Y$和属性向量$X_j, j = 1, \cdots. (n + 1)$的相关系数$r_j$，并按相关系数从大到小将属性排序；</li>
+<li><strong>第一个特征选择</strong>：从原点开始沿着<em>相关系数最大</em>的属性$X_1$游走，得到的向量作为预测输出$\hat{Y}$，残差对应为$Y - \hat{Y}$，那么在这个过程中残差与$X_1$的相关性降低<script type="math/tex; mode=display">r_1' = (Y - \hat{Y}) \cdot X_1</script></li>
+<li><strong>剩余特征加入</strong>：当步骤2中相关系数降低至<strong>存在特征$X_2$与残差的相关系数与$r_j’$相等</strong>时，即游走到$w_1 X_1$时，将该特征加入，并从该点开始沿着$w_1 X_1, X_2 - w_1 X_1$两向量的角平分线游走；</li>
+<li>重复步骤2，直至所有加入的特征与残差$Y - \hat{Y}$相关系数小于很小的常数。</li>
+</ol>
+<p><img src="/2018/10/18/Linear-Regression/lar.png" alt="lar"></p>
+<h2 id="弹性网-elasticnet"><a href="#弹性网-elasticnet" class="headerlink" title="弹性网(elasticnet)"></a>弹性网(elasticnet)</h2><script type="math/tex; mode=display">
+\hat{w} = \arg \min \left\{ \frac{1}{2} ||\hat{y}^{(i)}-y^{(i)}||_2^2 + \lambda \left[ \alpha ||w||_2^2 + (1 - \alpha) ||w||_1 \right] \right\}</script><h2 id="q阶惩罚"><a href="#q阶惩罚" class="headerlink" title="q阶惩罚"></a>q阶惩罚</h2><script type="math/tex; mode=display">
+\hat{w} = \arg \min \left\{ \frac{1}{2} ||\hat{y}^{(i)}-y^{(i)}||_2^2 + \lambda ||w||_q^q \right\}</script><p><img src="/2018/10/18/Linear-Regression/contours.png" alt="contours"></p>
 <h1 id="局部加权线性回归"><a href="#局部加权线性回归" class="headerlink" title="局部加权线性回归"></a>局部加权线性回归</h1><p>目标函数定义为</p>
 <script type="math/tex; mode=display">L(y, t)=\frac{1}{2N}\sum_i w^{(i)} (\hat{y}^{(i)}-y^{(i)})^2</script><p>其中</p>
 <script type="math/tex; mode=display">w^{(i)} = e^{-\frac{(x^{(i)}-x)^2}{2\tau^2}}</script><p>$x$表示输入的预测样本，$x^{(i)}$表示训练样本</p>
@@ -829,7 +918,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#模型"><span class="nav-number">2.</span> <span class="nav-text">模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#损失函数"><span class="nav-number">3.</span> <span class="nav-text">损失函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#定义误差"><span class="nav-number">3.1.</span> <span class="nav-text">定义误差</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定义损失函数"><span class="nav-number">3.2.</span> <span class="nav-text">定义损失函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#梯度推导"><span class="nav-number">4.</span> <span class="nav-text">梯度推导</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#训练"><span class="nav-number">4.1.</span> <span class="nav-text">训练</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#从投影的角度理解线性回归"><span class="nav-number">5.</span> <span class="nav-text">从投影的角度理解线性回归</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线性回归的正则化"><span class="nav-number">6.</span> <span class="nav-text">线性回归的正则化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#局部加权线性回归"><span class="nav-number">7.</span> <span class="nav-text">局部加权线性回归</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码"><span class="nav-number">8.</span> <span class="nav-text">代码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#training-step"><span class="nav-number">8.1.</span> <span class="nav-text">training step</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#predict-step"><span class="nav-number">8.2.</span> <span class="nav-text">predict step</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行结果"><span class="nav-number">8.3.</span> <span class="nav-text">运行结果</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#模型"><span class="nav-number">2.</span> <span class="nav-text">模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#损失函数"><span class="nav-number">3.</span> <span class="nav-text">损失函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#定义误差"><span class="nav-number">3.1.</span> <span class="nav-text">定义误差</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定义损失函数"><span class="nav-number">3.2.</span> <span class="nav-text">定义损失函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#梯度推导"><span class="nav-number">4.</span> <span class="nav-text">梯度推导</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#训练"><span class="nav-number">4.1.</span> <span class="nav-text">训练</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#从投影的角度理解线性回归"><span class="nav-number">5.</span> <span class="nav-text">从投影的角度理解线性回归</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线性回归的正则化"><span class="nav-number">6.</span> <span class="nav-text">线性回归的正则化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#岭回归"><span class="nav-number">6.1.</span> <span class="nav-text">岭回归</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lasso回归"><span class="nav-number">6.2.</span> <span class="nav-text">Lasso回归</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#弹性网-elasticnet"><span class="nav-number">6.3.</span> <span class="nav-text">弹性网(elasticnet)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#q阶惩罚"><span class="nav-number">6.4.</span> <span class="nav-text">q阶惩罚</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#局部加权线性回归"><span class="nav-number">7.</span> <span class="nav-text">局部加权线性回归</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码"><span class="nav-number">8.</span> <span class="nav-text">代码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#training-step"><span class="nav-number">8.1.</span> <span class="nav-text">training step</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#predict-step"><span class="nav-number">8.2.</span> <span class="nav-text">predict step</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行结果"><span class="nav-number">8.3.</span> <span class="nav-text">运行结果</span></a></li></ol></li></ol></div>
             
 
           </div>
