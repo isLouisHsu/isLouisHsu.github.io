@@ -121,12 +121,12 @@
 <meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/ridge_plot.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/ridge_param.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/lasso_graph.png">
-<meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/lar.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/lar.jpg">
 <meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/contours.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/w_i_x_i.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/result_linreg_noreg.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/result_linreg_reg.png">
-<meta property="og:updated_time" content="2020-05-24T15:38:05.859Z">
+<meta property="og:updated_time" content="2020-05-24T16:11:41.401Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linear Regression">
 <meta name="twitter:description" content="引言线性回归可以说是机器学习最基础的算法 模型\hat{y}^{(i)} = w^Tx^{(i)}其中$x^{(i)}_{(n + 1) \times 1}$为第$i$个$n$维向量，$i = 1, \cdots, m$，$w_{(n + 1) \times 1}$为权值向量  \begin{cases}     x^{(i)}=\begin{bmatrix} x_0^{(i)} &amp; x_1^{(">
@@ -429,7 +429,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-05-24 23:38:05" itemprop="dateModified" datetime="2020-05-24T23:38:05+08:00">2020-05-24</time>
+                <time title="修改时间：2020-05-25 00:11:41" itemprop="dateModified" datetime="2020-05-25T00:11:41+08:00">2020-05-25</time>
               
             
           </span>
@@ -609,14 +609,16 @@ $$ rank(X_{m \times (n + 1)}) < n + 1</script><blockquote>
     \hat{b}_i = (b_i - \overline{B}) / \sigma_B
 \end{cases}</script><p>那么相关系数也即这两个向量的<strong>余弦距离</strong></p>
 <script type="math/tex; mode=display">
-r_{AB} = \frac{\sum_{i=1}^n (a_i - \overline{A})(b_i - \overline{B})}{\sigma_A \sigma_B} = \frac{1}{n} \sum_{i=1}^n \hat{a}_i \hat{b}_i = \hat{A} \cdot \hat{B}= \cos<\hat{A}, \hat{B}></script><p>LAR<strong>具体算法</strong>如下</p>
+r_{AB} = \frac{\sum_{i=1}^n (a_i - \overline{A})(b_i - \overline{B})}{\sigma_A \sigma_B} = \frac{1}{n} \sum_{i=1}^n \hat{a}_i \hat{b}_i = \hat{A} \cdot \hat{B}= \cos<\hat{A}, \hat{B}></script><p>LAR<strong>具体算法</strong>如下，是一种线性的方法，求解结果与Lasso结果几乎一致(并不完全一致，但近似相同)</p>
 <ol>
 <li><strong>初始化</strong>：计算输出向量$Y$和属性向量$X_j, j = 1, \cdots. (n + 1)$的相关系数$r_j$，并按相关系数从大到小将属性排序；</li>
 <li><strong>第一个特征选择</strong>：从原点开始沿着<em>相关系数最大</em>的属性$X_1$游走，得到的向量作为预测输出$\hat{Y}$，残差对应为$Y - \hat{Y}$，那么在这个过程中残差与$X_1$的相关性降低<script type="math/tex; mode=display">r_1' = (Y - \hat{Y}) \cdot X_1</script></li>
-<li><strong>剩余特征加入</strong>：当步骤2中相关系数降低至<strong>存在特征$X_2$与残差的相关系数与$r_j’$相等</strong>时，即游走到$w_1 X_1$时，将该特征加入，并从该点开始沿着$w_1 X_1, X_2 - w_1 X_1$两向量的角平分线游走；</li>
-<li>重复步骤2，直至所有加入的特征与残差$Y - \hat{Y}$相关系数小于很小的常数。</li>
+<li><strong>剩余特征加入</strong>：当步骤2中相关系数降低至<strong>存在特征$X_2$与残差的相关系数与$r_j’$相等</strong>时，即游走到$w_1 X_1$时，将该特征加入，开始沿着$w_1 X_1, X_2 - w_1 X_1$两向量的角平分线$(w_1 X_1 + X_2’)$游走，其中$X_2’ = X_2 - w1 X_1$；</li>
+<li>重复步骤2，直至<strong>所有加入的特征</strong>与残差$Y - \hat{Y}$相关系数小于指定的较小常数$\epsilon$；</li>
+<li>此时<strong>剩余的特征被丢弃</strong>，达到特征筛选的作用。</li>
 </ol>
-<p><img src="/2018/10/18/Linear-Regression/lar.png" alt="lar"></p>
+<p>如下图，当残差为$R_2$时，$R_2$几乎与$X_1, X_2$垂直，相关系数为$0$，停止游走，特征$X_3$被丢弃。</p>
+<p><img src="/2018/10/18/Linear-Regression/lar.jpg" alt="lar"></p>
 <h2 id="弹性网-elasticnet"><a href="#弹性网-elasticnet" class="headerlink" title="弹性网(elasticnet)"></a>弹性网(elasticnet)</h2><script type="math/tex; mode=display">
 \hat{w} = \arg \min \left\{ \frac{1}{2} ||\hat{y}^{(i)}-y^{(i)}||_2^2 + \lambda \left[ \alpha ||w||_2^2 + (1 - \alpha) ||w||_1 \right] \right\}</script><h2 id="q阶惩罚"><a href="#q阶惩罚" class="headerlink" title="q阶惩罚"></a>q阶惩罚</h2><script type="math/tex; mode=display">
 \hat{w} = \arg \min \left\{ \frac{1}{2} ||\hat{y}^{(i)}-y^{(i)}||_2^2 + \lambda ||w||_q^q \right\}</script><p><img src="/2018/10/18/Linear-Regression/contours.png" alt="contours"></p>
@@ -771,7 +773,7 @@ r_{AB} = \frac{\sum_{i=1}^n (a_i - \overline{A})(b_i - \overline{B})}{\sigma_A \
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">96</span>
+                    <span class="site-state-item-count">97</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
