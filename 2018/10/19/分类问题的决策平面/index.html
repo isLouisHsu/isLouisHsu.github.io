@@ -115,7 +115,7 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="引言对于分类问题，计算结果一般为概率值，那么如何根据计算得的概率进行判别分类呢？  这部分理解后，Logistic回归与Softmax回归的模型就很容易推得。  判别函数对于一个类别为$K$的分类问题，如果对于所有的$ i,j=1,…,K, j\neq i$，有  g_i(x) &amp;gt; g_j(x)则此分类器将这个样本对应的特征向量$x$判别为$w_i$，则此分类器的作用是，计算$K$个判别函数并选取">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-07-17T12:13:21.310Z">
+<meta property="og:updated_time" content="2020-05-29T06:23:29.578Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="分类问题的决策平面">
 <meta name="twitter:description" content="引言对于分类问题，计算结果一般为概率值，那么如何根据计算得的概率进行判别分类呢？  这部分理解后，Logistic回归与Softmax回归的模型就很容易推得。  判别函数对于一个类别为$K$的分类问题，如果对于所有的$ i,j=1,…,K, j\neq i$，有  g_i(x) &amp;gt; g_j(x)则此分类器将这个样本对应的特征向量$x$判别为$w_i$，则此分类器的作用是，计算$K$个判别函数并选取">
@@ -417,7 +417,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-17 20:13:21" itemprop="dateModified" datetime="2019-07-17T20:13:21+08:00">2019-07-17</time>
+                <time title="修改时间：2020-05-29 14:23:29" itemprop="dateModified" datetime="2020-05-29T14:23:29+08:00">2020-05-29</time>
               
             
           </span>
@@ -513,9 +513,9 @@ g_i(x) =
 exp(-\frac{1}{2} (x-\mu_i)^T \Sigma^{-1} (x-\mu_i)) ·
 P(c_i)</script><p>取对数运算，并舍去常数项，展开整理得</p>
 <script type="math/tex; mode=display">g_i(x) = -\frac{1}{2}x^T \Sigma_i ^{-1} x + \mu_i^T \Sigma_i ^{-1} x  -\frac{1}{2} \mu_i ^T \Sigma_i ^{-1} \mu_i + ln P(c_i) \tag{0}</script><blockquote>
-<p><code>注：</code> 协方差矩阵 $ \Sigma^T = \Sigma $</p>
+<p><strong>注</strong>： 协方差矩阵 $ \Sigma^T = \Sigma $</p>
 </blockquote>
-<h2 id="1-Sigma-i-sigma-2-I"><a href="#1-Sigma-i-sigma-2-I" class="headerlink" title="1. $\Sigma_i = \sigma^2 I$"></a>1. $\Sigma_i = \sigma^2 I$</h2><p>$\Sigma_i^{-1} = \frac{1}{\sigma^2} I$代入$(0)$，有</p>
+<h2 id="独立同分布-Sigma-i-sigma-2-I"><a href="#独立同分布-Sigma-i-sigma-2-I" class="headerlink" title="独立同分布: $\Sigma_i = \sigma^2 I$"></a>独立同分布: $\Sigma_i = \sigma^2 I$</h2><p>$\Sigma_i^{-1} = \frac{1}{\sigma^2} I$代入$(0)$，有</p>
 <script type="math/tex; mode=display">
 g_i(x) = \frac{1}{\sigma^2}\mu_i^T x - \frac{1}{2\sigma^2} (x^Tx + \mu_i ^T \mu_i) + ln P(c_i)\tag{1}</script><p>定义</p>
 <script type="math/tex; mode=display">w_i = \frac{1}{\sigma^2}\mu_i^T</script><script type="math/tex; mode=display">w_0 =  - \frac{1}{2\sigma^2} (x^Tx + \mu_i ^T \mu_i) + ln P(c_i)</script><p>有一般形式如下，表示取$c_i$的概率</p>
@@ -535,7 +535,7 @@ x_0 = \frac{1}{2}(\mu_i + \mu_j)</script><p>结论：等先验概率时超平面
 <blockquote>
 <p>$\mu_i$与$\mu_j$分别表示两个类别的中心，由向量运算，$x_0$为两类中心的连线的中点。</p>
 </blockquote>
-<h2 id="2-Sigma-i-Sigma"><a href="#2-Sigma-i-Sigma" class="headerlink" title="2. $\Sigma_i = \Sigma$"></a>2. $\Sigma_i = \Sigma$</h2><p>代入$(0)$后可得</p>
+<h2 id="不独立但同分布-Sigma-i-Sigma"><a href="#不独立但同分布-Sigma-i-Sigma" class="headerlink" title="不独立但同分布: $\Sigma_i = \Sigma$"></a>不独立但同分布: $\Sigma_i = \Sigma$</h2><p>代入$(0)$后可得</p>
 <script type="math/tex; mode=display">g_i(x) =  \mu_i^T \Sigma ^{-1} x - \frac{1}{2}x^T \Sigma ^{-1} x   -\frac{1}{2} \mu_i ^T \Sigma ^{-1} \mu_i + ln P(c_i) \tag{5}</script><p>定义</p>
 <script type="math/tex; mode=display">w_i = \mu_i^T \Sigma ^{-1}</script><script type="math/tex; mode=display">w_0 = - \frac{1}{2}x^T \Sigma ^{-1} x   -\frac{1}{2} \mu_i ^T \Sigma ^{-1} \mu_i + ln P(c_i)</script><p>有一般形式如下，表示取$c_i$的概率</p>
 <script type="math/tex; mode=display">g_i(x) = w_i x + w_0\tag{6}</script><p>同样的，设决策平面为</p>
@@ -551,7 +551,7 @@ x_0 = \frac{1}{2}(\mu_i + \mu_j)</script><p>结论：等先验概率时超平面
 <p><code>注：</code> 协方差矩阵 $ \Sigma^T = \Sigma $</p>
 </blockquote>
 <script type="math/tex; mode=display">w = \Sigma^{-1}(\mu_i - \mu_j)</script><script type="math/tex; mode=display">x_0 = \frac{1}{2} (\mu_i + \mu_j)</script><p>由于通常$w=Σ^{−1}(μ_i−μ_j)$并非朝着$(μ_i−μ_j)$的方向，因而通常分离两类的超平面也并非与均值的连线垂直正交。但是， 如果先验概率相等，其判定面确实是与均值连线交于中点$x_0$处的。如果先验概率不等，最优边界超平面将远离可能性较大的均值。同前，如果偏移量足够大，判定面可以不落在两个均值向量之间。</p>
-<h2 id="3-Sigma-i-Sigma-i-∀"><a href="#3-Sigma-i-Sigma-i-∀" class="headerlink" title="3. $\Sigma_i = \Sigma_i(∀) $"></a>3. $\Sigma_i = \Sigma_i(∀) $</h2><script type="math/tex; mode=display">g_i(x) =  -\frac{1}{2}x^T \Sigma_i ^{-1} x + \mu_i^T \Sigma_i ^{-1} x  -\frac{1}{2} \mu_i ^T \Sigma_i ^{-1} \mu_i + ln P(c_i)</script><p>定义</p>
+<h2 id="不独立且不同分布-Sigma-i-Sigma-i-∀"><a href="#不独立且不同分布-Sigma-i-Sigma-i-∀" class="headerlink" title="不独立且不同分布: $\Sigma_i = \Sigma_i(∀) $"></a>不独立且不同分布: $\Sigma_i = \Sigma_i(∀) $</h2><script type="math/tex; mode=display">g_i(x) =  -\frac{1}{2}x^T \Sigma_i ^{-1} x + \mu_i^T \Sigma_i ^{-1} x  -\frac{1}{2} \mu_i ^T \Sigma_i ^{-1} \mu_i + ln P(c_i)</script><p>定义</p>
 <script type="math/tex; mode=display">W_i = -\frac{1}{2} \Sigma_i ^{-1}</script><script type="math/tex; mode=display">w_i = \mu_i^T \Sigma_i ^{-1}</script><script type="math/tex; mode=display">w_0 = -\frac{1}{2} \mu_i ^T \Sigma_i ^{-1} \mu_i + ln P(c_i)</script><p>有</p>
 <script type="math/tex; mode=display">
 g_i(x) = x^TW_ix + w_ix + w_0</script>
@@ -693,7 +693,7 @@ g_i(x) = x^TW_ix + w_ix + w_0</script>
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">97</span>
+                    <span class="site-state-item-count">96</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -738,10 +738,6 @@ g_i(x) = x^TW_ix + w_ix + w_0</script>
                 <div class="site-state-item site-state-tags">
                   <a href="/tags/index.html">
                     
-                    
-                      
-                    
-                      
                     
                       
                     
@@ -840,7 +836,7 @@ g_i(x) = x^TW_ix + w_ix + w_0</script>
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#判别函数"><span class="nav-number">2.</span> <span class="nav-text">判别函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#正态分布下的判别函数"><span class="nav-number">3.</span> <span class="nav-text">正态分布下的判别函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Sigma-i-sigma-2-I"><span class="nav-number">3.1.</span> <span class="nav-text">1. $\Sigma_i = \sigma^2 I$</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Sigma-i-Sigma"><span class="nav-number">3.2.</span> <span class="nav-text">2. $\Sigma_i = \Sigma$</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Sigma-i-Sigma-i-∀"><span class="nav-number">3.3.</span> <span class="nav-text">3. $\Sigma_i = \Sigma_i(∀) $</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#判别函数"><span class="nav-number">2.</span> <span class="nav-text">判别函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#正态分布下的判别函数"><span class="nav-number">3.</span> <span class="nav-text">正态分布下的判别函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#独立同分布-Sigma-i-sigma-2-I"><span class="nav-number">3.1.</span> <span class="nav-text">独立同分布: $\Sigma_i = \sigma^2 I$</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不独立但同分布-Sigma-i-Sigma"><span class="nav-number">3.2.</span> <span class="nav-text">不独立但同分布: $\Sigma_i = \Sigma$</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不独立且不同分布-Sigma-i-Sigma-i-∀"><span class="nav-number">3.3.</span> <span class="nav-text">不独立且不同分布: $\Sigma_i = \Sigma_i(∀) $</span></a></li></ol></li></ol></div>
             
 
           </div>

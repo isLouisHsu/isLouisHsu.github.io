@@ -117,7 +117,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/2019/08/02/ID3-C4-5-CART-RF/model.jfif">
 <meta property="og:image" content="http://yoursite.com/2019/08/02/ID3-C4-5-CART-RF/tree.jpg">
-<meta property="og:updated_time" content="2020-05-03T01:03:55.056Z">
+<meta property="og:updated_time" content="2020-05-29T06:29:23.475Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ID3, C4.5, CART, RF">
 <meta name="twitter:description" content="前言决策树(Decision Tree)是一种基本的分类与回归方法，本文主要讨论分类决策树，它可被认作if-then的集合，也可以认作是定义在特征空间与类空间上的条件概率分布。 决策树决策树模型形式如下，由结点(node)，有向边(directed edge)组成，节点包含两种：内部节点(internal node)和叶节点(leaf node)，内部节点表示一个特征或属性，叶节点包含一个类。">
@@ -420,7 +420,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-05-03 09:03:55" itemprop="dateModified" datetime="2020-05-03T09:03:55+08:00">2020-05-03</time>
+                <time title="修改时间：2020-05-29 14:29:23" itemprop="dateModified" datetime="2020-05-29T14:29:23+08:00">2020-05-29</time>
               
             
           </span>
@@ -731,13 +731,13 @@ I(X; Y) = \sum_{x, y} p(x, y) \log \frac{p(x, y)}{p(x) p(y)}</script></li>
 <blockquote>
 <p><strong>Bootstrap采样</strong>：对于一个样本，它在某一次含$m$个样本的训练集的随机采样中，每次被采集到的概率是$1/m$。不被采集到的概率为$1−1/m$。如果$m$次采样都没有被采集中的概率是$(1−1/m)^m$。当$m→\infty$时，$\lim_{m \rightarrow \infty} (1−1/m)^m \approx 0.368$。也就是说，在bagging的每轮随机采样中，训练集中大约有36.8%的数据没有被采样集采集中。对于这部分大约$36.8\%$的没有被采样到的数据，我们常常称之为袋外数据(Out Of Bag, 简称OOB)。这些数据没有参与训练集模型的拟合，因此可以用来检测模型的泛化能力。</p>
 </blockquote>
-<p>随机森林在Bagging策略上进行训练：</p>
+<p>随机森林在<strong>Bagging策略</strong>上进行训练：</p>
 <ol>
 <li>用Bootstrap策略随机采样$M$次；</li>
 <li>一棵树的生成时，<strong>仅从所有特征($K$个)中选取$k$个特征</strong>；</li>
 <li>生成$M$棵树进行投票表决，确定预测结果(分类可取众数、回归可取均值)。</li>
 </ol>
-<p>那么随机森林有以下超参数：</p>
+<p>那么随机森林有以下<strong>超参数</strong>：</p>
 <ol>
 <li>选取特征数目$k$，一般取$k = \sqrt{K}$；</li>
 <li>每棵树的最大深度，一般不超过$8$；</li>
@@ -890,7 +890,7 @@ I(X; Y) = \sum_{x, y} p(x, y) \log \frac{p(x, y)}{p(x) p(y)}</script></li>
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">97</span>
+                    <span class="site-state-item-count">96</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -935,10 +935,6 @@ I(X; Y) = \sum_{x, y} p(x, y) \log \frac{p(x, y)}{p(x) p(y)}</script></li>
                 <div class="site-state-item site-state-tags">
                   <a href="/tags/index.html">
                     
-                    
-                      
-                    
-                      
                     
                       
                     

@@ -108,12 +108,12 @@
 
 
 
-  <meta name="description" content="前言这是第一篇关于无监督学习的博文，无监督的学习则不是尝试预测任何东西，而是寻找数据中的特征，在无监督学习中，有一个重要的方法称为聚类，是把具有相同特征的数据聚集在一组。 基础知识距离度量方法机器学习中距离度量方法有很多，以下简单介绍几种。  机器学习常用的距离度量方法 - taotiezhengfeng的博客 - CSDN博客算法中的各种距离（欧式距离，马氏距离，闵可夫斯基距离……） - 啊哦1">
+  <meta name="description" content="目录这是第一篇关于无监督学习的博文，无监督的学习则不是尝试预测任何东西，而是寻找数据中的特征，在无监督学习中，有一个重要的方法称为聚类，是把具有相同特征的数据聚集在一组。  目录 基础知识 距离度量方法 hard vs. soft clustering 聚类方法的分类   常用聚类方法 K均值(K-means) 原理 计算步骤 缺点与部分解决方法 改进 类似的算法 代码   均值漂移(Meansh">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Clustering">
 <meta property="og:url" content="http://yoursite.com/2018/11/16/Clustering/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="前言这是第一篇关于无监督学习的博文，无监督的学习则不是尝试预测任何东西，而是寻找数据中的特征，在无监督学习中，有一个重要的方法称为聚类，是把具有相同特征的数据聚集在一组。 基础知识距离度量方法机器学习中距离度量方法有很多，以下简单介绍几种。  机器学习常用的距离度量方法 - taotiezhengfeng的博客 - CSDN博客算法中的各种距离（欧式距离，马氏距离，闵可夫斯基距离……） - 啊哦1">
+<meta property="og:description" content="目录这是第一篇关于无监督学习的博文，无监督的学习则不是尝试预测任何东西，而是寻找数据中的特征，在无监督学习中，有一个重要的方法称为聚类，是把具有相同特征的数据聚集在一组。  目录 基础知识 距离度量方法 hard vs. soft clustering 聚类方法的分类   常用聚类方法 K均值(K-means) 原理 计算步骤 缺点与部分解决方法 改进 类似的算法 代码   均值漂移(Meansh">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/2018/11/16/Clustering/cosine_distance.png">
 <meta property="og:image" content="http://yoursite.com/2018/11/16/Clustering/kmeans_example.gif">
@@ -129,10 +129,10 @@
 <meta property="og:image" content="http://yoursite.com/2018/11/16/Clustering/DBSCAN1.jpg">
 <meta property="og:image" content="http://yoursite.com/2018/11/16/Clustering/DBSCAN2.jpg">
 <meta property="og:image" content="http://yoursite.com/2018/11/16/Clustering/层次聚类.png">
-<meta property="og:updated_time" content="2020-05-01T07:35:47.225Z">
+<meta property="og:updated_time" content="2020-05-30T13:22:53.883Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Clustering">
-<meta name="twitter:description" content="前言这是第一篇关于无监督学习的博文，无监督的学习则不是尝试预测任何东西，而是寻找数据中的特征，在无监督学习中，有一个重要的方法称为聚类，是把具有相同特征的数据聚集在一组。 基础知识距离度量方法机器学习中距离度量方法有很多，以下简单介绍几种。  机器学习常用的距离度量方法 - taotiezhengfeng的博客 - CSDN博客算法中的各种距离（欧式距离，马氏距离，闵可夫斯基距离……） - 啊哦1">
+<meta name="twitter:description" content="目录这是第一篇关于无监督学习的博文，无监督的学习则不是尝试预测任何东西，而是寻找数据中的特征，在无监督学习中，有一个重要的方法称为聚类，是把具有相同特征的数据聚集在一组。  目录 基础知识 距离度量方法 hard vs. soft clustering 聚类方法的分类   常用聚类方法 K均值(K-means) 原理 计算步骤 缺点与部分解决方法 改进 类似的算法 代码   均值漂移(Meansh">
 <meta name="twitter:image" content="http://yoursite.com/2018/11/16/Clustering/cosine_distance.png">
 
 
@@ -432,7 +432,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-05-01 15:35:47" itemprop="dateModified" datetime="2020-05-01T15:35:47+08:00">2020-05-01</time>
+                <time title="修改时间：2020-05-30 21:22:53" itemprop="dateModified" datetime="2020-05-30T21:22:53+08:00">2020-05-30</time>
               
             
           </span>
@@ -490,7 +490,61 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这是第一篇关于无监督学习的博文，无监督的学习则不是尝试预测任何东西，而是寻找数据中的特征，在无监督学习中，有一个重要的方法称为聚类，是把具有相同特征的数据聚集在一组。</p>
+        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><p>这是第一篇关于无监督学习的博文，无监督的学习则不是尝试预测任何东西，而是寻找数据中的特征，在无监督学习中，有一个重要的方法称为聚类，是把具有相同特征的数据聚集在一组。</p>
+<ul>
+<li><a href="#目录">目录</a></li>
+<li><a href="#基础知识">基础知识</a><ul>
+<li><a href="#距离度量方法">距离度量方法</a></li>
+<li><a href="#hard-vs-soft-clustering">hard vs. soft clustering</a></li>
+<li><a href="#聚类方法的分类">聚类方法的分类</a></li>
+</ul>
+</li>
+<li><a href="#常用聚类方法">常用聚类方法</a><ul>
+<li><a href="#k均值k-means">K均值(K-means)</a><ul>
+<li><a href="#原理">原理</a></li>
+<li><a href="#计算步骤">计算步骤</a></li>
+<li><a href="#缺点与部分解决方法">缺点与部分解决方法</a></li>
+<li><a href="#改进">改进</a></li>
+<li><a href="#类似的算法">类似的算法</a></li>
+<li><a href="#代码">代码</a></li>
+</ul>
+</li>
+<li><a href="#均值漂移meanshift">均值漂移(Meanshift)</a><ul>
+<li><a href="#原理-1">原理</a></li>
+<li><a href="#高斯权重">高斯权重</a></li>
+<li><a href="#计算步骤-1">计算步骤</a></li>
+<li><a href="#代码-1">代码</a></li>
+</ul>
+</li>
+<li><a href="#谱聚类spectral-clustering">谱聚类(Spectral Clustering)</a><ul>
+<li><a href="#原理-2">原理</a><ul>
+<li><a href="#无向权重图">无向权重图</a></li>
+<li><a href="#相似矩阵">相似矩阵</a></li>
+<li><a href="#拉普拉斯矩阵graph-laplacians">拉普拉斯矩阵(Graph Laplacians)</a></li>
+<li><a href="#无向图的切图">无向图的切图</a><ul>
+<li><a href="#cut">cut</a></li>
+<li><a href="#ratio-cut">Ratio Cut</a></li>
+<li><a href="#n-cut">N Cut</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#计算步骤-2">计算步骤</a></li>
+<li><a href="#代码-2">代码</a></li>
+</ul>
+</li>
+<li><a href="#dbscan">DBSCAN</a><ul>
+<li><a href="#原理-3">原理</a></li>
+<li><a href="#计算思想">计算思想</a></li>
+<li><a href="#算法步骤">算法步骤</a></li>
+</ul>
+</li>
+<li><a href="#高斯混合模型gmm">高斯混合模型(GMM)</a></li>
+<li><a href="#层次聚类hierarchical-clustering">层次聚类(Hierarchical Clustering)</a></li>
+<li><a href="#图团体检测graph-community-detection">图团体检测(Graph Community Detection)</a></li>
+</ul>
+</li>
+</ul>
 <h1 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h1><h2 id="距离度量方法"><a href="#距离度量方法" class="headerlink" title="距离度量方法"></a>距离度量方法</h2><p>机器学习中距离度量方法有很多，以下简单介绍几种。</p>
 <blockquote>
 <p><a href="https://blog.csdn.net/taotiezhengfeng/article/details/80492128" target="_blank" rel="noopener">机器学习常用的距离度量方法 - taotiezhengfeng的博客 - CSDN博客</a><br><a href="https://blog.csdn.net/u014782458/article/details/58180885" target="_blank" rel="noopener">算法中的各种距离（欧式距离，马氏距离，闵可夫斯基距离……） - 啊哦123的博客 - CSDN博客 </a></p>
@@ -1044,7 +1098,7 @@ cut(V_i, \overline{V_i}) = W (V_i, \overline{V_i})</script><blockquote>
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">97</span>
+                    <span class="site-state-item-count">96</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1089,10 +1143,6 @@ cut(V_i, \overline{V_i}) = W (V_i, \overline{V_i})</script><blockquote>
                 <div class="site-state-item site-state-tags">
                   <a href="/tags/index.html">
                     
-                    
-                      
-                    
-                      
                     
                       
                     
@@ -1191,7 +1241,7 @@ cut(V_i, \overline{V_i}) = W (V_i, \overline{V_i})</script><blockquote>
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基础知识"><span class="nav-number">2.</span> <span class="nav-text">基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#距离度量方法"><span class="nav-number">2.1.</span> <span class="nav-text">距离度量方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hard-vs-soft-clustering"><span class="nav-number">2.2.</span> <span class="nav-text">hard vs. soft clustering</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#聚类方法的分类"><span class="nav-number">2.3.</span> <span class="nav-text">聚类方法的分类</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常用聚类方法"><span class="nav-number">3.</span> <span class="nav-text">常用聚类方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#K均值-K-means"><span class="nav-number">3.1.</span> <span class="nav-text">K均值(K-means)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理"><span class="nav-number">3.1.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算步骤"><span class="nav-number">3.1.2.</span> <span class="nav-text">计算步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺点与部分解决方法"><span class="nav-number">3.1.3.</span> <span class="nav-text">缺点与部分解决方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#改进"><span class="nav-number">3.1.4.</span> <span class="nav-text">改进</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类似的算法"><span class="nav-number">3.1.5.</span> <span class="nav-text">类似的算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码"><span class="nav-number">3.1.6.</span> <span class="nav-text">代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#均值漂移-Meanshift"><span class="nav-number">3.2.</span> <span class="nav-text">均值漂移(Meanshift)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理-1"><span class="nav-number">3.2.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高斯权重"><span class="nav-number">3.2.2.</span> <span class="nav-text">高斯权重</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算步骤-1"><span class="nav-number">3.2.3.</span> <span class="nav-text">计算步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码-1"><span class="nav-number">3.2.4.</span> <span class="nav-text">代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#谱聚类-Spectral-Clustering"><span class="nav-number">3.3.</span> <span class="nav-text">谱聚类(Spectral Clustering)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理-2"><span class="nav-number">3.3.1.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#无向权重图"><span class="nav-number">3.3.1.1.</span> <span class="nav-text">无向权重图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#相似矩阵"><span class="nav-number">3.3.1.2.</span> <span class="nav-text">相似矩阵</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#拉普拉斯矩阵-Graph-Laplacians"><span class="nav-number">3.3.1.3.</span> <span class="nav-text">拉普拉斯矩阵(Graph Laplacians)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#无向图的切图"><span class="nav-number">3.3.1.4.</span> <span class="nav-text">无向图的切图</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#cut"><span class="nav-number">3.3.1.4.1.</span> <span class="nav-text">cut</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Ratio-Cut"><span class="nav-number">3.3.1.4.2.</span> <span class="nav-text">Ratio Cut</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#N-Cut"><span class="nav-number">3.3.1.4.3.</span> <span class="nav-text">N Cut</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算步骤-2"><span class="nav-number">3.3.2.</span> <span class="nav-text">计算步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码-2"><span class="nav-number">3.3.3.</span> <span class="nav-text">代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DBSCAN"><span class="nav-number">3.4.</span> <span class="nav-text">DBSCAN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理-3"><span class="nav-number">3.4.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算思想"><span class="nav-number">3.4.2.</span> <span class="nav-text">计算思想</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算法步骤"><span class="nav-number">3.4.3.</span> <span class="nav-text">算法步骤</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高斯混合模型-GMM"><span class="nav-number">3.5.</span> <span class="nav-text">高斯混合模型(GMM)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#层次聚类-Hierarchical-Clustering"><span class="nav-number">3.6.</span> <span class="nav-text">层次聚类(Hierarchical Clustering)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#图团体检测-Graph-Community-Detection"><span class="nav-number">3.7.</span> <span class="nav-text">图团体检测(Graph Community Detection)</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#目录"><span class="nav-number">1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基础知识"><span class="nav-number">2.</span> <span class="nav-text">基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#距离度量方法"><span class="nav-number">2.1.</span> <span class="nav-text">距离度量方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hard-vs-soft-clustering"><span class="nav-number">2.2.</span> <span class="nav-text">hard vs. soft clustering</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#聚类方法的分类"><span class="nav-number">2.3.</span> <span class="nav-text">聚类方法的分类</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常用聚类方法"><span class="nav-number">3.</span> <span class="nav-text">常用聚类方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#K均值-K-means"><span class="nav-number">3.1.</span> <span class="nav-text">K均值(K-means)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理"><span class="nav-number">3.1.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算步骤"><span class="nav-number">3.1.2.</span> <span class="nav-text">计算步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺点与部分解决方法"><span class="nav-number">3.1.3.</span> <span class="nav-text">缺点与部分解决方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#改进"><span class="nav-number">3.1.4.</span> <span class="nav-text">改进</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类似的算法"><span class="nav-number">3.1.5.</span> <span class="nav-text">类似的算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码"><span class="nav-number">3.1.6.</span> <span class="nav-text">代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#均值漂移-Meanshift"><span class="nav-number">3.2.</span> <span class="nav-text">均值漂移(Meanshift)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理-1"><span class="nav-number">3.2.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高斯权重"><span class="nav-number">3.2.2.</span> <span class="nav-text">高斯权重</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算步骤-1"><span class="nav-number">3.2.3.</span> <span class="nav-text">计算步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码-1"><span class="nav-number">3.2.4.</span> <span class="nav-text">代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#谱聚类-Spectral-Clustering"><span class="nav-number">3.3.</span> <span class="nav-text">谱聚类(Spectral Clustering)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理-2"><span class="nav-number">3.3.1.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#无向权重图"><span class="nav-number">3.3.1.1.</span> <span class="nav-text">无向权重图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#相似矩阵"><span class="nav-number">3.3.1.2.</span> <span class="nav-text">相似矩阵</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#拉普拉斯矩阵-Graph-Laplacians"><span class="nav-number">3.3.1.3.</span> <span class="nav-text">拉普拉斯矩阵(Graph Laplacians)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#无向图的切图"><span class="nav-number">3.3.1.4.</span> <span class="nav-text">无向图的切图</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#cut"><span class="nav-number">3.3.1.4.1.</span> <span class="nav-text">cut</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Ratio-Cut"><span class="nav-number">3.3.1.4.2.</span> <span class="nav-text">Ratio Cut</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#N-Cut"><span class="nav-number">3.3.1.4.3.</span> <span class="nav-text">N Cut</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算步骤-2"><span class="nav-number">3.3.2.</span> <span class="nav-text">计算步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码-2"><span class="nav-number">3.3.3.</span> <span class="nav-text">代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DBSCAN"><span class="nav-number">3.4.</span> <span class="nav-text">DBSCAN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理-3"><span class="nav-number">3.4.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算思想"><span class="nav-number">3.4.2.</span> <span class="nav-text">计算思想</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算法步骤"><span class="nav-number">3.4.3.</span> <span class="nav-text">算法步骤</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高斯混合模型-GMM"><span class="nav-number">3.5.</span> <span class="nav-text">高斯混合模型(GMM)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#层次聚类-Hierarchical-Clustering"><span class="nav-number">3.6.</span> <span class="nav-text">层次聚类(Hierarchical Clustering)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#图团体检测-Graph-Community-Detection"><span class="nav-number">3.7.</span> <span class="nav-text">图团体检测(Graph Community Detection)</span></a></li></ol></li></ol></div>
             
 
           </div>
