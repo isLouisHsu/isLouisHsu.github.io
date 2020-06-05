@@ -116,7 +116,7 @@
 <meta property="og:description" content="目录 目录 模型集成 原理 策略 平均法 投票法 学习法     Bagging 自助采样法 随机森林   Boosting AdaBoost 分类 回归：AdaBoost R2 多分类：SAMME 带概率输出的多分类：SAMME.R     Blending Stacking 多样性 误差-分歧分解(Error-Ambiguity Decomposition) 多样性度量 多样性增强   Ref">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/2020/06/02/Model-Ensemble-Bagging-Boosting-Stacking-and-Blending/figure_1.png">
-<meta property="og:updated_time" content="2020-06-05T03:31:31.775Z">
+<meta property="og:updated_time" content="2020-06-05T03:35:20.583Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Model Ensemble: Bagging, Boosting, Stacking and Blending">
 <meta name="twitter:description" content="目录 目录 模型集成 原理 策略 平均法 投票法 学习法     Bagging 自助采样法 随机森林   Boosting AdaBoost 分类 回归：AdaBoost R2 多分类：SAMME 带概率输出的多分类：SAMME.R     Blending Stacking 多样性 误差-分歧分解(Error-Ambiguity Decomposition) 多样性度量 多样性增强   Ref">
@@ -419,7 +419,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-06-05 11:31:31" itemprop="dateModified" datetime="2020-06-05T11:31:31+08:00">2020-06-05</time>
+                <time title="修改时间：2020-06-05 11:35:20" itemprop="dateModified" datetime="2020-06-05T11:35:20+08:00">2020-06-05</time>
               
             
           </span>
@@ -536,8 +536,8 @@
 <h3 id="投票法"><a href="#投票法" class="headerlink" title="投票法"></a>投票法</h3><p><strong>通常用于分类任务中</strong></p>
 <ul>
 <li><strong>绝大多数投票</strong>：若某个标记得票数过半，则预测为该标记。可能存在所有标记都未过半的问题，该方法不常用。</li>
-<li><strong>相对多数投票</strong>：取得票最多的标记作为预测，即<script type="math/tex; mode=display">H(x) = \argmax_{c_j} \sum_{m = 1}^M I(h_m(x) = c_j)</script></li>
-<li><strong>加权投票</strong>：类似加权平均法<script type="math/tex; mode=display">H(x) = \argmax_{c_j} \sum_{m = 1}^M w_i I(h_m(x) = c_j)</script></li>
+<li><strong>相对多数投票</strong>：取得票最多的标记作为预测，即<script type="math/tex; mode=display">H(x) = \arg \max_{c_j} \sum_{m = 1}^M I(h_m(x) = c_j)</script></li>
+<li><strong>加权投票</strong>：类似加权平均法<script type="math/tex; mode=display">H(x) = \arg \max_{c_j} \sum_{m = 1}^M w_i I(h_m(x) = c_j)</script></li>
 </ul>
 <h3 id="学习法"><a href="#学习法" class="headerlink" title="学习法"></a>学习法</h3><p>通过另一个学习器(<strong>次级学习器或元学习器meta learner</strong>)来组合个体学习器(<strong>初级学习器</strong>)的分类结果。<strong>用初级学习器产生次级数据集，用作次级学习器的训练</strong>，Stacking是一种典型的学习法集成。</p>
 <h1 id="Bagging"><a href="#Bagging" class="headerlink" title="Bagging"></a>Bagging</h1><p>Bagging的<strong>基本流程</strong>是</p>
@@ -625,7 +625,7 @@
 </ol>
 </li>
 <li><p>基本分类器线性组合得到集成模型</p>
-<script type="math/tex; mode=display">H(X) = \argmax_k (\sum_m \alpha_m I \left( h_m(X) = c_k \right))</script></li>
+<script type="math/tex; mode=display">H(X) = \arg \max_k (\sum_m \alpha_m I \left( h_m(X) = c_k \right))</script></li>
 </ol>
 <h3 id="带概率输出的多分类：SAMME-R"><a href="#带概率输出的多分类：SAMME-R" class="headerlink" title="带概率输出的多分类：SAMME.R"></a>带概率输出的多分类：SAMME.R</h3><p>给定训练数据集$D = \{ (X^{(i)}, y^{(i)}), i = 1, \cdots, N\}, X^{(i)} \in \mathcal{R}^n, y^{(i)} \in \{ c_1, \cdots, c_K \}$</p>
 <ol>
@@ -646,7 +646,7 @@
 </ol>
 </li>
 <li><p>基本分类器线性组合得到集成模型</p>
-<script type="math/tex; mode=display">H(X) = \argmax_k (\sum_m {l_m (X^{(i)})}_k)</script></li>
+<script type="math/tex; mode=display">H(X) = \arg \max_k (\sum_m {l_m (X^{(i)})}_k)</script></li>
 </ol>
 <h1 id="Blending"><a href="#Blending" class="headerlink" title="Blending"></a>Blending</h1><p>Blending的流程如下</p>
 <ol>
@@ -840,6 +840,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2020/06/05/Least-Recently-Used-Cache/" rel="prev" title="Least Recently Used Cache">
+                Least Recently Used Cache <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -914,7 +918,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">97</span>
+                    <span class="site-state-item-count">98</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

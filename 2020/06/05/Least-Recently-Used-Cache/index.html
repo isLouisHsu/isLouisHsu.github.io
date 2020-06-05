@@ -108,30 +108,26 @@
 
 
 
-  <meta name="description" content="前言记录一下详细的MTCNN训练过程，之前损失函数的问题，训练得到网络效果一般，就拖到了最近。原理在之前写的博客Face Detection: MTCNN中已说明，本文不做详细介绍。详细代码可见本人代码仓库MTCNN_Darknet - Github。 数据集  数据集使用的是WIDER FACE: A Face Detection Benchmark与Deep Convolutional Net">
+  <meta name="description" content="目录 目录 原理介绍 算法设计 put(key, value) get(key) 注意   代码实现 Reference  原理介绍最近最少使用缓存(Least Recently Usd Cache, LRU Cache)是一种常用的页面置换算法，其设计原则是：如果一个数据在最近一段时间内没有被访问到，那么将来它被访问的几率也很小，那么当限定空间已满时再次存入数据，应当把最久没有访问到的数据删除以">
 <meta property="og:type" content="article">
-<meta property="og:title" content="详细！MTCNN训练全过程！">
-<meta property="og:url" content="http://yoursite.com/2019/11/10/详细！MTCNN训练全过程！/index.html">
+<meta property="og:title" content="Least Recently Used Cache">
+<meta property="og:url" content="http://yoursite.com/2020/06/05/Least-Recently-Used-Cache/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="前言记录一下详细的MTCNN训练过程，之前损失函数的问题，训练得到网络效果一般，就拖到了最近。原理在之前写的博客Face Detection: MTCNN中已说明，本文不做详细介绍。详细代码可见本人代码仓库MTCNN_Darknet - Github。 数据集  数据集使用的是WIDER FACE: A Face Detection Benchmark与Deep Convolutional Net">
+<meta property="og:description" content="目录 目录 原理介绍 算法设计 put(key, value) get(key) 注意   代码实现 Reference  原理介绍最近最少使用缓存(Least Recently Usd Cache, LRU Cache)是一种常用的页面置换算法，其设计原则是：如果一个数据在最近一段时间内没有被访问到，那么将来它被访问的几率也很小，那么当限定空间已满时再次存入数据，应当把最久没有访问到的数据删除以">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/2019/11/10/详细！MTCNN训练全过程！/dataset1.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/11/10/详细！MTCNN训练全过程！/dataset2.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/11/10/详细！MTCNN训练全过程！/1.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/11/10/详细！MTCNN训练全过程！/2.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/11/10/详细！MTCNN训练全过程！/3.jpg">
-<meta property="og:updated_time" content="2019-11-10T09:58:52.858Z">
+<meta property="og:image" content="http://yoursite.com/2020/06/05/Least-Recently-Used-Cache/hashlist.png">
+<meta property="og:updated_time" content="2020-06-05T06:54:45.650Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="详细！MTCNN训练全过程！">
-<meta name="twitter:description" content="前言记录一下详细的MTCNN训练过程，之前损失函数的问题，训练得到网络效果一般，就拖到了最近。原理在之前写的博客Face Detection: MTCNN中已说明，本文不做详细介绍。详细代码可见本人代码仓库MTCNN_Darknet - Github。 数据集  数据集使用的是WIDER FACE: A Face Detection Benchmark与Deep Convolutional Net">
-<meta name="twitter:image" content="http://yoursite.com/2019/11/10/详细！MTCNN训练全过程！/dataset1.jpg">
+<meta name="twitter:title" content="Least Recently Used Cache">
+<meta name="twitter:description" content="目录 目录 原理介绍 算法设计 put(key, value) get(key) 注意   代码实现 Reference  原理介绍最近最少使用缓存(Least Recently Usd Cache, LRU Cache)是一种常用的页面置换算法，其设计原则是：如果一个数据在最近一段时间内没有被访问到，那么将来它被访问的几率也很小，那么当限定空间已满时再次存入数据，应当把最久没有访问到的数据删除以">
+<meta name="twitter:image" content="http://yoursite.com/2020/06/05/Least-Recently-Used-Cache/hashlist.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/11/10/详细！MTCNN训练全过程！/">
+  <link rel="canonical" href="http://yoursite.com/2020/06/05/Least-Recently-Used-Cache/">
 
 
 
@@ -141,7 +137,7 @@
   };
 </script>
 
-  <title>详细！MTCNN训练全过程！ | LOUIS' BLOG</title>
+  <title>Least Recently Used Cache | LOUIS' BLOG</title>
   
 
 
@@ -364,7 +360,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/10/详细！MTCNN训练全过程！/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/05/Least-Recently-Used-Cache/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Louis Hsu">
@@ -381,7 +377,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">详细！MTCNN训练全过程！
+          <h1 class="post-title" itemprop="name headline">Least Recently Used Cache
               
             
           </h1>
@@ -406,7 +402,7 @@
                 
               
 
-              <time title="创建时间：2019-11-10 10:09:30 / 修改时间：17:58:52" itemprop="dateCreated datePublished" datetime="2019-11-10T10:09:30+08:00">2019-11-10</time>
+              <time title="创建时间：2020-06-05 12:23:17 / 修改时间：14:54:45" itemprop="dateCreated datePublished" datetime="2020-06-05T12:23:17+08:00">2020-06-05</time>
             
 
             
@@ -416,24 +412,6 @@
             
           </span>
 
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a></span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -469,66 +447,84 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>记录一下详细的MTCNN训练过程，之前损失函数的问题，训练得到网络效果一般，就拖到了最近。原理在之前写的博客<a href="https://louishsu.xyz/2019/05/05/Face-Detection-MTCNN/" target="_blank" rel="noopener">Face Detection: MTCNN</a>中已说明，本文不做详细介绍。详细代码可见本人代码仓库<a href="https://github.com/isLouisHsu/MTCNN_Darknet" target="_blank" rel="noopener">MTCNN_Darknet - Github</a>。</p>
-<h1 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h1><p><img src="/2019/11/10/详细！MTCNN训练全过程！/dataset1.jpg" alt="dataset1"></p>
-<p><img src="/2019/11/10/详细！MTCNN训练全过程！/dataset2.jpg" alt="dataset2"></p>
-<p>数据集使用的是<a href="http://shuoyang1213.me/WIDERFACE/index.html" target="_blank" rel="noopener">WIDER FACE: A Face Detection Benchmark</a>与<a href="http://mmlab.ie.cuhk.edu.hk/archive/CNN_FacePoint.htm" target="_blank" rel="noopener">Deep Convolutional Network Cascade for Facial Point Detection</a>，前者用于生成识别分类任务、定位回归任务的数据，后者用于生成关键点回归任务的数据。</p>
-<p>我们所需的文件有<code>WIDER_train.zip</code>，<code>WIDER_valid.zip</code>，<code>wider_face_split.zip</code>，<code>train.zip</code>，解压整理后得到文件目录如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">data/</span><br><span class="line">├─WIDER/</span><br><span class="line">│   ├── wider_face_train_bbx_gt.txt</span><br><span class="line">│   ├── wider_face_val_bbx_gt.txt</span><br><span class="line">│   ├── WIDER_train/</span><br><span class="line">│   └── WIDER_val/</span><br><span class="line">└─Align/</span><br><span class="line">    ├── lfw_5590/</span><br><span class="line">    ├── net_7876/</span><br><span class="line">    ├── testImageList.txt</span><br><span class="line">    └── trainImageList.txt</span><br></pre></td></tr></table></figure></p>
-<p>运行<a href="https://github.com/isLouisHsu/MTCNN_Darknet/blob/master/prepare_data/merge_annotations.py" target="_blank" rel="noopener">prepare_data/merge_annotations.py</a>后，合并标注文件得到<code>data/annotations.txt</code>。</p>
-<h1 id="PNet"><a href="#PNet" class="headerlink" title="PNet"></a>PNet</h1><h2 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">layer     filters    size           input                output</span><br><span class="line">0 conv      10      3 x 3 / 1    12 x  12 x   3   -&gt;    10 x  10 x  10  0.000 BFLOPs</span><br><span class="line">1 max               2 x 2 / 2    10 x  10 x  10   -&gt;     5 x   5 x  10</span><br><span class="line">2 conv      16      3 x 3 / 1     5 x   5 x  10   -&gt;     3 x   3 x  16  0.000 BFLOPs</span><br><span class="line">3 conv      32      3 x 3 / 1     3 x   3 x  16   -&gt;     1 x   1 x  32  0.000 BFLOPs</span><br><span class="line">4 conv      15      1 x 1 / 1     1 x   1 x  32   -&gt;     1 x   1 x  15  0.000 BFLOPs</span><br></pre></td></tr></table></figure>
-<h2 id="数据准备"><a href="#数据准备" class="headerlink" title="数据准备"></a>数据准备</h2><p>运行<a href="https://github.com/isLouisHsu/MTCNN_Darknet/blob/master/prepare_data/pnet_12x12.py" target="_blank" rel="noopener">prepare_data/pnet_12x12.py</a>，对原始图像进行随机采样，注意以下几点：</p>
-<ol>
-<li>WIDER用作分类、定位任务，Align用作关键点定位任务；</li>
-<li>滤除尺寸小于40(pixel)的人脸图像；</li>
-<li>采样数目设置<ul>
-<li>对每张图中任意采样$5 \times n_{faces}$份，再在每个人脸附近采样5份$iou &lt; 0.3$的人脸图像作为负样本(0)；</li>
-<li>每个人脸附近采样10份$iou &gt; 0.65$的人脸图像作为正样本(1)；</li>
-<li>每个人脸附近采样10份$0.4 &lt; iou &lt; 0.65$的人脸图像作为部分样本(-1)；</li>
-<li>每个Align样本附近采样50份关键点样本(-2)。</li>
+        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><ul>
+<li><a href="#目录">目录</a></li>
+<li><a href="#原理介绍">原理介绍</a></li>
+<li><a href="#算法设计">算法设计</a><ul>
+<li><a href="#putkey-value">put(key, value)</a></li>
+<li><a href="#getkey">get(key)</a></li>
+<li><a href="#注意">注意</a></li>
 </ul>
 </li>
-<li>数据集扩增<ul>
-<li>WIDER：随机左右镜像翻转；</li>
-<li>Align：随机左右镜像翻转，$\pm 15$度随机旋转；</li>
+<li><a href="#代码实现">代码实现</a></li>
+<li><a href="#reference">Reference</a></li>
+</ul>
+<h1 id="原理介绍"><a href="#原理介绍" class="headerlink" title="原理介绍"></a>原理介绍</h1><p><strong>最近最少使用缓存</strong>(Least Recently Usd Cache, LRU Cache)是一种常用的页面置换算法，其设计原则是：<strong>如果一个数据在最近一段时间内没有被访问到，那么将来它被访问的几率也很小，那么当限定空间已满时再次存入数据，应当把最久没有访问到的数据删除以提供空间</strong>。</p>
+<p>应当支持以下操作</p>
+<ul>
+<li><strong>获取数据<code>get(key)</code>(查)</strong>：若缓存中存在<code>key</code>，那么获取数据值，否则返回空；</li>
+<li><strong>写入数据<code>set(key, value)</code>(添、改)</strong>：若<code>key</code>不存在缓存中，则写入键值对，当缓存达到上限，需要在写入新数据前删除最近最少使用的数据用于腾出空间。</li>
+</ul>
+<p>例如<br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">lru = LRUCache(<span class="number">2</span>)</span><br><span class="line">lru.set(<span class="number">2</span>, <span class="number">1</span>)</span><br><span class="line">lru.set(<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">lru.get(<span class="number">2</span>)          <span class="comment"># 输出1</span></span><br><span class="line">lru.set(<span class="number">4</span>, <span class="number">1</span>)       <span class="comment"># 键值对(1, 1)被删除</span></span><br><span class="line">lru.get(<span class="number">1</span>)          <span class="comment"># 输出空</span></span><br><span class="line">lru.get(<span class="number">2</span>)          <span class="comment"># 输出1</span></span><br></pre></td></tr></table></figure></p>
+<hr>
+<p>如果用<strong>字典实现</strong></p>
+<ul>
+<li>在每次读写键<code>key</code>时，查找的时间复杂度是$O(1)$；</li>
+<li>需要对<code>key</code>计数，也就说每个键都必须新增<strong>计数变量</strong>；</li>
+<li>在缓存已满时删除访问量最少的键值对，需要$O(n)$的时间复杂度找到该键值对。</li>
+</ul>
+<p>考虑用<strong>链表实现</strong></p>
+<ul>
+<li>在每次读写<code>key</code>时，查找的时间复杂度是$O(n)$；</li>
+<li>若查找成功，<strong>将对应保存该键值对的节点移动到链表头部</strong>，以实现根据访问量排序的功能；</li>
+<li>在缓存已满时删除访问量最少的键值对，<strong>删除链表结尾的元素</strong>：<ul>
+<li>若采用单向链表，删除最后一个节点时，需要进行遍历，以确定<strong>最后一个节点及其前驱节点</strong>的地址，时间复杂度是$O(n)$；</li>
+<li>采用双向链表，并且保存尾节点地址，那么可以直接获取上述两个节点的地址，删除的时间复杂度是$O(1)$。</li>
 </ul>
 </li>
-</ol>
-<p>生成以下文件及文件夹</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">data/</span><br><span class="line">├── 12x12/</span><br><span class="line">├── 12x12.txt</span><br><span class="line">├── 12x12_train.txt</span><br><span class="line">├── 12x12_valid.txt</span><br><span class="line">└── 12x12_test.txt</span><br></pre></td></tr></table></figure>
-<p>其中<code>12x12/</code>包含随机采样得到的尺寸为$12 \times 12$图像，用于输入网络进行训练；<code>12x12.txt</code>包含所有图像的标注，其格式如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[image path] [sample label] [annotations]</span><br></pre></td></tr></table></figure>
-<p>其中负样本(0)无annotations，正样本(1)与部分样本(-1)包含定位框左上右下角的相对偏移量(4个)，关键点样本(-2)包含5个关键点相对于图片左上角的相对偏移量(10个)，例如</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">../data/12x12/25219.jpg 0</span><br><span class="line">../data/12x12/25269.jpg 1 0.07142857142857142 0.03571428571428571 -0.21428571428571427 0.10714285714285714</span><br><span class="line">../data/12x12/25231.jpg -1 -0.030303030303030304 -0.12121212121212122 0.18181818181818182 0.696969696969697</span><br><span class="line">../data/12x12/3926594.jpg -2 0.29134029571831355 0.08374723013072503 0.7777450550823473 0.20460741825864107 0.2530593377292015 0.5109005869899402 0.30317271612810937 0.767843704149384 0.6327263098562724 0.8486940727227192</span><br></pre></td></tr></table></figure>
-<p><code>12x12_*.txt</code>三个文件为对<code>12x12.txt</code>进行一定比例划分得到的标注文件，这里采用的比例为<code>0.6: 0.15: 0.25</code>。</p>
-<p>经统计，其样本数量与比例详细信息如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">==================================================</span><br><span class="line">Totally 3397282 images</span><br><span class="line">Pos(1): Neg(0): Part(-1): Landmark(-2) = 0.3107857987650127: 0.3618628067967275: 0.12916354897827145: 0.1981878454599883</span><br><span class="line">--------------------------------------------------</span><br><span class="line">Cls      | Pos(1)              : Neg(0)   = 0.858849798674096</span><br><span class="line">Offset   | [Pos(1) + Part(-1)] : n_samples = 0.4399493477432842</span><br><span class="line">Landmark | Landmark(-2)         : n_samples = 0.1981878454599883</span><br><span class="line">==================================================</span><br></pre></td></tr></table></figure></p>
-<h2 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h2><p>数据准备就绪后，可进行网络训练，运行<a href="https://github.com/isLouisHsu/MTCNN_Darknet/blob/master/mtcnn_py/main_pnet.py" target="_blank" rel="noopener">mtcnn_py/main_pnet.py</a>。批次大小设置为512，初始学习率0.01，权重衰减设置为4e-5，采用Adam优化器，学习率调整使用指数衰减策略，每代衰减95%，对于PNet，进行20代训练即可，得到权重文件<code>mtcnn_py/ckptdir/PNet.pkl</code>。</p>
-<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p><img src="/2019/11/10/详细！MTCNN训练全过程！/1.jpg" alt="1"></p>
-<h1 id="RNet"><a href="#RNet" class="headerlink" title="RNet"></a>RNet</h1><h2 id="网络结构-1"><a href="#网络结构-1" class="headerlink" title="网络结构"></a>网络结构</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">layer     filters    size           input                output</span><br><span class="line">0 conv     28       3 x 3 / 1    24 x  24 x   3   -&gt;    22 x  22 x  28  0.001 BFLOPs</span><br><span class="line">1 max               3 x 3 / 2    22 x  22 x  28   -&gt;    11 x  11 x  28</span><br><span class="line">2 conv     48       3 x 3 / 1    11 x  11 x  28   -&gt;     9 x   9 x  48  0.002 BFLOPs</span><br><span class="line">3 max               3 x 3 / 2     9 x   9 x  48   -&gt;     4 x   4 x  48</span><br><span class="line">4 conv     64       2 x 2 / 1     4 x   4 x  48   -&gt;     3 x   3 x  64  0.000 BFLOPs</span><br><span class="line">5 connected                                 576   -&gt;               128</span><br><span class="line">6 connected                                 128   -&gt;                15</span><br></pre></td></tr></table></figure>
-<h2 id="数据准备-1"><a href="#数据准备-1" class="headerlink" title="数据准备"></a>数据准备</h2><p>运行<a href="https://github.com/isLouisHsu/MTCNN_Darknet/blob/master/prepare_data/rnet_24x24.py" target="_blank" rel="noopener">prepare_data/rnet_24x24.py</a>，生成以下文件及文件夹</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">data/</span><br><span class="line">├── 24x24/</span><br><span class="line">├── 24x24.txt</span><br><span class="line">├── 24x24_train.txt</span><br><span class="line">├── 24x24_valid.txt</span><br><span class="line">├── 24x24_test.txt</span><br><span class="line">└── rDets.npy</span><br></pre></td></tr></table></figure>
-<p>RNet训练数据需要用到训练好的PNet生成候选框。首先利用PNet对每张原始图片进行检测，保存检测得到的候选框，文件为<code>data/rDets.npy</code>。</p>
-<p>再依据真实标注框对每个候选框进行判别，由于负样本众多，每张图片保留15份负样本，保留全部正样本与部分样本。关键点样本与PNet一致，每张原始图片生成80份关键点样本。</p>
-<p>经统计，样本数目如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">==================================================</span><br><span class="line">Totally 1954946 images</span><br><span class="line">Pos(1): Neg(0): Part(-1): Landmark(-2) = 0.05522607785585893: 0.10885466913152589: 0.2848656689238475: 0.5510535840887677</span><br><span class="line">--------------------------------------------------</span><br><span class="line">Cls      | Pos(1)              : Neg(0)   = 0.507337703531402</span><br><span class="line">Offset   | [Pos(1) + Part(-1)] : n_samples = 0.34009174677970644</span><br><span class="line">Landmark | Landmark(-2)         : n_samples = 0.5510535840887677</span><br><span class="line">==================================================</span><br></pre></td></tr></table></figure>
-<h2 id="训练-1"><a href="#训练-1" class="headerlink" title="训练"></a>训练</h2><p>运行<a href="https://github.com/isLouisHsu/MTCNN_Darknet/blob/master/mtcnn_py/main_rnet.py" target="_blank" rel="noopener">mtcnn_py/main_rnet.py</a>。批次大小设置为512，初始学习率0.01，权重衰减设置为4e-5，采用Adam优化器，学习率调整使用指数衰减策略，每代衰减95%，进行50代训练，得到权重文件<code>mtcnn_py/ckptdir/RNet.pkl</code>。。</p>
-<h2 id="测试-1"><a href="#测试-1" class="headerlink" title="测试"></a>测试</h2><p><img src="/2019/11/10/详细！MTCNN训练全过程！/2.jpg" alt="2"></p>
-<h1 id="ONet"><a href="#ONet" class="headerlink" title="ONet"></a>ONet</h1><h2 id="网络结构-2"><a href="#网络结构-2" class="headerlink" title="网络结构"></a>网络结构</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">layer     filters    size              input                output</span><br><span class="line">0 conv     32       3 x 3 / 1    48 x  48 x   3   -&gt;    46 x  46 x  32  0.004 BFLOPs</span><br><span class="line">1 max               3 x 3 / 2    46 x  46 x  32   -&gt;    23 x  23 x  32</span><br><span class="line">2 conv     64       3 x 3 / 1    23 x  23 x  32   -&gt;    21 x  21 x  64  0.016 BFLOPs</span><br><span class="line">3 max               3 x 3 / 2    21 x  21 x  64   -&gt;    10 x  10 x  64</span><br><span class="line">4 conv     64       3 x 3 / 1    10 x  10 x  64   -&gt;     8 x   8 x  64  0.005 BFLOPs</span><br><span class="line">5 max               2 x 2 / 2     8 x   8 x  64   -&gt;     4 x   4 x  64</span><br><span class="line">6 conv    128       2 x 2 / 1     4 x   4 x  64   -&gt;     3 x   3 x 128  0.001 BFLOPs</span><br><span class="line">7 connected                                1152   -&gt;               256</span><br><span class="line">8 connected                                 256   -&gt;                15</span><br></pre></td></tr></table></figure>
-<h2 id="数据准备-2"><a href="#数据准备-2" class="headerlink" title="数据准备"></a>数据准备</h2><p>运行<a href="https://github.com/isLouisHsu/MTCNN_Darknet/blob/master/prepare_data/onet_48x48.py" target="_blank" rel="noopener">prepare_data/onet_48x48.py</a>，生成以下文件及文件夹</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">data/</span><br><span class="line">├── 48x48/</span><br><span class="line">├── 48x48.txt</span><br><span class="line">├── 48x48_train.txt</span><br><span class="line">├── 48x48_valid.txt</span><br><span class="line">├── 48x48_test.txt</span><br><span class="line">└── oDets.npy</span><br></pre></td></tr></table></figure>
-<p>数据生成方法与RNet一致，不同之处是用到PNet与RNet生成的候选框，保存检测得到的候选框，文件为<code>data/oDets.npy</code>。</p>
-<p>由于负样本众多，每张图片保留10份负样本，保留全部正样本与部分样本。关键点样本与PNet一致，每张原始图片生成80份关键点样本。</p>
-<p>经统计，样本数目如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">==================================================</span><br><span class="line">Totally 1106392 images</span><br><span class="line">Pos(1): Neg(0): Part(-1): Landmark(-2) = 0.04348278006348564: 0.12449656179726534: 0.10240583807547415: 0.7296148200637749</span><br><span class="line">--------------------------------------------------</span><br><span class="line">Cls      | Pos(1)              : Neg(0)   = 0.34926892305905244</span><br><span class="line">Offset   | [Pos(1) + Part(-1)] : n_samples = 0.14588861813895979</span><br><span class="line">Landmark | Landmark(-2)         : n_samples = 0.7296148200637749</span><br><span class="line">==================================================</span><br></pre></td></tr></table></figure>
-<h2 id="训练-2"><a href="#训练-2" class="headerlink" title="训练"></a>训练</h2><p>运行<a href="https://github.com/isLouisHsu/MTCNN_Darknet/blob/master/mtcnn_py/main_onet.py" target="_blank" rel="noopener">mtcnn_py/main_onet.py</a>，批次大小设置为512，初始学习率0.01，权重衰减设置为4e-5，采用Adam优化器，学习率调整使用指数衰减策略，每代衰减95%，进行30代训练，得到权重文件<code>mtcnn_py/ckptdir/RNet.pkl</code>。</p>
-<h2 id="测试-2"><a href="#测试-2" class="headerlink" title="测试"></a>测试</h2><p><img src="/2019/11/10/详细！MTCNN训练全过程！/3.jpg" alt="3"></p>
-<h1 id="转C语言"><a href="#转C语言" class="headerlink" title="转C语言"></a>转C语言</h1><p>C语言框架使用的是<a href="https://github.com/pjreddie/darknet" target="_blank" rel="noopener">darknet</a>，我对它进行了一些修改，在<a href="https://github.com/isLouisHsu/DarkerNet" target="_blank" rel="noopener">isLouisHsu/DarkerNet</a>，安装使用说明在仓库文档说明。</p>
-<p>运行<a href="https://github.com/isLouisHsu/MTCNN_Darknet/blob/master/mtcnn_py/extract_weights.py" target="_blank" rel="noopener">mtcnn_py/extract_weights.py</a>生成权重<code>mtcnn_c/weights/*.weights</code>，运行</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd mtcnn_c/</span><br><span class="line">mkdir build &amp;&amp; cd build</span><br><span class="line">cmake .. &amp;&amp; make</span><br><span class="line">cd ..</span><br><span class="line">./mtcnn -h</span><br></pre></td></tr></table></figure>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
-<li><a href="https://arxiv.org/abs/1604.02878" target="_blank" rel="noopener">Joint Face Detection and Alignment using Multi-task Cascaded Convolutional Networks - arXiv</a></li>
-<li><a href="https://github.com/kpzhang93/MTCNN_face_detection_alignment" target="_blank" rel="noopener">kpzhang93/MTCNN_face_detection_alignment - Github</a></li>
-<li><a href="https://github.com/AITTSMD/MTCNN-Tensorflow" target="_blank" rel="noopener">AITTSMD/MTCNN-Tensorflow - Github</a></li>
-</ol>
+</ul>
+<p>经上述分析，以上两种方式实现的LRU Cache均不能实现$O(1)$的查找和删除，<strong>那么有什么办法改进呢？考虑用字典辅助双向链表的形式实现，即哈希链表</strong></p>
+<ul>
+<li><strong>键值对</strong>保存在双向链表中，以实现<strong>键值对按访问量排序，快速删除最近最少使用的键值对</strong>；<blockquote>
+<p><strong>关于链表为什么不只保存值，还需保存键</strong>：因为在删除最不常用键值对时，同时需要删除字典中对应的键值对，这就需要在节点中保存键以达到<strong>反向查找</strong>的目的。</p>
+</blockquote>
+</li>
+<li>将<strong>链表地址</strong>映射到字典中，以实现<strong>快速查找键值对</strong>。</li>
+</ul>
+<p><img src="/2020/06/05/Least-Recently-Used-Cache/hashlist.png" alt="hashlist"></p>
+<h1 id="算法设计"><a href="#算法设计" class="headerlink" title="算法设计"></a>算法设计</h1><h2 id="put-key-value"><a href="#put-key-value" class="headerlink" title="put(key, value)"></a>put(key, value)</h2><p>实现添和改，首先在字典中<strong>索引<code>key</code>对应的链表节点</strong></p>
+<ul>
+<li>若存在于字典中，那么在该节点中替换<code>value</code>，并将其移动到链表头部；</li>
+<li>若不存在，考虑此时<strong>双向链表是否已满</strong><ul>
+<li>若未满，在链表头部创建新节点保存<code>value</code>，并将该节点的地址映射到字典中；</li>
+<li>若已满，删除链表的尾节点，同时删除字典中该键(<strong>这就需要链表元素同时保存键值对</strong>)，然后再在连边头部创建新节点保存<code>value</code>，并将该节点的地址映射到字典中；</li>
+</ul>
+</li>
+</ul>
+<h2 id="get-key"><a href="#get-key" class="headerlink" title="get(key)"></a>get(key)</h2><p>实现查，首先在字典中<strong>索引<code>key</code>对应的链表节点</strong></p>
+<ul>
+<li>若存在于字典中，返回该节点对应的值<code>value</code>，并将其移动到链表头部；</li>
+<li>若不存在，返回空即可。</li>
+</ul>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>在实现过程中，注意以下几点</p>
+<ul>
+<li>注意双向链表的头尾指针的维护，以及相应的指针操作；</li>
+<li>在对某节点操作(添、查、改)后，需要将节点移动到链表头部；</li>
+<li>在删除链表节点时，同时需要删除字典中对应的键值对；</li>
+<li>注意<code>capcity</code>为$0, 1$及以上三种情况。</li>
+</ul>
+<h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><p>双向链表主要实现两个功能</p>
+<ul>
+<li><code>append</code>：将节点添加到头部；</li>
+<li><code>tohead</code>：将节点移动到链表头部。</li>
+</ul>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ListNode</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, value)</span>:</span></span><br><span class="line">        self.prev = <span class="keyword">None</span></span><br><span class="line">        self.next = <span class="keyword">None</span></span><br><span class="line">        self.value = value</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DoublyLinkedList</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.head = <span class="keyword">None</span></span><br><span class="line">        self.tail = <span class="keyword">None</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">append</span><span class="params">(self, node)</span>:</span></span><br><span class="line">        <span class="string">""" 将节点添加到头部 """</span></span><br><span class="line">        <span class="keyword">if</span> self.head <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">            <span class="comment"># 链表为空</span></span><br><span class="line">            self.head = self.tail = node</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="comment"># 链表非空，添加到头部</span></span><br><span class="line">            node.prev = <span class="keyword">None</span></span><br><span class="line">            node.next = self.head</span><br><span class="line">            self.head.prev = node</span><br><span class="line">            self.head = node</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">tohead</span><span class="params">(self, node)</span>:</span></span><br><span class="line">        <span class="string">""" 移动节点到头部 """</span></span><br><span class="line">        <span class="keyword">if</span> node <span class="keyword">is</span> <span class="keyword">None</span>: <span class="keyword">return</span></span><br><span class="line">        <span class="comment"># 已经是头节点</span></span><br><span class="line">        <span class="keyword">if</span> node.prev <span class="keyword">is</span> <span class="keyword">None</span>: <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 断开节点</span></span><br><span class="line">        node.prev.next = node.next</span><br><span class="line">        <span class="keyword">if</span> node.next:</span><br><span class="line">            node.next.prev = node.prev</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="comment"># 当该节点为尾节点，需要更新尾节点</span></span><br><span class="line">            self.tail = node.prev</span><br><span class="line">            self.tail.next = <span class="keyword">None</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 移动到头部</span></span><br><span class="line">        node.prev = node.next = <span class="keyword">None</span></span><br><span class="line">        self.append(node)</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">printlist</span><span class="params">(self)</span>:</span></span><br><span class="line">        node = self.head</span><br><span class="line">        <span class="keyword">while</span> node:</span><br><span class="line">            print(node.value, end=<span class="string">'-&gt;'</span>)</span><br><span class="line">            node = node.next</span><br><span class="line">        print()</span><br></pre></td></tr></table></figure>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LRUCache</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, capcity)</span>:</span></span><br><span class="line">        self.capcity = capcity</span><br><span class="line"></span><br><span class="line">        self.list = DoublyLinkedList()</span><br><span class="line">        self.dict = dict()</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__len__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> len(self.dict)</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">put</span><span class="params">(self, key, value)</span>:</span></span><br><span class="line">        <span class="string">""" 添、改 """</span></span><br><span class="line">        <span class="keyword">if</span> self.capcity == <span class="number">0</span>: <span class="keyword">return</span> </span><br><span class="line">            </span><br><span class="line">        <span class="comment"># 在字典中查找key对应的节点</span></span><br><span class="line">        node = self.dict.get(key, <span class="keyword">None</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 不存在</span></span><br><span class="line">        <span class="keyword">if</span> node <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">            <span class="comment"># 满了</span></span><br><span class="line">            <span class="keyword">if</span> len(self) &gt;= self.capcity:</span><br><span class="line">                tail = self.list.tail</span><br><span class="line">                <span class="comment"># 删除字典中的键</span></span><br><span class="line">                k = tail.value[<span class="number">0</span>]   </span><br><span class="line">                self.dict.pop(k)    <span class="comment"># 反向查找键并删除</span></span><br><span class="line"></span><br><span class="line">                <span class="comment"># 删除尾节点</span></span><br><span class="line">                <span class="keyword">if</span> tail.prev:</span><br><span class="line">                    tail.prev.next = <span class="keyword">None</span></span><br><span class="line">                    self.list.tail = tail.prev</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    self.list.head = self.list.tail = <span class="keyword">None</span></span><br><span class="line">                <span class="keyword">del</span> tail</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 新建节点并添加到链表和字典</span></span><br><span class="line">            node = ListNode([key, value])</span><br><span class="line">            self.list.append(node)</span><br><span class="line">            self.dict[key] = node</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 存在</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="comment"># 修改值，并移动到头部</span></span><br><span class="line">            node.value[<span class="number">-1</span>] = value</span><br><span class="line">            self.list.tohead(node)</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, key)</span>:</span></span><br><span class="line">        <span class="string">""" 查 """</span></span><br><span class="line">        <span class="comment"># 在字典中查找key对应的节点</span></span><br><span class="line">        node = self.dict.get(key, <span class="keyword">None</span>)</span><br><span class="line">        <span class="keyword">if</span> node <span class="keyword">is</span> <span class="keyword">None</span>: <span class="keyword">return</span> <span class="keyword">None</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 移动到头部</span></span><br><span class="line">        self.list.tohead(node)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 获取对应节点的值</span></span><br><span class="line">        <span class="keyword">return</span> node.value[<span class="number">-1</span>]</span><br></pre></td></tr></table></figure>
+<p>测试如下<br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    <span class="comment"># lru = LRUCache(0)</span></span><br><span class="line">    <span class="comment"># lru = LRUCache(1)</span></span><br><span class="line">    <span class="keyword">for</span> c <span class="keyword">in</span> range(<span class="number">4</span>):</span><br><span class="line">        lru = LRUCache(c)</span><br><span class="line">        lru.put(<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">        lru.list.printlist()</span><br><span class="line"></span><br><span class="line">        lru.put(<span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">        lru.list.printlist()</span><br><span class="line"></span><br><span class="line">        lru.get(<span class="number">1</span>)</span><br><span class="line">        lru.list.printlist()</span><br><span class="line"></span><br><span class="line">        lru.put(<span class="number">3</span>, <span class="number">3</span>)</span><br><span class="line">        lru.list.printlist()</span><br><span class="line"></span><br><span class="line">        lru.get(<span class="number">2</span>)</span><br><span class="line">        lru.list.printlist()</span><br><span class="line"></span><br><span class="line">        lru.get(<span class="number">3</span>)</span><br><span class="line">        lru.list.printlist()</span><br><span class="line">        print(<span class="string">'-----------'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>链表打印输出如下<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-----------</span><br><span class="line">[1, 1]-&gt;</span><br><span class="line">[2, 2]-&gt;</span><br><span class="line">[2, 2]-&gt;</span><br><span class="line">[3, 3]-&gt;</span><br><span class="line">[3, 3]-&gt;</span><br><span class="line">[3, 3]-&gt;</span><br><span class="line">-----------</span><br><span class="line">[1, 1]-&gt;</span><br><span class="line">[2, 2]-&gt;[1, 1]-&gt;</span><br><span class="line">[1, 1]-&gt;[2, 2]-&gt;</span><br><span class="line">[3, 3]-&gt;[1, 1]-&gt;</span><br><span class="line">[3, 3]-&gt;[1, 1]-&gt;</span><br><span class="line">[3, 3]-&gt;[1, 1]-&gt;</span><br><span class="line">-----------</span><br><span class="line">[1, 1]-&gt;</span><br><span class="line">[2, 2]-&gt;[1, 1]-&gt;</span><br><span class="line">[1, 1]-&gt;[2, 2]-&gt;</span><br><span class="line">[3, 3]-&gt;[1, 1]-&gt;[2, 2]-&gt;</span><br><span class="line">[2, 2]-&gt;[3, 3]-&gt;[1, 1]-&gt;</span><br><span class="line">[3, 3]-&gt;[2, 2]-&gt;[1, 1]-&gt;</span><br><span class="line">-----------</span><br></pre></td></tr></table></figure></p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="https://www.lintcode.com/problem/lru-cache/" target="_blank" rel="noopener">134. LRU缓存策略 - lintcode</a></li>
+</ul>
 
       
     </div>
@@ -580,8 +576,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/10/09/CenterNet-Objects-as-Points/" rel="next" title="CenterNet - Objects as Points">
-                <i class="fa fa-chevron-left"></i> CenterNet - Objects as Points
+              <a href="/2020/06/02/Model-Ensemble-Bagging-Boosting-Stacking-and-Blending/" rel="next" title="Model Ensemble: Bagging, Boosting, Stacking and Blending">
+                <i class="fa fa-chevron-left"></i> Model Ensemble: Bagging, Boosting, Stacking and Blending
               </a>
             
           </div>
@@ -589,10 +585,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/12/04/gcc-g-版本切换/" rel="prev" title="gcc/g++版本切换">
-                gcc/g++版本切换 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -811,7 +803,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据集"><span class="nav-number">2.</span> <span class="nav-text">数据集</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PNet"><span class="nav-number">3.</span> <span class="nav-text">PNet</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#网络结构"><span class="nav-number">3.1.</span> <span class="nav-text">网络结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据准备"><span class="nav-number">3.2.</span> <span class="nav-text">数据准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#训练"><span class="nav-number">3.3.</span> <span class="nav-text">训练</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试"><span class="nav-number">3.4.</span> <span class="nav-text">测试</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RNet"><span class="nav-number">4.</span> <span class="nav-text">RNet</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#网络结构-1"><span class="nav-number">4.1.</span> <span class="nav-text">网络结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据准备-1"><span class="nav-number">4.2.</span> <span class="nav-text">数据准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#训练-1"><span class="nav-number">4.3.</span> <span class="nav-text">训练</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试-1"><span class="nav-number">4.4.</span> <span class="nav-text">测试</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ONet"><span class="nav-number">5.</span> <span class="nav-text">ONet</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#网络结构-2"><span class="nav-number">5.1.</span> <span class="nav-text">网络结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据准备-2"><span class="nav-number">5.2.</span> <span class="nav-text">数据准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#训练-2"><span class="nav-number">5.3.</span> <span class="nav-text">训练</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试-2"><span class="nav-number">5.4.</span> <span class="nav-text">测试</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#转C语言"><span class="nav-number">6.</span> <span class="nav-text">转C语言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">7.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#目录"><span class="nav-number">1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#原理介绍"><span class="nav-number">2.</span> <span class="nav-text">原理介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#算法设计"><span class="nav-number">3.</span> <span class="nav-text">算法设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#put-key-value"><span class="nav-number">3.1.</span> <span class="nav-text">put(key, value)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#get-key"><span class="nav-number">3.2.</span> <span class="nav-text">get(key)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注意"><span class="nav-number">3.3.</span> <span class="nav-text">注意</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码实现"><span class="nav-number">4.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>
