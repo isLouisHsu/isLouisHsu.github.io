@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="目录 目录 模型集成 原理 策略 平均法 投票法 学习法     Bagging 自助采样法 随机森林   Boosting AdaBoost 分类 回归：AdaBoost R2 多分类：SAMME 带概率输出的多分类：SAMME.R     Blending Stacking 多样性 误差-分歧分解(Error-Ambiguity Decomposition) 多样性度量 多样性增强   Ref">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Model Ensemble: Bagging, Boosting, Stacking and Blending">
+<meta property="og:url" content="http://yoursite.com/2020/06/02/Model-Ensemble-Bagging-Boosting-Stacking-and-Blending/index.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="目录 目录 模型集成 原理 策略 平均法 投票法 学习法     Bagging 自助采样法 随机森林   Boosting AdaBoost 分类 回归：AdaBoost R2 多分类：SAMME 带概率输出的多分类：SAMME.R     Blending Stacking 多样性 误差-分歧分解(Error-Ambiguity Decomposition) 多样性度量 多样性增强   Ref">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2020/06/02/Model-Ensemble-Bagging-Boosting-Stacking-and-Blending/figure_1.png">
+<meta property="og:updated_time" content="2020-06-05T03:31:31.775Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Model Ensemble: Bagging, Boosting, Stacking and Blending">
+<meta name="twitter:description" content="目录 目录 模型集成 原理 策略 平均法 投票法 学习法     Bagging 自助采样法 随机森林   Boosting AdaBoost 分类 回归：AdaBoost R2 多分类：SAMME 带概率输出的多分类：SAMME.R     Blending Stacking 多样性 误差-分歧分解(Error-Ambiguity Decomposition) 多样性度量 多样性增强   Ref">
+<meta name="twitter:image" content="http://yoursite.com/2020/06/02/Model-Ensemble-Bagging-Boosting-Stacking-and-Blending/figure_1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/02/Model-Ensemble-Bagging-Boosting-Stacking-and-Blending/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Model Ensemble: Bagging, Boosting, Stacking and Blending | LOUIS' BLOG</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LOUIS' BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">To be better</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-guestbook">
+    <a href="/guestbook" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-guest"></i> <br>留言</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/02/Model-Ensemble-Bagging-Boosting-Stacking-and-Blending/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="技术博客？">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Model Ensemble: Bagging, Boosting, Stacking and Blending
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-06-02 17:15:23" itemprop="dateCreated datePublished" datetime="2020-06-02T17:15:23+08:00">2020-06-02</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-06-05 11:31:31" itemprop="dateModified" datetime="2020-06-05T11:31:31+08:00">2020-06-05</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><ul>
+<li><a href="#目录">目录</a></li>
+<li><a href="#模型集成">模型集成</a><ul>
+<li><a href="#原理">原理</a></li>
+<li><a href="#策略">策略</a><ul>
+<li><a href="#平均法">平均法</a></li>
+<li><a href="#投票法">投票法</a></li>
+<li><a href="#学习法">学习法</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#bagging">Bagging</a><ul>
+<li><a href="#自助采样法">自助采样法</a></li>
+<li><a href="#随机森林">随机森林</a></li>
+</ul>
+</li>
+<li><a href="#boosting">Boosting</a><ul>
+<li><a href="#adaboost">AdaBoost</a><ul>
+<li><a href="#分类">分类</a></li>
+<li><a href="#回归adaboost-r2">回归：AdaBoost R2</a></li>
+<li><a href="#多分类samme">多分类：SAMME</a></li>
+<li><a href="#带概率输出的多分类sammer">带概率输出的多分类：SAMME.R</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#blending">Blending</a></li>
+<li><a href="#stacking">Stacking</a></li>
+<li><a href="#多样性">多样性</a><ul>
+<li><a href="#误差-分歧分解error-ambiguity-decomposition">误差-分歧分解(Error-Ambiguity Decomposition)</a></li>
+<li><a href="#多样性度量">多样性度量</a></li>
+<li><a href="#多样性增强">多样性增强</a></li>
+</ul>
+</li>
+<li><a href="#reference">Reference</a></li>
+</ul>
+<h1 id="模型集成"><a href="#模型集成" class="headerlink" title="模型集成"></a>模型集成</h1><h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>集成学习有以下优点</p>
+<ul>
+<li>学习任务假设空间很大时，可能有多个假设在训练集上达到同等性能，此时单学习器可能导致泛化能力不佳；</li>
+<li>单个学习器可能陷入局部极小值，组合多个学习器可以降低陷入局部极小的风险；</li>
+<li>组合多个学习器可以扩大假设空间，得到更好的近似。</li>
+</ul>
+<h2 id="策略"><a href="#策略" class="headerlink" title="策略"></a>策略</h2><p>对于$M$个基学习器$h_1, \cdots, h_M$，可以通过三种策略集成结果：平均法、投票法、学习法。</p>
+<h3 id="平均法"><a href="#平均法" class="headerlink" title="平均法"></a>平均法</h3><p><strong>通常用于回归任务中</strong></p>
+<ul>
+<li><p><strong>简单平均法</strong>：求取学习器输出的均值作为输出</p>
+<script type="math/tex; mode=display">H(x) = \frac{1}{M} \sum_{m=1}^M h_m(x)</script></li>
+<li><p><strong>加权平均法</strong>：学习权重$w_m$，加权组合各学习器的输出</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+  H(x) = \frac{1}{M} \sum_{m=1}^M w_m h_m(x) \\
+  w_m \geq 0, \sum_m w_m = 1
+\end{aligned}</script><p>加权平均会引入较多参数，对于规模较大的集成学习容易出现过拟合，不一定优于简单平均法，适合个体学习器性能相差较大的场景。</p>
+</li>
+</ul>
+<h3 id="投票法"><a href="#投票法" class="headerlink" title="投票法"></a>投票法</h3><p><strong>通常用于分类任务中</strong></p>
+<ul>
+<li><strong>绝大多数投票</strong>：若某个标记得票数过半，则预测为该标记。可能存在所有标记都未过半的问题，该方法不常用。</li>
+<li><strong>相对多数投票</strong>：取得票最多的标记作为预测，即<script type="math/tex; mode=display">H(x) = \argmax_{c_j} \sum_{m = 1}^M I(h_m(x) = c_j)</script></li>
+<li><strong>加权投票</strong>：类似加权平均法<script type="math/tex; mode=display">H(x) = \argmax_{c_j} \sum_{m = 1}^M w_i I(h_m(x) = c_j)</script></li>
+</ul>
+<h3 id="学习法"><a href="#学习法" class="headerlink" title="学习法"></a>学习法</h3><p>通过另一个学习器(<strong>次级学习器或元学习器meta learner</strong>)来组合个体学习器(<strong>初级学习器</strong>)的分类结果。<strong>用初级学习器产生次级数据集，用作次级学习器的训练</strong>，Stacking是一种典型的学习法集成。</p>
+<h1 id="Bagging"><a href="#Bagging" class="headerlink" title="Bagging"></a>Bagging</h1><p>Bagging的<strong>基本流程</strong>是</p>
+<ol>
+<li>经过$M$次<strong>自助采样</strong>，得到$M$个包含$N$个训练样本的采样集；</li>
+<li>基于每个训练集训练得到各个基学习器；</li>
+<li>将这$M$个基学习器进行组合(如投票法)，得到集成模型。</li>
+</ol>
+<p>Bagging主要关注<strong>降低方差</strong>，能够平滑强学习器的方差，非剪枝决策树、神经网络等易受样本扰动的学习器。</p>
+<h2 id="自助采样法"><a href="#自助采样法" class="headerlink" title="自助采样法"></a>自助采样法</h2><p>Bagging基于<strong>自助采样法</strong>(Bootstrap Sampling)。<strong>具体操作为</strong>，给定包含$N$个样本的数据集，<strong>有放回地</strong>进行$N$次随机采样，得到包含$N$个样本的采样集。注意到采样集中某些样本可能多次出现，也存在样本未出现。在某次抽样中样本$x_i$被采样到的概率是$1/N$，经过$N$次采样，<strong>不出现在采样集中的概率</strong>为</p>
+<script type="math/tex; mode=display">(1 - \frac{1}{N})^N</script><p>那么当样本集数目趋于无穷时，有</p>
+<script type="math/tex; mode=display">\lim_{N \rightarrow \infty} (1 - \frac{1}{N})^N = \frac{1}{e} \approx 0.368</script><p>因此原训练集中有<strong>大约有$62.8\%$的样本出现在了采样集中</strong>。那么每个基学习器只用初始训练集中$62.8\%$的样本来训练，剩余$36.8\%$的样本可用作验证集来<strong>对泛化性能进行包外估计</strong>。</p>
+<h2 id="随机森林"><a href="#随机森林" class="headerlink" title="随机森林"></a>随机森林</h2><p><strong>随机森林(</strong>Random Forest)是Bagging的变体。以<strong>决策树</strong>作为基学习器，在每棵决策树训练过程中，除了自助采样引入<strong>随机样本扰动</strong>，还在某节点划分属性时，从所有属性($K$个)中选择一个包含$k$个属性的子集，从中选择最优属性用于划分，从而引入<strong>随机属性扰动</strong>。如果$k=n$，即传统决策树，通常选择$k = \log_2 n$。</p>
+<p><strong>随机森林的优点</strong>是</p>
+<ol>
+<li>可以用于高维数据，无需降维或特征选择；</li>
+<li>可以判断特征的重要程度，用于特征选择；</li>
+<li>可以得到特征间的相互关系；</li>
+<li>不易过拟合；</li>
+<li>决策树实现简单，且可以并行训练，训练速度快；</li>
+<li>对于不平衡数据集，可以平衡误差；</li>
+<li>可以有效应对特征缺失问题。</li>
+</ol>
+<p><strong>缺点</strong>是：</p>
+<ol>
+<li>随着树的数目增加，随机森林可以有效缓解过拟合，<strong>模型的方差会显著降低，但是不会纠正偏差</strong>，在噪音较大的分类或回归问题上会过拟合；</li>
+<li>取值划分较多的属性会对随机森林产生很大影响，所以<strong>属性权值是不可信的</strong>。</li>
+</ol>
+<h1 id="Boosting"><a href="#Boosting" class="headerlink" title="Boosting"></a>Boosting</h1><p><strong>提升方法</strong>(Boosting)的<strong>基本思想</strong>是：通过调整训练样本的权重，训练多个学习器，并将学习器组合得到更好的能力。其<strong>理论基础</strong>是强可学习和弱可学习是等价的，即弱学习算法可以通过某些方法提升为强学习算法。</p>
+<p>其<strong>基本流程</strong>是</p>
+<ol>
+<li>从初始训练集训练得到一个基学习器；</li>
+<li>根据基学习器表现对训练样本权重进行调整，使分类错误的样本得到更多关注；</li>
+<li>用调整权重后的数据集训练下一个基学习器；</li>
+<li>重复直至得到$M$个基学习器，进行加权组合得到集成学习器。</li>
+</ol>
+<h2 id="AdaBoost"><a href="#AdaBoost" class="headerlink" title="AdaBoost"></a>AdaBoost</h2><h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><p>给定训练数据集$D = \{ (X^{(i)}, y^{(i)}), i = 1, \cdots, N\}, X^{(i)} \in \mathcal{R}^n, y^{(i)} \in \{ -1, +1 \}$</p>
+<ol>
+<li>初始化训练数据的权值分布$W_1 = \begin{bmatrix} w_1^{(1)}, \cdots, w_1^{(N)} \end{bmatrix}^T, w_1^{(i)} = 1 / N$；</li>
+<li><p>对于$m = 1, \cdots, M$</p>
+<ol>
+<li>用权值分布$W_m$评估数据集，训练得到弱学习算法的基本分类器$h_m$；</li>
+<li><p>计算分类器$h_m$在训练数据集上的分类误差率如下，即所有误分类的加权和，<strong>若$e_m \geq 1 / 2$，算法终止</strong>；</p>
+<script type="math/tex; mode=display">e_m = \sum_i w_m^{(i)} I(h_m(X^{(i)}) \neq y^{(i)}) \in (0， 1/2)</script></li>
+<li><p>计算分类器$h_m$的权重系数如下，评估该分类器在集成模型中的重要性，注意到该函数为单调递减函数，说明误差越小的分类器权重越大；</p>
+<script type="math/tex; mode=display">\alpha_m = \frac{1}{2} \log \frac{1 - e_m}{e_m} \in (- \infty, 0)</script><p><img src="/2020/06/02/Model-Ensemble-Bagging-Boosting-Stacking-and-Blending/figure_1.png" alt="figure_1"></p>
+</li>
+<li><p>更新数据集的权重分布$W_{m+1} = \begin{bmatrix} w_{m+1}^{(1)}, \cdots, w_{m+1}^{(N)} \end{bmatrix}^T$</p>
+<script type="math/tex; mode=display">z_m^{(i)} = w_m^{(i)} \exp \left( - \alpha_m y^{(i)} h_m(X^{(i)}) \right)</script><script type="math/tex; mode=display">w_{m+1}^{(i)} = z_m^{(i)} / \sum_j z_m^{(j)}</script><p><strong>注意</strong>：分类正确时，$w_{m+1}^{(i)} = w_m^{(i)} \exp(-\alpha_m) / \sum_j z_m^{(j)}$，分类错误时，$w_{m+1}^{(i)} = w_m^{(i)} \exp(+ \alpha_m) / \sum_j z_m^{(j)}$，因此错误分类样本权重是正确分类样本权重的$\exp(2 \alpha_m)$倍。</p>
+</li>
+</ol>
+</li>
+<li><p>基本分类器线性组合得到集成模型</p>
+<script type="math/tex; mode=display">H(X) = \text{sign} (\sum_{m} \alpha_m h_m(X))</script></li>
+</ol>
+<h3 id="回归：AdaBoost-R2"><a href="#回归：AdaBoost-R2" class="headerlink" title="回归：AdaBoost R2"></a>回归：AdaBoost R2</h3><p>AdaBoost用于<strong>回归任务</strong>的一种推广。给定训练数据集$D = \{ (X^{(i)}, y^{(i)}), i = 1, \cdots, N\}, X^{(i)} \in \mathcal{R}^n, y^{(i)} \in \mathcal{R}$</p>
+<ol>
+<li>初始化训练数据的权值分布$W_1 = \begin{bmatrix} w_1^{(1)}, \cdots, w_1^{(N)} \end{bmatrix}^T, w_1^{(i)} = 1 / N$；</li>
+<li><p>对于$m = 1, \cdots, M$</p>
+<ol>
+<li>用权值分布$W_m$评估数据集，训练得到弱学习算法的基本回归器$h_m$；</li>
+<li><p>计算回归器$h_m$在训练数据集上的分类误差率如下，即所有回归误差的加权和</p>
+<script type="math/tex; mode=display">e_m^{(i)} = y^{(i)} - h_m(X^{(i)})</script><script type="math/tex; mode=display">E_m = \max_i | e_m^{(i)} |</script><script type="math/tex; mode=display">e_m = \sum_i w_m^{(i)} (e_m^{(i)} / E_m)^2</script></li>
+<li><p>计算回归器$h_m$的权重系数如下，评估该回归器在集成模型中的重要性，注意到该函数为单调递减函数，说明误差越小的回归器权重越大；</p>
+<script type="math/tex; mode=display">\alpha_m = \frac{e_m}{1 - e_m}</script></li>
+<li><p>更新数据集的权重分布$W_{m+1} = \begin{bmatrix} w_{m+1}^{(1)}, \cdots, w_{m+1}^{(N)} \end{bmatrix}^T$</p>
+<script type="math/tex; mode=display">z_m^{(i)} = w_m^{(i)} \alpha_m^{1 - (\frac{y^{(i)} - h_m(X^{(i)})}{E_m})^2}</script><script type="math/tex; mode=display">w_{m+1}^{(i)} = z_m^{(i)} / \sum_j z_m^{(j)}</script></li>
+</ol>
+</li>
+<li><p>基本回归器线性组合得到集成模型</p>
+<script type="math/tex; mode=display">H(X) = \sum_{m} (\ln \frac{1}{\alpha_m}) h_m(X)</script></li>
+</ol>
+<h3 id="多分类：SAMME"><a href="#多分类：SAMME" class="headerlink" title="多分类：SAMME"></a>多分类：SAMME</h3><p>AdaBoost在多分类任务中的推广，当$K=2$时退化为AdaBoost。给定训练数据集$D = \{ (X^{(i)}, y^{(i)}), i = 1, \cdots, N\}, X^{(i)} \in \mathcal{R}^n, y^{(i)} \in \{ c_1, \cdots, c_K \}$</p>
+<ol>
+<li>初始化训练数据的权值分布$W_1 = \begin{bmatrix} w_1^{(1)}, \cdots, w_1^{(N)} \end{bmatrix}^T, w_1^{(i)} = 1 / N$；</li>
+<li><p>对于$m = 1, \cdots, M$</p>
+<ol>
+<li>用权值分布$W_m$评估数据集，训练得到弱学习算法的基本分类器$h_m$；</li>
+<li><p>计算分类器$h_m$在训练数据集上的分类误差率如下，即所有误分类的加权和，<strong>若$e_m \geq (K - 1) / K$，算法终止</strong>；</p>
+<script type="math/tex; mode=display">e_m = \sum_i w_m^{(i)} I(h_m(X^{(i)}) \neq y^{(i)})</script></li>
+<li><p>计算分类器$h_m$的权重系数如下，评估该分类器在集成模型中的重要性，注意到该函数为单调递减函数，说明误差越小的分类器权重越大；</p>
+<script type="math/tex; mode=display">\alpha_m = \frac{1}{2} \log \frac{1 - e_m}{e_m} + \log (K - 1)</script></li>
+<li><p>更新数据集的权重分布$W_{m+1} = \begin{bmatrix} w_{m+1}^{(1)}, \cdots, w_{m+1}^{(N)} \end{bmatrix}^T$</p>
+<script type="math/tex; mode=display">z_m^{(i)} = w_m^{(i)} \exp \left( - \alpha_m y^{(i)} h_m(X^{(i)}) \right)</script><script type="math/tex; mode=display">w_{m+1}^{(i)} = z_m^{(i)} / \sum_j z_m^{(j)}</script></li>
+</ol>
+</li>
+<li><p>基本分类器线性组合得到集成模型</p>
+<script type="math/tex; mode=display">H(X) = \argmax_k (\sum_m \alpha_m I \left( h_m(X) = c_k \right))</script></li>
+</ol>
+<h3 id="带概率输出的多分类：SAMME-R"><a href="#带概率输出的多分类：SAMME-R" class="headerlink" title="带概率输出的多分类：SAMME.R"></a>带概率输出的多分类：SAMME.R</h3><p>给定训练数据集$D = \{ (X^{(i)}, y^{(i)}), i = 1, \cdots, N\}, X^{(i)} \in \mathcal{R}^n, y^{(i)} \in \{ c_1, \cdots, c_K \}$</p>
+<ol>
+<li>初始化训练数据的权值分布$W_1 = \begin{bmatrix} w_1^{(1)}, \cdots, w_1^{(N)} \end{bmatrix}^T, w_1^{(i)} = 1 / N$；</li>
+<li><p>对于$m = 1, \cdots, M$</p>
+<ol>
+<li>用权值分布$W_m$评估数据集，训练得到弱学习算法的基本分类器$h_m$；</li>
+<li><p>计算分类器$h_m$在训练数据集上的加权概率估计，刻画其预测$X^{(i)}$的输出为类别$c_k$的概率的加权和</p>
+<script type="math/tex; mode=display">{p_m^{(i)}}_k = w_m^{(i)} p(y^{(i)} = c_k | X^{(i)})</script></li>
+<li><p>对于$h_m$和类别$c_k$，定义${l_m}_k(X^{(i)})$如下，刻画$\log {p_m^{(i)}}_k$到<strong>所有概率加权均值</strong>$\frac{1}{K} \sum_{k’} \log {p_m^{(i)}}_{k’}$的距离</p>
+<script type="math/tex; mode=display">{l_m (X^{(i)})}_k = (K - 1) \times \left( \log {p_m^{(i)}}_k - \frac{1}{K} \sum_{k'} \log {p_m^{(i)}}_{k'} \right)</script></li>
+<li><p>更新数据集的权重分布$W_{m+1} = \begin{bmatrix} w_{m+1}^{(1)}, \cdots, w_{m+1}^{(N)} \end{bmatrix}^T$</p>
+<script type="math/tex; mode=display">z_m^{(i)} = w_m^{(i)} \exp \left( - \frac{K - 1}{K} \sum_k {\sigma^{(i)}}_k \log {p_m^{(i)}}_k \right)</script><script type="math/tex; mode=display">
+\sigma^{(i)}_k = 
+\begin{cases}
+  1 & y^{(i)} = c_k \\ - \frac{1}{K - 1} & \text{otherwise}  
+\end{cases}</script><script type="math/tex; mode=display">w_{m+1}^{(i)} = z_m^{(i)} / \sum_j z_m^{(j)}</script></li>
+</ol>
+</li>
+<li><p>基本分类器线性组合得到集成模型</p>
+<script type="math/tex; mode=display">H(X) = \argmax_k (\sum_m {l_m (X^{(i)})}_k)</script></li>
+</ol>
+<h1 id="Blending"><a href="#Blending" class="headerlink" title="Blending"></a>Blending</h1><p>Blending的流程如下</p>
+<ol>
+<li>将数据划分为训练集trainset、验证集validset测试集testset；</li>
+<li>创建第一层模型，这些模型可以是同质的或异质的，用训练集训练这多个模型；</li>
+<li>用上述模型预测验证集和测试集，得到validpred和testpred1；</li>
+<li>创建第二层模型。用validpred作为训练集训练这多个模型；</li>
+<li>用上述模型对testpred1进行预测，作为整个测试集的结果输出testpred。</li>
+</ol>
+<h1 id="Stacking"><a href="#Stacking" class="headerlink" title="Stacking"></a>Stacking</h1><p>Stacking涉及<strong>交叉验证</strong>，流程与Blending类似，具体代码参考<a href="https://github.com/log0/vertebral/blob/master/stacked_generalization.py" target="_blank" rel="noopener">log0/vertebral/stacked_generalization.py </a></p>
+<ol>
+<li>数据划分为训练集trainset和测试集testset；</li>
+<li>创建第一层模型，这些模型可以是同质的或异质的；</li>
+<li>上述每个模型以$K$折交叉验证的方式，分别训练<ol>
+<li>将训练集划分为$K$个子集，其中$1$个用作验证集(cvset)，其余$K-1$个用作本次交叉验证的训练集训练模型；</li>
+<li>cvset在训练得到模型上获取输出cvpred，作为第二层模型的训练集；</li>
+<li>testset在训练得到模型上获取输出testpredk，取testpredk的均值testpred1作为第二层模型的测试集；</li>
+</ol>
+</li>
+<li>创建第二层模型，用cvpred训练单个模型；</li>
+<li>用上述模型对testpred1进行预测，作为整个测试集的结果输出testpred。</li>
+</ol>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">clfs = [</span><br><span class="line">  RandomForestClassifier(n_estimators = n_trees, criterion = <span class="string">'gini'</span>),</span><br><span class="line">  ExtraTreesClassifier(n_estimators = n_trees * <span class="number">2</span>, criterion = <span class="string">'gini'</span>),</span><br><span class="line">  GradientBoostingClassifier(n_estimators = n_trees),</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="comment"># Ready for cross validation</span></span><br><span class="line">skf = list(StratifiedKFold(Y_dev, n_folds))</span><br><span class="line"></span><br><span class="line"><span class="comment"># Pre-allocate the data</span></span><br><span class="line">blend_train = np.zeros((X_dev.shape[<span class="number">0</span>], len(clfs))) <span class="comment"># Number of training data x Number of classifiers</span></span><br><span class="line">blend_test = np.zeros((X_test.shape[<span class="number">0</span>], len(clfs))) <span class="comment"># Number of testing data x Number of classifiers</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># For each classifier, we train the number of fold times (=len(skf))</span></span><br><span class="line"><span class="keyword">for</span> j, clf <span class="keyword">in</span> enumerate(clfs):</span><br><span class="line">    <span class="keyword">print</span> <span class="string">'Training classifier [%s]'</span> % (j)</span><br><span class="line">    blend_test_j = np.zeros((X_test.shape[<span class="number">0</span>], len(skf))) <span class="comment"># Number of testing data x Number of folds , we will take the mean of the predictions later</span></span><br><span class="line">    <span class="keyword">for</span> i, (train_index, cv_index) <span class="keyword">in</span> enumerate(skf):</span><br><span class="line">        <span class="keyword">print</span> <span class="string">'Fold [%s]'</span> % (i)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># This is the training and validation set</span></span><br><span class="line">        X_train = X_dev[train_index]</span><br><span class="line">        Y_train = Y_dev[train_index]</span><br><span class="line">        X_cv = X_dev[cv_index]</span><br><span class="line">        Y_cv = Y_dev[cv_index]</span><br><span class="line">        </span><br><span class="line">        clf.fit(X_train, Y_train)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># This output will be the basis for our blended classifier to train against,</span></span><br><span class="line">        <span class="comment"># which is also the output of our classifiers</span></span><br><span class="line">        blend_train[cv_index, j] = clf.predict(X_cv)</span><br><span class="line">        blend_test_j[:, i] = clf.predict(X_test)</span><br><span class="line">    <span class="comment"># Take the mean of the predictions of the cross validation set</span></span><br><span class="line">    blend_test[:, j] = blend_test_j.mean(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Start blending!</span></span><br><span class="line">bclf = LogisticRegression()</span><br><span class="line">bclf.fit(blend_train, Y_dev)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Predict now</span></span><br><span class="line">Y_test_predict = bclf.predict(blend_test)</span><br><span class="line">score = metrics.accuracy_score(Y_test, Y_test_predict)</span><br><span class="line"><span class="keyword">print</span> <span class="string">'Accuracy = %s'</span> % (score)</span><br></pre></td></tr></table></figure>
+<h1 id="多样性"><a href="#多样性" class="headerlink" title="多样性"></a>多样性</h1><h2 id="误差-分歧分解-Error-Ambiguity-Decomposition"><a href="#误差-分歧分解-Error-Ambiguity-Decomposition" class="headerlink" title="误差-分歧分解(Error-Ambiguity Decomposition)"></a>误差-分歧分解(Error-Ambiguity Decomposition)</h2><p>假定有$M$个学习器$h_1, \cdots, h_M$，通过加权平均组合产生集成学习器$H$，即</p>
+<script type="math/tex; mode=display">H(x) = \sum_{m=1}^M w_m h_m(x)</script><hr>
+<p><strong>对于单个样本$x$</strong>，定义<strong>学习器$h_m$的分歧</strong>为</p>
+<script type="math/tex; mode=display">a_m(x) = (h_m(x) - H(x))^2</script><p><strong>集成学习器$H$的分歧</strong>为</p>
+<script type="math/tex; mode=display">a_H(x) = \sum_{m=1}^M w_m a_m(x) = \sum_{m=1}^M w_m (h_m(x) - H(x))^2</script><p><strong>学习器$h_m$的误差</strong>为</p>
+<script type="math/tex; mode=display">e_m(x) = (y - h_m(x))^2</script><p>那么多个学习器的<strong>误差加权平均</strong>为</p>
+<script type="math/tex; mode=display">e_h(x) = \sum_{m=1}^M w_m e_m(x) = \sum_{m=1}^M w_m (y - h_m(x))^2</script><p><strong>集成学习器$H$的误差</strong>为</p>
+<script type="math/tex; mode=display">e_H(x) = (y - H(x))^2</script><hr>
+<p>定义<strong>集成模型的泛化误差</strong>如下，<strong>希望将$e_H(x)$进行分解，用个体学习器的指标$E_m, A_m$表示</strong></p>
+<script type="math/tex; mode=display">E = \int e_H(x) p(x) dx</script><p>设$p(x)$为样本$x$的概率密度分布，定义个体学习器$h_m$在<strong>全体样本</strong>上的<strong>泛化误差与分歧项</strong>，和<strong>相应的加权平均</strong>为</p>
+<script type="math/tex; mode=display">E_m = \int e_m(x) p(x) dx \Rightarrow \overline{E} = \sum_{m=1}^M w_m E_m</script><script type="math/tex; mode=display">A_m = \int a_m(x) p(x) dx \Rightarrow \overline{A} = \sum_{m=1}^M w_m A_m</script><p>又因为</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    e_h(x) - a_H(x) = \sum_{m=1}^M w_m (y - h_m(x))^2 - \sum_{m=1}^M w_m (h_m(x) - H(x))^2 \\
+    = \sum_{m=1}^M w_m \left[ (y - h_m(x))^2 - (h_m(x) - H(x))^2 \right] \\
+    = \sum_{m=1}^M w_m \left[ y^2 + \cancel{h_m^2(x)} - 2yh_m(x) - \cancel{h_m^2(x)} - H^2(x) + 2 h_m(x)H(x) \right] \\
+    = y^2 \cancel{\sum_{m=1}^M w_m} - 2y \sum_{m=1}^M w_m h_m(x) - 
+      H^2(x) \cancel{\sum_{m=1}^M w_m} + 2H(x) \sum_{m=1}^M w_m h_m(x) \\
+    = y^2 - H^2(x) + 2 \sum_{m=1}^M w_m h_m(x) (H(x) - y) \\
+    = y^2 - H^2(x) + 2 H(x) (H(x) - y) \\
+    = y^2 - H^2(x) + 2 H^2(x) - 2 y H(x) \\
+    = (y - H(x))^2 = e_H(x)
+\end{aligned}</script><p>也即</p>
+<script type="math/tex; mode=display">e_H(x) = e_h(x) - a_H(x)</script><p>那么有</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \int e_H(x) p(x) dx = \int e_h(x) p(x) dx - \int a_H(x) p(x) dx \\
+    = \int \sum_{m=1}^M w_m e_m(x) p(x) dx - \int \sum_{m=1}^M w_m a_m(x) p(x) dx \\
+    = \sum_{m=1}^M w_m \underbrace{\int e_m(x) p(x) dx}_{E_m} - 
+    \sum_{m=1}^M w_m \underbrace{\int a_m(x) p(x) dx}_{A_m} \\
+\end{aligned}</script><p>那么<strong>集成学习的误差-分歧分解</strong>如下</p>
+<script type="math/tex; mode=display">E = \overline{E} - \overline{A}</script><p>那么集成学习的目标是<strong>使$E$最小化</strong>，即</p>
+<ul>
+<li>降低个体学习器的泛化误差的加权均值，个体准确性要高；</li>
+<li>提高个体学习器的加权分歧值，个体间差异应尽量大。</li>
+</ul>
+<p>但是有以下<strong>两个问题</strong></p>
+<ul>
+<li>只针对回归问题，难以直接推广到分类问题中；</li>
+<li>难以直接作为优化目标进行优化：<ul>
+<li>定义在整体样本空间上；</li>
+<li>$\overline{A}$是需要集成学习器构造后才能进行估计。</li>
+</ul>
+</li>
+</ul>
+<h2 id="多样性度量"><a href="#多样性度量" class="headerlink" title="多样性度量"></a>多样性度量</h2><p><strong>多样性度量</strong>(diversity measure)用于刻画集成模型中个体分类器多样性的程度。给定样本集合$\{(X^{(i)}, y^{(i)}), i = 1, \cdots, N, y \in \{-1, +1\}\}$，分类器$h_i, h_j$的预测结果表为</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>$h_i = +1$</th>
+<th>$h_i = -1$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$h_j = +1$</td>
+<td>a</td>
+<td>b</td>
+</tr>
+<tr>
+<td>$h_j = -1$</td>
+<td>c</td>
+<td>d</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li><strong>不合度量</strong>(disagreement measure)<script type="math/tex; mode=display">dis_{ij} = \frac{b + c}{N}</script></li>
+<li><strong>相关系数</strong>(correlation coefficient)<script type="math/tex; mode=display">\rho_{ij} = \frac{ad - bc}{\sqrt{(a + b)(a + c)(c + d)(b + d)}}</script><ul>
+<li>若$h_i, h_j$无关，则值为$0$；</li>
+<li>若$h_i, h_j$正相关，则值大于$0$；</li>
+<li>若$h_i, h_j$负相关，则值小于$0$。</li>
+</ul>
+</li>
+<li><p><strong>$Q$统计量</strong></p>
+<script type="math/tex; mode=display">Q_{ij} = \frac{ad - bc}{ad + bc}</script><p>  $Q_{ij}$符号与$\rho_{ij}$相同，且$|Q_{ij} \leq \rho_{ij}|$。</p>
+</li>
+<li><p><strong>$\kappa$统计量</strong></p>
+<script type="math/tex; mode=display">\kappa_{ij} = \frac{p_1 - p_2}{1 - p_2}</script><p>  其中</p>
+<ul>
+<li><strong>$p_1$两个分类器取得一致的概率</strong><script type="math/tex; mode=display">
+  p_1 = P(h_i = +1, h_j = +1) + P(h_i = -1, h_j = -1) = \frac{a + d}{N}</script></li>
+<li><strong>$p_2$是假设两个分类器预测结果相互独立下，预测达成一致的概率</strong><script type="math/tex; mode=display">
+  \begin{aligned}
+      p_2 = P(h_i = +1, h_j = +1) + P(h_i = -1, h_j = -1) \\ 
+      = P(h_i = +1)P(h_j = +1) + P(h_i = -1)P(h_j = -1) \\ 
+      = \frac{(a + b)(a + c) + (c + d)(b + d)}{N^2} 
+  \end{aligned}</script></li>
+<li>若两个分类器完全一致，则$b=c$，此时$\kappa=1$；</li>
+<li>若两个分类器偶然达成一致，则$p_1 = p_2$，此时$\kappa=0$；</li>
+<li><strong>通常$\kappa$取非负值</strong>，仅在$h_i$和$h_j$达成一致的概率甚至低于偶然性的情况下，才取负值。</li>
+</ul>
+</li>
+</ul>
+<h2 id="多样性增强"><a href="#多样性增强" class="headerlink" title="多样性增强"></a>多样性增强</h2><p>为获得多样性较大的个体学习器，需要在学习过程中引入随机性，常见做法是：<strong>对数数据样本、输入属性、输出表示、算法参数等进行扰动</strong></p>
+<ul>
+<li><strong>数据样本扰动</strong>：从给定初始数据集中产生不同的数据子集(通常基于采样)，利用不同数据子集训练不同的个体学习器；<br>  对决策树、神经网络等受样本影响较大的<strong>不稳定基学习器</strong>很有效，而对于线性学习器、支持向量机、朴素贝叶斯、$k$近邻等<strong>稳定基学习器</strong>效果不大。</li>
+<li><strong>输入属性扰动</strong>：由一组属性描述训练样本，从不同的样本子空间提供观察数据的不同视角；<br>  适合包含大量冗余属性的数据，而属性或冗余属性较少的数据，不宜采用。</li>
+<li><strong>输出表示扰动</strong>：对输出表示进行操纵以增强多样性。<br>  如对训练样本的类标记稍作变动，如翻转法(flipping output)随机改变一些训练样本的标记。</li>
+<li><strong>算法参数扰动</strong>：通过随机设置不同的超参数，产生差异较大的个体学习器；<br>  交叉验证方法是从不同超参数的个体学习其中选择最优的，而集成模型是全部使用。</li>
+</ul>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="https://www.cnblogs.com/zongfa/p/9304353.html" target="_blank" rel="noopener">机器学习—集成学习（Ensemble Learning） - cnblogs</a></li>
+<li><a href="http://www.huaxiaozhuan.com/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/chapters/6_ensemble_learning.html" target="_blank" rel="noopener">集成学习 - huaxiaozhuan.com</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/34534004" target="_blank" rel="noopener">ID3、C4.5、CART、RF、boosting、Adaboost、GBDT、xgboost模型 - 知乎</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/05/grep-sed-awk/" rel="next" title="grep, sed, awk">
+                <i class="fa fa-chevron-left"></i> grep, sed, awk
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Louis Hsu">
+            
+              <p class="site-author-name" itemprop="name">Louis Hsu</p>
+              <p class="site-description motion-element" itemprop="description">技术博客？</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">97</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/isLouisHsu" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://is.louishsu@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/islouishsu" target="_blank" title="Zhihu"><i class="fa fa-fw fa-zhihu"></i>Zhihu</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/islouishsu" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          <div id="music163player">
+            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="110" src="//music.163.com/outchain/player?type=0&id=2703291040&auto=1&height=90">
+            </iframe>
+          </div>
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#目录"><span class="nav-number">1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#模型集成"><span class="nav-number">2.</span> <span class="nav-text">模型集成</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#原理"><span class="nav-number">2.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#策略"><span class="nav-number">2.2.</span> <span class="nav-text">策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#平均法"><span class="nav-number">2.2.1.</span> <span class="nav-text">平均法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#投票法"><span class="nav-number">2.2.2.</span> <span class="nav-text">投票法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#学习法"><span class="nav-number">2.2.3.</span> <span class="nav-text">学习法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Bagging"><span class="nav-number">3.</span> <span class="nav-text">Bagging</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#自助采样法"><span class="nav-number">3.1.</span> <span class="nav-text">自助采样法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#随机森林"><span class="nav-number">3.2.</span> <span class="nav-text">随机森林</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Boosting"><span class="nav-number">4.</span> <span class="nav-text">Boosting</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#AdaBoost"><span class="nav-number">4.1.</span> <span class="nav-text">AdaBoost</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分类"><span class="nav-number">4.1.1.</span> <span class="nav-text">分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#回归：AdaBoost-R2"><span class="nav-number">4.1.2.</span> <span class="nav-text">回归：AdaBoost R2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多分类：SAMME"><span class="nav-number">4.1.3.</span> <span class="nav-text">多分类：SAMME</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#带概率输出的多分类：SAMME-R"><span class="nav-number">4.1.4.</span> <span class="nav-text">带概率输出的多分类：SAMME.R</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Blending"><span class="nav-number">5.</span> <span class="nav-text">Blending</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Stacking"><span class="nav-number">6.</span> <span class="nav-text">Stacking</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#多样性"><span class="nav-number">7.</span> <span class="nav-text">多样性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#误差-分歧分解-Error-Ambiguity-Decomposition"><span class="nav-number">7.1.</span> <span class="nav-text">误差-分歧分解(Error-Ambiguity Decomposition)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多样性度量"><span class="nav-number">7.2.</span> <span class="nav-text">多样性度量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多样性增强"><span class="nav-number">7.3.</span> <span class="nav-text">多样性增强</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">8.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Louis Hsu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: 'e65d27f7cf5c62feaf97',
+          clientSecret: '356386826698e8b817ca076b08d7c0e9814f52ea',
+          repo: 'isLouisHsu.github.io',
+          owner: 'isLouisHsu',
+          admin: ['isLouisHsu'],
+          id: md5(window.location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('3');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+
+  <script type="text/javascript" src="/js/click_show_text.js"></script>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
