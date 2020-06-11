@@ -115,7 +115,7 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="目录 目录 前言 MLE/MAP 最大似然估计(MLE) 最大后验概率估计(MAP)   线性回归/逻辑斯蒂回归 线性回归 逻辑斯蒂回归(LR)   朴素贝叶斯 PCA/LDA PCA 计算步骤 证明   LDA 计算步骤 证明     EM/GMM EM算法 GMM模型   SVM KKT条件 核技巧 分类问题 线性可分 线性不可分   回归问题 求解优化问题   聚类 距离度量 KMeans">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-05-11T11:35:35.785Z">
+<meta property="og:updated_time" content="2020-06-11T15:27:44.500Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="经典机器学习算法推导汇总">
 <meta name="twitter:description" content="目录 目录 前言 MLE/MAP 最大似然估计(MLE) 最大后验概率估计(MAP)   线性回归/逻辑斯蒂回归 线性回归 逻辑斯蒂回归(LR)   朴素贝叶斯 PCA/LDA PCA 计算步骤 证明   LDA 计算步骤 证明     EM/GMM EM算法 GMM模型   SVM KKT条件 核技巧 分类问题 线性可分 线性不可分   回归问题 求解优化问题   聚类 距离度量 KMeans">
@@ -362,7 +362,7 @@
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Louis Hsu">
-      <meta itemprop="description" content="技术博客？">
+      <meta itemprop="description" content="永远年轻，永远热泪盈眶">
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
@@ -417,7 +417,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-05-11 19:35:35" itemprop="dateModified" datetime="2020-05-11T19:35:35+08:00">2020-05-11</time>
+                <time title="修改时间：2020-06-11 23:27:44" itemprop="dateModified" datetime="2020-06-11T23:27:44+08:00">2020-06-11</time>
               
             
           </span>
@@ -539,79 +539,85 @@
 <h1 id="MLE-MAP"><a href="#MLE-MAP" class="headerlink" title="MLE/MAP"></a>MLE/MAP</h1><p>给定$N$个样本对$\{(X^{(i)}, y^{(i)}), i = 1, \cdots, N\}$，其中$y \in \{C_k, k = 1, \cdots, K\}$，要求估计参数模型$P(X | \theta)$的参数$\theta$，使之最能描述给定数据分布。</p>
 <h2 id="最大似然估计-MLE"><a href="#最大似然估计-MLE" class="headerlink" title="最大似然估计(MLE)"></a>最大似然估计(MLE)</h2><script type="math/tex; mode=display">
 \begin{aligned}
-    优化目标：\hat{\theta} = \arg \max P(D | \theta) \\
-    定义：L(D | \theta) = P(D | \theta) = \prod_i P(X^{(i)} | \theta) \\
-    取对数： \log L(D | \theta) = \sum_i \log P(X^{(i)} | \theta) \\
-    求取极值：\frac{\partial}{\partial \theta} \log L(D | \theta) = 0 \Rightarrow \hat{\theta}
+    优化目标：& \hat{\theta} = \arg \max P(D | \theta) \\
+    定义：& L(D | \theta) = P(D | \theta) = \prod_i P(X^{(i)} | \theta) \\
+    取对数：& \log L(D | \theta) = \sum_i \log P(X^{(i)} | \theta) \\
+    求取极值：& \frac{\partial}{\partial \theta} \log L(D | \theta) = 0 \Rightarrow \hat{\theta}
 \end{aligned}</script><h2 id="最大后验概率估计-MAP"><a href="#最大后验概率估计-MAP" class="headerlink" title="最大后验概率估计(MAP)"></a>最大后验概率估计(MAP)</h2><script type="math/tex; mode=display">
 \begin{aligned}
-    优化目标：\hat{\theta} = \arg \max P(\theta | D) \\
-    其中：P(\theta | D) = \frac{P(D | \theta) P(\theta)}{P(D)}, P(\theta)为给定的参数先验概率分布 \\
-    定义：L(\theta | D) = P(D | \theta) P(\theta) = \prod_i P(X^{(i)} | \theta) \cdot P(\theta) \\
-    取对数： \log L(\theta | D) = \sum_i \log P(X^{(i)} | \theta) + \log P(\theta) \\
-    求取极值：\frac{\partial}{\partial \theta} \log L(\theta | D) = 0 \Rightarrow \hat{\theta}
+    优化目标：& \hat{\theta} = \arg \max P(\theta | D) \\
+    其中：& P(\theta | D) = \frac{P(D | \theta) P(\theta)}{P(D)} \\
+    & P(\theta)为给定的参数先验概率分布 \\
+    定义：& L(\theta | D) = P(D | \theta) P(\theta) = \prod_i P(X^{(i)} | \theta) \cdot P(\theta) \\
+    取对数：&  \log L(\theta | D) = \sum_i \log P(X^{(i)} | \theta) + \log P(\theta) \\
+    求取极值：& \frac{\partial}{\partial \theta} \log L(\theta | D) = 0 \Rightarrow \hat{\theta}
 \end{aligned}</script><div style="page-break-after: always;"></div>
 
 <h1 id="线性回归-逻辑斯蒂回归"><a href="#线性回归-逻辑斯蒂回归" class="headerlink" title="线性回归/逻辑斯蒂回归"></a>线性回归/逻辑斯蒂回归</h1><p>给定$N$个样本对$\{(X^{(i)}, y^{(i)}), i = 1, \cdots, N\}$，记样本矩阵$X_{N \times n}$。</p>
 <h2 id="线性回归"><a href="#线性回归" class="headerlink" title="线性回归"></a>线性回归</h2><script type="math/tex; mode=display">
 \begin{aligned}
-    标签信息：y \in \mathcal{R}^1，
+    标签信息：& y \in \mathcal{R}^1，
     定义模型：\hat{y}_{1\times 1} = w_{n \times 1}^T x_{n \times 1} + b \\ 
-    增广后：\hat{y}_{1\times 1} = w_{n \times 1}^T x_{n \times 1} \begin{cases} w_1 = b \\ x_1 = 1 \end{cases} \\
-    MSE作为损失，则总体损失：L(\hat{y}, y) = \frac{1}{N} \sum_{i=1}^N \frac{1}{2} (\hat{y}^{(i)} - y^{(i)})^2 \\
-    求取梯度：\frac{\partial L}{\partial w_j} = 
+    增广后：& \hat{y}_{1\times 1} = w_{n \times 1}^T x_{n \times 1} \begin{cases} w_1 = b \\ x_1 = 1 \end{cases} \\
+    MSE作为损失，则总体损失：& L(\hat{y}, y) = \frac{1}{N} \sum_{i=1}^N \frac{1}{2} (\hat{y}^{(i)} - y^{(i)})^2 \\
+    求取梯度：& \frac{\partial L}{\partial w_j} = 
         \frac{1}{N} \sum_{i=1}^N (\hat{y}^{(i)} - y^{(i)}) \frac{\partial \hat{y}^{(i)}}{\partial w_j} = 
         \frac{1}{N} \sum_{i=1}^N (\hat{y}^{(i)} - y^{(i)}) x^{(i)}_j \Rightarrow \\
-    梯度下降：w_j := w_j - \alpha \frac{\partial L}{\partial w_j}
+    梯度下降：& w_j := w_j - \alpha \frac{\partial L}{\partial w_j}
 \end{aligned}</script><p>若描述为矩阵</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
     \left.\begin{aligned}
-        标签信息 Y \in R^{N}，定义模型：\hat{Y}_{N \times 1} = X_{N \times (n + 1)} w_{(n + 1) \times 1} \\
-        总体损失：L(\hat{Y}, Y) = \frac{1}{N} \cdot \frac{1}{2} || \hat{Y} - Y ||_2^2 =
+        & 标签信息 Y \in R^{N} \\
+        定义模型：& \hat{Y}_{N \times 1} = X_{N \times (n + 1)} w_{(n + 1) \times 1} \\
+        总体损失：& L(\hat{Y}, Y) = \frac{1}{N} \cdot \frac{1}{2} || \hat{Y} - Y ||_2^2 =
         \frac{1}{N} \cdot \frac{1}{2} (\hat{Y} - Y)^T(\hat{Y} - Y)
     \end{aligned}\right\} \Rightarrow \\
     L(\hat{Y}, Y) = \frac{1}{2 N} (w^T X^T X w - 2 Y^T X w + Y^T Y) \\
-    求取梯度：\frac{\partial L}{\partial w} = \frac{1}{\cancel{2} N} (\cancel{2} X^T X w - \cancel{2} X^T Y) = 0 \Rightarrow \\
+    求取梯度： \frac{\partial L}{\partial w} = \frac{1}{\cancel{2} N} (\cancel{2} X^T X w - \cancel{2} X^T Y) = 0 \Rightarrow \\
     \begin{cases}
-        梯度下降：w := w - \alpha \frac{\partial L}{\partial w} \\
-        解析解：\hat{w}^* = \underbrace{(X^T X + \lambda I)^{-1} X^T}_{X^+} Y 
+        梯度下降：& w := w - \alpha \frac{\partial L}{\partial w} \\
+        解析解：& \hat{w}^* = \underbrace{(X^T X + \lambda I)^{-1} X^T}_{X^+} Y 
     \end{cases}
 \end{aligned}</script><div style="page-break-after: always;"></div>
 
 <h2 id="逻辑斯蒂回归-LR"><a href="#逻辑斯蒂回归-LR" class="headerlink" title="逻辑斯蒂回归(LR)"></a>逻辑斯蒂回归(LR)</h2><script type="math/tex; mode=display">
 \begin{aligned}
-    标签信息：y \in \{0, 1\}，定义模型：\begin{cases} \hat{y} = \sigma(z) \\ z = w^T X + b \end{cases} 其中 \sigma(z) = \frac{1}{1 + \exp(-z)} \\
-    样本X服从0-1分布：P(X) = (1 - \hat{y})^{1 - y} (\hat{y})^{y} (\hat{y}^{(i)}为直接待估参数) \\
-    MLE：L(D | w) = \prod_i P(X^{(i)}) \Rightarrow 
+    标签信息： y \in \{0, 1\} \\
+    定义模型：& \begin{cases} \hat{y} = \sigma(z) \\ z = w^T X + b \end{cases} \\
+    & 其中 \sigma(z) = \frac{1}{1 + \exp(-z)} \\
+    样本X服从0-1分布：& P(X) = (1 - \hat{y})^{1 - y} (\hat{y})^{y} (\hat{y}^{(i)}为直接待估参数) \\
+    MLE：& L(D | w) = \prod_i P(X^{(i)}) \Rightarrow 
         \log L(D | w) = \sum_i \log P(X^{(i)}) \\
-    优化目标：\hat{w} = \arg \max L(D | w) = \arg \max \log L(D | w) \\
-    求取极值：\frac{\partial L}{\partial w_j} = 
-        \frac{\partial}{\partial w_j} \sum_i \log P(X^{(i)}) = 
-        \frac{\partial}{\partial w_j} \sum_i \log (1 - \hat{y}^{(i)})^{1 - y^{(i)}} (\hat{y}^{(i)})^{y^{(i)}} \\
-        = \frac{\partial}{\partial w_j} \sum_i (1 - y^{(i)}) \log (1 - \hat{y}^{(i)}) + \frac{\partial}{\partial w_j} \sum_i y^{(i)} \log \hat{y}^{(i)} \\
-        = \sum_i (1 - y^{(i)}) \frac{1}{1 - \hat{y}^{(i)}} (- \frac{\partial y^{(i)}}{\partial w_j}) + 
-            \sum_i y^{(i)} \frac{1}{\hat{y}^{(i)}} (\frac{\partial y^{(i)}}{\partial w_j}) \\
-    其中：\frac{\partial y^{(i)}}{\partial w_j} = \sigma'(z^{(i)}) \frac{\partial z^{(i)}}{\partial w_j} = \sigma(z^{(i)}) (1 - \sigma(z^{(i)})) x^{(i)}_j \Rightarrow \\
-    \frac{\partial L}{\partial w_j} = \sum_i - (1 - \bcancel{y^{(i)}}) \frac{1}{\cancel{1 - \hat{y}^{(i)}}} \sigma(z^{(i)}) \cancel{(1 - \sigma(z^{(i)}))} x^{(i)}_j + \\
-        \sum_i y^{(i)} \frac{1}{\cancel{\hat{y}^{(i)}}} \cancel{\sigma(z^{(i)})} (1 - \bcancel{\sigma(z^{(i)})}) x^{(i)}_j 
+    优化目标：& \hat{w} = \arg \max L(D | w) = \arg \max \log L(D | w) \\
+    求取极值：& \begin{aligned}
+        \frac{\partial L}{\partial w_j} & =
+        \frac{\partial}{\partial w_j} \sum_i \log P(X^{(i)}) \\ 
+        & = \frac{\partial}{\partial w_j} \sum_i \log (1 - \hat{y}^{(i)})^{1 - y^{(i)}} (\hat{y}^{(i)})^{y^{(i)}} \\
+        & = \frac{\partial}{\partial w_j} \sum_i (1 - y^{(i)}) \log (1 - \hat{y}^{(i)}) + \frac{\partial}{\partial w_j} \sum_i y^{(i)} \log \hat{y}^{(i)} \\
+        & = \sum_i (1 - y^{(i)}) \frac{1}{1 - \hat{y}^{(i)}} (- \frac{\partial y^{(i)}}{\partial w_j}) + 
+            \sum_i y^{(i)} \frac{1}{\hat{y}^{(i)}} (\frac{\partial y^{(i)}}{\partial w_j})
+    \end{aligned} \\
+    其中：& \frac{\partial y^{(i)}}{\partial w_j} = \sigma'(z^{(i)}) \frac{\partial z^{(i)}}{\partial w_j} = \sigma(z^{(i)}) (1 - \sigma(z^{(i)})) x^{(i)}_j \Rightarrow \\
+    & \frac{\partial L}{\partial w_j} = \sum_i - (1 - \bcancel{y^{(i)}}) \frac{1}{\cancel{1 - \hat{y}^{(i)}}} \sigma(z^{(i)}) \cancel{(1 - \sigma(z^{(i)}))} x^{(i)}_j + \\
+        & \sum_i y^{(i)} \frac{1}{\cancel{\hat{y}^{(i)}}} \cancel{\sigma(z^{(i)})} (1 - \bcancel{\sigma(z^{(i)})}) x^{(i)}_j 
         = \sum_i (y^{(i)} - \hat{y}^{(i)}) x^{(i)}_j \Rightarrow \\ 
-        梯度下降：w_j := w_j - \alpha \frac{\partial L}{\partial w_j}
+        梯度下降：& w_j := w_j - \alpha \frac{\partial L}{\partial w_j}
 \end{aligned}</script><div style="page-break-after: always;"></div>
 
 <h1 id="朴素贝叶斯"><a href="#朴素贝叶斯" class="headerlink" title="朴素贝叶斯"></a>朴素贝叶斯</h1><p>给定$N$个样本对$\{(X^{(i)}, y^{(i)}), i = 1, \cdots, N\}$，其中$y \in \{C_k, k = 1, \cdots, K\}$。</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-    定义模型为条件概率分布：P(Y | X) \\
-    由贝叶斯公式：P(Y | X) = \frac{P(X | Y) P(Y)}{P(X)} \\
-    称：\begin{cases}
-        后验概率：P(Y | X) \\ 
-        似然函数：P(X | Y) = \prod_{j=1}^n P(X_j | Y) (朴素贝叶斯)\\ 
-        先验概率：P(Y) \\ 
-        证据因子：P(X) = \sum_k P(X | Y = C_k) P(Y = C_k)
+    定义模型为条件概率分布：& P(Y | X) \\
+    由贝叶斯公式：& P(Y | X) = \frac{P(X | Y) P(Y)}{P(X)} \\
+    称：& \begin{cases}
+        后验概率：& P(Y | X) \\ 
+        似然函数：& P(X | Y) = \prod_{j=1}^n P(X_j | Y) (朴素贝叶斯)\\ 
+        先验概率：& P(Y) \\ 
+        证据因子：& P(X) = \sum_k P(X | Y = C_k) P(Y = C_k)
     \end{cases} \\
-    \hat{y} = \max_k P(X | Y = C_k) P(Y = C_k) \\ 
-    = \max_k \prod_{j=1}^n P(X_j | Y = C_k) P(Y = C_k)
+    \hat{y} & = \max_k P(X | Y = C_k) P(Y = C_k) \\ 
+    & = \max_k \prod_{j=1}^n P(X_j | Y = C_k) P(Y = C_k)
 \end{aligned}</script><h1 id="PCA-LDA"><a href="#PCA-LDA" class="headerlink" title="PCA/LDA"></a>PCA/LDA</h1><h2 id="PCA"><a href="#PCA" class="headerlink" title="PCA"></a>PCA</h2><p>给定<strong>包含$M$个样本的$N$维数据集</strong>$\{X_{N \times 1}^{(i)}, i = 1, \cdots, M\}$构成样本矩阵$X_{N \times M} = \begin{bmatrix}X^{(1)} &amp; X^{(2)} &amp; \cdots X^{(M)}\end{bmatrix}$，现希望求取主分量$\beta_k, k = 1, \cdots, K$使得数据投影<strong>在各主分量上的散布最大/方差最大</strong>。</p>
 <h3 id="计算步骤"><a href="#计算步骤" class="headerlink" title="计算步骤"></a>计算步骤</h3><ol>
 <li>计算维度间的<strong>协方差矩阵</strong>$\Sigma_{N \times N} = \frac{1}{M} \tilde{X} \tilde{X}^T$，其中$\tilde{X}^{(i)} = X^{(i)} - \overline{X}, \overline{X} = \frac{1}{M} \sum_{i=1}^{M} X^{(i)}$；</li>
@@ -623,14 +629,14 @@
 <li><p>第$1$主成分<br> 优化目标为</p>
 <script type="math/tex; mode=display">
  \begin{aligned}
-     \beta_1 = \arg \max ||S_1||_2^2 \\ s.t. \quad ||\beta_1||_2^2 = 1
+     \beta_1 & = \arg \max ||S_1||_2^2 \\ s.t. & \quad ||\beta_1||_2^2 = 1
  \end{aligned}</script><p> 那么</p>
 <script type="math/tex; mode=display">
  \begin{aligned}
      \left. \begin{aligned}
          \left. \begin{aligned}
-             ||S_1||_2^2 = S_1^T S_1 \\
-             S_1 = X^T \beta_1
+             ||S_1||_2^2 & = S_1^T S_1 \\
+             S_1 & = X^T \beta_1
          \end{aligned} \right\} \Rightarrow
          ||S_1||_2^2 = \beta_1^T \underbrace{X X^T}_C \beta_1 \\
          C = X X^T = W \Lambda W^T
@@ -649,8 +655,9 @@
 <li><p>第$r(r&gt;1)$主成分<br> 优化目标为</p>
 <script type="math/tex; mode=display">
  \begin{aligned}
-     \beta_r = \arg \max ||S_r||_2^2 \\ s.t. \quad \beta_r^T \beta_i = 0, i = 1, \cdots, r - 1 \\
-     ||\beta_r||_2^2 = 1
+     \beta_r & = \arg \max ||S_r||_2^2 \\
+     s.t. & \quad \beta_r^T \beta_i = 0, i = 1, \cdots, r - 1 \\
+     & ||\beta_r||_2^2 = 1
  \end{aligned}</script><p> 那么</p>
 <script type="math/tex; mode=display">
  \begin{aligned}
@@ -681,12 +688,12 @@
 <p>定义：</p>
 <script type="math/tex; mode=display">
 \begin{cases}
-    总样本均值 & \mu = \frac{1}{N} \sum_{i=1}^N X^{(i)} \\
-    类别样本均值 & \mu_k = \frac{1}{N_k} \sum_{i=1}^{N_k} X^{(i)}, y^{(i)} = C_k \\
-    类内离差阵 & S_{W, n \times n} = \sum_k \frac{N_k}{N} \left[ 
+    总样本均值： & \mu = \frac{1}{N} \sum_{i=1}^N X^{(i)} \\
+    类别样本均值： & \mu_k = \frac{1}{N_k} \sum_{i=1}^{N_k} X^{(i)}, y^{(i)} = C_k \\
+    类内离差阵： & S_{W, n \times n} = \sum_k \frac{N_k}{N} \left[ 
         \frac{1}{N_k} \sum_i (X^{(i)} - \mu_k) (X^{(i)} - \mu_k)^T
     \right] \\
-    类内离差阵 & S_{B, n \times n} = \sum_k \frac{N_k}{N} \left[ 
+    类内离差阵： & S_{B, n \times n} = \sum_k \frac{N_k}{N} \left[ 
         (\mu_k - \mu) (\mu_k - \mu)^T 
     \right] \\
 \end{cases}</script><h3 id="计算步骤-1"><a href="#计算步骤-1" class="headerlink" title="计算步骤"></a>计算步骤</h3><ol>
@@ -699,11 +706,11 @@
 \begin{aligned}
     将样本点X^{(i)}投影到第一主轴u_1上有 \quad \tilde{X}^{(i)} = u_1^T X^{(i)} \quad 在投影空间有 \\
     \left.\begin{aligned}
-        \tilde{X}^{(i)} = u_1^T X^{(i)}, \tilde{\mu} = u_1^T \mu, \tilde{\mu}_k = u_1^T \mu_k \\
-        \tilde{S_W}_{1 \times 1} = \sum_k \frac{N_k}{N} \left[ 
+        \tilde{X}^{(i)} & = u_1^T X^{(i)}, \tilde{\mu} = u_1^T \mu, \tilde{\mu}_k = u_1^T \mu_k \\
+        \tilde{S_W}_{1 \times 1} & = \sum_k \frac{N_k}{N} \left[ 
             \frac{1}{N_k} \sum_i (\tilde{X}^{(i)} - \tilde{\mu}_k) (\tilde{X}^{(i)} - \tilde{\mu}_k)^T 
         \right] \\
-        \tilde{S_B}_{1 \times 1} = \sum_k \frac{N_k}{N} \left[ 
+        \tilde{S_B}_{1 \times 1} & = \sum_k \frac{N_k}{N} \left[ 
             (\tilde{\mu}_k - \tilde{\mu}) (\tilde{\mu}_k - \tilde{\mu})^T
         \right]
     \end{aligned}\right\} \Rightarrow
@@ -798,11 +805,11 @@
 \end{aligned}</script><h2 id="核技巧"><a href="#核技巧" class="headerlink" title="核技巧"></a>核技巧</h2><p>设某函数$\Phi(x)$，可将$x$从$n$维空间映射到$n’$维空间，定义两个向量的核函数为$\kappa(x_i, x_j) = \Phi(x_i)^T \Phi(x_j)$，常用和函数有</p>
 <script type="math/tex; mode=display">
 \begin{cases}
-    线性核：\kappa(x_i, x_j) = x_i^T x_j \\
-    多项式核：\kappa(x_i, x_j) = (\gamma x_i^T x_j + c)^n \\
-    sigmoid核：\kappa(x_i, x_j) = \tanh (\gamma x_i^T x_j + c) \\
-    拉普拉斯核：\kappa(x_i, x_j) = \exp (- \gamma \frac{||x_i - x_j||}{\sigma}) \\
-    高斯核：\kappa(x_i, x_j) = \exp (- \gamma \frac{||x_i - x_j||^2}{2 \sigma^2}) 
+    线性核：& \kappa(x_i, x_j) = x_i^T x_j \\
+    多项式核：& \kappa(x_i, x_j) = (\gamma x_i^T x_j + c)^n \\
+    sigmoid核：& \kappa(x_i, x_j) = \tanh (\gamma x_i^T x_j + c) \\
+    拉普拉斯核：& \kappa(x_i, x_j) = \exp (- \gamma \frac{||x_i - x_j||}{\sigma}) \\
+    高斯核：& \kappa(x_i, x_j) = \exp (- \gamma \frac{||x_i - x_j||^2}{2 \sigma^2}) 
 \end{cases}</script><div style="page-break-after: always;"></div>
 
 <h2 id="分类问题"><a href="#分类问题" class="headerlink" title="分类问题"></a>分类问题</h2><p>给定$N$对样本$\{(X^{(i)}, y^{(i)}), i = 1, \cdots, N\}, y \in \{-1, 1\}$，求取超平面$w^T \Phi(x) + b = 0$使样本点落在该超平面两侧。</p>
@@ -817,19 +824,20 @@
     \end{aligned}\right\} \Rightarrow \\
 \end{aligned}</script><script type="math/tex; mode=display">
 \begin{aligned}
-    优化目标：\begin{aligned}
-            w, b = \arg \max r \\ s.t. \quad y^{(i)} [w^T \Phi(x^{(i)}) + b] \geq 1
+    优化目标：& \begin{aligned}
+            w, b & = \arg \max r \\ 
+            s.t. & \quad y^{(i)} [w^T \Phi(x^{(i)}) + b] \geq 1
         \end{aligned} \\
-    即  \begin{aligned}
-            w, b = \arg \min \frac{1}{2} ||w||^2 \\ s.t. \quad y^{(i)} [w^T \Phi(x^{(i)}) + b] \geq 1
+    即： & \begin{aligned}
+            w, b & = \arg \min \frac{1}{2} ||w||^2 \\ s.t. & \quad y^{(i)} [w^T \Phi(x^{(i)}) + b] \geq 1
         \end{aligned}
 \end{aligned}</script><h3 id="线性不可分"><a href="#线性不可分" class="headerlink" title="线性不可分"></a>线性不可分</h3><p>在线性可分支持向量机基础上，对每个样本添加松弛变量$\epsilon^{(i)}$</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
     优化目标：\begin{aligned}
-            w, b = \arg \min \left[ \frac{1}{2} ||w||^2 + C \sum_i \epsilon^{(i)} \right] \\ 
-            s.t. \quad y^{(i)} [w^T \Phi(x^{(i)}) + b] \geq 1 - \epsilon^{(i)}
-            \\ \epsilon^{(i)} \geq 0
+            w, b & = \arg \min \left[ \frac{1}{2} ||w||^2 + C \sum_i \epsilon^{(i)} \right] \\ 
+            s.t. & \quad y^{(i)} [w^T \Phi(x^{(i)}) + b] \geq 1 - \epsilon^{(i)}
+            \\ & \epsilon^{(i)} \geq 0
         \end{aligned}
 \end{aligned}</script><h2 id="回归问题"><a href="#回归问题" class="headerlink" title="回归问题"></a>回归问题</h2><p>给定$N$对样本$\{(X^{(i)}, y^{(i)}), i = 1, \cdots, N\}, y \in R$，求回归模型$\hat{y} = w^T \Phi(x) + b$，使得每个样本尽量拟合到该模型上，定义损失为</p>
 <script type="math/tex; mode=display">
@@ -841,8 +849,8 @@ L^{(i)} = \begin{cases}
 <h2 id="求解优化问题"><a href="#求解优化问题" class="headerlink" title="求解优化问题"></a>求解优化问题</h2><p>以线性可分支持向量机为例，讲解参数$w， b$的优化方法</p>
 <script type="math/tex; mode=display">
 优化目标：\begin{aligned}
-    w, b = \arg \min \frac{1}{2} ||w||^2 \\ 
-    s.t. \quad y^{(i)} [w^T \Phi(x^{(i)}) + b] \geq 1
+    w, b & = \arg \min \frac{1}{2} ||w||^2 \\ 
+    s.t. & \quad y^{(i)} [w^T \Phi(x^{(i)}) + b] \geq 1
 \end{aligned}</script><script type="math/tex; mode=display">
 \begin{aligned}
     拉格朗日函数：L(w, b, \mu) = \frac{1}{2} ||w||^2 + \sum_i \mu^{(i)} \left\{ 1 - y^{(i)} [w^T \Phi(x^{(i)}) + b] \right\} \\
@@ -861,37 +869,37 @@ L^{(i)} = \begin{cases}
     \end{cases} \\
     由K.K.T条件：\begin{cases}
         \left.\begin{aligned}
-            \sum_i \mu^{(i)} y^{(i)} \Phi(x^{(i)})_j = w_j \\
-            \sum_i \mu^{(i)} y^{(i)} = 0
+            \sum_i \mu^{(i)} y^{(i)} \Phi(x^{(i)})_j & = w_j \\
+            \sum_i \mu^{(i)} y^{(i)} & = 0
         \end{aligned}\right\} (极值条件) \\
         1 - y^{(i)} [w^T \Phi(x^{(i)}) + b] \leq 0 (不等式约束) \\
         \left.\begin{aligned}
             \mu^{(i)} \left\{ 1 - y^{(i)} [w^T \Phi(x^{(i)}) + b] \right\} = 0 \\ 
             \mu^{(i)} > 0
-        \end{aligned} \right\} (优化目标取=的必要条件)
+        \end{aligned} \right\} (优化目标取'='的必要条件)
     \end{cases}
 \end{aligned}</script><div style="page-break-after: always;"></div>
 
 <p>$拉格朗日函数展开后，将极值条件代入，有$</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-    L(w, b, \mu) = \frac{1}{2} ||w||^2 + \sum_i \mu^{(i)} \left\{ 1 - y^{(i)} [w^T \Phi(x^{(i)}) + b] \right\} \\
-    = \frac{1}{2} w^T w + \sum_i \mu^{(i)} - \sum_i \mu^{(i)} y^{(i)} w^T \Phi(x^{(i)}) - \sum_i \mu^{(i)} y^{(i)} b \\
-    = \frac{1}{2} w^T w + \sum_i \mu^{(i)} - \sum_i \mu^{(i)} y^{(i)} \underbrace{\left( \sum_j w_j \Phi(x^{(i)})_j \right)}_{w^T \Phi(x^{(i)})} - \cancel{\sum_i \mu^{(i)} y^{(i)} b} \\
-    \left.\begin{aligned}
+    L(w, b, \mu) & = \frac{1}{2} ||w||^2 + \sum_i \mu^{(i)} \left\{ 1 - y^{(i)} [w^T \Phi(x^{(i)}) + b] \right\} \\
+    & = \frac{1}{2} w^T w + \sum_i \mu^{(i)} - \sum_i \mu^{(i)} y^{(i)} w^T \Phi(x^{(i)}) - \sum_i \mu^{(i)} y^{(i)} b \\
+    & = \frac{1}{2} w^T w + \sum_i \mu^{(i)} - \sum_i \mu^{(i)} y^{(i)} \underbrace{\left( \sum_j w_j \Phi(x^{(i)})_j \right)}_{w^T \Phi(x^{(i)})} - \cancel{\sum_i \mu^{(i)} y^{(i)} b} \\
+    & \left.\begin{aligned}
         = \frac{1}{2} w^T w + \sum_i \mu^{(i)} - \sum_j w_j \cdot \underbrace{\sum_i \mu^{(i)} y^{(i)} \Phi(x^{(i)})_j}_{w_i} 
         = - \frac{1}{2} w^T w + \sum_i \mu^{(i)} \\
         w^T w = \left( \sum_i \mu^{(i)} y^{(i)} \Phi(x^{(i)}) \right)^T 
             \left( \sum_i \mu^{(i)} y^{(i)} \Phi(x^{(i)}) \right) = \\
             \sum_i \sum_j \mu^{(i)} \mu^{(j)} y^{(i)} y^{(j)} \Phi(x^{(i)})^T \Phi(x^{(j)})
     \end{aligned}\right\} \Rightarrow \\
-    L(\mu) = - \frac{1}{2} \underbrace{\sum_i \sum_j \mu^{(i)} \mu^{(j)} y^{(i)} y^{(j)} \Phi(x^{(i)})^T \Phi(x^{(j)})}_{w^T w} + \sum_i \mu^{(i)}
+    L(\mu) & = - \frac{1}{2} \underbrace{\sum_i \sum_j \mu^{(i)} \mu^{(j)} y^{(i)} y^{(j)} \Phi(x^{(i)})^T \Phi(x^{(j)})}_{w^T w} + \sum_i \mu^{(i)}
 \end{aligned}</script><p>$那么现在的优化问题如下，用SMO进行求解$</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-    \mu = \arg \max_{\mu} L(\mu) \\
-    s.t. \quad \mu^{(i)} \geq 0, \quad \sum_i \mu^{(i)} y^{(i)} = 0 \\
-    \Rightarrow \mu^* \Rightarrow w^*, b^*
+    \mu & = \arg \max_{\mu} L(\mu) \\
+    s.t. & \quad \mu^{(i)} \geq 0, \quad \sum_i \mu^{(i)} y^{(i)} = 0 \\
+    \Rightarrow & \mu^* \Rightarrow w^*, b^*
 \end{aligned}</script><div style="page-break-after: always;"></div>
 
 <h1 id="聚类"><a href="#聚类" class="headerlink" title="聚类"></a>聚类</h1><p>仅介绍部分概念和算法步骤。给定样本集合$\{X^{(i)}, i = 1, \cdots, N\}$，指定划分类别$K$，要求利用样本分布，将样本划分为$K$个类别。</p>
@@ -913,15 +921,15 @@ L^{(i)} = \begin{cases}
 <li>构建相似矩阵$\begin{cases} S_{N \times N} = \begin{bmatrix} d_{ij} \end{bmatrix} \\ d_{ij} = ||x^{(i)} - x^{(j)}||_2^2 \end{cases}$；</li>
 <li>计算邻接矩阵<script type="math/tex; mode=display">
  \begin{cases}
-     \epsilon近邻法：w_{ij} = \begin{cases}
+     \epsilon近邻法：& w_{ij} = \begin{cases}
              \epsilon & d_{ij} \leq \epsilon \\
              0 & otherwise
          \end{cases} \\
-     K近邻法：w_{ij} = \begin{cases}
+     K近邻法：& w_{ij} = \begin{cases}
              \exp(-\frac{d_{ij}}{2 \sigma^2}) & x^{(i)} \in \delta_K(x^{(j)}) \quad AND/OR \quad x^{(j)} \in \delta_K(x^{(i)}) \\
              0 & otherwise
-         \end{cases} \\ \delta_K(x)表示x的K邻域 \\
-         全连接法：w_{ij} =  \exp(-\frac{d_{ij}}{2 \sigma^2})
+         \end{cases} \\ & \delta_K(x)表示x的K邻域 \\
+     全连接法：& w_{ij} =  \exp(-\frac{d_{ij}}{2 \sigma^2})
  \end{cases}</script></li>
 <li>求度矩阵$D_{N \times N} = \text{diag}\{\sum_j w_{ij}, i = 1, \cdots, N\}$，即$W$行和作为对角元素；</li>
 <li>求(正则)拉普拉斯矩阵$L = D - W$或$L = D^{-1}(D - W)$或$L = D^{-1/2}(D - W)D^{-1/2}$；</li>
@@ -936,8 +944,8 @@ L^{(i)} = \begin{cases}
 \begin{aligned}
     g(D, A) = H(D) - H(D | A) \\
     \left.\begin{aligned}
-        H(D) = - \sum_k \frac{|D_k|}{|D|} \log \frac{|D_k|}{|D|}(总样本的类别熵) \\
-        H(D | A) = \sum_a \frac{|D_a|}{|D|} 
+        H(D) & = - \sum_k \frac{|D_k|}{|D|} \log \frac{|D_k|}{|D|}(总样本的类别熵) \\
+        H(D | A) & = \sum_a \frac{|D_a|}{|D|} 
         \underbrace{\left( - \sum_k \frac{|D_{ak}|}{|D_a|} \log \frac{|D_{ak}|}{|D_a|} \right)}_{H(D_a)} (特征A_a的类别熵的加权和)
     \end{aligned} \right\}
 \end{aligned}</script><h2 id="C4-5"><a href="#C4-5" class="headerlink" title="C4.5"></a>C4.5</h2><p>用<strong>信息增益比</strong>作为准则选择当前最优划分属性：信息增益比越大表示属性越优</p>
@@ -947,15 +955,15 @@ L^{(i)} = \begin{cases}
 </ul>
 <script type="math/tex; mode=display">
 \begin{aligned}
-    g_R(D, A) = \frac{g(D, A)}{H_A(D)} \\
-    H_A(D) = - \sum_a \frac{|D_a|}{|D|} \log \frac{|D_a|}{|D|} (特征A的属性熵)
+    g_R(D, A) & = \frac{g(D, A)}{H_A(D)} \\
+    H_A(D) & = - \sum_a \frac{|D_a|}{|D|} \log \frac{|D_a|}{|D|} (特征A的属性熵)
 \end{aligned}</script><h2 id="CART"><a href="#CART" class="headerlink" title="CART"></a>CART</h2><p>用<strong>信息增益比</strong>作为准则选择当前最优划分属性：信息增益比越大表示属性越优</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
     g_G(D, A) = \text{Gini}(D) - \text{Gini}(D|A) \\
     \left.\begin{aligned}
-        \text{Gini}(D) = 1 - \sum_k (\frac{|D_k|}{|D|})^2 (总样本的类别基尼系数) \\
-        \text{Gini}(D|A) = \sum_a \frac{|D_a|}{|D|} 
+        \text{Gini}(D) & = 1 - \sum_k (\frac{|D_k|}{|D|})^2 (总样本的类别基尼系数) \\
+        \text{Gini}(D|A) & = \sum_a \frac{|D_a|}{|D|} 
             \underbrace{\left( 1 - \sum_k (\frac{|D_{ak}|}{|D_a|})^2 \right)}_{\text{Gini}(D_a)} (特征A_a的类别基尼系数的加权和)
     \end{aligned}\right\}
 \end{aligned}</script><h2 id="RF"><a href="#RF" class="headerlink" title="RF"></a>RF</h2><p>随机森林是用Bagging策略，对包含$N$个样本的数据集<strong>进行$M$次的有放回的采样，每次随机取$N_m$个样本</strong>，得到$M$个样本数目为$N_m$的样本子集，对每个子集建立分类器。</p>
@@ -1097,7 +1105,7 @@ L^{(i)} = \begin{cases}
               <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Louis Hsu">
             
               <p class="site-author-name" itemprop="name">Louis Hsu</p>
-              <p class="site-description motion-element" itemprop="description">技术博客？</p>
+              <p class="site-description motion-element" itemprop="description">永远年轻，永远热泪盈眶</p>
           </div>
 
           
@@ -1107,7 +1115,7 @@ L^{(i)} = \begin{cases}
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">98</span>
+                    <span class="site-state-item-count">99</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

@@ -116,7 +116,7 @@
 <meta property="og:description" content="前言马尔科夫链蒙特卡罗法(Markov Chain Monte Carlo, MCMC)是以马尔可夫链为概率模型的蒙特卡罗法。通过构建马尔可夫链，基于该马尔可夫链进行随机游走，产生样本序列，并使用这些样本进行近似数值计算。 蒙特卡罗法蒙特卡罗法可应用在随机抽样、数学期望估计、定积分计算等方面。 随机抽样蒙特卡罗法需要解决的问题是，假设概率分布定义已知，通过抽样获得概率分布的随机样本，用这些随机样本">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/2020/04/15/Markov-Chain-Monte-Carlo/egGibbs.png">
-<meta property="og:updated_time" content="2020-04-16T07:21:58.479Z">
+<meta property="og:updated_time" content="2020-06-11T07:15:05.640Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Markov Chain Monte Carlo">
 <meta name="twitter:description" content="前言马尔科夫链蒙特卡罗法(Markov Chain Monte Carlo, MCMC)是以马尔可夫链为概率模型的蒙特卡罗法。通过构建马尔可夫链，基于该马尔可夫链进行随机游走，产生样本序列，并使用这些样本进行近似数值计算。 蒙特卡罗法蒙特卡罗法可应用在随机抽样、数学期望估计、定积分计算等方面。 随机抽样蒙特卡罗法需要解决的问题是，假设概率分布定义已知，通过抽样获得概率分布的随机样本，用这些随机样本">
@@ -364,7 +364,7 @@
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Louis Hsu">
-      <meta itemprop="description" content="技术博客？">
+      <meta itemprop="description" content="永远年轻，永远热泪盈眶">
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
@@ -419,7 +419,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-04-16 15:21:58" itemprop="dateModified" datetime="2020-04-16T15:21:58+08:00">2020-04-16</time>
+                <time title="修改时间：2020-06-11 15:15:05" itemprop="dateModified" datetime="2020-06-11T15:15:05+08:00">2020-06-11</time>
               
             
           </span>
@@ -499,8 +499,8 @@
 <script type="math/tex; mode=display">
 \begin{aligned}
     F_Y(y) = P(Y \leq y) = P\{f(X) \leq y\} \\
-    \Rightarrow P\{X \leq f^{-1}(y)\} = F_X(f^{-1}(y)) \tag{2.1}
-\end{aligned}</script><p>其中</p>
+    \Rightarrow P\{X \leq f^{-1}(y)\} = F_X(f^{-1}(y))
+\end{aligned} \tag{2.1}</script><p>其中</p>
 <script type="math/tex; mode=display">F_X(x) = \int p(x) dx \tag{2.2}</script><p>$f^{-1}(y)$已知，求取$F_Y(y)$后，有</p>
 <script type="math/tex; mode=display">p(y) = \frac{d}{dy} F_Y(y) \tag{2.3}</script><script type="math/tex; mode=display">EY = \int y p(y) dy \tag{2.4}</script><p>在计算$(2.2)$时，若$p(x)$是非标准的，则难以求取积分，需通过数值方法求解近似。蒙特卡罗法可用于求取<strong>数学期望估计</strong>(estimation of mathematical expectation)：按照概率分布$p(x)$<strong>独立同分布</strong>地在定义域$\mathcal{X}$多次抽取，得到样本集$\{ x^{(1)}, x^{(2)}, \cdots, x^{(n)} \}$，由下式<strong>计算样本均值作为期望的估计</strong></p>
 <script type="math/tex; mode=display">EY \approx \frac{1}{n} \sum_{i = 1}^{n} f(x^{(i)}) \tag{3}</script><h2 id="积分计算"><a href="#积分计算" class="headerlink" title="积分计算"></a>积分计算</h2><p>假设有函数$f(x)$，需求取其在区间$\mathcal{X}$上的定积分</p>
@@ -621,13 +621,13 @@ P = \begin{bmatrix}
 <p><strong>定理</strong>：由$(14.1 \sim 14.2)$构建的马尔可夫链是可逆的，且$p(x)$是其平稳分布<br><strong>证明</strong>：<br>由$(12.2)$可证得可逆</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-    p(x) \cdot p(x, x') =  
+    p(x) \cdot p(x, x') & =  
     p(x) \cdot q(x, x') 
-    \min\left\{1, \frac{p(x') \cdot q(x', x)} {p(x) \cdot q(x, x')} \right\} = \\
-    \min\left\{p(x) \cdot q(x, x'), p(x') \cdot q(x', x) \right\} = \\
-    p(x') \cdot q(x', x)
-    \min\left\{\frac{p(x) \cdot q(x, x')} {p(x') \cdot q(x', x)}, 1\right\} = 
-    p(x') \cdot p(x', x)
+    \min\left\{1, \frac{p(x') \cdot q(x', x)} {p(x) \cdot q(x, x')} \right\} \\
+    & = \min\left\{p(x) \cdot q(x, x'), p(x') \cdot q(x', x) \right\} \\
+    & = p(x') \cdot q(x', x)
+    \min\left\{\frac{p(x) \cdot q(x, x')} {p(x') \cdot q(x', x)}, 1\right\} \\
+    & = p(x') \cdot p(x', x)
 \end{aligned} 
 \Rightarrow 可逆</script><p>那么由$(10.1)$，$p(x)$为平稳分布</p>
 <script type="math/tex; mode=display">
@@ -847,7 +847,7 @@ p(x) = \frac{1}{\sqrt{3} \pi}
               <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Louis Hsu">
             
               <p class="site-author-name" itemprop="name">Louis Hsu</p>
-              <p class="site-description motion-element" itemprop="description">技术博客？</p>
+              <p class="site-description motion-element" itemprop="description">永远年轻，永远热泪盈眶</p>
           </div>
 
           
@@ -857,7 +857,7 @@ p(x) = \frac{1}{\sqrt{3} \pi}
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">98</span>
+                    <span class="site-state-item-count">99</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
