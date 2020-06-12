@@ -1,0 +1,1797 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="目录《数据挖掘》中介绍许多数据处理方法，但对特征选择没有深入介绍，本文对这方面的方法进行汇总介绍，并结合sklearn做一些样例。  Data-Mining - LOUIS’ BLOG。   目录 过滤方法(Filter) 方差阈值(Variance Threshold) 单变量选择(Univariate Feature Selection) 相关系数(Correlation Coefficien">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Efficient Feature Selection">
+<meta property="og:url" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/index.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="目录《数据挖掘》中介绍许多数据处理方法，但对特征选择没有深入介绍，本文对这方面的方法进行汇总介绍，并结合sklearn做一些样例。  Data-Mining - LOUIS’ BLOG。   目录 过滤方法(Filter) 方差阈值(Variance Threshold) 单变量选择(Univariate Feature Selection) 相关系数(Correlation Coefficien">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/feature_engineering.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/feature_selection_methods.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/rfe.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/L1.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/L2.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/ridge_plot.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/ridge_param.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/linear_regression_graph.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/lar.jpg">
+<meta property="og:updated_time" content="2020-06-12T05:07:37.249Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Efficient Feature Selection">
+<meta name="twitter:description" content="目录《数据挖掘》中介绍许多数据处理方法，但对特征选择没有深入介绍，本文对这方面的方法进行汇总介绍，并结合sklearn做一些样例。  Data-Mining - LOUIS’ BLOG。   目录 过滤方法(Filter) 方差阈值(Variance Threshold) 单变量选择(Univariate Feature Selection) 相关系数(Correlation Coefficien">
+<meta name="twitter:image" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/feature_engineering.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Efficient Feature Selection | LOUIS' BLOG</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LOUIS' BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">To be better</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-guestbook">
+    <a href="/guestbook" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-guest"></i> <br>留言</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="永远年轻，永远热泪盈眶">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Efficient Feature Selection
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-06-12 13:04:00 / 修改时间：13:07:37" itemprop="dateCreated datePublished" datetime="2020-06-12T13:04:00+08:00">2020-06-12</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><p>《数据挖掘》中介绍许多数据处理方法，但对特征选择没有深入介绍，本文对这方面的方法进行汇总介绍，并结合sklearn做一些样例。</p>
+<blockquote>
+<p><a href="TODO:" target="_blank" rel="noopener">Data-Mining - LOUIS’ BLOG</a>。</p>
+</blockquote>
+<ul>
+<li><a href="#目录">目录</a></li>
+<li><a href="#过滤方法filter">过滤方法(Filter)</a><ul>
+<li><a href="#方差阈值variance-threshold">方差阈值(Variance Threshold)</a></li>
+<li><a href="#单变量选择univariate-feature-selection">单变量选择(Univariate Feature Selection)</a><ul>
+<li><a href="#相关系数correlation-coefficient">相关系数(Correlation Coefficient)</a></li>
+<li><a href="#卡方检验chi-square-test">卡方检验(Chi-Square Test)</a></li>
+<li><a href="#互信息mutual-information">互信息(Mutual Information)</a></li>
+<li><a href="#最大信息系数maximal-information-coefficient-mic">最大信息系数(Maximal Information Coefficient, MIC)</a></li>
+<li><a href="#信息增益information-gain">信息增益(Information Gain)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#包裹方法wrapper">包裹方法(Wrapper)</a><ul>
+<li><a href="#递归特征消除recursive-feature-elimination-ref">递归特征消除(Recursive Feature Elimination, REF)</a></li>
+<li><a href="#拉斯维加斯方法las-vegas-wrapper-lvw">拉斯维加斯方法(Las Vegas Wrapper, LVW)</a><ul>
+<li><a href="#lv随机算法">LV随机算法</a></li>
+<li><a href="#lvw特征选择">LVW特征选择</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#嵌入方法embedded">嵌入方法(Embedded)</a><ul>
+<li><a href="#惩罚项方法regularization">惩罚项方法(Regularization)</a><ul>
+<li><a href="#线性回归的最小二乘估计和贝叶斯估计">线性回归的最小二乘估计和贝叶斯估计</a></li>
+<li><a href="#lassol1">LASSO(L1)</a></li>
+<li><a href="#ridgel2">Ridge(L2)</a></li>
+<li><a href="#least-angel-regressionlars">Least Angel Regression(LARS)</a></li>
+</ul>
+</li>
+<li><a href="#基于树的方法tree-based">基于树的方法(Tree-based)</a><ul>
+<li><a href="#决策树decision-tree">决策树(Decision Tree)</a></li>
+<li><a href="#随机森林random-forest-rf">随机森林(Random Forest, RF)</a></li>
+<li><a href="#梯度提升树gbdt">梯度提升树(GBDT)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#reference">Reference</a></li>
+</ul>
+<p><img src="/2020/06/12/Efficient-Feature-Selection/feature_engineering.jpg" alt="feature_engineering"><br><img src="/2020/06/12/Efficient-Feature-Selection/feature_selection_methods.png" alt="feature_selection_methods"></p>
+<h1 id="过滤方法-Filter"><a href="#过滤方法-Filter" class="headerlink" title="过滤方法(Filter)"></a>过滤方法(Filter)</h1><p>过滤法只用于检验特征向量和目标(响应变量)的相关度，不需要任何的机器学习的算法，不依赖于任何模型，只是应用统计量做筛选：我们根据统计量的大小，设置合适的阈值，将低于阈值的特征剔除。</p>
+<p>所以，从某种程度上来说，过滤法更像是一个数学问题，我们只在过滤之后的特征子集上进行建模和训练。</p>
+<h2 id="方差阈值-Variance-Threshold"><a href="#方差阈值-Variance-Threshold" class="headerlink" title="方差阈值(Variance Threshold)"></a>方差阈值(Variance Threshold)</h2><p>一种最简单的方法，<strong>移除方差较小的特征，</strong>可以用于离散或连续的变量。如下，三列方差分别为$0.13888889, 0.22222222, 0.25$，阈值设置为$0.8 \times (1 - 0.8) = 0.16$，第一列被删除。<br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> VarianceThreshold</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X = [[<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>], [<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>], [<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>], [<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>], [<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>], [<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>]]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>sel = VarianceThreshold(threshold=(<span class="number">.8</span> * (<span class="number">1</span> - <span class="number">.8</span>)))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>sel.fit_transform(X)</span><br><span class="line">array([[<span class="number">0</span>, <span class="number">1</span>],</span><br><span class="line">       [<span class="number">1</span>, <span class="number">0</span>],</span><br><span class="line">       [<span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">       [<span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">       [<span class="number">1</span>, <span class="number">0</span>],</span><br><span class="line">       [<span class="number">1</span>, <span class="number">1</span>]])</span><br></pre></td></tr></table></figure></p>
+<h2 id="单变量选择-Univariate-Feature-Selection"><a href="#单变量选择-Univariate-Feature-Selection" class="headerlink" title="单变量选择(Univariate Feature Selection)"></a><a href="https://scikit-learn.org/stable/modules/feature_selection.html#univariate-feature-selection" target="_blank" rel="noopener">单变量选择(Univariate Feature Selection)</a></h2><p>分别计算每个特征的某个统计指标，根据该指标来判断哪些指标重要，剔除那些不重要的指标</p>
+<blockquote>
+<p>These objects take as input <strong>a scoring function that returns univariate scores and p-values</strong> (or only scores for <code>SelectKBest</code> and <code>SelectPercentile</code>):</p>
+<ul>
+<li><strong>For regression</strong>: <code>f_regression</code>, <code>mutual_info_regression</code></li>
+<li><strong>For classification</strong>: <code>chi2</code>, <code>f_classif</code>, <code>mutual_info_classif</code></li>
+</ul>
+</blockquote>
+<h3 id="相关系数-Correlation-Coefficient"><a href="#相关系数-Correlation-Coefficient" class="headerlink" title="相关系数(Correlation Coefficient)"></a>相关系数(Correlation Coefficient)</h3><p>单变量选择方法，通过<strong>计每个算特征与标签的相关系数，来评估特征的重要性</strong>，计算方式如下</p>
+<script type="math/tex; mode=display">
+\rho = \frac{Cov(X, Y)}{\sqrt{D(X)} \sqrt{D(Y)}} = 
+  \frac{\sum_j (X_j - \overline{X}) (Y_j - \overline{Y})}
+  {
+    \sqrt{\sum_j (X_j - \overline{X})^2} 
+    \sqrt{\sum_j (Y_j - \overline{Y})^2}
+  }</script><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> scipy.stats <span class="keyword">import</span> pearsonr</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> SelectKBest</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">corr</span><span class="params">(X, Y)</span>:</span></span><br><span class="line"><span class="meta">... </span>    _corr = <span class="keyword">lambda</span> X, Y: np.array(list(</span><br><span class="line"><span class="meta">... </span>              map(<span class="keyword">lambda</span> x: pearsonr(x, Y), X.T))).T</span><br><span class="line"><span class="meta">... </span>    _tolist = <span class="keyword">lambda</span> x: list(map(list, x))</span><br><span class="line"><span class="meta">... </span>    <span class="keyword">return</span> _tolist(_corr(X, Y))</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X, y = load_iris(return_X_y=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new = SelectKBest(corr, k=<span class="number">2</span>).fit_transform(X, y)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="卡方检验-Chi-Square-Test"><a href="#卡方检验-Chi-Square-Test" class="headerlink" title="卡方检验(Chi-Square Test)"></a>卡方检验(Chi-Square Test)</h3><p>卡方检验用于<strong>统计样本的实际观测值于理论推断值之间的偏离程度</strong>，卡方值越大表示越偏离，假设有两个$0-1$变量$X, Y$，由统计信息可以得到<strong>观测四格表</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>$X$</th>
+<th>$\overline{X}$</th>
+<th>合计</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$Y$</td>
+<td>$a$</td>
+<td>$b$</td>
+<td>$a + b$</td>
+</tr>
+<tr>
+<td>$\overline{Y}$</td>
+<td>$c$</td>
+<td>$d$</td>
+<td>$c + d$</td>
+</tr>
+<tr>
+<td>合计</td>
+<td>$a + c$</td>
+<td>$b + d$</td>
+<td>$N$</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>建立<strong>无关性假设</strong>：$X$与$Y$是独立无关的，那么随机抽取一个样本</p>
+<ul>
+<li>属于$X$的概率是$p = (a + c) / N$</li>
+<li>属于$\overline{X}$的概率是$1 - p = (b + d) / N$</li>
+</ul>
+<p>那么可得<strong>理论值四格表</strong>如下</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>$X$</th>
+<th>$\overline{X}$</th>
+<th>合计</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$Y$</td>
+<td>$\overline{a} = (a + b) \times p$</td>
+<td>$\overline{b} = (a + b) \times (1 - p)$</td>
+<td>$a + b$</td>
+</tr>
+<tr>
+<td>$\overline{Y}$</td>
+<td>$\overline{c} = (c + d) \times p$</td>
+<td>$\overline{d} = (c + d) \times (1 - p)$</td>
+<td>$c + d$</td>
+</tr>
+<tr>
+<td>合计</td>
+<td>$N \times p$</td>
+<td>$N \times (1 - p)$</td>
+<td>$N$</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>那么卡方值可以由下式计算</p>
+<script type="math/tex; mode=display">
+\chi^2 = \sum_{x \in \{a, b, c, d\}} 
+  \frac{(x - \overline{x})^2}{x}</script><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> SelectKBest</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> chi2</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X, y = load_iris(return_X_y=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new = SelectKBest(chi2, k=<span class="number">2</span>).fit_transform(X, y)</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="互信息-Mutual-Information"><a href="#互信息-Mutual-Information" class="headerlink" title="互信息(Mutual Information)"></a>互信息(Mutual Information)</h3><p>用于评估互信息(Mutual Information)是信息论里一种有用的信息度量，它可以看成是一个随机变量中包含的关于另一个随机变量的信息量，或者说是一个随机变量由于已知另一个随机变量而减少的不肯定性。</p>
+<p>设随机变量$X, Y$得联合分布为$p(x, y)$，边缘分布分别为$p(x), p(y)$，那么互信息是联合分布$p(x, y)$与边缘分布$p(x), p(y)$的相对熵，即</p>
+<script type="math/tex; mode=display">I(X; Y) = \sum_x \sum_y p(x, y) \log \frac{p(x, y)}{p(x) p(y)}</script><p>它有一些<strong>缺点</strong></p>
+<ul>
+<li>不属于度量方式，也不能进行归一化，不同数据集上结果无法比较；</li>
+<li>对于连续变量，需要先进行离散化才能计算。</li>
+</ul>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> SelectKBest</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> mutual_info_classif</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X, y = load_iris(return_X_y=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new = SelectKBest(mutual_info_classif, k=<span class="number">2</span>).fit_transform(X, y)</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="最大信息系数-Maximal-Information-Coefficient-MIC"><a href="#最大信息系数-Maximal-Information-Coefficient-MIC" class="headerlink" title="最大信息系数(Maximal Information Coefficient, MIC)"></a>最大信息系数(Maximal Information Coefficient, MIC)</h3><p>在计算<a href="#互信息mutual-information">互信息</a>时，联合分布$p(x, y)$很难求解。采用<strong>蒙特卡洛法</strong>估计：将两个随机变量的散点描绘在二维平面上，然后将$X$平均划分为$|X|$个子区间，$Y$平均划分为$|Y|$个子区间，然后就可以得到$p(x, y)$的估计。</p>
+<p>MIC可以用下式计算</p>
+<script type="math/tex; mode=display">MIC(X, Y) = \max_{|X||Y| < B} \frac{I(X; Y)}{\log (\min(|X|, |Y|))}</script><p>其中$B$一般取数据总量$N$的$0.6$或者$0.55$次方。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> minepy <span class="keyword">import</span> MINE</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> SelectKBest</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">minemic</span><span class="params">(x, y)</span>:</span></span><br><span class="line"><span class="meta">... </span>    m = MINE()</span><br><span class="line"><span class="meta">... </span>    m.compute_score(x, y)</span><br><span class="line"><span class="meta">... </span>    <span class="keyword">return</span> m.mic(), <span class="number">0.5</span></span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">mic</span><span class="params">(X, Y)</span>:</span></span><br><span class="line"><span class="meta">... </span>    _mic = <span class="keyword">lambda</span> X, Y: np.array(list(</span><br><span class="line"><span class="meta">... </span>                map(<span class="keyword">lambda</span> x: minemic(x, Y), X.T))).T</span><br><span class="line"><span class="meta">... </span>    _tolist = <span class="keyword">lambda</span> x: list(map(list, x))</span><br><span class="line"><span class="meta">... </span>    <span class="keyword">return</span> _tolist(_mic(X, Y))</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X, y = load_iris(return_X_y=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new = SelectKBest(mic, k=<span class="number">3</span>).fit_transform(X, y)</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="信息增益-Information-Gain"><a href="#信息增益-Information-Gain" class="headerlink" title="信息增益(Information Gain)"></a>信息增益(Information Gain)</h3><p>信息增益被用于决策树的分裂中，用于选择当前最优的分裂属性，可以描述某特征对数据集不确定性减少的程度。而在特征选择中，可以<strong>衡量特征能够描述数据集的多少信息量</strong>。</p>
+<p>假设分类问题数据集$D$包含$|D|$个样本，标签列为$Y$，供包含$K$类，即$y \in \{c_1, \cdots, c_K\}$，那么类别熵为</p>
+<script type="math/tex; mode=display">H(Y) = - \sum_k p(Y = c_k) \log p(Y = c_k) = - \sum_k \frac{|c_k|}{|D|} \log \frac{|c_k|}{|D|}</script><p>假设特征$X$有$A$种取值$\{x_1, \cdots, x_A\}$，那么当$X$取$x_a$时的类别熵为</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    H(Y | X = x_a) = 
+      - \sum_k p(Y = c_k | X = x_a) \log p(Y = c_k | X = x_a) 
+      = - \sum_k \frac{|c_{ak}|}{|x_a|} \log \frac{|c_{ak}|}{|x_a|}
+\end{aligned}</script><p>那么</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    H(Y | X) = \sum_a p(X = x_a) H(Y | X = x_a)
+    = - \sum_a \frac{|x_a|}{|D|} \sum_k \frac{|c_{ak}|}{|x_a|} \log \frac{|c_{ak}|}{|x_a|}
+\end{aligned}</script><p>信息增益为</p>
+<script type="math/tex; mode=display">IG(X) = H(Y) - H(Y | X)</script><h1 id="包裹方法-Wrapper"><a href="#包裹方法-Wrapper" class="headerlink" title="包裹方法(Wrapper)"></a>包裹方法(Wrapper)</h1><p>与过滤法不同的是，包裹法采用的是特征搜索的办法。它的基本思路是，<strong>从初始特征集合中不断的选择子集合，根据学习器的性能来对子集进行评价，直到选择出最佳的子集。在搜索过程中，我们会对每个子集做建模和训练。</strong></p>
+<p>包裹法很大程度上变成了一个计算机问题：<strong>在特征子集的搜索问题</strong>(subset search)。我们有多种思路，最容易想到的办法是<strong>穷举</strong>(Brute-force search)，遍历所有可能的子集，但这样的方法适用于特征数较少的情形，特征一旦增多，就会遇到组合爆炸，在计算上并不可行。($N$个特征，则子集会有$x^N - 1$种可能)</p>
+<p>另一个思路是<strong>随机化搜索</strong>，比如<strong>拉斯维加斯算法</strong>(Las Vegas algorithm)，但这样的算法在特征数大的时候，计算开销仍然很大，而且有给不出任何解的风险。所以，我们常使用的是<strong>贪心算法</strong>：</p>
+<ul>
+<li><p><strong>前向搜索</strong>(Forward search)<br>在开始时，按照特征数来划分子集，每个子集只有一个特征，对每个子集进行评价。然后<strong>在最优的子集上逐步增加特征</strong>，使模型性能提升最大，直到增加特征并不能使模型性能提升为止。</p>
+</li>
+<li><p><strong>后向搜索</strong>(Backward search)<br>在开始时，将特征集合分别减去一个特征作为子集，每个子集有N—1个特征，对每个子集进行评价。然后<strong>在最优的子集上逐步减少特征</strong>，使得模型性能提升最大，直到减少特征并不能使模型性能提升为止。</p>
+</li>
+<li><p><strong>双向搜索</strong>(Bidirectional search)<br>将Forward search 和Backward search结合起来。</p>
+</li>
+<li><p><strong>递归剔除</strong>(Recursive elimination)<br>反复的训练模型，并剔除每次的最优或者最差的特征，将剔除完毕的特征集进入下一轮训练，直到所有的特征被剔除，<strong>被剔除的顺序</strong>度量了特征的重要程度。</p>
+</li>
+</ul>
+<h2 id="递归特征消除-Recursive-Feature-Elimination-REF"><a href="#递归特征消除-Recursive-Feature-Elimination-REF" class="headerlink" title="递归特征消除(Recursive Feature Elimination, REF)"></a>递归特征消除(Recursive Feature Elimination, REF)</h2><p>一种典型的递归剔除方法，思路很简单，在sklearn中具体实现如下<br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_fit</span><span class="params">(self, X, y, step_score=None)</span>:</span></span><br><span class="line">    <span class="comment"># Parameter step_score controls the calculation of self.scores_</span></span><br><span class="line">    <span class="comment"># step_score is not exposed to users</span></span><br><span class="line">    <span class="comment"># and is used when implementing RFECV</span></span><br><span class="line">    <span class="comment"># self.scores_ will not be calculated when calling _fit through fit</span></span><br><span class="line"></span><br><span class="line">    tags = self._get_tags()</span><br><span class="line">    X, y = self._validate_data(</span><br><span class="line">        X, y, accept_sparse=<span class="string">"csc"</span>,</span><br><span class="line">        ensure_min_features=<span class="number">2</span>,</span><br><span class="line">        force_all_finite=<span class="keyword">not</span> tags.get(<span class="string">'allow_nan'</span>, <span class="keyword">True</span>),</span><br><span class="line">        multi_output=<span class="keyword">True</span></span><br><span class="line">    )</span><br><span class="line">    <span class="comment"># Initialization</span></span><br><span class="line">    n_features = X.shape[<span class="number">1</span>]</span><br><span class="line">    <span class="keyword">if</span> self.n_features_to_select <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">        n_features_to_select = n_features // <span class="number">2</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        n_features_to_select = self.n_features_to_select</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="number">0.0</span> &lt; self.step &lt; <span class="number">1.0</span>:</span><br><span class="line">        step = int(max(<span class="number">1</span>, self.step * n_features))</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        step = int(self.step)</span><br><span class="line">    <span class="keyword">if</span> step &lt;= <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">"Step must be &gt;0"</span>)</span><br><span class="line"></span><br><span class="line">    support_ = np.ones(n_features, dtype=np.bool)</span><br><span class="line">    ranking_ = np.ones(n_features, dtype=np.int)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> step_score:</span><br><span class="line">        self.scores_ = []</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Elimination</span></span><br><span class="line">    <span class="keyword">while</span> np.sum(support_) &gt; n_features_to_select:</span><br><span class="line">        <span class="comment"># Remaining features</span></span><br><span class="line">        features = np.arange(n_features)[support_]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Rank the remaining features</span></span><br><span class="line">        estimator = clone(self.estimator)</span><br><span class="line">        <span class="keyword">if</span> self.verbose &gt; <span class="number">0</span>:</span><br><span class="line">            print(<span class="string">"Fitting estimator with %d features."</span> % np.sum(support_))</span><br><span class="line"></span><br><span class="line">        estimator.fit(X[:, features], y)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Get coefs</span></span><br><span class="line">        <span class="keyword">if</span> hasattr(estimator, <span class="string">'coef_'</span>):</span><br><span class="line">            coefs = estimator.coef_</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            coefs = getattr(estimator, <span class="string">'feature_importances_'</span>, <span class="keyword">None</span>)</span><br><span class="line">        <span class="keyword">if</span> coefs <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">            <span class="keyword">raise</span> RuntimeError(<span class="string">'The classifier does not expose '</span></span><br><span class="line">                               <span class="string">'"coef_" or "feature_importances_" '</span></span><br><span class="line">                               <span class="string">'attributes'</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Get ranks</span></span><br><span class="line">        <span class="keyword">if</span> coefs.ndim &gt; <span class="number">1</span>:</span><br><span class="line">            ranks = np.argsort(safe_sqr(coefs).sum(axis=<span class="number">0</span>))</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            ranks = np.argsort(safe_sqr(coefs))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># for sparse case ranks is matrix</span></span><br><span class="line">        ranks = np.ravel(ranks)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Eliminate the worse features</span></span><br><span class="line">        threshold = min(step, np.sum(support_) - n_features_to_select)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Compute step score on the previous selection iteration</span></span><br><span class="line">        <span class="comment"># because 'estimator' must use features</span></span><br><span class="line">        <span class="comment"># that have not been eliminated yet</span></span><br><span class="line">        <span class="keyword">if</span> step_score:</span><br><span class="line">            self.scores_.append(step_score(estimator, features))</span><br><span class="line">        support_[features[ranks][:threshold]] = <span class="keyword">False</span></span><br><span class="line">        ranking_[np.logical_not(support_)] += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Set final attributes</span></span><br><span class="line">    features = np.arange(n_features)[support_]</span><br><span class="line">    self.estimator_ = clone(self.estimator)</span><br><span class="line">    self.estimator_.fit(X[:, features], y)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Compute step score when only n_features_to_select features left</span></span><br><span class="line">    <span class="keyword">if</span> step_score:</span><br><span class="line">        self.scores_.append(step_score(self.estimator_, features))</span><br><span class="line">    self.n_features_ = support_.sum()</span><br><span class="line">    self.support_ = support_</span><br><span class="line">    self.ranking_ = ranking_</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> self</span><br></pre></td></tr></table></figure></p>
+<p>可以看到在每次迭代中会删除一些特征，其中有几个重要的步骤</p>
+<ul>
+<li><p><strong>用模型对剩余的特征进行评估，得到每个特征相应的评分；</strong></p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">features = np.arange(n_features)[support_]</span><br><span class="line">estimator = clone(self.estimator)</span><br><span class="line">estimator.fit(X[:, features], y)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Get coefs</span></span><br><span class="line"><span class="keyword">if</span> hasattr(estimator, <span class="string">'coef_'</span>):</span><br><span class="line">    coefs = estimator.coef_</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    coefs = getattr(estimator, <span class="string">'feature_importances_'</span>, <span class="keyword">None</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>根据评分，对特征进行排序</strong></p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Get ranks</span></span><br><span class="line"><span class="keyword">if</span> coefs.ndim &gt; <span class="number">1</span>:</span><br><span class="line">    ranks = np.argsort(safe_sqr(coefs).sum(axis=<span class="number">0</span>))</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    ranks = np.argsort(safe_sqr(coefs))</span><br><span class="line"></span><br><span class="line"><span class="comment"># for sparse case ranks is matrix</span></span><br><span class="line">ranks = np.ravel(ranks)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>删除本次迭代中评分最低的特征</strong></p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Eliminate the worse features</span></span><br><span class="line">threshold = min(step, np.sum(support_) - n_features_to_select)</span><br><span class="line">support_[features[ranks][:threshold]] = <span class="keyword">False</span></span><br><span class="line">ranking_[np.logical_not(support_)] += <span class="number">1</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>例如将手写字每个像素作为特征维度，对其进行递归特征筛选，<strong><code>ranking</code>越小的特征重要性越大</strong><br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.svm <span class="keyword">import</span> SVC</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_digits</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> RFE</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="comment"># Load the digits dataset</span></span><br><span class="line"><span class="meta">... </span>digits = load_digits()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X = digits.images.reshape((len(digits.images), <span class="number">-1</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y = digits.target</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="comment"># Create the RFE object and rank each pixel</span></span><br><span class="line"><span class="meta">... </span>svc = SVC(kernel=<span class="string">"linear"</span>, C=<span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>rfe = RFE(estimator=svc, n_features_to_select=<span class="number">1</span>, step=<span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>rfe.fit(X, y)</span><br><span class="line">RFE(estimator=SVC(C=<span class="number">1</span>, kernel=<span class="string">'linear'</span>), n_features_to_select=<span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ranking = rfe.ranking_.reshape(digits.images[<span class="number">0</span>].shape)</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="comment"># Plot pixel ranking</span></span><br><span class="line"><span class="meta">... </span>plt.matshow(ranking, cmap=plt.cm.Blues)</span><br><span class="line">&lt;matplotlib.image.AxesImage object at <span class="number">0x0000019E756CDE48</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>plt.colorbar()</span><br><span class="line">&lt;matplotlib.colorbar.Colorbar object at <span class="number">0x0000019E755994E0</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>plt.title(<span class="string">"Ranking of pixels with RFE"</span>)</span><br><span class="line">Text(<span class="number">0.5</span>, <span class="number">1.05</span>, <span class="string">'Ranking of pixels with RFE'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>plt.show()</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2020/06/12/Efficient-Feature-Selection/rfe.png" alt="rfe"></p>
+<h2 id="拉斯维加斯方法-Las-Vegas-Wrapper-LVW"><a href="#拉斯维加斯方法-Las-Vegas-Wrapper-LVW" class="headerlink" title="拉斯维加斯方法(Las Vegas Wrapper, LVW)"></a>拉斯维加斯方法(Las Vegas Wrapper, LVW)</h2><p><strong>LVW</strong>(Las Vegas Wrapper)是一种典型的包裹式特征选择方法，它在拉斯维加斯方法框架下使用<strong>随机策略</strong>来进行子集搜索，并以最终分类器的误差为特征子集评价准则。</p>
+<h3 id="LV随机算法"><a href="#LV随机算法" class="headerlink" title="LV随机算法"></a>LV随机算法</h3><p>拉斯维加斯算法是一种基于随机策略的算法设计方法，与蒙特卡洛方法对比有以下特点</p>
+<ul>
+<li><strong>蒙特卡罗算法</strong>：采样越多，越接近最优解(强调每一个iteration都在进步，提高的过程)；</li>
+<li><strong>拉斯维加斯算法</strong>：采样越多，越有可能找到最优解(强调直接想要最优解)。</li>
+</ul>
+<p>假设随即搜索中，找到问题的解的概率是$p$，那么每次搜索错误的概率是$1 - p$。<strong>经过$n$次搜索命中正确结果的概率，也就是1减去$n$次都未命中的概率</strong>，即</p>
+<script type="math/tex; mode=display">\lim_{n \rightarrow \infty} \left( 1 - (1 - p)^n \right) = 1</script><p>其算法框架可以表示为<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Obstinate</span><span class="params">(InputType x, OutputType &amp;y;)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 反复调用拉斯维加斯算法LV(x, y)，直到找到问题的一个解</span></span><br><span class="line">    <span class="keyword">bool</span> success = <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">while</span> (!success) </span><br><span class="line">         success = LV(x,y);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>例如用LV方法解决$N$皇后问题<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Queen</span>&#123;</span></span><br><span class="line">   <span class="function"><span class="keyword">friend</span> <span class="keyword">bool</span> <span class="title">nQueen</span><span class="params">(<span class="keyword">int</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">   <span class="function"><span class="keyword">bool</span> <span class="title">Place</span><span class="params">(<span class="keyword">int</span> k)</span></span>;              <span class="comment">//测试皇后K置于x[k]列的合法性</span></span><br><span class="line">   <span class="function"><span class="keyword">bool</span> <span class="title">Backtrack</span><span class="params">(<span class="keyword">int</span> t)</span></span>;          <span class="comment">//解n后问题的回溯法</span></span><br><span class="line">   <span class="function"><span class="keyword">bool</span> <span class="title">QueenLV</span><span class="params">(<span class="keyword">int</span> stopVegas)</span></span>;    <span class="comment">//随机放置n个皇后的拉斯维加斯算法</span></span><br><span class="line">   <span class="keyword">int</span> n, *x, *y;    </span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">bool</span> Queen::Place(<span class="keyword">int</span> k)&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; k; j++)<span class="comment">//第k个皇后是否跟前面的皇后冲突 </span></span><br><span class="line">        <span class="keyword">if</span>((<span class="built_in">abs</span>(k - j) == <span class="built_in">abs</span>(x[j] - x[k])) || (x[j] == x[k]))</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">bool</span> Queen::Backtrack(<span class="keyword">int</span> t)&#123;</span><br><span class="line">    <span class="keyword">if</span>(t &gt; n)&#123;        <span class="comment">//存放皇后放置的位置 </span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">            y[i] = x[i];</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">            x[t] = i;<span class="comment">//t皇后放在第i列 </span></span><br><span class="line">            <span class="keyword">if</span>(Place(t) &amp;&amp; Backtrack(t+<span class="number">1</span>))</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">bool</span> Queen::QueenLV(<span class="keyword">int</span> stopVegas)&#123;</span><br><span class="line">    <span class="comment">//随机放置n个皇后的拉斯维加斯算法</span></span><br><span class="line">    <span class="keyword">int</span> k = <span class="number">1</span>;<span class="comment">//随机数产生器</span></span><br><span class="line">    <span class="keyword">int</span> count = <span class="number">1</span>;</span><br><span class="line">    <span class="comment">//1&lt;=stopVagas=&lt;n表示允许随机放置的皇后数</span></span><br><span class="line">    <span class="keyword">while</span>((k &lt;= stopVegas) &amp;&amp; (count &gt; <span class="number">0</span>))&#123;</span><br><span class="line">        count = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">            x[k] = i;</span><br><span class="line">            <span class="keyword">if</span>(Place(k))</span><br><span class="line">                y[count++] = i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(count &gt; <span class="number">0</span>) <span class="comment">//如果能放置，则在这么多个能放置第k个皇后的位置中选择一个位置 </span></span><br><span class="line">            x[k++] = y[rand() % count];</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">return</span>(count&gt;<span class="number">0</span>);<span class="comment">//count&gt;0表示放置成功 </span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">nQueen</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="comment">//与回溯法相结合的接n后问题的拉斯维加斯算法</span></span><br><span class="line">    Queen X;</span><br><span class="line">    X.n = n;</span><br><span class="line">    <span class="keyword">int</span> *p = <span class="keyword">new</span> <span class="keyword">int</span>[n+<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">int</span> *q = <span class="keyword">new</span> <span class="keyword">int</span>[n+<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= n; i++)&#123;</span><br><span class="line">        p[i] = <span class="number">0</span>;</span><br><span class="line">        q[i] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    X.y = p;</span><br><span class="line">    X.x = q;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> stop = <span class="number">5</span>;</span><br><span class="line">    <span class="keyword">if</span>(n &gt; <span class="number">15</span>)</span><br><span class="line">        stop = n - <span class="number">15</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">bool</span> found = <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">while</span>(!X.QueenLV(stop));  <span class="comment">//直到能放置</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//算法的回溯搜索部分</span></span><br><span class="line">    <span class="keyword">if</span>(X.Backtrack(stop + <span class="number">1</span>))&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; p[i] &lt;&lt; <span class="string">"  "</span>;</span><br><span class="line">        found = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">delete</span> [] p; <span class="keyword">delete</span> [] q;</span><br><span class="line">    <span class="keyword">return</span> found; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"n: "</span>; <span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">    <span class="keyword">if</span>(!nQueen(n))</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"无解"</span> &lt;&lt; <span class="built_in">endl</span>; </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="LVW特征选择"><a href="#LVW特征选择" class="headerlink" title="LVW特征选择"></a>LVW特征选择</h3><p>设数据集是$D$，特征集是$A$，LVW每次从特征集$A$中随机产生一个特征子集$A’$，用交叉验证的方法估计学习器在$A’$上的误差，在以下情况保留$A’$</p>
+<ul>
+<li>该误差小于之前获得的最小误差；</li>
+<li>与之前最小误差相当，但包含更少的特征</li>
+</ul>
+<p>由于LVW算法每次评价子集$A′$时，都需要重新训练学习器，计算开销很大，设置参数$T$控制停止条件。但当特征数很多(即$|A|$很大)并且$T$设置得很大时，可能算法运行很长时间都不能停止。</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    输入:   & 数据集D; \\
+            & 特征集A; \\
+            & 学习算法L; \\
+            & 停止条件控制参数T; \\
+    过程:\\
+        & \begin{aligned}
+            & E^* = \infty; \\
+            & A^* = A; \\
+            & d^* = |A|; \\
+            & t = 0; \\
+            & while \quad t < T \quad do \\
+                & \qquad \begin{aligned}
+                    & randomly \quad choose \quad A'; \\
+                    & d' = |A'|; \\
+                    & E' = CrossValidation(L(D^{A'})) \\
+                    & if \quad (E' < E^*) \vee [ (E' \approx E^*) \wedge (d' < d^*) ] \quad then \\
+                        & \qquad \begin{aligned}
+                            & t = 0; \\
+                            & E^* = E'; \\
+                            & d^* = d'; \\
+                            & A^* = A';
+                        \end{aligned} \\
+                    & else \\
+                        & \qquad t = t + 1; \\
+                \end{aligned} \\
+                & \qquad endif
+        \end{aligned} \\
+        & end \quad while \\
+    输出: & 特征子集A^*
+\end{aligned}</script><h1 id="嵌入方法-Embedded"><a href="#嵌入方法-Embedded" class="headerlink" title="嵌入方法(Embedded)"></a>嵌入方法(Embedded)</h1><p>过滤法与学习器没有关系，特征选择只是用统计量做筛选，而包裹法则固定了学习器，特征选择只是在特征空间上进行搜索。<strong>而嵌入法最大的突破在于，特征选择会在学习器的训练过程中自动完成</strong>。</p>
+<h2 id="惩罚项方法-Regularization"><a href="#惩罚项方法-Regularization" class="headerlink" title="惩罚项方法(Regularization)"></a>惩罚项方法(Regularization)</h2><h3 id="线性回归的最小二乘估计和贝叶斯估计"><a href="#线性回归的最小二乘估计和贝叶斯估计" class="headerlink" title="线性回归的最小二乘估计和贝叶斯估计"></a>线性回归的最小二乘估计和贝叶斯估计</h3><p>给定样本集合$\{(X^{(i)}, y^{(i)}), i = 1, \cdots, N, X^{(i)} \in R^d, y^{(i)} \in R\}$，增广后组成样本矩阵$X_{N \times (d + 1)}$，线性回归模型参数为$w \in R^{d + 1}$，那么有</p>
+<script type="math/tex; mode=display">\hat{Y} = Xw</script><ol>
+<li><p><strong>基于最小二乘估计</strong>，定义线性回归模型的优化目标</p>
+<script type="math/tex; mode=display">w^* = \argmax_w \frac{1}{N} || Y - Xw ||_2^2</script></li>
+<li><p><strong>基于贝叶斯估计</strong>，假定参数$w_j$服从分布$p(w_j)$，其优化目标为</p>
+<script type="math/tex; mode=display">
+ \begin{aligned}
+     w^* & = \argmax_w \log \left( \prod_i p(y^{(i)} | X^{(i)}, w) p(w) \right) \\
+     & = \argmax_w \sum_i \left( \log p(y^{(i)} | X^{(i)}, w) + \log p(w) \right)
+ \end{aligned}</script><p> 在线性回归模型中，假定$y \sim N(w^T x, \delta)$(<strong>本质是高斯模型</strong>)，那么有</p>
+<script type="math/tex; mode=display">\log p(y^{(i)} | X^{(i)}, w) \propto (y^{(i)} - w^T x^{(i)})^2</script><p> 另外，<strong>假定参数维度间独立</strong>，即</p>
+<script type="math/tex; mode=display">p(w) = \prod_j p(w_j)</script></li>
+</ol>
+<h3 id="LASSO-L1"><a href="#LASSO-L1" class="headerlink" title="LASSO(L1)"></a>LASSO(L1)</h3><p>LASSO是指Least Absolute Shrinkage and Selection Operator，是采用$L1$正则化的线性回归方法。添加$L1$正则项，构成LASSO优化目标</p>
+<script type="math/tex; mode=display">w^* = \argmax_w \frac{1}{N} || Y - Xw ||_2^2 + \lambda || w ||_1</script><p><strong>该问题等价于</strong></p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    w^*  & = \argmax_w \frac{1}{N} || Y - Xw ||_2^2 \\
+    s.t. & \qquad || w ||_1 \leq t(常数)
+\end{aligned}</script><blockquote>
+<p>用拉格朗日乘子法进行求解时，可以发现两个优化问题等价</p>
+<script type="math/tex; mode=display">
+L(w, \lambda) = \frac{1}{N} || Y - Xw ||_2^2 + \lambda(|| w ||_1 - t)</script></blockquote>
+<hr>
+<p>从贝叶斯估计角度考虑，<strong>假定参数$w$服从拉普拉斯分布</strong></p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    & p(w_j) & = \frac{1}{2 \alpha} \exp(- \frac{|w_j|}{\alpha}) \\
+    \Rightarrow \quad & \log p(w) & = - \sum_j \left( \frac{|w_j|}{\alpha} + \log(2 \alpha) \right)
+\end{aligned}</script><p>那么可以看到是等价的</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    w^* & = \argmax_w \sum_i \left( \log p(y^{(i)} | X^{(i)}, w) + \log p(w) \right) \\
+    & = \argmax_w \sum_i \left( (y^{(i)} - w^T x^{(i)})^2 - \sum_j ( \frac{|w_j|}{\alpha} + \log(2 \alpha) ) \right)
+\end{aligned}</script><hr>
+<p>其几何意义如下，入了正则化项，相当于是对参数施加了约束，其中L1正则化将参数限制在一个菱形中，，从图中可以看出，L1正则化施加的约束会使得最优值在菱形顶点处取得，也就是说很多参数取值为$0$，得到<strong>稀疏的参数估计结果</strong><br><img src="/2020/06/12/Efficient-Feature-Selection/L1.jpg" alt="L1"></p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> Lasso</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> SelectFromModel</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X, y = load_iris(return_X_y=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>clf = Lasso()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>clf.fit(X, y)</span><br><span class="line">Lasso()</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>model = SelectFromModel(clf, prefit=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new = model.transform(X)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<p>又如在SVM中增加$L1$正则项<br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.svm <span class="keyword">import</span> LinearSVC</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> SelectFromModel</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X, y = load_iris(return_X_y=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>lsvc = LinearSVC(C=<span class="number">0.01</span>, penalty=<span class="string">"l1"</span>, dual=<span class="keyword">False</span>).fit(X, y)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>model = SelectFromModel(lsvc, prefit=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new = model.transform(X)</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">3</span>)</span><br></pre></td></tr></table></figure></p>
+<h3 id="Ridge-L2"><a href="#Ridge-L2" class="headerlink" title="Ridge(L2)"></a>Ridge(L2)</h3><p>在线性回归优化目标中添加$L2$正则项，得到Ridge优化目标</p>
+<script type="math/tex; mode=display">w^* = \argmax_w \frac{1}{N} || Y - Xw ||_2^2 + \lambda || w ||_2^2</script><p><strong>该问题等价于</strong></p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    w^*  & = \argmax_w \frac{1}{N} || Y - Xw ||_2^2 \\
+    s.t. & \qquad || w ||_2^2 \leq t(常数)
+\end{aligned}</script><blockquote>
+<p>用拉格朗日乘子法进行求解时，可以发现两个优化问题等价</p>
+<script type="math/tex; mode=display">
+L(w, \lambda) = \frac{1}{N} || Y - Xw ||_2^2 + \lambda(|| w ||_2^2 - t)</script></blockquote>
+<p>但是在求取梯度时，$L1$范数不可导，这就带来求解上的问题，后面介绍的LARS可以近似计算LASSO。</p>
+<hr>
+<p>从贝叶斯估计角度考虑，<strong>假定参数$w$服从高斯分布</strong></p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    & p(w_j) & = \frac{1}{\sqrt{2 \pi \alpha}} \exp(- \frac{w_j^2}{2 \alpha}) \\
+    \Rightarrow \quad & \log p(w) & = 
+    - \sum_j \left( \frac{w_j^2}{2 \alpha} + \frac{1}{2} \log(2 \pi \alpha) \right)
+\end{aligned}</script><p>那么可以看到是等价的</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    w^* & = \argmax_w \sum_i \left( \log p(y^{(i)} | X^{(i)}, w) + \log p(w) \right) \\
+    & = \argmax_w \sum_i \left( 
+        (y^{(i)} - w^T x^{(i)})^2 - 
+        \sum_j ( \frac{w_j^2}{2 \alpha} + \frac{1}{2} \log(2 \pi \alpha) )
+    \right)
+\end{aligned}</script><hr>
+<p>其几何意义如下，入了正则化项，相当于是对参数施加了约束，其中L2正则化将参数限制在一个圆中，会使得<strong>权重趋向于零</strong>(Weight Decay)，并倾向于在相关特征之间<strong>均匀分布权重</strong><br><img src="/2020/06/12/Efficient-Feature-Selection/L2.jpg" alt="L2"></p>
+<hr>
+<p>由于参数$\lambda$并不是唯一确定的，所以得到的$\hat{w}(\lambda)$是回归参数$w$的一个<strong>估计族</strong>，$\hat{w}_{j}(\lambda) - \lambda$图称为<strong>岭迹图</strong>，根据以下规则可以筛选有效特征</p>
+<ul>
+<li>当$\lambda = 0$时为最小二乘估计，参数$\hat{w}_{j}$<strong>不应趋向无穷</strong>；</li>
+<li>当不存在奇异时，岭迹应<strong>稳定渐进趋向$0$</strong>；</li>
+<li><p>通过岭迹图可以剔除变量解决多重共线性问题(个别情形下适用)</p>
+<ul>
+<li>可以剔除掉标准化岭回归<strong>系数比较稳定且绝对值很小</strong>的自变量;</li>
+<li>随着$\lambda$的增加，回归系数不稳定，<strong>震荡趋于零</strong>的自变量也可以剔除;</li>
+<li>如果依照上述去掉变量的原则，有若干个回归系数不稳定，究竟去掉几个，去掉哪几个，这幵无一般原则可循，这需根据<strong>去掉某个变量后重新进行岭回归分析</strong>的效果来确定。</li>
+</ul>
+</li>
+</ul>
+<p>一些岭迹图<br><img src="/2020/06/12/Efficient-Feature-Selection/ridge_plot.png" alt="ridge_plot"></p>
+<p>通过岭迹图<strong>选择参数$\lambda$的原则</strong></p>
+<ul>
+<li>各回归系数的岭估计基本稳定(如正负)；</li>
+<li>用最小二乘估计时符号不合理的回归系数，其岭估计的符号变得合理；</li>
+<li>回归系数没有不合乎实际意义的绝对值；</li>
+<li>残差平方和增大不太多。</li>
+</ul>
+<blockquote>
+<p>还有<strong>方差扩大因子法</strong>，注意不同方法建议的选择可能不一致。</p>
+</blockquote>
+<p><img src="/2020/06/12/Efficient-Feature-Selection/ridge_param.png" alt="ridge_param"></p>
+<p><strong>存在的问题</strong></p>
+<ul>
+<li>岭参数$\lambda$计算方法太多且差异很大；</li>
+<li>用岭迹图进行变量筛选，随意性太大，且只能一定程度消除多重共线性，而不能解决其他问题；</li>
+<li>岭回归返回的模型若<strong>没有经过特征筛选</strong>，包含全部变量。</li>
+</ul>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> RidgeClassifier</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> SelectFromModel</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X, y = load_iris(return_X_y=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>clf = RidgeClassifier()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>clf.fit(X, y)</span><br><span class="line">RidgeClassifier()</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>model = SelectFromModel(clf, prefit=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new = model.transform(X)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="Least-Angel-Regression-LARS"><a href="#Least-Angel-Regression-LARS" class="headerlink" title="Least Angel Regression(LARS)"></a>Least Angel Regression(LARS)</h3><p><strong>最小角回归</strong>(Least Angel Regression, LARS)是一种求解线性回归的方法。线性回归模型可以表示为</p>
+<script type="math/tex; mode=display">Y_{N \times 1} = X_{N \times (d + 1)} w_{(d + 1) \times 1}</script><p>根据矩阵乘法，可以将$Y$看作是所有特征$X_j, j = 1, \cdots, d+1$的线性组合，其特征空间内的基向量为$\{X_1, \cdots, X_{d+1}\}$</p>
+<script type="math/tex; mode=display">Y = \sum_{j=1}^{d+1} w_j X_j</script><p>残差$R$定义为</p>
+<script type="math/tex; mode=display">R = Y - \hat{Y}</script><p>以$2$个样本为例($X_j$维度与样本数有关，再高无法可视化)，在图中表示为<br><img src="/2020/06/12/Efficient-Feature-Selection/linear_regression_graph.jpg" alt="linear_regression_graph"></p>
+<p>其中</p>
+<ul>
+<li>$e_1, e_2, e_3$表示自然基；</li>
+<li>$x_1, x_2, (2 \times 1)$为每个维度上的特征；</li>
+<li>$w_1, w_2$为每个维度上的回归系数；</li>
+<li>$y, y’$分别表示真实值和回归值；</li>
+<li>$r$表示残差。</li>
+</ul>
+<p>可以看到$R$与$X_j, j = 1, \cdots, d + 1$都是垂直的，那么线性回归的优化的实质，<strong>从几何角度解释，是找到残差向量$R$与$X_j, j = 1, \cdots, d + 1$垂直，也即线性无关</strong>。</p>
+<hr>
+<p>基于以上几何意义的解释，就可以介绍LARS算法了，<strong>它的基本思想是：线性回归的求解过程，可以看作是$y$从$O(0, 0)$出发，向$\hat{Y}$逐步接近的过程</strong>，那么现在的问题就是如何选择路径。</p>
+<p>首先介绍<strong>相关系数的几何意义</strong>，将$A, B$两个向量<strong>去中心化、单位化</strong>，即</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    \hat{a}_i = (a_i - \overline{A}) / \sigma_A \\
+    \hat{b}_i = (b_i - \overline{B}) / \sigma_B
+\end{cases}</script><p>那么相关系数也即这两个向量的<strong>余弦距离</strong></p>
+<script type="math/tex; mode=display">
+r_{AB} = \frac{\sum_{i=1}^n (a_i - \overline{A})(b_i - \overline{B})}{\sigma_A \sigma_B} = \frac{1}{n} \sum_{i=1}^n \hat{a}_i \hat{b}_i = \hat{A} \cdot \hat{B}= \cos<\hat{A}, \hat{B}></script><p>LAR<strong>具体算法</strong>如下，是一种线性的方法，求解结果与Lasso结果几乎一致(并不完全一致，但近似相同)</p>
+<ol>
+<li><strong>初始化</strong>：计算输出向量$Y$和属性向量$X_j, j = 1, \cdots. (n + 1)$的相关系数$r_j$，并按相关系数从大到小将属性排序；</li>
+<li><strong>第一个特征选择</strong>：从原点开始沿着<em>相关系数最大</em>的属性$X_1$游走，得到的向量作为预测输出$\hat{Y}$，残差对应为$Y - \hat{Y}$，那么在这个过程中残差与$X_1$的相关性降低<script type="math/tex; mode=display">r_1' = (Y - \hat{Y}) \cdot X_1</script></li>
+<li><strong>剩余特征加入</strong>：当步骤2中相关系数降低至<strong>存在特征$X_2$与残差的相关系数与$r_j’$相等</strong>时，即游走到$w_1 X_1$时，将该特征加入，开始沿着$w_1 X_1, X_2 - w_1 X_1$两向量的角平分线$(w_1 X_1 + X_2’)$游走，其中$X_2’ = X_2 - w1 X_1$；</li>
+<li>重复步骤2，直至<strong>所有加入的特征</strong>与残差$Y - \hat{Y}$相关系数小于指定的较小常数$\epsilon$；</li>
+<li>此时<strong>剩余的特征被丢弃</strong>，达到特征筛选的作用。</li>
+</ol>
+<p>如下图，当残差为$R_2$时，$R_2$几乎与$X_1, X_2$垂直，相关系数为$0$，停止游走，特征$X_3$被丢弃。</p>
+<p><img src="/2020/06/12/Efficient-Feature-Selection/lar.jpg" alt="lar"></p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> Lars</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> SelectFromModel</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X, y = load_iris(return_X_y=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>clf = Lars()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>clf.fit(X, y)</span><br><span class="line">Lars()</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>model = SelectFromModel(clf, prefit=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new = model.transform(X)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LassoLars</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> SelectFromModel</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X, y = load_iris(return_X_y=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>clf = LassoLars()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>clf.fit(X, y)</span><br><span class="line">LassoLars()</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>model = SelectFromModel(clf, prefit=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new = model.transform(X)</span><br><span class="line">C:\Apps\Anaconda3\envs\PR\lib\site-packages\sklearn\feature_selection\_base.py:<span class="number">81</span>: UserWarning: No features were selected: either the data <span class="keyword">is</span> too noisy <span class="keyword">or</span> the selection test too strict. UserWarning)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="基于树的方法-Tree-based"><a href="#基于树的方法-Tree-based" class="headerlink" title="基于树的方法(Tree-based)"></a>基于树的方法(Tree-based)</h2><p>在决策树训练过程中，就存在选择最优分裂特征的问题，这可以用于评估特征重要性(不进行详细介绍)。</p>
+<h3 id="决策树-Decision-Tree"><a href="#决策树-Decision-Tree" class="headerlink" title="决策树(Decision Tree)"></a>决策树(Decision Tree)</h3><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> DecisionTreeClassifier</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> SelectFromModel</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X, y = load_iris(return_X_y=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>clf = DecisionTreeClassifier()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>clf.fit(X, y)</span><br><span class="line">DecisionTreeClassifier()</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>clf.feature_importances_</span><br><span class="line">array([<span class="number">0.01333333</span>, <span class="number">0.01333333</span>, <span class="number">0.55072262</span>, <span class="number">0.42261071</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>model = SelectFromModel(clf, prefit=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new = model.transform(X)</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="随机森林-Random-Forest-RF"><a href="#随机森林-Random-Forest-RF" class="headerlink" title="随机森林(Random Forest, RF)"></a>随机森林(Random Forest, RF)</h3><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> SelectFromModel</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X, y = load_iris(return_X_y=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>clf = RandomForestClassifier()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>clf.fit(X, y)</span><br><span class="line">RandomForestClassifier()</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>clf.feature_importances_</span><br><span class="line">array([<span class="number">0.11294047</span>, <span class="number">0.01823962</span>, <span class="number">0.43942899</span>, <span class="number">0.42939091</span>])</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>model = SelectFromModel(clf, prefit=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new = model.transform(X)</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="梯度提升树-GBDT"><a href="#梯度提升树-GBDT" class="headerlink" title="梯度提升树(GBDT)"></a>梯度提升树(GBDT)</h3><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> GradientBoostingClassifier</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> SelectFromModel</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X, y = load_iris(return_X_y=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>clf = GradientBoostingClassifier()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>clf.fit(X, y)</span><br><span class="line">GradientBoostingClassifier()</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>clf.feature_importances_</span><br><span class="line">array([<span class="number">0.00649375</span>, <span class="number">0.01077262</span>, <span class="number">0.31215818</span>, <span class="number">0.67057545</span>])</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>model = SelectFromModel(clf, prefit=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new = model.transform(X)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="https://blog.csdn.net/Mr_Lowbee/article/details/86566949" target="_blank" rel="noopener">用遗传算法进行特征选择 - CSDN</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/95061281" target="_blank" rel="noopener">特征选择之经典三刀 - 知乎</a></li>
+<li><a href="https://www.zhihu.com/question/28641663" target="_blank" rel="noopener">机器学习中，有哪些特征选择的工程方法？ - 知乎</a></li>
+<li><a href="https://www.cnblogs.com/hhh5460/p/5186226.html" target="_blank" rel="noopener">结合Scikit-learn介绍几种常用的特征选择方法 - cnblogs</a></li>
+<li><a href="https://scikit-learn.org/stable/modules/feature_selection.html" target="_blank" rel="noopener">1.13. Feature selection - scikit learn</a></li>
+<li><a href="https://github.com/FeatureLabs/featuretools" target="_blank" rel="noopener">FeatureLabs/featuretools - Github</a></li>
+<li><a href="https://github.com/Yimeng-Zhang/feature-engineering-and-feature-selection" target="_blank" rel="noopener">Yimeng-Zhang/feature-engineering-and-feature-selection - Github</a></li>
+<li><a href="http://www.wutianqi.com/blog/1723.html" target="_blank" rel="noopener">随机化算法(4) — 拉斯维加斯(Las Vegas)算法 - http://www.wutianqi.com</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/46999826" target="_blank" rel="noopener">从Lasso开始说起 - 知乎</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/08/Python函数静态变量/" rel="next" title="Python函数静态变量">
+                <i class="fa fa-chevron-left"></i> Python函数静态变量
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Louis Hsu">
+            
+              <p class="site-author-name" itemprop="name">Louis Hsu</p>
+              <p class="site-description motion-element" itemprop="description">永远年轻，永远热泪盈眶</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">100</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/isLouisHsu" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://is.louishsu@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/islouishsu" target="_blank" title="Zhihu"><i class="fa fa-fw fa-zhihu"></i>Zhihu</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/islouishsu" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          <div id="music163player">
+            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="110" src="//music.163.com/outchain/player?type=0&id=2703291040&auto=1&height=90">
+            </iframe>
+          </div>
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#目录"><span class="nav-number">1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#过滤方法-Filter"><span class="nav-number">2.</span> <span class="nav-text">过滤方法(Filter)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#方差阈值-Variance-Threshold"><span class="nav-number">2.1.</span> <span class="nav-text">方差阈值(Variance Threshold)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单变量选择-Univariate-Feature-Selection"><span class="nav-number">2.2.</span> <span class="nav-text">单变量选择(Univariate Feature Selection)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#相关系数-Correlation-Coefficient"><span class="nav-number">2.2.1.</span> <span class="nav-text">相关系数(Correlation Coefficient)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#卡方检验-Chi-Square-Test"><span class="nav-number">2.2.2.</span> <span class="nav-text">卡方检验(Chi-Square Test)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#互信息-Mutual-Information"><span class="nav-number">2.2.3.</span> <span class="nav-text">互信息(Mutual Information)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最大信息系数-Maximal-Information-Coefficient-MIC"><span class="nav-number">2.2.4.</span> <span class="nav-text">最大信息系数(Maximal Information Coefficient, MIC)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信息增益-Information-Gain"><span class="nav-number">2.2.5.</span> <span class="nav-text">信息增益(Information Gain)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#包裹方法-Wrapper"><span class="nav-number">3.</span> <span class="nav-text">包裹方法(Wrapper)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#递归特征消除-Recursive-Feature-Elimination-REF"><span class="nav-number">3.1.</span> <span class="nav-text">递归特征消除(Recursive Feature Elimination, REF)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拉斯维加斯方法-Las-Vegas-Wrapper-LVW"><span class="nav-number">3.2.</span> <span class="nav-text">拉斯维加斯方法(Las Vegas Wrapper, LVW)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#LV随机算法"><span class="nav-number">3.2.1.</span> <span class="nav-text">LV随机算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LVW特征选择"><span class="nav-number">3.2.2.</span> <span class="nav-text">LVW特征选择</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#嵌入方法-Embedded"><span class="nav-number">4.</span> <span class="nav-text">嵌入方法(Embedded)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#惩罚项方法-Regularization"><span class="nav-number">4.1.</span> <span class="nav-text">惩罚项方法(Regularization)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#线性回归的最小二乘估计和贝叶斯估计"><span class="nav-number">4.1.1.</span> <span class="nav-text">线性回归的最小二乘估计和贝叶斯估计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LASSO-L1"><span class="nav-number">4.1.2.</span> <span class="nav-text">LASSO(L1)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ridge-L2"><span class="nav-number">4.1.3.</span> <span class="nav-text">Ridge(L2)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Least-Angel-Regression-LARS"><span class="nav-number">4.1.4.</span> <span class="nav-text">Least Angel Regression(LARS)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于树的方法-Tree-based"><span class="nav-number">4.2.</span> <span class="nav-text">基于树的方法(Tree-based)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#决策树-Decision-Tree"><span class="nav-number">4.2.1.</span> <span class="nav-text">决策树(Decision Tree)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#随机森林-Random-Forest-RF"><span class="nav-number">4.2.2.</span> <span class="nav-text">随机森林(Random Forest, RF)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#梯度提升树-GBDT"><span class="nav-number">4.2.3.</span> <span class="nav-text">梯度提升树(GBDT)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Louis Hsu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: 'e65d27f7cf5c62feaf97',
+          clientSecret: '356386826698e8b817ca076b08d7c0e9814f52ea',
+          repo: 'isLouisHsu.github.io',
+          owner: 'isLouisHsu',
+          admin: ['isLouisHsu'],
+          id: md5(window.location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('3');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+
+  <script type="text/javascript" src="/js/click_show_text.js"></script>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+</html>

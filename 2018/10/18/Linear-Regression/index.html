@@ -16,7 +16,7 @@
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
 <head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="UTF-8">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
@@ -126,7 +126,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/w_i_x_i.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/result_linreg_noreg.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/18/Linear-Regression/result_linreg_reg.png">
-<meta property="og:updated_time" content="2020-05-24T16:11:41.401Z">
+<meta property="og:updated_time" content="2020-06-12T05:00:47.698Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linear Regression">
 <meta name="twitter:description" content="引言线性回归可以说是机器学习最基础的算法 模型\hat{y}^{(i)} = w^Tx^{(i)}其中$x^{(i)}_{(n + 1) \times 1}$为第$i$个$n$维向量，$i = 1, \cdots, m$，$w_{(n + 1) \times 1}$为权值向量  \begin{cases}     x^{(i)}=\begin{bmatrix} x_0^{(i)} &amp; x_1^{(">
@@ -183,7 +183,7 @@
       .logo-line-after i { right: initial; }
     }
   </style>
-</noscript>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
 </head>
 
@@ -194,7 +194,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -429,7 +429,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-05-25 00:11:41" itemprop="dateModified" datetime="2020-05-25T00:11:41+08:00">2020-05-25</time>
+                <time title="修改时间：2020-06-12 13:00:47" itemprop="dateModified" datetime="2020-06-12T13:00:47+08:00">2020-06-12</time>
               
             
           </span>
@@ -562,7 +562,7 @@ $$ rank(X_{m \times (n + 1)}) < n + 1</script><blockquote>
 <li>对于<strong>任意</strong>$\lambda &gt; 0$，$||\hat{w}|| \neq 0$，总有$|| \hat{w}(\lambda) || &lt; ||\hat{w}||$；</li>
 <li><strong>存在</strong>$\lambda &gt; 0$，使得$MSE(\hat{w}(\lambda)) &lt; MSE(\hat{w})$。</li>
 </ul>
-<p>由于参数$\lambda$并不是唯一确定的，所以得到的$\hat{w}(\lambda)$是回归参数$w$的一个<strong>估计族</strong>，$\hat{w}_{j}(\lambda) - \lambda$图称为<strong>岭迹图</strong>。</p>
+<p>由于参数$\lambda$并不是唯一确定的，所以得到的$\hat{w}(\lambda)$是回归参数$w$的一个<strong>估计族</strong>，$\hat{w}_{j}(\lambda) - \lambda$图称为<strong>岭迹图</strong>，根据以下规则可以筛选有效特征</p>
 <ul>
 <li>当$\lambda = 0$时为最小二乘估计，参数$\hat{w}_{j}$<strong>不应趋向无穷</strong>；</li>
 <li>当不存在奇异时，岭迹应<strong>稳定渐进趋向$0$</strong>；</li>
@@ -773,7 +773,7 @@ r_{AB} = \frac{\sum_{i=1}^n (a_i - \overline{A})(b_i - \overline{B})}{\sigma_A \
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">99</span>
+                    <span class="site-state-item-count">100</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1570,5 +1570,5 @@ r_{AB} = \frac{\sum_{i=1}^n (a_i - \overline{A})(b_i - \overline{B})}{\sigma_A \
 
   <script type="text/javascript" src="/js/click_show_text.js"></script>
   <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>
