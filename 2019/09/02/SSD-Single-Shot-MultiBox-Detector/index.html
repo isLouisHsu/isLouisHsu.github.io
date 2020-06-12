@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.8.0">
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="#222">
 
 
@@ -32,8 +32,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 
 
@@ -56,9 +56,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css" />
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
@@ -109,21 +109,21 @@
 
 
   <meta name="description" content="IntroductionSSD主要做了以下工作  设计了one-stage检测算法，比同样是one-stage的YOLOv1更快更准确，相比较Faster R-CNN等two-stage检测算法，在不降低准确率的情况下速度更快； 其核心是用小卷积核，对特征图进行卷积运算，通过一系列的固定回归框进行预测； 用不同尺度的特征图产生不同尺度的预测，并且明确指定多种纵横比； 可进行端到端训练，即使是低分辨">
-<meta name="keywords" content="Object Detection">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SSD: Single Shot MultiBox Detector">
 <meta property="og:url" content="http://yoursite.com/2019/09/02/SSD-Single-Shot-MultiBox-Detector/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="IntroductionSSD主要做了以下工作  设计了one-stage检测算法，比同样是one-stage的YOLOv1更快更准确，相比较Faster R-CNN等two-stage检测算法，在不降低准确率的情况下速度更快； 其核心是用小卷积核，对特征图进行卷积运算，通过一系列的固定回归框进行预测； 用不同尺度的特征图产生不同尺度的预测，并且明确指定多种纵横比； 可进行端到端训练，即使是低分辨">
-<meta property="og:locale" content="zh-CN">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://yoursite.com/2019/09/02/SSD-Single-Shot-MultiBox-Detector/im4x4_6x6_8x8_anchor.jpg">
 <meta property="og:image" content="http://yoursite.com/2019/09/02/SSD-Single-Shot-MultiBox-Detector/Fig2.png">
 <meta property="og:image" content="http://yoursite.com/2019/09/02/SSD-Single-Shot-MultiBox-Detector/Tab1.png">
 <meta property="og:image" content="http://yoursite.com/2019/09/02/SSD-Single-Shot-MultiBox-Detector/Fig3.png">
-<meta property="og:updated_time" content="2019-09-02T07:35:45.947Z">
+<meta property="article:published_time" content="2019-09-02T01:28:53.000Z">
+<meta property="article:modified_time" content="2019-09-02T07:35:45.947Z">
+<meta property="article:author" content="Louis Hsu">
+<meta property="article:tag" content="Object Detection">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SSD: Single Shot MultiBox Detector">
-<meta name="twitter:description" content="IntroductionSSD主要做了以下工作  设计了one-stage检测算法，比同样是one-stage的YOLOv1更快更准确，相比较Faster R-CNN等two-stage检测算法，在不降低准确率的情况下速度更快； 其核心是用小卷积核，对特征图进行卷积运算，通过一系列的固定回归框进行预测； 用不同尺度的特征图产生不同尺度的预测，并且明确指定多种纵横比； 可进行端到端训练，即使是低分辨">
 <meta name="twitter:image" content="http://yoursite.com/2019/09/02/SSD-Single-Shot-MultiBox-Detector/im4x4_6x6_8x8_anchor.jpg">
 
 
@@ -131,7 +131,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/09/02/SSD-Single-Shot-MultiBox-Detector/">
+  <link rel="canonical" href="http://yoursite.com/2019/09/02/SSD-Single-Shot-MultiBox-Detector/"/>
 
 
 
@@ -177,11 +177,11 @@
       .logo-line-after i { right: initial; }
     }
   </style>
-</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</noscript>
 
-</head>
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -191,7 +191,7 @@
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -231,7 +231,7 @@
           
           <li class="menu-item menu-item-home">
     <a href="/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
   </li>
         
         
@@ -239,7 +239,7 @@
           
           <li class="menu-item menu-item-tags">
     <a href="/tags/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
   </li>
         
         
@@ -247,7 +247,7 @@
           
           <li class="menu-item menu-item-categories">
     <a href="/categories/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
   </li>
         
         
@@ -255,7 +255,7 @@
           
           <li class="menu-item menu-item-archives">
     <a href="/archives/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
   </li>
         
         
@@ -263,7 +263,7 @@
           
           <li class="menu-item menu-item-guestbook">
     <a href="/guestbook" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-guest"></i> <br>留言</a>
+      <i class="menu-item-icon fa fa-fw fa-guest"></i> <br />留言</a>
   </li>
         
         
@@ -271,7 +271,7 @@
           
           <li class="menu-item menu-item-about">
     <a href="/about/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
   </li>
 
       
@@ -281,7 +281,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
         </li>
       
     </ul>
@@ -301,7 +301,9 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -329,7 +331,7 @@
     
       
     
-    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg>
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg>
     
       </a>
     
@@ -359,20 +361,20 @@
     <div class="reading-progress-bar"></div>
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/02/SSD-Single-Shot-MultiBox-Detector/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Louis Hsu">
       <meta itemprop="description" content="永远年轻，永远热泪盈眶">
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="LOUIS' BLOG">
     </span>
 
@@ -417,7 +419,7 @@
           </span>
 
           
-            <span class="post-category">
+            <span class="post-category" >
             
               <span class="post-meta-divider">|</span>
             
@@ -428,7 +430,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a></span>
 
                 
                 
@@ -445,10 +447,11 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon">
+            <span class="post-meta-item-icon"
+            >
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
             </span>
           
 
@@ -489,7 +492,7 @@
     t_h = \log (\frac{h_g}{h_a})
 \end{aligned}</script><p><img src="/2019/09/02/SSD-Single-Shot-MultiBox-Detector/im4x4_6x6_8x8_anchor.jpg" alt="im4x4_6x6_8x8_anchor"></p>
 <h2 id="关于anchor参数的设置"><a href="#关于anchor参数的设置" class="headerlink" title="关于anchor参数的设置"></a>关于anchor参数的设置</h2><p>这样带来的问题是，对于各个分辨率下的特征图，每个点处anchor参数是不同的，如上面随意设置的参数，可能实际使用时不适合，SSD是这样解决的。</p>
-<p>对于某一层特征图，设置五种纵横比：$a_r \in \{\frac{1}{3}, \frac{1}{2}, 1, 2, 3\}$，纵横比为$1$的anchor再缩放形成另一尺度的anchor，$s_k’ = \sqrt{s_k s_{k+1}}$，那么该层每个点处包含$6$个anchor。</p>
+<p>对于某一层特征图，设置五种纵横比：$a_r \in {\frac{1}{3}, \frac{1}{2}, 1, 2, 3}$，纵横比为$1$的anchor再缩放形成另一尺度的anchor，$s_k’ = \sqrt{s_k s_{k+1}}$，那么该层每个点处包含$6$个anchor。</p>
 <p>对于不同层间，特征图的尺度改变，anchor大小也需随之变化。设置$s_{min}=0.2, s_{max}=0.9$，若所用特征图总层数为$m$，则从浅层到深层，各层的anchor尺度为$s_k = s_{min} + \frac{k - 1}{m - 1}(s_{max} - s_{min}), k \in [1, m]$，在第$k$层，anchor尺寸为$w^a_k = h^a_k = \frac{s_k}{\sqrt{a_r}}$。</p>
 <p>anchor的中心定于$(\frac{i + 0.5}{|f_k|}, \frac{j + 0.5}{|f_k|})$，$|f_k|$为第$k$层特征图某点对应原图中网格的边长。实际上，锚框参数是人为指定的，是需要被解决的一个问题，应根据实际情况进行修改。</p>
 <h1 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h1><p><img src="/2019/09/02/SSD-Single-Shot-MultiBox-Detector/Fig2.png" alt="Fig2"></p>
@@ -546,7 +549,7 @@ L_{total} = \frac{1}{N} \left[\alpha \underbrace{\sum_{i, j, k, l} 1^{ij_k}_l \s
 
     
       <div id="alipay" style="display: inline-block">
-        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝"/>
         <p>支付宝</p>
       </div>
     
@@ -651,9 +654,11 @@ L_{total} = \frac{1}{N} \left[\alpha \underbrace{\sum_{i, j, k, l} 1^{ij_k}_l \s
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Louis Hsu">
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.gif"
+                alt="Louis Hsu" />
             
               <p class="site-author-name" itemprop="name">Louis Hsu</p>
               <p class="site-description motion-element" itemprop="description">永远年轻，永远热泪盈眶</p>
@@ -664,7 +669,7 @@ L_{total} = \frac{1}{N} \left[\alpha \underbrace{\sum_{i, j, k, l} 1^{ij_k}_l \s
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/archives/">
+                  <a href="/archives/%20%7C%7C%20archive">
                 
                     <span class="site-state-item-count">100</span>
                     <span class="site-state-item-name">日志</span>
@@ -740,10 +745,6 @@ L_{total} = \frac{1}{N} \left[\alpha \underbrace{\sum_{i, j, k, l} 1^{ij_k}_l \s
                     
                       
                     
-                      
-                    
-                      
-                    
                     <span class="site-state-item-count">14</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
@@ -786,8 +787,10 @@ L_{total} = \frac{1}{N} \left[\alpha \underbrace{\sum_{i, j, k, l} 1^{ij_k}_l \s
           
           
 
-          <div id="music163player">
-            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="110" src="//music.163.com/outchain/player?type=0&id=2703291040&auto=1&height=90">
+          <div id='music163player'>
+            <iframe 
+              frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=110 
+              src="//music.163.com/outchain/player?type=0&id=2703291040&auto=1&height=90">
             </iframe>
           </div>
 

@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.8.0">
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="#222">
 
 
@@ -32,8 +32,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 
 
@@ -56,9 +56,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css" />
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
@@ -108,14 +108,13 @@
 
 
 
-  <meta name="description" content="前言Github: isLouisHsu/Basic-Machine-Learning-Algorithm/algorithm/p97_svm.py 补一补支持向量机的笔记。 支持向量机(SVM)为有监督学习算法，可用于回归、分类甚至聚类(支持向量聚类)，其主要特点为  将样本表示为超空间中的点； 求取支持向量，其余样本点对超平面无影响； 对于线性不可分问题，利用核函数映射到高维空间，使其线性可分">
-<meta name="keywords" content="监督学习">
+  <meta name="description" content="前言Github: isLouisHsu&#x2F;Basic-Machine-Learning-Algorithm&#x2F;algorithm&#x2F;p97_svm.py 补一补支持向量机的笔记。 支持向量机(SVM)为有监督学习算法，可用于回归、分类甚至聚类(支持向量聚类)，其主要特点为  将样本表示为超空间中的点； 求取支持向量，其余样本点对超平面无影响； 对于线性不可分问题，利用核函数映射到高维空间，使其线性可分">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Support Vector Machine">
 <meta property="og:url" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="前言Github: isLouisHsu/Basic-Machine-Learning-Algorithm/algorithm/p97_svm.py 补一补支持向量机的笔记。 支持向量机(SVM)为有监督学习算法，可用于回归、分类甚至聚类(支持向量聚类)，其主要特点为  将样本表示为超空间中的点； 求取支持向量，其余样本点对超平面无影响； 对于线性不可分问题，利用核函数映射到高维空间，使其线性可分">
-<meta property="og:locale" content="zh-CN">
+<meta property="og:description" content="前言Github: isLouisHsu&#x2F;Basic-Machine-Learning-Algorithm&#x2F;algorithm&#x2F;p97_svm.py 补一补支持向量机的笔记。 支持向量机(SVM)为有监督学习算法，可用于回归、分类甚至聚类(支持向量聚类)，其主要特点为  将样本表示为超空间中的点； 求取支持向量，其余样本点对超平面无影响； 对于线性不可分问题，利用核函数映射到高维空间，使其线性可分">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/distance.jpg">
 <meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/kernel_poly.jpg">
 <meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/svm-3-conditions.jpg">
@@ -126,10 +125,11 @@
 <meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/epsilon.jpg">
 <meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/y1neqy2.jpg">
 <meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/y1eqy2.jpg">
-<meta property="og:updated_time" content="2020-05-02T13:27:29.670Z">
+<meta property="article:published_time" content="2019-05-27T01:32:15.000Z">
+<meta property="article:modified_time" content="2020-05-02T13:27:29.670Z">
+<meta property="article:author" content="Louis Hsu">
+<meta property="article:tag" content="监督学习">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Support Vector Machine">
-<meta name="twitter:description" content="前言Github: isLouisHsu/Basic-Machine-Learning-Algorithm/algorithm/p97_svm.py 补一补支持向量机的笔记。 支持向量机(SVM)为有监督学习算法，可用于回归、分类甚至聚类(支持向量聚类)，其主要特点为  将样本表示为超空间中的点； 求取支持向量，其余样本点对超平面无影响； 对于线性不可分问题，利用核函数映射到高维空间，使其线性可分">
 <meta name="twitter:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/distance.jpg">
 
 
@@ -137,7 +137,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/05/27/Support-Vector-Machine/">
+  <link rel="canonical" href="http://yoursite.com/2019/05/27/Support-Vector-Machine/"/>
 
 
 
@@ -183,11 +183,11 @@
       .logo-line-after i { right: initial; }
     }
   </style>
-</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</noscript>
 
-</head>
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -197,7 +197,7 @@
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -237,7 +237,7 @@
           
           <li class="menu-item menu-item-home">
     <a href="/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
   </li>
         
         
@@ -245,7 +245,7 @@
           
           <li class="menu-item menu-item-tags">
     <a href="/tags/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
   </li>
         
         
@@ -253,7 +253,7 @@
           
           <li class="menu-item menu-item-categories">
     <a href="/categories/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
   </li>
         
         
@@ -261,7 +261,7 @@
           
           <li class="menu-item menu-item-archives">
     <a href="/archives/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
   </li>
         
         
@@ -269,7 +269,7 @@
           
           <li class="menu-item menu-item-guestbook">
     <a href="/guestbook" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-guest"></i> <br>留言</a>
+      <i class="menu-item-icon fa fa-fw fa-guest"></i> <br />留言</a>
   </li>
         
         
@@ -277,7 +277,7 @@
           
           <li class="menu-item menu-item-about">
     <a href="/about/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
   </li>
 
       
@@ -287,7 +287,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
         </li>
       
     </ul>
@@ -307,7 +307,9 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -335,7 +337,7 @@
     
       
     
-    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg>
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg>
     
       </a>
     
@@ -365,20 +367,20 @@
     <div class="reading-progress-bar"></div>
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/27/Support-Vector-Machine/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Louis Hsu">
       <meta itemprop="description" content="永远年轻，永远热泪盈眶">
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="LOUIS' BLOG">
     </span>
 
@@ -435,7 +437,7 @@
           </span>
 
           
-            <span class="post-category">
+            <span class="post-category" >
             
               <span class="post-meta-divider">|</span>
             
@@ -446,7 +448,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
 
                 
                 
@@ -463,10 +465,11 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon">
+            <span class="post-meta-item-icon"
+            >
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
             </span>
           
 
@@ -767,7 +770,7 @@ b \sum_i \mu_1^{(i)} y^{(i)} -
 <li>$\epsilon^{(i)} &gt; 0$时，$y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] &lt; 1$，该点在支撑超平面间；</li>
 </ol>
 </li>
-<li>$C \neq \mu_1^{(i)}$即$C &gt; \mu_1^{(i)} \geq 0$时，$\mu_2^{(i)} \neq 0$，则由$\mu_2^{(i)} \left( - \epsilon^{(i)} \right) = 0$，可得$\epsilon^{(i)} = 0$，那么$\mu_1^{(i)} \left\{ 1 - y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] \right\} = 0$<ol>
+<li>$C \neq \mu_1^{(i)}$即$C &gt; \mu_1^{(i)} \geq 0$时，$\mu_2^{(i)} \neq 0$，则由$\mu_2^{(i)} \left( - \epsilon^{(i)} \right) = 0$，可得$\epsilon^{(i)} = 0$，那么$\mu_1^{(i)} \left{ 1 - y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] \right} = 0$<ol>
 <li>$\mu_1^{(i)} &gt; 0$时，$y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] = 1$，该点为支撑向量；</li>
 <li>$\mu_1^{(i)} = 0$时，$y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] \geq 1$，该点分类正确，在支持超平面上或者两边</li>
 </ol>
@@ -1034,7 +1037,7 @@ b = \begin{cases}
 
     
       <div id="alipay" style="display: inline-block">
-        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝"/>
         <p>支付宝</p>
       </div>
     
@@ -1053,7 +1056,7 @@ b = \begin{cases}
       
         <div class="post-tags">
           
-            <a href="/tags/监督学习/" rel="tag"># 监督学习</a>
+            <a href="/tags/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/" rel="tag"># 监督学习</a>
           
         </div>
       
@@ -1139,9 +1142,11 @@ b = \begin{cases}
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Louis Hsu">
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.gif"
+                alt="Louis Hsu" />
             
               <p class="site-author-name" itemprop="name">Louis Hsu</p>
               <p class="site-description motion-element" itemprop="description">永远年轻，永远热泪盈眶</p>
@@ -1152,7 +1157,7 @@ b = \begin{cases}
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/archives/">
+                  <a href="/archives/%20%7C%7C%20archive">
                 
                     <span class="site-state-item-count">100</span>
                     <span class="site-state-item-name">日志</span>
@@ -1228,10 +1233,6 @@ b = \begin{cases}
                     
                       
                     
-                      
-                    
-                      
-                    
                     <span class="site-state-item-count">14</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
@@ -1274,8 +1275,10 @@ b = \begin{cases}
           
           
 
-          <div id="music163player">
-            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="110" src="//music.163.com/outchain/player?type=0&id=2703291040&auto=1&height=90">
+          <div id='music163player'>
+            <iframe 
+              frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=110 
+              src="//music.163.com/outchain/player?type=0&id=2703291040&auto=1&height=90">
             </iframe>
           </div>
 

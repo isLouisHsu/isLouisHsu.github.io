@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.8.0">
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="#222">
 
 
@@ -32,8 +32,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 
 
@@ -56,9 +56,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css" />
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
@@ -108,24 +108,24 @@
 
 
 
-  <meta name="description" content="前言位运算在编程中有不少的应用，但没必要记太多的“奇淫巧计”。 英文字符转换 字符转小写  12&amp;apos;a&amp;apos; | &amp;apos; &amp;apos; = &amp;apos;a&amp;apos;&amp;apos;A&amp;apos; | &amp;apos; &amp;apos; = &amp;apos;a&amp;apos;  字符转大写  12&amp;apos;a&amp;apos; &amp;amp; &amp;apos;_&amp;apos; = &amp;apos;A&amp;apos;&amp;a">
+  <meta name="description" content="前言位运算在编程中有不少的应用，但没必要记太多的“奇淫巧计”。 英文字符转换 字符转小写 12&#39;a&#39; | &#39; &#39; &#x3D; &#39;a&#39;&#39;A&#39; | &#39; &#39; &#x3D; &#39;a&#39; 字符转大写 12&#39;a&#39; &amp; &#39;_&#39; &#x3D; &#39;A&#39;&#39;A&amp;#">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【算法】位运算的应用">
-<meta property="og:url" content="http://yoursite.com/2020/04/12/【算法】位运算的应用/index.html">
+<meta property="og:url" content="http://yoursite.com/2020/04/12/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E4%BD%8D%E8%BF%90%E7%AE%97%E7%9A%84%E5%BA%94%E7%94%A8/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="前言位运算在编程中有不少的应用，但没必要记太多的“奇淫巧计”。 英文字符转换 字符转小写  12&amp;apos;a&amp;apos; | &amp;apos; &amp;apos; = &amp;apos;a&amp;apos;&amp;apos;A&amp;apos; | &amp;apos; &amp;apos; = &amp;apos;a&amp;apos;  字符转大写  12&amp;apos;a&amp;apos; &amp;amp; &amp;apos;_&amp;apos; = &amp;apos;A&amp;apos;&amp;a">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-04-23T04:01:26.503Z">
+<meta property="og:description" content="前言位运算在编程中有不少的应用，但没必要记太多的“奇淫巧计”。 英文字符转换 字符转小写 12&#39;a&#39; | &#39; &#39; &#x3D; &#39;a&#39;&#39;A&#39; | &#39; &#39; &#x3D; &#39;a&#39; 字符转大写 12&#39;a&#39; &amp; &#39;_&#39; &#x3D; &#39;A&#39;&#39;A&amp;#">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-04-12T05:38:05.000Z">
+<meta property="article:modified_time" content="2020-04-23T04:01:26.503Z">
+<meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="【算法】位运算的应用">
-<meta name="twitter:description" content="前言位运算在编程中有不少的应用，但没必要记太多的“奇淫巧计”。 英文字符转换 字符转小写  12&amp;apos;a&amp;apos; | &amp;apos; &amp;apos; = &amp;apos;a&amp;apos;&amp;apos;A&amp;apos; | &amp;apos; &amp;apos; = &amp;apos;a&amp;apos;  字符转大写  12&amp;apos;a&amp;apos; &amp;amp; &amp;apos;_&amp;apos; = &amp;apos;A&amp;apos;&amp;a">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/04/12/【算法】位运算的应用/">
+  <link rel="canonical" href="http://yoursite.com/2020/04/12/【算法】位运算的应用/"/>
 
 
 
@@ -171,11 +171,11 @@
       .logo-line-after i { right: initial; }
     }
   </style>
-</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</noscript>
 
-</head>
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -185,7 +185,7 @@
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -225,7 +225,7 @@
           
           <li class="menu-item menu-item-home">
     <a href="/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
   </li>
         
         
@@ -233,7 +233,7 @@
           
           <li class="menu-item menu-item-tags">
     <a href="/tags/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
   </li>
         
         
@@ -241,7 +241,7 @@
           
           <li class="menu-item menu-item-categories">
     <a href="/categories/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
   </li>
         
         
@@ -249,7 +249,7 @@
           
           <li class="menu-item menu-item-archives">
     <a href="/archives/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
   </li>
         
         
@@ -257,7 +257,7 @@
           
           <li class="menu-item menu-item-guestbook">
     <a href="/guestbook" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-guest"></i> <br>留言</a>
+      <i class="menu-item-icon fa fa-fw fa-guest"></i> <br />留言</a>
   </li>
         
         
@@ -265,7 +265,7 @@
           
           <li class="menu-item menu-item-about">
     <a href="/about/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
   </li>
 
       
@@ -275,7 +275,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
         </li>
       
     </ul>
@@ -295,7 +295,9 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -323,7 +325,7 @@
     
       
     
-    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg>
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg>
     
       </a>
     
@@ -353,20 +355,20 @@
     <div class="reading-progress-bar"></div>
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/12/【算法】位运算的应用/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/12/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E4%BD%8D%E8%BF%90%E7%AE%97%E7%9A%84%E5%BA%94%E7%94%A8/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Louis Hsu">
       <meta itemprop="description" content="永远年轻，永远热泪盈眶">
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="LOUIS' BLOG">
     </span>
 
@@ -423,7 +425,7 @@
           </span>
 
           
-            <span class="post-category">
+            <span class="post-category" >
             
               <span class="post-meta-divider">|</span>
             
@@ -434,7 +436,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a></span>
 
                 
                 
@@ -451,10 +453,11 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon">
+            <span class="post-meta-item-icon"
+            >
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
             </span>
           
 
@@ -477,14 +480,9 @@
       
         <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>位运算在编程中有不少的应用，但没必要记太多的“奇淫巧计”。</p>
 <h1 id="英文字符转换"><a href="#英文字符转换" class="headerlink" title="英文字符转换"></a>英文字符转换</h1><ol>
-<li><p>字符转小写</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&apos;a&apos; | &apos; &apos; = &apos;a&apos;</span><br><span class="line">&apos;A&apos; | &apos; &apos; = &apos;a&apos;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>字符转大写</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&apos;a&apos; &amp; &apos;_&apos; = &apos;A&apos;</span><br><span class="line">&apos;A&apos; &amp; &apos;_&apos; = &apos;A&apos;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>大小写互换</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&apos;a&apos; ^ &apos; &apos; = &apos;A&apos;</span><br><span class="line">&apos;A&apos; ^ &apos; &apos; = &apos;a&apos;</span><br></pre></td></tr></table></figure>
+<li>字符转小写 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#39;a&#39; | &#39; &#39; &#x3D; &#39;a&#39;</span><br><span class="line">&#39;A&#39; | &#39; &#39; &#x3D; &#39;a&#39;</span><br></pre></td></tr></table></figure></li>
+<li>字符转大写 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#39;a&#39; &amp; &#39;_&#39; &#x3D; &#39;A&#39;</span><br><span class="line">&#39;A&#39; &amp; &#39;_&#39; &#x3D; &#39;A&#39;</span><br></pre></td></tr></table></figure></li>
+<li>大小写互换 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#39;a&#39; ^ &#39; &#39; &#x3D; &#39;A&#39;</span><br><span class="line">&#39;A&#39; ^ &#39; &#39; &#x3D; &#39;a&#39;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 <h1 id="单个数字的操作"><a href="#单个数字的操作" class="headerlink" title="单个数字的操作"></a>单个数字的操作</h1><ol>
@@ -501,8 +499,7 @@
  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">isPowOf2</span><span class="params">(<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (x &lt;= <span class="number">0</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">return</span> !(x &amp; (x - <span class="number">1</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>该数字二进制表示中<code>1</code>的个数</p>
- <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bCountOne</span><span class="params">(<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (x)&#123;      <span class="comment">// x != 0x0000</span></span><br><span class="line">        x = x &amp; (x - <span class="number">1</span>);</span><br><span class="line">        count++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
+ <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bCountOne</span><span class="params">(<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (x)&#123;      <span class="comment">// x != 0x0000</span></span><br><span class="line">        x = x &amp; (x - <span class="number">1</span>);</span><br><span class="line">        count++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 <li><p>求一个符号数的绝对值</p>
 <p> <strong>数字按位取反后加$1$得到该数的相反数(补码)</strong>。</p>
  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bAbs</span><span class="params">(<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> mask = x &gt;&gt; (<span class="keyword">sizeof</span>(<span class="keyword">int</span>) * <span class="number">8</span> - <span class="number">1</span>); <span class="comment">// `&gt;&gt;`为算术位移，此时`mask = 0x0000 = 0`或`mask = 0xFFFF = -1`</span></span><br><span class="line">    <span class="comment">// return (x ^ mask) - mask;</span></span><br><span class="line">    <span class="comment">// 分解：</span></span><br><span class="line">    x ^= mask;  <span class="comment">// `mask = 0x0000`时不变，`mask = 0xFFFF`时按位取反</span></span><br><span class="line">    x -= mask;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -562,7 +559,7 @@
 
     
       <div id="alipay" style="display: inline-block">
-        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝"/>
         <p>支付宝</p>
       </div>
     
@@ -588,7 +585,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/03/23/【算法】回溯法与分支定界法/" rel="next" title="【算法】回溯法与分支定界法">
+              <a href="/2020/03/23/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%9B%9E%E6%BA%AF%E6%B3%95%E4%B8%8E%E5%88%86%E6%94%AF%E5%AE%9A%E7%95%8C%E6%B3%95/" rel="next" title="【算法】回溯法与分支定界法">
                 <i class="fa fa-chevron-left"></i> 【算法】回溯法与分支定界法
               </a>
             
@@ -661,9 +658,11 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Louis Hsu">
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.gif"
+                alt="Louis Hsu" />
             
               <p class="site-author-name" itemprop="name">Louis Hsu</p>
               <p class="site-description motion-element" itemprop="description">永远年轻，永远热泪盈眶</p>
@@ -674,7 +673,7 @@
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/archives/">
+                  <a href="/archives/%20%7C%7C%20archive">
                 
                     <span class="site-state-item-count">100</span>
                     <span class="site-state-item-name">日志</span>
@@ -750,10 +749,6 @@
                     
                       
                     
-                      
-                    
-                      
-                    
                     <span class="site-state-item-count">14</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
@@ -796,8 +791,10 @@
           
           
 
-          <div id="music163player">
-            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="110" src="//music.163.com/outchain/player?type=0&id=2703291040&auto=1&height=90">
+          <div id='music163player'>
+            <iframe 
+              frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=110 
+              src="//music.163.com/outchain/player?type=0&id=2703291040&auto=1&height=90">
             </iframe>
           </div>
 

@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.8.0">
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="#222">
 
 
@@ -32,8 +32,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 
 
@@ -56,9 +56,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css" />
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
@@ -108,24 +108,24 @@
 
 
 
-  <meta name="description" content="目录 目录 前言 MLE/MAP 最大似然估计(MLE) 最大后验概率估计(MAP)   线性回归/逻辑斯蒂回归 线性回归 逻辑斯蒂回归(LR)   朴素贝叶斯 PCA/LDA PCA 计算步骤 证明   LDA 计算步骤 证明     EM/GMM EM算法 GMM模型   SVM KKT条件 核技巧 分类问题 线性可分 线性不可分   回归问题 求解优化问题   聚类 距离度量 KMeans">
+  <meta name="description" content="目录 目录 前言 MLE&#x2F;MAP 最大似然估计(MLE) 最大后验概率估计(MAP)   线性回归&#x2F;逻辑斯蒂回归 线性回归 逻辑斯蒂回归(LR)   朴素贝叶斯 PCA&#x2F;LDA PCA 计算步骤 证明   LDA 计算步骤 证明     EM&#x2F;GMM EM算法 GMM模型   SVM KKT条件 核技巧 分类问题 线性可分 线性不可分   回归问题 求解优化问题   聚类 距离度量 KMeans">
 <meta property="og:type" content="article">
 <meta property="og:title" content="经典机器学习算法推导汇总">
-<meta property="og:url" content="http://yoursite.com/2020/02/10/经典机器学习算法推导汇总/index.html">
+<meta property="og:url" content="http://yoursite.com/2020/02/10/%E7%BB%8F%E5%85%B8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95%E6%8E%A8%E5%AF%BC%E6%B1%87%E6%80%BB/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
-<meta property="og:description" content="目录 目录 前言 MLE/MAP 最大似然估计(MLE) 最大后验概率估计(MAP)   线性回归/逻辑斯蒂回归 线性回归 逻辑斯蒂回归(LR)   朴素贝叶斯 PCA/LDA PCA 计算步骤 证明   LDA 计算步骤 证明     EM/GMM EM算法 GMM模型   SVM KKT条件 核技巧 分类问题 线性可分 线性不可分   回归问题 求解优化问题   聚类 距离度量 KMeans">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-06-11T15:27:44.500Z">
+<meta property="og:description" content="目录 目录 前言 MLE&#x2F;MAP 最大似然估计(MLE) 最大后验概率估计(MAP)   线性回归&#x2F;逻辑斯蒂回归 线性回归 逻辑斯蒂回归(LR)   朴素贝叶斯 PCA&#x2F;LDA PCA 计算步骤 证明   LDA 计算步骤 证明     EM&#x2F;GMM EM算法 GMM模型   SVM KKT条件 核技巧 分类问题 线性可分 线性不可分   回归问题 求解优化问题   聚类 距离度量 KMeans">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-02-10T13:45:45.000Z">
+<meta property="article:modified_time" content="2020-06-11T15:27:44.500Z">
+<meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="经典机器学习算法推导汇总">
-<meta name="twitter:description" content="目录 目录 前言 MLE/MAP 最大似然估计(MLE) 最大后验概率估计(MAP)   线性回归/逻辑斯蒂回归 线性回归 逻辑斯蒂回归(LR)   朴素贝叶斯 PCA/LDA PCA 计算步骤 证明   LDA 计算步骤 证明     EM/GMM EM算法 GMM模型   SVM KKT条件 核技巧 分类问题 线性可分 线性不可分   回归问题 求解优化问题   聚类 距离度量 KMeans">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/02/10/经典机器学习算法推导汇总/">
+  <link rel="canonical" href="http://yoursite.com/2020/02/10/经典机器学习算法推导汇总/"/>
 
 
 
@@ -171,11 +171,11 @@
       .logo-line-after i { right: initial; }
     }
   </style>
-</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</noscript>
 
-</head>
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -185,7 +185,7 @@
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -225,7 +225,7 @@
           
           <li class="menu-item menu-item-home">
     <a href="/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
   </li>
         
         
@@ -233,7 +233,7 @@
           
           <li class="menu-item menu-item-tags">
     <a href="/tags/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
   </li>
         
         
@@ -241,7 +241,7 @@
           
           <li class="menu-item menu-item-categories">
     <a href="/categories/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
   </li>
         
         
@@ -249,7 +249,7 @@
           
           <li class="menu-item menu-item-archives">
     <a href="/archives/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
   </li>
         
         
@@ -257,7 +257,7 @@
           
           <li class="menu-item menu-item-guestbook">
     <a href="/guestbook" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-guest"></i> <br>留言</a>
+      <i class="menu-item-icon fa fa-fw fa-guest"></i> <br />留言</a>
   </li>
         
         
@@ -265,7 +265,7 @@
           
           <li class="menu-item menu-item-about">
     <a href="/about/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
   </li>
 
       
@@ -275,7 +275,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
         </li>
       
     </ul>
@@ -295,7 +295,9 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -323,7 +325,7 @@
     
       
     
-    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg>
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg>
     
       </a>
     
@@ -353,20 +355,20 @@
     <div class="reading-progress-bar"></div>
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/10/经典机器学习算法推导汇总/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/10/%E7%BB%8F%E5%85%B8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95%E6%8E%A8%E5%AF%BC%E6%B1%87%E6%80%BB/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Louis Hsu">
       <meta itemprop="description" content="永远年轻，永远热泪盈眶">
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="LOUIS' BLOG">
     </span>
 
@@ -423,7 +425,7 @@
           </span>
 
           
-            <span class="post-category">
+            <span class="post-category" >
             
               <span class="post-meta-divider">|</span>
             
@@ -434,7 +436,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Matchine-Learning/" itemprop="url" rel="index"><span itemprop="name">Matchine Learning</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Matchine-Learning/" itemprop="url" rel="index"><span itemprop="name">Matchine Learning</span></a></span>
 
                 
                 
@@ -451,10 +453,11 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon">
+            <span class="post-meta-item-icon"
+            >
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
             </span>
           
 
@@ -536,7 +539,7 @@
 <div style="page-break-after: always;"></div>
 
 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本文只做复习使用，只给出关键算法描述和证明。</p>
-<h1 id="MLE-MAP"><a href="#MLE-MAP" class="headerlink" title="MLE/MAP"></a>MLE/MAP</h1><p>给定$N$个样本对$\{(X^{(i)}, y^{(i)}), i = 1, \cdots, N\}$，其中$y \in \{C_k, k = 1, \cdots, K\}$，要求估计参数模型$P(X | \theta)$的参数$\theta$，使之最能描述给定数据分布。</p>
+<h1 id="MLE-MAP"><a href="#MLE-MAP" class="headerlink" title="MLE/MAP"></a>MLE/MAP</h1><p>给定$N$个样本对${(X^{(i)}, y^{(i)}), i = 1, \cdots, N}$，其中$y \in {C_k, k = 1, \cdots, K}$，要求估计参数模型$P(X | \theta)$的参数$\theta$，使之最能描述给定数据分布。</p>
 <h2 id="最大似然估计-MLE"><a href="#最大似然估计-MLE" class="headerlink" title="最大似然估计(MLE)"></a>最大似然估计(MLE)</h2><script type="math/tex; mode=display">
 \begin{aligned}
     优化目标：& \hat{\theta} = \arg \max P(D | \theta) \\
@@ -553,7 +556,7 @@
     求取极值：& \frac{\partial}{\partial \theta} \log L(\theta | D) = 0 \Rightarrow \hat{\theta}
 \end{aligned}</script><div style="page-break-after: always;"></div>
 
-<h1 id="线性回归-逻辑斯蒂回归"><a href="#线性回归-逻辑斯蒂回归" class="headerlink" title="线性回归/逻辑斯蒂回归"></a>线性回归/逻辑斯蒂回归</h1><p>给定$N$个样本对$\{(X^{(i)}, y^{(i)}), i = 1, \cdots, N\}$，记样本矩阵$X_{N \times n}$。</p>
+<h1 id="线性回归-逻辑斯蒂回归"><a href="#线性回归-逻辑斯蒂回归" class="headerlink" title="线性回归/逻辑斯蒂回归"></a>线性回归/逻辑斯蒂回归</h1><p>给定$N$个样本对${(X^{(i)}, y^{(i)}), i = 1, \cdots, N}$，记样本矩阵$X_{N \times n}$。</p>
 <h2 id="线性回归"><a href="#线性回归" class="headerlink" title="线性回归"></a>线性回归</h2><script type="math/tex; mode=display">
 \begin{aligned}
     标签信息：& y \in \mathcal{R}^1，
@@ -605,7 +608,7 @@
         梯度下降：& w_j := w_j - \alpha \frac{\partial L}{\partial w_j}
 \end{aligned}</script><div style="page-break-after: always;"></div>
 
-<h1 id="朴素贝叶斯"><a href="#朴素贝叶斯" class="headerlink" title="朴素贝叶斯"></a>朴素贝叶斯</h1><p>给定$N$个样本对$\{(X^{(i)}, y^{(i)}), i = 1, \cdots, N\}$，其中$y \in \{C_k, k = 1, \cdots, K\}$。</p>
+<h1 id="朴素贝叶斯"><a href="#朴素贝叶斯" class="headerlink" title="朴素贝叶斯"></a>朴素贝叶斯</h1><p>给定$N$个样本对${(X^{(i)}, y^{(i)}), i = 1, \cdots, N}$，其中$y \in {C_k, k = 1, \cdots, K}$。</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
     定义模型为条件概率分布：& P(Y | X) \\
@@ -618,7 +621,7 @@
     \end{cases} \\
     \hat{y} & = \max_k P(X | Y = C_k) P(Y = C_k) \\ 
     & = \max_k \prod_{j=1}^n P(X_j | Y = C_k) P(Y = C_k)
-\end{aligned}</script><h1 id="PCA-LDA"><a href="#PCA-LDA" class="headerlink" title="PCA/LDA"></a>PCA/LDA</h1><h2 id="PCA"><a href="#PCA" class="headerlink" title="PCA"></a>PCA</h2><p>给定<strong>包含$M$个样本的$N$维数据集</strong>$\{X_{N \times 1}^{(i)}, i = 1, \cdots, M\}$构成样本矩阵$X_{N \times M} = \begin{bmatrix}X^{(1)} &amp; X^{(2)} &amp; \cdots X^{(M)}\end{bmatrix}$，现希望求取主分量$\beta_k, k = 1, \cdots, K$使得数据投影<strong>在各主分量上的散布最大/方差最大</strong>。</p>
+\end{aligned}</script><h1 id="PCA-LDA"><a href="#PCA-LDA" class="headerlink" title="PCA/LDA"></a>PCA/LDA</h1><h2 id="PCA"><a href="#PCA" class="headerlink" title="PCA"></a>PCA</h2><p>给定<strong>包含$M$个样本的$N$维数据集</strong>${X_{N \times 1}^{(i)}, i = 1, \cdots, M}$构成样本矩阵$X_{N \times M} = \begin{bmatrix}X^{(1)} &amp; X^{(2)} &amp; \cdots X^{(M)}\end{bmatrix}$，现希望求取主分量$\beta_k, k = 1, \cdots, K$使得数据投影<strong>在各主分量上的散布最大/方差最大</strong>。</p>
 <h3 id="计算步骤"><a href="#计算步骤" class="headerlink" title="计算步骤"></a>计算步骤</h3><ol>
 <li>计算维度间的<strong>协方差矩阵</strong>$\Sigma_{N \times N} = \frac{1}{M} \tilde{X} \tilde{X}^T$，其中$\tilde{X}^{(i)} = X^{(i)} - \overline{X}, \overline{X} = \frac{1}{M} \sum_{i=1}^{M} X^{(i)}$；</li>
 <li>求矩阵$\Sigma$的<strong>特征值分解</strong>，即$\Sigma \beta_k = \lambda_k \beta_k$；</li>
@@ -684,7 +687,7 @@
 </ol>
 <div style="page-break-after: always;"></div>
 
-<h2 id="LDA"><a href="#LDA" class="headerlink" title="LDA"></a>LDA</h2><p>给定$N$个样本对$\{(X^{(i)}, y^{(i)}), i = 1, \cdots, N\}$，其中$y \in \{C_k, k = 1, \cdots, K\}$，记样本矩阵$X_{N \times n}$。现利用类别信息求取投影主轴$u$，<strong>使得投影后类内散步小，类间散步大</strong>。</p>
+<h2 id="LDA"><a href="#LDA" class="headerlink" title="LDA"></a>LDA</h2><p>给定$N$个样本对${(X^{(i)}, y^{(i)}), i = 1, \cdots, N}$，其中$y \in {C_k, k = 1, \cdots, K}$，记样本矩阵$X_{N \times n}$。现利用类别信息求取投影主轴$u$，<strong>使得投影后类内散步小，类间散步大</strong>。</p>
 <p>定义：</p>
 <script type="math/tex; mode=display">
 \begin{cases}
@@ -723,7 +726,7 @@
     S_w u_1 = \underbrace{\frac{u_1^T S_W u_1}{u_1^T S_B u_1}}_{\lambda_1} S_B u_1，记\lambda_1 = \frac{u_1^T S_W u_1}{u_1^T S_B u_1}
 \end{aligned}</script><div style="page-break-after: always;"></div>
 
-<h1 id="EM-GMM"><a href="#EM-GMM" class="headerlink" title="EM/GMM"></a>EM/GMM</h1><h2 id="EM算法"><a href="#EM算法" class="headerlink" title="EM算法"></a>EM算法</h2><p>给定包含$N$对样本数据$\{(X^{(i)}, y^{(i)}), i = 1, \cdots, N\}$。设分类模型为概率模型$P(X | \theta)$，其中$\theta$待估。该模型包含$K$种<strong>隐藏变量</strong>状态$\{w_k, k = 1, \cdots, K\}$。那么证明过程总结如下</p>
+<h1 id="EM-GMM"><a href="#EM-GMM" class="headerlink" title="EM/GMM"></a>EM/GMM</h1><h2 id="EM算法"><a href="#EM算法" class="headerlink" title="EM算法"></a>EM算法</h2><p>给定包含$N$对样本数据${(X^{(i)}, y^{(i)}), i = 1, \cdots, N}$。设分类模型为概率模型$P(X | \theta)$，其中$\theta$待估。该模型包含$K$种<strong>隐藏变量</strong>状态${w_k, k = 1, \cdots, K}$。那么证明过程总结如下</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
     MLE \Rightarrow L(D | \theta) = \prod_i P(X^{(i)} | \theta) 
@@ -812,7 +815,7 @@
     高斯核：& \kappa(x_i, x_j) = \exp (- \gamma \frac{||x_i - x_j||^2}{2 \sigma^2}) 
 \end{cases}</script><div style="page-break-after: always;"></div>
 
-<h2 id="分类问题"><a href="#分类问题" class="headerlink" title="分类问题"></a>分类问题</h2><p>给定$N$对样本$\{(X^{(i)}, y^{(i)}), i = 1, \cdots, N\}, y \in \{-1, 1\}$，求取超平面$w^T \Phi(x) + b = 0$使样本点落在该超平面两侧。</p>
+<h2 id="分类问题"><a href="#分类问题" class="headerlink" title="分类问题"></a>分类问题</h2><p>给定$N$对样本${(X^{(i)}, y^{(i)}), i = 1, \cdots, N}, y \in {-1, 1}$，求取超平面$w^T \Phi(x) + b = 0$使样本点落在该超平面两侧。</p>
 <h3 id="线性可分"><a href="#线性可分" class="headerlink" title="线性可分"></a>线性可分</h3><script type="math/tex; mode=display">
 \begin{aligned}
     \left.\begin{aligned}
@@ -839,7 +842,7 @@
             s.t. & \quad y^{(i)} [w^T \Phi(x^{(i)}) + b] \geq 1 - \epsilon^{(i)}
             \\ & \epsilon^{(i)} \geq 0
         \end{aligned}
-\end{aligned}</script><h2 id="回归问题"><a href="#回归问题" class="headerlink" title="回归问题"></a>回归问题</h2><p>给定$N$对样本$\{(X^{(i)}, y^{(i)}), i = 1, \cdots, N\}, y \in R$，求回归模型$\hat{y} = w^T \Phi(x) + b$，使得每个样本尽量拟合到该模型上，定义损失为</p>
+\end{aligned}</script><h2 id="回归问题"><a href="#回归问题" class="headerlink" title="回归问题"></a>回归问题</h2><p>给定$N$对样本${(X^{(i)}, y^{(i)}), i = 1, \cdots, N}, y \in R$，求回归模型$\hat{y} = w^T \Phi(x) + b$，使得每个样本尽量拟合到该模型上，定义损失为</p>
 <script type="math/tex; mode=display">
 L^{(i)} = \begin{cases}
     |y^{(i)} - w^T \Phi(x^{(i)}) - b| - \epsilon & |y^{(i)} - w^T \Phi(x^{(i)}) - b| > \epsilon \\ 
@@ -902,7 +905,7 @@ L^{(i)} = \begin{cases}
     \Rightarrow & \mu^* \Rightarrow w^*, b^*
 \end{aligned}</script><div style="page-break-after: always;"></div>
 
-<h1 id="聚类"><a href="#聚类" class="headerlink" title="聚类"></a>聚类</h1><p>仅介绍部分概念和算法步骤。给定样本集合$\{X^{(i)}, i = 1, \cdots, N\}$，指定划分类别$K$，要求利用样本分布，将样本划分为$K$个类别。</p>
+<h1 id="聚类"><a href="#聚类" class="headerlink" title="聚类"></a>聚类</h1><p>仅介绍部分概念和算法步骤。给定样本集合${X^{(i)}, i = 1, \cdots, N}$，指定划分类别$K$，要求利用样本分布，将样本划分为$K$个类别。</p>
 <h2 id="距离度量"><a href="#距离度量" class="headerlink" title="距离度量"></a>距离度量</h2><p>定义两个$n$维向量$x, y$，有如下常用距离定义</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
@@ -918,7 +921,7 @@ L^{(i)} = \begin{cases}
 <li>重复2~4直至收敛。</li>
 </ol>
 <h2 id="Spectral"><a href="#Spectral" class="headerlink" title="Spectral"></a>Spectral</h2><ol>
-<li>构建相似矩阵$\begin{cases} S_{N \times N} = \begin{bmatrix} d_{ij} \end{bmatrix} \\ d_{ij} = ||x^{(i)} - x^{(j)}||_2^2 \end{cases}$；</li>
+<li>构建相似矩阵$\begin{cases} S_{N \times N} = \begin{bmatrix} d_{ij} \end{bmatrix} \ d_{ij} = ||x^{(i)} - x^{(j)}||_2^2 \end{cases}$；</li>
 <li>计算邻接矩阵<script type="math/tex; mode=display">
  \begin{cases}
      \epsilon近邻法：& w_{ij} = \begin{cases}
@@ -931,14 +934,14 @@ L^{(i)} = \begin{cases}
          \end{cases} \\ & \delta_K(x)表示x的K邻域 \\
      全连接法：& w_{ij} =  \exp(-\frac{d_{ij}}{2 \sigma^2})
  \end{cases}</script></li>
-<li>求度矩阵$D_{N \times N} = \text{diag}\{\sum_j w_{ij}, i = 1, \cdots, N\}$，即$W$行和作为对角元素；</li>
+<li>求度矩阵$D_{N \times N} = \text{diag}{\sum_j w_{ij}, i = 1, \cdots, N}$，即$W$行和作为对角元素；</li>
 <li>求(正则)拉普拉斯矩阵$L = D - W$或$L = D^{-1}(D - W)$或$L = D^{-1/2}(D - W)D^{-1/2}$；</li>
 <li>求$L$的特征分解，选取$N’(N’ \leq N)$个<strong>最小</strong>特征值对应的特征向量组成矩阵$F_{N \times N’}$；</li>
 <li>将矩阵$F$每行视作样本$f^{(i)}$，标准化后执行其他简单的聚类如KMeans，得到聚类结果。</li>
 </ol>
 <div style="page-break-after: always;"></div>
 
-<h1 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h1><p>给定包含$|D|$个样本的样本集$D = \{(X^{(i)}, y^{(i)}), i = 1, \cdots, |D|\}$，属于$K$个类别$y \in \{C_k, k = 1, \cdots, K\}$，设类别$C_k$的样本数目为$|D_{k}|$，设特征$A$有$|A|$个特征$\{A_a, a = 1, \cdots, |A|\}$，每个特征包含样本数目$|D_{a}|$，记特征为$A_a$的样本中属于类别$C_k$的样本数目为$|D_{ak}|$。</p>
+<h1 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h1><p>给定包含$|D|$个样本的样本集$D = {(X^{(i)}, y^{(i)}), i = 1, \cdots, |D|}$，属于$K$个类别$y \in {C_k, k = 1, \cdots, K}$，设类别$C_k$的样本数目为$|D_{k}|$，设特征$A$有$|A|$个特征${A_a, a = 1, \cdots, |A|}$，每个特征包含样本数目$|D_{a}|$，记特征为$A_a$的样本中属于类别$C_k$的样本数目为$|D_{ak}|$。</p>
 <h2 id="ID3"><a href="#ID3" class="headerlink" title="ID3"></a>ID3</h2><p>用<strong>信息增益</strong>作为准则选择当前最优划分属性：信息增益越大表示属性越优</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
@@ -1001,7 +1004,7 @@ L^{(i)} = \begin{cases}
 
     
       <div id="alipay" style="display: inline-block">
-        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝"/>
         <p>支付宝</p>
       </div>
     
@@ -1037,7 +1040,7 @@ L^{(i)} = \begin{cases}
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/02/13/【算法】排序/" rel="prev" title="【算法】排序">
+              <a href="/2020/02/13/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E6%8E%92%E5%BA%8F/" rel="prev" title="【算法】排序">
                 【算法】排序 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -1100,9 +1103,11 @@ L^{(i)} = \begin{cases}
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Louis Hsu">
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.gif"
+                alt="Louis Hsu" />
             
               <p class="site-author-name" itemprop="name">Louis Hsu</p>
               <p class="site-description motion-element" itemprop="description">永远年轻，永远热泪盈眶</p>
@@ -1113,7 +1118,7 @@ L^{(i)} = \begin{cases}
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/archives/">
+                  <a href="/archives/%20%7C%7C%20archive">
                 
                     <span class="site-state-item-count">100</span>
                     <span class="site-state-item-name">日志</span>
@@ -1189,10 +1194,6 @@ L^{(i)} = \begin{cases}
                     
                       
                     
-                      
-                    
-                      
-                    
                     <span class="site-state-item-count">14</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
@@ -1235,8 +1236,10 @@ L^{(i)} = \begin{cases}
           
           
 
-          <div id="music163player">
-            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="110" src="//music.163.com/outchain/player?type=0&id=2703291040&auto=1&height=90">
+          <div id='music163player'>
+            <iframe 
+              frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=110 
+              src="//music.163.com/outchain/player?type=0&id=2703291040&auto=1&height=90">
             </iframe>
           </div>
 
@@ -1258,7 +1261,7 @@ L^{(i)} = \begin{cases}
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#目录"><span class="nav-number">1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">2.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MLE-MAP"><span class="nav-number">3.</span> <span class="nav-text">MLE/MAP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#最大似然估计-MLE"><span class="nav-number">3.1.</span> <span class="nav-text">最大似然估计(MLE)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最大后验概率估计-MAP"><span class="nav-number">3.2.</span> <span class="nav-text">最大后验概率估计(MAP)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线性回归-逻辑斯蒂回归"><span class="nav-number">4.</span> <span class="nav-text">线性回归/逻辑斯蒂回归</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#线性回归"><span class="nav-number">4.1.</span> <span class="nav-text">线性回归</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#逻辑斯蒂回归-LR"><span class="nav-number">4.2.</span> <span class="nav-text">逻辑斯蒂回归(LR)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#朴素贝叶斯"><span class="nav-number">5.</span> <span class="nav-text">朴素贝叶斯</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PCA-LDA"><span class="nav-number">6.</span> <span class="nav-text">PCA/LDA</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#PCA"><span class="nav-number">6.1.</span> <span class="nav-text">PCA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#计算步骤"><span class="nav-number">6.1.1.</span> <span class="nav-text">计算步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#证明"><span class="nav-number">6.1.2.</span> <span class="nav-text">证明</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LDA"><span class="nav-number">6.2.</span> <span class="nav-text">LDA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#计算步骤-1"><span class="nav-number">6.2.1.</span> <span class="nav-text">计算步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#证明-1"><span class="nav-number">6.2.2.</span> <span class="nav-text">证明</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#EM-GMM"><span class="nav-number">7.</span> <span class="nav-text">EM/GMM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#EM算法"><span class="nav-number">7.1.</span> <span class="nav-text">EM算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GMM模型"><span class="nav-number">7.2.</span> <span class="nav-text">GMM模型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SVM"><span class="nav-number">8.</span> <span class="nav-text">SVM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#KKT条件"><span class="nav-number">8.1.</span> <span class="nav-text">KKT条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#核技巧"><span class="nav-number">8.2.</span> <span class="nav-text">核技巧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分类问题"><span class="nav-number">8.3.</span> <span class="nav-text">分类问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#线性可分"><span class="nav-number">8.3.1.</span> <span class="nav-text">线性可分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线性不可分"><span class="nav-number">8.3.2.</span> <span class="nav-text">线性不可分</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#回归问题"><span class="nav-number">8.4.</span> <span class="nav-text">回归问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#求解优化问题"><span class="nav-number">8.5.</span> <span class="nav-text">求解优化问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#聚类"><span class="nav-number">9.</span> <span class="nav-text">聚类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#距离度量"><span class="nav-number">9.1.</span> <span class="nav-text">距离度量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#KMeans"><span class="nav-number">9.2.</span> <span class="nav-text">KMeans</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spectral"><span class="nav-number">9.3.</span> <span class="nav-text">Spectral</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#决策树"><span class="nav-number">10.</span> <span class="nav-text">决策树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ID3"><span class="nav-number">10.1.</span> <span class="nav-text">ID3</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C4-5"><span class="nav-number">10.2.</span> <span class="nav-text">C4.5</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CART"><span class="nav-number">10.3.</span> <span class="nav-text">CART</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RF"><span class="nav-number">10.4.</span> <span class="nav-text">RF</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#目录"><span class="nav-number">1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">2.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MLE-MAP"><span class="nav-number">3.</span> <span class="nav-text">MLE&#x2F;MAP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#最大似然估计-MLE"><span class="nav-number">3.1.</span> <span class="nav-text">最大似然估计(MLE)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最大后验概率估计-MAP"><span class="nav-number">3.2.</span> <span class="nav-text">最大后验概率估计(MAP)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线性回归-逻辑斯蒂回归"><span class="nav-number">4.</span> <span class="nav-text">线性回归&#x2F;逻辑斯蒂回归</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#线性回归"><span class="nav-number">4.1.</span> <span class="nav-text">线性回归</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#逻辑斯蒂回归-LR"><span class="nav-number">4.2.</span> <span class="nav-text">逻辑斯蒂回归(LR)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#朴素贝叶斯"><span class="nav-number">5.</span> <span class="nav-text">朴素贝叶斯</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PCA-LDA"><span class="nav-number">6.</span> <span class="nav-text">PCA&#x2F;LDA</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#PCA"><span class="nav-number">6.1.</span> <span class="nav-text">PCA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#计算步骤"><span class="nav-number">6.1.1.</span> <span class="nav-text">计算步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#证明"><span class="nav-number">6.1.2.</span> <span class="nav-text">证明</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LDA"><span class="nav-number">6.2.</span> <span class="nav-text">LDA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#计算步骤-1"><span class="nav-number">6.2.1.</span> <span class="nav-text">计算步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#证明-1"><span class="nav-number">6.2.2.</span> <span class="nav-text">证明</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#EM-GMM"><span class="nav-number">7.</span> <span class="nav-text">EM&#x2F;GMM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#EM算法"><span class="nav-number">7.1.</span> <span class="nav-text">EM算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GMM模型"><span class="nav-number">7.2.</span> <span class="nav-text">GMM模型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SVM"><span class="nav-number">8.</span> <span class="nav-text">SVM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#KKT条件"><span class="nav-number">8.1.</span> <span class="nav-text">KKT条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#核技巧"><span class="nav-number">8.2.</span> <span class="nav-text">核技巧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分类问题"><span class="nav-number">8.3.</span> <span class="nav-text">分类问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#线性可分"><span class="nav-number">8.3.1.</span> <span class="nav-text">线性可分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线性不可分"><span class="nav-number">8.3.2.</span> <span class="nav-text">线性不可分</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#回归问题"><span class="nav-number">8.4.</span> <span class="nav-text">回归问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#求解优化问题"><span class="nav-number">8.5.</span> <span class="nav-text">求解优化问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#聚类"><span class="nav-number">9.</span> <span class="nav-text">聚类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#距离度量"><span class="nav-number">9.1.</span> <span class="nav-text">距离度量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#KMeans"><span class="nav-number">9.2.</span> <span class="nav-text">KMeans</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spectral"><span class="nav-number">9.3.</span> <span class="nav-text">Spectral</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#决策树"><span class="nav-number">10.</span> <span class="nav-text">决策树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ID3"><span class="nav-number">10.1.</span> <span class="nav-text">ID3</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C4-5"><span class="nav-number">10.2.</span> <span class="nav-text">C4.5</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CART"><span class="nav-number">10.3.</span> <span class="nav-text">CART</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RF"><span class="nav-number">10.4.</span> <span class="nav-text">RF</span></a></li></ol></li></ol></div>
             
 
           </div>

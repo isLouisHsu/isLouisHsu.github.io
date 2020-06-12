@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.8.0">
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="#222">
 
 
@@ -32,8 +32,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 
 
@@ -56,9 +56,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css" />
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
@@ -114,7 +114,7 @@
 <meta property="og:url" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/index.html">
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="目录《数据挖掘》中介绍许多数据处理方法，但对特征选择没有深入介绍，本文对这方面的方法进行汇总介绍，并结合sklearn做一些样例。  Data-Mining - LOUIS’ BLOG。   目录 过滤方法(Filter) 方差阈值(Variance Threshold) 单变量选择(Univariate Feature Selection) 相关系数(Correlation Coefficien">
-<meta property="og:locale" content="zh-CN">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/feature_engineering.jpg">
 <meta property="og:image" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/feature_selection_methods.png">
 <meta property="og:image" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/rfe.png">
@@ -124,10 +124,10 @@
 <meta property="og:image" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/ridge_param.png">
 <meta property="og:image" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/linear_regression_graph.jpg">
 <meta property="og:image" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/lar.jpg">
-<meta property="og:updated_time" content="2020-06-12T05:07:37.249Z">
+<meta property="article:published_time" content="2020-06-12T05:04:00.000Z">
+<meta property="article:modified_time" content="2020-06-12T05:07:37.249Z">
+<meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Efficient Feature Selection">
-<meta name="twitter:description" content="目录《数据挖掘》中介绍许多数据处理方法，但对特征选择没有深入介绍，本文对这方面的方法进行汇总介绍，并结合sklearn做一些样例。  Data-Mining - LOUIS’ BLOG。   目录 过滤方法(Filter) 方差阈值(Variance Threshold) 单变量选择(Univariate Feature Selection) 相关系数(Correlation Coefficien">
 <meta name="twitter:image" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/feature_engineering.jpg">
 
 
@@ -135,7 +135,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/">
+  <link rel="canonical" href="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/"/>
 
 
 
@@ -181,11 +181,11 @@
       .logo-line-after i { right: initial; }
     }
   </style>
-</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</noscript>
 
-</head>
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -195,7 +195,7 @@
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -235,7 +235,7 @@
           
           <li class="menu-item menu-item-home">
     <a href="/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
   </li>
         
         
@@ -243,7 +243,7 @@
           
           <li class="menu-item menu-item-tags">
     <a href="/tags/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
   </li>
         
         
@@ -251,7 +251,7 @@
           
           <li class="menu-item menu-item-categories">
     <a href="/categories/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
   </li>
         
         
@@ -259,7 +259,7 @@
           
           <li class="menu-item menu-item-archives">
     <a href="/archives/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
   </li>
         
         
@@ -267,7 +267,7 @@
           
           <li class="menu-item menu-item-guestbook">
     <a href="/guestbook" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-guest"></i> <br>留言</a>
+      <i class="menu-item-icon fa fa-fw fa-guest"></i> <br />留言</a>
   </li>
         
         
@@ -275,7 +275,7 @@
           
           <li class="menu-item menu-item-about">
     <a href="/about/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
   </li>
 
       
@@ -285,7 +285,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
         </li>
       
     </ul>
@@ -305,7 +305,9 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -333,7 +335,7 @@
     
       
     
-    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg>
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg>
     
       </a>
     
@@ -363,20 +365,20 @@
     <div class="reading-progress-bar"></div>
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Louis Hsu">
       <meta itemprop="description" content="永远年轻，永远热泪盈眶">
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="LOUIS' BLOG">
     </span>
 
@@ -421,7 +423,7 @@
           </span>
 
           
-            <span class="post-category">
+            <span class="post-category" >
             
               <span class="post-meta-divider">|</span>
             
@@ -432,7 +434,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
 
                 
                 
@@ -449,10 +451,11 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon">
+            <span class="post-meta-item-icon"
+            >
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
             </span>
           
 
@@ -475,7 +478,7 @@
       
         <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><p>《数据挖掘》中介绍许多数据处理方法，但对特征选择没有深入介绍，本文对这方面的方法进行汇总介绍，并结合sklearn做一些样例。</p>
 <blockquote>
-<p><a href="TODO:" target="_blank" rel="noopener">Data-Mining - LOUIS’ BLOG</a>。</p>
+<p><a href="TODO:">Data-Mining - LOUIS’ BLOG</a>。</p>
 </blockquote>
 <ul>
 <li><a href="#目录">目录</a></li>
@@ -626,8 +629,8 @@
 <script type="math/tex; mode=display">MIC(X, Y) = \max_{|X||Y| < B} \frac{I(X; Y)}{\log (\min(|X|, |Y|))}</script><p>其中$B$一般取数据总量$N$的$0.6$或者$0.55$次方。</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> minepy <span class="keyword">import</span> MINE</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> SelectKBest</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">minemic</span><span class="params">(x, y)</span>:</span></span><br><span class="line"><span class="meta">... </span>    m = MINE()</span><br><span class="line"><span class="meta">... </span>    m.compute_score(x, y)</span><br><span class="line"><span class="meta">... </span>    <span class="keyword">return</span> m.mic(), <span class="number">0.5</span></span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">mic</span><span class="params">(X, Y)</span>:</span></span><br><span class="line"><span class="meta">... </span>    _mic = <span class="keyword">lambda</span> X, Y: np.array(list(</span><br><span class="line"><span class="meta">... </span>                map(<span class="keyword">lambda</span> x: minemic(x, Y), X.T))).T</span><br><span class="line"><span class="meta">... </span>    _tolist = <span class="keyword">lambda</span> x: list(map(list, x))</span><br><span class="line"><span class="meta">... </span>    <span class="keyword">return</span> _tolist(_mic(X, Y))</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X, y = load_iris(return_X_y=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new = SelectKBest(mic, k=<span class="number">3</span>).fit_transform(X, y)</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">3</span>)</span><br></pre></td></tr></table></figure>
 <h3 id="信息增益-Information-Gain"><a href="#信息增益-Information-Gain" class="headerlink" title="信息增益(Information Gain)"></a>信息增益(Information Gain)</h3><p>信息增益被用于决策树的分裂中，用于选择当前最优的分裂属性，可以描述某特征对数据集不确定性减少的程度。而在特征选择中，可以<strong>衡量特征能够描述数据集的多少信息量</strong>。</p>
-<p>假设分类问题数据集$D$包含$|D|$个样本，标签列为$Y$，供包含$K$类，即$y \in \{c_1, \cdots, c_K\}$，那么类别熵为</p>
-<script type="math/tex; mode=display">H(Y) = - \sum_k p(Y = c_k) \log p(Y = c_k) = - \sum_k \frac{|c_k|}{|D|} \log \frac{|c_k|}{|D|}</script><p>假设特征$X$有$A$种取值$\{x_1, \cdots, x_A\}$，那么当$X$取$x_a$时的类别熵为</p>
+<p>假设分类问题数据集$D$包含$|D|$个样本，标签列为$Y$，供包含$K$类，即$y \in {c_1, \cdots, c_K}$，那么类别熵为</p>
+<script type="math/tex; mode=display">H(Y) = - \sum_k p(Y = c_k) \log p(Y = c_k) = - \sum_k \frac{|c_k|}{|D|} \log \frac{|c_k|}{|D|}</script><p>假设特征$X$有$A$种取值${x_1, \cdots, x_A}$，那么当$X$取$x_a$时的类别熵为</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
     H(Y | X = x_a) = 
@@ -655,14 +658,9 @@
 <h2 id="递归特征消除-Recursive-Feature-Elimination-REF"><a href="#递归特征消除-Recursive-Feature-Elimination-REF" class="headerlink" title="递归特征消除(Recursive Feature Elimination, REF)"></a>递归特征消除(Recursive Feature Elimination, REF)</h2><p>一种典型的递归剔除方法，思路很简单，在sklearn中具体实现如下<br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_fit</span><span class="params">(self, X, y, step_score=None)</span>:</span></span><br><span class="line">    <span class="comment"># Parameter step_score controls the calculation of self.scores_</span></span><br><span class="line">    <span class="comment"># step_score is not exposed to users</span></span><br><span class="line">    <span class="comment"># and is used when implementing RFECV</span></span><br><span class="line">    <span class="comment"># self.scores_ will not be calculated when calling _fit through fit</span></span><br><span class="line"></span><br><span class="line">    tags = self._get_tags()</span><br><span class="line">    X, y = self._validate_data(</span><br><span class="line">        X, y, accept_sparse=<span class="string">"csc"</span>,</span><br><span class="line">        ensure_min_features=<span class="number">2</span>,</span><br><span class="line">        force_all_finite=<span class="keyword">not</span> tags.get(<span class="string">'allow_nan'</span>, <span class="keyword">True</span>),</span><br><span class="line">        multi_output=<span class="keyword">True</span></span><br><span class="line">    )</span><br><span class="line">    <span class="comment"># Initialization</span></span><br><span class="line">    n_features = X.shape[<span class="number">1</span>]</span><br><span class="line">    <span class="keyword">if</span> self.n_features_to_select <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">        n_features_to_select = n_features // <span class="number">2</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        n_features_to_select = self.n_features_to_select</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="number">0.0</span> &lt; self.step &lt; <span class="number">1.0</span>:</span><br><span class="line">        step = int(max(<span class="number">1</span>, self.step * n_features))</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        step = int(self.step)</span><br><span class="line">    <span class="keyword">if</span> step &lt;= <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">"Step must be &gt;0"</span>)</span><br><span class="line"></span><br><span class="line">    support_ = np.ones(n_features, dtype=np.bool)</span><br><span class="line">    ranking_ = np.ones(n_features, dtype=np.int)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> step_score:</span><br><span class="line">        self.scores_ = []</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Elimination</span></span><br><span class="line">    <span class="keyword">while</span> np.sum(support_) &gt; n_features_to_select:</span><br><span class="line">        <span class="comment"># Remaining features</span></span><br><span class="line">        features = np.arange(n_features)[support_]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Rank the remaining features</span></span><br><span class="line">        estimator = clone(self.estimator)</span><br><span class="line">        <span class="keyword">if</span> self.verbose &gt; <span class="number">0</span>:</span><br><span class="line">            print(<span class="string">"Fitting estimator with %d features."</span> % np.sum(support_))</span><br><span class="line"></span><br><span class="line">        estimator.fit(X[:, features], y)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Get coefs</span></span><br><span class="line">        <span class="keyword">if</span> hasattr(estimator, <span class="string">'coef_'</span>):</span><br><span class="line">            coefs = estimator.coef_</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            coefs = getattr(estimator, <span class="string">'feature_importances_'</span>, <span class="keyword">None</span>)</span><br><span class="line">        <span class="keyword">if</span> coefs <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">            <span class="keyword">raise</span> RuntimeError(<span class="string">'The classifier does not expose '</span></span><br><span class="line">                               <span class="string">'"coef_" or "feature_importances_" '</span></span><br><span class="line">                               <span class="string">'attributes'</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Get ranks</span></span><br><span class="line">        <span class="keyword">if</span> coefs.ndim &gt; <span class="number">1</span>:</span><br><span class="line">            ranks = np.argsort(safe_sqr(coefs).sum(axis=<span class="number">0</span>))</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            ranks = np.argsort(safe_sqr(coefs))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># for sparse case ranks is matrix</span></span><br><span class="line">        ranks = np.ravel(ranks)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Eliminate the worse features</span></span><br><span class="line">        threshold = min(step, np.sum(support_) - n_features_to_select)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Compute step score on the previous selection iteration</span></span><br><span class="line">        <span class="comment"># because 'estimator' must use features</span></span><br><span class="line">        <span class="comment"># that have not been eliminated yet</span></span><br><span class="line">        <span class="keyword">if</span> step_score:</span><br><span class="line">            self.scores_.append(step_score(estimator, features))</span><br><span class="line">        support_[features[ranks][:threshold]] = <span class="keyword">False</span></span><br><span class="line">        ranking_[np.logical_not(support_)] += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Set final attributes</span></span><br><span class="line">    features = np.arange(n_features)[support_]</span><br><span class="line">    self.estimator_ = clone(self.estimator)</span><br><span class="line">    self.estimator_.fit(X[:, features], y)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Compute step score when only n_features_to_select features left</span></span><br><span class="line">    <span class="keyword">if</span> step_score:</span><br><span class="line">        self.scores_.append(step_score(self.estimator_, features))</span><br><span class="line">    self.n_features_ = support_.sum()</span><br><span class="line">    self.support_ = support_</span><br><span class="line">    self.ranking_ = ranking_</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> self</span><br></pre></td></tr></table></figure></p>
 <p>可以看到在每次迭代中会删除一些特征，其中有几个重要的步骤</p>
 <ul>
-<li><p><strong>用模型对剩余的特征进行评估，得到每个特征相应的评分；</strong></p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">features = np.arange(n_features)[support_]</span><br><span class="line">estimator = clone(self.estimator)</span><br><span class="line">estimator.fit(X[:, features], y)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Get coefs</span></span><br><span class="line"><span class="keyword">if</span> hasattr(estimator, <span class="string">'coef_'</span>):</span><br><span class="line">    coefs = estimator.coef_</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    coefs = getattr(estimator, <span class="string">'feature_importances_'</span>, <span class="keyword">None</span>)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>根据评分，对特征进行排序</strong></p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Get ranks</span></span><br><span class="line"><span class="keyword">if</span> coefs.ndim &gt; <span class="number">1</span>:</span><br><span class="line">    ranks = np.argsort(safe_sqr(coefs).sum(axis=<span class="number">0</span>))</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    ranks = np.argsort(safe_sqr(coefs))</span><br><span class="line"></span><br><span class="line"><span class="comment"># for sparse case ranks is matrix</span></span><br><span class="line">ranks = np.ravel(ranks)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>删除本次迭代中评分最低的特征</strong></p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Eliminate the worse features</span></span><br><span class="line">threshold = min(step, np.sum(support_) - n_features_to_select)</span><br><span class="line">support_[features[ranks][:threshold]] = <span class="keyword">False</span></span><br><span class="line">ranking_[np.logical_not(support_)] += <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<li><strong>用模型对剩余的特征进行评估，得到每个特征相应的评分；</strong><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">features = np.arange(n_features)[support_]</span><br><span class="line">estimator = clone(self.estimator)</span><br><span class="line">estimator.fit(X[:, features], y)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Get coefs</span></span><br><span class="line"><span class="keyword">if</span> hasattr(estimator, <span class="string">'coef_'</span>):</span><br><span class="line">    coefs = estimator.coef_</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    coefs = getattr(estimator, <span class="string">'feature_importances_'</span>, <span class="keyword">None</span>)</span><br></pre></td></tr></table></figure></li>
+<li><strong>根据评分，对特征进行排序</strong><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Get ranks</span></span><br><span class="line"><span class="keyword">if</span> coefs.ndim &gt; <span class="number">1</span>:</span><br><span class="line">    ranks = np.argsort(safe_sqr(coefs).sum(axis=<span class="number">0</span>))</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    ranks = np.argsort(safe_sqr(coefs))</span><br><span class="line"></span><br><span class="line"><span class="comment"># for sparse case ranks is matrix</span></span><br><span class="line">ranks = np.ravel(ranks)</span><br></pre></td></tr></table></figure></li>
+<li><strong>删除本次迭代中评分最低的特征</strong><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Eliminate the worse features</span></span><br><span class="line">threshold = min(step, np.sum(support_) - n_features_to_select)</span><br><span class="line">support_[features[ranks][:threshold]] = <span class="keyword">False</span></span><br><span class="line">ranking_[np.logical_not(support_)] += <span class="number">1</span></span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <p>例如将手写字每个像素作为特征维度，对其进行递归特征筛选，<strong><code>ranking</code>越小的特征重要性越大</strong><br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.svm <span class="keyword">import</span> SVC</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_digits</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> RFE</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="comment"># Load the digits dataset</span></span><br><span class="line"><span class="meta">... </span>digits = load_digits()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X = digits.images.reshape((len(digits.images), <span class="number">-1</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y = digits.target</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="comment"># Create the RFE object and rank each pixel</span></span><br><span class="line"><span class="meta">... </span>svc = SVC(kernel=<span class="string">"linear"</span>, C=<span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>rfe = RFE(estimator=svc, n_features_to_select=<span class="number">1</span>, step=<span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>rfe.fit(X, y)</span><br><span class="line">RFE(estimator=SVC(C=<span class="number">1</span>, kernel=<span class="string">'linear'</span>), n_features_to_select=<span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ranking = rfe.ranking_.reshape(digits.images[<span class="number">0</span>].shape)</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="comment"># Plot pixel ranking</span></span><br><span class="line"><span class="meta">... </span>plt.matshow(ranking, cmap=plt.cm.Blues)</span><br><span class="line">&lt;matplotlib.image.AxesImage object at <span class="number">0x0000019E756CDE48</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>plt.colorbar()</span><br><span class="line">&lt;matplotlib.colorbar.Colorbar object at <span class="number">0x0000019E755994E0</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>plt.title(<span class="string">"Ranking of pixels with RFE"</span>)</span><br><span class="line">Text(<span class="number">0.5</span>, <span class="number">1.05</span>, <span class="string">'Ranking of pixels with RFE'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>plt.show()</span><br></pre></td></tr></table></figure></p>
@@ -714,7 +712,7 @@
         & end \quad while \\
     输出: & 特征子集A^*
 \end{aligned}</script><h1 id="嵌入方法-Embedded"><a href="#嵌入方法-Embedded" class="headerlink" title="嵌入方法(Embedded)"></a>嵌入方法(Embedded)</h1><p>过滤法与学习器没有关系，特征选择只是用统计量做筛选，而包裹法则固定了学习器，特征选择只是在特征空间上进行搜索。<strong>而嵌入法最大的突破在于，特征选择会在学习器的训练过程中自动完成</strong>。</p>
-<h2 id="惩罚项方法-Regularization"><a href="#惩罚项方法-Regularization" class="headerlink" title="惩罚项方法(Regularization)"></a>惩罚项方法(Regularization)</h2><h3 id="线性回归的最小二乘估计和贝叶斯估计"><a href="#线性回归的最小二乘估计和贝叶斯估计" class="headerlink" title="线性回归的最小二乘估计和贝叶斯估计"></a>线性回归的最小二乘估计和贝叶斯估计</h3><p>给定样本集合$\{(X^{(i)}, y^{(i)}), i = 1, \cdots, N, X^{(i)} \in R^d, y^{(i)} \in R\}$，增广后组成样本矩阵$X_{N \times (d + 1)}$，线性回归模型参数为$w \in R^{d + 1}$，那么有</p>
+<h2 id="惩罚项方法-Regularization"><a href="#惩罚项方法-Regularization" class="headerlink" title="惩罚项方法(Regularization)"></a>惩罚项方法(Regularization)</h2><h3 id="线性回归的最小二乘估计和贝叶斯估计"><a href="#线性回归的最小二乘估计和贝叶斯估计" class="headerlink" title="线性回归的最小二乘估计和贝叶斯估计"></a>线性回归的最小二乘估计和贝叶斯估计</h3><p>给定样本集合${(X^{(i)}, y^{(i)}), i = 1, \cdots, N, X^{(i)} \in R^d, y^{(i)} \in R}$，增广后组成样本矩阵$X_{N \times (d + 1)}$，线性回归模型参数为$w \in R^{d + 1}$，那么有</p>
 <script type="math/tex; mode=display">\hat{Y} = Xw</script><ol>
 <li><p><strong>基于最小二乘估计</strong>，定义线性回归模型的优化目标</p>
 <script type="math/tex; mode=display">w^* = \argmax_w \frac{1}{N} || Y - Xw ||_2^2</script></li>
@@ -813,7 +811,7 @@ L(w, \lambda) = \frac{1}{N} || Y - Xw ||_2^2 + \lambda(|| w ||_2^2 - t)</script>
 </ul>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> RidgeClassifier</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> SelectFromModel</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X, y = load_iris(return_X_y=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>clf = RidgeClassifier()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>clf.fit(X, y)</span><br><span class="line">RidgeClassifier()</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>model = SelectFromModel(clf, prefit=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new = model.transform(X)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
 <h3 id="Least-Angel-Regression-LARS"><a href="#Least-Angel-Regression-LARS" class="headerlink" title="Least Angel Regression(LARS)"></a>Least Angel Regression(LARS)</h3><p><strong>最小角回归</strong>(Least Angel Regression, LARS)是一种求解线性回归的方法。线性回归模型可以表示为</p>
-<script type="math/tex; mode=display">Y_{N \times 1} = X_{N \times (d + 1)} w_{(d + 1) \times 1}</script><p>根据矩阵乘法，可以将$Y$看作是所有特征$X_j, j = 1, \cdots, d+1$的线性组合，其特征空间内的基向量为$\{X_1, \cdots, X_{d+1}\}$</p>
+<script type="math/tex; mode=display">Y_{N \times 1} = X_{N \times (d + 1)} w_{(d + 1) \times 1}</script><p>根据矩阵乘法，可以将$Y$看作是所有特征$X_j, j = 1, \cdots, d+1$的线性组合，其特征空间内的基向量为${X_1, \cdots, X_{d+1}}$</p>
 <script type="math/tex; mode=display">Y = \sum_{j=1}^{d+1} w_j X_j</script><p>残差$R$定义为</p>
 <script type="math/tex; mode=display">R = Y - \hat{Y}</script><p>以$2$个样本为例($X_j$维度与样本数有关，再高无法可视化)，在图中表示为<br><img src="/2020/06/12/Efficient-Feature-Selection/linear_regression_graph.jpg" alt="linear_regression_graph"></p>
 <p>其中</p>
@@ -886,7 +884,7 @@ r_{AB} = \frac{\sum_{i=1}^n (a_i - \overline{A})(b_i - \overline{B})}{\sigma_A \
 
     
       <div id="alipay" style="display: inline-block">
-        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝"/>
         <p>支付宝</p>
       </div>
     
@@ -912,7 +910,7 @@ r_{AB} = \frac{\sum_{i=1}^n (a_i - \overline{A})(b_i - \overline{B})}{\sigma_A \
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/06/08/Python函数静态变量/" rel="next" title="Python函数静态变量">
+              <a href="/2020/06/08/Python%E5%87%BD%E6%95%B0%E9%9D%99%E6%80%81%E5%8F%98%E9%87%8F/" rel="next" title="Python函数静态变量">
                 <i class="fa fa-chevron-left"></i> Python函数静态变量
               </a>
             
@@ -981,9 +979,11 @@ r_{AB} = \frac{\sum_{i=1}^n (a_i - \overline{A})(b_i - \overline{B})}{\sigma_A \
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Louis Hsu">
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.gif"
+                alt="Louis Hsu" />
             
               <p class="site-author-name" itemprop="name">Louis Hsu</p>
               <p class="site-description motion-element" itemprop="description">永远年轻，永远热泪盈眶</p>
@@ -994,7 +994,7 @@ r_{AB} = \frac{\sum_{i=1}^n (a_i - \overline{A})(b_i - \overline{B})}{\sigma_A \
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/archives/">
+                  <a href="/archives/%20%7C%7C%20archive">
                 
                     <span class="site-state-item-count">100</span>
                     <span class="site-state-item-name">日志</span>
@@ -1070,10 +1070,6 @@ r_{AB} = \frac{\sum_{i=1}^n (a_i - \overline{A})(b_i - \overline{B})}{\sigma_A \
                     
                       
                     
-                      
-                    
-                      
-                    
                     <span class="site-state-item-count">14</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
@@ -1116,8 +1112,10 @@ r_{AB} = \frac{\sum_{i=1}^n (a_i - \overline{A})(b_i - \overline{B})}{\sigma_A \
           
           
 
-          <div id="music163player">
-            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="110" src="//music.163.com/outchain/player?type=0&id=2703291040&auto=1&height=90">
+          <div id='music163player'>
+            <iframe 
+              frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=110 
+              src="//music.163.com/outchain/player?type=0&id=2703291040&auto=1&height=90">
             </iframe>
           </div>
 
