@@ -1,0 +1,2081 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="目录《深入浅出图神经网络》阅读笔记，这本书非常OK，看着没多少字，都是干货，比什么《xxx从入门到精通》类的书好太多。  目录 图卷积神经网络(GCN) 图信号 拉普拉斯算子 图傅里叶变换 GFT与IGFT 总变差(TV) 图信号的频域描述   图滤波器 定义 拉普拉斯矩阵多项式拓展形式 空域角度 频域角度   图卷积的定义 滤波器的参数化 频域图卷积模型 频率响应函数的参数化 拉普拉斯矩阵多项式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Graph Neural Network">
+<meta property="og:url" content="http://yoursite.com/2020/06/13/Graph-Neural-Network/index.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="目录《深入浅出图神经网络》阅读笔记，这本书非常OK，看着没多少字，都是干货，比什么《xxx从入门到精通》类的书好太多。  目录 图卷积神经网络(GCN) 图信号 拉普拉斯算子 图傅里叶变换 GFT与IGFT 总变差(TV) 图信号的频域描述   图滤波器 定义 拉普拉斯矩阵多项式拓展形式 空域角度 频域角度   图卷积的定义 滤波器的参数化 频域图卷积模型 频率响应函数的参数化 拉普拉斯矩阵多项式">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/2020/06/13/Graph-Neural-Network/spatial_frequency_domain_eg.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/13/Graph-Neural-Network/low_pass_filter.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/13/Graph-Neural-Network/graphsage_1.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/13/Graph-Neural-Network/graphsage_2.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/13/Graph-Neural-Network/graph_coarsening.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/13/Graph-Neural-Network/subgraph_context.jpg">
+<meta property="article:published_time" content="2020-06-13T09:55:25.000Z">
+<meta property="article:modified_time" content="2020-06-13T09:49:17.468Z">
+<meta property="article:author" content="Louis Hsu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2020/06/13/Graph-Neural-Network/spatial_frequency_domain_eg.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/13/Graph-Neural-Network/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Graph Neural Network | LOUIS' BLOG</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LOUIS' BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">To be better</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-guestbook">
+    <a href="/guestbook" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-guest"></i> <br />留言</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/13/Graph-Neural-Network/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="永远年轻，永远热泪盈眶">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Graph Neural Network
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-06-13 17:55:25 / 修改时间：17:49:17" itemprop="dateCreated datePublished" datetime="2020-06-13T17:55:25+08:00">2020-06-13</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><p>《深入浅出图神经网络》阅读笔记，这本书非常OK，看着没多少字，都是干货，比什么《xxx从入门到精通》类的书好太多。</p>
+<ul>
+<li><a href="#目录">目录</a></li>
+<li><a href="#图卷积神经网络gcn">图卷积神经网络(GCN)</a><ul>
+<li><a href="#图信号">图信号</a></li>
+<li><a href="#拉普拉斯算子">拉普拉斯算子</a></li>
+<li><a href="#图傅里叶变换">图傅里叶变换</a><ul>
+<li><a href="#gft与igft">GFT与IGFT</a></li>
+<li><a href="#总变差tv">总变差(TV)</a></li>
+<li><a href="#图信号的频域描述">图信号的频域描述</a></li>
+</ul>
+</li>
+<li><a href="#图滤波器">图滤波器</a><ul>
+<li><a href="#定义">定义</a></li>
+<li><a href="#拉普拉斯矩阵多项式拓展形式">拉普拉斯矩阵多项式拓展形式</a></li>
+<li><a href="#空域角度">空域角度</a></li>
+<li><a href="#频域角度">频域角度</a></li>
+</ul>
+</li>
+<li><a href="#图卷积的定义">图卷积的定义</a></li>
+<li><a href="#滤波器的参数化">滤波器的参数化</a><ul>
+<li><a href="#频域图卷积模型">频域图卷积模型</a><ul>
+<li><a href="#频率响应函数的参数化">频率响应函数的参数化</a></li>
+<li><a href="#拉普拉斯矩阵多项式拓展形式系数的参数化">拉普拉斯矩阵多项式拓展形式系数的参数化</a></li>
+</ul>
+</li>
+<li><a href="#空域图卷积模型">空域图卷积模型</a><ul>
+<li><a href="#固定滤波器的参数化">固定滤波器的参数化</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#gcn的性质">GCN的性质</a><ul>
+<li><a href="#gcn与cnn联系">GCN与CNN联系</a></li>
+<li><a href="#端到端学习">端到端学习</a></li>
+<li><a href="#低通滤波器">低通滤波器</a></li>
+<li><a href="#过平滑问题">过平滑问题</a><ul>
+<li><a href="#频域视角">频域视角</a></li>
+<li><a href="#空域视角">空域视角</a></li>
+<li><a href="#解决方法">解决方法</a><ul>
+<li><a href="#跳跃连接">跳跃连接</a></li>
+<li><a href="#重分配权重">重分配权重</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#gcn变体与框架">GCN变体与框架</a><ul>
+<li><a href="#graphsage">GraphSAGE</a><ul>
+<li><a href="#邻居采样">邻居采样</a></li>
+<li><a href="#邻居聚合">邻居聚合</a></li>
+<li><a href="#算法流程与实现">算法流程与实现</a></li>
+</ul>
+</li>
+<li><a href="#gat">GAT</a></li>
+<li><a href="#r-gcn">R-GCN</a></li>
+</ul>
+</li>
+<li><a href="#图分类">图分类</a><ul>
+<li><a href="#基于一次性全局池化的图分类">基于一次性全局池化的图分类</a></li>
+<li><a href="#基于层次化池化的图分类">基于层次化池化的图分类</a><ul>
+<li><a href="#基于图坍缩的池化机制">基于图坍缩的池化机制</a><ul>
+<li><a href="#diffpool">DIFFPOOL</a></li>
+<li><a href="#eigenpooling">EigenPooling</a></li>
+</ul>
+</li>
+<li><a href="#基于topk的池化机制">基于TopK的池化机制</a></li>
+<li><a href="#基于边收缩的池化机制">基于边收缩的池化机制</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#图表示学习">图表示学习</a><ul>
+<li><a href="#基于重构损失的gnn">基于重构损失的GNN</a></li>
+<li><a href="#基于对比损失的gnn">基于对比损失的GNN</a><ul>
+<li><a href="#邻居上下文">邻居上下文</a></li>
+<li><a href="#子图上下文">子图上下文</a></li>
+<li><a href="#全图上下文">全图上下文</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#reference">Reference</a></li>
+</ul>
+<h1 id="图卷积神经网络-GCN"><a href="#图卷积神经网络-GCN" class="headerlink" title="图卷积神经网络(GCN)"></a>图卷积神经网络(GCN)</h1><h2 id="图信号"><a href="#图信号" class="headerlink" title="图信号"></a>图信号</h2><p>给定图$G = (V, E)$，$V$表示图中节点集合，$E$表示边集合。假设有$n$个节点，第$i$个节点的<strong>信号强度</strong>为$x_i$，这个图的图信号可以表示为向量的形式</p>
+<script type="math/tex; mode=display">x = \left[ x_1, \cdots, x_i, \cdots, x_n \right]^T \tag{1}</script><blockquote>
+<p>注意研究图信号性质时，除了考虑图信号的强度外，还需考虑<strong>图的拓扑结构</strong>。</p>
+</blockquote>
+<h2 id="拉普拉斯算子"><a href="#拉普拉斯算子" class="headerlink" title="拉普拉斯算子"></a>拉普拉斯算子</h2><p><strong>拉普拉斯矩阵</strong>(Laplacian Matrix)是用于研究图的结构性质的核心对象，定义为</p>
+<script type="math/tex; mode=display">L = D - A \tag{2.1}</script><p>其一种<strong>正则化</strong>的形式(symmetric normalized laplacian)为</p>
+<script type="math/tex; mode=display">L_{sym} = D^{-1/2} L D^{1/2} \tag{2.2}</script><p>其中$A$是图的<strong>邻接矩阵</strong>，$D$是邻接矩阵对应的<strong>度矩阵</strong></p>
+<script type="math/tex; mode=display">d_{ii} = \sum_{j=1}^n a_{ij} \tag{3.1}</script><p>因此</p>
+<script type="math/tex; mode=display">
+A = \begin{bmatrix}
+    a_{11} & a_{12} & \cdots & a_{1n} \\
+    a_{21} & a_{22} & \cdots & a_{2n} \\
+    \vdots & \vdots & \ddots & \vdots \\
+    a_{n1} & a_{n2} & \cdots & a_{nn} \\
+\end{bmatrix},
+D = \begin{bmatrix}
+    \sum_j a_{1j} & 0 & \cdots & 0 \\
+    0 & \sum_j a_{2j} & \cdots & 0 \\
+    \vdots & \vdots & \ddots & \vdots \\
+    0 & 0 & \cdots & \sum_j a_{nj}
+\end{bmatrix} \tag{3.2}</script><p><strong>拉普拉斯算子</strong><a id="laplacian_operator"></a>被用作描述中心节点与邻居节点之间的差异，对于图信号$x$，有</p>
+<script type="math/tex; mode=display">L x = (D - A) x = \begin{bmatrix} \cdots & x_i' & \cdots \end{bmatrix}^T \tag{4.1}</script><p>其中</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    x_i' & = (- a_{ii} + \sum_j a_{ij}) x_i - \sum_{j \neq i} a_{ij} x_j \\
+    & = x_i \sum_j a_{ij} - \sum_j a_{ij} x_j \\
+    & = \sum_j a_{ij} (x_i - x_j) \\
+\end{aligned} \tag{4.2}</script><p>可以看到经$L$变换实际上是<strong>根据节点间信号差异$x_i - x_j$更新$x_i’$</strong>。</p>
+<p><a id="eigen_of_V"><strong>注意</strong></a> </p>
+<ul>
+<li>$x^T L x \geq 0$，因此$L$是<strong>半正定矩阵</strong>，所有特征值大于等于$0$；</li>
+<li>由$(4.1)$，$L \cdot \bm{1} = 0 = 0 \cdot \bm{1}$，所以$L$有<strong>最小的特征值</strong>$0$，且对应特征向量为$\bm{1}$；</li>
+<li>$L_{sym}$的<strong>特征值存在上限</strong>，即$\lambda_{sym} \leq 2$。</li>
+</ul>
+<h2 id="图傅里叶变换"><a href="#图傅里叶变换" class="headerlink" title="图傅里叶变换"></a>图傅里叶变换</h2><p>图傅里叶变换可将图信号由<strong>空域</strong>(spatial domain)视角转换到<strong>频域</strong>(frequency domain)视角，便于图信号处理理论体系的建立。</p>
+<h3 id="GFT与IGFT"><a href="#GFT与IGFT" class="headerlink" title="GFT与IGFT"></a>GFT与IGFT</h3><p>假设图$G$的拉普拉斯矩阵为$L \in R^{n \times n}$，注意到$L$是一个<strong>实对称矩阵</strong>，可以被<strong>正交对角化</strong>为</p>
+<script type="math/tex; mode=display">
+L = V \Lambda V^T = 
+    \begin{bmatrix}
+        v_1 & \cdots & v_n
+    \end{bmatrix}
+    \begin{bmatrix}
+        \lambda_1 & & \\
+        & \ddots & \\
+        & & \lambda_n
+    \end{bmatrix}
+    \begin{bmatrix}
+        v_1^T \\ \vdots \\ v_n^T
+    \end{bmatrix} \tag{5}</script><p>其中$0 \leq \lambda_1 \leq \cdots \leq \lambda_n$；$V$是<strong>正交矩阵</strong>，即满足$V V^T = I$，$v_i = \begin{bmatrix} v_{i1} &amp; \cdots &amp; v_{in} \end{bmatrix}^T$，<strong>$v$彼此正交，且均为单位向量</strong>。</p>
+<p><strong>图傅里叶变换</strong>(Graph Fourier Transform, GFT)：对于任意一个在图$G$上的信号$x$，其图傅里叶变换为</p>
+<script type="math/tex; mode=display">\tilde{x} = V^T x, \tilde{x} \in R^n \tag{6.1}</script><p><strong>逆图傅里叶变换</strong>(Inverse Graph Fourier Transform, IGFT)定义为</p>
+<script type="math/tex; mode=display">x = V \tilde{x}, x \in R^{n} \tag{6.2}</script><p>那么从线性变换的角度来看，特征向量$v_k$即<strong>傅里叶基</strong>(完备的)，$\tilde{x}_k$是<strong>傅里叶系数</strong>，即图信号在$v_k$上的投影，<strong>衡量了图信号与傅里叶基之间的相似度</strong>。</p>
+<h3 id="总变差-TV"><a href="#总变差-TV" class="headerlink" title="总变差(TV)"></a>总变差(TV)</h3><p>一个重要的二次型$TV(x)$如下，称图信号的<strong>总变差</strong>(Total Variation)，<strong>刻画图信号整体的平滑度</strong></p>
+<script type="math/tex; mode=display">TV(x) = x^T L x = \sum_i \sum_j a_{ij} (x_i - x_j)^2 \tag{7}</script><p>可以进行如下变换</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    & \begin{cases}
+        TV(x) & = & x^T L x \\
+        x & = & V \tilde{x} \\
+        L & = & V \Lambda V^T
+    \end{cases} \\ \Rightarrow 
+    TV(x) & = (V \tilde{x})^T (V \Lambda V^T) (V \tilde{x}) \\ 
+    & = \tilde{x}^T \Lambda \tilde{x} = \sum_{i=1}^n \tilde{x}_i^2 \cdot \lambda_i
+\end{aligned} \tag{8}</script><p>因此，<strong>图的总变差与图的特征值$\lambda_i$之间有非常直接的线性对应关系(权重为$\tilde{x}_i^2$)</strong></p>
+<h3 id="图信号的频域描述"><a href="#图信号的频域描述" class="headerlink" title="图信号的频域描述"></a>图信号的频域描述</h3><blockquote>
+<p>有一个问题需要思考：<strong>一个图中什么样的图信号具有最小的总变差？</strong></p>
+</blockquote>
+<p><strong>限定图信号$x$为单位向量</strong>，经<a href="#eigen_of_V">分析</a>$\lambda_1 = 0$，那么当$x$与$v_1$完全重合时，$x$在$v_{i\neq1}$上投影均为$0$，即</p>
+<script type="math/tex; mode=display">
+\tilde{x}_i = x \cdot v_i = 
+    \begin{cases}
+        1 & i = 1 \\
+        0 & i \neq 1
+    \end{cases} \Rightarrow \min TV(x) = \lambda_1 \tag{9.1}</script><p>实际上可以证明</p>
+<script type="math/tex; mode=display">TV(x_k) = \lambda_k \tag{9.2}</script><p>如果要选择一组彼此正交的图信号，使各自总变差依次取得最小值，那么这组图信号即傅里叶基$v_1, \cdots, v_n$</p>
+<script type="math/tex; mode=display">\lambda_k = \min_{x: ||x||=1, x \bot x_{x \neq k}} x^T L x \tag{9.3}</script><p><strong>特征值排列后，对图信号的平滑度做出了梯度刻画，因此可以将特征值等价成频率</strong>。特征值越小即频率越低，对应傅里叶基上的图信号总变差越小，变换得越缓慢，相近节点上信号值趋于一致；反之亦然。相应的，<strong>傅里叶系数即图信号在对应频率分量上的幅值</strong>，反应其强度，在低频分量上强度越大，则信号平滑度越高。</p>
+<hr>
+<p><strong>例</strong>：给定图的邻接矩阵如下</p>
+<script type="math/tex; mode=display">
+A = \begin{bmatrix}
+    0 & 1 & 1 & 0 & 0 \\
+    1 & 0 & 1 & 1 & 0 \\
+    1 & 1 & 0 & 1 & 0 \\
+    0 & 1 & 1 & 0 & 1 \\
+    0 & 0 & 0 & 1 & 0
+\end{bmatrix} \Rightarrow
+L = \begin{bmatrix}
+    2 & -1 & -1 & 0 & 0 \\
+    -1 & 3 & -1 & -1 & 0 \\
+    -1 & -1 & 3 & -1 & 0 \\
+    0 & -1 & -1 & 3 & -1 \\
+    0 & 0 & 0 & -1 & 1
+\end{bmatrix}</script><p>$L$的特征分解为<br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>A = np.array([</span><br><span class="line"><span class="meta">... </span>[<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line"><span class="meta">... </span>[<span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>],</span><br><span class="line"><span class="meta">... </span>[<span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>],</span><br><span class="line"><span class="meta">... </span>[<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>],</span><br><span class="line"><span class="meta">... </span>[<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>]</span><br><span class="line"><span class="meta">... </span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>D = np.diag(A.sum(axis=<span class="number">1</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>D</span><br><span class="line">array([[<span class="number">2</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">       [<span class="number">0</span>, <span class="number">3</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">       [<span class="number">0</span>, <span class="number">0</span>, <span class="number">3</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">       [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">3</span>, <span class="number">0</span>],</span><br><span class="line">       [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>L = D - A</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.linalg.eig(L)</span><br><span class="line">(array([<span class="number">0.</span>        , <span class="number">0.82991351</span>, <span class="number">2.68889218</span>, <span class="number">4.4811943</span> , <span class="number">4.</span>        ]), </span><br><span class="line">array([[ <span class="number">4.47213595e-01</span>,  <span class="number">4.37531395e-01</span>, <span class="number">-7.03081478e-01</span>, <span class="number">-3.37998097e-01</span>, <span class="number">-1.24491566e-16</span>],</span><br><span class="line">       [ <span class="number">4.47213595e-01</span>,  <span class="number">2.55974786e-01</span>,  <span class="number">2.42173667e-01</span>, <span class="number">4.19319477e-01</span>,  <span class="number">7.07106781e-01</span>],</span><br><span class="line">       [ <span class="number">4.47213595e-01</span>,  <span class="number">2.55974786e-01</span>,  <span class="number">2.42173667e-01</span>, <span class="number">4.19319477e-01</span>, <span class="number">-7.07106781e-01</span>],</span><br><span class="line">       [ <span class="number">4.47213595e-01</span>, <span class="number">-1.38018756e-01</span>,  <span class="number">5.36249932e-01</span>, <span class="number">-7.02415001e-01</span>, <span class="number">-8.17563909e-16</span>],</span><br><span class="line">       [ <span class="number">4.47213595e-01</span>, <span class="number">-8.11462211e-01</span>, <span class="number">-3.17515788e-01</span>, <span class="number">2.01774144e-01</span>,  <span class="number">3.46536171e-16</span>]]))</span><br></pre></td></tr></table></figure></p>
+<p>可以看到$v_1 =  [0.4472136, 0.4472136, 0.4472136, 0.4472136, 0.4472136]^T$，变化最缓慢，全部相同，而$v_5$变化最剧烈。</p>
+<hr>
+<p>我们把图信号所有傅里叶系数合在一起称作其<strong>频谱</strong>(spectrum)，给定频谱就可以通过逆图傅里叶变换完整得到空域中的图信号；同时，<strong>频谱也完整描述了图信号的频域特性</strong>。</p>
+<p>继续以上面给出的图为例，输入随机图信号，其在频域中表示为<br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>...</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>eigval, eigvec = np.linalg.eig(L)       <span class="comment"># 拉氏矩阵分解得到傅里叶基</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = np.random.rand(<span class="number">5</span>); x                <span class="comment"># 随机生成图信号</span></span><br><span class="line">array([<span class="number">0.24427103</span>, <span class="number">0.69121671</span>, <span class="number">0.26806286</span>, <span class="number">0.62879822</span>, <span class="number">0.53215482</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x.T.dot(L).dot(x)                       <span class="comment"># 总变差</span></span><br><span class="line"><span class="number">0.5227516746889123</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>frequency = eigenval                    <span class="comment"># 特征值等价为频率</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>amplitude = eigvec.T.dot(x); amplitude  <span class="comment"># 图信号投影到傅里叶基上，计算幅值</span></span><br><span class="line">array([ <span class="number">1.05743818</span>, <span class="number">-0.16618185</span>,  <span class="number">0.22879526</span>, <span class="number">-0.01462076</span>,  <span class="number">0.29921495</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>plt.figure()</span><br><span class="line">&lt;Figure size <span class="number">640</span>x480 <span class="keyword">with</span> <span class="number">0</span> Axes&gt;</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="comment"># 空域</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>plt.subplot(<span class="number">211</span>); plt.grid()</span><br><span class="line">&lt;matplotlib.axes._subplots.AxesSubplot object at <span class="number">0x000001BB66698FD0</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>plt.bar(np.arange(<span class="number">1</span>, <span class="number">6</span>), x, width=<span class="number">0.2</span>)</span><br><span class="line">&lt;BarContainer object of <span class="number">5</span> artists&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>plt.title(<span class="string">"spatial domain"</span>)</span><br><span class="line">Text(<span class="number">0.5</span>, <span class="number">1.0</span>, <span class="string">'spatial domain'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>plt.xlabel(<span class="string">"index"</span>)</span><br><span class="line">Text(<span class="number">0.5</span>, <span class="number">0</span>, <span class="string">'index'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>plt.ylabel(<span class="string">"x_i"</span>)</span><br><span class="line">Text(<span class="number">0</span>, <span class="number">0.5</span>, <span class="string">'x_i'</span>)</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="comment"># 频域</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>plt.subplot(<span class="number">212</span>); plt.grid()</span><br><span class="line">&lt;matplotlib.axes._subplots.AxesSubplot object at <span class="number">0x000001BB666C3048</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>plt.bar(frequency, amplitude, width=<span class="number">0.2</span>)</span><br><span class="line">&lt;BarContainer object of <span class="number">5</span> artists&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>plt.title(<span class="string">"frequency domain"</span>)</span><br><span class="line">Text(<span class="number">0.5</span>, <span class="number">1.0</span>, <span class="string">'frequency domain'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>plt.xlabel(<span class="string">"frequency"</span>)</span><br><span class="line">Text(<span class="number">0.5</span>, <span class="number">0</span>, <span class="string">'frequency'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>plt.ylabel(<span class="string">"amplitude"</span>)</span><br><span class="line">Text(<span class="number">0</span>, <span class="number">0.5</span>, <span class="string">'amplitude'</span>)</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>plt.show()</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2020/06/13/Graph-Neural-Network/spatial_frequency_domain_eg.png" alt="spatial_frequency_domain_eg"></p>
+<h2 id="图滤波器"><a href="#图滤波器" class="headerlink" title="图滤波器"></a>图滤波器</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>定义<strong>图滤波器</strong>(Graph Filter)为对给定图信号的频谱中<strong>各个频率分量强度进行增强或衰减的操作</strong>，假设输入信号频谱为$\tilde{x}$，经滤波器$H \in R^{n \times n}$调整后，得到输出信号频谱为$\tilde{y}$</p>
+<script type="math/tex; mode=display">y = H x \tag{10.1}</script><p>那么<strong>各频率分量上调整幅值</strong>，有</p>
+<script type="math/tex; mode=display">\tilde{y}_k = h(\lambda_k) \times \tilde{x}_k \tag{10.2}</script><p>也即</p>
+<script type="math/tex; mode=display">\tilde{y} = \begin{bmatrix} h(\lambda_1) & & \\ & \ddots & \\ & & h(\lambda_n) \end{bmatrix} \tilde{x} \tag{10.3}</script><p>那么对应的输出图信号可以通过傅里叶基重构</p>
+<script type="math/tex; mode=display">y = \sum_{k=1}^n \tilde{y}_k \cdot v_k = V \cdot \tilde{y} \tag{10.4}</script><p>$(10.3)$带入$(10.4)$后有</p>
+<script type="math/tex; mode=display">y = V \cdot \Lambda_h \cdot \tilde{x} = \underbrace{V \Lambda_h V^T}_H \cdot x \tag{10}</script><p>可以看到$H$只在对角与边坐标上时才有可能取非零值，即</p>
+<script type="math/tex; mode=display">H_{ij} = 0, if \quad i \neq j \quad or \quad e_{ij} \notin E</script><p>从算子角度看，$Hx$描述了一种作用在每个节点一阶子图上的变换操作。一般来说，满足以上性质的变换矩阵称为$G$的<strong>图位移算子</strong>(Graph Shift Operator)，拉普拉斯矩阵与邻接矩阵都是典型的图位移算子。</p>
+<hr>
+<p>图滤波器具有如下<strong>性质</strong>：</p>
+<ol>
+<li><strong>线性</strong>：$H(x + y) = Hx + Hy$；</li>
+<li><strong>顺序无关</strong>：$H_1 (H_2 x) = H_2 (H_1 x)$；</li>
+<li><strong>可逆</strong>：若$h(\lambda) \neq 0$，那么滤波操作可逆。</li>
+</ol>
+<hr>
+<script type="math/tex; mode=display">H = V \Lambda_h V^T \tag{11.1}</script><p>称$\Lambda_h$是图滤波器$H$的<strong>频率响应矩阵</strong>，其对角元素$h(\lambda)$是$H$的<strong>频率响应函数</strong>，不同的频率响应函数可以实现不同的滤波效果，如低通、高通、带通等。</p>
+<h3 id="拉普拉斯矩阵多项式拓展形式"><a href="#拉普拉斯矩阵多项式拓展形式" class="headerlink" title="拉普拉斯矩阵多项式拓展形式"></a>拉普拉斯矩阵多项式拓展形式</h3><p>理论上任意性质的图滤波器都可以被实现，即任意类型函数曲线的频率响应函数。通过泰勒展开用多项式进行逼近，有<strong>拉普拉斯矩阵多项式拓展形式的图滤波器</strong>如下</p>
+<script type="math/tex; mode=display">H = \sum_{k=0}^K h_k L^k \tag{11.2}</script><p>其中$K$是图滤波器$H$的阶数，$h_k$是多项式系数。</p>
+<blockquote>
+<p>为什么是上述形式，请参考<a href="#频域角度">频域角度</a>。</p>
+</blockquote>
+<h3 id="空域角度"><a href="#空域角度" class="headerlink" title="空域角度"></a>空域角度</h3><p>对于$y = Hx = (\sum_{k=0}^K h_k L^k) \cdot x$，记</p>
+<script type="math/tex; mode=display">x^{(k)} =  L^k \cdot x \tag{12.1}</script><p>由于$L$是图位移算子，那么$x^{(k-1)}$到$x^{(k)}$的变换只需所有节点的<strong>一阶邻居</strong>参与计算，所以$x^{(k)}$需要所有节点的$k$阶邻居参与，这种性质称为<strong>图滤波器的局部性</strong>。那么输出图信号是$(K + 1)$组图信号的线性加权</p>
+<script type="math/tex; mode=display">y = \sum_{k=0}^K h_k x^{(k)} \tag{12.2}</script><blockquote>
+<ul>
+<li>经$k$次拉普拉斯矩阵线性变换，<strong>聚合节点$i$的$k$阶邻居</strong>得到图信号$x^{(k)}_i$；</li>
+<li>$K$次<strong>局部性不同</strong>的聚合线性组合(权重$h_k$)得到本次滤波的输出。</li>
+</ul>
+</blockquote>
+<hr>
+<p>从<strong>空域角度</strong>来看，滤波操作的性质为</p>
+<ol>
+<li><strong>局部性</strong>：每个节点的输出信号仅需考虑其$K$阶子图；</li>
+<li>通过$K$步迭<strong>代式的矩阵向量乘法</strong>完成滤波操作。</li>
+</ol>
+<h3 id="频域角度"><a href="#频域角度" class="headerlink" title="频域角度"></a>频域角度</h3><p>由于$L = V \Lambda V^T$，那么</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    H & = \sum_{k=0}^K h_k L^k \\
+    & = \sum_{k=0}^K h_k (V \Lambda V^T)^k \\
+    & = \sum_{k=0}^K h_k (V \Lambda V^T) \cdots (V \Lambda V^T) \\
+    & = V \underbrace{(\sum_{k=0}^K h_k \Lambda^k)}_{\Lambda_h} V^T 
+\end{aligned} \tag{13.1}</script><p>其中</p>
+<script type="math/tex; mode=display">\Lambda_h = \sum_{k=0}^K h_k \Lambda^k = 
+    \begin{bmatrix}
+        \underbrace{\sum_{k=0}^K h_k \lambda_1^k}_{h(\lambda_1)} & & \\
+        & \ddots & \\
+        & & \underbrace{\sum_{k=0}^K h_k \lambda_n^k }_{h(\lambda_n)}
+    \end{bmatrix} \tag{13.2}</script><p>那么$H$的<strong>频率响应函数$h(\lambda) = \sum_{k=0}^K h_k \lambda^k$是$\lambda$的$K$次多项式</strong>，如果$K$足够大，可以逼近任意一个关于$\lambda$的函数。</p>
+<hr>
+<p>在滤波操作时</p>
+<script type="math/tex; mode=display">y = Hx = V \Lambda_h V^T \cdot x \tag{13.3}</script><p>可以看到变换过程由<strong>以下三步</strong>组成</p>
+<ol>
+<li>通过图傅里叶变换，求取$x$的频谱$\tilde{x} = V^T x$；</li>
+<li>用$\Lambda_h$对频率分量的幅值进行调节，得到调整后的频谱$\tilde{y} = \Lambda_h \tilde{x}$；</li>
+<li>通过反图傅里叶变换，求取输出图信号$y = V \tilde{y}$。</li>
+</ol>
+<hr>
+<p>设多项式系数构成向量$h$，那么$H$的频率响应矩阵为</p>
+<script type="math/tex; mode=display">\Lambda_h = \sum_{k=0}^K h_k \Lambda^k = \text{diag}(\Psi \cdot h) \tag{14.1 }</script><p>$\text{diag}$表示将列向量转换为对角矩阵。</p>
+<p>其中$\Psi = \begin{bmatrix} 1 &amp; \lambda_1 &amp; \cdots &amp; \lambda_1^K \ 1 &amp; \lambda_2 &amp; \cdots &amp; \lambda_2^K \ \vdots &amp; \vdots &amp; \ddots &amp; \vdots \ 1 &amp; \lambda_n &amp; \cdots &amp; \lambda_n^K \end{bmatrix}$为<strong>范德蒙矩阵</strong>，$h = \begin{bmatrix} h_1 &amp; \cdots &amp; h_n \end{bmatrix}^T$。所以在确定频率响应函数$h(\lambda)$后，可以<strong>反解</strong>得到多项式系数$h$</p>
+<script type="math/tex; mode=display">h = \Psi^{-1} \text{diag}^{-1} (\Lambda_h) \tag{14.2}</script><p>$\text{diag}^{-1}$表示将对角矩阵转换为列向量。</p>
+<hr>
+<p>从<strong>频域角度</strong>来看，滤波操作的性质为</p>
+<ol>
+<li>能更加清晰地完成对图信号地特定滤波操作；</li>
+<li>有显式的公式知道图滤波器的设计；</li>
+<li>不必进行矩阵分解，减少计算量。</li>
+</ol>
+<h2 id="图卷积的定义"><a href="#图卷积的定义" class="headerlink" title="图卷积的定义"></a>图卷积的定义</h2><p>给定两组$G$上的图信号$x_1, x_2$，其图卷积运算定义为</p>
+<script type="math/tex; mode=display">x_1 * x_2 = IGFT \left( GFT(x_1) \bigodot GFT(x_2) \right) \tag{15.1}</script><p>这里定义和离散时间信号处理中卷积定义相同，即<strong>时域中的卷积运算等价于频域中的乘法运算</strong>，其中</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    GFT(x) = V^T x \\
+    IGFT(x) = V x
+\end{cases} \tag{15.2}</script><p>$\bigodot$表示哈达玛积，那么</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    x_1 * x_2 & = V \left( V^T (x_1) \bigodot V^T (x_2) \right) \\
+    & =  V \left( \tilde{x_1} \bigodot V^T (x_2) \right) \\
+    & =  V \left( \text{diag}(\tilde{x_1}) \cdot V^T (x_2) \right) \\
+    & = \left( V \text{diag}(\tilde{x_1}) V^T \right) \cdot x_2
+\end{aligned} \tag{15.3}</script><p>令</p>
+<script type="math/tex; mode=display">H_{\tilde{x}} = V \text{diag}(\tilde{x_1}) V^T \tag{15.4}</script><p>显然$H_{\tilde{x}}$是一个图位移算子，<strong>其频率响应矩阵对应$x_1$的频谱</strong>，那么</p>
+<script type="math/tex; mode=display">x_1 * x_2 = H_{\tilde{x}} \cdot x_2 \tag{15.5}</script><p>所以两组图信号的图卷积运算能转化为对应形式的图滤波运算，<strong>可以说图卷积等价于图滤波</strong>，后文提到的图卷积都是等号右边的滤波形式，相对应的卷积信号无需显示地表达出来。</p>
+<hr>
+<p>设定义在包含$N$个节点的图$G$上的图信号，为$d$维数据，表示为<strong>图信号矩阵</strong>如下，其中$d$为<strong>图信号的总通道数</strong></p>
+<script type="math/tex; mode=display">
+X_{N \times d} = 
+\begin{bmatrix}
+    x_{11} & x_{12} & \cdots & x_{1d} \\ 
+    x_{21} & x_{22} & \cdots & x_{2d} \\ 
+    \vdots & \vdots & \ddots & \vdots \\
+    x_{N1} & x_{N2} & \cdots & x_{Nd}
+\end{bmatrix} \tag{16.1}</script><p>那么$Y = HX$可以视作用图滤波器$H$对信号矩阵<strong>每个通道(列)的信号</strong>分别进行滤波操作。</p>
+<h2 id="滤波器的参数化"><a href="#滤波器的参数化" class="headerlink" title="滤波器的参数化"></a>滤波器的参数化</h2><p>将图卷积运算推广到图数据的学习中，定义神经网络层，并对滤波器进行参数化。神经网络层内引入图滤波器$H$，一般定义为</p>
+<script type="math/tex; mode=display">Y = \sigma(H X) \tag{17}</script><p>其中$\sigma(\cdot)$是激活函数。</p>
+<h3 id="频域图卷积模型"><a href="#频域图卷积模型" class="headerlink" title="频域图卷积模型"></a>频域图卷积模型</h3><p>只能从频域出发进行矩阵特征分解从而执行图卷积计算的模型。</p>
+<h4 id="频率响应函数的参数化"><a href="#频率响应函数的参数化" class="headerlink" title="频率响应函数的参数化"></a>频率响应函数的参数化</h4><p>经过前面讨论，图滤波器$H$可以分解为</p>
+<script type="math/tex; mode=display">H = V \Lambda_h V^T \tag{11.1}</script><p>其中</p>
+<script type="math/tex; mode=display">
+\Lambda_h = 
+ \begin{bmatrix} 
+    h(\lambda_1) & & \\ 
+    & \ddots & \\ 
+    & & h(\lambda_n) 
+\end{bmatrix} \tag{10.3}</script><p>我们将其参数化，用待估参数$\theta_i$代替$h(\lambda_i)$，得到参数矩阵$\text{diag}(\theta)$</p>
+<script type="math/tex; mode=display">
+\text{diag}(\theta) = 
+ \begin{bmatrix} 
+    \theta_1 & & \\ 
+    & \ddots & \\ 
+    & & \theta_n 
+\end{bmatrix} \tag{18}</script><p><strong>神经网络层</strong>定义为</p>
+<script type="math/tex; mode=display">Y = \sigma(V \text{diag}(\theta) V^T X) = \sigma(\Theta X) \tag{19}</script><p>其中$\Theta$即需要学习的滤波器</p>
+<ul>
+<li>从<strong>空域的角度</strong>理解，该层引入自适应的<strong>图位移算子</strong>，通过学习的手段指导算子的学习，完成对输入图信号的针对性变换操作；</li>
+<li>从<strong>频域的角度</strong>理解，该层训练了一个可自适应的图滤波器。其<strong>频率响应函数</strong>可通过任务与数据间的对应关系来进行学习。</li>
+</ul>
+<p>但是这种参数化方法有以下<strong>缺点</strong></p>
+<ol>
+<li>要学习的参数量与节点数目一致，引入过多的参数，在大规模图数据(上亿节点)的图中极易过拟合；</li>
+<li>真实图数据中，数据有效信息通常蕴含在低频段中，因此$n$个维度自由度的图滤波器，是完全没有必要的。</li>
+</ol>
+<h4 id="拉普拉斯矩阵多项式拓展形式系数的参数化"><a href="#拉普拉斯矩阵多项式拓展形式系数的参数化" class="headerlink" title="拉普拉斯矩阵多项式拓展形式系数的参数化"></a>拉普拉斯矩阵多项式拓展形式系数的参数化</h4><p>考虑用<strong>拉普拉斯矩阵多项式拓展形式</strong>逼近任意频率响应函数</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    H & = \sum_{k=0}^K h_k L^k \\
+    & = \sum_{k=0}^K h_k (V \Lambda V^T)^k \\
+    & = \sum_{k=0}^K h_k (V \Lambda V^T) \cdots (V \Lambda V^T) \\
+    & = V \underbrace{(\sum_{k=0}^K h_k \Lambda^k)}_{\Lambda_h} V^T 
+\end{aligned} \tag{13.1}</script><p>将各阶次的系数参数化为$\theta$，神经网络层定义为</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    Y & = \sigma \left( \left( \sum_{k=0}^K h_k L^k \right) X \right) \\
+    & = \sigma \left( V \left( \sum_{k=0}^K \theta_k \Lambda^k \right) V^T X \right) \\
+    & = \sigma \left( V \text{diag}(\Psi \theta) V^T X \right)
+\end{aligned} \tag{20}</script><p>这种方法定义神经网络层，参数量$K$可控制，$K$越大，可拟合的频率响应函数次数越高，可以对应输入图信号矩阵与输出图信号矩阵之间复杂的滤波关系。一般设$k &lt;&lt; N$，大大降低模型过拟合风险。<strong>但是这种方法还是需要进行矩阵的分解，计算复杂度高。</strong></p>
+<h3 id="空域图卷积模型"><a href="#空域图卷积模型" class="headerlink" title="空域图卷积模型"></a>空域图卷积模型</h3><p>不需要进行矩阵特征分解，能在空域视角执行矩阵乘法运算的模型。</p>
+<h4 id="固定滤波器的参数化"><a href="#固定滤波器的参数化" class="headerlink" title="固定滤波器的参数化"></a>固定滤波器的参数化</h4><p>为解决计算复杂度的问题，对$(19)$进行<strong>极大简化</strong>，设$K = 1$，那么</p>
+<script type="math/tex; mode=display">Y = \sigma \left( (\theta_0 + \theta_1 L) X \right) \tag{21.1}</script><p>令$\theta_0 = \theta_1 = \theta$，那么</p>
+<script type="math/tex; mode=display">Y = \sigma \left( \theta (I + L) X \right) \tag{21.2}</script><p>实际上，$\theta$此时只是一个比例缩放因子，是不必要引入的。设$\theta = 1$，得到<strong>固定的图滤波器$\tilde{L} = I + L$</strong></p>
+<script type="math/tex; mode=display">Y = \sigma(\tilde{L} X) \tag{21.3}</script><blockquote>
+<p>从空域上看，只聚合了$1$阶邻居节点的信息。</p>
+</blockquote>
+<p>为了加强网络学习时的数值稳定性，对$\tilde{L}$进行归一化处理，防止梯度消失或爆炸问题</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \begin{cases}
+        \tilde{A} = A + I \\
+        \tilde{D} = \text{diag} (\begin{bmatrix}
+            \cdots & \sum_j \tilde{A}_{ij} & \cdots
+        \end{bmatrix}) = D + I
+    \end{cases} \\ \\ \Rightarrow
+    \tilde{L}_{sym} = \tilde{D}^{-1/2} \tilde{A} \tilde{D}^{-1/2}
+\end{aligned} \tag{21.4}</script><blockquote>
+<p>注意$\tilde{L}_{sym}$的特征值取值范围为$(-1, 1]$。</p>
+</blockquote>
+<p>为了加强网络拟合能力，<strong>引入参数化的权重矩阵$W$对输入的图信号矩阵进行仿射变换</strong>，可变换数据的维度，即</p>
+<script type="math/tex; mode=display">Y = \sigma(\tilde{L}_{sym} \cdot X W) \tag{22}</script><p>由于$\tilde{L}_{sym}$是一个图位移算子，$\tilde{L}_{sym} X$的计算<strong>等价于对邻居节点的特征向量($X$的行向量，$d$个通道)进行聚合操作</strong></p>
+<script type="math/tex; mode=display">y_{i, :} = \sigma(\sum_{v_j \in \tilde{N}(v_i)} {\tilde{L}_{sym}}_{ij} \cdot W x_{j, :}) \tag{23}</script><blockquote>
+<p>对于$v_i$节点，根据每个邻居节点$v_j$更新自身状态</p>
+<ul>
+<li>对节点特征向量进行一次仿射变换$W x_j$；</li>
+<li>固定滤波器$\tilde{L}_{sym}$的是<a href="#laplacian_operator">拉普拉斯算子</a>，第$i$行的可以聚合节点$v_i$的邻居节点；</li>
+<li>聚合后非线性激活作为输出。</li>
+</ul>
+</blockquote>
+<p>实际工程中，可以用<strong>稀疏矩阵</strong>表示$\tilde{L}_{sym}$，进一步降低计算复杂度。相比较于分解矩阵的$O(n^3)$，可以降低至$O(|E|d)$。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> tensorflow.python.keras.initializers <span class="keyword">import</span> Identity, glorot_uniform, Zeros</span><br><span class="line"><span class="keyword">from</span> tensorflow.python.keras.layers <span class="keyword">import</span> Dropout, Input, Layer, Embedding, Reshape</span><br><span class="line"><span class="keyword">from</span> tensorflow.python.keras.models <span class="keyword">import</span> Model</span><br><span class="line"><span class="keyword">from</span> tensorflow.python.keras.regularizers <span class="keyword">import</span> l2</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GraphConvolution</span><span class="params">(Layer)</span>:</span>  <span class="comment"># ReLU(AXW)</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, units,</span></span></span><br><span class="line"><span class="function"><span class="params">                 activation=tf.nn.relu, dropout_rate=<span class="number">0.5</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">                 use_bias=True, l2_reg=<span class="number">0</span>, feature_less=False,</span></span></span><br><span class="line"><span class="function"><span class="params">                 seed=<span class="number">1024</span>, **kwargs)</span>:</span></span><br><span class="line">        super(GraphConvolution, self).__init__(**kwargs)</span><br><span class="line">        self.units = units</span><br><span class="line">        self.feature_less = feature_less</span><br><span class="line">        self.use_bias = use_bias</span><br><span class="line">        self.l2_reg = l2_reg</span><br><span class="line">        self.dropout_rate = dropout_rate</span><br><span class="line">        self.activation = activation</span><br><span class="line">        self.seed = seed</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">build</span><span class="params">(self, input_shapes)</span>:</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> self.feature_less:</span><br><span class="line">            input_dim = int(input_shapes[<span class="number">0</span>][<span class="number">-1</span>])</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">assert</span> len(input_shapes) == <span class="number">2</span></span><br><span class="line">            features_shape = input_shapes[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">            input_dim = int(features_shape[<span class="number">-1</span>])</span><br><span class="line"></span><br><span class="line">        self.kernel = self.add_weight(shape=(input_dim,</span><br><span class="line">                                             self.units),</span><br><span class="line">                                      initializer=glorot_uniform(</span><br><span class="line">                                          seed=self.seed),</span><br><span class="line">                                      regularizer=l2(self.l2_reg),</span><br><span class="line">                                      name=<span class="string">'kernel'</span>, )</span><br><span class="line">        <span class="keyword">if</span> self.use_bias:</span><br><span class="line">            self.bias = self.add_weight(shape=(self.units,),</span><br><span class="line">                                        initializer=Zeros(),</span><br><span class="line">                                        name=<span class="string">'bias'</span>, )</span><br><span class="line"></span><br><span class="line">        self.dropout = Dropout(self.dropout_rate, seed=self.seed)</span><br><span class="line"></span><br><span class="line">        self.built = <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">call</span><span class="params">(self, inputs, training=None, **kwargs)</span>:</span></span><br><span class="line">        features, A = inputs</span><br><span class="line">        features = self.dropout(features, training=training)</span><br><span class="line">        output = tf.matmul(tf.sparse_tensor_dense_matmul(</span><br><span class="line">            A, features), self.kernel)</span><br><span class="line">        <span class="keyword">if</span> self.bias:</span><br><span class="line">            output += self.bias</span><br><span class="line">        act = self.activation(output)</span><br><span class="line"></span><br><span class="line">        act._uses_learning_phase = features._uses_learning_phase</span><br><span class="line">        <span class="keyword">return</span> act</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_config</span><span class="params">(self)</span>:</span></span><br><span class="line">        config = &#123;<span class="string">'units'</span>: self.units,</span><br><span class="line">                  <span class="string">'activation'</span>: self.activation,</span><br><span class="line">                  <span class="string">'dropout_rate'</span>: self.dropout_rate,</span><br><span class="line">                  <span class="string">'l2_reg'</span>: self.l2_reg,</span><br><span class="line">                  <span class="string">'use_bias'</span>: self.use_bias,</span><br><span class="line">                  <span class="string">'feature_less'</span>: self.feature_less,</span><br><span class="line">                  <span class="string">'seed'</span>: self.seed</span><br><span class="line">                  &#125;</span><br><span class="line"></span><br><span class="line">        base_config = super(GraphConvolution, self).get_config()</span><br><span class="line">        <span class="keyword">return</span> dict(list(base_config.items()) + list(config.items()))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">GCN</span><span class="params">(adj_dim,feature_dim,n_hidden, num_class, num_layers=<span class="number">2</span>,activation=tf.nn.relu,dropout_rate=<span class="number">0.5</span>, l2_reg=<span class="number">0</span>, feature_less=True, )</span>:</span></span><br><span class="line">    Adj = Input(shape=(<span class="keyword">None</span>,), sparse=<span class="keyword">True</span>)</span><br><span class="line">    <span class="keyword">if</span> feature_less:</span><br><span class="line">        X_in = Input(shape=(<span class="number">1</span>,), )</span><br><span class="line"></span><br><span class="line">        emb = Embedding(adj_dim, feature_dim,</span><br><span class="line">                        embeddings_initializer=Identity(<span class="number">1.0</span>), trainable=<span class="keyword">False</span>)</span><br><span class="line">        X_emb = emb(X_in)</span><br><span class="line">        h = Reshape([X_emb.shape[<span class="number">-1</span>]])(X_emb)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        X_in = Input(shape=(feature_dim,), )</span><br><span class="line"></span><br><span class="line">        h = X_in</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(num_layers):</span><br><span class="line">        <span class="keyword">if</span> i == num_layers - <span class="number">1</span>:</span><br><span class="line">            activation = tf.nn.softmax</span><br><span class="line">            n_hidden = num_class</span><br><span class="line">        h = GraphConvolution(n_hidden, activation=activation, dropout_rate=dropout_rate, l2_reg=l2_reg)([h,Adj])</span><br><span class="line"></span><br><span class="line">    output = h</span><br><span class="line">    model = Model(inputs=[X_in,Adj], outputs=output)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> model</span><br></pre></td></tr></table></figure>
+<h1 id="GCN的性质"><a href="#GCN的性质" class="headerlink" title="GCN的性质"></a>GCN的性质</h1><h2 id="GCN与CNN联系"><a href="#GCN与CNN联系" class="headerlink" title="GCN与CNN联系"></a>GCN与CNN联系</h2><ol>
+<li>CNN中卷积运算没有显式表达邻接矩阵，可视作处理<strong>2D栅格结构的图数据</strong>；GCN卷积运算用于处理更普遍的非结构化的图数据，数据之间关系更复杂多样；</li>
+<li>两者都是<strong>局部连接</strong>，减少单层网络的计算复杂度；</li>
+<li>两者都<strong>共享参数</strong>，减少单层网络的参数量，避免过拟合；</li>
+<li>节点自身特征的更新与卷积运算强耦合，<strong>感受野</strong>都随着卷积层的增加而变大，特征也更抽象；</li>
+<li>在任务上，CNN有对全局进行的图像分类和对局部进行的语义分割，GNN相应地有<strong>图分类和图节点分类</strong>。</li>
+</ol>
+<h2 id="端到端学习"><a href="#端到端学习" class="headerlink" title="端到端学习"></a>端到端学习</h2><p><strong>端到端学习</strong>实现了一种自动化地从数据中进行高效学习的机制，需要<strong>大量针对特定类型数据的学习任务的适配工作</strong>。图数据中包含两部分信息</p>
+<ul>
+<li><strong>属性信息</strong>：描述了图中节点的固有性质；</li>
+<li><strong>机构信息</strong>：描述了节点间的关联性质。</li>
+</ul>
+<hr>
+<p>GCN方法对于属性和结构信息的学习，体现在其核心公式上</p>
+<script type="math/tex; mode=display">\tilde{L}_{sym} X W \tag{24}</script><p>可以看到计算过程可以分为两部分</p>
+<ul>
+<li><strong>特征间的交互</strong>：用$X W$对属性信息进行放射变换，以学习属性特征间的交互模式；</li>
+<li><strong>节点局部结构信息编码</strong>：$\tilde{L}_{sym} (X W)$从空域角度看，是聚合邻居节点的过程，对结构信息进行编码。</li>
+</ul>
+<hr>
+<p><strong>GCN模型有以下优点</strong></p>
+<ul>
+<li>表示学习和任务学习一起进行<strong>端到端优化</strong>，节点的特征表示和下游任务间有很好的适应性；</li>
+<li>同时进行<strong>结构信息和属性信息的学习</strong>，两者具有很好的互补关系<ul>
+<li>对于结构稀疏的图，属性信息的补充可以很好地提高模型对节点表示学习的质量；</li>
+<li>结构信息蕴含属性信息中没有的知识，对节点刻画十分重要。</li>
+</ul>
+</li>
+</ul>
+<h2 id="低通滤波器"><a href="#低通滤波器" class="headerlink" title="低通滤波器"></a>低通滤波器</h2><p>再次回到GCN的核心公式$\tilde{L}_{sym} X W$，其中</p>
+<script type="math/tex; mode=display">\tilde{L}_{sym} = \tilde{D}^{-1/2} \tilde{A} \tilde{D}^{-1/2} \tag{25.1}</script><p>根据</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    \tilde{A} = A + I \\
+    \tilde{D} = D + I \\
+    L = D - A
+\end{cases} \Rightarrow 
+\tilde{A} = \tilde{D} - L \tag{25.2}</script><p>那么$\tilde{A}$带入$\tilde{L}_{sym}$可以得到</p>
+<script type="math/tex; mode=display">\tilde{L}_{sym} = \tilde{D}^{-1/2} (\tilde{D} - L) \tilde{D}^{-1/2} = I -  \tilde{D}^{-1/2} L \tilde{D}^{-1/2} \tag{25.3}</script><p>记</p>
+<script type="math/tex; mode=display">\tilde{L}_s = \tilde{D}^{-1/2} L \tilde{D}^{-1/2} \tag{25.4}</script><p>可以被正交对角化如下，且<strong>特征值满足$\tilde{\lambda}_i \in [0, 2)$</strong></p>
+<script type="math/tex; mode=display">\tilde{L}_s = V \tilde{\Lambda} V^T \tag{25.5}</script><p>所以</p>
+<script type="math/tex; mode=display">\tilde{L}_{sym} = I - V \tilde{\Lambda} V^T = V (1 - \tilde{\Lambda}) V^T \tag{26.1}</script><p>对应的频率响应函数如下，是一个线性收缩函数，并且$\tilde{\lambda}_1 \leq \cdots  \leq \tilde{\lambda}_n$，所以对高频信号有更大的缩减作用，是一个<strong>低通滤波器</strong></p>
+<script type="math/tex; mode=display">p_i(\lambda) = 1 - \tilde{\lambda}_i \in (-1, 1] \tag{26.2}</script><p>如果将信号矩阵$X$不断左乘$K$次$\tilde{L}_{sym}$，其对应的频率响应函数为</p>
+<script type="math/tex; mode=display">p_i^k (\lambda) = (1 - \tilde{\lambda}_i)^k \in (-1, 1] \tag{26.3}</script><p>其函数图像如下，可以看到<strong>当$K$增大时，低通滤波器的效应更强</strong><br><img src="/2020/06/13/Graph-Neural-Network/low_pass_filter.png" alt="low_pass_filter"></p>
+<p>事实上，为了突出这种低通滤波的能力、减少模型参数量，也有直接将多层GCN退化为</p>
+<script type="math/tex; mode=display">Y = \sigma(\tilde{L}_{sym}^K \cdot X W) \tag{27}</script><h2 id="过平滑问题"><a href="#过平滑问题" class="headerlink" title="过平滑问题"></a>过平滑问题</h2><p>由于每层GCN都是一个低通滤波器，在多层堆叠时，信号经不断平滑会越来越趋同，丧失节点特征的多样性，以下分别从频域和空域两个视角对这个问题进行分析。</p>
+<h3 id="频域视角"><a href="#频域视角" class="headerlink" title="频域视角"></a>频域视角</h3><p>从退化的多层GCN模型出发</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \lim_{K \rightarrow + \infty} \tilde{L}_{sym}^K &=
+        \lim_{K \rightarrow + \infty} (I - \tilde{L}_s)^K
+    = \lim_{K \rightarrow + \infty} \left( V (I - \tilde{\Lambda}) V^T \right)^K \\
+    & = \lim_{K \rightarrow + \infty} V
+        \begin{bmatrix}
+            (1 - \tilde{\lambda}_1)^K & & & \\
+            & (1 - \tilde{\lambda}_2)^K & & \\
+            & & \ddots & \\
+            & & & (1 - \tilde{\lambda}_n)^K \\
+        \end{bmatrix} V^T
+\end{aligned} \tag{28.1}</script><p>由于$\tilde{\lambda}_1 = 0, \tilde{\lambda}_i &gt; 0, i = 2, \cdots, n$，所以</p>
+<script type="math/tex; mode=display">
+\lim_{K \rightarrow + \infty} \tilde{L}_{sym}^K = V 
+    \begin{bmatrix}
+        1 & & & \\
+        & 0 & & \\
+        & & \ddots & \\
+        & & & 0 \\
+    \end{bmatrix} V^T \tag{28.2}</script><p>那么对于输入图信号$x$，有</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    (\lim_{K \rightarrow + \infty} \tilde{L}_{sym}^K) \cdot x & = V 
+        \begin{bmatrix}
+            1 & & & \\
+            & 0 & & \\
+            & & \ddots & \\
+            & & & 0 \\
+        \end{bmatrix} V^T \cdot x \\
+        & = v_1 V^T \cdot x = v_1 v_1^T \cdot x = \tilde{x}_1 v_1
+\end{aligned} \tag{28.3}</script><hr>
+<p>考虑</p>
+<script type="math/tex; mode=display">
+\tilde{L}_{sym} \cdot \tilde{D}^{1/2} \bm{1} 
+    = \tilde{D}^{-1/2} L \tilde{D}^{-1/2} \cdot \tilde{D}^{1/2} \bm{1}
+    = \tilde{D}^{-1/2} \underbrace{L \bm{1}}_{\sum_j a_{ij} - d_i = 0}
+    = \tilde{D}^{-1/2}   \bm{0}
+    = \bm{0} \tag{28.4}</script><p>所以$(\tilde{D}^{1/2} \bm{1}, 0)$是$\tilde{L}_{sym}$的特征对，又因为</p>
+<script type="math/tex; mode=display">\tilde{L}_s = \tilde{D}^{-1/2} L \tilde{D}^{-1/2} = \begin{cases}
+    \tilde{D}^{-1/2} V \Lambda V^T \tilde{D}^{-1/2} \\
+    V \tilde{\Lambda} V^T
+\end{cases}\tag{28.5}</script><p>经<a href="#eigen_of_V">拉普拉斯算子</a>一节分析，拉普拉斯矩阵$L$存在特征对$(\bm{1}, 0)$，所以</p>
+<script type="math/tex; mode=display">v_1 = \tilde{D}^{1/2} \bm{1} \tag{28.6}</script><hr>
+<p>结合$(28.3)与(28.6)$可以得到</p>
+<script type="math/tex; mode=display">(\lim_{K \rightarrow + \infty} \tilde{L}_{sym}^K) \cdot x = \tilde{x}_1 \tilde{D}^{1/2} \cdot \bm{1} \tag{29}</script><p><strong>也就是说，经过$K \rightarrow + \infty$次平滑后，图信号最终趋于常向量，不具有区分性。</strong></p>
+<h3 id="空域视角"><a href="#空域视角" class="headerlink" title="空域视角"></a>空域视角</h3><p>GCN从空域角度理解，是聚合邻居节点的信息。<strong>随着GCN层数增加，节点的聚合半径也在增长，最终会覆盖整个图</strong>，这与从那个结点出发开始聚合是无关的。这种情况会大大降低每个节点的局部网络结构的多样性，对节点自身的特征学习十分不利。</p>
+<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><h4 id="跳跃连接"><a href="#跳跃连接" class="headerlink" title="跳跃连接"></a>跳跃连接</h4><p>通过跳跃连接来聚合模型的每层节点输出，聚合后的节点特征具有混合性的聚合半径。对于任意一个节点而言，都不会因为聚合半径过大而出现过平滑问题，也不会因为半径过小而未充分学习结构信息。</p>
+<p>具体操作是将每层GCN网络层的输出，通过跳跃连接与网络的最终输出相连，可以选择如拼接、平均池化、最大池化等操作，得到的最终输出用于监督学习。</p>
+<h4 id="重分配权重"><a href="#重分配权重" class="headerlink" title="重分配权重"></a>重分配权重</h4><p>回到频域视角调节图滤波器的值，例如</p>
+<script type="math/tex; mode=display">
+A_{ij}' = \begin{cases}
+    1 - p & i = j \\
+    p \times \frac{A_{ij}}{\text{deg}(v_i)} & i \neq j
+\end{cases} \tag{30}</script><p>其中$\text{deg}(\cdot)$表示取节点的度，也即</p>
+<script type="math/tex; mode=display">\text{deg}(v_i) = \sum_{v_j \in \mathcal{N}(v_i)} A_{ij} \tag{31}</script><p>调节$p$的值对节点自身权重进行重分配</p>
+<ul>
+<li>$p \rightarrow 0$时，模型趋向于不聚合邻居信息，减缓了模型低通滤波的效应；</li>
+<li>$p \rightarrow 1$时，模型趋向于不使用自身信息，加速了模型低通滤波的效应。</li>
+</ul>
+<h1 id="GCN变体与框架"><a href="#GCN变体与框架" class="headerlink" title="GCN变体与框架"></a>GCN变体与框架</h1><h2 id="GraphSAGE"><a href="#GraphSAGE" class="headerlink" title="GraphSAGE"></a><a href="https://papers.nips.cc/paper/6703-inductive-representation-learning-on-large-graphs.pdf" target="_blank" rel="noopener">GraphSAGE</a></h2><p>上面以随机游走算法训练过程中，用到了拉普拉斯矩阵$L_{n \times n}$，$n$为节点个数，也就是说需要用全部节点的信息进行参数的学习，这对极大规模的图数据非常不友好，存在以下问题</p>
+<ul>
+<li><strong>子图的节点数呈指数级增长</strong>：例如节点度的均值为$\overline{d}$，执行$K$层GCN就涉及$1 + \overline{d} + \overline{d}^2 + \cdots + \overline{d}^K$个节点，导致很高的时间复杂度；</li>
+<li><strong>图数据节点度呈幂律分布</strong>：一些节点的度非常大(超级节点)，这些节点就放大了指数级增长的问题。</li>
+</ul>
+<p>GraphSAGE从空域角度出发，每个节点聚合其$K$阶邻居节点的信息用于更新自身图信号，这就涉及到以下两个方面</p>
+<ul>
+<li><strong>邻居采样</strong>：将GCN由全图的训练方式改造为以节点为中心的小批量训练方式，可以用于训练大规模图数据；</li>
+<li><strong>邻居聚合</strong>：对聚合操作进行拓展，提出几种新的方式，</li>
+</ul>
+<h3 id="邻居采样"><a href="#邻居采样" class="headerlink" title="邻居采样"></a>邻居采样</h3><p>GraphSAGE使用非常自然的采样邻居操作，用于控制子图发散的增长率。具体操作是在第$k$层的邻居采样倍率设置为$S_k$，即每个节点采样的一阶邻居不超过$S_k$(均匀采样)，那么任意一个中心节点的表达计算涉及的节点数目在$O(\prod_k S_k)$级别。</p>
+<blockquote>
+<p>例如一个$2$层的模型，设置$S_1 = 3, S_2 = 2$，那么总节点个数为$1 + 3 + 3 \times 2 = 10$。</p>
+</blockquote>
+<h3 id="邻居聚合"><a href="#邻居聚合" class="headerlink" title="邻居聚合"></a>邻居聚合</h3><p><img src="/2020/06/13/Graph-Neural-Network/graphsage_1.png" alt="graphsage_1"></p>
+<p>邻居图信息的聚合需要满足以下两个条件</p>
+<ul>
+<li>自适应聚合节点数，聚合输出维度必须一致，即长度统一的向量；</li>
+<li>聚合操作对节点具有排列不变性，即邻居节点的顺序与聚合输出无关。</li>
+</ul>
+<p>符合以上性质的操作算子有</p>
+<ul>
+<li>逐元素的平均/加和：是GCN中图卷积操作的线性近似，加和聚合的网络层公式如下，其中$W, b$是代估参数<script type="math/tex; mode=display">y^{sum} = \sigma \left( \sum_{v_j \in \mathcal{N}(v_i)} (W h_j + b) \right)\tag{31}</script></li>
+<li>逐元素的池化：借鉴CNN的池化操作，最大池化聚合的网络层公式如下<script type="math/tex; mode=display">y^{maxpool} = \max_{v_j \in \mathcal{N}(v_i)} \left( \sigma(Wh_j + b) \right) \tag{32}</script></li>
+</ul>
+<blockquote>
+<p>注意激活函数的位置是不同的。</p>
+</blockquote>
+<h3 id="算法流程与实现"><a href="#算法流程与实现" class="headerlink" title="算法流程与实现"></a>算法流程与实现</h3><p><img src="/2020/06/13/Graph-Neural-Network/graphsage_2.png" alt="graphsage_2"></p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> tensorflow.python.keras.initializers <span class="keyword">import</span> glorot_uniform, Zeros</span><br><span class="line"><span class="keyword">from</span> tensorflow.python.keras.layers <span class="keyword">import</span> Input, Dense, Dropout, Layer, LSTM</span><br><span class="line"><span class="keyword">from</span> tensorflow.python.keras.models <span class="keyword">import</span> Model</span><br><span class="line"><span class="keyword">from</span> tensorflow.python.keras.regularizers <span class="keyword">import</span> l2</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MeanAggregator</span><span class="params">(Layer)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, units, input_dim, neigh_max, concat=True, dropout_rate=<span class="number">0.0</span>, activation=tf.nn.relu, l2_reg=<span class="number">0</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">                 use_bias=False,</span></span></span><br><span class="line"><span class="function"><span class="params">                 seed=<span class="number">1024</span>, **kwargs)</span>:</span></span><br><span class="line">        super(MeanAggregator, self).__init__()</span><br><span class="line">        self.units = units</span><br><span class="line">        self.neigh_max = neigh_max</span><br><span class="line">        self.concat = concat</span><br><span class="line">        self.dropout_rate = dropout_rate</span><br><span class="line">        self.l2_reg = l2_reg</span><br><span class="line">        self.use_bias = use_bias</span><br><span class="line">        self.activation = activation</span><br><span class="line">        self.seed = seed</span><br><span class="line">        self.input_dim = input_dim</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">build</span><span class="params">(self, input_shapes)</span>:</span></span><br><span class="line"></span><br><span class="line">        self.neigh_weights = self.add_weight(shape=(self.input_dim, self.units),</span><br><span class="line">                                             initializer=glorot_uniform(</span><br><span class="line">                                                 seed=self.seed),</span><br><span class="line">                                             regularizer=l2(self.l2_reg),</span><br><span class="line">                                             name=<span class="string">"neigh_weights"</span>)</span><br><span class="line">        <span class="keyword">if</span> self.use_bias:</span><br><span class="line">            self.bias = self.add_weight(shape=(self.units), initializer=Zeros(),</span><br><span class="line">                                        name=<span class="string">'bias_weight'</span>)</span><br><span class="line"></span><br><span class="line">        self.dropout = Dropout(self.dropout_rate)</span><br><span class="line">        self.built = <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">call</span><span class="params">(self, inputs, training=None)</span>:</span></span><br><span class="line">        features, node, neighbours = inputs</span><br><span class="line"></span><br><span class="line">        node_feat = tf.nn.embedding_lookup(features, node)</span><br><span class="line">        neigh_feat = tf.nn.embedding_lookup(features, neighbours)</span><br><span class="line"></span><br><span class="line">        node_feat = self.dropout(node_feat, training=training)</span><br><span class="line">        neigh_feat = self.dropout(neigh_feat, training=training)</span><br><span class="line"></span><br><span class="line">        concat_feat = tf.concat([neigh_feat, node_feat], axis=<span class="number">1</span>)</span><br><span class="line">        concat_mean = tf.reduce_mean(concat_feat, axis=<span class="number">1</span>, keep_dims=<span class="keyword">False</span>)</span><br><span class="line"></span><br><span class="line">        output = tf.matmul(concat_mean, self.neigh_weights)</span><br><span class="line">        <span class="keyword">if</span> self.use_bias:</span><br><span class="line">            output += self.bias</span><br><span class="line">        <span class="keyword">if</span> self.activation:</span><br><span class="line">            output = self.activation(output)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># output = tf.nn.l2_normalize(output,dim=-1)</span></span><br><span class="line">        output._uses_learning_phase = <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_config</span><span class="params">(self)</span>:</span></span><br><span class="line">        config = &#123;<span class="string">'units'</span>: self.units,</span><br><span class="line">                  <span class="string">'concat'</span>: self.concat,</span><br><span class="line">                  <span class="string">'seed'</span>: self.seed</span><br><span class="line">                  &#125;</span><br><span class="line"></span><br><span class="line">        base_config = super(MeanAggregator, self).get_config()</span><br><span class="line">        <span class="keyword">return</span> dict(list(base_config.items()) + list(config.items()))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PoolingAggregator</span><span class="params">(Layer)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, units, input_dim, neigh_max, aggregator=<span class="string">'meanpooling'</span>, concat=True,</span></span></span><br><span class="line"><span class="function"><span class="params">                 dropout_rate=<span class="number">0.0</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">                 activation=tf.nn.relu, l2_reg=<span class="number">0</span>, use_bias=False,</span></span></span><br><span class="line"><span class="function"><span class="params">                 seed=<span class="number">1024</span>, )</span>:</span></span><br><span class="line">        super(PoolingAggregator, self).__init__()</span><br><span class="line">        self.output_dim = units</span><br><span class="line">        self.input_dim = input_dim</span><br><span class="line">        self.concat = concat</span><br><span class="line">        self.pooling = aggregator</span><br><span class="line">        self.dropout_rate = dropout_rate</span><br><span class="line">        self.l2_reg = l2_reg</span><br><span class="line">        self.use_bias = use_bias</span><br><span class="line">        self.activation = activation</span><br><span class="line">        self.neigh_max = neigh_max</span><br><span class="line">        self.seed = seed</span><br><span class="line"></span><br><span class="line">        <span class="comment"># if neigh_input_dim is None:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">build</span><span class="params">(self, input_shapes)</span>:</span></span><br><span class="line"></span><br><span class="line">        self.dense_layers = [Dense(</span><br><span class="line">            self.input_dim, activation=<span class="string">'relu'</span>, use_bias=<span class="keyword">True</span>, kernel_regularizer=l2(self.l2_reg))]</span><br><span class="line"></span><br><span class="line">        self.neigh_weights = self.add_weight(</span><br><span class="line">            shape=(self.input_dim * <span class="number">2</span>, self.output_dim),</span><br><span class="line">            initializer=glorot_uniform(</span><br><span class="line">                seed=self.seed),</span><br><span class="line">            regularizer=l2(self.l2_reg),</span><br><span class="line"></span><br><span class="line">            name=<span class="string">"neigh_weights"</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> self.use_bias:</span><br><span class="line">            self.bias = self.add_weight(shape=(self.output_dim,),</span><br><span class="line">                                        initializer=Zeros(),</span><br><span class="line">                                        name=<span class="string">'bias_weight'</span>)</span><br><span class="line"></span><br><span class="line">        self.built = <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">call</span><span class="params">(self, inputs, mask=None)</span>:</span></span><br><span class="line"></span><br><span class="line">        features, node, neighbours = inputs</span><br><span class="line"></span><br><span class="line">        node_feat = tf.nn.embedding_lookup(features, node)</span><br><span class="line">        neigh_feat = tf.nn.embedding_lookup(features, neighbours)</span><br><span class="line"></span><br><span class="line">        dims = tf.shape(neigh_feat)</span><br><span class="line">        batch_size = dims[<span class="number">0</span>]</span><br><span class="line">        num_neighbors = dims[<span class="number">1</span>]</span><br><span class="line">        h_reshaped = tf.reshape(</span><br><span class="line">            neigh_feat, (batch_size * num_neighbors, self.input_dim))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> l <span class="keyword">in</span> self.dense_layers:</span><br><span class="line">            h_reshaped = l(h_reshaped)</span><br><span class="line">        neigh_feat = tf.reshape(</span><br><span class="line">            h_reshaped, (batch_size, num_neighbors, int(h_reshaped.shape[<span class="number">-1</span>])))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> self.pooling == <span class="string">"meanpooling"</span>:</span><br><span class="line">            neigh_feat = tf.reduce_mean(neigh_feat, axis=<span class="number">1</span>, keep_dims=<span class="keyword">False</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            neigh_feat = tf.reduce_max(neigh_feat, axis=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        output = tf.concat(</span><br><span class="line">            [tf.squeeze(node_feat, axis=<span class="number">1</span>), neigh_feat], axis=<span class="number">-1</span>)</span><br><span class="line"></span><br><span class="line">        output = tf.matmul(output, self.neigh_weights)</span><br><span class="line">        <span class="keyword">if</span> self.use_bias:</span><br><span class="line">            output += self.bias</span><br><span class="line">        <span class="keyword">if</span> self.activation:</span><br><span class="line">            output = self.activation(output)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># output = tf.nn.l2_normalize(output, dim=-1)</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_config</span><span class="params">(self)</span>:</span></span><br><span class="line">        config = &#123;<span class="string">'output_dim'</span>: self.output_dim,</span><br><span class="line">                  <span class="string">'concat'</span>: self.concat</span><br><span class="line">                  &#125;</span><br><span class="line"></span><br><span class="line">        base_config = super(PoolingAggregator, self).get_config()</span><br><span class="line">        <span class="keyword">return</span> dict(list(base_config.items()) + list(config.items()))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">GraphSAGE</span><span class="params">(feature_dim, neighbor_num, n_hidden, n_classes, use_bias=True, activation=tf.nn.relu,</span></span></span><br><span class="line"><span class="function"><span class="params">              aggregator_type=<span class="string">'mean'</span>, dropout_rate=<span class="number">0.0</span>, l2_reg=<span class="number">0</span>)</span>:</span></span><br><span class="line">    features = Input(shape=(feature_dim,))</span><br><span class="line">    node_input = Input(shape=(<span class="number">1</span>,), dtype=tf.int32)</span><br><span class="line">    neighbor_input = [Input(shape=(l,), dtype=tf.int32) <span class="keyword">for</span> l <span class="keyword">in</span> neighbor_num]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> aggregator_type == <span class="string">'mean'</span>:</span><br><span class="line">        aggregator = MeanAggregator</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        aggregator = PoolingAggregator</span><br><span class="line"></span><br><span class="line">    h = features</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, len(neighbor_num)):</span><br><span class="line">        <span class="keyword">if</span> i &gt; <span class="number">0</span>:</span><br><span class="line">            feature_dim = n_hidden</span><br><span class="line">        <span class="keyword">if</span> i == len(neighbor_num) - <span class="number">1</span>:</span><br><span class="line">            activation = tf.nn.softmax</span><br><span class="line">            n_hidden = n_classes</span><br><span class="line">        h = aggregator(units=n_hidden, input_dim=feature_dim, activation=activation, l2_reg=l2_reg, use_bias=use_bias,</span><br><span class="line">                       dropout_rate=dropout_rate, neigh_max=neighbor_num[i], aggregator=aggregator_type)(</span><br><span class="line">            [h, node_input, neighbor_input[i]])  <span class="comment">#</span></span><br><span class="line"></span><br><span class="line">    output = h</span><br><span class="line">    input_list = [features, node_input] + neighbor_input</span><br><span class="line">    model = Model(input_list, outputs=output)</span><br><span class="line">    <span class="keyword">return</span> model</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sample_neighs</span><span class="params">(G, nodes, sample_num=None, self_loop=False, shuffle=True)</span>:</span>  <span class="comment"># 抽样邻居节点</span></span><br><span class="line">    _sample = np.random.choice</span><br><span class="line">    neighs = [list(G[int(node)]) <span class="keyword">for</span> node <span class="keyword">in</span> nodes]  <span class="comment"># nodes里每个节点的邻居</span></span><br><span class="line">    <span class="keyword">if</span> sample_num:</span><br><span class="line">        <span class="keyword">if</span> self_loop:</span><br><span class="line">            sample_num -= <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        samp_neighs = [</span><br><span class="line">            list(_sample(neigh, sample_num, replace=<span class="keyword">False</span>)) <span class="keyword">if</span> len(neigh) &gt;= sample_num <span class="keyword">else</span> list(</span><br><span class="line">                _sample(neigh, sample_num, replace=<span class="keyword">True</span>)) <span class="keyword">for</span> neigh <span class="keyword">in</span> neighs]  <span class="comment"># 采样邻居</span></span><br><span class="line">        <span class="keyword">if</span> self_loop:</span><br><span class="line">            samp_neighs = [</span><br><span class="line">                samp_neigh + list([nodes[i]]) <span class="keyword">for</span> i, samp_neigh <span class="keyword">in</span> enumerate(samp_neighs)]  <span class="comment"># gcn邻居要加上自己</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> shuffle:</span><br><span class="line">            samp_neighs = [list(np.random.permutation(x)) <span class="keyword">for</span> x <span class="keyword">in</span> samp_neighs]</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        samp_neighs = neighs</span><br><span class="line">    <span class="keyword">return</span> np.asarray(samp_neighs), np.asarray(list(map(len, samp_neighs)))</span><br></pre></td></tr></table></figure>
+<h2 id="GAT"><a href="#GAT" class="headerlink" title="GAT"></a>GAT</h2><p><strong>图注意力网络</strong>(Graph Attention Networks, GAT)通过注意力机制对邻居节点进行聚合操作，实现对不同邻居权重的自适应分配，提高模型表达能力。</p>
+<p>设图中任意节点$v_i$在$l$层对应的特征向量为$h^{(l)}_i \in R^{d^{(l)}}$，$d^{(l)}$表示节点的特征维数。经过以注意力机制为核心的聚合操作后，得到输出$h^{(l + 1)}_i \in R^{d^{(l + 1)}}$。</p>
+<p>设中心节点为$v_i$，定义$W^{(l)} \in R^{d^{(l + 1)} \times d^{(l)}}$是该层节点特征变换的权重参数，$a(\cdot)$是计算两个节点相关度的函数，那么邻居节点$v_j$(可以将每个节点都视作自己的邻居)到$v_i$的权重系数为</p>
+<script type="math/tex; mode=display">e^{(l)}_{ij} = a(W^{(l)} h^{(l)}_i, W^{(l)} h^{(l)}_j) \tag{33}</script><p>原文中，作者采用了以下函数计算权重</p>
+<script type="math/tex; mode=display">e^{(l)}_{ij} = \text{Leaky ReLU}({a^{(l)}}^T [W^{(l)} h^{(l)}_i || W^{(l)} h^{(l)}_j]) \tag{34.1}</script><p>其中$a^{(l)} \in R^{2d^{(l + 1)}}$，$[\cdot || \cdot]$表示特征拼接操作。用softmax进行归一化，得到权重系数$\alpha^{(l)}_{ij}$</p>
+<script type="math/tex; mode=display">\alpha^{(l)}_{ij} = \text{softmax}_j (e^{(l)}_{ij}) = \exp(e^{(l)}_{ij}) / \sum_{v_k \in \mathcal{N}(v_i)} e^{(l)}_{ik} \tag{34.2}</script><p>那么网络层输入输出的关系可以表示为</p>
+<script type="math/tex; mode=display">h^{(l + 1)}_i = \sigma\left( \sum_{v_k \in \mathcal{N}(v_i)} \alpha^{(l)}_{ij} \cdot W^{(l)} h^{(l)}_j \right) \tag{35}</script><hr>
+<p>为进一步提高注意力层的表达能力，可以加入<strong>多头注意力机制</strong>(mult-head attention)，具体操作是对$(35)$多次调用$K$组相互独立的注意力机制，然后将结果聚集，例如拼接操作</p>
+<script type="math/tex; mode=display">h^{(l + 1)}_i = ||_{k=1}^K \sigma \left( \sum_{v_k \in \mathcal{N}(v_i)} {\alpha^{(l)}_{ij}}_k \cdot W_k^{(l)} h^{(l)}_j \right) \tag{36.1}</script><p>或者取均值</p>
+<script type="math/tex; mode=display">h^{(l + 1)}_i = \frac{1}{K} \sum_{k=1}^K \sigma \left( \sum_{v_k \in \mathcal{N}(v_i)} {\alpha^{(l)}_{ij}}_k \cdot W_k^{(l)} h^{(l)}_j \right) \tag{36.2}</script><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> tensorflow.python.keras <span class="keyword">import</span> backend <span class="keyword">as</span> K</span><br><span class="line"><span class="keyword">from</span> tensorflow.python.keras.initializers <span class="keyword">import</span> Zeros</span><br><span class="line"><span class="keyword">from</span> tensorflow.python.keras.layers <span class="keyword">import</span> Layer, Dropout,Input</span><br><span class="line"><span class="keyword">from</span> tensorflow.python.keras.regularizers <span class="keyword">import</span> l2</span><br><span class="line"><span class="keyword">from</span> tensorflow.python.keras.models <span class="keyword">import</span> Model</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GATLayer</span><span class="params">(Layer)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, att_embedding_size=<span class="number">8</span>, head_num=<span class="number">8</span>, dropout_rate=<span class="number">0.5</span>, l2_reg=<span class="number">0</span>, activation=tf.nn.relu,</span></span></span><br><span class="line"><span class="function"><span class="params">                 reduction=<span class="string">'concat'</span>, use_bias=True, seed=<span class="number">1024</span>, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> head_num &lt;= <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">'head_num must be a int &gt; 0'</span>)</span><br><span class="line">        self.att_embedding_size = att_embedding_size</span><br><span class="line">        self.head_num = head_num</span><br><span class="line">        self.dropout_rate = dropout_rate</span><br><span class="line">        self.l2_reg = l2_reg</span><br><span class="line">        self.activation = activation</span><br><span class="line">        self.act = activation</span><br><span class="line">        self.reduction = reduction</span><br><span class="line">        self.use_bias = use_bias</span><br><span class="line">        self.seed = seed</span><br><span class="line">        super(GATLayer, self).__init__(**kwargs)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">build</span><span class="params">(self, input_shape)</span>:</span></span><br><span class="line"></span><br><span class="line">        X, A = input_shape</span><br><span class="line">        embedding_size = int(X[<span class="number">-1</span>])</span><br><span class="line">        self.weight = self.add_weight(name=<span class="string">'weight'</span>, shape=[embedding_size, self.att_embedding_size * self.head_num],</span><br><span class="line">                                      dtype=tf.float32,</span><br><span class="line">                                      regularizer=l2(self.l2_reg),</span><br><span class="line">                                      initializer=tf.keras.initializers.glorot_uniform())</span><br><span class="line">        self.att_self_weight = self.add_weight(name=<span class="string">'att_self_weight'</span>,</span><br><span class="line">                                               shape=[<span class="number">1</span>, self.head_num,</span><br><span class="line">                                                      self.att_embedding_size],</span><br><span class="line">                                               dtype=tf.float32,</span><br><span class="line">                                               regularizer=l2(self.l2_reg),</span><br><span class="line">                                               initializer=tf.keras.initializers.glorot_uniform())</span><br><span class="line">        self.att_neighs_weight = self.add_weight(name=<span class="string">'att_neighs_weight'</span>,</span><br><span class="line">                                                 shape=[<span class="number">1</span>, self.head_num,</span><br><span class="line">                                                        self.att_embedding_size],</span><br><span class="line">                                                 dtype=tf.float32,</span><br><span class="line">                                                 regularizer=l2(self.l2_reg),</span><br><span class="line">                                                 initializer=tf.keras.initializers.glorot_uniform())</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> self.use_bias:</span><br><span class="line">            self.bias_weight = self.add_weight(name=<span class="string">'bias'</span>, shape=[<span class="number">1</span>, self.head_num, self.att_embedding_size],</span><br><span class="line">                                               dtype=tf.float32,</span><br><span class="line">                                               initializer=Zeros())</span><br><span class="line">        self.in_dropout = Dropout(self.dropout_rate)</span><br><span class="line">        self.feat_dropout = Dropout(self.dropout_rate, )</span><br><span class="line">        self.att_dropout = Dropout(self.dropout_rate, )</span><br><span class="line">        <span class="comment"># Be sure to call this somewhere!</span></span><br><span class="line">        super(GATLayer, self).build(input_shape)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">call</span><span class="params">(self, inputs, training=None, **kwargs)</span>:</span></span><br><span class="line"></span><br><span class="line">        X, A = inputs</span><br><span class="line">        X = self.in_dropout(X)  <span class="comment"># N * D</span></span><br><span class="line">        <span class="comment"># A = self.att_dropout(A, training=training)</span></span><br><span class="line">        <span class="keyword">if</span> K.ndim(X) != <span class="number">2</span>:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(</span><br><span class="line">                <span class="string">"Unexpected inputs dimensions %d, expect to be 2 dimensions"</span> % (K.ndim(X)))</span><br><span class="line"></span><br><span class="line">        features = tf.matmul(X, self.weight, )  <span class="comment"># None F'*head_num</span></span><br><span class="line">        features = tf.reshape(</span><br><span class="line">            features, [<span class="number">-1</span>, self.head_num, self.att_embedding_size])  <span class="comment"># None head_num F'</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># attn_for_self = K.dot(features, attention_kernel[0])  # (N x 1), [a_1]^T [Wh_i]</span></span><br><span class="line">        <span class="comment"># attn_for_neighs = K.dot(features, attention_kernel[1])  # (N x 1), [a_2]^T [Wh_j]</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># head_num None F D --- &gt; head_num None(F) D</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># querys = tf.stack(tf.split(querys, self.head_num, axis=1))</span></span><br><span class="line">        <span class="comment"># keys = tf.stack(tf.split(keys, self.head_num, axis=1))#[?,1,1433,64]</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># features = tf.stack(tf.split(features, self.head_num, axis=1))  # head_num None F'</span></span><br><span class="line">        attn_for_self = tf.reduce_sum(</span><br><span class="line">            features * self.att_self_weight, axis=<span class="number">-1</span>, keep_dims=<span class="keyword">True</span>)  <span class="comment"># None head_num 1</span></span><br><span class="line">        attn_for_neighs = tf.reduce_sum(</span><br><span class="line">            features * self.att_neighs_weight, axis=<span class="number">-1</span>, keep_dims=<span class="keyword">True</span>)</span><br><span class="line">        dense = tf.transpose(attn_for_self, [<span class="number">1</span>, <span class="number">0</span>, <span class="number">2</span>]) + \</span><br><span class="line">                    tf.transpose(attn_for_neighs, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">        dense = tf.nn.leaky_relu(dense, alpha=<span class="number">0.2</span>)</span><br><span class="line">        mask = <span class="number">-10e9</span> * (<span class="number">1.0</span> - A)</span><br><span class="line">        dense += tf.expand_dims(mask, axis=<span class="number">0</span>)  <span class="comment"># [?,8,8], [1,?,2708]</span></span><br><span class="line"></span><br><span class="line">        self.normalized_att_scores = tf.nn.softmax(</span><br><span class="line">            dense, dim=<span class="number">-1</span>, )  <span class="comment"># head_num None(F) None(F)</span></span><br><span class="line"></span><br><span class="line">        features = self.feat_dropout(features, )</span><br><span class="line">        self.normalized_att_scores = self.att_dropout(</span><br><span class="line">            self.normalized_att_scores)</span><br><span class="line"></span><br><span class="line">        result = tf.matmul(self.normalized_att_scores,</span><br><span class="line">                           tf.transpose(features, [<span class="number">1</span>, <span class="number">0</span>, <span class="number">2</span>]))  <span class="comment"># head_num None F D   [8,2708,8] [8,2708,3]</span></span><br><span class="line">        result = tf.transpose(result, [<span class="number">1</span>, <span class="number">0</span>, <span class="number">2</span>])  <span class="comment"># None head_num attsize</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> self.use_bias:</span><br><span class="line">            result += self.bias_weight</span><br><span class="line"></span><br><span class="line">        <span class="comment"># head_num Node embeding_size</span></span><br><span class="line">        <span class="keyword">if</span> self.reduction == <span class="string">"concat"</span>:</span><br><span class="line">            result = tf.concat(</span><br><span class="line">                tf.split(result, self.head_num, axis=<span class="number">1</span>), axis=<span class="number">-1</span>)</span><br><span class="line">            result = tf.squeeze(result, axis=<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            result = tf.reduce_mean(result, axis=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> self.act:</span><br><span class="line">            result = self.activation(result)</span><br><span class="line"></span><br><span class="line">        result._uses_learning_phase = <span class="keyword">True</span></span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">compute_output_shape</span><span class="params">(self, input_shape)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> self.reduction == <span class="string">"concat"</span>:</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> (<span class="keyword">None</span>, self.att_embedding_size * self.head_num)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> (<span class="keyword">None</span>, self.att_embedding_size)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_config</span><span class="params">(self, )</span>:</span></span><br><span class="line">        config = &#123;<span class="string">'att_embedding_size'</span>: self.att_embedding_size, <span class="string">'head_num'</span>: self.head_num, <span class="string">'use_res'</span>: self.use_res,</span><br><span class="line">                  <span class="string">'seed'</span>: self.seed&#125;</span><br><span class="line">        base_config = super(GATLayer, self).get_config()</span><br><span class="line">        <span class="keyword">return</span> dict(list(base_config.items()) + list(config.items()))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">GAT</span><span class="params">(adj_dim,feature_dim,num_class,num_layers=<span class="number">2</span>,n_attn_heads = <span class="number">8</span>,att_embedding_size=<span class="number">8</span>,dropout_rate=<span class="number">0.0</span>,l2_reg=<span class="number">0.0</span>,use_bias=True)</span>:</span></span><br><span class="line">    X_in = Input(shape=(feature_dim,))</span><br><span class="line">    A_in = Input(shape=(adj_dim,))</span><br><span class="line">    h = X_in</span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> range(num_layers<span class="number">-1</span>):</span><br><span class="line">        h = GATLayer(att_embedding_size=att_embedding_size, head_num=n_attn_heads, dropout_rate=dropout_rate, l2_reg=l2_reg,</span><br><span class="line">                                     activation=tf.nn.elu, use_bias=use_bias, )([h, A_in])</span><br><span class="line"></span><br><span class="line">    h = GATLayer(att_embedding_size=num_class, head_num=<span class="number">1</span>, dropout_rate=dropout_rate, l2_reg=l2_reg,</span><br><span class="line">                                 activation=tf.nn.softmax, use_bias=use_bias, reduction=<span class="string">'mean'</span>)([h, A_in])</span><br><span class="line"></span><br><span class="line">    model = Model(inputs=[X_in, A_in], outputs=h)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> model</span><br></pre></td></tr></table></figure>
+<h2 id="R-GCN"><a href="#R-GCN" class="headerlink" title="R-GCN"></a>R-GCN</h2><p>R-GCN用于对节点不同关系进行建模，之前介绍的GCN模型都是考虑同构图，而现实生活中图数据往往是异构的。例如在搜索某人的信息时，异构图中需要考虑与其在多种关系图中有关联的人员，如国籍、年龄、出生地等，而关系间没有很大的关联性。</p>
+<p>R-GCN基于GCN的聚合邻居操作，<strong>增加了聚合关系的维度，使得节点的聚合操作变成双重聚合过程</strong>，如下</p>
+<script type="math/tex; mode=display">
+h^{(l + 1)}_i = 
+    \sigma \left( \sum_{r \in R}
+        \sum_{v_k \in \mathcal{N}_r(v_i)} 
+            \frac{1}{ {c_i}_r }
+            W_r^{(l)} h^{(l)}_j + 
+            W_o^{(l)} h^{(l)}_i
+    \right) \tag{37}</script><p>其中</p>
+<ul>
+<li>$R$表示所有关系的集合；</li>
+<li>$\mathcal{N}_r(v_i)$表示与节点$v_i$具有$r$关系的邻居集合；</li>
+<li>${c_i}_r$用于归一化，如${c_i}_r = |\mathcal{N}_r(v_i)|$；</li>
+<li>$W_r^{(l)}$是具有$r$关系的邻居对应的权重系数；</li>
+<li>$W_o^{(l)}$是节点自身对应的权重系数。</li>
+</ul>
+<hr>
+<p>但是以上方式存在以下问题</p>
+<ul>
+<li>多关系图中可能包含大量关系，如果为每一种关系设计一组权重，那么单层R-GCN参数量十分庞大；</li>
+<li>不同关系的节点数目不同，例如不常见关对应的权重参数非常少，增加了过拟合风险。</li>
+</ul>
+<p>R-GCN提出了对$W_r^{(l)}$进行<strong>基分解</strong>(basic decomposition)，即</p>
+<script type="math/tex; mode=display">W_r^{(l)} = \sum_{b=1}^B { {a_b}_r }^{(l)} V_b^{(l)} \tag{38.1}</script><p>其中$V_b^{(l)} \in R^{d^{(l + 1)} \times d^{(l)}}$，${ {a_b}_r }^{(l)}$是分解系数，$B$是控制分解个数的超参数(一般取$B &lt;&lt; \min(|R|,  d^{(l + 1)} \times d^{(l)})$)。那么经过分解后，参数量是原来的</p>
+<script type="math/tex; mode=display">\frac{(|R| + d^{(l + 1)} \times d^{(l)}) \times B}{|R| \times d^{(l + 1)} \times d^{(l)}} \tag{38.2}</script><h1 id="图分类"><a href="#图分类" class="headerlink" title="图分类"></a>图分类</h1><p><strong>图分类问题</strong>与节点层面任务不同，给定多张图及其对应标签，需要通过学习得出一个<strong>由图到相应标签的图分类模型</strong>。需要关注图数据的<strong>全局信息</strong>(包括图的结构信息和各个节点的属性信息)，重点在于如何通过学习得到一个优秀的全图表示向量。</p>
+<p>图分类任务与视觉中图像分类一样，需要对全局的信息进行融合学习。CNN中通常采用的方法是<strong>层次化池化</strong>(Hierarchical Pooling)。由于图像数据为规则的栅格结构，固定大小和步长的滑窗使最大池化或平均池化等简单操作都能高效地提取高阶信息，但非规则结构的图数据无法直接迁移这类池化操作。</p>
+<p>以下主要介绍两个部分：基于一次性全局池化的图分类、基于层次化池化的图分类。</p>
+<h2 id="基于一次性全局池化的图分类"><a href="#基于一次性全局池化的图分类" class="headerlink" title="基于一次性全局池化的图分类"></a>基于一次性全局池化的图分类</h2><p>类似CNN模型中常用的最后一个卷积层的<strong>全局池化</strong>(Global Pooling)，这种方法对经过$K$轮迭代的所有节点进行一次性聚合操作，得到全图的全局表示</p>
+<script type="math/tex; mode=display">y = R(\{ h^{(k)}_i | \forall v_i \in V \}) \tag{39}</script><p>$R$可以是Sum、Mean、Max等类型的函数。考虑到<strong>经过$K$仑迭代后，各个节点的表达会接近全局表达，所以能较好地提取全局信息</strong>。但是这种处理方法本质上是将输入数据看作平整且规则的结构数据，<strong>丢失了图数据中丰富的结构信息</strong>，适用于结构信息相对单一的小规模图数据；</p>
+<h2 id="基于层次化池化的图分类"><a href="#基于层次化池化的图分类" class="headerlink" title="基于层次化池化的图分类"></a>基于层次化池化的图分类</h2><h3 id="基于图坍缩的池化机制"><a href="#基于图坍缩的池化机制" class="headerlink" title="基于图坍缩的池化机制"></a>基于图坍缩的池化机制</h3><p>将图划分成不同的子图，然后将子图视作<strong>超级节点</strong>，从而形成坍缩的图。</p>
+<p>给定图$G$，通过某种划分策略得到$K$个子图${G^{(k), k = 1, \cdots, K}}$，子图$G^{(k)}$中的节点个数为$N_k$、节点列表为$\Gamma^{(k)}$，并定义两个关键矩阵：</p>
+<ul>
+<li><p><strong>簇分配矩阵</strong>$S \in R^{N \times K}$：当且仅当$v_i \in \Gamma^{(k)}$时，有$S_{ik} = 1$。考察一下<strong>簇分配矩阵$S$的含义</strong>，有</p>
+<script type="math/tex; mode=display">{ A_{coar} }_{K \times K} = S^T A S \tag{40}</script><p>  $A_{coar}$描述了<strong>图坍塌后超级节点之间的连接强度</strong>，${ A_{coar} }_{ii}$是超级节点自身内部的连接强度。</p>
+</li>
+<li><p><strong>采样算子</strong>$C^{(k)} \in R^{N \times N_k}$，$N_k$是簇$k$中结点的个数：当且仅当$v_i = \Gamma^{(k)}_j$时，有$C_{ij} = 1$。<br>  假定定义在$G$上的$1$维图信号为$x \in R^{N}$，下面两个式子完成了对图信号的<strong>下采样</strong>(切片)和<strong>上采样</strong>操作</p>
+<script type="math/tex; mode=display">
+  \begin{aligned}
+      x^{(K)} & = { C^{(k)} }^T x & 取出包含节点对应维度的图信号 \\
+      \overline{x} & = C^{(k)} x^{(K)} & 在不包含的节点对应维度处补0 \\
+  \end{aligned}</script><p>  那么可以通过采样算子<strong>获取子图的邻接矩阵</strong></p>
+<script type="math/tex; mode=display">A^{(k)} = { C^{(k)} }^T A C^{(k)} \tag{41}</script></li>
+</ul>
+<p>通过$(40)$和$(41)$可以确定簇内的邻接关系和簇间的邻接关系。那么如果能够确定簇内信号的融合方法，将结果表示为超级节点上的信号，那么迭代重复上述过程就可以获得越来越全局的图信号。</p>
+<hr>
+<p>如下图所示</p>
+<p><img src="/2020/06/13/Graph-Neural-Network/graph_coarsening.jpg" alt="graph_coarsening"></p>
+<p>那么有邻接矩阵</p>
+<script type="math/tex; mode=display">
+A = \begin{bmatrix}
+    0 & 1 & 1 & 0 & 0 & 0 \\
+    1 & 0 & 1 & 0 & 0 & 0 \\
+    1 & 1 & 0 & 1 & 0 & 0 \\
+    0 & 0 & 1 & 0 & 1 & 1 \\
+    0 & 0 & 0 & 1 & 0 & 1 \\
+    0 & 0 & 0 & 1 & 1 & 0
+\end{bmatrix}</script><p>按图中分为两个簇，$\Gamma^{(1)} = {v_1, v_2, v_3}, \Gamma^{(2)} = {v_4, v_5, v_6}$，那么<strong>簇分配矩阵</strong>为</p>
+<script type="math/tex; mode=display">
+S = \begin{bmatrix}
+    1 & 0 \\
+    1 & 0 \\
+    1 & 0 \\
+    0 & 1 \\
+    0 & 1 \\
+    0 & 1
+\end{bmatrix}</script><p><strong>采样算子</strong>有</p>
+<script type="math/tex; mode=display">
+C^{(1)} = \begin{bmatrix}
+    1 & 0 & 0 \\
+    0 & 1 & 0 \\
+    0 & 0 & 1 \\
+    0 & 0 & 0 \\
+    0 & 0 & 0 \\
+    0 & 0 & 0
+\end{bmatrix}, 
+C^{(2)} = \begin{bmatrix}
+    0 & 0 & 0 \\
+    0 & 0 & 0 \\
+    0 & 0 & 0 \\
+    1 & 0 & 0 \\
+    0 & 1 & 0 \\
+    0 & 0 & 1
+\end{bmatrix}</script><p>在本例中<strong>超级节点间的邻接矩阵</strong>为</p>
+<script type="math/tex; mode=display">A_{coar} = S^T A S = \begin{bmatrix}6 & 1 \\ 1 & 6 \end{bmatrix}</script><p><strong>子图$G^{(1)}$内的邻接矩阵</strong>为</p>
+<script type="math/tex; mode=display">A^{(1)} = { C^{(1)} }^T A C^{(1)} = \begin{bmatrix}0 & 1 & 1 \\ 1 & 0 & 1 \\ 1 & 1 & 0 \end{bmatrix}</script><h4 id="DIFFPOOL"><a href="#DIFFPOOL" class="headerlink" title="DIFFPOOL"></a>DIFFPOOL</h4><p>DIFFPOOL是首个将图坍塌过程和GNN结合起来进行图层面任务学习的算法。提<strong>出了一个可学习的簇分配矩阵，具体地就是通过GNN对每个节点进行特征学习，然后通过另一个GNN为节点学习出所属各个簇的概率分布</strong></p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    特征学习: & Z^{(l)} = & GNN_{l, embed}(A^{(l)}, H^{(l)}) \\
+    簇概率分布学习: & S^{(l)} = & softmax \left( GNN_{l, pool}(A^{(l)}, H^{(l)}) \right)
+\end{aligned} \tag{42.1}</script><p>其中</p>
+<ul>
+<li>$A^{(l)} \in R^{n^{(l)} \times n^{(l)}}, S^{(l)} \in R^{n^{(l)} \times n^{(l + 1)}}$，$n^{(l)}$表示第$l$层的节点数；</li>
+<li>相比较$(40)$的簇分配矩阵，这里的$S$是一个软分配器，值表示节点被分配到任意一个簇的概率，由于概率不为$0$，所以这是一个下层超级节点到上层所有节点之间的全连接结构；</li>
+<li>$GNN_{l, embed}, GNN_{l, pool}$是两个独立的GNN层，输入相同但参数不同，学习任务也不同；</li>
+<li>最后一层的簇分配矩阵，需要将图坍缩成一个超级节点，所以直接将该矩阵固定成全$1$的矩阵。</li>
+</ul>
+<p>基于上述两个GNN层的输出，可以对图进行坍缩，定义<strong>DIFFPOOL层</strong>$\left( (A^{(l)}, Z^{(l)}) \rightarrow (A^{(l+1)}, H^{(l+1)}) \right)$，由以下两部分组成</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    簇内节点的特征加和处理: & H^{(l+1)} = & { S^{(l)} }^T Z^{(l)} \\
+    簇间邻接矩阵计算: & A^{(l+1)} = & { S^{(l)} }^T A^{(l)} S^{(l)}
+\end{aligned} \tag{42.2}</script><h4 id="EigenPooling"><a href="#EigenPooling" class="headerlink" title="EigenPooling"></a>EigenPooling</h4><p>EigenPooling没有对图分类模型引入任何需要学习的参数，<strong>其核心步骤在于作用域的选取以及池化操作。</strong></p>
+<ul>
+<li><p>EigenPooling借用一些<strong>图分区的算法</strong>来实现图的划分，如谱聚类算法，划分后用式$(40)$得到超级节点间的邻接关系</p>
+<script type="math/tex; mode=display">{ A_{coar} }_{K \times K} = S^T A S \tag{40}</script></li>
+<li><p>用子图上的信号在该子图上的<strong>图傅里叶变换</strong>来代表结构信息与属性信息的整合输出(详细略)。</p>
+</li>
+</ul>
+<h3 id="基于TopK的池化机制"><a href="#基于TopK的池化机制" class="headerlink" title="基于TopK的池化机制"></a>基于TopK的池化机制</h3><p>对图中每个节点学习得到一个分数，<strong>基于分数的排序丢弃一些低分数的节点</strong>。这种方法借鉴了最大池化的思路：将更重要的信息筛选出来，但是图数据难以实现局部滑窗，需要依据分数进行全局筛选。</p>
+<p>具体来说，首先设置一个表示池化率的超参数$k \in (0, 1)$，接着学习出一个表示节点重要度的值$z$并对其进行降序排序，然后将全图中$N$个节点下采样至$kN$个，即</p>
+<script type="math/tex; mode=display">i = top-rank(z, kN) \tag{43.1}</script><script type="math/tex; mode=display">X' = X_{i,:} \tag{43.2}</script><script type="math/tex; mode=display">A' = A_{i, i} \tag{43.3}</script><p>其中</p>
+<ul>
+<li>$i$为索引向量，即Topk中的索引；</li>
+<li>$X_{i,:}$表示按向量$i$的值对特征矩阵按行切片；</li>
+<li>$A_{i, i}$表示按向量$i$的值对邻接决战同时进行行切片与列切片。</li>
+</ul>
+<hr>
+<p>关于节点重要度的学习，在<a href="https://arxiv.org/abs/1811.01287" target="_blank" rel="noopener">[1811.01287] Towards Sparse Hierarchical Graph Classifiers</a>一文中，作者为图分类模型设置了全局基向量$p$，<strong>将节点特征向量在该基向量的投影视作重要度</strong></p>
+<script type="math/tex; mode=display">z = X \cdot \frac{p}{||p||} \tag{44.1}</script><p>有以下两个作用</p>
+<ul>
+<li>可以以投影大小确定Topk排序；</li>
+<li>投影大小起到了梯度门限的作用，投影越大其梯度更新增幅越大。</li>
+</ul>
+<p><strong>全部细节如下</strong></p>
+<script type="math/tex; mode=display">z = \frac{Xp}{||p||}, i = top-rank(z, kN) \tag{44.2}</script><script type="math/tex; mode=display">X' = (X \odot tanh(z))_{i, :} \tag{44.3}</script><script type="math/tex; mode=display">A' = A_{i, i} \tag{44.4}</script><p>$(44.3)$中点乘$tanh(z)$相当于利用节点的重要度对节点特征做一次收缩变换，进一步强化了对重要度高的节点的梯度学习，这一操作被称为<strong>gpool层</strong>。这种采取层层丢弃节点的做法，可以提高远距离节点的融合效率，但是会使其缺乏对所有节点进行有效信息融合的手段。因此，作者选择<strong>在每个gpool层后跟随读出层，实现对该尺度下图的全局信息的一次性聚合</strong></p>
+<script type="math/tex; mode=display">s = \underbrace{\frac{1}{N} \sum_{i=1}^N x_i'}_{全局平均池化} || \underbrace{\max_{i=1}^N  x_i'}_{全局最大池化} \tag{44.5}</script><p>最终将各层的$s$相加。得到<strong>全图的表示</strong></p>
+<script type="math/tex; mode=display">s = \sum_{l=1}^L s^{(l)} \tag{44.6}</script><h3 id="基于边收缩的池化机制"><a href="#基于边收缩的池化机制" class="headerlink" title="基于边收缩的池化机制"></a>基于边收缩的池化机制</h3><p><strong>基于边收缩的池化机制EdgePool</strong>，通过迭代式地对每条边上的节点进行两两归并形成新节点，同时保留合并前节点的连接关系到新结点上。有个问题如何在某节点的多条边中选择用于收缩的边，EdgePool的解决方法是对每条边设计一个分数，根据该分数进行非重复式的挑选和合并，具体操作如下</p>
+<ul>
+<li><p>计算每条边的<strong>原始分数</strong>$r$</p>
+<script type="math/tex; mode=display">r_{ij} = w^T [h_i || h_j] + b \tag{45.1}</script></li>
+<li><p>对原始分数沿邻居节点进行<strong>归一化</strong></p>
+<script type="math/tex; mode=display">s_{ij} = softmax_j (r_ij) \tag{45.2}</script></li>
+<li><p>对所有$s_{ij}$进行排序，依次选择<strong>分数最高的且未被选中的两个节点</strong>进行收缩操作，并用求和的方式求取合并之后的节点特征</p>
+<script type="math/tex; mode=display">h_{ij} = s \cdot (h_i + h_j), s = \max(s_{ij}, s_{ji}) \tag{45.3}</script><p>  其中分数$s$用于对节点特征进行收缩处理。</p>
+<blockquote>
+<p>注意：未被选中的两个节点才进行合并，即将节点归并比严格控制在$0.5$。</p>
+</blockquote>
+</li>
+</ul>
+<h1 id="图表示学习"><a href="#图表示学习" class="headerlink" title="图表示学习"></a>图表示学习</h1><p>前面使用邻接矩阵$A \in R^{N \times N}$表示图的结构信息，一般来说$A$是一个高维且稀疏的矩阵，直接用$A$去表示图数据，相关的任务学习难以高效。<strong>图表示学习的主要目标是将图数据转化成低维稠密的向量化表示，同时确保图数据的某些性质在向量空间中也得到对应。</strong></p>
+<h2 id="基于重构损失的GNN"><a href="#基于重构损失的GNN" class="headerlink" title="基于重构损失的GNN"></a>基于重构损失的GNN</h2><p>类比自编码器的思路，可以将节点间的邻接关系进行重构学习，定义<strong>图自编码器</strong>(Graph Auto Encoder)</p>
+<script type="math/tex; mode=display">Z = GNN(X, A) \tag{46.1}</script><script type="math/tex; mode=display">\hat{A} = \sigma(Z Z^T) \tag{46.2}</script><p>其中</p>
+<ul>
+<li>$Z$是所有节点的表示，借助GNN模型同时对图的属性信息和结构信息进行编码学习；</li>
+<li>$\hat{A}$是重构之后的邻接矩阵，这里使用向量内积表示节点之间对的邻接关系。</li>
+</ul>
+<p>图自编码器的重构损失定义为</p>
+<script type="math/tex; mode=display">L_{recon} = || \hat{A} - A ||_2^2 \tag{46.3}</script><p>由于<strong>过平滑问题</strong>，GNN可以轻易将相邻节点学习出相似的表达，导致$\hat{A}$能很快趋近于原始邻接矩阵$A$，模型参数难以有效优化。那么同自编码器一样，对损失函数加上一些约束目标。如对输入数据进行一定扰动，迫使模型从加噪数据中提取有用的信息，包括</p>
+<ul>
+<li>对原图数据的特征矩阵$X$适当增加随机噪声或随机置$0$；</li>
+<li>对原图数据的邻接矩阵$A$删除适当比例的边，或修改边上的权重值。</li>
+</ul>
+<p>还有如基于<strong>变分自编码器</strong>(VAE)的图表示学习方法。</p>
+<h2 id="基于对比损失的GNN"><a href="#基于对比损失的GNN" class="headerlink" title="基于对比损失的GNN"></a>基于对比损失的GNN</h2><p>对比损失是无监督表示学习中一种常见的损失函数。通过设置<strong>评分函数</strong>$D(\cdot)$，在学习过程中将会提高正样本的评分，降低负样本的评分。</p>
+<p>类比词向量，<strong>在图数据中上下文代表与节点有对应关系的对象，从小到大依次可以是节点的邻居、节点所处的子图、全图</strong>。作为节点与上下文之间存在的固有关系，我们希望评分函数提高节点与上下文对的得分、降低节点与非上下文对的得分，即</p>
+<script type="math/tex; mode=display">L_{v_i} = - \log (D(z_i, c)) + \log (D(z_i, \overline{c})) \tag{47}</script><p>其中$c$表示上下文的表示向量，$\overline{c}$表示非上下文的表示向量。</p>
+<h3 id="邻居上下文"><a href="#邻居上下文" class="headerlink" title="邻居上下文"></a>邻居上下文</h3><p><strong>将邻居节点作为上下文，那么就是建模节点与邻居节点的共现关系</strong>。GraphSAGE中描述了这样一种方法，在随机游走时与中心节点$v_i$一起出现在固定长度窗口内的节点$v_j$视作邻居，通过负采样手段将不符合该关系的节点作为负样本</p>
+<script type="math/tex; mode=display">Z = GNN(X, A) \tag{48.1}</script><script type="math/tex; mode=display">L_{v_i} = \log(1 - \sigma(z_i^T z_j)) + E_{v_n \sim p_n(v_i)} \log (\sigma(z_i^T z_{v_n})) \tag{48.2}</script><p>其中</p>
+<ul>
+<li>$p_n(v_i)$是一个关于节点出现概率的<strong>负采样分布</strong>；</li>
+<li><strong>得分函数</strong>使用向量内积加$sigmoid$函数的形式，将分数限制在$[0, 1]$内。</li>
+</ul>
+<p><strong>但是这种方式强调节点之间的共现关系，更多反映了图中节点间的距离远近，缺乏对节点结构相似性的捕捉。</strong></p>
+<h3 id="子图上下文"><a href="#子图上下文" class="headerlink" title="子图上下文"></a>子图上下文</h3><p><a href="https://arxiv.org/abs/1905.12265" target="_blank" rel="noopener">[1905.12265] Pre-training Graph Neural Networks</a>一文中提出这样一种方法，将子图作为节点的上下文进行对比学习。用GNN在节点$v_i$的$K$阶子图上提取<strong>表示向量</strong>；在$r_1-hop$与$r_2-hop$之间的节点定义为$v_i$的上下文锚点，用GNN提取该范围内每个节点作为上下文锚点时的表示向量，然后聚合上下文锚点的表示向量得到一个总的、固定长度的<strong>上下文表示向量</strong>。具体地</p>
+<script type="math/tex; mode=display">Z = GNN(X, A) \tag{49.1}</script><script type="math/tex; mode=display">Z_{context} = GNN_{context}(X, A) \tag{49.2.1}</script><script type="math/tex; mode=display">c_i = R\left( \{ Z_{context}[j], \forall v_j \in C_{v_i} \} \right) \tag{49.2.2}</script><script type="math/tex; mode=display">L_{v_i} = \log(1 - \sigma(z_i^T c_i)) + \log(\sigma(z_i^T c_{j | j \neq i})) \tag{49.3}</script><p>其中$C_{v_i}$表示节点$v_i$的上下文锚点集合，示意图如下<br><img src="/2020/06/13/Graph-Neural-Network/subgraph_context.jpg" alt="subgraph_context"></p>
+<h3 id="全图上下文"><a href="#全图上下文" class="headerlink" title="全图上下文"></a>全图上下文</h3><p>Deep Graph Infmax(DGI)，略。</p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="https://github.com/shenweichen/GraphNeuralNetwork" target="_blank" rel="noopener">shenweichen/GraphNeuralNetwork</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/12/Efficient-Feature-Selection/" rel="next" title="Efficient Feature Selection">
+                <i class="fa fa-chevron-left"></i> Efficient Feature Selection
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.gif"
+                alt="Louis Hsu" />
+            
+              <p class="site-author-name" itemprop="name">Louis Hsu</p>
+              <p class="site-description motion-element" itemprop="description">永远年轻，永远热泪盈眶</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/%20%7C%7C%20archive">
+                
+                    <span class="site-state-item-count">101</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/isLouisHsu" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://is.louishsu@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/islouishsu" target="_blank" title="Zhihu"><i class="fa fa-fw fa-zhihu"></i>Zhihu</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/islouishsu" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          <div id='music163player'>
+            <iframe 
+              frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=110 
+              src="//music.163.com/outchain/player?type=0&id=2703291040&auto=1&height=90">
+            </iframe>
+          </div>
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#目录"><span class="nav-number">1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#图卷积神经网络-GCN"><span class="nav-number">2.</span> <span class="nav-text">图卷积神经网络(GCN)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#图信号"><span class="nav-number">2.1.</span> <span class="nav-text">图信号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拉普拉斯算子"><span class="nav-number">2.2.</span> <span class="nav-text">拉普拉斯算子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#图傅里叶变换"><span class="nav-number">2.3.</span> <span class="nav-text">图傅里叶变换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GFT与IGFT"><span class="nav-number">2.3.1.</span> <span class="nav-text">GFT与IGFT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总变差-TV"><span class="nav-number">2.3.2.</span> <span class="nav-text">总变差(TV)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#图信号的频域描述"><span class="nav-number">2.3.3.</span> <span class="nav-text">图信号的频域描述</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#图滤波器"><span class="nav-number">2.4.</span> <span class="nav-text">图滤波器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#定义"><span class="nav-number">2.4.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拉普拉斯矩阵多项式拓展形式"><span class="nav-number">2.4.2.</span> <span class="nav-text">拉普拉斯矩阵多项式拓展形式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#空域角度"><span class="nav-number">2.4.3.</span> <span class="nav-text">空域角度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#频域角度"><span class="nav-number">2.4.4.</span> <span class="nav-text">频域角度</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#图卷积的定义"><span class="nav-number">2.5.</span> <span class="nav-text">图卷积的定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#滤波器的参数化"><span class="nav-number">2.6.</span> <span class="nav-text">滤波器的参数化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#频域图卷积模型"><span class="nav-number">2.6.1.</span> <span class="nav-text">频域图卷积模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#频率响应函数的参数化"><span class="nav-number">2.6.1.1.</span> <span class="nav-text">频率响应函数的参数化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#拉普拉斯矩阵多项式拓展形式系数的参数化"><span class="nav-number">2.6.1.2.</span> <span class="nav-text">拉普拉斯矩阵多项式拓展形式系数的参数化</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#空域图卷积模型"><span class="nav-number">2.6.2.</span> <span class="nav-text">空域图卷积模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#固定滤波器的参数化"><span class="nav-number">2.6.2.1.</span> <span class="nav-text">固定滤波器的参数化</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GCN的性质"><span class="nav-number">3.</span> <span class="nav-text">GCN的性质</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GCN与CNN联系"><span class="nav-number">3.1.</span> <span class="nav-text">GCN与CNN联系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#端到端学习"><span class="nav-number">3.2.</span> <span class="nav-text">端到端学习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#低通滤波器"><span class="nav-number">3.3.</span> <span class="nav-text">低通滤波器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#过平滑问题"><span class="nav-number">3.4.</span> <span class="nav-text">过平滑问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#频域视角"><span class="nav-number">3.4.1.</span> <span class="nav-text">频域视角</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#空域视角"><span class="nav-number">3.4.2.</span> <span class="nav-text">空域视角</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方法"><span class="nav-number">3.4.3.</span> <span class="nav-text">解决方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#跳跃连接"><span class="nav-number">3.4.3.1.</span> <span class="nav-text">跳跃连接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#重分配权重"><span class="nav-number">3.4.3.2.</span> <span class="nav-text">重分配权重</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GCN变体与框架"><span class="nav-number">4.</span> <span class="nav-text">GCN变体与框架</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GraphSAGE"><span class="nav-number">4.1.</span> <span class="nav-text">GraphSAGE</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#邻居采样"><span class="nav-number">4.1.1.</span> <span class="nav-text">邻居采样</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#邻居聚合"><span class="nav-number">4.1.2.</span> <span class="nav-text">邻居聚合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算法流程与实现"><span class="nav-number">4.1.3.</span> <span class="nav-text">算法流程与实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GAT"><span class="nav-number">4.2.</span> <span class="nav-text">GAT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#R-GCN"><span class="nav-number">4.3.</span> <span class="nav-text">R-GCN</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#图分类"><span class="nav-number">5.</span> <span class="nav-text">图分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基于一次性全局池化的图分类"><span class="nav-number">5.1.</span> <span class="nav-text">基于一次性全局池化的图分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于层次化池化的图分类"><span class="nav-number">5.2.</span> <span class="nav-text">基于层次化池化的图分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于图坍缩的池化机制"><span class="nav-number">5.2.1.</span> <span class="nav-text">基于图坍缩的池化机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#DIFFPOOL"><span class="nav-number">5.2.1.1.</span> <span class="nav-text">DIFFPOOL</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#EigenPooling"><span class="nav-number">5.2.1.2.</span> <span class="nav-text">EigenPooling</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于TopK的池化机制"><span class="nav-number">5.2.2.</span> <span class="nav-text">基于TopK的池化机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于边收缩的池化机制"><span class="nav-number">5.2.3.</span> <span class="nav-text">基于边收缩的池化机制</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#图表示学习"><span class="nav-number">6.</span> <span class="nav-text">图表示学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基于重构损失的GNN"><span class="nav-number">6.1.</span> <span class="nav-text">基于重构损失的GNN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于对比损失的GNN"><span class="nav-number">6.2.</span> <span class="nav-text">基于对比损失的GNN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#邻居上下文"><span class="nav-number">6.2.1.</span> <span class="nav-text">邻居上下文</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#子图上下文"><span class="nav-number">6.2.2.</span> <span class="nav-text">子图上下文</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#全图上下文"><span class="nav-number">6.2.3.</span> <span class="nav-text">全图上下文</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">7.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Louis Hsu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: 'e65d27f7cf5c62feaf97',
+          clientSecret: '356386826698e8b817ca076b08d7c0e9814f52ea',
+          repo: 'isLouisHsu.github.io',
+          owner: 'isLouisHsu',
+          admin: ['isLouisHsu'],
+          id: md5(window.location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('3');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+
+  <script type="text/javascript" src="/js/click_show_text.js"></script>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+</html>
