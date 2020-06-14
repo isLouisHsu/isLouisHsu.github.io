@@ -122,7 +122,7 @@
 <meta property="og:image" content="http://yoursite.com/2020/06/13/Graph-Neural-Network/graph_coarsening.jpg">
 <meta property="og:image" content="http://yoursite.com/2020/06/13/Graph-Neural-Network/subgraph_context.jpg">
 <meta property="article:published_time" content="2020-06-13T09:55:25.000Z">
-<meta property="article:modified_time" content="2020-06-13T09:49:17.468Z">
+<meta property="article:modified_time" content="2020-06-14T00:12:27.751Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://yoursite.com/2020/06/13/Graph-Neural-Network/spatial_frequency_domain_eg.png">
@@ -409,12 +409,24 @@
                 
               
 
-              <time title="创建时间：2020-06-13 17:55:25 / 修改时间：17:49:17" itemprop="dateCreated datePublished" datetime="2020-06-13T17:55:25+08:00">2020-06-13</time>
+              <time title="创建时间：2020-06-13 17:55:25" itemprop="dateCreated datePublished" datetime="2020-06-13T17:55:25+08:00">2020-06-13</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-06-14 08:12:27" itemprop="dateModified" datetime="2020-06-14T08:12:27+08:00">2020-06-14</time>
               
             
           </span>
@@ -584,7 +596,7 @@ D = \begin{bmatrix}
 <script type="math/tex; mode=display">L x = (D - A) x = \begin{bmatrix} \cdots & x_i' & \cdots \end{bmatrix}^T \tag{4.1}</script><p>其中</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-    x_i' & = (- a_{ii} + \sum_j a_{ij}) x_i - \sum_{j \neq i} a_{ij} x_j \\
+    x_i' & = \underbrace{(- a_{ii} + \sum_j a_{ij})}_{对角线元素} x_i - \sum_{j \neq i} a_{ij} x_j \\
     & = x_i \sum_j a_{ij} - \sum_j a_{ij} x_j \\
     & = \sum_j a_{ij} (x_i - x_j) \\
 \end{aligned} \tag{4.2}</script><p>可以看到经$L$变换实际上是<strong>根据节点间信号差异$x_i - x_j$更新$x_i’$</strong>。</p>
@@ -683,8 +695,8 @@ L = \begin{bmatrix}
 <script type="math/tex; mode=display">x^{(k)} =  L^k \cdot x \tag{12.1}</script><p>由于$L$是图位移算子，那么$x^{(k-1)}$到$x^{(k)}$的变换只需所有节点的<strong>一阶邻居</strong>参与计算，所以$x^{(k)}$需要所有节点的$k$阶邻居参与，这种性质称为<strong>图滤波器的局部性</strong>。那么输出图信号是$(K + 1)$组图信号的线性加权</p>
 <script type="math/tex; mode=display">y = \sum_{k=0}^K h_k x^{(k)} \tag{12.2}</script><blockquote>
 <ul>
-<li>经$k$次拉普拉斯矩阵线性变换，<strong>聚合节点$i$的$k$阶邻居</strong>得到图信号$x^{(k)}_i$；</li>
-<li>$K$次<strong>局部性不同</strong>的聚合线性组合(权重$h_k$)得到本次滤波的输出。</li>
+<li>经$k$次拉普拉斯矩阵线性变换，每次<strong>聚合节点$i$的$k$阶邻居</strong>($k$随着$i$递增)得到图信号$x^{(k)}_i$；</li>
+<li>$K$次<strong>局部性不同</strong>的聚合$x^{(k)}$，经过线性组合(权重$h_k$)得到本次滤波的输出。</li>
 </ul>
 </blockquote>
 <hr>
@@ -2076,6 +2088,6 @@ C^{(2)} = \begin{bmatrix}
 
 
   <script type="text/javascript" src="/js/click_show_text.js"></script>
-  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
 </html>

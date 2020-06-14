@@ -125,7 +125,7 @@
 <meta property="og:image" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/linear_regression_graph.jpg">
 <meta property="og:image" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/lar.jpg">
 <meta property="article:published_time" content="2020-06-12T05:04:00.000Z">
-<meta property="article:modified_time" content="2020-06-12T05:07:37.249Z">
+<meta property="article:modified_time" content="2020-06-14T03:30:39.920Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/feature_engineering.jpg">
@@ -412,12 +412,24 @@
                 
               
 
-              <time title="创建时间：2020-06-12 13:04:00 / 修改时间：13:07:37" itemprop="dateCreated datePublished" datetime="2020-06-12T13:04:00+08:00">2020-06-12</time>
+              <time title="创建时间：2020-06-12 13:04:00" itemprop="dateCreated datePublished" datetime="2020-06-12T13:04:00+08:00">2020-06-12</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-06-14 11:30:39" itemprop="dateModified" datetime="2020-06-14T11:30:39+08:00">2020-06-14</time>
               
             
           </span>
@@ -715,21 +727,21 @@
 <h2 id="惩罚项方法-Regularization"><a href="#惩罚项方法-Regularization" class="headerlink" title="惩罚项方法(Regularization)"></a>惩罚项方法(Regularization)</h2><h3 id="线性回归的最小二乘估计和贝叶斯估计"><a href="#线性回归的最小二乘估计和贝叶斯估计" class="headerlink" title="线性回归的最小二乘估计和贝叶斯估计"></a>线性回归的最小二乘估计和贝叶斯估计</h3><p>给定样本集合${(X^{(i)}, y^{(i)}), i = 1, \cdots, N, X^{(i)} \in R^d, y^{(i)} \in R}$，增广后组成样本矩阵$X_{N \times (d + 1)}$，线性回归模型参数为$w \in R^{d + 1}$，那么有</p>
 <script type="math/tex; mode=display">\hat{Y} = Xw</script><ol>
 <li><p><strong>基于最小二乘估计</strong>，定义线性回归模型的优化目标</p>
-<script type="math/tex; mode=display">w^* = \argmax_w \frac{1}{N} || Y - Xw ||_2^2</script></li>
+<script type="math/tex; mode=display">w^* = \arg \max_w \frac{1}{N} || Y - Xw ||_2^2</script></li>
 <li><p><strong>基于贝叶斯估计</strong>，假定参数$w_j$服从分布$p(w_j)$，其优化目标为</p>
 <script type="math/tex; mode=display">
  \begin{aligned}
-     w^* & = \argmax_w \log \left( \prod_i p(y^{(i)} | X^{(i)}, w) p(w) \right) \\
-     & = \argmax_w \sum_i \left( \log p(y^{(i)} | X^{(i)}, w) + \log p(w) \right)
+     w^* & = \arg \max_w \log \left( \prod_i p(y^{(i)} | X^{(i)}, w) p(w) \right) \\
+     & = \arg \max_w \sum_i \left( \log p(y^{(i)} | X^{(i)}, w) + \log p(w) \right)
  \end{aligned}</script><p> 在线性回归模型中，假定$y \sim N(w^T x, \delta)$(<strong>本质是高斯模型</strong>)，那么有</p>
 <script type="math/tex; mode=display">\log p(y^{(i)} | X^{(i)}, w) \propto (y^{(i)} - w^T x^{(i)})^2</script><p> 另外，<strong>假定参数维度间独立</strong>，即</p>
 <script type="math/tex; mode=display">p(w) = \prod_j p(w_j)</script></li>
 </ol>
 <h3 id="LASSO-L1"><a href="#LASSO-L1" class="headerlink" title="LASSO(L1)"></a>LASSO(L1)</h3><p>LASSO是指Least Absolute Shrinkage and Selection Operator，是采用$L1$正则化的线性回归方法。添加$L1$正则项，构成LASSO优化目标</p>
-<script type="math/tex; mode=display">w^* = \argmax_w \frac{1}{N} || Y - Xw ||_2^2 + \lambda || w ||_1</script><p><strong>该问题等价于</strong></p>
+<script type="math/tex; mode=display">w^* = \arg \max_w \frac{1}{N} || Y - Xw ||_2^2 + \lambda || w ||_1</script><p><strong>该问题等价于</strong></p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-    w^*  & = \argmax_w \frac{1}{N} || Y - Xw ||_2^2 \\
+    w^*  & = \arg \max_w \frac{1}{N} || Y - Xw ||_2^2 \\
     s.t. & \qquad || w ||_1 \leq t(常数)
 \end{aligned}</script><blockquote>
 <p>用拉格朗日乘子法进行求解时，可以发现两个优化问题等价</p>
@@ -744,17 +756,17 @@ L(w, \lambda) = \frac{1}{N} || Y - Xw ||_2^2 + \lambda(|| w ||_1 - t)</script></
 \end{aligned}</script><p>那么可以看到是等价的</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-    w^* & = \argmax_w \sum_i \left( \log p(y^{(i)} | X^{(i)}, w) + \log p(w) \right) \\
-    & = \argmax_w \sum_i \left( (y^{(i)} - w^T x^{(i)})^2 - \sum_j ( \frac{|w_j|}{\alpha} + \log(2 \alpha) ) \right)
+    w^* & = \arg \max_w \sum_i \left( \log p(y^{(i)} | X^{(i)}, w) + \log p(w) \right) \\
+    & = \arg \max_w \sum_i \left( (y^{(i)} - w^T x^{(i)})^2 - \sum_j ( \frac{|w_j|}{\alpha} + \log(2 \alpha) ) \right)
 \end{aligned}</script><hr>
 <p>其几何意义如下，入了正则化项，相当于是对参数施加了约束，其中L1正则化将参数限制在一个菱形中，，从图中可以看出，L1正则化施加的约束会使得最优值在菱形顶点处取得，也就是说很多参数取值为$0$，得到<strong>稀疏的参数估计结果</strong><br><img src="/2020/06/12/Efficient-Feature-Selection/L1.jpg" alt="L1"></p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> Lasso</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> SelectFromModel</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X, y = load_iris(return_X_y=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>clf = Lasso()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>clf.fit(X, y)</span><br><span class="line">Lasso()</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>model = SelectFromModel(clf, prefit=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new = model.transform(X)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
 <p>又如在SVM中增加$L1$正则项<br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.svm <span class="keyword">import</span> LinearSVC</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> SelectFromModel</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X, y = load_iris(return_X_y=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>lsvc = LinearSVC(C=<span class="number">0.01</span>, penalty=<span class="string">"l1"</span>, dual=<span class="keyword">False</span>).fit(X, y)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>model = SelectFromModel(lsvc, prefit=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new = model.transform(X)</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">3</span>)</span><br></pre></td></tr></table></figure></p>
 <h3 id="Ridge-L2"><a href="#Ridge-L2" class="headerlink" title="Ridge(L2)"></a>Ridge(L2)</h3><p>在线性回归优化目标中添加$L2$正则项，得到Ridge优化目标</p>
-<script type="math/tex; mode=display">w^* = \argmax_w \frac{1}{N} || Y - Xw ||_2^2 + \lambda || w ||_2^2</script><p><strong>该问题等价于</strong></p>
+<script type="math/tex; mode=display">w^* = \arg \max_w \frac{1}{N} || Y - Xw ||_2^2 + \lambda || w ||_2^2</script><p><strong>该问题等价于</strong></p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-    w^*  & = \argmax_w \frac{1}{N} || Y - Xw ||_2^2 \\
+    w^*  & = \arg \max_w \frac{1}{N} || Y - Xw ||_2^2 \\
     s.t. & \qquad || w ||_2^2 \leq t(常数)
 \end{aligned}</script><blockquote>
 <p>用拉格朗日乘子法进行求解时，可以发现两个优化问题等价</p>
@@ -771,8 +783,8 @@ L(w, \lambda) = \frac{1}{N} || Y - Xw ||_2^2 + \lambda(|| w ||_2^2 - t)</script>
 \end{aligned}</script><p>那么可以看到是等价的</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-    w^* & = \argmax_w \sum_i \left( \log p(y^{(i)} | X^{(i)}, w) + \log p(w) \right) \\
-    & = \argmax_w \sum_i \left( 
+    w^* & = \arg \max_w \sum_i \left( \log p(y^{(i)} | X^{(i)}, w) + \log p(w) \right) \\
+    & = \arg \max_w \sum_i \left( 
         (y^{(i)} - w^T x^{(i)})^2 - 
         \sum_j ( \frac{w_j^2}{2 \alpha} + \frac{1}{2} \log(2 \pi \alpha) )
     \right)
@@ -1794,6 +1806,6 @@ r_{AB} = \frac{\sum_{i=1}^n (a_i - \overline{A})(b_i - \overline{B})}{\sigma_A \
 
 
   <script type="text/javascript" src="/js/click_show_text.js"></script>
-  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
 </html>
