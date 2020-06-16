@@ -6,7 +6,7 @@
 @Github: https://github.com/isLouisHsu
 @E-mail: is.louishsu@foxmail.com
 @Date: 2020-06-16 10:38:45
-@LastEditTime: 2020-06-16 14:12:31
+@LastEditTime: 2020-06-16 17:18:38
 @Update: 
 '''
 from heapq import nlargest
@@ -156,7 +156,7 @@ class HuffmanTree:
 # 构建
 tree = HuffmanTree()
 tree.build(poem)
-print(poem)
+print(tree.table)
 
 # 编码
 encoded = tree.encode(poem)
