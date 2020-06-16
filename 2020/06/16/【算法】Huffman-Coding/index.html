@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="目录 目录 霍夫曼编码 霍夫曼树 原理 构建 实现   Reference  霍夫曼编码霍夫曼编码(Huffman Coding)是一种可变长编码(VLC)，作用是根据使用频率来最大化节省字符(编码)的存储空间，完全依据字符出现概率来构造异字头的平均长度最短的码字，有时称作最佳编码。 假设某文本内容如下1234567This is my prayer to thee, my lordstrike,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【算法】Huffman Coding">
+<meta property="og:url" content="http://yoursite.com/2020/06/16/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91Huffman-Coding/index.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="目录 目录 霍夫曼编码 霍夫曼树 原理 构建 实现   Reference  霍夫曼编码霍夫曼编码(Huffman Coding)是一种可变长编码(VLC)，作用是根据使用频率来最大化节省字符(编码)的存储空间，完全依据字符出现概率来构造异字头的平均长度最短的码字，有时称作最佳编码。 假设某文本内容如下1234567This is my prayer to thee, my lordstrike,">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-06-16T02:00:41.000Z">
+<meta property="article:modified_time" content="2020-06-16T06:18:55.374Z">
+<meta property="article:author" content="Louis Hsu">
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/16/【算法】Huffman-Coding/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>【算法】Huffman Coding | LOUIS' BLOG</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LOUIS' BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">To be better</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-guestbook">
+    <a href="/guestbook" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-guest"></i> <br />留言</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/16/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91Huffman-Coding/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="永远年轻，永远热泪盈眶">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【算法】Huffman Coding
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-06-16 10:00:41 / 修改时间：14:18:55" itemprop="dateCreated datePublished" datetime="2020-06-16T10:00:41+08:00">2020-06-16</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><ul>
+<li><a href="#目录">目录</a></li>
+<li><a href="#霍夫曼编码">霍夫曼编码</a></li>
+<li><a href="#霍夫曼树">霍夫曼树</a><ul>
+<li><a href="#原理">原理</a></li>
+<li><a href="#构建">构建</a></li>
+<li><a href="#实现">实现</a></li>
+</ul>
+</li>
+<li><a href="#reference">Reference</a></li>
+</ul>
+<h1 id="霍夫曼编码"><a href="#霍夫曼编码" class="headerlink" title="霍夫曼编码"></a>霍夫曼编码</h1><p><strong>霍夫曼编码</strong>(Huffman Coding)是一种<strong>可变长编码</strong>(VLC)，作用是根据使用频率来最大化节省字符(编码)的存储空间，完全依据字符出现概率来构造异字头的平均长度最短的码字，有时称作<strong>最佳编码</strong>。</p>
+<p>假设某文本内容如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">This is my prayer to thee, my lord</span><br><span class="line">strike, strike at the root of penury in my heart.</span><br><span class="line">Give me the strength lightly to bear my joys and sorrows.</span><br><span class="line">Give me the strength to make my love fruitful in service.</span><br><span class="line">Give me the strength never to disown the poor or bend my knees before insolent might.</span><br><span class="line">Give me the strength to raise my mind high above daily trifles.</span><br><span class="line">And give me the strength to surrender my strength to thy will with love.</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>节选自泰戈尔《吉檀迦利》</p>
+</blockquote>
+<p>各字符的统计频数如下</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th><code>\n</code></th>
+<th><code>T</code></th>
+<th><code>h</code></th>
+<th><code>i</code></th>
+<th><code>s</code></th>
+<th><code> </code></th>
+<th><code>m</code></th>
+<th><code>y</code></th>
+<th><code>p</code></th>
+<th><code>r</code></th>
+<th><code>a</code></th>
+<th><code>e</code></th>
+<th><code>t</code></th>
+<th><code>o</code></th>
+<th><code>,</code></th>
+<th><code>l</code></th>
+<th><code>d</code></th>
+<th><code>k</code></th>
+<th><code>f</code></th>
+<th><code>n</code></th>
+<th><code>u</code></th>
+<th><code>.</code></th>
+<th><code>G</code></th>
+<th><code>v</code></th>
+<th><code>g</code></th>
+<th><code>b</code></th>
+<th><code>j</code></th>
+<th><code>w</code></th>
+<th><code>c</code></th>
+<th><code>A</code></th>
+<th>合计</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>频数</td>
+<td>8</td>
+<td>1</td>
+<td>22</td>
+<td>24</td>
+<td>20</td>
+<td>75</td>
+<td>16</td>
+<td>14</td>
+<td>3</td>
+<td>28</td>
+<td>9</td>
+<td>49</td>
+<td>39</td>
+<td>23</td>
+<td>2</td>
+<td>11</td>
+<td>8</td>
+<td>4</td>
+<td>5</td>
+<td>19</td>
+<td>4</td>
+<td>6</td>
+<td>4</td>
+<td>10</td>
+<td>10</td>
+<td>4</td>
+<td>1</td>
+<td>4</td>
+<td>1</td>
+<td>1</td>
+<td>425</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>共$30$个字符，如果用<strong>二进制等长编码</strong>对这些字符进行编码，每个字符最少需要$\lceil \log_2 31 \rceil = 5(bit)$，那么整个文本至少需要$425 \times 5 / 8 = 265.625(B)$的空间用于存储，即</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th><code>\n</code></th>
+<th><code>T</code></th>
+<th><code>h</code></th>
+<th><code>i</code></th>
+<th>…</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>编码</td>
+<td>00000</td>
+<td>00001</td>
+<td>00010</td>
+<td>00011</td>
+<td>…</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="霍夫曼树"><a href="#霍夫曼树" class="headerlink" title="霍夫曼树"></a>霍夫曼树</h1><h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>先介绍一些术语</p>
+<ul>
+<li><strong>路径</strong>：在一棵树中，一个结点到另一个结点之间的通路，称为路径；</li>
+<li><strong>路径长度</strong>：在一条路径中，每经过一个结点，路径长度都要加$1$；</li>
+<li><strong>结点的权</strong>：给每一个结点赋予一个新的数值，被称为这个结点的权；</li>
+<li><strong>结点的带权路径长度</strong>：指的是从根结点到该结点之间的路径长度与该结点的权的乘积；</li>
+<li><strong>树的带权路径长度(WPL)</strong>：树中所有叶子结点的带权路径长度之和，即<script type="math/tex; mode=display">WPL = \sum_{i=1}^n w_i \times l_i</script></li>
+</ul>
+<p><strong>当用$n$个结点(都做叶子结点且都有各自的权值)</strong>试图构建一棵二叉树时，如果构建的这棵树的带权路径长度最小，称这棵树为<strong>最优二叉树</strong>，有时也叫<strong>霍夫曼树</strong>(Huffman Tree)。</p>
+<p>霍夫曼编码的有两个重要的<strong>思想</strong></p>
+<ol>
+<li><strong>任何一个字符编码，都不是其他字符编码的前缀</strong>：每个字符对应于树中的<strong>叶子节点</strong>，且每个节点赋予权值$w_i$；</li>
+<li>信息编码的总长度最小：树的带权路径长度最小。</li>
+</ol>
+<p><strong>在编码时，叶子节点的权值定义为字符的出现频率。</strong></p>
+<h2 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h2><p><strong>霍夫曼树的构建基于贪心法</strong>，具体步骤如下</p>
+<ol>
+<li>初始化各叶子节点，每个节点包含代表字符及其权重；</li>
+<li>从剩余节点中选取权重最小的两个节点，置为新节点的子节点，新节点的权值为两个子节点的权重和；</li>
+<li>将上个步骤中的两个子节点从待选节点中删除，将新节点加入；</li>
+<li>重复2-3步骤，直至只剩余根节点，那么霍夫曼树构建完毕。</li>
+</ol>
+<p>注意霍夫曼树某节点左右子树顺序无固定要求，所以<strong>最终生成的树不唯一</strong>。</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> heapq <span class="keyword">import</span> nlargest</span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter, deque</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HuffmanTreeNode</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, weight, char=None)</span>:</span></span><br><span class="line">        <span class="comment"># 左右子树</span></span><br><span class="line">        self.left = <span class="keyword">None</span></span><br><span class="line">        self.right = <span class="keyword">None</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 属性</span></span><br><span class="line">        self.weight = weight    <span class="comment"># 权重</span></span><br><span class="line">        self.char = char        <span class="comment"># 代表字符</span></span><br><span class="line">        self.code = <span class="keyword">None</span>        <span class="comment"># 节点编码，用字符串表示</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">isLeaf</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.left <span class="keyword">is</span> <span class="keyword">None</span> <span class="keyword">and</span> self.right <span class="keyword">is</span> <span class="keyword">None</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HuffmanTree</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.root = <span class="keyword">None</span></span><br><span class="line">        self.table = <span class="keyword">None</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_build</span><span class="params">(self, text)</span>:</span></span><br><span class="line">        <span class="string">""" 构建霍夫曼树</span></span><br><span class="line"><span class="string">        Parameters:</span></span><br><span class="line"><span class="string">            text: &#123;str&#125;</span></span><br><span class="line"><span class="string">        Returns:</span></span><br><span class="line"><span class="string">            node: &#123;HuffmanTreeNode&#125;</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="comment"># 统计字符数</span></span><br><span class="line">        counter = Counter(text)</span><br><span class="line">        <span class="comment"># 初始化节点，这里进行了一次排序使树结构尽量稳定</span></span><br><span class="line">        kvps = sorted(counter.items(), key=<span class="keyword">lambda</span> x: x[<span class="number">0</span>])</span><br><span class="line">        nodes = [HuffmanTreeNode(n / sum(counter.values()), c) \</span><br><span class="line">                <span class="keyword">for</span> c, n <span class="keyword">in</span> kvps]</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 循环构建树</span></span><br><span class="line">        <span class="keyword">while</span> len(nodes) &gt; <span class="number">1</span>:</span><br><span class="line">            <span class="comment"># 选择权重最小的两个节点</span></span><br><span class="line">            left, right = nlargest(<span class="number">2</span>, nodes, key=<span class="keyword">lambda</span> x: - x.weight)</span><br><span class="line">            <span class="comment"># 新建节点</span></span><br><span class="line">            weight = left.weight + right.weight</span><br><span class="line">            node = HuffmanTreeNode(weight)</span><br><span class="line">            node.left, node.right = left, right</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 移除节点</span></span><br><span class="line">            nodes.remove(left)</span><br><span class="line">            nodes.remove(right)</span><br><span class="line">            <span class="comment"># 加入节点</span></span><br><span class="line">            nodes += [node]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> nodes[<span class="number">0</span>]</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_table</span><span class="params">(self, root)</span>:</span></span><br><span class="line">        <span class="string">""" 获取编码列表</span></span><br><span class="line"><span class="string">        Parameters:</span></span><br><span class="line"><span class="string">            None</span></span><br><span class="line"><span class="string">        Returns:</span></span><br><span class="line"><span class="string">            table</span></span><br><span class="line"><span class="string">        Notes:</span></span><br><span class="line"><span class="string">            层次遍历(BFS)得到各字符的表示</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="comment"># 初始化队列</span></span><br><span class="line">        q = deque()</span><br><span class="line">        self.root.code = <span class="string">''</span></span><br><span class="line">        q.extend([self.root])</span><br><span class="line"></span><br><span class="line">        <span class="comment"># bfs</span></span><br><span class="line">        table = dict()</span><br><span class="line">        <span class="keyword">while</span> len(q) &gt; <span class="number">0</span>:</span><br><span class="line">            <span class="comment"># 队首元素</span></span><br><span class="line">            node = q.popleft()</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 叶子节点</span></span><br><span class="line">            <span class="keyword">if</span> node.isLeaf():</span><br><span class="line">                table[node.char] = node.code</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            <span class="comment"># 非叶子节点</span></span><br><span class="line">            <span class="keyword">if</span> node.left:</span><br><span class="line">                node.left.code = node.code + <span class="string">'0'</span></span><br><span class="line">                q.extend([node.left])</span><br><span class="line">            <span class="keyword">if</span> node.right:</span><br><span class="line">                node.right.code = node.code + <span class="string">'1'</span></span><br><span class="line">                q.extend([node.right])</span><br><span class="line">        <span class="keyword">return</span> table</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">build</span><span class="params">(self, text)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        Parameters:</span></span><br><span class="line"><span class="string">            text: &#123;str&#125;</span></span><br><span class="line"><span class="string">        Returns:</span></span><br><span class="line"><span class="string">            None</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        self.root = self._build(text)</span><br><span class="line">        self.table = self._table(self.root)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">encode</span><span class="params">(self, text)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        Parameters:</span></span><br><span class="line"><span class="string">            text: &#123;str&#125;</span></span><br><span class="line"><span class="string">        Returns:</span></span><br><span class="line"><span class="string">            encoded: &#123;int&#125;</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        encoded = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i, char <span class="keyword">in</span> enumerate(text):</span><br><span class="line">            <span class="comment"># 查询编码</span></span><br><span class="line">            code = self.table[char]</span><br><span class="line">            <span class="comment"># 每一位加入编码</span></span><br><span class="line">            <span class="keyword">for</span> c <span class="keyword">in</span> code:</span><br><span class="line">                encoded = (encoded &lt;&lt; <span class="number">1</span>) + int(c)</span><br><span class="line">        <span class="keyword">return</span> encoded</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">decode</span><span class="params">(self, encoded)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        Parameters:</span></span><br><span class="line"><span class="string">            encoded: &#123;int&#125;</span></span><br><span class="line"><span class="string">        Returns:</span></span><br><span class="line"><span class="string">            text: &#123;str&#125;</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        text = <span class="string">''</span></span><br><span class="line">        encoded = bin(encoded)</span><br><span class="line">        node = self.root</span><br><span class="line">        <span class="keyword">for</span> i, c <span class="keyword">in</span> enumerate(encoded[<span class="number">2</span>:]):</span><br><span class="line">            <span class="comment"># 向子树游走</span></span><br><span class="line">            <span class="keyword">if</span> c == <span class="string">'0'</span>:</span><br><span class="line">                node = node.left</span><br><span class="line">            <span class="keyword">elif</span> c == <span class="string">'1'</span>:</span><br><span class="line">                node = node.right</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 查找到叶子节点，从根节点重新开始</span></span><br><span class="line">            <span class="keyword">if</span> node.isLeaf():</span><br><span class="line">                text += node.char</span><br><span class="line">                node = self.root</span><br><span class="line">        <span class="keyword">return</span> text</span><br></pre></td></tr></table></figure>
+<p>调用方法如下，可以看到，编码后共占$224.25(B)$，编码前为$265.625(B)$<br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">poem = \</span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">This is my prayer to thee, my lord</span></span><br><span class="line"><span class="string">strike, strike at the root of penury in my heart.</span></span><br><span class="line"><span class="string">Give me the strength lightly to bear my joys and sorrows.</span></span><br><span class="line"><span class="string">Give me the strength to make my love fruitful in service.</span></span><br><span class="line"><span class="string">Give me the strength never to disown the poor or bend my knees before insolent might.</span></span><br><span class="line"><span class="string">Give me the strength to raise my mind high above daily trifles.</span></span><br><span class="line"><span class="string">And give me the strength to surrender my strength to thy will with love.</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 构建</span></span><br><span class="line">tree = HuffmanTree()</span><br><span class="line">tree.build(poem)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 编码</span></span><br><span class="line">encoded = tree.encode(poem)</span><br><span class="line">strEncoded = bin(encoded)</span><br><span class="line">print(strEncoded)</span><br><span class="line">print((len(strEncoded) - <span class="number">2</span>) / <span class="number">8</span>, <span class="string">" Bytes"</span>)</span><br><span class="line"><span class="comment"># 0b101101110011111010010000010111100000101111011110011111001111110101101101001101110101110000101111000010001101111001110111101111001111110010010110101100001011010010000101010001100100011110011101110010000101010001100100011111110110000111000010001111110100101010100011101010011101110011111011110101100101101010011111100011010111101111001111101000111101101010000101100101101110001010000011001111110111011111000010001111100100001010011110101101110000100111100101000110111010000010010100111110000101111110001101111011010101111011110011111001111010101100110010111110110110101100001110010010110101010010111001100010101100101101110001010000011001111110111011111000010001111100100001010011110101101110000100111000010111110111110110110010001111110111100111111001001010011001111100111010101100101100000000111011001011001011110001101011100100111010001101000001111000111011001011011100010100000110011111101110111110000100011111001000010100111101011011100001001111101001100110011101011100001011111100001000001001011100110110101110000100011111001111101010101101011101011010111110001101111010110000111101111001111111001001101001101100101111100011011001110010110100111111000110100010010110010011110100001111011110001101110100000101100101101110001010000011001111110111011111000010001111100100001010011110101101110000100111000010111110101101101000001001111110111100111111011110001101011000011101001000110111010011111011011000110101001100111111100001101101000100101001111100010101000001110100100110010101100101101110011110110101100001111101111000001100111111011101111100001000111110010000101001111010110111000010011100001011110010110010110101010011110101100000111010111101111001111100100001010011110101101110000100111000010111100001001001111111001101000100101001011111001101000000010011110010010100110011101100101101</span></span><br><span class="line"><span class="comment"># 224.25  Bytes</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 解码</span></span><br><span class="line">decoded = tree.decode(encoded)</span><br><span class="line">print(decoded)</span><br><span class="line"><span class="comment"># This is my prayer to thee, my lord</span></span><br><span class="line"><span class="comment"># strike, strike at the root of penury in my heart.</span></span><br><span class="line"><span class="comment"># Give me the strength lightly to bear my joys and sorrows.</span></span><br><span class="line"><span class="comment"># Give me the strength to make my love fruitful in service.</span></span><br><span class="line"><span class="comment"># Give me the strength never to disown the poor or bend my knees before insolent might.</span></span><br><span class="line"><span class="comment"># Give me the strength to raise my mind high above daily trifles.</span></span><br><span class="line"><span class="comment"># And give me the strength to surrender my strength to thy will with love.</span></span><br></pre></td></tr></table></figure></p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="https://zhuanlan.zhihu.com/p/67855882" target="_blank" rel="noopener">哈夫曼编码 - 知乎</a></li>
+<li><a href="https://blog.csdn.net/weixin_42104573/article/details/80445630" target="_blank" rel="noopener">哈夫曼编码 - CSDN</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/13/Graph-Neural-Network/" rel="next" title="Graph Neural Network">
+                <i class="fa fa-chevron-left"></i> Graph Neural Network
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.gif"
+                alt="Louis Hsu" />
+            
+              <p class="site-author-name" itemprop="name">Louis Hsu</p>
+              <p class="site-description motion-element" itemprop="description">永远年轻，永远热泪盈眶</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/%20%7C%7C%20archive">
+                
+                    <span class="site-state-item-count">102</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/isLouisHsu" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://is.louishsu@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/islouishsu" target="_blank" title="Zhihu"><i class="fa fa-fw fa-zhihu"></i>Zhihu</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/islouishsu" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          <div id='music163player'>
+            <iframe 
+              frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=110 
+              src="//music.163.com/outchain/player?type=0&id=2703291040&auto=1&height=90">
+            </iframe>
+          </div>
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#目录"><span class="nav-number">1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#霍夫曼编码"><span class="nav-number">2.</span> <span class="nav-text">霍夫曼编码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#霍夫曼树"><span class="nav-number">3.</span> <span class="nav-text">霍夫曼树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#原理"><span class="nav-number">3.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构建"><span class="nav-number">3.2.</span> <span class="nav-text">构建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现"><span class="nav-number">3.3.</span> <span class="nav-text">实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Louis Hsu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: 'e65d27f7cf5c62feaf97',
+          clientSecret: '356386826698e8b817ca076b08d7c0e9814f52ea',
+          repo: 'isLouisHsu.github.io',
+          owner: 'isLouisHsu',
+          admin: ['isLouisHsu'],
+          id: md5(window.location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('3');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+
+  <script type="text/javascript" src="/js/click_show_text.js"></script>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+</html>

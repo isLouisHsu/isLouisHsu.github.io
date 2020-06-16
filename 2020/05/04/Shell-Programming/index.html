@@ -116,7 +116,7 @@
 <meta property="og:description" content="目录 目录 Shell基础 常用指令 父子shell 环境变量 输入&#x2F;输出重定向 执行时重定向 输入重定向 输出重定向 错误重定向   脚本中重定向 输入&#x2F;输出 自定义文件描述符 重定向到已有文件描述符     管道   变量 字符串 变量参数 数组参数   参数传递 位置参数 命名参数   用户输入 基本输入: read 文件输入: cat | read   脚本退出: exit 命令替换: (">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-05-04T15:23:34.000Z">
-<meta property="article:modified_time" content="2020-05-21T12:06:39.854Z">
+<meta property="article:modified_time" content="2020-06-16T01:18:00.205Z">
 <meta property="article:author" content="Louis Hsu">
 <meta property="article:tag" content="shell">
 <meta name="twitter:card" content="summary">
@@ -420,7 +420,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-05-21 20:06:39" itemprop="dateModified" datetime="2020-05-21T20:06:39+08:00">2020-05-21</time>
+                <time title="修改时间：2020-06-16 09:18:00" itemprop="dateModified" datetime="2020-06-16T09:18:00+08:00">2020-06-16</time>
               
             
           </span>
@@ -480,92 +480,92 @@
 
       
         <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><ul>
-<li><a href="#%e7%9b%ae%e5%bd%95">目录</a></li>
-<li><a href="#shell%e5%9f%ba%e7%a1%80">Shell基础</a><ul>
-<li><a href="#%e5%b8%b8%e7%94%a8%e6%8c%87%e4%bb%a4">常用指令</a></li>
-<li><a href="#%e7%88%b6%e5%ad%90shell">父子shell</a></li>
-<li><a href="#%e7%8e%af%e5%a2%83%e5%8f%98%e9%87%8f">环境变量</a></li>
-<li><a href="#%e8%be%93%e5%85%a5%e8%be%93%e5%87%ba%e9%87%8d%e5%ae%9a%e5%90%91">输入/输出重定向</a><ul>
-<li><a href="#%e6%89%a7%e8%a1%8c%e6%97%b6%e9%87%8d%e5%ae%9a%e5%90%91">执行时重定向</a><ul>
-<li><a href="#%e8%be%93%e5%85%a5%e9%87%8d%e5%ae%9a%e5%90%91">输入重定向</a></li>
-<li><a href="#%e8%be%93%e5%87%ba%e9%87%8d%e5%ae%9a%e5%90%91">输出重定向</a></li>
-<li><a href="#%e9%94%99%e8%af%af%e9%87%8d%e5%ae%9a%e5%90%91">错误重定向</a></li>
+<li><a href="#目录">目录</a></li>
+<li><a href="#shell基础">Shell基础</a><ul>
+<li><a href="#常用指令">常用指令</a></li>
+<li><a href="#父子shell">父子shell</a></li>
+<li><a href="#环境变量">环境变量</a></li>
+<li><a href="#输入输出重定向">输入/输出重定向</a><ul>
+<li><a href="#执行时重定向">执行时重定向</a><ul>
+<li><a href="#输入重定向">输入重定向</a></li>
+<li><a href="#输出重定向">输出重定向</a></li>
+<li><a href="#错误重定向">错误重定向</a></li>
 </ul>
 </li>
-<li><a href="#%e8%84%9a%e6%9c%ac%e4%b8%ad%e9%87%8d%e5%ae%9a%e5%90%91">脚本中重定向</a><ul>
-<li><a href="#%e8%be%93%e5%85%a5%e8%be%93%e5%87%ba">输入/输出</a></li>
-<li><a href="#%e8%87%aa%e5%ae%9a%e4%b9%89%e6%96%87%e4%bb%b6%e6%8f%8f%e8%bf%b0%e7%ac%a6">自定义文件描述符</a></li>
-<li><a href="#%e9%87%8d%e5%ae%9a%e5%90%91%e5%88%b0%e5%b7%b2%e6%9c%89%e6%96%87%e4%bb%b6%e6%8f%8f%e8%bf%b0%e7%ac%a6">重定向到已有文件描述符</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#%e7%ae%a1%e9%81%93">管道</a></li>
-</ul>
-</li>
-<li><a href="#%e5%8f%98%e9%87%8f">变量</a><ul>
-<li><a href="#%e5%ad%97%e7%ac%a6%e4%b8%b2">字符串</a></li>
-<li><a href="#%e5%8f%98%e9%87%8f%e5%8f%82%e6%95%b0">变量参数</a></li>
-<li><a href="#%e6%95%b0%e7%bb%84%e5%8f%82%e6%95%b0">数组参数</a></li>
-</ul>
-</li>
-<li><a href="#%e5%8f%82%e6%95%b0%e4%bc%a0%e9%80%92">参数传递</a><ul>
-<li><a href="#%e4%bd%8d%e7%bd%ae%e5%8f%82%e6%95%b0">位置参数</a></li>
-<li><a href="#%e5%91%bd%e5%90%8d%e5%8f%82%e6%95%b0">命名参数</a></li>
-</ul>
-</li>
-<li><a href="#%e7%94%a8%e6%88%b7%e8%be%93%e5%85%a5">用户输入</a><ul>
-<li><a href="#%e5%9f%ba%e6%9c%ac%e8%be%93%e5%85%a5-read">基本输入: read</a></li>
-<li><a href="#%e6%96%87%e4%bb%b6%e8%be%93%e5%85%a5-cat--read">文件输入: cat | read</a></li>
-</ul>
-</li>
-<li><a href="#%e8%84%9a%e6%9c%ac%e9%80%80%e5%87%ba-exit">脚本退出: exit</a></li>
-<li><a href="#%e5%91%bd%e4%bb%a4%e6%9b%bf%e6%8d%a2--command">命令替换: ( command )</a></li>
-<li><a href="#%e8%bf%90%e7%ae%97%e5%92%8c%e6%b5%8b%e8%af%95">运算和测试</a><ul>
-<li><a href="#%e6%95%b0%e5%ad%a6%e8%bf%90%e7%ae%97">数学运算</a><ul>
-<li><a href="#expr-expression">$( expr expression )</a></li>
-<li><a href="#expression">$[ expression ]</a></li>
-<li><a href="#let-expression--expression">let expression, $(( expression ))</a></li>
-<li><a href="#%e5%86%85%e5%bb%ba%e8%ae%a1%e7%ae%97%e5%99%a8bc">内建计算器bc</a></li>
-</ul>
-</li>
-<li><a href="#%e6%b5%8b%e8%af%95%e5%91%bd%e4%bb%a4-test-expression--expression">测试命令: test expression, [ expression ]</a><ul>
-<li><a href="#%e6%95%b0%e5%80%bc%e6%b5%8b%e8%af%95--eq--ne--gt--ge--lt--le">数值测试: -eq, -ne, -gt, -ge, -lt, -le</a></li>
-<li><a href="#%e5%ad%97%e7%ac%a6%e6%b5%8b%e8%af%95------n--z">字符测试: =, !=, &lt;, &gt;, -n  -z</a></li>
-<li><a href="#%e6%96%87%e4%bb%b6%e6%b5%8b%e8%af%95--e--d--f">文件测试: -e, -d, -f, …</a></li>
-<li><a href="#%e5%a4%8d%e5%90%88%e6%9d%a1%e4%bb%b6%e6%b5%8b%e8%af%95---o----a">复合条件测试: !, -o / ||, -a / &amp;&amp;</a></li>
+<li><a href="#脚本中重定向">脚本中重定向</a><ul>
+<li><a href="#输入输出">输入/输出</a></li>
+<li><a href="#自定义文件描述符">自定义文件描述符</a></li>
+<li><a href="#重定向到已有文件描述符">重定向到已有文件描述符</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#%e7%bb%93%e6%9e%84%e5%8c%96%e5%91%bd%e4%bb%a4">结构化命令</a><ul>
-<li><a href="#%e5%88%86%e6%94%af">分支</a><ul>
+<li><a href="#管道">管道</a></li>
+</ul>
+</li>
+<li><a href="#变量">变量</a><ul>
+<li><a href="#字符串">字符串</a></li>
+<li><a href="#变量参数">变量参数</a></li>
+<li><a href="#数组参数">数组参数</a></li>
+</ul>
+</li>
+<li><a href="#参数传递">参数传递</a><ul>
+<li><a href="#位置参数">位置参数</a></li>
+<li><a href="#命名参数">命名参数</a></li>
+</ul>
+</li>
+<li><a href="#用户输入">用户输入</a><ul>
+<li><a href="#基本输入-read">基本输入: read</a></li>
+<li><a href="#文件输入-cat--read">文件输入: cat | read</a></li>
+</ul>
+</li>
+<li><a href="#脚本退出-exit">脚本退出: exit</a></li>
+<li><a href="#命令替换--command-">命令替换: ( command )</a></li>
+<li><a href="#运算和测试">运算和测试</a><ul>
+<li><a href="#数学运算">数学运算</a><ul>
+<li><a href="#-expr-expression-">$( expr expression )</a></li>
+<li><a href="#-expression-">$[ expression ]</a></li>
+<li><a href="#let-expression--expression-">let expression, $(( expression ))</a></li>
+<li><a href="#内建计算器bc">内建计算器bc</a></li>
+</ul>
+</li>
+<li><a href="#测试命令-test-expression--expression-">测试命令: test expression, [ expression ]</a><ul>
+<li><a href="#数值测试--eq--ne--gt--ge--lt--le">数值测试: -eq, -ne, -gt, -ge, -lt, -le</a></li>
+<li><a href="#字符测试------n--z">字符测试: =, !=, &lt;, &gt;, -n  -z</a></li>
+<li><a href="#文件测试--e--d--f-">文件测试: -e, -d, -f, …</a></li>
+<li><a href="#复合条件测试---o----a--">复合条件测试: !, -o / ||, -a / &amp;&amp;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#结构化命令">结构化命令</a><ul>
+<li><a href="#分支">分支</a><ul>
 <li><a href="#if-then-elif-else-fi">if-then-elif-else-fi</a></li>
 <li><a href="#case-in">case-in</a></li>
 </ul>
 </li>
-<li><a href="#%e5%be%aa%e7%8e%af">循环</a><ul>
+<li><a href="#循环">循环</a><ul>
 <li><a href="#for-do-done">for-do-done</a></li>
 <li><a href="#while-do-done">while-do-done</a></li>
 <li><a href="#until-do-done">until-do-done</a></li>
-<li><a href="#%e5%be%aa%e7%8e%af%e6%8e%a7%e5%88%b6-break-continue">循环控制: break, continue</a></li>
+<li><a href="#循环控制-break-continue">循环控制: break, continue</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#%e5%87%bd%e6%95%b0">函数</a><ul>
-<li><a href="#%e5%88%9b%e5%bb%ba%e5%92%8c%e8%b0%83%e7%94%a8%e5%87%bd%e6%95%b0">创建和调用函数</a></li>
-<li><a href="#%e5%8f%82%e6%95%b0%e4%bc%a0%e9%80%92-1">参数传递</a><ul>
-<li><a href="#%e4%bd%9c%e7%94%a8%e5%9f%9f-local">作用域: local</a></li>
-<li><a href="#%e5%8f%98%e9%87%8f%e5%8f%82%e6%95%b0-1">变量参数</a></li>
-<li><a href="#%e6%95%b0%e7%bb%84%e5%8f%82%e6%95%b0-1">数组参数</a></li>
+<li><a href="#函数">函数</a><ul>
+<li><a href="#创建和调用函数">创建和调用函数</a></li>
+<li><a href="#参数传递-1">参数传递</a><ul>
+<li><a href="#作用域-local">作用域: local</a></li>
+<li><a href="#变量参数-1">变量参数</a></li>
+<li><a href="#数组参数-1">数组参数</a></li>
 </ul>
 </li>
-<li><a href="#%e8%bf%94%e5%9b%9e%e5%80%bc-return-echo">返回值: return, echo</a></li>
+<li><a href="#返回值-return-echo">返回值: return, echo</a></li>
 </ul>
 </li>
-<li><a href="#%e6%96%87%e4%bb%b6%e5%8c%85%e5%90%ab-source">文件包含: source</a></li>
-<li><a href="#%e6%80%bb%e7%bb%93">总结</a></li>
+<li><a href="#文件包含-source">文件包含: source</a></li>
+<li><a href="#总结">总结</a></li>
 </ul>
 <h1 id="Shell基础"><a href="#Shell基础" class="headerlink" title="Shell基础"></a>Shell基础</h1><h2 id="常用指令"><a href="#常用指令" class="headerlink" title="常用指令"></a>常用指令</h2><p><a href="https://www.runoob.com/linux/linux-command-manual.html" target="_blank" rel="noopener">Linux 命令大全 - 菜鸟教程</a></p>
 <h2 id="父子shell"><a href="#父子shell" class="headerlink" title="父子shell"></a>父子shell</h2><p>在当前shell中打开其他shell时，会创建新的shell程序，称为子shell(chile shell)。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">$ ps --forest</span><br><span class="line">  PID TTY          TIME CMD</span><br><span class="line">    6 tty1     00:00:00 bash</span><br><span class="line">   66 tty1     00:00:00  \_ ps</span><br><span class="line">$ bash          <span class="comment"># 子shell1</span></span><br><span class="line">$ ps --forest</span><br><span class="line">  PID TTY          TIME CMD</span><br><span class="line">    6 tty1     00:00:00 bash</span><br><span class="line">   75 tty1     00:00:00  \_ bash</span><br><span class="line">  125 tty1     00:00:00      \_ ps</span><br><span class="line">$ bash          <span class="comment"># 子shell1的子shell</span></span><br><span class="line">$ ps --forest</span><br><span class="line">  PID TTY          TIME CMD</span><br><span class="line">    6 tty1     00:00:00 bash</span><br><span class="line">   75 tty1     00:00:00  \_ bash</span><br><span class="line">  126 tty1     00:00:00      \_ bash</span><br><span class="line">  174 tty1     00:00:00          \_ ps</span><br><span class="line">$ <span class="built_in">exit</span></span><br><span class="line"><span class="built_in">exit</span></span><br><span class="line">$ <span class="built_in">exit</span></span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure></p>
@@ -907,18 +907,18 @@
 <td>[ ! false ] 返回 true。</td>
 </tr>
 <tr>
-<td>-o / \</td>
-<td>\</td>
+<td>-o / `</td>
 <td></td>
+<td>`</td>
 <td>或运算，有一个表达式为 true 则返回 true，满足就近原则，即运算符前表达式为真则跳过后一表达式</td>
-<td>[ condition1 -o condition1 ] 或 [ condition1 ] \</td>
-<td>\</td>
-<td>[ condition1 ]</td>
+<td>[ condition1 -o condition1 ] 或 [ condition1 ] `</td>
+<td></td>
+<td>` [ condition1 ]</td>
 </tr>
 <tr>
 <td>-a / &amp;&amp;</td>
 <td>与运算，两个表达式都为 true 才返回 true。</td>
-<td>[ condition1 -a condition1 ]或 [ condition1 ] &amp;&amp; [ condition1 ]</td>
+<td>[ condition1 -a condition1 ] 或 [ condition1 ] &amp;&amp; [ condition1 ]</td>
 </tr>
 </tbody>
 </table>
@@ -1161,7 +1161,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">101</span>
+                    <span class="site-state-item-count">102</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1955,6 +1955,6 @@
 
 
   <script type="text/javascript" src="/js/click_show_text.js"></script>
-  <script type="text/javascript" src="/js/hone_hone_clock.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>
