@@ -6,7 +6,7 @@
 @Github: https://github.com/isLouisHsu
 @E-mail: is.louishsu@foxmail.com
 @Date: 2020-03-20 12:08:11
-@LastEditTime: 2020-06-15 22:08:13
+@LastEditTime: 2020-06-18 08:43:11
 @Update: 
 '''
 
@@ -398,4 +398,148 @@ def findSubtree2Core(root, maxavg, maxroot):
     # 更新最大
     return (root.avg, root) if root.avg > maxavg else (maxavg, maxroot)
 
+"""
+@param root: a root of binary tree
+@return: return a integer
+@note: https://www.lintcode.com/problem/diameter-of-binary-tree/description?_from=ladder&&fromId=137
+    分别求左、右子树高度，然后相加作为直径
+@example:
+    root = TreeNode(1)
+    root.left = TreeNode(-5)
+    root.left.left = TreeNode(1)
+    diameterOfBinaryTree(root)
+"""
+def diameterOfBinaryTree(root):
+    if root is None: return 0
+    if root.left:
+        hL = heightOfNode(root.left )
+    else:
+        hL = 0
+    if root.right:
+        hR = heightOfNode(root.right)
+    else:
+        hR = 0
+    return hL + hR
+
+def heightOfNode(root):
+    # 叶子节点
+    if root.left is None and root.right is None:
+        return 1
+    
+    # 非叶子节点
+    if root.left:
+        heightL = heightOfNode(root.left)
+    else:
+        heightL = 0
+    if root.right:
+        heightR = heightOfNode(root.right)
+    else:
+        heightR = 0
+    
+    return max(heightL, heightR) + 1
+    
+"""
+@param root: An object of TreeNode, denote the root of the binary tree.
+This method will be invoked first, you should design your own algorithm 
+to serialize a binary tree which denote by a root node to a string which
+can be easily deserialized by your own "deserialize" method later.
+@param data: A string serialized by your serialize method.
+This method will be invoked second, the argument data is what exactly
+you serialized at method "serialize", that means the data is not given by
+system, it's given by your own serialize method. So the format of data is
+designed by yourself, and deserialize it here as you serialize it in 
+"serialize" method.
+@note: https://www.lintcode.com/problem/serialize-and-deserialize-binary-tree/description?_from=ladder&&fromId=102
+@example:
+    root = TreeNode(1)
+    root.left  = TreeNode(-5)
+    root.right = TreeNode(1)
+    root.right.left  = TreeNode(1)
+    root.right.right = TreeNode(1)
+    deserialize(serialize(root))
+    deserialize([1,2,3,11,'#',4,5,'#','#',6,7,'#',10,'#','#',8,9,'#','#',12,13,'#','#','#','#','#',14])
+"""
+def serialize(root):
+    if root is None: return None
+    
+    from collections import deque
+    q = deque([root])
+    data = []
+    while True:
+        n = q.popleft()
+        data += [n.val]
+        # 节点为空
+        if n.val == '#':
+            q.extend([TreeNode('#'), TreeNode('#')])
+        # 节点不为空
+        else:
+            q.extend([
+                n.left  if n.left  else TreeNode('#'),
+                n.right if n.right else TreeNode('#'),
+            ])
+        if len(list(filter(lambda x: x.val != '#', q))) == 0:
+            break
+    return data
+
+def deserialize(data):
+    if data is None: return None
+
+    from collections import deque
+    root = TreeNode(data[0])
+    nq = deque([root])
+    vq = deque(data[1:])
+    
+    while len(vq) > 0:
+        node = nq.popleft()
+        
+        # 左子节点
+        val = vq.popleft()
+        if val != '#':
+            node.left  = TreeNode(val)
+            nq.extend([node.left] )
+        # 这里是为了使nq与vq对齐，否则一直popleft，会导致nq提前为空
+        else:
+            nq.extend([None])
+        # 右子节点
+        val = vq.popleft()
+        if val != '#':
+            node.right = TreeNode(val)
+            nq.extend([node.right])
+        # 这里是为了使nq与vq对齐，否则一直popleft，会导致nq提前为空
+        else:
+            nq.extend([None])
+    
+    return root
+
+"""
+@param matrix: A list of lists of integers
+@param target: An integer you want to search in matrix
+@return: An integer indicate the total occurrence of target in the given matrix
+@note: https://www.lintcode.com/problem/search-a-2d-matrix-ii/description?_from=ladder&&fromId=137
+"""
+def searchMatrix(matrix, target):
+    
+    # def bisect_left(nums, target):
+    #     l, r = 0, len(nums) - 1
+    #     while l <= r:
+    #         m = (l + r) // 2
+    #         if target < nums[m]:
+    #             # 缩紧右边界
+    #             r = m - 1
+    #         if target > nums[m]:
+    #             # 缩紧左边界
+    #             l = m + 1
+    #         if target == nums[m]:
+    #             # 缩紧右边界
+    #             r = m - 1
+    #     return l
+    from bisect import bisect_left
+    
+    count = 0
+    for line in matrix:
+        index = bisect_left(line, target)
+        for num in line[index:]:
+            if num != target: break
+            count += 1
+    return count
 
