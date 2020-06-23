@@ -116,7 +116,7 @@
 <meta property="og:description" content="前言隐马尔科夫模型(Hidden Markov Model, HMM)可用于标注问题，描述由隐藏的马尔科夫链随机生成观测序列的过程，属于生成模型。在语音识别、自然语言处理、生物信息等领域有广泛的应用。 基本概念定义定义：隐马尔科夫模型是关于时序的概率模型，描述有一个隐藏的马尔科夫链随机生成不可观测的状态随机序列(state sequence)，再由各个状态生成一个观测，多个时刻的观测组成观测随机序">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2018-11-13T09:28:36.000Z">
-<meta property="article:modified_time" content="2020-06-05T10:06:56.767Z">
+<meta property="article:modified_time" content="2020-06-20T13:27:33.381Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
 
@@ -419,7 +419,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-06-05 18:06:56" itemprop="dateModified" datetime="2020-06-05T18:06:56+08:00">2020-06-05</time>
+                <time title="修改时间：2020-06-20 21:27:33" itemprop="dateModified" datetime="2020-06-20T21:27:33+08:00">2020-06-20</time>
               
             
           </span>
@@ -526,23 +526,23 @@
 <p> 由概率乘法公式，可得各观测的联合分布满足</p>
 <script type="math/tex; mode=display">
  \begin{aligned}
-     P(O | \theta) = P(o^{(1)}, \cdots, o^{(T)} | \theta) \\
-     = P(o^{(1)} | \theta) P(o^{(2)} | o^{(1)}, \theta) P(o^{(3)} | o^{(1)}, o^{(2)}, \theta) \cdots P(o^{(T)} | o^{(1)}, o^{(2)}, \cdots, o^{(T - 1)}, \theta) \\
+     P(O | \theta) & = P(o^{(1)}, \cdots, o^{(T)} | \theta) \\
+     & = P(o^{(1)} | \theta) P(o^{(2)} | o^{(1)}, \theta) P(o^{(3)} | o^{(1)}, o^{(2)}, \theta) \cdots P(o^{(T)} | o^{(1)}, o^{(2)}, \cdots, o^{(T - 1)}, \theta) \\
  \end{aligned}</script><p> 注意到</p>
 <script type="math/tex; mode=display">
  \begin{cases}
      P(o^{(1)} | \theta) = 
      \sum_{i = 1}^N P(s^{(1)} = q_i | \theta) P(o^{(1)} | s^{(1)} = q_i, \theta) 
          = \sum_{i = 1}^N \pi_i b_{i, o^{(t)}} \\
-         P(o^{(2)} | o^{(1)}, \theta) = 
-         \sum_{i = 1}^N \underbrace{P(s^{(2)} = q_i | o^{(1)}, \theta)} 
-         P(o^{(2)} | s^{(2)} = q_i, o^{(1)}, \theta) \\
      \begin{aligned}
-         = \sum_{i = 1}^N \left( 
+      P(o^{(2)} | o^{(1)}, \theta) = 
+         & \sum_{i = 1}^N \underbrace{P(s^{(2)} = q_i | o^{(1)}, \theta)} 
+         P(o^{(2)} | s^{(2)} = q_i, o^{(1)}, \theta) \\
+         = & \sum_{i = 1}^N \left( 
                  \sum_{j=1}^N P(s^{(2)} = q_i | s^{(1)} = q_j, o^{(1)}, \theta ) 
                  P(s^{(1)} = q_j | o^{(1)}, \theta ) 
              \right) \times P(o^{(2)} | s^{(2)} \\
-         = q_i, o^{(1)}, \theta) 
+         = & q_i, o^{(1)}, \theta) 
          = \sum_{i=1}^N \left( \sum_{j=1}^N \pi_j a_{ji} \right) b_{i, o^{(2)}}
      \end{aligned} 
      \cdots
@@ -552,15 +552,16 @@
 <script type="math/tex; mode=display">\alpha^{(1)}_i = P(s^{(1)} = q_i, o^{(1)} | \theta) = \pi_i b_{i, o^{(1)}} \tag{4.1}, \quad i = 1, 2, \cdots, N</script><p> 对于$t = 2, 3, T$时刻，由边缘概率公式和条件概率，得到<strong>递推公式</strong></p>
 <script type="math/tex; mode=display">
  \begin{aligned}
-     \alpha^{(t)}_i = P(s^{(t)} = q_i, o^{(1)}, \cdots, o^{(t)} | \theta) \\ 
-     = P(s^{(t)} = q_i, o^{(1)}, \cdots, o^{(t-1)} | o^{(t)}, \theta) 
+     \alpha^{(t)}_i & = P(s^{(t)} = q_i, o^{(1)}, \cdots, o^{(t)} | \theta) \\ 
+     & = P(s^{(t)} = q_i, o^{(1)}, \cdots, o^{(t-1)} | o^{(t)}, \theta) 
      P(o^{(t)} | s^{(t)} = q_i, \theta) \\ 
-     = \left( 
-     \sum_{j=1}^N 
-     \underbrace{P(s^{(t - 1)} = q_j, o^{(1)}, \cdots, o^{(t - 1)} | o^{(t)}, \theta)}_{\alpha^{(t-1)}_j}
-     \underbrace{P(s^{(t)} = q_i | s^{(t - 1)} = q_j, o^{(t)}, \theta)}_{a_{ji}} \right)
-     \underbrace{P(o^{(t)} | s^{(t)} = q_i, \theta)}_{b_{i, o^{(t)}}} \\ 
-     = \left( \sum_{j=1}^N \alpha^{(t-1)}_j a_{ji} \right) b_{i, o^{(t)}}     
+     & = \left( 
+         \sum_{j=1}^N 
+         \underbrace{P(s^{(t - 1)} = q_j, o^{(1)}, \cdots, o^{(t - 1)} | o^{(t)}, \theta)}_{\alpha^{(t-1)}_j}
+         \underbrace{P(s^{(t)} = q_i | s^{(t - 1)} = q_j, o^{(t)}, \theta)}_{a_{ji}}
+     \right) \\
+     & \qquad \underbrace{P(o^{(t)} | s^{(t)} = q_i, \theta)}_{b_{i, o^{(t)}}} \\ 
+     = & \left( \sum_{j=1}^N \alpha^{(t-1)}_j a_{ji} \right) b_{i, o^{(t)}}     
  \end{aligned} \tag{4.2}</script><p> 那么到<strong>时刻$T$时</strong>，由边缘概率公式，可得到$P(O | \theta)$</p>
 <script type="math/tex; mode=display">
  \begin{aligned}
@@ -573,15 +574,15 @@
 <script type="math/tex; mode=display">\beta^{(T)}_i = 1, \quad i = 1, 2, \cdots, N \tag{6.1}</script><p> 对$t = T - 1, T - 2, \cdots, 1$，有<strong>递推公式</strong></p>
 <script type="math/tex; mode=display">
  \begin{aligned}
-     \beta^{(t)}_i = P( o^{(t + 1)}, \cdots, o^{(T)} | s^{(t)} = q_i, \theta) \\
-     = \sum_{j=1}^N P(s^{(t + 1)} = q_j, o^{(t + 1)}, \cdots, o^{(T)} | s^{(t)} = q_i, \theta) \\
-     = \sum_{j=1}^N P(s^{(t + 1)} = q_j | s^{(t)} = q_i, \theta)
+     \beta^{(t)}_i & = P( o^{(t + 1)}, \cdots, o^{(T)} | s^{(t)} = q_i, \theta) \\
+     & = \sum_{j=1}^N P(s^{(t + 1)} = q_j, o^{(t + 1)}, \cdots, o^{(T)} | s^{(t)} = q_i, \theta) \\
+     & = \sum_{j=1}^N P(s^{(t + 1)} = q_j | s^{(t)} = q_i, \theta)
      P(o^{(t + 1)}, \cdots, o^{(T)} | s^{(t + 1)} = q_j, s^{(t)} = q_i, \theta)  \\
-     = \sum_{j=1}^N 
+     & = \sum_{j=1}^N 
      \underbrace{P(s^{(t + 1)} = q_j | s^{(t)} = q_i, \theta)}_{a_{ij}}
      \underbrace{P(o^{(t + 1)} | s^{(t + 1)} = q_j, s^{(t)} = q_i, \theta)}_{b_{j, o^{(t + 1)}}} \\
-     \underbrace{P(o^{(t + 2)}, \cdots, o^{(T)} | s^{(t + 1)} = q_j, s^{(t)} = q_i, o^{(t + 1)}, \theta)}_{\beta^{(t + 1)}_j} \\
-     = \sum_{j=1}^N a_{ij} b_{j, o^{(t + 1)}} \beta^{(t + 1)}_j 
+     & \underbrace{P(o^{(t + 2)}, \cdots, o^{(T)} | s^{(t + 1)} = q_j, s^{(t)} = q_i, o^{(t + 1)}, \theta)}_{\beta^{(t + 1)}_j} \\
+     & = \sum_{j=1}^N a_{ij} b_{j, o^{(t + 1)}} \beta^{(t + 1)}_j 
  \end{aligned} \tag{6.2}</script><p> 观测序列的概率用下式计算</p>
 <script type="math/tex; mode=display">
  P(O | \theta) = \sum_{i=1}^N \pi_i b_{i, o^{(1)}} \beta^{(1)}_i \tag{6.3}</script></li>
@@ -616,14 +617,14 @@ P(O | \theta) = \sum_{i=1}^N \sum_{j=1}^N \alpha^{(t)}_i a_{ij} b_{j, o^{(t + 1)
 <script type="math/tex; mode=display">Q(\theta | \overline{\theta}) = \sum_S P(O, S | \overline{\theta}) \log P(O, S | \theta) \tag{10.1}</script><p>那么$(9)$代入后得到</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-    Q(\theta | \overline{\theta}) = 
+    Q(\theta | \overline{\theta}) & = 
     \sum_S P(O, S | \overline{\theta}) \log (\pi_{s^{(1)}} a_{s^{(1)}s^{(2)}} b_{s^{(1)}o^{(1)}} \cdots a_{s^{(T - 1)}s^{(T)}} b_{s^{(T)}o^{(T)}}) \\
-    = \sum_S P(O, S | \overline{\theta}) \log \pi_{s^{(1)}} + 
+    & = \sum_S P(O, S | \overline{\theta}) \log \pi_{s^{(1)}} + 
     \sum_S P(O, S | \overline{\theta}) \log \prod_{t=1}^{T-1} a_{s^{(t)}s^{(t+1)}} + 
     \sum_S P(O, S | \overline{\theta}) \log \prod_{t=1}^{T} b_{s^{(t)}o^{(t)}} \\
-    = \sum_{i=1}^N P(O, s^{(1)} = q_i | \theta) \log \pi_i + \\
-    \sum_{i=1}^N \sum_{j=1}^N \sum_{t=1}^{T-1} P(O, s^{(t)} = q_i, s^{(t+1)} = q_j | \overline{\theta}) \log a_{ij} + \\
-    \sum_{i=1}^N \sum_{t=1}^{T} P(O, s^{(t)} = q_i | \theta) \log b_{i,o^{(t)}}
+    & = \sum_{i=1}^N P(O, s^{(1)} = q_i | \theta) \log \pi_i + \\
+    & \sum_{i=1}^N \sum_{j=1}^N \sum_{t=1}^{T-1} P(O, s^{(t)} = q_i, s^{(t+1)} = q_j | \overline{\theta}) \log a_{ij} + \\
+    & \sum_{i=1}^N \sum_{t=1}^{T} P(O, s^{(t)} = q_i | \theta) \log b_{i,o^{(t)}}
 \end{aligned} \tag{10.2}</script><p>那么相应优化问题为</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
@@ -652,7 +653,7 @@ P(O | \theta) = \sum_{i=1}^N \sum_{j=1}^N \alpha^{(t)}_i a_{ij} b_{j, o^{(t + 1)
     b_{ij} = \frac{\sum_{t=1, o^{(t)}=v_j}^T \gamma^{(t)}_i}{\sum_{t=1}^T \gamma^{(t)}_i} \\
     \pi_i = \gamma^{(1)}_i
 \end{cases} \tag{10}</script><p>迭代求解参数$(A, B, \pi)$得到模型。</p>
-<h1 id="预测问题"><a href="#预测问题" class="headerlink" title="预测问题"></a>预测问题</h1><h2 id="贪婪策略"><a href="#贪婪策略" class="headerlink" title="贪婪策略"></a>贪婪策略</h2><p>在每个时刻$t$选择在该时刻最有可能出现的状态$s^{(t)<em> }$，从而得到状态序列$S^{</em> }$作为预测结果</p>
+<h1 id="预测问题"><a href="#预测问题" class="headerlink" title="预测问题"></a>预测问题</h1><h2 id="贪婪策略"><a href="#贪婪策略" class="headerlink" title="贪婪策略"></a>贪婪策略</h2><p>在每个时刻$t$选择在该时刻最有可能出现的状态$s^{(t)<em>}$，从而得到状态序列$S^{</em>}$作为预测结果</p>
 <script type="math/tex; mode=display">S^{*} = (s^{(1)*}, \cdots, s^{(T)*}) \tag{11.1}</script><p>其中</p>
 <script type="math/tex; mode=display">s^{(t)*} = \arg \max_{1 \leq i \leq N} \gamma^{(t)}_i \tag{11.2}</script><h2 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h2><p>用动态规划，在状态概率间求解概率最大路径，即<strong>维特比算法</strong>(Viterbi algorithm)，选择状态路径点$s^{(t)} \in Q$使得下式最大</p>
 <script type="math/tex; mode=display">
@@ -806,7 +807,7 @@ P(O | \theta) = \sum_{i=1}^N \sum_{j=1}^N \alpha^{(t)}_i a_{ij} b_{j, o^{(t + 1)
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">103</span>
+                    <span class="site-state-item-count">104</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1600,6 +1601,6 @@ P(O | \theta) = \sum_{i=1}^N \sum_{j=1}^N \alpha^{(t)}_i a_{ij} b_{j, o^{(t + 1)
 
 
   <script type="text/javascript" src="/js/click_show_text.js"></script>
-  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
 </html>
