@@ -1,0 +1,2296 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="目录背包问题是动态规划的经典问题，它的意义在于可运用到其他问题上，其基本描述为：给定容量为$W$的背包，以及$N$件物品，第$i$件物品的价值是$p_i$、所需容量为$w_i$，在不同的限制条件下，求能放进背包的物品最大价值总和是多少？根据限制条件不同，如物品数目可产生变种的背包问题。  目录 0-1背包 完全背包 多重背包 混合三种背包 二维费用背包 分组背包 有依赖背包 泛化物品背包 背包问题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【算法】背包问题">
+<meta property="og:url" content="http://yoursite.com/2020/06/23/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="目录背包问题是动态规划的经典问题，它的意义在于可运用到其他问题上，其基本描述为：给定容量为$W$的背包，以及$N$件物品，第$i$件物品的价值是$p_i$、所需容量为$w_i$，在不同的限制条件下，求能放进背包的物品最大价值总和是多少？根据限制条件不同，如物品数目可产生变种的背包问题。  目录 0-1背包 完全背包 多重背包 混合三种背包 二维费用背包 分组背包 有依赖背包 泛化物品背包 背包问题">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-06-23T08:15:29.000Z">
+<meta property="article:modified_time" content="2020-06-26T07:37:38.676Z">
+<meta property="article:author" content="Louis Hsu">
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/23/【算法】背包问题/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>【算法】背包问题 | LOUIS' BLOG</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LOUIS' BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">To be better</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-guestbook">
+    <a href="/guestbook" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-guest"></i> <br />留言</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/23/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="ᵕ᷄ ≀ ̠˘᷅ 永远年轻，永远热泪盈眶">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【算法】背包问题
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-06-23 16:15:29" itemprop="dateCreated datePublished" datetime="2020-06-23T16:15:29+08:00">2020-06-23</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-06-26 15:37:38" itemprop="dateModified" datetime="2020-06-26T15:37:38+08:00">2020-06-26</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><p>背包问题是动态规划的经典问题，它的意义在于可运用到其他问题上，其<strong>基本描述</strong>为：<strong>给定容量为$W$的背包，以及$N$件物品，第$i$件物品的价值是$p_i$、所需容量为$w_i$，在不同的限制条件下，求能放进背包的物品最大价值总和是多少</strong>？根据限制条件不同，如物品数目可产生变种的背包问题。</p>
+<ul>
+<li><a href="#目录">目录</a></li>
+<li><a href="#0-1背包">0-1背包</a></li>
+<li><a href="#完全背包">完全背包</a></li>
+<li><a href="#多重背包">多重背包</a></li>
+<li><a href="#混合三种背包">混合三种背包</a></li>
+<li><a href="#二维费用背包">二维费用背包</a></li>
+<li><a href="#分组背包">分组背包</a></li>
+<li><a href="#有依赖背包">有依赖背包</a></li>
+<li><a href="#泛化物品背包">泛化物品背包</a></li>
+<li><a href="#背包问题的问法">背包问题的问法</a><ul>
+<li><a href="#最大价值总和">最大价值总和</a></li>
+<li><a href="#任意最优方案">任意最优方案</a></li>
+<li><a href="#字典序最小的最优方案">字典序最小的最优方案</a></li>
+<li><a href="#满足条件的方案总数">满足条件的方案总数</a></li>
+<li><a href="#最优方案总数">最优方案总数</a></li>
+</ul>
+</li>
+<li><a href="#reference">Reference</a></li>
+</ul>
+<h1 id="0-1背包"><a href="#0-1背包" class="headerlink" title="0-1背包"></a>0-1背包</h1><p>给定容量是$W$的背包和$N$种物品，第$i$种物品的价格是$p_i$、所占容量$w_i$，<strong>每种商品最多可以选择$1$件</strong>。求解在这些物品所占容量总和不超过背包容量$W$的情况下，获得的最大价值总和。</p>
+<p><strong>状态定义</strong>：定义二维数组$dp$，其元素$dp[i][j]$表示在背包容量为$j$的情况下，前$i$种物品能获得的最大价值总和，其中$i = 1, \cdots, N, j = 1, \cdots, W$。<br><strong>状态转移方程</strong>；求解$dp[i][j]$的过程，即考虑是否将第$j$件物品放入背包。首先考虑这件物品能否放入，即<strong>当前背包容量$j$是否满足$j \geq w_i$</strong>，那么就有以下两种情况</p>
+<ul>
+<li><p>$j &lt; w_i$：这件物品无法放入容量为$j$的背包，那么此时只能在前$(i - 1)$件物品中求解可行的最大价值总和，而这个子问题的结果已经保存在$dp[i - 1][j]$中，所以此时</p>
+<script type="math/tex; mode=display">dp[i][j] = dp[i - 1][j]</script></li>
+<li><p>$j \geq w_i$：这件背包能够放入容量为$j$的背包，那么选择将其放入后，背包剩余容量$(j - w_i)$，在前$(i - 1)$件物品中需要选择能够放入剩余容量的最大价值总和，所以此时能得到的价值总和是</p>
+<script type="math/tex; mode=display">dp[i][j] = dp[i - 1][j - 1 \times w_i] + 1 \times p_i = dp[i - 1][j - w_i] + p_i</script><p>  <strong>但是放入这件物品一定能获得容量为$j$下最大的价值总和吗</strong>？可能前$(i - 1)$件物品放入容量$j$的背包能够产生更大的价值，即选择放入$0$件，那么</p>
+<script type="math/tex; mode=display">dp[i][j] = dp[i - 1][j - 0 \times w_i] + 0 \times p_i = dp[i - 1][j]</script><p>  取两者最大，应该有</p>
+<script type="math/tex; mode=display">dp[i][j] = \begin{cases}
+      dp[i - 1][j] & j < w_i \\
+      \max(dp[i - 1][j - w_i] + p_i, dp[i - 1][j]) & j \geq w_i
+  \end{cases}</script><p>  最多$1$件第$i$种物品放入背包，受限于背包容量$j$，实际上最多放入$K = \min(1, \lfloor j / w_i \rfloor)$件，这其中已经包括不放入这种物品的情况，即可选件数是$k \in {0, 1}$，所以上面表达式可以统一为$dp[i][j] = \max(dp[i - 1][j - w_i] + p_i, dp[i - 1][j])$，也就是</p>
+<script type="math/tex; mode=display">dp[i][j] = \max_{k = 0}^K (dp[i - 1][j - k \times w_i] + k \times p_i), K = 1</script></li>
+</ul>
+<p><strong>边界条件</strong>：注意到状态$dp[i][j]$可能由$i = 0$或$j = 0$的状态转移而来，$i = 0$表示没有物品可以选择，$j = 0$表示背包容量此时为$0$，所以都不可能产生价值，即</p>
+<script type="math/tex; mode=display">dp[i][0] = dp[0][j] = 0</script><p><strong>优化策略</strong>：实际上若$w_i &gt; w_j$但$p_i &lt; p_j$时，可以直接将物品$i$扔掉，即在计算表格时不考虑物品$i$。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">backPack_01</span><span class="params">(self, W, w, p)</span>:</span></span><br><span class="line">        n = len(w)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 注意数组大小</span></span><br><span class="line">        <span class="comment"># n + 1: 状态方程中包含`i - 1`，故多定义一行，减少判断条件，便于实现</span></span><br><span class="line">        <span class="comment"># W + 1: 背包的容量是W，`range`函数不包含`stop`值，因此需多加1列</span></span><br><span class="line">        dp = [[<span class="number">0</span> <span class="keyword">for</span> j <span class="keyword">in</span> range(W + <span class="number">1</span>)] <span class="keyword">for</span> i <span class="keyword">in</span> range(n + <span class="number">1</span>)]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n + <span class="number">1</span>):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>, W + <span class="number">1</span>):</span><br><span class="line">                <span class="comment"># # 背包空间不够</span></span><br><span class="line">                <span class="comment"># if j &lt; w[i - 1]:</span></span><br><span class="line">                <span class="comment">#     dp[i][j] = dp[i - 1][j]</span></span><br><span class="line">                <span class="comment"># # 背包空间够，考虑是否放入</span></span><br><span class="line">                <span class="comment"># else:</span></span><br><span class="line">                <span class="comment">#     dp[i][j] = max(</span></span><br><span class="line">                <span class="comment">#         dp[i - 1][j],</span></span><br><span class="line">                <span class="comment">#         dp[i - 1][j - w[i - 1]] + p[i - 1])</span></span><br><span class="line">                <span class="comment"># ----------------------------------------------</span></span><br><span class="line">                <span class="comment"># 初始化为`0`</span></span><br><span class="line">                dp[i][j] = <span class="number">0</span></span><br><span class="line">                <span class="comment"># 最多放入`K`件</span></span><br><span class="line">                K = min(<span class="number">1</span>, j // w[i - <span class="number">1</span>])</span><br><span class="line">                <span class="keyword">for</span> k <span class="keyword">in</span> range(K + <span class="number">1</span>):</span><br><span class="line">                    dp[i][j] = max(</span><br><span class="line">                        dp[i][j], </span><br><span class="line">                        dp[i - <span class="number">1</span>][j - k * w[i - <span class="number">1</span>]] + k * p[i - <span class="number">1</span>])</span><br><span class="line">        <span class="keyword">return</span> dp[<span class="number">-1</span>][<span class="number">-1</span>]</span><br></pre></td></tr></table></figure>
+<p>例如输入<code>W = 10, w = [2, 3, 5, 7], p = [1, 5, 2, 4]</code>，得到表格如下</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>itemidx \ W</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td><strong>0</strong></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td><strong>0</strong></td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td><strong>5</strong></td>
+<td>5</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td><strong>5</strong></td>
+<td>5</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+<td>7</td>
+<td>7</td>
+<td>8</td>
+</tr>
+<tr>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>5</td>
+<td>5</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+<td>7</td>
+<td>7</td>
+<td><strong>9</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>优化空间复杂度，因为$dp[i][j]$仅与$dp[i - 1][j]$有关，故修改$dp$为一维数组，<strong>注意$j$的遍历顺序</strong><br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">backPack_01</span><span class="params">(self, W, w, p)</span>:</span></span><br><span class="line">        <span class="string">""" 01背包问题 """</span></span><br><span class="line">        n = len(w)</span><br><span class="line"></span><br><span class="line">        dp = [<span class="number">0</span> <span class="keyword">for</span> j <span class="keyword">in</span> range(W + <span class="number">1</span>)]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n + <span class="number">1</span>):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(W, <span class="number">0</span>, <span class="number">-1</span>):</span><br><span class="line">                <span class="comment"># # 背包空间不够</span></span><br><span class="line">                <span class="comment"># if j &lt; w[i - 1]:</span></span><br><span class="line">                <span class="comment">#     continue    # dp[i][j] = dp[i][j]</span></span><br><span class="line">                <span class="comment"># # 背包空间够，考虑是否放入</span></span><br><span class="line">                <span class="comment"># else:</span></span><br><span class="line">                <span class="comment">#     dp[j] = max(</span></span><br><span class="line">                <span class="comment">#         dp[j], </span></span><br><span class="line">                <span class="comment">#         dp[j - w[i - 1]] + p[i - 1])</span></span><br><span class="line">                <span class="comment"># ----------------------------------------------</span></span><br><span class="line">                <span class="comment"># 初始化为`0`</span></span><br><span class="line">                dp[j] = <span class="number">0</span></span><br><span class="line">                <span class="comment"># 最多放入`K`件</span></span><br><span class="line">                K = min(<span class="number">1</span>, j // w[i - <span class="number">1</span>])</span><br><span class="line">                <span class="keyword">for</span> k <span class="keyword">in</span> range(K + <span class="number">1</span>):</span><br><span class="line">                    dp[j] = max(</span><br><span class="line">                        dp[j], </span><br><span class="line">                        dp[j - k * w[i - <span class="number">1</span>]] + k * p[i - <span class="number">1</span>])</span><br><span class="line">        <span class="keyword">return</span> dp[<span class="number">-1</span>]</span><br></pre></td></tr></table></figure></p>
+<h1 id="完全背包"><a href="#完全背包" class="headerlink" title="完全背包"></a>完全背包</h1><p>给定容量是$W$的背包和$N$种物品，第$i$种物品的价格是$p_i$、所占容量$w_i$，<strong>每种商品均有无穷多件可以选择</strong>。求解在这些物品所占容量总和不超过背包容量$W$的情况下，获得的最大价值总和。</p>
+<ul>
+<li><strong>状态定义</strong>：定义二维数组$dp$，其元素$dp[i][j]$表示在背包容量为$j$的情况下，前$i$种物品能获得的最大价值总和，其中$i = 1, \cdots, N, j = 1, \cdots, W$。</li>
+<li><p><strong>状态转移方程</strong>；求解$dp[i][j]$的过程，需考虑将多少件第$i$种物品放入背包。首先考虑能放入多少件，受限于背包容量$j$，实际上最多放入$K = \lfloor j / w_i \rfloor$，这其中已经包括不放入这种物品的情况，即可选件数是$k \in {0, 1, 2, \cdots, K}$，剩余容量$(j - k \times w_i)$用前$(i - 1)$种物品填充，此子问题的结果已经保存在$dp[i - 1][j - k \times w_i]$中，所以应该有</p>
+<script type="math/tex; mode=display">dp[i][j] = \max_{k = 0}^K (dp[i - 1][j - k \times w_i] + k \times p_i), K = \lfloor j / w_i \rfloor</script></li>
+<li><p><strong>边界条件</strong>：注意到状态$dp[i][j]$可能由$i = 0$或$j = 0$的状态转移而来，$i = 0$表示没有物品可以选择，$j = 0$表示背包容量此时为$0$，所以都不可能产生价值，即</p>
+<script type="math/tex; mode=display">dp[i][0] = dp[0][j] = 0</script></li>
+</ul>
+<p>注意到，完全背包只是将$0-1$背包件数上限从$1$修改为$K = \lfloor j / w_i \rfloor$，其中包括了$j &lt; w_i$的情况($K = 0$)。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">backPack_complete</span><span class="params">(self, W, w, p)</span>:</span></span><br><span class="line">        <span class="string">""" 完全背包问题 """</span></span><br><span class="line">        n = len(w)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 注意数组大小</span></span><br><span class="line">        <span class="comment"># n + 1: 状态方程中包含`i - 1`，故多定义一行，减少判断条件，便于实现</span></span><br><span class="line">        <span class="comment"># W + 1: 背包的容量是W，`range`函数不包含`stop`值，因此需多加1列</span></span><br><span class="line">        dp = [[<span class="number">0</span> <span class="keyword">for</span> j <span class="keyword">in</span> range(W + <span class="number">1</span>)] <span class="keyword">for</span> i <span class="keyword">in</span> range(n + <span class="number">1</span>)]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n + <span class="number">1</span>):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>, W + <span class="number">1</span>):</span><br><span class="line"></span><br><span class="line">                <span class="comment"># 初始化为`0`</span></span><br><span class="line">                dp[i][j] = <span class="number">0</span></span><br><span class="line">                <span class="comment"># 最多放入`K`件</span></span><br><span class="line">                K = j // w[i - <span class="number">1</span>]</span><br><span class="line">                <span class="comment"># K = min(float('inf'), j // w[i - 1])</span></span><br><span class="line">                <span class="keyword">for</span> k <span class="keyword">in</span> range(K + <span class="number">1</span>):</span><br><span class="line">                    dp[i][j] = max(</span><br><span class="line">                        dp[i][j], </span><br><span class="line">                        dp[i - <span class="number">1</span>][j - k * w[i - <span class="number">1</span>]] + k * p[i - <span class="number">1</span>])</span><br><span class="line">        <span class="keyword">return</span> dp[<span class="number">-1</span>][<span class="number">-1</span>]</span><br></pre></td></tr></table></figure>
+<p>例如输入<code>W = 10, w = [2, 3, 5, 7], p = [1, 5, 2, 4]</code>，得到表格如下</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>itemidx \ W</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td><strong>0</strong></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td><strong>0</strong></td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>2</td>
+<td>3</td>
+<td>3</td>
+<td>4</td>
+<td>4</td>
+<td>5</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>5</td>
+<td>5</td>
+<td>6</td>
+<td>10</td>
+<td>10</td>
+<td>11</td>
+<td>15</td>
+<td><strong>15</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>5</td>
+<td>5</td>
+<td>6</td>
+<td>10</td>
+<td>10</td>
+<td>11</td>
+<td>15</td>
+<td><strong>15</strong></td>
+</tr>
+<tr>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>5</td>
+<td>5</td>
+<td>6</td>
+<td>10</td>
+<td>10</td>
+<td>11</td>
+<td>15</td>
+<td><strong>15</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>选择$3$件物品$2$，得到最大价值总和$15$。同样可以优化空间复杂度，略。</p>
+<h1 id="多重背包"><a href="#多重背包" class="headerlink" title="多重背包"></a>多重背包</h1><p>给定容量是$W$的背包和$N$种物品，第$i$种物品的价格是$p_i$、所占容量$w_i$，<strong>每种商品可选件数是$n_i$</strong>。求解在这些物品所占容量总和不超过背包容量$W$的情况下，获得的最大价值总和。</p>
+<ul>
+<li><strong>状态定义</strong>：定义二维数组$dp$，其元素$dp[i][j]$表示在背包容量为$j$的情况下，前$i$种物品能获得的最大价值总和，其中$i = 1, \cdots, N, j = 1, \cdots, W$。</li>
+<li><p><strong>状态转移方程</strong>；求解$dp[i][j]$的过程，需考虑将多少件第$i$种物品放入背包。首先考虑能放入多少件，受限于背包容量$j$，实际上最多放入$K = \min(n_i, \lfloor j / w_i \rfloor)$，这其中已经包括不放入这种物品的情况，即可选件数是$k \in {0, 1, 2, \cdots, K}$，剩余容量$(j - k \times w_i)$用前$(i - 1)$种物品填充，此子问题的结果已经保存在$dp[i - 1][j - k \times w_i]$中，所以应该有</p>
+<script type="math/tex; mode=display">\begin{aligned}
+      dp[i][j] & = \max_{k = 0}^K (dp[i - 1][j - k \times w_i] + k \times p_i) \\
+      K & = \min(n_i, \lfloor j / w_i \rfloor)
+  \end{aligned}</script></li>
+<li><p><strong>边界条件</strong>：注意到状态$dp[i][j]$可能由$i = 0$或$j = 0$的状态转移而来，$i = 0$表示没有物品可以选择，$j = 0$表示背包容量此时为$0$，所以都不可能产生价值，即</p>
+<script type="math/tex; mode=display">dp[i][0] = dp[0][j] = 0</script></li>
+</ul>
+<p>注意到，多重背包只是将$0-1$背包件数上限从$1$修改为$K = \min(n_i, \lfloor j / w_i \rfloor)$，或者在完全背包基础上增加上限约束$n_i$，将其中包括了$j &lt; w_i$的情况($K = 0$)。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">backPack_multiple</span><span class="params">(self, W, w, p, N)</span>:</span></span><br><span class="line">        <span class="string">""" 多重背包问题 """</span></span><br><span class="line">        n = len(w)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 注意数组大小</span></span><br><span class="line">        <span class="comment"># n + 1: 状态方程中包含`i - 1`，故多定义一行，减少判断条件，便于实现</span></span><br><span class="line">        <span class="comment"># W + 1: 背包的容量是W，`range`函数不包含`stop`值，因此需多加1列</span></span><br><span class="line">        dp = [[<span class="number">0</span> <span class="keyword">for</span> j <span class="keyword">in</span> range(W + <span class="number">1</span>)] <span class="keyword">for</span> i <span class="keyword">in</span> range(n + <span class="number">1</span>)]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n + <span class="number">1</span>):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>, W + <span class="number">1</span>):</span><br><span class="line"></span><br><span class="line">                <span class="comment"># 初始化为`0`</span></span><br><span class="line">                dp[i][j] = <span class="number">0</span></span><br><span class="line">                <span class="comment"># 最多放入`K`件</span></span><br><span class="line">                K = min(N[i - <span class="number">1</span>], j // w[i - <span class="number">1</span>])</span><br><span class="line">                <span class="keyword">for</span> k <span class="keyword">in</span> range(K + <span class="number">1</span>):</span><br><span class="line">                    dp[i][j] = max(</span><br><span class="line">                        dp[i][j], dp[i - <span class="number">1</span>][j - k * w[i - <span class="number">1</span>]] + k * p[i - <span class="number">1</span>])</span><br><span class="line">        <span class="keyword">return</span> dp[<span class="number">-1</span>][<span class="number">-1</span>]</span><br></pre></td></tr></table></figure>
+<p>例如输入<code>W = 10, w = [2, 3, 5, 7], p = [1, 5, 2, 4], N = [1, 2, 1, 1]</code>，得到表格如下</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>itemidx \ W</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td><strong>0</strong></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td><strong>1</strong></td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>5</td>
+<td>5</td>
+<td>6</td>
+<td>10</td>
+<td>10</td>
+<td>11</td>
+<td>11</td>
+<td><strong>11</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>5</td>
+<td>5</td>
+<td>6</td>
+<td>10</td>
+<td>10</td>
+<td>11</td>
+<td>11</td>
+<td><strong>11</strong></td>
+</tr>
+<tr>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>5</td>
+<td>5</td>
+<td>6</td>
+<td>10</td>
+<td>10</td>
+<td>11</td>
+<td>11</td>
+<td><strong>11</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>选择$1$件物品$1$和$2$件物品$2$，得到最大价值总和$11$。</p>
+<h1 id="混合三种背包"><a href="#混合三种背包" class="headerlink" title="混合三种背包"></a>混合三种背包</h1><p>将<a href="#0-1背包">0-1背包</a>、<a href="#完全背包">完全背包</a>、<a href="#多重背包">多重背包</a>三个问题结合起来。即给定容量是$W$的背包和$N$种物品，第$i$种物品的价格是$p_i$、所占容量$w_i$，<strong>部分物品只有$1$件、部分物品有$n_i$件、部分物品有无穷多件</strong>。求解在这些物品所占容量总和不超过背包容量$W$的情况下，获得的最大价值总和。</p>
+<ul>
+<li><strong>状态定义</strong>：定义二维数组$dp$，其元素$dp[i][j]$表示在背包容量为$j$的情况下，前$i$种物品能获得的最大价值总和，其中$i = 1, \cdots, N, j = 1, \cdots, W$。</li>
+<li><p><strong>状态转移方程</strong>；求解$dp[i][j]$的过程，需考虑将多少件第$i$种物品放入背包。首先考虑能放入多少件，受限于背包容量$j$，实际上最多放入$K = \min(n_i, \lfloor j / w_i \rfloor)$，这其中已经包括不放入这种物品的情况，即可选件数是$k \in {0, 1, 2, \cdots, K}$，剩余容量$(j - k \times w_i)$用前$(i - 1)$种物品填充，此子问题的结果已经保存在$dp[i - 1][j - k \times w_i]$中，所以应该有</p>
+<script type="math/tex; mode=display">\begin{aligned}
+      dp[i][j] & = \max_{k = 0}^K (dp[i - 1][j - k \times w_i] + k \times p_i) \\
+      K & = \min(n_i, \lfloor j / w_i \rfloor)
+  \end{aligned}</script></li>
+<li><p><strong>边界条件</strong>：注意到状态$dp[i][j]$可能由$i = 0$或$j = 0$的状态转移而来，$i = 0$表示没有物品可以选择，$j = 0$表示背包容量此时为$0$，所以都不可能产生价值，即</p>
+<script type="math/tex; mode=display">dp[i][0] = dp[0][j] = 0</script></li>
+</ul>
+<p>注意到，混合三种背包与多重背包的解题思路是完全一致的。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">backPack_mixture</span><span class="params">(self, W, w, p, N)</span>:</span></span><br><span class="line">        <span class="string">""" 混合背包问题 """</span></span><br><span class="line">        n = len(w)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 注意数组大小</span></span><br><span class="line">        <span class="comment"># n + 1: 状态方程中包含`i - 1`，故多定义一行，减少判断条件，便于实现</span></span><br><span class="line">        <span class="comment"># W + 1: 背包的容量是W，`range`函数不包含`stop`值，因此需多加1列</span></span><br><span class="line">        dp = [[<span class="number">0</span> <span class="keyword">for</span> j <span class="keyword">in</span> range(W + <span class="number">1</span>)] <span class="keyword">for</span> i <span class="keyword">in</span> range(n + <span class="number">1</span>)]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n + <span class="number">1</span>):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>, W + <span class="number">1</span>):</span><br><span class="line"></span><br><span class="line">                <span class="comment"># 初始化为`0`</span></span><br><span class="line">                dp[i][j] = <span class="number">0</span></span><br><span class="line">                <span class="comment"># 最多放入`K`件</span></span><br><span class="line">                K = min(N[i - <span class="number">1</span>], j // w[i - <span class="number">1</span>])</span><br><span class="line">                <span class="keyword">for</span> k <span class="keyword">in</span> range(K + <span class="number">1</span>):</span><br><span class="line">                    dp[i][j] = max(</span><br><span class="line">                        dp[i][j], dp[i - <span class="number">1</span>][j - k * w[i - <span class="number">1</span>]] + k * p[i - <span class="number">1</span>])</span><br><span class="line">        <span class="keyword">return</span> dp[<span class="number">-1</span>][<span class="number">-1</span>]</span><br></pre></td></tr></table></figure>
+<p>例如输入<code>W = 10, w = [2, 3, 5, 7], p = [1, 5, 2, 4], N = [3, 1, float(&#39;inf&#39;), 1]</code>，得到表格如下</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>itemidx \ W</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td><strong>0</strong></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td><strong>0</strong></td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>2</td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td><strong>5</strong></td>
+<td>5</td>
+<td>6</td>
+<td>6</td>
+<td>7</td>
+<td>7</td>
+<td>8</td>
+<td>8</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td><strong>5</strong></td>
+<td>5</td>
+<td>6</td>
+<td>6</td>
+<td>7</td>
+<td>7</td>
+<td>8</td>
+<td>8</td>
+</tr>
+<tr>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>5</td>
+<td>5</td>
+<td>6</td>
+<td>6</td>
+<td>7</td>
+<td>7</td>
+<td>8</td>
+<td><strong>9</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>选择$1$件物品$2$和$1$件物品$4$，得到最大价值总和$9$。</p>
+<h1 id="二维费用背包"><a href="#二维费用背包" class="headerlink" title="二维费用背包"></a>二维费用背包</h1><p>给定容量是$W$的背包和$N$种物品，第$i$种物品的价格是$p_i$、<strong>所占容量$w_i$、还包含费用$v_i$</strong>，简单起见每种物品最多选择$1$件(0-1背包拓展)。求解将哪些物品装入背包，可使这些物品所占<strong>容量总和不超过背包容量$W$、且费用总和不超过$V$的情况下</strong>，价值总和最大。</p>
+<ul>
+<li><strong>状态定义</strong>：定义三维数组$dp$，其元素$dp[i][j][l]$表示在背包容量为$j$、费用为$k$的情况下，前$i$种物品能获得的最大价值总和，其中$i = 1, \cdots, N, j = 1, \cdots, W, k = 1, \cdots, V$。</li>
+<li><p><strong>状态转移方程</strong>；求解$dp[i][j][l]$的过程，即将最多$K$件第$i$种物品放入背包，受限于背包容量$j$和费用$k$，实际上最多放入$K = \min(1, \lfloor j / w_i \rfloor, \lfloor k / v_i \rfloor)$，这其中已经包括不放入这种物品的情况，即可选件数是$k \in {0, 1, 2, \cdots, K}$，剩余容量$(j - k \times w_i)$、剩余费用$(k - k \times v_i)$用前$(i - 1)$种物品填充，此子问题的结果已经保存在$dp[i - 1][j - k \times w_i][k - k \times v_i]$中，所以应该有</p>
+<script type="math/tex; mode=display">\begin{aligned}
+      dp[i][j][l] & = \max_{k = 0}^K (dp[i - 1][j - k \times w_i][k - k \times v_i] + k \times p_i) \\
+      K & = \min(1, \lfloor j / w_i \rfloor, \lfloor k / v_i \rfloor)
+  \end{aligned}</script></li>
+<li><p><strong>边界条件</strong>：注意到状态$dp[i][j]$可能由$i = 0$、$j = 0$或$k = 0$的状态转移而来，$i = 0$表示没有物品可以选择，$j = 0$表示背包容量此时为$0$，$k = 0$表示可用费用此时为$0$，所以都不可能产生价值，即</p>
+<script type="math/tex; mode=display">dp[i][0][0] = dp[0][j][0] = dp[0][0][l] = 0</script></li>
+</ul>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">backPack_01_cost</span><span class="params">(self, W, V, w, v, p)</span>:</span></span><br><span class="line">        <span class="string">""" 01背包拓展的二维费用背包问题 """</span></span><br><span class="line">        n = len(w)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 注意数组大小</span></span><br><span class="line">        <span class="comment"># n + 1: 状态方程中包含`i - 1`，故多定义一行，减少判断条件，便于实现</span></span><br><span class="line">        <span class="comment"># W + 1: 背包的容量是W，`range`函数不包含`stop`值，因此需多加1列</span></span><br><span class="line">        <span class="comment"># V + 1: 可用价值总量是V，`range`函数不包含`stop`值，因此需多加1列</span></span><br><span class="line">        dp = [[[<span class="number">0</span> <span class="keyword">for</span> k <span class="keyword">in</span> range(V + <span class="number">1</span>)] <span class="keyword">for</span> j <span class="keyword">in</span> range(W + <span class="number">1</span>)] <span class="keyword">for</span> i <span class="keyword">in</span> range(n + <span class="number">1</span>)]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n + <span class="number">1</span>):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>, W + <span class="number">1</span>):</span><br><span class="line">                <span class="keyword">for</span> l <span class="keyword">in</span> range(<span class="number">1</span>, V + <span class="number">1</span>):</span><br><span class="line"></span><br><span class="line">                    <span class="comment"># 初始化为`0`</span></span><br><span class="line">                    dp[i][j][l] = <span class="number">0</span></span><br><span class="line">                    <span class="comment"># 最多放入`K`件</span></span><br><span class="line">                    K = min(<span class="number">1</span>, j // w[i - <span class="number">1</span>], l // v[i - <span class="number">1</span>])</span><br><span class="line">                    <span class="keyword">for</span> k <span class="keyword">in</span> range(K + <span class="number">1</span>):</span><br><span class="line">                        dp[i][j][l] = max(</span><br><span class="line">                            dp[i][j][l], </span><br><span class="line">                            dp[i - <span class="number">1</span>][j - k * w[i - <span class="number">1</span>]][l - k * v[i - <span class="number">1</span>]] + k * p[i - <span class="number">1</span>])</span><br><span class="line">        <span class="keyword">return</span> dp[<span class="number">-1</span>][<span class="number">-1</span>][<span class="number">-1</span>]</span><br></pre></td></tr></table></figure>
+<p>输入<code>W = 10, V = 8, w = [2, 3, 5, 7], v = [1, 5, 2, 3], p = [1, 5, 2, 4]</code>，在选择$1$件物品$2$和$1$件物品$4$，得到最大价值总和$9$，所占容量为$3 + 7 = 10$，所占费用为$5 + 3 = 8$。</p>
+<h1 id="分组背包"><a href="#分组背包" class="headerlink" title="分组背包"></a>分组背包</h1><p>给定容量是$W$的背包和$N$种物品，第$i$种物品的价格是$p_i$、所占容量$w_i$，简单起见每种物品最多选择$1$件(0-1背包拓展)，<strong>另外这些物品被划分成$G$组，标签为$g_i$，同组内(相同标签)的物品只能选择一种物品</strong>。求解在这些物品所占容量总和不超过背包容量$W$的情况下，获得的最大价值总和。</p>
+<ul>
+<li><strong>状态定义</strong>：由于同组内物品存在冲突，选择一种后其余不能选择，故定义二维数组$dp$，其元素$dp[g][j]$表示在背包容量为$j$的情况下，前$g$组物品能获得的最大价值总和，其中$g = 1, \cdots, G, j = 1, \cdots, W$。</li>
+<li><p><strong>状态转移方程</strong>；求解$dp[g][j]$的过程，即将最多$1$件第$g$组物品放入背包，并且组中包含多件物品$w_i \in G_g$。首先考虑能放入多少件，受限于背包容量$j$，且最多选择$1$件，所以实际上最多放入$K = \min(1, \lfloor j / w_i \rfloor)$，这其中已经包括不放入这种物品的情况，即可选件数是$k \in {0, 1}$，剩余容量$(j - k \times w_i)$用前$(g - 1)$组物品填充，此子问题的结果已经保存在$dp[g - 1][j - k \times w_i]$中，所以应该有</p>
+<script type="math/tex; mode=display">
+  \begin{aligned}
+      dp[g][j] & = \max_{i \in G_g} \left( \max_{k=1}^K(dp[g - 1][j - k \times w_i]) \right) \\
+      K & = \min(1, \lfloor j / w_i \rfloor)
+  \end{aligned}</script></li>
+<li><p><strong>边界条件</strong>：注意到状态$dp[g][j]$可能由$g = 0$或$j = 0$的状态转移而来，$g = 0$表示没有物品可以选择，$j = 0$表示背包容量此时为$0$，所以都不可能产生价值，即</p>
+<script type="math/tex; mode=display">dp[g][0] = dp[0][j] = 0</script></li>
+</ul>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">backPack_01_group</span><span class="params">(self, W, w, p, group)</span>:</span></span><br><span class="line">        <span class="string">""" 01背包拓展的分组背包问题 """</span></span><br><span class="line">        <span class="comment"># 去重求组数</span></span><br><span class="line">        gids = list(set(group)) <span class="comment"># 去重</span></span><br><span class="line">        G = len(gids)</span><br><span class="line">        n = len(w)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 注意数组大小</span></span><br><span class="line">        <span class="comment"># G + 1: 状态方程中包含`g - 1`，故多定义一行，减少判断条件，便于实现</span></span><br><span class="line">        <span class="comment"># W + 1: 背包的容量是m，`range`函数不包含`stop`值，因此需多加1列</span></span><br><span class="line">        dp = [[<span class="number">0</span> <span class="keyword">for</span> j <span class="keyword">in</span> range(W + <span class="number">1</span>)] <span class="keyword">for</span> g <span class="keyword">in</span> range(G + <span class="number">1</span>)]</span><br><span class="line">        <span class="keyword">for</span> g <span class="keyword">in</span> range(<span class="number">1</span>, G + <span class="number">1</span>):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>, W + <span class="number">1</span>):</span><br><span class="line"></span><br><span class="line">                <span class="comment"># 初始化为`0`</span></span><br><span class="line">                dp[g][j] = <span class="number">0</span></span><br><span class="line">                <span class="comment"># 从所有物品中过滤该组物品</span></span><br><span class="line">                <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n + <span class="number">1</span>):</span><br><span class="line">                    <span class="keyword">if</span> group[i - <span class="number">1</span>] != gids[g - <span class="number">1</span>]:</span><br><span class="line">                        <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">                    <span class="comment"># 最多放入`K`件</span></span><br><span class="line">                    K = min(<span class="number">1</span>, j // w[i - <span class="number">1</span>])</span><br><span class="line">                    <span class="keyword">for</span> k <span class="keyword">in</span> range(K + <span class="number">1</span>):</span><br><span class="line">                        dp[g][j] = max(</span><br><span class="line">                            dp[g][j], dp[g - <span class="number">1</span>][j - k * w[i - <span class="number">1</span>]] + k * p[i - <span class="number">1</span>])</span><br><span class="line">        <span class="keyword">return</span> dp[<span class="number">-1</span>][<span class="number">-1</span>]</span><br></pre></td></tr></table></figure>
+<p>输入<code>W = 10, w = [2, 3, 5, 7], p = [1, 5, 2, 4], group = [0, 1, 0, 1]</code>，得到表格如下</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>groupidx \ W</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td><strong>0</strong></td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td><strong>2</strong></td>
+<td>2</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>5</td>
+<td>5</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+<td>7</td>
+<td>7</td>
+<td><strong>7</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>选择$1$件物品$2$和$1$件物品$4$，得到最大价值总和$9$，所占容量为$3 + 7 = 10$。</p>
+<h1 id="有依赖背包"><a href="#有依赖背包" class="headerlink" title="有依赖背包"></a>有依赖背包</h1><p>给定容量是$W$的背包和$N$种物品，第$i$种物品的价格是$p_i$、所占容量$w_i$，简单起见每种物品最多选择$1$件(0-1背包拓展)。<strong>另外这些物品间存在依赖关系，具体地指在选择物品$i$时必须选择$j$</strong>，简单起见做以下假设：</p>
+<ul>
+<li>没有物品既依赖于其他物品，又被其他物品依赖</li>
+<li>每件物品最多依赖其他一件物品，但一件物品可以被多件物品依赖</li>
+</ul>
+<p>求解在这些物品所占容量总和不超过背包容量$W$的情况下，获得的最大价值总和。</p>
+<p><strong>思路分析</strong>：根据问题假设，可以将$N$件物品间的依赖关系视作，由多棵高度最大为$2$的树构成的森林，例如物品$2$依赖于物品$1$、物品$4, 5$依赖于物品$3$可以表示为下图<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">erDiagram</span><br><span class="line">    item-1 ||--|| item-2 : depend</span><br><span class="line">    item-3 ||--|| item-4 : depend</span><br><span class="line">    item-3 ||--|| item-5 : depend</span><br></pre></td></tr></table></figure><br>将不依赖于其他物品的项称为“主件”，依赖于主件的项称为“附件”，那么在选择时，可以选择主件及其$m \in {0, \cdots, M}$种附件，$M$是某主件的附件总数，<strong>那么这些策略是互斥的，所以可以将这些策略视作组，每种策略是其中的项，那么就可以用<a href="#分组背包">分组背包</a>进行求解了</strong>。具体地，如上图所给的依赖关系，我们得到两个组分别为</p>
+<script type="math/tex; mode=display">\{\{1\}, \{1, 2\}\}, \{\{3\}, \{3, 4\}, \{3, 5\}\}</script><p><strong>问题拓展</strong>：将两个假设删除，问题复杂但解题思路一致，在多级的树结构中每个节点都可视作“子主件”，多次使用上述策略进行求解。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    def backPack_01_group(self, W, w, p, group): -&gt; int: ...</span><br><span class="line">        <span class="string">""" 01背包拓展的分组背包问题 """</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">backPack_01_easy_dependence</span><span class="params">(self, W, w, p, dependence)</span>:</span></span><br><span class="line">        <span class="string">""" 01背包拓展的、满足两种假设的简单依赖背包问题 """</span></span><br><span class="line">        n = len(w)</span><br><span class="line">        <span class="comment"># ----------------------------------------------------------</span></span><br><span class="line">        <span class="comment"># 寻找主件</span></span><br><span class="line">        masters = [i <span class="keyword">for</span> i, d <span class="keyword">in</span> enumerate(dependence) <span class="keyword">if</span> d <span class="keyword">is</span> <span class="keyword">None</span>]</span><br><span class="line">        <span class="comment"># 构造组集合</span></span><br><span class="line">        groups = []</span><br><span class="line">        <span class="keyword">for</span> master <span class="keyword">in</span> masters:</span><br><span class="line">            group = [[master]]</span><br><span class="line">            <span class="comment"># 借助Apriori算法中的连接步算法</span></span><br><span class="line">            g_k_1 = [[master, i] <span class="keyword">for</span> i, d <span class="keyword">in</span> enumerate(dependence) <span class="keyword">if</span> d == master]</span><br><span class="line">            <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">                group += g_k_1</span><br><span class="line">                <span class="comment"># 连接</span></span><br><span class="line">                g_k = []</span><br><span class="line">                k_1 = len(g_k_1)</span><br><span class="line">                <span class="keyword">for</span> i <span class="keyword">in</span> range(k_1):</span><br><span class="line">                    <span class="keyword">for</span> j <span class="keyword">in</span> range(i + <span class="number">1</span>, k_1):</span><br><span class="line">                        <span class="comment"># 前`k - 2`项相同，第`k - 1`项不同</span></span><br><span class="line">                        <span class="comment"># 已经按字典序排序，`&lt;`为了简单去重</span></span><br><span class="line">                        <span class="keyword">if</span> g_k_1[i][:<span class="number">-1</span>] == g_k_1[j][:<span class="number">-1</span>] <span class="keyword">and</span> \</span><br><span class="line">                                g_k_1[i][<span class="number">-1</span>] &lt; g_k_1[j][<span class="number">-1</span>]:</span><br><span class="line">                            g_k += [g_k_1[i] + [g_k_1[j][<span class="number">-1</span>]]]</span><br><span class="line">                <span class="comment"># `k`项集空，终止循环</span></span><br><span class="line">                <span class="keyword">if</span> len(g_k) == <span class="number">0</span>: <span class="keyword">break</span></span><br><span class="line">                g_k_1 = g_k</span><br><span class="line">            groups += [group]</span><br><span class="line">            </span><br><span class="line">        <span class="comment"># ----------------------------------------------------------</span></span><br><span class="line">        <span class="comment"># 构造输入`backPack_01_group`的参数</span></span><br><span class="line">        gW, gP, gG = [], [], []</span><br><span class="line">        <span class="keyword">for</span> i, group <span class="keyword">in</span> enumerate(groups):</span><br><span class="line">            <span class="comment"># 该组内各项集计算参数</span></span><br><span class="line">            <span class="keyword">for</span> j, itemset <span class="keyword">in</span> enumerate(group):</span><br><span class="line">                <span class="comment"># 该项集占用容量和</span></span><br><span class="line">                gW += [sum(map(<span class="keyword">lambda</span> x: w[x], itemset))]</span><br><span class="line">                <span class="comment"># 该项集占用价值总和</span></span><br><span class="line">                gP += [sum(map(<span class="keyword">lambda</span> x: p[x], itemset))]</span><br><span class="line">                <span class="comment"># 该项集归属组</span></span><br><span class="line">                gG += [i]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># ----------------------------------------------------------</span></span><br><span class="line">        <span class="comment"># 计算分组背包</span></span><br><span class="line">        ret = self.backPack_01_group(W, gW, gP, gG)</span><br><span class="line">        <span class="keyword">return</span> ret</span><br></pre></td></tr></table></figure>
+<p>输入<code>W = 10, w = [2, 3, 5, 7], p = [1, 5, 2, 4], dependence = [None, 0, 0, None]</code>，，其中$dependence$表示依赖关系，第$i$件物品依赖于$dependence[i]$，得到</p>
+<ul>
+<li><strong>分组后的项集</strong>：<code>groups = [[0], [0, 1], [0, 2], [0, 1, 2]], [[3]]</code>；</li>
+<li><strong>分组项集展开后对应参数</strong>：<code>gW = [2, 5, 7, 10, 7], gP = [1, 6, 3, 8, 4], gG = [0, 0, 0, 0, 1]</code></li>
+</ul>
+<p><code>W = 10, gW = [2, 5, 7, 10, 7], gP = [1, 6, 3, 8, 4], gG = [0, 0, 0, 0, 1]</code>输入函数<code>backPack_01_group</code>得到表格如下</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>groupidx \ W</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td><strong>0</strong></td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+<td><strong>8</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+<td><strong>8</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>所以选择物品$0, 1, 2$得到最大价值总和$8$，此时占用背包容量$2 + 3 + 5 = 10$。</p>
+<h1 id="泛化物品背包"><a href="#泛化物品背包" class="headerlink" title="泛化物品背包"></a>泛化物品背包</h1><p>给定容量是$W$的背包和$N$种物品，<strong>第$i$种物品的所占容量是变量$W_i \in [0, W]$，其价值是与容量(费用)相关的函数$p_i(W_i)$</strong>，简单起见每种物品最多选择$1$件(0-1背包拓展)。求解在这些物品所占容量总和不超过背包容量$W$的情况下，获得的最大价值总和。</p>
+<p><strong>问题分析</strong>：假设分配到各种物品的容量是$W_i$，那么多种物品的价值总和用下式求解</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    f(W) & = \max \left( \sum_{i = 1}^N p_i(W_i) \right) \\
+    W & = \sum_{i = 1}^N W_i
+\end{aligned}</script><p>注意到<a href="#0-1背包">0-1背包</a>是泛化物品背包的特殊情况，即</p>
+<script type="math/tex; mode=display">p_i(W_i) = p_i, const</script><p>而<a href="#完全背包">完全背包</a>则是</p>
+<script type="math/tex; mode=display">p_i(W_i) = \lfloor W_i / w_i \rfloor \times p_i</script><p>实现略。</p>
+<h1 id="背包问题的问法"><a href="#背包问题的问法" class="headerlink" title="背包问题的问法"></a>背包问题的问法</h1><h2 id="最大价值总和"><a href="#最大价值总和" class="headerlink" title="最大价值总和"></a>最大价值总和</h2><p>上面$9$个问题中讨论的都是这个问题，这种最大/最小的问题无需考虑方案等，相对来说比较容易，这类的问法还可以拓展为</p>
+<ul>
+<li>总价值最大/最小</li>
+<li>总件数最大/最小</li>
+</ul>
+<h2 id="任意最优方案"><a href="#任意最优方案" class="headerlink" title="任意最优方案"></a>任意最优方案</h2><p>要求输出任意一个满足最大价值总和的方案。这个问题的求解的关键在于<strong>记录下每个状态的最优值，是从前面哪一个状态转移过来的</strong>。具体的求解方法是，在已得到的状态表格中进行逆推，得到最优状态的转移路径。</p>
+<p>以<a href="#0-1背包">0-1背包</a>为例，进行讲解，假设输入<code>W = 10, w = [2, 3, 5, 7], p = [1, 5, 2, 4]</code>，得到表格如下。那么$dp[4][10]$应该有</p>
+<script type="math/tex; mode=display">dp[4][10] = \max(dp[3][10], dp[3][10 - 7] + 4) = 9</script><p>通过比较表格数值，可以知道$dp[4][10]$是由$dp[3][3] + 4 = 5$转移而来，且物品$4$被选中，继续对$dp[3][3]$进行回溯，有</p>
+<script type="math/tex; mode=display">dp[3][3] = \max(dp[2][3], dp[2][3 - 3] + 2) = 5</script><p>通过比较表格数值，可以知道$dp[3][3]$由$dp[2][3] = 5$转移得到，那么物品$3$未被选中，对$dp[2][3]$进行回溯，有</p>
+<script type="math/tex; mode=display">dp[2][3] = \max(dp[1][3], dp[1][3 - 2] + 5) = 5</script><p>通过比较表格数值，可以知道$dp[2][3]$由$dp[1][1] + 5 = 5$转移得到，那么物品$2$被选中，对$dp[1][1]$进行回溯，有</p>
+<script type="math/tex; mode=display">dp[1][1] = \max(dp[0][1], dp[0][1 - 2] + 1)</script><p>由于背包容量$1&lt;$物品$1$的所需容量$2$，所以一定由$dp[0][1]$转移得到，此时已到达边界，停止回溯。所以最终得到的方案是${2, 4}$。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>itemidx \ W</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td><strong>0</strong></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td><strong>0</strong></td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td><strong>5</strong></td>
+<td>5</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td><strong>5</strong></td>
+<td>5</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+<td>7</td>
+<td>7</td>
+<td>8</td>
+</tr>
+<tr>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>5</td>
+<td>5</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+<td>7</td>
+<td>7</td>
+<td><strong>9</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">backPack_01_choice</span><span class="params">(self, W, w, p)</span>:</span></span><br><span class="line">        <span class="string">""" 01背包拓展的任意最优方案问题 """</span></span><br><span class="line">        n = len(w)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 注意数组大小</span></span><br><span class="line">        <span class="comment"># n + 1: 状态方程中包含`i - 1`，故多定义一行，减少判断条件，便于实现</span></span><br><span class="line">        <span class="comment"># W + 1: 背包的容量是W，`range`函数不包含`stop`值，因此需多加1列</span></span><br><span class="line">        dp = [[<span class="number">0</span> <span class="keyword">for</span> j <span class="keyword">in</span> range(W + <span class="number">1</span>)] <span class="keyword">for</span> i <span class="keyword">in</span> range(n + <span class="number">1</span>)]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n + <span class="number">1</span>):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>, W + <span class="number">1</span>):</span><br><span class="line">                <span class="comment"># # 背包空间不够</span></span><br><span class="line">                <span class="comment"># if j &lt; w[i - 1]:</span></span><br><span class="line">                <span class="comment">#     dp[i][j] = dp[i - 1][j]</span></span><br><span class="line">                <span class="comment"># # 背包空间够，考虑是否放入</span></span><br><span class="line">                <span class="comment"># else:</span></span><br><span class="line">                <span class="comment">#     dp[i][j] = max(</span></span><br><span class="line">                <span class="comment">#         dp[i - 1][j],</span></span><br><span class="line">                <span class="comment">#         dp[i - 1][j - w[i - 1]] + p[i - 1])</span></span><br><span class="line">                <span class="comment"># ----------------------------------------------</span></span><br><span class="line">                <span class="comment"># 初始化为`0`</span></span><br><span class="line">                dp[i][j] = <span class="number">0</span></span><br><span class="line">                <span class="comment"># 最多放入`K`件</span></span><br><span class="line">                K = min(<span class="number">1</span>, j // w[i - <span class="number">1</span>])</span><br><span class="line">                <span class="keyword">for</span> k <span class="keyword">in</span> range(K + <span class="number">1</span>):</span><br><span class="line">                    dp[i][j] = max(</span><br><span class="line">                        dp[i][j], </span><br><span class="line">                        dp[i - <span class="number">1</span>][j - k * w[i - <span class="number">1</span>]] + k * p[i - <span class="number">1</span>])</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># ------------------------------------------------------</span></span><br><span class="line">        <span class="comment"># 回溯</span></span><br><span class="line">        choice = []</span><br><span class="line">        i, j = n, W</span><br><span class="line">        <span class="keyword">while</span> i &gt; <span class="number">0</span> <span class="keyword">and</span> j &gt; <span class="number">0</span>:</span><br><span class="line">            <span class="comment"># 可以放入`K`件物品`i`</span></span><br><span class="line">            K = min(<span class="number">1</span>, j // w[i - <span class="number">1</span>])</span><br><span class="line">            <span class="comment"># 无法放入，跳过</span></span><br><span class="line">            <span class="keyword">if</span> K == <span class="number">0</span>: i -= <span class="number">1</span></span><br><span class="line">            <span class="comment"># 可以放入，依次选择</span></span><br><span class="line">            <span class="keyword">for</span> k <span class="keyword">in</span> range(<span class="number">0</span>, K + <span class="number">1</span>):</span><br><span class="line">                <span class="keyword">if</span> dp[i - <span class="number">1</span>][j - k * w[i - <span class="number">1</span>]] + k * p[i - <span class="number">1</span>] == dp[i][j]:</span><br><span class="line">                    choice += [i]</span><br><span class="line">                    j -= k * w[i - <span class="number">1</span>]</span><br><span class="line">                    i -= <span class="number">1</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">return</span> choice</span><br></pre></td></tr></table></figure>
+<h2 id="字典序最小的最优方案"><a href="#字典序最小的最优方案" class="headerlink" title="字典序最小的最优方案"></a>字典序最小的最优方案</h2><p>要求输出字典序最小的、满足最大价值总和的方案。与<a href="#任意最优方案">任意最优方案</a>不同之处是，若$dp[i][j]$回溯时发现既可以从$dp[i - 1][j]$转移，也可以由$(dp[i - 1][j - k \times w_i] + k \times p_i)$转移，为得到字典序最小的方案，<strong>应该不放入物品$i$</strong>，即选择从$dp[i - 1][j]$转移得到。</p>
+<p>实际上，<a href="#任意最优方案">任意最优方案</a>中的代码，<code>k</code>的循环方向<code>range(0, K + 1)</code>，已经决定了返回字典序最小的最优方案。</p>
+<h2 id="满足条件的方案总数"><a href="#满足条件的方案总数" class="headerlink" title="满足条件的方案总数"></a>满足条件的方案总数</h2><p>例如，要求统计已装入物品所需总容量在某个指定容量以下的方案总数，简单起见每种物品最多选择$1$件(0-1背包拓展)。对于这类改变问法的问题，一般只需将状态转移方程中的$\max$改成$\sum$即可，</p>
+<ul>
+<li><strong>状态定义</strong>：定义二维数组$dp$，其元素$dp[i][j]$表示在背包容量为$j$的情况下，前$i$种物品能放入的<strong>方案数</strong>，其中$i = 1, \cdots, N, j = 1, \cdots, W$。</li>
+<li><p><strong>状态转移方程</strong>；求解$dp[i][j]$的过程，需考虑将多少件第$i$种物品放入背包。首先考虑能放入多少件，受限于背包容量$j$，实际上最多放入$K = \min(1, \lfloor j / w_i \rfloor)$，这其中已经包括不放入这种物品的情况，即可选件数是$k \in {0, 1, 2, \cdots, K}$，剩余容量$(j - k \times w_i)$用前$(i - 1)$种物品填充，此子问题的结果已经保存在$dp[i - 1][j - k \times w_i]$中，所以应该有</p>
+<script type="math/tex; mode=display">\begin{aligned}
+      dp[i][j] & = \sum_{k = 0}^K dp[i - 1][j - k \times w_i] \\
+      K & = \min(1, \lfloor j / w_i \rfloor)
+  \end{aligned}</script></li>
+<li><p><strong>边界条件</strong>：注意到状态$dp[i][j]$可能由$i = 0$或$j = 0$的状态转移而来，$i = 0$表示没有物品可以选择，$j = 0$表示背包容量此时为$0$，方案数都是$1$，即</p>
+<script type="math/tex; mode=display">dp[i][0] = dp[0][j] = 1</script></li>
+</ul>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">backPack_01_num_of_choice</span><span class="params">(self, W, w, p)</span>:</span></span><br><span class="line">        <span class="string">""" 01背包拓展的求满足方案的总数问题 """</span></span><br><span class="line">        n = len(w)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 注意数组大小</span></span><br><span class="line">        <span class="comment"># n + 1: 状态方程中包含`i - 1`，故多定义一行，减少判断条件，便于实现</span></span><br><span class="line">        <span class="comment"># W + 1: 背包的容量是W，`range`函数不包含`stop`值，因此需多加1列</span></span><br><span class="line">        dp = [[<span class="number">1</span> <span class="keyword">for</span> j <span class="keyword">in</span> range(W + <span class="number">1</span>)] <span class="keyword">for</span> i <span class="keyword">in</span> range(n + <span class="number">1</span>)]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n + <span class="number">1</span>):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>, W + <span class="number">1</span>):</span><br><span class="line">                <span class="comment"># 初始化为`0`</span></span><br><span class="line">                dp[i][j] = <span class="number">0</span></span><br><span class="line">                <span class="comment"># 最多放入`K`件</span></span><br><span class="line">                K = min(<span class="number">1</span>, j // w[i - <span class="number">1</span>])</span><br><span class="line">                <span class="keyword">for</span> k <span class="keyword">in</span> range(K + <span class="number">1</span>):</span><br><span class="line">                    dp[i][j] += dp[i - <span class="number">1</span>][j - k * w[i - <span class="number">1</span>]]</span><br><span class="line">        <span class="keyword">return</span> dp[<span class="number">-1</span>][<span class="number">-1</span>]</span><br></pre></td></tr></table></figure>
+<p>例如输入<code>W = 10, w = [2, 3, 5, 7], p = [1, 5, 2, 4]</code>，得到表格如下</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>itemidx \ W</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td><strong>1</strong></td>
+<td>1</td>
+<td>1</td>
+<td><strong>1</strong></td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td><strong>1</strong></td>
+</tr>
+<tr>
+<td>1</td>
+<td><strong>1</strong></td>
+<td>1</td>
+<td>2</td>
+<td><strong>2</strong></td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td><strong>2</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td><strong>3</strong></td>
+<td>3</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td><strong>4</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td><strong>3</strong></td>
+<td>3</td>
+<td>5</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+<td>7</td>
+<td><strong>8</strong></td>
+</tr>
+<tr>
+<td>4</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>3</td>
+<td>5</td>
+<td>5</td>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+<td><strong>11</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="最优方案总数"><a href="#最优方案总数" class="headerlink" title="最优方案总数"></a>最优方案总数</h2><p>满足最大价值总和的方案可能存在多个，要求统计这些方案共有多少种。在求解最大方案的同时，也求解最佳方案数目。</p>
+<ul>
+<li><p><strong>状态定义</strong>：</p>
+<ul>
+<li>定义二维数组$dpv$，其元素$dpv[i][j]$表示在背包容量为$j$的情况下，前$i$种物品能获得的最大价值总和；</li>
+<li><p>定义二维数组$dpn$，其元素$dpn[i][j]$表示在背包容量为$j$的情况下，前$i$种物品能获得的最大价值总和对应的方案数。</p>
+<p>其中$i = 1, \cdots, N, j = 1, \cdots, W$。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>状态转移方程</strong>；</p>
+<ul>
+<li><p>求解$dpv[i][j]$的过程，需考虑将多少件第$i$种物品放入背包。首先考虑能放入多少件，受限于背包容量$j$，实际上最多放入$K = \lfloor j / w_i \rfloor$，这其中已经包括不放入这种物品的情况，即可选件数是$k \in {0, 1, 2, \cdots, K}$，剩余容量$(j - k \times w_i)$用前$(i - 1)$种物品填充，此子问题的结果已经保存在$dpv[i - 1][j - k \times w_i]$中，所以应该有</p>
+<script type="math/tex; mode=display">dpv[i][j] = \max_{k = 0}^K (dpv[i - 1][j - k \times w_i] + k \times p_i), K = \lfloor j / w_i \rfloor</script></li>
+<li><p>求解$dpn[i][j]$的过程，需要考虑$dpv[i][j]$是从哪里转移过来的，所以</p>
+<script type="math/tex; mode=display">
+  \begin{aligned}
+      dpn[i][j] = \sum_{k = 0}^K I[i - 1][j - k \times w_i] \times dpn[i - 1][j - k \times w_i] \\
+      I[i - 1][j - k \times w_i] = (dpv[i][j] == pv[i - 1][j - k \times w_i] + k \times p_i)
+  \end{aligned}</script></li>
+</ul>
+</li>
+<li><p><strong>边界条件</strong>：注意到状态$dpv[i][j]$可能由$i = 0$或$j = 0$的状态转移而来，$i = 0$表示没有物品可以选择，$j = 0$表示背包容量此时为$0$，所以都不可能产生价值，即</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+  dpv[i][0] = dpv[0][j] = 0 \\
+  dpn[i][0] = dpn[0][j] = 0
+\end{aligned}</script></li>
+</ul>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">backPack_01_num_of_best_choice</span><span class="params">(self, W, w, p)</span>:</span></span><br><span class="line">        <span class="string">""" 01背包拓展的求最优方案总数问题 """</span></span><br><span class="line">        n = len(w)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 注意数组大小</span></span><br><span class="line">        <span class="comment"># n + 1: 状态方程中包含`i - 1`，故多定义一行，减少判断条件，便于实现</span></span><br><span class="line">        <span class="comment"># W + 1: 背包的容量是W，`range`函数不包含`stop`值，因此需多加1列</span></span><br><span class="line">        dpv = [[<span class="number">0</span> <span class="keyword">for</span> j <span class="keyword">in</span> range(W + <span class="number">1</span>)] <span class="keyword">for</span> i <span class="keyword">in</span> range(n + <span class="number">1</span>)]</span><br><span class="line">        dpn = [[<span class="number">0</span> <span class="keyword">for</span> j <span class="keyword">in</span> range(W + <span class="number">1</span>)] <span class="keyword">for</span> i <span class="keyword">in</span> range(n + <span class="number">1</span>)]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n + <span class="number">1</span>):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>, W + <span class="number">1</span>):</span><br><span class="line">                <span class="comment"># 初始化为`0`</span></span><br><span class="line">                dpv[i][j] = <span class="number">0</span></span><br><span class="line">                <span class="comment"># 最多放入`K`件</span></span><br><span class="line">                K = min(<span class="number">1</span>, j // w[i - <span class="number">1</span>])</span><br><span class="line">                <span class="comment"># 求最大价值</span></span><br><span class="line">                <span class="keyword">for</span> k <span class="keyword">in</span> range(K + <span class="number">1</span>):</span><br><span class="line">                    dpv[i][j] = max(</span><br><span class="line">                        dpv[i][j], </span><br><span class="line">                        dpv[i - <span class="number">1</span>][j - k * w[i - <span class="number">1</span>]] + k * p[i - <span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">                <span class="comment"># 求最大价值对应的方案数</span></span><br><span class="line">                <span class="comment"># 放不进物品`i`</span></span><br><span class="line">                <span class="keyword">if</span> K == <span class="number">0</span>:</span><br><span class="line">                    dpn[i][j] = dpn[i - <span class="number">1</span>][j]</span><br><span class="line">                <span class="comment"># 放`K`件范围内的物品</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    <span class="keyword">for</span> k <span class="keyword">in</span> range(K + <span class="number">1</span>):</span><br><span class="line">                        <span class="comment"># 剩余容量</span></span><br><span class="line">                        r = j - k * w[i - <span class="number">1</span>]</span><br><span class="line">                        <span class="comment"># `dp[i][j]`是否由状态`dpv[i - 1][r]`转移而来</span></span><br><span class="line">                        <span class="keyword">if</span> dpv[i][j] == dpv[i - <span class="number">1</span>][r] + k * p[i - <span class="number">1</span>]:</span><br><span class="line">                            <span class="comment"># # `i, j`下第一次取最大价值</span></span><br><span class="line">                            <span class="comment"># if dpn[i - 1][r] == 0:</span></span><br><span class="line">                            <span class="comment">#     dpn[i][j] = 1</span></span><br><span class="line">                            <span class="comment"># # 累加</span></span><br><span class="line">                            <span class="comment"># else:</span></span><br><span class="line">                            <span class="comment">#     dpn[i][j] += dpn[i - 1][r]</span></span><br><span class="line">                            <span class="comment"># ------ 或者 ------</span></span><br><span class="line">                            dpn[i][j] += max(<span class="number">1</span>, dpn[i - <span class="number">1</span>][r])</span><br><span class="line">        <span class="keyword">return</span> dpn[<span class="number">-1</span>][<span class="number">-1</span>]</span><br></pre></td></tr></table></figure>
+<p>输入<code>W = 10, w = [2, 3, 6, 7], p = [1, 5, 4, 4]</code>，得到表格如下</p>
+<ul>
+<li><p>$dpv$<br>  | itemidx \ W | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |<br>  | —- | —- | —- | —- | —- | —- | —- | —- | —- | —- | —- | —- |<br>  | 0 | 0 | <strong>0</strong> | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |<br>  | 1 | <strong>0</strong> | <strong>0</strong> | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |<br>  | 2 | 0 | 0 | 1 | <strong>5</strong> | <strong>5</strong> | 6 | 6 | 6 | 6 | 6 | 6 |<br>  | 3 | 0 | 0 | 1 | <strong>5</strong> | 5 | 6 | 6 | 6 | 6 | 9 | <strong>9</strong> |<br>  | 4 | 0 | 0 | 1 | 5 | 5 | 6 | 6 | 6 | 6 | <strong>9</strong> | <strong>9</strong> |</p>
+</li>
+<li><p>$dpn$<br>  | itemidx \ W | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |<br>  | —- | —- | —- | —- | —- | —- | —- | —- | —- | —- | —- | —- |<br>  | 0 | 0 | <strong>0</strong> | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |<br>  | 1 | <strong>0</strong> | <strong>0</strong> | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |<br>  | 2 | 0 | 0 | 1 | <strong>1</strong> | <strong>1</strong> | 1 | 1 | 1 | 1 | 1 | 1 |<br>  | 3 | 0 | 0 | 1 | <strong>1</strong> | 1 | 1 | 1 | 1 | 1 | 1 | <strong>1</strong> |<br>  | 4 | 0 | 0 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | <strong>2</strong> |</p>
+</li>
+</ul>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="https://github.com/tianyicui/pack" target="_blank" rel="noopener">背包9讲 - Github</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/23/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E7%BB%8F%E5%85%B8%E9%A2%98%E5%9E%8B/" rel="next" title="【算法】动态规划经典题型">
+                <i class="fa fa-chevron-left"></i> 【算法】动态规划经典题型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.gif"
+                alt="Louis Hsu" />
+            
+              <p class="site-author-name" itemprop="name">Louis Hsu</p>
+              <p class="site-description motion-element" itemprop="description">ᵕ᷄ ≀ ̠˘᷅ 永远年轻，永远热泪盈眶</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/%20%7C%7C%20archive">
+                
+                    <span class="site-state-item-count">104</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/isLouisHsu" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://is.louishsu@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/islouishsu" target="_blank" title="Zhihu"><i class="fa fa-fw fa-zhihu"></i>Zhihu</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/islouishsu" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          <div id='music163player'>
+            <iframe 
+              frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=110 
+              src="//music.163.com/outchain/player?type=0&id=2703291040&auto=1&height=90">
+            </iframe>
+          </div>
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#目录"><span class="nav-number">1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0-1背包"><span class="nav-number">2.</span> <span class="nav-text">0-1背包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#完全背包"><span class="nav-number">3.</span> <span class="nav-text">完全背包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#多重背包"><span class="nav-number">4.</span> <span class="nav-text">多重背包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#混合三种背包"><span class="nav-number">5.</span> <span class="nav-text">混合三种背包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二维费用背包"><span class="nav-number">6.</span> <span class="nav-text">二维费用背包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分组背包"><span class="nav-number">7.</span> <span class="nav-text">分组背包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#有依赖背包"><span class="nav-number">8.</span> <span class="nav-text">有依赖背包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#泛化物品背包"><span class="nav-number">9.</span> <span class="nav-text">泛化物品背包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#背包问题的问法"><span class="nav-number">10.</span> <span class="nav-text">背包问题的问法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#最大价值总和"><span class="nav-number">10.1.</span> <span class="nav-text">最大价值总和</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#任意最优方案"><span class="nav-number">10.2.</span> <span class="nav-text">任意最优方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字典序最小的最优方案"><span class="nav-number">10.3.</span> <span class="nav-text">字典序最小的最优方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#满足条件的方案总数"><span class="nav-number">10.4.</span> <span class="nav-text">满足条件的方案总数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最优方案总数"><span class="nav-number">10.5.</span> <span class="nav-text">最优方案总数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">11.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Louis Hsu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: 'e65d27f7cf5c62feaf97',
+          clientSecret: '356386826698e8b817ca076b08d7c0e9814f52ea',
+          repo: 'isLouisHsu.github.io',
+          owner: 'isLouisHsu',
+          admin: ['isLouisHsu'],
+          id: md5(window.location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('3');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+
+  <script type="text/javascript" src="/js/click_show_text.js"></script>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+</html>

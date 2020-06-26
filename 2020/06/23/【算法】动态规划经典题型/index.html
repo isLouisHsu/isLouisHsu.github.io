@@ -116,7 +116,7 @@
 <meta property="og:description" content="目录 目录 解题思路 零钱兑换 零钱兑换 I: 最少硬币个数 零钱兑换 II: 硬币组合数   背包问题II: 0-1背包 剪绳子 I 青蛙跳台阶问题 *青蛙过河问题 最小编辑距离 最大子序和问题 最长回文子串 最长递增子序列问题, LIS 最长公共子串 最长公共子序列问题, LCS *买卖股票的最佳时机 买卖股票的最佳时机 I: 一次交易 买卖股票的最佳时机 II: 无穷多次交易 买卖股票的最佳">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-06-23T00:56:39.000Z">
-<meta property="article:modified_time" content="2020-06-24T02:15:19.240Z">
+<meta property="article:modified_time" content="2020-06-24T05:06:27.326Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
 
@@ -419,7 +419,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-06-24 10:15:19" itemprop="dateModified" datetime="2020-06-24T10:15:19+08:00">2020-06-24</time>
+                <time title="修改时间：2020-06-24 13:06:27" itemprop="dateModified" datetime="2020-06-24T13:06:27+08:00">2020-06-24</time>
               
             
           </span>
@@ -531,7 +531,7 @@
      dp[-1][j] = \infty & j > -1 \\
      dp[i][-1] = 0 & \forall i
  \end{cases}</script><p> 即初始化表格为</p>
-<p> | coin \ amount | 0 | 1 | 2 | 3 | 4 | 5 | 6 | … |<br> | —- | —- | —- | —- | —- | —- | —- | —- | —- |<br> | 空 | 0 | inf | inf | inf | inf | inf | inf | … |<br> | c1 | 0 | | | | | | | | | | |<br> | c2 | 0 | | | | | | | | | | |<br> | … | … | | | | | | | | | | |</p>
+<p> | coin \ amount | 0 | 1 | 2 | 3 | 4 | 5 | 6 | … |<br> | —- | —- | —- | —- | —- | —- | —- | —- | —- |<br> | 空 | 0 | inf | inf | inf | inf | inf | inf | … |<br> | c1 | 0 |  |  |  |  |  |  | … |<br> | c2 | 0 |  |  |  |  |  |  | … |<br> | … | … |  |  |  |  |  |  | … |</p>
 </li>
 </ol>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">coinChange</span><span class="params">(self, coins: List[int], amount: int)</span> -&gt; int:</span></span><br><span class="line">        <span class="comment"># 边界条件：金额为0</span></span><br><span class="line">        <span class="keyword">if</span> amount == <span class="number">0</span>: <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line">        m, n = len(coins), amount</span><br><span class="line">        <span class="comment"># 注意数组大小</span></span><br><span class="line">        <span class="comment"># m + 1: 状态方程中包含`i - 1`，故多定义一行，减少判断条件，便于实现</span></span><br><span class="line">        <span class="comment"># n + 1: 包括面值`n`，`range`函数中不包含`stop`值</span></span><br><span class="line">        dp = [[<span class="number">0</span> <span class="keyword">for</span> j <span class="keyword">in</span> range(n + <span class="number">1</span>)] <span class="keyword">for</span> i <span class="keyword">in</span> range(m + <span class="number">1</span>)]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 边界条件</span></span><br><span class="line">        <span class="comment"># 用前0种硬币表示面额j，无法表示</span></span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(n + <span class="number">1</span>):</span><br><span class="line">            dp[<span class="number">0</span>][j] = float(<span class="string">'inf'</span>)</span><br><span class="line">        <span class="comment"># 用前i种硬币表示面额0，有0种方案</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(m + <span class="number">1</span>):</span><br><span class="line">            dp[i][<span class="number">0</span>] = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">        ret = float(<span class="string">'inf'</span>)</span><br><span class="line">        <span class="comment"># 状态转移方程</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, m + <span class="number">1</span>):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>, n + <span class="number">1</span>):</span><br><span class="line"></span><br><span class="line">                dp[i][j] = float(<span class="string">'inf'</span>)</span><br><span class="line">                <span class="keyword">for</span> k <span class="keyword">in</span> range(j // coins[i - <span class="number">1</span>] + <span class="number">1</span>):</span><br><span class="line">                    <span class="comment"># 剩余面额</span></span><br><span class="line">                    r = j - coins[i - <span class="number">1</span>] * k</span><br><span class="line">                    <span class="comment"># 剩余面额无法表示</span></span><br><span class="line">                    <span class="keyword">if</span> dp[i - <span class="number">1</span>][r] == float(<span class="string">'inf'</span>):</span><br><span class="line">                        <span class="keyword">continue</span></span><br><span class="line">                    <span class="comment"># 剩余面额能够表示，取数量最少的</span></span><br><span class="line">                    <span class="keyword">else</span>:</span><br><span class="line">                        dp[i][j] = min(dp[i][j], dp[i - <span class="number">1</span>][r] + k)</span><br><span class="line">                </span><br><span class="line">                <span class="comment"># --------------------------------------</span></span><br><span class="line">                <span class="comment"># 寻找能表示amount的最少硬币个数</span></span><br><span class="line">                <span class="keyword">if</span> j == n:</span><br><span class="line">                    ret = min(ret, dp[i][<span class="number">-1</span>])</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span> <span class="keyword">if</span> ret == float(<span class="string">'inf'</span>) <span class="keyword">else</span> ret</span><br></pre></td></tr></table></figure>
@@ -945,7 +945,7 @@ dp[i][j] = \begin{cases}
 </tbody>
 </table>
 </div>
-<h1 id="剪绳子-I"><a href="#剪绳子-I" class="headerlink" title="剪绳子 I"></a><a href="https://leetcode-cn.com/problems/jian-sheng-zi-lcof/" target="_blank" rel="noopener">剪绳子 I</a></h1><p>给你一根长度为$n$的绳子，请把绳子剪成整数长度的$m$段（$m、n$都是整数，$n&gt;1$并且$m&gt;1$），每段绳子的长度记为$k[0],k[1]…k[m-1]$。请问$k[0]<em>k[1]</em>…<em>k[m-1]$可能的最大乘积是多少？例如，当绳子的长度是$8$时，我们把它剪成长度分别为$2, 3, 3$的三段，此时得到的最大乘积是$18$。<br><strong>示例 1</strong>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: 2</span><br><span class="line">输出: 1</span><br><span class="line">解释: 2 &#x3D; 1 + 1, 1 × 1 &#x3D; 1</span><br></pre></td></tr></table></figure><br><strong>示例 2</strong>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: 10</span><br><span class="line">输出: 36</span><br><span class="line">解释: 10 &#x3D; 3 + 3 + 4, 3 × 3 × 4 &#x3D; 36</span><br></pre></td></tr></table></figure><br><strong>提示</strong>：<br>2 &lt;= n &lt;= 58<br><em>*注意</em></em>：本题与主站 343 题相同：<a href="https://leetcode-cn.com/problems/integer-break/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/integer-break/</a></p>
+<h1 id="剪绳子-I"><a href="#剪绳子-I" class="headerlink" title="剪绳子 I"></a><a href="https://leetcode-cn.com/problems/jian-sheng-zi-lcof/" target="_blank" rel="noopener">剪绳子 I</a></h1><p>给你一根长度为$n$的绳子，请把绳子剪成整数长度的$m$段($m、n$都是整数，$n&gt;1$并且$m&gt;1$)，每段绳子的长度记为$k[0],k[1]…k[m-1]$。请问$k[0] \times k[1] \times … \times k[m-1]$可能的最大乘积是多少？例如，当绳子的长度是$8$时，我们把它剪成长度分别为$2, 3, 3$的三段，此时得到的最大乘积是$18$。<br><strong>示例 1</strong>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: 2</span><br><span class="line">输出: 1</span><br><span class="line">解释: 2 &#x3D; 1 + 1, 1 × 1 &#x3D; 1</span><br></pre></td></tr></table></figure><br><strong>示例 2</strong>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: 10</span><br><span class="line">输出: 36</span><br><span class="line">解释: 10 &#x3D; 3 + 3 + 4, 3 × 3 × 4 &#x3D; 36</span><br></pre></td></tr></table></figure><br><strong>提示</strong>：<br>2 &lt;= n &lt;= 58<br><strong>注意</strong>：本题与主站 343 题相同：<a href="https://leetcode-cn.com/problems/integer-break/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/integer-break/</a></p>
 <hr>
 <ol>
 <li><strong>子问题</strong>：对长度为$n$的绳子，最后一刀可以选择减去$x$，求$x * (n - x)$最大，那么子问题是剩余绳子$(n - x)$剪若干次后的最大乘积。</li>
@@ -979,7 +979,7 @@ maxProduct = \begin{cases}
 <tbody>
 <tr>
 <td>0</td>
-<td>1</td>
+<td><strong>1</strong></td>
 <td>1</td>
 <td>1</td>
 <td>1</td>
@@ -994,7 +994,7 @@ maxProduct = \begin{cases}
 <td>1</td>
 <td>1</td>
 <td>2</td>
-<td>3</td>
+<td><strong>3</strong></td>
 <td>4</td>
 <td>5</td>
 <td>6</td>
@@ -1008,7 +1008,7 @@ maxProduct = \begin{cases}
 <td>2</td>
 <td>3</td>
 <td>4</td>
-<td>6</td>
+<td><strong>6</strong></td>
 <td>9</td>
 <td>12</td>
 <td>16</td>
@@ -1023,7 +1023,7 @@ maxProduct = \begin{cases}
 <td>6</td>
 <td>9</td>
 <td>12</td>
-<td>18</td>
+<td><strong>18</strong></td>
 </tr>
 <tr>
 <td>4</td>
@@ -1035,7 +1035,7 @@ maxProduct = \begin{cases}
 <td>6</td>
 <td>9</td>
 <td>12</td>
-<td>18</td>
+<td><strong>18</strong></td>
 </tr>
 <tr>
 <td>5</td>
@@ -1047,7 +1047,7 @@ maxProduct = \begin{cases}
 <td>6</td>
 <td>9</td>
 <td>12</td>
-<td>18</td>
+<td><strong>18</strong></td>
 </tr>
 <tr>
 <td>6</td>
@@ -1059,7 +1059,7 @@ maxProduct = \begin{cases}
 <td>6</td>
 <td>9</td>
 <td>12</td>
-<td>18</td>
+<td><strong>18</strong></td>
 </tr>
 <tr>
 <td>7</td>
@@ -1071,7 +1071,7 @@ maxProduct = \begin{cases}
 <td>6</td>
 <td>9</td>
 <td>12</td>
-<td>18</td>
+<td><strong>18</strong></td>
 </tr>
 <tr>
 <td>8</td>
@@ -1083,7 +1083,7 @@ maxProduct = \begin{cases}
 <td>6</td>
 <td>9</td>
 <td>12</td>
-<td>18</td>
+<td><strong>18</strong></td>
 </tr>
 </tbody>
 </table>
@@ -1131,29 +1131,29 @@ maxProduct = \begin{cases}
 <td>0</td>
 <td>1</td>
 <td>2</td>
-<td>3</td>
+<td><strong>3</strong></td>
 <td>4</td>
-<td>6</td>
+<td><strong>6</strong></td>
 <td>9</td>
 <td>12</td>
-<td>18</td>
+<td><strong>18</strong></td>
 </tr>
 <tr>
 <td>maxProduct</td>
 <td>none</td>
-<td>0</td>
-<td>1</td>
-<td>2</td>
+<td><em>0</em></td>
+<td><em>1</em></td>
+<td><em>2</em></td>
 <td>4</td>
 <td>6</td>
 <td>9</td>
 <td>12</td>
-<td>18</td>
+<td><strong>18</strong></td>
 </tr>
 </tbody>
 </table>
 </div>
-<h1 id="青蛙跳台阶问题"><a href="#青蛙跳台阶问题" class="headerlink" title="青蛙跳台阶问题"></a><a href="https://leetcode-cn.com/problems/qing-wa-tiao-tai-jie-wen-ti-lcof/" target="_blank" rel="noopener">青蛙跳台阶问题</a></h1><p>一只青蛙一次可以跳上1级台阶，也可以跳上2级台阶。求该青蛙跳上一个 n 级的台阶总共有多少种跳法。答案需要取模 1e9+7（1000000007），如计算初始结果为：1000000008，请返回 1。<br><strong>示例1</strong>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：n &#x3D; 2</span><br><span class="line">输出：2</span><br></pre></td></tr></table></figure><br><strong>示例2</strong>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：n &#x3D; 7</span><br><span class="line">输出：21</span><br></pre></td></tr></table></figure><br><strong>提示：</strong><br>0 &lt;= n &lt;= 100</p>
+<h1 id="青蛙跳台阶问题"><a href="#青蛙跳台阶问题" class="headerlink" title="青蛙跳台阶问题"></a><a href="https://leetcode-cn.com/problems/qing-wa-tiao-tai-jie-wen-ti-lcof/" target="_blank" rel="noopener">青蛙跳台阶问题</a></h1><p>一只青蛙一次可以跳上1级台阶，也可以跳上2级台阶。求该青蛙跳上一个 n 级的台阶总共有多少种跳法。答案需要取模 1e9+7(1000000007)，如计算初始结果为：1000000008，请返回 1。<br><strong>示例1</strong>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：n &#x3D; 2</span><br><span class="line">输出：2</span><br></pre></td></tr></table></figure><br><strong>示例2</strong>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：n &#x3D; 7</span><br><span class="line">输出：21</span><br></pre></td></tr></table></figure><br><strong>提示：</strong><br>0 &lt;= n &lt;= 100</p>
 <hr>
 <ol>
 <li><strong>子问题</strong>：对$n$个台阶，最后一步可以跳$1$或$2$阶，接下来相对应的待求解问题是$(n - 1)$或$(n - 2)$个台阶有多少种跳法。</li>
@@ -1195,14 +1195,14 @@ maxProduct = \begin{cases}
 </tbody>
 </table>
 </div>
-<h1 id="青蛙过河问题"><a href="#青蛙过河问题" class="headerlink" title="*青蛙过河问题"></a><a href="https://leetcode-cn.com/problems/frog-jump/" target="_blank" rel="noopener">*青蛙过河问题</a></h1><p>一只青蛙想要过河。 假定河流被等分为$x$个单元格，并且在每一个单元格内都有可能放有一石子（也有可能没有）。 青蛙可以跳上石子，但是不可以跳入水中。</p>
-<p>给定石子的位置列表（用单元格序号升序表示）， <strong>请判定青蛙能否成功过河</strong>（即能否在最后一步跳至最后一个石子上）。 开始时， 青蛙默认已站在第一个石子上，并可以假定它第一步只能跳跃一个单位（即只能从单元格1跳至单元格2）。</p>
-<p>如果青蛙上一步跳跃了$k$个单位，那么它接下来的跳跃距离只能选择为$k - 1$、$k$或$k + 1$个单位。 另请注意，青蛙只能向前方（终点的方向）跳跃。</p>
+<h1 id="青蛙过河问题"><a href="#青蛙过河问题" class="headerlink" title="*青蛙过河问题"></a><a href="https://leetcode-cn.com/problems/frog-jump/" target="_blank" rel="noopener">*青蛙过河问题</a></h1><p>一只青蛙想要过河。 假定河流被等分为$x$个单元格，并且在每一个单元格内都有可能放有一石子(也有可能没有)。 青蛙可以跳上石子，但是不可以跳入水中。</p>
+<p>给定石子的位置列表(用单元格序号升序表示)， <strong>请判定青蛙能否成功过河</strong>(即能否在最后一步跳至最后一个石子上)。 开始时， 青蛙默认已站在第一个石子上，并可以假定它第一步只能跳跃一个单位(即只能从单元格1跳至单元格2)。</p>
+<p>如果青蛙上一步跳跃了$k$个单位，那么它接下来的跳跃距离只能选择为$k - 1$、$k$或$k + 1$个单位。 另请注意，青蛙只能向前方(终点的方向)跳跃。</p>
 <p><strong>请注意</strong>：</p>
 <ul>
 <li>石子的数量 ≥ 2 且 &lt; 1100；</li>
 <li>每一个石子的位置序号都是一个非负整数，且其 &lt; 231；</li>
-<li>第一个石子的位置永远是0。<br><strong>示例 1</strong>:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[0,1,3,5,6,8,12,17]</span><br><span class="line"></span><br><span class="line">总共有8个石子。</span><br><span class="line">第一个石子处于序号为0的单元格的位置, 第二个石子处于序号为1的单元格的位置,</span><br><span class="line">第三个石子在序号为3的单元格的位置， 以此定义整个数组...</span><br><span class="line">最后一个石子处于序号为17的单元格的位置。</span><br><span class="line"></span><br><span class="line">返回 true。即青蛙可以成功过河，按照如下方案跳跃： </span><br><span class="line">跳1个单位到第2块石子, 然后跳2个单位到第3块石子, 接着 </span><br><span class="line">跳2个单位到第4块石子, 然后跳3个单位到第6块石子, </span><br><span class="line">跳4个单位到第7块石子, 最后，跳5个单位到第8个石子（即最后一块石子）。</span><br></pre></td></tr></table></figure>
+<li>第一个石子的位置永远是0。<br><strong>示例 1</strong>:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[0,1,3,5,6,8,12,17]</span><br><span class="line"></span><br><span class="line">总共有8个石子。</span><br><span class="line">第一个石子处于序号为0的单元格的位置, 第二个石子处于序号为1的单元格的位置,</span><br><span class="line">第三个石子在序号为3的单元格的位置， 以此定义整个数组...</span><br><span class="line">最后一个石子处于序号为17的单元格的位置。</span><br><span class="line"></span><br><span class="line">返回 true。即青蛙可以成功过河，按照如下方案跳跃： </span><br><span class="line">跳1个单位到第2块石子, 然后跳2个单位到第3块石子, 接着 </span><br><span class="line">跳2个单位到第4块石子, 然后跳3个单位到第6块石子, </span><br><span class="line">跳4个单位到第7块石子, 最后，跳5个单位到第8个石子(即最后一块石子)。</span><br></pre></td></tr></table></figure>
 <strong>示例 2</strong>:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[0,1,2,3,4,8,9,11]</span><br><span class="line"></span><br><span class="line">返回 false。青蛙没有办法过河。 </span><br><span class="line">这是因为第5和第6个石子之间的间距太大，没有可选的方案供青蛙跳跃过去。</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
@@ -1494,7 +1494,7 @@ dp[i - 1][j - 1] & wrod1[i] = word2[j] \\
 </tbody>
 </table>
 </div>
-<h1 id="最大子序和问题"><a href="#最大子序和问题" class="headerlink" title="最大子序和问题"></a><a href="https://leetcode-cn.com/problems/maximum-subarray/" target="_blank" rel="noopener">最大子序和问题</a></h1><p>给定一个整数数组<code>nums</code>，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。</p>
+<h1 id="最大子序和问题"><a href="#最大子序和问题" class="headerlink" title="最大子序和问题"></a><a href="https://leetcode-cn.com/problems/maximum-subarray/" target="_blank" rel="noopener">最大子序和问题</a></h1><p>给定一个整数数组<code>nums</code>，找到一个具有最大和的连续子数组(子数组最少包含一个元素)，返回其最大和。</p>
 <p><strong>示例</strong>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: [-2,1,-3,4,-1,2,1,-5,4],</span><br><span class="line">输出: 6</span><br><span class="line">解释: 连续子数组 [4,-1,2,1] 的和最大，为 6。</span><br></pre></td></tr></table></figure><br>进阶:</p>
 <p>如果你已经实现复杂度为 O(n) 的解法，尝试使用更为精妙的分治法求解。</p>
 <hr>
@@ -1781,7 +1781,7 @@ dp[i][j] = \begin{cases}
 </tbody>
 </table>
 </div>
-<h1 id="最长递增子序列问题-LIS"><a href="#最长递增子序列问题-LIS" class="headerlink" title="最长递增子序列问题, LIS"></a><a href="https://www.lintcode.com/problem/longest-increasing-subsequence/description" target="_blank" rel="noopener">最长递增子序列问题, LIS</a></h1><p>给定一个整数序列，找到最长上升子序列（LIS），返回LIS的长度。</p>
+<h1 id="最长递增子序列问题-LIS"><a href="#最长递增子序列问题-LIS" class="headerlink" title="最长递增子序列问题, LIS"></a><a href="https://www.lintcode.com/problem/longest-increasing-subsequence/description" target="_blank" rel="noopener">最长递增子序列问题, LIS</a></h1><p>给定一个整数序列，找到最长上升子序列(LIS)，返回LIS的长度。</p>
 <p>样例<br><strong>样例 1</strong>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">输入:  [5,4,1,2,3]</span><br><span class="line">输出:  3</span><br><span class="line"></span><br><span class="line">解释:</span><br><span class="line">LIS 是 [1,2,3]</span><br></pre></td></tr></table></figure></p>
 <p><strong>样例 2</strong>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">输入: [4,2,4,5,3,7]</span><br><span class="line">输出:  4</span><br><span class="line"></span><br><span class="line">解释: </span><br><span class="line">LIS 是 [2,4,5,7]</span><br></pre></td></tr></table></figure><br><strong>挑战</strong><br>要求时间复杂度为O(n^2)或者O(nlogn)</p>
 <p><strong>说明</strong><br>最长上升子序列的定义：</p>
@@ -1970,7 +1970,7 @@ dp[i][j] = \begin{cases}
 <p><strong>样例 1</strong>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入:  &quot;ABCD&quot; and &quot;EDCA&quot;</span><br><span class="line">输出:  1</span><br></pre></td></tr></table></figure><br>解释:<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LCS 是 &#39;A&#39; 或  &#39;D&#39; 或 &#39;C&#39;</span><br></pre></td></tr></table></figure></p>
 <p><strong>样例 2:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: &quot;ABCD&quot; and &quot;EACB&quot;</span><br><span class="line">输出:  2</span><br></pre></td></tr></table></figure><br>解释:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LCS 是 &quot;AC&quot;</span><br></pre></td></tr></table></figure><br>说明<br>最长公共子序列的定义：</p>
 <ul>
-<li>最长公共子序列问题是在一组序列（通常2个）中找到最长公共子序列（<strong>注意：不同于子串，LCS不需要是连续的子串</strong>）。该问题是典型的计算机科学问题，是文件差异比较程序的基础，在生物信息学中也有所应用。</li>
+<li>最长公共子序列问题是在一组序列(通常2个)中找到最长公共子序列(<strong>注意：不同于子串，LCS不需要是连续的子串</strong>)。该问题是典型的计算机科学问题，是文件差异比较程序的基础，在生物信息学中也有所应用。</li>
 <li><a href="https://en.wikipedia.org/wiki/Longest_common_subsequence_problem" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Longest_common_subsequence_problem</a></li>
 </ul>
 <hr>
@@ -2197,7 +2197,7 @@ dp[i][j] = \begin{cases}
 <blockquote>
 <p><strong>为便于理解，以下代码都没有优化空间复杂度，实际上都可以降低。</strong></p>
 </blockquote>
-<h2 id="买卖股票的最佳时机-I-一次交易"><a href="#买卖股票的最佳时机-I-一次交易" class="headerlink" title="买卖股票的最佳时机 I: 一次交易"></a><a href="https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/" target="_blank" rel="noopener">买卖股票的最佳时机 I: 一次交易</a></h2><p>给定一个数组，它的第$i$个元素是一支给定股票第$i$天的价格。<br>如果你最多只允许完成一笔交易（即买入和卖出一支股票一次），设计一个算法来计算你所能获取的最大利润。<br>注意：你不能在买入股票前卖出股票。<br><strong>示例 1</strong>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">输入: [7,1,5,3,6,4]</span><br><span class="line">输出: 5</span><br><span class="line">解释: 在第 2 天（股票价格 &#x3D; 1）的时候买入，在第 5 天（股票价格 &#x3D; 6）的时候卖出，最大利润 &#x3D; 6-1 &#x3D; 5 。</span><br><span class="line">     注意利润不能是 7-1 &#x3D; 6, 因为卖出价格需要大于买入价格；同时，你不能在买入前卖出股票。</span><br></pre></td></tr></table></figure><br><strong>示例 2</strong>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: [7,6,4,3,1]</span><br><span class="line">输出: 0</span><br><span class="line">解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。</span><br></pre></td></tr></table></figure></p>
+<h2 id="买卖股票的最佳时机-I-一次交易"><a href="#买卖股票的最佳时机-I-一次交易" class="headerlink" title="买卖股票的最佳时机 I: 一次交易"></a><a href="https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/" target="_blank" rel="noopener">买卖股票的最佳时机 I: 一次交易</a></h2><p>给定一个数组，它的第$i$个元素是一支给定股票第$i$天的价格。<br>如果你最多只允许完成一笔交易(即买入和卖出一支股票一次)，设计一个算法来计算你所能获取的最大利润。<br>注意：你不能在买入股票前卖出股票。<br><strong>示例 1</strong>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">输入: [7,1,5,3,6,4]</span><br><span class="line">输出: 5</span><br><span class="line">解释: 在第 2 天(股票价格 &#x3D; 1)的时候买入，在第 5 天(股票价格 &#x3D; 6)的时候卖出，最大利润 &#x3D; 6-1 &#x3D; 5 。</span><br><span class="line">     注意利润不能是 7-1 &#x3D; 6, 因为卖出价格需要大于买入价格；同时，你不能在买入前卖出股票。</span><br></pre></td></tr></table></figure><br><strong>示例 2</strong>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: [7,6,4,3,1]</span><br><span class="line">输出: 0</span><br><span class="line">解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。</span><br></pre></td></tr></table></figure></p>
 <hr>
 <p>在第$i$天卖出的最大收益，肯定是<strong>第$i$天价格减去前$(i - 1)$天中最低价格</strong>，因此<strong>将问题转换为求取前$i$天的最低价格</strong>。</p>
 <ol>
@@ -2297,7 +2297,7 @@ dp[i][j] = \begin{cases}
 </table>
 </div>
 <p>表示在价格为$2$时买入，价格为$6$时卖出。</p>
-<h2 id="买卖股票的最佳时机-II-无穷多次交易"><a href="#买卖股票的最佳时机-II-无穷多次交易" class="headerlink" title="买卖股票的最佳时机 II: 无穷多次交易"></a><a href="https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/" target="_blank" rel="noopener">买卖股票的最佳时机 II: 无穷多次交易</a></h2><p>给定一个数组，它的第$i$个元素是一支给定股票第$i$天的价格。设计一个算法来计算你所能获取的最大利润。你可以尽可能地完成更多的交易（多次买卖一支股票）。<br>注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。<br><strong>示例 1</strong>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">输入: [7,1,5,3,6,4]</span><br><span class="line">输出: 7</span><br><span class="line">解释: 在第 2 天（股票价格 &#x3D; 1）的时候买入，在第 3 天（股票价格 &#x3D; 5）的时候卖出, 这笔交易所能获得利润 &#x3D; 5-1 &#x3D; 4 。</span><br><span class="line">     随后，在第 4 天（股票价格 &#x3D; 3）的时候买入，在第 5 天（股票价格 &#x3D; 6）的时候卖出, 这笔交易所能获得利润 &#x3D; 6-3 &#x3D; 3 。</span><br></pre></td></tr></table></figure><br><strong>示例 2</strong>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">输入: [1,2,3,4,5]</span><br><span class="line">输出: 4</span><br><span class="line">解释: 在第 1 天（股票价格 &#x3D; 1）的时候买入，在第 5 天 （股票价格 &#x3D; 5）的时候卖出, 这笔交易所能获得利润 &#x3D; 5-1 &#x3D; 4 。</span><br><span class="line">     注意你不能在第 1 天和第 2 天接连购买股票，之后再将它们卖出。</span><br><span class="line">     因为这样属于同时参与了多笔交易，你必须在再次购买前出售掉之前的股票。</span><br></pre></td></tr></table></figure><br><strong>示例 3</strong>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: [7,6,4,3,1]</span><br><span class="line">输出: 0</span><br><span class="line">解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。</span><br></pre></td></tr></table></figure><br><strong>提示</strong>：</p>
+<h2 id="买卖股票的最佳时机-II-无穷多次交易"><a href="#买卖股票的最佳时机-II-无穷多次交易" class="headerlink" title="买卖股票的最佳时机 II: 无穷多次交易"></a><a href="https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/" target="_blank" rel="noopener">买卖股票的最佳时机 II: 无穷多次交易</a></h2><p>给定一个数组，它的第$i$个元素是一支给定股票第$i$天的价格。设计一个算法来计算你所能获取的最大利润。你可以尽可能地完成更多的交易(多次买卖一支股票)。<br>注意：你不能同时参与多笔交易(你必须在再次购买前出售掉之前的股票)。<br><strong>示例 1</strong>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">输入: [7,1,5,3,6,4]</span><br><span class="line">输出: 7</span><br><span class="line">解释: 在第 2 天(股票价格 &#x3D; 1)的时候买入，在第 3 天(股票价格 &#x3D; 5)的时候卖出, 这笔交易所能获得利润 &#x3D; 5-1 &#x3D; 4 。</span><br><span class="line">     随后，在第 4 天(股票价格 &#x3D; 3)的时候买入，在第 5 天(股票价格 &#x3D; 6)的时候卖出, 这笔交易所能获得利润 &#x3D; 6-3 &#x3D; 3 。</span><br></pre></td></tr></table></figure><br><strong>示例 2</strong>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">输入: [1,2,3,4,5]</span><br><span class="line">输出: 4</span><br><span class="line">解释: 在第 1 天(股票价格 &#x3D; 1)的时候买入，在第 5 天 (股票价格 &#x3D; 5)的时候卖出, 这笔交易所能获得利润 &#x3D; 5-1 &#x3D; 4 。</span><br><span class="line">     注意你不能在第 1 天和第 2 天接连购买股票，之后再将它们卖出。</span><br><span class="line">     因为这样属于同时参与了多笔交易，你必须在再次购买前出售掉之前的股票。</span><br></pre></td></tr></table></figure><br><strong>示例 3</strong>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: [7,6,4,3,1]</span><br><span class="line">输出: 0</span><br><span class="line">解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。</span><br></pre></td></tr></table></figure><br><strong>提示</strong>：</p>
 <ul>
 <li>$1 \leq prices.length \leq 3 * 10 ^ 4$</li>
 <li>$0 \leq prices[i] \leq 10 ^ 4$</li>
@@ -2368,8 +2368,8 @@ dp[i][j] = \begin{cases}
 </table>
 </div>
 <p>表示在价格为$2$时买入，价格为$6$时卖出，再在价格为$0$时买入，价格为$3$时卖出。</p>
-<h2 id="买卖股票的最佳时机-III-最多两次交易"><a href="#买卖股票的最佳时机-III-最多两次交易" class="headerlink" title="买卖股票的最佳时机 III: 最多两次交易"></a><a href="https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iii/" target="_blank" rel="noopener">买卖股票的最佳时机 III: 最多两次交易</a></h2><p>给定一个数组，它的第$i$个元素是一支给定的股票在第$i$天的价格。<br>设计一个算法来计算你所能获取的最大利润。你最多可以完成<strong>两笔</strong>交易。<br>注意: 你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。</p>
-<p><strong>示例 1</strong>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">输入: [3,3,5,0,0,3,1,4]</span><br><span class="line">输出: 6</span><br><span class="line">解释: 在第 4 天（股票价格 &#x3D; 0）的时候买入，在第 6 天（股票价格 &#x3D; 3）的时候卖出，这笔交易所能获得利润 &#x3D; 3-0 &#x3D; 3 。</span><br><span class="line">     随后，在第 7 天（股票价格 &#x3D; 1）的时候买入，在第 8 天 （股票价格 &#x3D; 4）的时候卖出，这笔交易所能获得利润 &#x3D; 4-1 &#x3D; 3 。</span><br></pre></td></tr></table></figure><br><strong>示例 2</strong>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">输入: [1,2,3,4,5]</span><br><span class="line">输出: 4</span><br><span class="line">解释: 在第 1 天（股票价格 &#x3D; 1）的时候买入，在第 5 天 （股票价格 &#x3D; 5）的时候卖出, 这笔交易所能获得利润 &#x3D; 5-1 &#x3D; 4 。   </span><br><span class="line">     注意你不能在第 1 天和第 2 天接连购买股票，之后再将它们卖出。   </span><br><span class="line">     因为这样属于同时参与了多笔交易，你必须在再次购买前出售掉之前的股票。</span><br></pre></td></tr></table></figure><br><strong>示例 3</strong>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: [7,6,4,3,1] </span><br><span class="line">输出: 0 </span><br><span class="line">解释: 在这个情况下, 没有交易完成, 所以最大利润为 0。</span><br></pre></td></tr></table></figure></p>
+<h2 id="买卖股票的最佳时机-III-最多两次交易"><a href="#买卖股票的最佳时机-III-最多两次交易" class="headerlink" title="买卖股票的最佳时机 III: 最多两次交易"></a><a href="https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iii/" target="_blank" rel="noopener">买卖股票的最佳时机 III: 最多两次交易</a></h2><p>给定一个数组，它的第$i$个元素是一支给定的股票在第$i$天的价格。<br>设计一个算法来计算你所能获取的最大利润。你最多可以完成<strong>两笔</strong>交易。<br>注意: 你不能同时参与多笔交易(你必须在再次购买前出售掉之前的股票)。</p>
+<p><strong>示例 1</strong>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">输入: [3,3,5,0,0,3,1,4]</span><br><span class="line">输出: 6</span><br><span class="line">解释: 在第 4 天(股票价格 &#x3D; 0)的时候买入，在第 6 天(股票价格 &#x3D; 3)的时候卖出，这笔交易所能获得利润 &#x3D; 3-0 &#x3D; 3 。</span><br><span class="line">     随后，在第 7 天(股票价格 &#x3D; 1)的时候买入，在第 8 天 (股票价格 &#x3D; 4)的时候卖出，这笔交易所能获得利润 &#x3D; 4-1 &#x3D; 3 。</span><br></pre></td></tr></table></figure><br><strong>示例 2</strong>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">输入: [1,2,3,4,5]</span><br><span class="line">输出: 4</span><br><span class="line">解释: 在第 1 天(股票价格 &#x3D; 1)的时候买入，在第 5 天 (股票价格 &#x3D; 5)的时候卖出, 这笔交易所能获得利润 &#x3D; 5-1 &#x3D; 4 。   </span><br><span class="line">     注意你不能在第 1 天和第 2 天接连购买股票，之后再将它们卖出。   </span><br><span class="line">     因为这样属于同时参与了多笔交易，你必须在再次购买前出售掉之前的股票。</span><br></pre></td></tr></table></figure><br><strong>示例 3</strong>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: [7,6,4,3,1] </span><br><span class="line">输出: 0 </span><br><span class="line">解释: 在这个情况下, 没有交易完成, 所以最大利润为 0。</span><br></pre></td></tr></table></figure></p>
 <hr>
 <p>状态转移方程仍旧是以下，不用修改</p>
 <script type="math/tex; mode=display">
@@ -2467,7 +2467,7 @@ dp[i][j] = \begin{cases}
 </table>
 </div>
 <p>表示在价格为$2$时买入，价格为$6$时卖出，再在价格为$0$时买入，价格为$3$时卖出。</p>
-<h2 id="买卖股票的最佳时机-IV-多次交易"><a href="#买卖股票的最佳时机-IV-多次交易" class="headerlink" title="买卖股票的最佳时机 IV: 多次交易"></a><a href="https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iv/" target="_blank" rel="noopener">买卖股票的最佳时机 IV: 多次交易</a></h2><p>给定一个数组，它的第$i$个元素是一支给定的股票在第$i$天的价格。<br>设计一个算法来计算你所能获取的最大利润。你最多可以完成$k$笔交易。<br>注意: 你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。</p>
+<h2 id="买卖股票的最佳时机-IV-多次交易"><a href="#买卖股票的最佳时机-IV-多次交易" class="headerlink" title="买卖股票的最佳时机 IV: 多次交易"></a><a href="https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iv/" target="_blank" rel="noopener">买卖股票的最佳时机 IV: 多次交易</a></h2><p>给定一个数组，它的第$i$个元素是一支给定的股票在第$i$天的价格。<br>设计一个算法来计算你所能获取的最大利润。你最多可以完成$k$笔交易。<br>注意: 你不能同时参与多笔交易(你必须在再次购买前出售掉之前的股票)。</p>
 <p><strong>示例 1</strong>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: [2,4,1], k &#x3D; 2</span><br><span class="line">输出: 2</span><br><span class="line">解释: 在第 1 天 (股票价格 &#x3D; 2) 的时候买入，在第 2 天 (股票价格 &#x3D; 4) 的时候卖出，这笔交易所能获得利润 &#x3D; 4-2 &#x3D; 2 。</span><br></pre></td></tr></table></figure><br><strong>示例 2</strong>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">输入: [3,2,6,5,0,3], k &#x3D; 2</span><br><span class="line">输出: 7</span><br><span class="line">解释: 在第 2 天 (股票价格 &#x3D; 2) 的时候买入，在第 3 天 (股票价格 &#x3D; 6) 的时候卖出, 这笔交易所能获得利润 &#x3D; 6-2 &#x3D; 4 。</span><br><span class="line">     随后，在第 5 天 (股票价格 &#x3D; 0) 的时候买入，在第 6 天 (股票价格 &#x3D; 3) 的时候卖出, 这笔交易所能获得利润 &#x3D; 3-0 &#x3D; 3 。</span><br></pre></td></tr></table></figure></p>
 <hr>
 <p>如果输入的$K$特别大，会造成时间复杂度过高，Leetcode上通不过。实际上，一次买卖由买入、卖出组成，所以当$K \gt \lfloor n / 2 \rfloor$时相当于无穷多次交易，所以代码应该如下，时间复杂度$O(nk)$，空间复杂度$O(nk)$。<br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">maxProfit</span><span class="params">(self, prices: List[int])</span> -&gt; int:</span></span><br><span class="line">        n = len(prices)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 视作无穷多次</span></span><br><span class="line">        <span class="keyword">if</span> K &gt; n // <span class="number">2</span>:</span><br><span class="line">            <span class="keyword">return</span> self.maxProfit_inf(prices)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 边界条件</span></span><br><span class="line">        bought = [[float(<span class="string">'-inf'</span>) <span class="keyword">for</span> k <span class="keyword">in</span> range(<span class="number">1</span> + K)] <span class="keyword">for</span> i <span class="keyword">in</span> range(n + <span class="number">1</span>)]</span><br><span class="line">        sold   = [[<span class="number">0</span> <span class="keyword">for</span> k <span class="keyword">in</span> range(<span class="number">1</span> + K)] <span class="keyword">for</span> i <span class="keyword">in</span> range(n + <span class="number">1</span>)]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n + <span class="number">1</span>):</span><br><span class="line">            <span class="keyword">for</span> k <span class="keyword">in</span> range(<span class="number">1</span>, K + <span class="number">1</span>):</span><br><span class="line">                </span><br><span class="line">                <span class="comment"># 状态转移方程</span></span><br><span class="line">                bought[i][k] = max(</span><br><span class="line">                    <span class="comment"># 前一天第k次买入</span></span><br><span class="line">                    bought[i - <span class="number">1</span>][k],</span><br><span class="line">                    <span class="comment"># 前一天第k-1次卖出，这天第k次买入</span></span><br><span class="line">                    sold[i - <span class="number">1</span>][k - <span class="number">1</span>] - prices[i - <span class="number">1</span>]</span><br><span class="line">                )</span><br><span class="line">                sold[i][k] = max(</span><br><span class="line">                    <span class="comment"># 前一天第k次卖出</span></span><br><span class="line">                    sold[i - <span class="number">1</span>][k],</span><br><span class="line">                    <span class="comment"># 前一天第k次买入，这天第k次卖出</span></span><br><span class="line">                    bought[i - <span class="number">1</span>][k] + prices[i - <span class="number">1</span>]</span><br><span class="line">                )</span><br><span class="line">        <span class="keyword">return</span> sold[<span class="number">-1</span>][<span class="number">-1</span>]</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">maxProfit_inf</span><span class="params">(self, prices)</span>:</span></span><br><span class="line">        ...     <span class="comment"># 同无穷多次交易</span></span><br></pre></td></tr></table></figure></p>
@@ -2575,9 +2575,9 @@ dp[i][j] = \begin{cases}
     bought[i][k] & = \max(bought[i - 1][k], sold[i - 1][k - 1] - price[i]) \\
     sold[i][k] & = \max(sold[i - 1][k], bought[i - 1][k] + price[i] - fee) \\
 \end{aligned}</script><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">maxProfit</span><span class="params">(self, prices: List[int], fee: int)</span> -&gt; int:</span></span><br><span class="line">        n = len(prices)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 边界条件</span></span><br><span class="line">        bought = [float(<span class="string">'-inf'</span>) <span class="keyword">for</span> i <span class="keyword">in</span> range(n + <span class="number">1</span>)]</span><br><span class="line">        sold   = [<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(n + <span class="number">1</span>)]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n + <span class="number">1</span>):</span><br><span class="line">            <span class="comment"># 状态转移方程</span></span><br><span class="line">            bought[i] = max(</span><br><span class="line">                <span class="comment"># 前一天买入</span></span><br><span class="line">                bought[i - <span class="number">1</span>],</span><br><span class="line">                <span class="comment"># 前一天卖出，这天买入</span></span><br><span class="line">                sold[i - <span class="number">1</span>] - prices[i - <span class="number">1</span>]</span><br><span class="line">            )</span><br><span class="line">            sold[i] = max(</span><br><span class="line">                <span class="comment"># 前一天卖出</span></span><br><span class="line">                sold[i - <span class="number">1</span>],</span><br><span class="line">                <span class="comment"># 前一天买入，这天卖出</span></span><br><span class="line">                bought[i - <span class="number">1</span>] + prices[i - <span class="number">1</span>] - fee</span><br><span class="line">            )</span><br><span class="line">        <span class="keyword">return</span> sold[<span class="number">-1</span>]</span><br></pre></td></tr></table></figure>
-<h2 id="买卖股票的最佳时机-VI-含冷冻期"><a href="#买卖股票的最佳时机-VI-含冷冻期" class="headerlink" title="买卖股票的最佳时机 VI: 含冷冻期"></a><a href="https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/" target="_blank" rel="noopener">买卖股票的最佳时机 VI: 含冷冻期</a></h2><p>给定一个整数数组，其中第$i$个元素代表了第$i$天的股票价格 。​设计一个算法计算出最大利润。在满足以下约束条件下，你可以<strong>尽可能地完成更多的交易</strong>（多次买卖一支股票）:</p>
+<h2 id="买卖股票的最佳时机-VI-含冷冻期"><a href="#买卖股票的最佳时机-VI-含冷冻期" class="headerlink" title="买卖股票的最佳时机 VI: 含冷冻期"></a><a href="https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/" target="_blank" rel="noopener">买卖股票的最佳时机 VI: 含冷冻期</a></h2><p>给定一个整数数组，其中第$i$个元素代表了第$i$天的股票价格 。​设计一个算法计算出最大利润。在满足以下约束条件下，你可以<strong>尽可能地完成更多的交易</strong>(多次买卖一支股票):</p>
 <ul>
-<li>你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。</li>
+<li>你不能同时参与多笔交易(你必须在再次购买前出售掉之前的股票)。</li>
 <li>卖出股票后，你无法在第二天买入股票 (即冷冻期为 1 天)。</li>
 </ul>
 <p><strong>示例</strong>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: [1,2,3,0,2]</span><br><span class="line">输出: 3 </span><br><span class="line">解释: 对应的交易状态为: [买入, 卖出, 冷冻期, 买入, 卖出]</span><br></pre></td></tr></table></figure></p>
@@ -2603,8 +2603,8 @@ dp[i][j] = \begin{cases}
     \end{cases} \\
     sold[i][k] & = \max(sold[i - 1][k], bought[i - 1][k] + price[i]) \\
 \end{aligned}</script><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">maxProfit</span><span class="params">(self, prices: List[int])</span> -&gt; int:</span></span><br><span class="line">        n = len(prices)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 边界条件</span></span><br><span class="line">        bought = [float(<span class="string">'-inf'</span>) <span class="keyword">for</span> i <span class="keyword">in</span> range(n + <span class="number">1</span>)]</span><br><span class="line">        sold   = [<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(n + <span class="number">1</span>)]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n + <span class="number">1</span>):</span><br><span class="line">            <span class="comment"># 状态转移方程</span></span><br><span class="line">            bought[i] = max(</span><br><span class="line">                <span class="comment"># 前一天买入</span></span><br><span class="line">                bought[i - <span class="number">1</span>],</span><br><span class="line">                <span class="comment"># 前一天卖出，这天买入</span></span><br><span class="line">                (sold[i - <span class="number">2</span>] <span class="keyword">if</span> i &gt; <span class="number">1</span> <span class="keyword">else</span> <span class="number">0</span>) - prices[i - <span class="number">1</span>]</span><br><span class="line">            )</span><br><span class="line">            sold[i] = max(</span><br><span class="line">                <span class="comment"># 前一天卖出</span></span><br><span class="line">                sold[i - <span class="number">1</span>],</span><br><span class="line">                <span class="comment"># 前一天买入，这天卖出</span></span><br><span class="line">                bought[i - <span class="number">1</span>] + prices[i - <span class="number">1</span>]</span><br><span class="line">            )</span><br><span class="line">        <span class="keyword">return</span> sold[<span class="number">-1</span>]</span><br></pre></td></tr></table></figure>
-<h1 id="二叉树最大路径和"><a href="#二叉树最大路径和" class="headerlink" title="二叉树最大路径和"></a><a href="https://www.lintcode.com/problem/binary-tree-maximum-path-sum/description?_from=ladder&amp;&amp;fromId=131" target="_blank" rel="noopener">二叉树最大路径和</a></h1><p>给出一棵二叉树，寻找一条路径使其路径和最大，路径可以在任一节点中开始和结束（路径和为两个节点之间所在路径上的节点权值之和）</p>
-<p><strong>样例 1</strong>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入:  给定一棵树（只有一个节点）:</span><br><span class="line">	2</span><br><span class="line">输出：2</span><br></pre></td></tr></table></figure><br><strong>样例 2</strong>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">输入:  给定一棵树：</span><br><span class="line"></span><br><span class="line">      1</span><br><span class="line">     &#x2F; \</span><br><span class="line">    2   3</span><br><span class="line">		</span><br><span class="line">输出: 6</span><br></pre></td></tr></table></figure></p>
+<h1 id="二叉树最大路径和"><a href="#二叉树最大路径和" class="headerlink" title="二叉树最大路径和"></a><a href="https://www.lintcode.com/problem/binary-tree-maximum-path-sum/description?_from=ladder&amp;&amp;fromId=131" target="_blank" rel="noopener">二叉树最大路径和</a></h1><p>给出一棵二叉树，寻找一条路径使其路径和最大，路径可以在任一节点中开始和结束(路径和为两个节点之间所在路径上的节点权值之和)</p>
+<p><strong>样例 1</strong>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入:  给定一棵树(只有一个节点):</span><br><span class="line">	2</span><br><span class="line">输出：2</span><br></pre></td></tr></table></figure><br><strong>样例 2</strong>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">输入:  给定一棵树：</span><br><span class="line"></span><br><span class="line">      1</span><br><span class="line">     &#x2F; \</span><br><span class="line">    2   3</span><br><span class="line">		</span><br><span class="line">输出: 6</span><br></pre></td></tr></table></figure></p>
 <p><strong>该题的一个关键是，确定二叉树路径和的求法</strong></p>
 <ul>
 <li><strong>路径和为两个节点之间所在路径上的节点权值之和</strong>，也就是以任意节点为根，向左右子节点拓展的“八”字形树；</li>
@@ -2735,6 +2735,10 @@ W =
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2020/06/23/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/" rel="prev" title="【算法】背包问题">
+                【算法】背包问题 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -2811,7 +2815,7 @@ W =
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">103</span>
+                    <span class="site-state-item-count">104</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3605,6 +3609,6 @@ W =
 
 
   <script type="text/javascript" src="/js/click_show_text.js"></script>
-  <script type="text/javascript" src="/js/hone_hone_clock.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>
