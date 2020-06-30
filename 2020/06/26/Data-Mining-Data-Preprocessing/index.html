@@ -1,0 +1,1937 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="目录 目录 认识数据 数据对象与属性类型 标称、二元、序数、数值(区间标度、比率标度) 离散、连续   基本统计描述 中心趋势度量：均值、中位数、众数、中列数 数据散布度量：方差、标准差、极差、四分位数、四分位数极差 图形显示：分位数图、分位数-分位数图、直方图、散点图   数据可视化 数据的相似性和相异性 数据矩阵与相异性矩阵 标称属性的邻近性度量：不匹配率 二元属性的邻近性度量 对称的二元属性">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Data Mining: Data Preprocessing">
+<meta property="og:url" content="http://yoursite.com/2020/06/26/Data-Mining-Data-Preprocessing/index.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="目录 目录 认识数据 数据对象与属性类型 标称、二元、序数、数值(区间标度、比率标度) 离散、连续   基本统计描述 中心趋势度量：均值、中位数、众数、中列数 数据散布度量：方差、标准差、极差、四分位数、四分位数极差 图形显示：分位数图、分位数-分位数图、直方图、散点图   数据可视化 数据的相似性和相异性 数据矩阵与相异性矩阵 标称属性的邻近性度量：不匹配率 二元属性的邻近性度量 对称的二元属性">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/.com//box-plot.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//q-q-plot.png">
+<meta property="article:published_time" content="2020-06-26T11:04:28.000Z">
+<meta property="article:modified_time" content="2020-06-26T11:11:38.828Z">
+<meta property="article:author" content="Louis Hsu">
+<meta property="article:tag" content="读书笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/.com//box-plot.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/26/Data-Mining-Data-Preprocessing/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Data Mining: Data Preprocessing | LOUIS' BLOG</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LOUIS' BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">To be better</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-guestbook">
+    <a href="/guestbook" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-guest"></i> <br />留言</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/26/Data-Mining-Data-Preprocessing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="ᵕ᷄ ≀ ̠˘᷅ 永远年轻，永远热泪盈眶">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Data Mining: Data Preprocessing
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-06-26 19:04:28 / 修改时间：19:11:38" itemprop="dateCreated datePublished" datetime="2020-06-26T19:04:28+08:00">2020-06-26</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><ul>
+<li><a href="#目录">目录</a></li>
+<li><a href="#认识数据">认识数据</a><ul>
+<li><a href="#数据对象与属性类型">数据对象与属性类型</a><ul>
+<li><a href="#标称二元序数数值区间标度比率标度">标称、二元、序数、数值(区间标度、比率标度)</a></li>
+<li><a href="#离散连续">离散、连续</a></li>
+</ul>
+</li>
+<li><a href="#基本统计描述">基本统计描述</a><ul>
+<li><a href="#中心趋势度量均值中位数众数中列数">中心趋势度量：均值、中位数、众数、中列数</a></li>
+<li><a href="#数据散布度量方差标准差极差四分位数四分位数极差">数据散布度量：方差、标准差、极差、四分位数、四分位数极差</a></li>
+<li><a href="#图形显示分位数图分位数-分位数图直方图散点图">图形显示：分位数图、分位数-分位数图、直方图、散点图</a></li>
+</ul>
+</li>
+<li><a href="#数据可视化">数据可视化</a></li>
+<li><a href="#数据的相似性和相异性">数据的相似性和相异性</a><ul>
+<li><a href="#数据矩阵与相异性矩阵">数据矩阵与相异性矩阵</a></li>
+<li><a href="#标称属性的邻近性度量不匹配率">标称属性的邻近性度量：不匹配率</a></li>
+<li><a href="#二元属性的邻近性度量">二元属性的邻近性度量</a><ul>
+<li><a href="#对称的二元属性">对称的二元属性</a></li>
+<li><a href="#非对称的二元属性jaccard系数">非对称的二元属性：Jaccard系数</a></li>
+</ul>
+</li>
+<li><a href="#数值属性的邻近性度量math-xmlnshttpwwww3org1998mathmathmlsemanticsmrowmsubmilmimn1mnmsubmo-separatortruemomsubmilmimn2mnmsubmo-separatortruemomsubmilmimipmimsubmo-separatortruemomsubmilmimi-mathvariantnormalmimsubmrowannotation-encodingapplicationx-texl_1-l_2-l_p-l_inftyannotationsemanticsmathl1l2lpl-math-xmlnshttpwwww3org1998mathmathmlsemanticsmrowmsubmilmimimmimsubmrowannotation-encodingapplicationx-texl_mannotationsemanticsmathlm">数值属性的邻近性度量：$L_1, L_2, L_p, L_{\infty}$, $L_{M}$</a></li>
+<li><a href="#序数属性的邻近性度量">序数属性的邻近性度量</a></li>
+<li><a href="#混合类型属性的邻近性度量">混合类型属性的邻近性度量</a></li>
+<li><a href="#余弦相似度度量和tanimoto系数">余弦相似度度量和Tanimoto系数</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#数据预处理">数据预处理</a><ul>
+<li><a href="#数据清理">数据清理</a><ul>
+<li><a href="#缺失值">缺失值</a></li>
+<li><a href="#噪声">噪声</a></li>
+<li><a href="#清理过程">清理过程</a></li>
+</ul>
+</li>
+<li><a href="#数据集成">数据集成</a><ul>
+<li><a href="#实体识别">实体识别</a></li>
+<li><a href="#冗余和相关分析">冗余和相关分析</a><ul>
+<li><a href="#标称数据的math-xmlnshttpwwww3org1998mathmathmlsemanticsmrowmsupmiχmimn2mnmsupmrowannotation-encodingapplicationx-texchi2annotationsemanticsmathχ2检验">标称数据的$\chi^2$检验</a></li>
+<li><a href="#数值数据的相关系数">数值数据的相关系数</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#数据归约">数据归约</a><ul>
+<li><a href="#维规约">维规约</a><ul>
+<li><a href="#小波变换dwt">小波变换：DWT</a></li>
+<li><a href="#主成分分析pca">主成分分析：PCA</a></li>
+<li><a href="#属性子集选择">属性子集选择</a></li>
+<li><a href="#回归和对数线性模型参数化数据规约">回归和对数线性模型：参数化数据规约</a></li>
+</ul>
+</li>
+<li><a href="#数量规约">数量规约</a><ul>
+<li><a href="#直方图">直方图</a></li>
+<li><a href="#聚类">聚类</a></li>
+<li><a href="#抽样">抽样</a></li>
+<li><a href="#数据立方体聚集">数据立方体聚集</a></li>
+</ul>
+</li>
+<li><a href="#数据压缩">数据压缩</a></li>
+</ul>
+</li>
+<li><a href="#数据变换">数据变换</a><ul>
+<li><a href="#规范化">规范化</a><ul>
+<li><a href="#min-max最小-最大规范化">min-max(最小-最大)规范化</a></li>
+<li><a href="#z-score零均值规范化">z-score(零均值)规范化</a></li>
+<li><a href="#按小数定标规范化">按小数定标规范化</a></li>
+<li><a href="#min-max与z-score的关系与对比">min-max与z-score的关系与对比</a></li>
+</ul>
+</li>
+<li><a href="#数据离散化">数据离散化</a><ul>
+<li><a href="#分箱">分箱</a></li>
+<li><a href="#聚类-1">聚类</a></li>
+<li><a href="#决策树">决策树</a></li>
+<li><a href="#相关分析">相关分析</a></li>
+</ul>
+</li>
+<li><a href="#概念分层">概念分层</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="认识数据"><a href="#认识数据" class="headerlink" title="认识数据"></a>认识数据</h1><h2 id="数据对象与属性类型"><a href="#数据对象与属性类型" class="headerlink" title="数据对象与属性类型"></a>数据对象与属性类型</h2><p>数据集由<strong>数据对象</strong>组成，一个数据对象代表一个实体；<strong>属性</strong>是一个数据字段，表示数据对象的一个特征。</p>
+<h3 id="标称、二元、序数、数值-区间标度、比率标度"><a href="#标称、二元、序数、数值-区间标度、比率标度" class="headerlink" title="标称、二元、序数、数值(区间标度、比率标度)"></a>标称、二元、序数、数值(区间标度、比率标度)</h3><p>标称、二元、序数属性都是<strong>定性</strong>的，仅描述对象特征而不给出实际大小或数目</p>
+<ol>
+<li><strong>标称属性</strong>(nominal/categorical attribute)：值为一些符号或事务的名称，代表某种类别、编码或状态，不必具有有意义的序，也不是定量的；在计算机中，可视作<strong>枚举</strong>(enumeration)的。如头发颜色(黑、棕、淡黄、红色……)，职业(教师、牙医、程序员、农民……)，顾客编号等。</li>
+<li><strong>二元属性</strong>(binary/bool attribute)：是一种标称属性，只有两个类别或状态。若两种状态具有同种价值且权重相同，则称该二元属性是<strong>对称的</strong>，如性别(男、女)；否则如果其状态结果不同等重要，则称<strong>不对称的</strong>，如艾滋病(阴性、阳性)阳性结果较为重要，一般作为$1$。</li>
+<li><strong>序数属性</strong>(ordinal attribute)：可能的取值间具有有意义的序或秩(ranking)，但是相继值之间的差未知；也可以通过把数值属性进行值域划分，离散化为多个有序类别得到。<strong>序数属性的中心趋势可以用众数和中位数度量，但不能定义均值</strong>。如顾客满意度(满意、中等、不满意)。</li>
+<li><strong>数值属性</strong>(numerical attribute)：定量的，即可度量的量，用实数表示，可以是<strong>区间标度的</strong>或<strong>比率标度的</strong><ol>
+<li><strong>区间标度</strong>(interval-scaled)：用相等的单位尺度度量，除了中心度量众数和中位数度量外还可以定义均值。但是这类属性不具有真正的零点，<strong>不能用比率描述不同值的关系</strong>，例如温度、日期；</li>
+<li><strong>比率标度</strong>(ratio-scaled)：具有固定零点的数值属性，除了中心度量众数和中位数度量外还可以定义均值。<strong>可以用比率描述值的关系</strong>，例如长度、速度。</li>
+</ol>
+</li>
+</ol>
+<h3 id="离散、连续"><a href="#离散、连续" class="headerlink" title="离散、连续"></a>离散、连续</h3><ul>
+<li><strong>离散属性</strong>：具有有限或无限可数个值，可以用或不用整数表示，可以是标称的、二元的、序数的、数值的。如果一个属性可能的值集合是无限的，但是可以与自然数一一对应，那么称之为是<strong>无限可数的</strong>。在实践中用有限位数字表示；</li>
+<li><strong>连续属性</strong>：不是离散的属性就是连续的，实践中一般用浮点变量表示。</li>
+</ul>
+<h2 id="基本统计描述"><a href="#基本统计描述" class="headerlink" title="基本统计描述"></a>基本统计描述</h2><h3 id="中心趋势度量：均值、中位数、众数、中列数"><a href="#中心趋势度量：均值、中位数、众数、中列数" class="headerlink" title="中心趋势度量：均值、中位数、众数、中列数"></a>中心趋势度量：均值、中位数、众数、中列数</h3><ol>
+<li><p><strong>均值</strong>(mean)<br> 令$x_1, \cdots, x_n$为属性$X$的$n$个观测值，那么<strong>均值</strong>定义为</p>
+<script type="math/tex; mode=display">\overline{x} = \frac{1}{n} \sum_{i=1}^n x_i</script><p> 若每个值$x_i$存在权重$w_i$与之对应，那么<strong>加权算术均值</strong>定义为</p>
+<script type="math/tex; mode=display">\overline{x} = \frac{\sum_{i=1}^n w_i x_i}{\sum_{i=1}^n w_i}</script><p> 均值的主要问题是<strong>对极端值很敏感</strong>，如离群点，为减少少数极端值影响，用<strong>舍弃极端值</strong>(如舍弃最高和最低的$2\%$)后的数据计算均值，也即<strong>截尾均值</strong>，但是要避免截去太多。</p>
+</li>
+<li><p><strong>中位数</strong>(median)<br> 有序数值的中间值，<strong>将数据较高一半和较低一半划分开</strong>。对于倾斜(非对称)数据，中位数是比均值更好的度量。注意在$n$个观测值下，$n$不同奇偶性计算方法不同：奇数下取中间值，偶数下取作中间两个值的平均值。<br> <strong>当观测数据数量很大时</strong>，求取中位数计算开销很大，可以用<strong>插值</strong>的方式近似求解：将数据$x_i$划分为多个区间，每个区间的频数是可以统计的，令包含中位数的区间为<strong>中位数区间</strong>，记</p>
+<ul>
+<li>$L_1$：中位数区间下界；</li>
+<li>$N$：全部数据个数；</li>
+<li>$freq_{median}$：中位数区间的频数；</li>
+<li>$width$：中位数区间宽度。</li>
+<li><p>$(\sum freq)_i$：低于中位数区间的所有区间的频数和；</p>
+<p>那么</p>
+<script type="math/tex; mode=display">median = L_1 + \frac{N/2 - (\sum freq)_i}{freq_{median}} \times width</script></li>
+</ul>
+</li>
+<li><p><strong>众数</strong>(mode)<br> 是集合中出现最频繁的值，可以对定性和定量属性确定众数。最高频率可能对应多个不同值出现多个众数，具有一个、两个、三个众数的数据集合称为<strong>单峰的</strong>(unimodal)、<strong>双峰的</strong>(bimodal)、<strong>三峰的</strong>(trimodal)。<br> 对于适度倾斜(非对称)的单峰数据，有如下经验关系，可以通过均值和中位数近似计算</p>
+<script type="math/tex; mode=display">mean - mode \approx 3 \times (mean - median)</script></li>
+<li><p><strong>中列数</strong>(midrange)<br> 数据集的最大和最小值的均值。</p>
+</li>
+</ol>
+<h3 id="数据散布度量：方差、标准差、极差、四分位数、四分位数极差"><a href="#数据散布度量：方差、标准差、极差、四分位数、四分位数极差" class="headerlink" title="数据散布度量：方差、标准差、极差、四分位数、四分位数极差"></a>数据散布度量：方差、标准差、极差、四分位数、四分位数极差</h3><ol>
+<li><strong>方差和标准差</strong><br> 对于属性$X$的$n$个观测值$x_1, \cdots, x_n$，其<strong>方差</strong>(variance)为<script type="math/tex; mode=display">\sigma^2 = \frac{1}{n - 1} \sum_{i=1}^n (x_i - \overline{x})^2</script></li>
+</ol>
+<pre><code>&gt; 原书中为有偏的样本方差。
+
+**标准差$\sigma$低表示数据观测趋向于非常靠近均值**，有如下性质
+- $\sigma$用作度量均值的发散，仅当选择均值作为中心度量时使用；
+- 所有观测值具有相同值是，$\sigma = 0$，否则$\sigma &gt; 0$。
+
+标准差是数据集发散的很好指示器，一个观测通常不会远离均值太多，可以证明最少$(1 - 1 / k^2) \times 100 \%$的观测离均值不会超过$k$个标准差。
+</code></pre><ol>
+<li><p><strong>极差、四分位数和四分位数极差</strong></p>
+<ul>
+<li><strong>极差</strong>(range)：最大值和最小值之差；</li>
+<li><p><strong>分位数</strong>(quantile)：假设属性$X$有$n$个按递增排列的观测，<strong>在数据分布上取$(q-1)$个$q-$分位数，将数据划分为$q$个大小近似为$n/q$的子集合</strong>。第$k$个$q-$分位数处的数据点为$x$，那么有$k/q \times 100\%$的数据小于$x$。</p>
+<ul>
+<li><strong>中位数</strong>：即$2-$分位数，将数据划分为两半；</li>
+<li><strong>四分位数</strong>：数据划分为$4$个相等的部分；</li>
+<li><strong>百分位数</strong>：即$100-$分位数.</li>
+</ul>
+<p>四分位数可以给出分布的<strong>中心、散布和形状</strong>的某种指示：第$1$个四分位数记作$Q_1$，砍去数据最低的$25\%$；第$2$个四分位数即中位数，给出数据分布的中心；第$3$个四分位数记作$Q_3$，砍去数据最高的$25\%$。那么<strong>四分位数极差(</strong>IQR)定义为</p>
+<script type="math/tex; mode=display">IQR = Q_3 - Q1</script><p><strong>离群点识别的通常规则</strong>是：落在$Q_1$之下或$Q_3$之上至少$(1.5 \times IQR)$处的值。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>五数概括</strong></p>
+<p> <strong>五数概括</strong>(five-number summary)依次为</p>
+<script type="math/tex; mode=display">Minimum, Q_1, Median, Q_3, Maximun</script><p> <strong>盒图</strong>(boxplot)是一种体现五数概括的直观表示</p>
+<ul>
+<li><strong>盒的端点</strong>一般在四分位数上；</li>
+<li><strong>盒子的长度</strong>是四分位数极差；</li>
+<li><strong>盒内的线</strong>标记中位数；</li>
+<li><p><strong>盒外的两条线</strong>(胡须)延伸到最大和最小值。</p>
+<p><img src="/.com//box-plot.jpg" alt="box-plot"></p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="图形显示：分位数图、分位数-分位数图、直方图、散点图"><a href="#图形显示：分位数图、分位数-分位数图、直方图、散点图" class="headerlink" title="图形显示：分位数图、分位数-分位数图、直方图、散点图"></a>图形显示：分位数图、分位数-分位数图、直方图、散点图</h3><ol>
+<li><p><strong>分位数图</strong>(quantile plot)<br> 设属性$X$的$n$个观测<strong>按递增排列</strong>，定义$f_i$表示存在大约$f_i \times 100\%$的观测值小于$x_i$</p>
+<script type="math/tex; mode=display">f_i = \frac{i - 0.5}{n}</script></li>
+<li><p><strong>分位数-分位数图</strong>(quantile-quantile plot)<br> 用于观测从一个分布到另一个分布是否存在漂移。假设从一个分布中取得$n$个观测${x_i, i = 1, \cdots, n}$，从另一个分布中取得$n$个观测${y_i, i = 1, \cdots, n}$。两组观测递增排序后，以$(x_i, y_i)$为坐标点简单描点作图，即可得到$q-q$图。<br> <img src="/.com//q-q-plot.png" alt="q-q-plot"></p>
+</li>
+<li><p><strong>直方图</strong>(histogram)、<strong>频率直方图</strong>(frequency histogram)</p>
+<ul>
+<li><strong>标称数据</strong>：可以对于<strong>每个标称值</strong>，统计其出现的频数/频率进行作图；</li>
+<li><strong>数值数据</strong>：将值域划分为<strong>不相交的连续子域</strong>(桶(bucket)、箱(bin))，范围称作宽度(通常等宽)，对落到每个子域内的数据频数/频率进行统计作图。</li>
+</ul>
+</li>
+<li><strong>散点图</strong>(scatter plot)<br> 将数据点描绘在图上可得散点图，可用于确定两个数值变量间是否存在联系、模式或趋势，例如观察点簇和离群点，或考察相关性。</li>
+</ol>
+<h2 id="数据可视化"><a href="#数据可视化" class="headerlink" title="数据可视化"></a>数据可视化</h2><p>略。</p>
+<h2 id="数据的相似性和相异性"><a href="#数据的相似性和相异性" class="headerlink" title="数据的相似性和相异性"></a>数据的相似性和相异性</h2><h3 id="数据矩阵与相异性矩阵"><a href="#数据矩阵与相异性矩阵" class="headerlink" title="数据矩阵与相异性矩阵"></a>数据矩阵与相异性矩阵</h3><p>基于内存的聚类和最近邻算法都在如下两种数据结构上进行</p>
+<ul>
+<li><p><strong>数值矩阵</strong>(data matrix)：由$n$个$p$维对象组成的$n \times p$矩阵</p>
+<script type="math/tex; mode=display">
+  \begin{bmatrix}
+      x_{11} & \cdots & x_{1p} \\
+      x_{21} & \cdots & x_{2p} \\
+      \vdots & \ddots & \vdots \\
+      x_{n1} & \cdots & x_{np}
+  \end{bmatrix}</script></li>
+<li><p><strong>相异性矩阵</strong>(dissimilarity matrix)：存放$n$个对象两两之间<strong>邻近度</strong>(proximity)的$n \times n$矩阵</p>
+<script type="math/tex; mode=display">
+  \begin{bmatrix}
+           0 & d_{12} & \cdots & d_{1n} \\
+      d_{21} & 0 & \cdots & d_{2n} \\
+      \vdots & \vdots & \ddots & \vdots \\
+      d_{n1} & d_{n2} & \cdots & 0
+  \end{bmatrix}</script></li>
+</ul>
+<h3 id="标称属性的邻近性度量：不匹配率"><a href="#标称属性的邻近性度量：不匹配率" class="headerlink" title="标称属性的邻近性度量：不匹配率"></a>标称属性的邻近性度量：不匹配率</h3><p>用标称属性刻画的对象$i, j$之间相异性可以用<strong>不匹配率</strong>计算</p>
+<script type="math/tex; mode=display">d(i, j) = \frac{p - m}{p}</script><p>其中</p>
+<ul>
+<li>$m$：匹配的属性数，即$i, j$取值相同的属性数；</li>
+<li>$p$：对象的属性数</li>
+</ul>
+<p>那么<strong>相似性</strong>为</p>
+<script type="math/tex; mode=display">s(i, j) = 1 - d(i, j) = \frac{m}{p}</script><p>或者用$one-hot$编码处理标称属性后，用<a href="#%e4%ba%8c%e5%85%83%e5%b1%9e%e6%80%a7%e7%9a%84%e9%82%bb%e8%bf%91%e6%80%a7%e5%ba%a6%e9%87%8f">二元属性的邻近性度量</a>进行度量。</p>
+<h3 id="二元属性的邻近性度量"><a href="#二元属性的邻近性度量" class="headerlink" title="二元属性的邻近性度量"></a>二元属性的邻近性度量</h3><p>假设有$p$维二元属性的对象$i, j$，用$q, r, s, t$分别表示$i, j$取值匹配的属性数，如表</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>对象</th>
+<th>1</th>
+<th>0</th>
+<th>sum</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>q</td>
+<td>r</td>
+<td>q + r</td>
+</tr>
+<tr>
+<td>0</td>
+<td>s</td>
+<td>t</td>
+<td>s + t</td>
+</tr>
+<tr>
+<td>sum</td>
+<td>q + s</td>
+<td>r + t</td>
+<td>p</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="对称的二元属性"><a href="#对称的二元属性" class="headerlink" title="对称的二元属性"></a>对称的二元属性</h4><p>对称的二元属性指每个状态同等重要，那么$i, j$相异性为</p>
+<script type="math/tex; mode=display">d(i, j) = \frac{r + s}{q + r + s + t}</script><p>相似性</p>
+<script type="math/tex; mode=display">s(i, j) = 1 - d(i, j)</script><h4 id="非对称的二元属性：Jaccard系数"><a href="#非对称的二元属性：Jaccard系数" class="headerlink" title="非对称的二元属性：Jaccard系数"></a>非对称的二元属性：Jaccard系数</h4><p>两种状态并不是同等重要的二元属性，负匹配$t$(两个对象取$0$)的属性被视作是不重要的，那么</p>
+<script type="math/tex; mode=display">d(i, j) = \frac{r + s}{q + r + s}</script><p>对应的相似性被称作<strong>Jaccard系数</strong>，即</p>
+<script type="math/tex; mode=display">J(i, j) = s(i, j) = 1 - d(i, j)</script><h3 id="数值属性的邻近性度量：-L-1-L-2-L-p-L-infty-L-M"><a href="#数值属性的邻近性度量：-L-1-L-2-L-p-L-infty-L-M" class="headerlink" title="数值属性的邻近性度量：$L_1, L_2, L_p, L_{\infty}$, $L_{M}$"></a>数值属性的邻近性度量：$L_1, L_2, L_p, L_{\infty}$, $L_{M}$</h3><p>在计算数值属性的邻近性度量时，一般先进行<strong>规范化</strong>，涉及调整值域的数据变换。</p>
+<p>满足如下性质的测度称作<strong>度量</strong>(metric)</p>
+<ul>
+<li><strong>非负性</strong>：$d(i, j) \geq 0$</li>
+<li><strong>同一性</strong>：$d_{ii} = 0$</li>
+<li><strong>对称性</strong>：$d(i, j) = d{ji}$</li>
+<li><strong>三角不等式</strong>：$d(i, j) \leq d_{ik} + d_{kj}$</li>
+</ul>
+<p>以下距离均满足度量性质</p>
+<ul>
+<li><p>曼哈顿距离：$L_1$</p>
+<script type="math/tex; mode=display">d(i, j) = \sum_{f=1}^{p} | x_{if} - x_{jf} |</script></li>
+<li><p>欧几里得距离：$L_2$</p>
+<script type="math/tex; mode=display">d(i, j) = \sqrt{\sum_{f=1}^{p} | x_{if} - x_{jf} |^2}</script></li>
+<li><p>闵可夫斯基距离：$L_p$</p>
+<script type="math/tex; mode=display">d(i, j) = \left( \sum_{f=1}^{p} | x_{if} - x_{jf} |^p \right)^{1/p}</script></li>
+<li><p>上确界距离：$L_{\infty}$</p>
+<script type="math/tex; mode=display">d(i, j) = \lim_{p \rightarrow \infty} \left( \sum_{f=1}^{p} | x_{if} - x_{jf} |^p \right)^{1/p} = \max_{f}^{p} | x_{if} - x_{jf} |</script></li>
+<li><p>马氏距离: $L_M$</p>
+<script type="math/tex; mode=display">d(i, j) = \sqrt{(x_{i} - x_{j})^T \Sigma^{-1}(x_{i} - x_{j})}</script><p>  其中$\Sigma$是多为随机变量$x_{i}, x_{j}$的协方差矩阵。</p>
+</li>
+</ul>
+<p>在计算距离时，还可以对每个变量进行加权，如<strong>加权的欧几里得距离</strong>为</p>
+<script type="math/tex; mode=display">d(i, j) = \sqrt{\sum_{f=1}^{p} w_f \times | x_{if} - x_{jf} |^2}</script><h3 id="序数属性的邻近性度量"><a href="#序数属性的邻近性度量" class="headerlink" title="序数属性的邻近性度量"></a>序数属性的邻近性度量</h3><p>假设$f$是描述对象的一组序数属性，有$M_f$个有序的<strong>排位</strong>$1, 2, \cdots, m_{if}, \cdots, M_f$。若第$i$个对象的属性$f$取值为$x_{if}$，用相应的排位$m_{if}$代替$x_{if}$，使$n$个对象的属性$f$转化为数值属性，然后通过值域变换将其缩放到$[0.0, 1.0]$上，<strong>用数值属性的距离度量进行计算</strong>，即</p>
+<script type="math/tex; mode=display">z_{if} = \frac{m_{if} - 1}{M_{if} - 1}</script><h3 id="混合类型属性的邻近性度量"><a href="#混合类型属性的邻近性度量" class="headerlink" title="混合类型属性的邻近性度量"></a>混合类型属性的邻近性度量</h3><p>假设对象$x$的$p$个属性包含多种类型，可以将所有有意义的属性转换到共有区间$[0.0, 1.0]$上。对象$i, j$的<strong>相异性</strong>定义为</p>
+<script type="math/tex; mode=display">d(i, j) = \frac{\sum_{f=1}^p \delta_{ij}^{(f)} d_{ij}^{(f)}}{\sum_{f=1}^p \delta_{ij}^{(f)}}</script><p>其中</p>
+<ul>
+<li><p>$\delta_{ij}^{(f)}$为<strong>指示符</strong>，舍弃无意义属性值</p>
+<script type="math/tex; mode=display">
+  \delta_{ij}^{(f)} = \begin{cases} 
+      0 & x_{if}或x_{jf}缺失，或者x_{if} = x_{jf} = 0 \\ 
+      1 & otherwise 
+  \end{cases}</script></li>
+<li><p>$d_{ij}^{(f)}$为$i, j$间<strong>相似度的贡献</strong>，根据不同类型计算</p>
+<script type="math/tex; mode=display">
+  d_{ij}^{(f)} = \begin{cases}
+      \frac{|x_{if} - x_{jf}|}{ \max_h x_{hf} - \min_h x_{hf} } & f为数值类型 \\
+      \begin{cases}
+          1 & x_{if} = x_{jf} \\ 0 & x_{if} \neq x_{jf}
+      \end{cases} & f为标称或二元类型 \\
+      计算排位m_f和z_f，视作数值类型 & f为序数类型
+  \end{cases}</script><blockquote>
+<ul>
+<li>数值类型时，即<strong>最大-最小规范化后两属性的绝对差值</strong>(曼哈顿距离)，也可使用其他距离？</li>
+<li>标称或二元属性时，这里使用的是<strong>Jaccard距离</strong>。</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h3 id="余弦相似度度量和Tanimoto系数"><a href="#余弦相似度度量和Tanimoto系数" class="headerlink" title="余弦相似度度量和Tanimoto系数"></a>余弦相似度度量和Tanimoto系数</h3><p><strong>稀疏的对象向量是高度非对称的</strong>，很多公共的$0$并不重要，但是不忽略会使得他们相似度降低。用余弦度量作为相似度函数，有</p>
+<script type="math/tex; mode=display">s(x, y) = \frac{x \cdot y}{||x|| ||y||}</script><blockquote>
+<p>注意余弦度量不满足度量的性质，故被称作<strong>非度量测度</strong>(nonmetric measure)。</p>
+</blockquote>
+<p>当属性为二元属性时，$x \cdot y$是$x, y$共有为$1$的属性数，$x \cdot x$与$y \cdot y$分别为$x, y$为$1$的属性数，那么余弦度量的变种<strong>Tanimoto系数</strong>定义为</p>
+<script type="math/tex; mode=display">s(x, y) = \frac{x \cdot y}{x \cdot x + y \cdot y - x \cdot y}</script><blockquote>
+<p>可以理解为$与 / 或$的运算。</p>
+</blockquote>
+<h1 id="数据预处理"><a href="#数据预处理" class="headerlink" title="数据预处理"></a>数据预处理</h1><p><strong>数据质量</strong>包括以下因素</p>
+<ul>
+<li>准确性</li>
+<li>完整性</li>
+<li>一致性</li>
+<li>时效性</li>
+<li>可信性</li>
+<li>可解释性</li>
+</ul>
+<h2 id="数据清理"><a href="#数据清理" class="headerlink" title="数据清理"></a>数据清理</h2><h3 id="缺失值"><a href="#缺失值" class="headerlink" title="缺失值"></a>缺失值</h3><p>许多元组的一些属性可能没有记录值，即存在缺失值，有以下<strong>原因</strong>可能产生缺失值</p>
+<ul>
+<li>被要求提供属性值的人拒绝提供和/或没有所需要的信息；</li>
+<li>数据输入者不知道正确的值；</li>
+<li>值在稍后提供。</li>
+</ul>
+<p>有如下<strong>方法</strong>处理</p>
+<ol>
+<li><strong>忽略元组</strong>：通常在缺少类标号时使用，忽略整个元组，可能丢失剩余有效的属性值，特别是在每个属性缺失值变化很大时效果很差；</li>
+<li><strong>人工填写</strong>：费时费力；</li>
+<li><strong>全局常量填充</strong>：常量可能被挖掘算法视作一个有趣的概念，并不十分可靠；</li>
+<li><strong>全局中心度量填充</strong>：对称数据分布可以使用均值，非对称数据分布应使用中位数；</li>
+<li><strong>同类中心度量填充</strong>：填充与该元组类标号一致的数据的中心度量；</li>
+<li><strong>基于推理填充</strong>：用回归、贝叶斯、决策树等方法推断缺失值；</li>
+<li><strong>随机填充</strong>：在缺失量特别少(通常认为小于1%)的时候，可以随机生成。</li>
+</ol>
+<ul>
+<li>$3 \sim 6$使数据有偏，填入值可能不正确；</li>
+<li>缺失值并不意味着数据有误，例如某项无可填选项时用户自然不填；</li>
+<li>实际机器学习工程中，直接删除、众数填充和直接离散化方法用的最多。</li>
+</ul>
+<p>每个属性应当有一个或多个关于空值条件的规则，用以说明是否允许有空值，并且/或者说明空值应当如何处理或转换，<strong>好的数据库和数据输入设计将有助于在第一现场将缺失值或错误数量降到最低</strong>。</p>
+<h3 id="噪声"><a href="#噪声" class="headerlink" title="噪声"></a>噪声</h3><p>噪声是指被测量的变量的随机误差或方差，可以用<strong>数据光滑技术</strong>一定程度去除噪声影响</p>
+<ol>
+<li><strong>分箱</strong>：通过考察数据的“近邻”来光滑有序数据值，先将数据划分到大小相同的箱中，然后每个箱内进行光滑操作<ul>
+<li>用箱中心度量光滑：箱内数据计算中心度量(均值、中位数等)，替代箱中数据；</li>
+<li>用箱边界值光滑：计算箱中的最大、最小值，箱中每个值替换为最近的边界值。</li>
+</ul>
+</li>
+<li><strong>回归</strong>：用回归方法拟合数据来光滑数据</li>
+<li><strong>离群点分析</strong>：用聚类等方法检测离群点，并将其去除</li>
+</ol>
+<h3 id="清理过程"><a href="#清理过程" class="headerlink" title="清理过程"></a>清理过程</h3><p>数据清理一般通过<strong>偏差检测</strong>和<strong>数据变换</strong>两个过程迭代执行</p>
+<ol>
+<li><p><strong>偏差检测</strong></p>
+<ul>
+<li>可以通过<strong>元数据</strong>发现噪声、离群点和需要考察的不寻常的值。元数据包括<ul>
+<li>数据类型</li>
+<li>定义域</li>
+<li>均值、中位数、众数等统计量</li>
+<li>数据分布是否对称</li>
+<li>数据分布是否符合期望，如数据落在期望的区间</li>
+<li>每个属性的标准差</li>
+<li>属性间的依赖关系</li>
+<li>……</li>
+</ul>
+</li>
+<li>根据<strong>唯一性规则、连续性规则和空值规则</strong>考察数据<ul>
+<li><strong>唯一性规则</strong>：给定属性的每个值都必须不同于该属性的其他值；</li>
+<li><strong>连续性规则</strong>：属性的最低和最高值之间没有缺失值，并且所有的值唯一；</li>
+<li><strong>空值规则</strong>：说明指示空值条件的符号使用，以及如何处理。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>偏差纠正</strong>：定义并使用<strong>一系列</strong>变换来纠正偏差。</p>
+</li>
+</ol>
+<h2 id="数据集成"><a href="#数据集成" class="headerlink" title="数据集成"></a>数据集成</h2><p><strong>数据集成</strong>是指合并来自多个数据存储的数据，小心集成可以减少数据集的冗余度和不一致。</p>
+<h3 id="实体识别"><a href="#实体识别" class="headerlink" title="实体识别"></a>实体识别</h3><p><strong>实体识别问题</strong>是指如何匹配多个信息源的现实世界的等价实体。当一个数据库的属性与另一个匹配时，需要特别注意<strong>数据结构</strong>，确保源系统中函数依赖，以及参照约束与目标系统中的匹配。</p>
+<h3 id="冗余和相关分析"><a href="#冗余和相关分析" class="headerlink" title="冗余和相关分析"></a>冗余和相关分析</h3><p><strong>冗余</strong>是指一个属性能由另一个(或另一组)属性导出，属性的命名不一致可能也会导致冗余。冗余可以通过<strong>相关分析</strong>检测：对于<strong>标称数据</strong>，可以<strong>采用$\chi^2$检验</strong>；<strong>数值数据</strong>可以采用<strong>相关系数</strong>(correlation coefficient)和<strong>协方差</strong>(covariance)检测。</p>
+<h4 id="标称数据的-chi-2-检验"><a href="#标称数据的-chi-2-检验" class="headerlink" title="标称数据的$\chi^2$检验"></a>标称数据的$\chi^2$检验</h4><p>假设当前有两个属性$A, B$待检验，$A$包含$c$个不同值$a_1, \cdots, a_c$，$B$包含$r$个不同值$b_1, \cdots, b_r$。以$A$的$c$个属性值为列，$B$的$r$个属性值为行构成<strong>相依表</strong>，$(A_i, B_j)$表示联合事件$(A = a_i, B = b_j)$如下</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>$a_1$</th>
+<th>$a_1$</th>
+<th>$\cdots$</th>
+<th>$a_c$</th>
+<th>合计</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$b_1$</td>
+<td>$o_{11}$</td>
+<td>$o_{12}$</td>
+<td></td>
+<td>$o_{1c}$</td>
+<td>$B_1$</td>
+</tr>
+<tr>
+<td>$b_2$</td>
+<td>$o_{21}$</td>
+<td>$o_{22}$</td>
+<td></td>
+<td>$o_{2c}$</td>
+<td>$B_2$</td>
+</tr>
+<tr>
+<td>$\cdots$</td>
+<td></td>
+<td></td>
+<td>$\ddots$</td>
+<td></td>
+<td>$\cdots$</td>
+</tr>
+<tr>
+<td>$b_r$</td>
+<td>$o_{r1}$</td>
+<td>$o_{r2}$</td>
+<td></td>
+<td>$o_{rc}$</td>
+<td>$B_r$</td>
+</tr>
+<tr>
+<td>合计</td>
+<td>$A_1$</td>
+<td>$A_2$</td>
+<td>$\cdots$</td>
+<td>$A_c$</td>
+<td>$n$</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>那么$(A_i, B_j)$的<strong>期望频数</strong>为</p>
+<script type="math/tex; mode=display">e_{ij} = \frac{|A_i| \times |B_j|}{n}</script><ul>
+<li>$|A_i|$：$A$取$a_i$的元组个数；</li>
+<li>$|B_j|$：$B$取$b_j$的元组个数；</li>
+<li>$n$：总的元组个数。</li>
+</ul>
+<p>那么$\chi^2$计算方法如下</p>
+<script type="math/tex; mode=display">\chi^2 = \sum_{i=1}^{c} \sum_{j=1}^r \frac{(o_{ij} - e_{ij})^2}{e_{ij}}</script><ul>
+<li>$o_{ij}$：联合事件$(A_i, B_j)$的<strong>观测频数</strong>(实际计数)；</li>
+<li>对$\chi^2$值贡献最大的是观测频数和期望频数很不相同的单元。</li>
+</ul>
+<p>$\chi^2$统计检验假设$A, B$独立，具有自由度$(r - 1) \times (c - 1)$，在置信水平$\alpha$下可以查找$\chi^2$分布百分点表得到拒绝假设的值。<strong>若计算得$\chi^2$值大于该值，那么可以拒绝$A, B$是独立的假设，也就是说这两个属性是相关的。</strong></p>
+<h4 id="数值数据的相关系数"><a href="#数值数据的相关系数" class="headerlink" title="数值数据的相关系数"></a>数值数据的相关系数</h4><p>两个数值属性$A, B$的<strong>相关系数</strong>定义如下，$r_{AB} \in \left[-1, 1\right]$，该值的符号表示正/负相关，绝对值越大表示相关性越强。<strong>注意相关系数为$0$不能代表两个属性独立。</strong></p>
+<script type="math/tex; mode=display">
+r_{AB} = \frac{Cov(A, B)}{\sqrt{D(A)} \sqrt{D(B)}} = \frac{\sum_{i=1}^n (a_i - \overline{A})(b_i - \overline{B})}{\sigma_A \sigma_B}</script><ul>
+<li>$n$：元组总个数；</li>
+<li>$a_i, b_i$：元组$i$在$A, B$上的值；</li>
+<li>$\overline{A}, \overline{B}$：$A, B$的均值；</li>
+<li>$\sigma_A, \sigma_B$：$A, B$的标准差；</li>
+</ul>
+<p>其<strong>几何意义</strong>解释如下，将$A, B$两个向量<strong>去中心化、单位化</strong>，即</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    \hat{a}_i = (a_i - \overline{A}) / \sigma_A \\
+    \hat{b}_i = (b_i - \overline{B}) / \sigma_B
+\end{cases}</script><p>那么相关系数也即这两个向量的<strong>余弦距离</strong></p>
+<script type="math/tex; mode=display">
+r_{AB} = \frac{\sum_{i=1}^n (a_i - \overline{A})(b_i - \overline{B})}{\sigma_A \sigma_B} = \frac{1}{n} \sum_{i=1}^n \hat{a}_i \hat{b}_i = \hat{A} \cdot \hat{B}= \cos<\hat{A}, \hat{B}></script><h2 id="数据归约"><a href="#数据归约" class="headerlink" title="数据归约"></a>数据归约</h2><p><strong>数据归约</strong>(data reduction)旨在得到数据的规约表示，但能够保持数据的完整性。</p>
+<h3 id="维规约"><a href="#维规约" class="headerlink" title="维规约"></a>维规约</h3><p><strong>维规约</strong>(dimensionly reduction)减少所考虑的<strong>随机变量或属性的个数</strong>。</p>
+<h4 id="小波变换：DWT"><a href="#小波变换：DWT" class="headerlink" title="小波变换：DWT"></a>小波变换：DWT</h4><h4 id="主成分分析：PCA"><a href="#主成分分析：PCA" class="headerlink" title="主成分分析：PCA"></a>主成分分析：PCA</h4><h4 id="属性子集选择"><a href="#属性子集选择" class="headerlink" title="属性子集选择"></a>属性子集选择</h4><p><strong>属性子集选择</strong>通过删除不相关或冗余的属性减少数据量，找到最小属性集使得数据类的概率分布尽可能地接近使用所有属性得到的所有属性得到的原分布。</p>
+<p>通常使用压缩搜索空间的启发式方法(典型的贪心算法)，选择属性的“好”和“差”可以通过<strong>统计显著性检验</strong>确定，或者是<strong>信息增益度量</strong>，有以下算法</p>
+<ul>
+<li><strong>逐步向前归纳</strong>：由空属性集作为归约集，确定原属性集中最好的属性，并在每次的迭代中依次加入剩余属性集中最好的属性；</li>
+<li><strong>逐步向后删除</strong>：由整个属性集开始，每一步迭代中删除剩余属性集中最差的属性；</li>
+<li><strong>逐步向前选择和逐步向后删除的组合</strong>：每次迭代中选择一个最好的属性，并删除一个最差的属性；</li>
+<li><strong>决策树归纳</strong>：由给定的数据构造决策树，不出现在树中的所有属性假定是不相关的，出现在树中的属性形成规约后的属性子集。</li>
+</ul>
+<h4 id="回归和对数线性模型：参数化数据规约"><a href="#回归和对数线性模型：参数化数据规约" class="headerlink" title="回归和对数线性模型：参数化数据规约"></a>回归和对数线性模型：参数化数据规约</h4><p><strong>回归和对数线性模型</strong>用于近似给定的数据，在回归方法中用一个(或一组)属性拟合另一个属性从而<strong>降低维数</strong>；而<strong>对数线性模型</strong>近似离散的多维概率分布，对于给定的元组集合，每个元组视作$n$维的点，用对数线性模型基于维组合的一个较小子集，估计多维空间中每个点的概率，使得高维数据可以由较低维空间构造。</p>
+<h3 id="数量规约"><a href="#数量规约" class="headerlink" title="数量规约"></a>数量规约</h3><p><strong>数量规约</strong>(numerousity reduction)用<strong>替代的、较小的数据表示形式</strong>来替代原数据。</p>
+<h4 id="直方图"><a href="#直方图" class="headerlink" title="直方图"></a>直方图</h4><p>用桶对属性值进行划分，包括<strong>等宽</strong>和<strong>等频</strong>两种方法，得到桶聚合，然后将桶作为数据的压缩表示，从而减少元组数目。</p>
+<h4 id="聚类"><a href="#聚类" class="headerlink" title="聚类"></a>聚类</h4><p>类似分桶，通过聚类方法将对象划分为<strong>群或簇</strong>，用数据的簇代表替换实际数据。该方法的有效性依赖于数据的性质。</p>
+<h4 id="抽样"><a href="#抽样" class="headerlink" title="抽样"></a>抽样</h4><p>用数据的小得多的<strong>随机样本子集</strong>代表大型数据集。抽样方法的优点是，算法复杂度仅与样本集大小有关，而与数据集大小无关。通常<strong>方法</strong>有</p>
+<ul>
+<li>$s$个样本的<strong>无放回简单随机抽样</strong>；</li>
+<li>$s$个样本的<strong>有放回简单随机抽样</strong>；</li>
+<li><strong>簇抽样</strong>：将元组放入不同的<strong>簇</strong>中，每个簇中进行抽样，例如基于邻近度定义簇；</li>
+<li><strong>分层抽样</strong>：数据集被划分为互不相交的部分，即“<strong>层</strong>”，对每一层进行简单随机抽样。特别是当数据倾斜时，可以帮助确保样本的代表性。</li>
+</ul>
+<h4 id="数据立方体聚集"><a href="#数据立方体聚集" class="headerlink" title="数据立方体聚集"></a>数据立方体聚集</h4><h3 id="数据压缩"><a href="#数据压缩" class="headerlink" title="数据压缩"></a>数据压缩</h3><p><strong>数据压缩</strong>(data compression)使用变换得到原数据的规约或“压缩”表示，维规约和数量规约可以视作某种形式的数据压缩。</p>
+<h2 id="数据变换"><a href="#数据变换" class="headerlink" title="数据变换"></a>数据变换</h2><p>用于将数据变换或统一成适合于挖掘的形式，包括</p>
+<ul>
+<li><strong>光滑</strong>：去掉噪声，包括分箱、回归和聚类；</li>
+<li><strong>属性构造</strong>：由给定属性构造新的属性，并添加到属性集中；</li>
+<li><strong>聚集</strong>：对数据进行汇总或聚集；</li>
+<li><strong>规范化</strong>：把单属性数据按比例缩放，落到特定的小区间；</li>
+<li><strong>离散化</strong>：将数值属性的原始值用区间标签或概念标签替换，这些标签可以递归地组织成更高层概念，导致数值属性地概念分层；</li>
+<li><strong>由标称属性产生概念分层</strong>：将具有一定概念的属性泛化到更高的概念层。</li>
+</ul>
+<p>作用是</p>
+<ul>
+<li><strong>避免异常点</strong>：比如对连续变量进行份桶离散化</li>
+<li><strong>可解释性或者需要连续输出</strong>：比如评分卡模型中的iv+woe</li>
+<li><strong>使得原始数据的信息量更大</strong>：比如log/sqrt变换</li>
+</ul>
+<h3 id="规范化"><a href="#规范化" class="headerlink" title="规范化"></a>规范化</h3><p>试图赋予所有属性相等的权重，用于减少对度量单位的依赖性。</p>
+<h4 id="min-max-最小-最大-规范化"><a href="#min-max-最小-最大-规范化" class="headerlink" title="min-max(最小-最大)规范化"></a>min-max(最小-最大)规范化</h4><p>对原始数据仅线性变换，仅跟最大、最小值的差别有关，只是一个去量纲的过程，将落在$[min, max]$的属性值$a$映射到$[MIN, MAX]$中</p>
+<script type="math/tex; mode=display">a' = \frac{a - min}{max - min} \times (MAX - MIN) + MIN</script><h4 id="z-score-零均值-规范化"><a href="#z-score-零均值-规范化" class="headerlink" title="z-score(零均值)规范化"></a>z-score(零均值)规范化</h4><p>缩放和所有点都相关，数据相对分布不会改变，集中的数据标准化后依旧集中。</p>
+<ul>
+<li><p>基于属性$A$的均值$\overline{A}$和方差$\sigma_A$</p>
+<script type="math/tex; mode=display">a' = \frac{a - \overline{A}}{\sigma_A}</script></li>
+<li><p>或者是$A$的<strong>均值绝对偏差</strong>(mean absolute deviation)$s_A$代替$\sigma_A$</p>
+<script type="math/tex; mode=display">s_A = \frac{1}{n} \sum_{i=1}^n | a_i - \overline{A} |</script></li>
+</ul>
+<blockquote>
+<p>$\sigma_A$与$s_A$分别代表$A - \overline{A}$的$L_2, L1$范数。</p>
+</blockquote>
+<h4 id="按小数定标规范化"><a href="#按小数定标规范化" class="headerlink" title="按小数定标规范化"></a>按小数定标规范化</h4><p>移动属性$A$的值的小数点位置进行规范化</p>
+<script type="math/tex; mode=display">a' = a / 10^j</script><p>其中$j$是使得$\max(| a_i’ |) &lt; 1$的最小整数</p>
+<h4 id="min-max与z-score的关系与对比"><a href="#min-max与z-score的关系与对比" class="headerlink" title="min-max与z-score的关系与对比"></a>min-max与z-score的关系与对比</h4><ul>
+<li><strong>异常点角度</strong>：特征数据上下限明显异常的时候使用z-score规范化方法，简单min-max规范化会造成数据差异模糊，整体方差下降；</li>
+<li><strong>分布角度</strong>：使用z-score规范化之前，要求数据需要近似满足高斯分布，不然会改变数据的分布，尤其是对数据分布有强假设的情况下；</li>
+<li><strong>上线变动角度</strong>：min-max规范化在上线的时候需要考虑上下约束界是否需要变动，z-score规范化则不需要考虑变动；</li>
+<li><strong>值域范围角度</strong>：min-max规范化对数据范围约定较为固定，而z-score规范化的输出上下界则不定；</li>
+<li><strong>模型角度</strong>：一般涉及距离计算，协方差计算，数据满足高斯分布的情况下用z-score规范化，其他min-max规范化或其他变换。</li>
+</ul>
+<h3 id="数据离散化"><a href="#数据离散化" class="headerlink" title="数据离散化"></a>数据离散化</h3><h4 id="分箱"><a href="#分箱" class="headerlink" title="分箱"></a>分箱</h4><p><strong>基于指定箱个数的自顶向下的分裂技术</strong>，例如用等宽或等频分箱后，用均值或中位数替换箱中的每个值，从而离散化。对用户指定的箱的个数很敏感，且容易受离群点影响。<strong>适用于小范围连续数据内不存在逻辑关系的数据</strong>，比如31岁和32岁之间不存在明显的差异，可以归为一个箱中。</p>
+<h4 id="聚类-1"><a href="#聚类-1" class="headerlink" title="聚类"></a>聚类</h4><p>考虑属性$A$的分布及其数据点的邻近性，将属性值划分为多个簇，可以产生高质量的离散化结果。</p>
+<h4 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h4><p><strong>主要思想是，通过选择划分点使得一个给定的结果分区包含尽可能多的同类元组，将属性离散化</strong>。这种离散化可以形成$A$的概念分层。</p>
+<h4 id="相关分析"><a href="#相关分析" class="headerlink" title="相关分析"></a>相关分析</h4><p>例如，基于$\chi^2$的离散化方法$ChiMerge$采用自底向上的策略，递归找出最邻近的区间进行合并。<strong>基本思想是，对于精确的离散化，相对类频率在一个区间内应当完全一致</strong>。因此，若两个邻近区间具有类似的类分布，那么可以进行合并。</p>
+<h3 id="概念分层"><a href="#概念分层" class="headerlink" title="概念分层"></a>概念分层</h3><p>用于将数据变换到多个粒度层，适用于有一定规律的类别数据，邮政编码，手机号等，产生方法有</p>
+<ul>
+<li>由用户或专家在<strong>模式级</strong>显式说明属性的部分序；</li>
+<li>通过<strong>显式数据分组</strong>说明分层结构的一部分；</li>
+<li><strong>说明属性集但不说明它们的偏序</strong>：可以根据给定属性集中，每个属性不同值的个数，自动产生概念分层。属性不同值个数越少，其所在概念分层结构中所处的层次越高。</li>
+<li><strong>只说明部分属性集</strong>：依照属性的语义相关性进行分层。</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag"># 读书笔记</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/23/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/" rel="next" title="【算法】背包问题">
+                <i class="fa fa-chevron-left"></i> 【算法】背包问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/29/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%8D%95%E8%B0%83%E6%A0%88%E5%92%8C%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97/" rel="prev" title="【算法】单调栈和单调队列">
+                【算法】单调栈和单调队列 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.gif"
+                alt="Louis Hsu" />
+            
+              <p class="site-author-name" itemprop="name">Louis Hsu</p>
+              <p class="site-description motion-element" itemprop="description">ᵕ᷄ ≀ ̠˘᷅ 永远年轻，永远热泪盈眶</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/%20%7C%7C%20archive">
+                
+                    <span class="site-state-item-count">106</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/isLouisHsu" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://is.louishsu@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/islouishsu" target="_blank" title="Zhihu"><i class="fa fa-fw fa-zhihu"></i>Zhihu</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/islouishsu" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          <div id='music163player'>
+            <iframe 
+              frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=110 
+              src="//music.163.com/outchain/player?type=0&id=2703291040&auto=1&height=90">
+            </iframe>
+          </div>
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#目录"><span class="nav-number">1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#认识数据"><span class="nav-number">2.</span> <span class="nav-text">认识数据</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据对象与属性类型"><span class="nav-number">2.1.</span> <span class="nav-text">数据对象与属性类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#标称、二元、序数、数值-区间标度、比率标度"><span class="nav-number">2.1.1.</span> <span class="nav-text">标称、二元、序数、数值(区间标度、比率标度)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#离散、连续"><span class="nav-number">2.1.2.</span> <span class="nav-text">离散、连续</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本统计描述"><span class="nav-number">2.2.</span> <span class="nav-text">基本统计描述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#中心趋势度量：均值、中位数、众数、中列数"><span class="nav-number">2.2.1.</span> <span class="nav-text">中心趋势度量：均值、中位数、众数、中列数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据散布度量：方差、标准差、极差、四分位数、四分位数极差"><span class="nav-number">2.2.2.</span> <span class="nav-text">数据散布度量：方差、标准差、极差、四分位数、四分位数极差</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#图形显示：分位数图、分位数-分位数图、直方图、散点图"><span class="nav-number">2.2.3.</span> <span class="nav-text">图形显示：分位数图、分位数-分位数图、直方图、散点图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据可视化"><span class="nav-number">2.3.</span> <span class="nav-text">数据可视化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据的相似性和相异性"><span class="nav-number">2.4.</span> <span class="nav-text">数据的相似性和相异性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据矩阵与相异性矩阵"><span class="nav-number">2.4.1.</span> <span class="nav-text">数据矩阵与相异性矩阵</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标称属性的邻近性度量：不匹配率"><span class="nav-number">2.4.2.</span> <span class="nav-text">标称属性的邻近性度量：不匹配率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二元属性的邻近性度量"><span class="nav-number">2.4.3.</span> <span class="nav-text">二元属性的邻近性度量</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#对称的二元属性"><span class="nav-number">2.4.3.1.</span> <span class="nav-text">对称的二元属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#非对称的二元属性：Jaccard系数"><span class="nav-number">2.4.3.2.</span> <span class="nav-text">非对称的二元属性：Jaccard系数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数值属性的邻近性度量：-L-1-L-2-L-p-L-infty-L-M"><span class="nav-number">2.4.4.</span> <span class="nav-text">数值属性的邻近性度量：$L_1, L_2, L_p, L_{\infty}$, $L_{M}$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#序数属性的邻近性度量"><span class="nav-number">2.4.5.</span> <span class="nav-text">序数属性的邻近性度量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#混合类型属性的邻近性度量"><span class="nav-number">2.4.6.</span> <span class="nav-text">混合类型属性的邻近性度量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#余弦相似度度量和Tanimoto系数"><span class="nav-number">2.4.7.</span> <span class="nav-text">余弦相似度度量和Tanimoto系数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据预处理"><span class="nav-number">3.</span> <span class="nav-text">数据预处理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据清理"><span class="nav-number">3.1.</span> <span class="nav-text">数据清理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缺失值"><span class="nav-number">3.1.1.</span> <span class="nav-text">缺失值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#噪声"><span class="nav-number">3.1.2.</span> <span class="nav-text">噪声</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#清理过程"><span class="nav-number">3.1.3.</span> <span class="nav-text">清理过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据集成"><span class="nav-number">3.2.</span> <span class="nav-text">数据集成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#实体识别"><span class="nav-number">3.2.1.</span> <span class="nav-text">实体识别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#冗余和相关分析"><span class="nav-number">3.2.2.</span> <span class="nav-text">冗余和相关分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#标称数据的-chi-2-检验"><span class="nav-number">3.2.2.1.</span> <span class="nav-text">标称数据的$\chi^2$检验</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数值数据的相关系数"><span class="nav-number">3.2.2.2.</span> <span class="nav-text">数值数据的相关系数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据归约"><span class="nav-number">3.3.</span> <span class="nav-text">数据归约</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#维规约"><span class="nav-number">3.3.1.</span> <span class="nav-text">维规约</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#小波变换：DWT"><span class="nav-number">3.3.1.1.</span> <span class="nav-text">小波变换：DWT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#主成分分析：PCA"><span class="nav-number">3.3.1.2.</span> <span class="nav-text">主成分分析：PCA</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#属性子集选择"><span class="nav-number">3.3.1.3.</span> <span class="nav-text">属性子集选择</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#回归和对数线性模型：参数化数据规约"><span class="nav-number">3.3.1.4.</span> <span class="nav-text">回归和对数线性模型：参数化数据规约</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数量规约"><span class="nav-number">3.3.2.</span> <span class="nav-text">数量规约</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#直方图"><span class="nav-number">3.3.2.1.</span> <span class="nav-text">直方图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#聚类"><span class="nav-number">3.3.2.2.</span> <span class="nav-text">聚类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#抽样"><span class="nav-number">3.3.2.3.</span> <span class="nav-text">抽样</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据立方体聚集"><span class="nav-number">3.3.2.4.</span> <span class="nav-text">数据立方体聚集</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据压缩"><span class="nav-number">3.3.3.</span> <span class="nav-text">数据压缩</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据变换"><span class="nav-number">3.4.</span> <span class="nav-text">数据变换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#规范化"><span class="nav-number">3.4.1.</span> <span class="nav-text">规范化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#min-max-最小-最大-规范化"><span class="nav-number">3.4.1.1.</span> <span class="nav-text">min-max(最小-最大)规范化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#z-score-零均值-规范化"><span class="nav-number">3.4.1.2.</span> <span class="nav-text">z-score(零均值)规范化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#按小数定标规范化"><span class="nav-number">3.4.1.3.</span> <span class="nav-text">按小数定标规范化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#min-max与z-score的关系与对比"><span class="nav-number">3.4.1.4.</span> <span class="nav-text">min-max与z-score的关系与对比</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据离散化"><span class="nav-number">3.4.2.</span> <span class="nav-text">数据离散化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分箱"><span class="nav-number">3.4.2.1.</span> <span class="nav-text">分箱</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#聚类-1"><span class="nav-number">3.4.2.2.</span> <span class="nav-text">聚类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#决策树"><span class="nav-number">3.4.2.3.</span> <span class="nav-text">决策树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#相关分析"><span class="nav-number">3.4.2.4.</span> <span class="nav-text">相关分析</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#概念分层"><span class="nav-number">3.4.3.</span> <span class="nav-text">概念分层</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Louis Hsu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: 'e65d27f7cf5c62feaf97',
+          clientSecret: '356386826698e8b817ca076b08d7c0e9814f52ea',
+          repo: 'isLouisHsu.github.io',
+          owner: 'isLouisHsu',
+          admin: ['isLouisHsu'],
+          id: md5(window.location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('3');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+
+  <script type="text/javascript" src="/js/click_show_text.js"></script>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+</html>

@@ -116,7 +116,7 @@
 <meta property="og:description" content="目录背包问题是动态规划的经典问题，它的意义在于可运用到其他问题上，其基本描述为：给定容量为$W$的背包，以及$N$件物品，第$i$件物品的价值是$p_i$、所需容量为$w_i$，在不同的限制条件下，求能放进背包的物品最大价值总和是多少？根据限制条件不同，如物品数目可产生变种的背包问题。  目录 0-1背包 完全背包 多重背包 混合三种背包 二维费用背包 分组背包 有依赖背包 泛化物品背包 背包问题">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-06-23T08:15:29.000Z">
-<meta property="article:modified_time" content="2020-06-26T07:37:38.676Z">
+<meta property="article:modified_time" content="2020-06-26T08:06:43.975Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
 
@@ -419,7 +419,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-06-26 15:37:38" itemprop="dateModified" datetime="2020-06-26T15:37:38+08:00">2020-06-26</time>
+                <time title="修改时间：2020-06-26 16:06:43" itemprop="dateModified" datetime="2020-06-26T16:06:43+08:00">2020-06-26</time>
               
             
           </span>
@@ -1349,14 +1349,198 @@
   dpn[i][0] = dpn[0][j] = 0
 \end{aligned}</script></li>
 </ul>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">backPack_01_num_of_best_choice</span><span class="params">(self, W, w, p)</span>:</span></span><br><span class="line">        <span class="string">""" 01背包拓展的求最优方案总数问题 """</span></span><br><span class="line">        n = len(w)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 注意数组大小</span></span><br><span class="line">        <span class="comment"># n + 1: 状态方程中包含`i - 1`，故多定义一行，减少判断条件，便于实现</span></span><br><span class="line">        <span class="comment"># W + 1: 背包的容量是W，`range`函数不包含`stop`值，因此需多加1列</span></span><br><span class="line">        dpv = [[<span class="number">0</span> <span class="keyword">for</span> j <span class="keyword">in</span> range(W + <span class="number">1</span>)] <span class="keyword">for</span> i <span class="keyword">in</span> range(n + <span class="number">1</span>)]</span><br><span class="line">        dpn = [[<span class="number">0</span> <span class="keyword">for</span> j <span class="keyword">in</span> range(W + <span class="number">1</span>)] <span class="keyword">for</span> i <span class="keyword">in</span> range(n + <span class="number">1</span>)]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n + <span class="number">1</span>):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>, W + <span class="number">1</span>):</span><br><span class="line">                <span class="comment"># 初始化为`0`</span></span><br><span class="line">                dpv[i][j] = <span class="number">0</span></span><br><span class="line">                <span class="comment"># 最多放入`K`件</span></span><br><span class="line">                K = min(<span class="number">1</span>, j // w[i - <span class="number">1</span>])</span><br><span class="line">                <span class="comment"># 求最大价值</span></span><br><span class="line">                <span class="keyword">for</span> k <span class="keyword">in</span> range(K + <span class="number">1</span>):</span><br><span class="line">                    dpv[i][j] = max(</span><br><span class="line">                        dpv[i][j], </span><br><span class="line">                        dpv[i - <span class="number">1</span>][j - k * w[i - <span class="number">1</span>]] + k * p[i - <span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">                <span class="comment"># 求最大价值对应的方案数</span></span><br><span class="line">                <span class="comment"># 放不进物品`i`</span></span><br><span class="line">                <span class="keyword">if</span> K == <span class="number">0</span>:</span><br><span class="line">                    dpn[i][j] = dpn[i - <span class="number">1</span>][j]</span><br><span class="line">                <span class="comment"># 放`K`件范围内的物品</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    <span class="keyword">for</span> k <span class="keyword">in</span> range(K + <span class="number">1</span>):</span><br><span class="line">                        <span class="comment"># 剩余容量</span></span><br><span class="line">                        r = j - k * w[i - <span class="number">1</span>]</span><br><span class="line">                        <span class="comment"># `dp[i][j]`是否由状态`dpv[i - 1][r]`转移而来</span></span><br><span class="line">                        <span class="keyword">if</span> dpv[i][j] == dpv[i - <span class="number">1</span>][r] + k * p[i - <span class="number">1</span>]:</span><br><span class="line">                            <span class="comment"># # `i, j`下第一次取最大价值</span></span><br><span class="line">                            <span class="comment"># if dpn[i - 1][r] == 0:</span></span><br><span class="line">                            <span class="comment">#     dpn[i][j] = 1</span></span><br><span class="line">                            <span class="comment"># # 累加</span></span><br><span class="line">                            <span class="comment"># else:</span></span><br><span class="line">                            <span class="comment">#     dpn[i][j] += dpn[i - 1][r]</span></span><br><span class="line">                            <span class="comment"># ------ 或者 ------</span></span><br><span class="line">                            dpn[i][j] += max(<span class="number">1</span>, dpn[i - <span class="number">1</span>][r])</span><br><span class="line">        <span class="keyword">return</span> dpn[<span class="number">-1</span>][<span class="number">-1</span>]</span><br></pre></td></tr></table></figure>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">backPack_01_num_of_best_choice</span><span class="params">(self, W, w, p)</span>:</span></span><br><span class="line">        <span class="string">""" 01背包拓展的求最优方案总数问题 """</span></span><br><span class="line">        n = len(w)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 注意数组大小</span></span><br><span class="line">        <span class="comment"># n + 1: 状态方程中包含`i - 1`，故多定义一行，减少判断条件，便于实现</span></span><br><span class="line">        <span class="comment"># W + 1: 背包的容量是W，`range`函数不包含`stop`值，因此需多加1列</span></span><br><span class="line">        dpv = [[<span class="number">0</span> <span class="keyword">for</span> j <span class="keyword">in</span> range(W + <span class="number">1</span>)] <span class="keyword">for</span> i <span class="keyword">in</span> range(n + <span class="number">1</span>)]</span><br><span class="line">        dpn = [[<span class="number">0</span> <span class="keyword">for</span> j <span class="keyword">in</span> range(W + <span class="number">1</span>)] <span class="keyword">for</span> i <span class="keyword">in</span> range(n + <span class="number">1</span>)]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n + <span class="number">1</span>):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>, W + <span class="number">1</span>):</span><br><span class="line">                <span class="comment"># 初始化为`0`</span></span><br><span class="line">                dpv[i][j] = <span class="number">0</span></span><br><span class="line">                <span class="comment"># 最多放入`K`件</span></span><br><span class="line">                K = min(<span class="number">1</span>, j // w[i - <span class="number">1</span>])</span><br><span class="line">                <span class="comment"># 求最大价值</span></span><br><span class="line">                <span class="keyword">for</span> k <span class="keyword">in</span> range(K + <span class="number">1</span>):</span><br><span class="line">                    dpv[i][j] = max(</span><br><span class="line">                        dpv[i][j], </span><br><span class="line">                        dpv[i - <span class="number">1</span>][j - k * w[i - <span class="number">1</span>]] + k * p[i - <span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">                <span class="comment"># 求最大价值对应的方案数</span></span><br><span class="line">                <span class="keyword">for</span> k <span class="keyword">in</span> range(K + <span class="number">1</span>):</span><br><span class="line">                    <span class="comment"># 剩余容量</span></span><br><span class="line">                    r = j - k * w[i - <span class="number">1</span>]</span><br><span class="line">                    <span class="comment"># `dp[i][j]`是否由状态`dpv[i - 1][r]`转移而来</span></span><br><span class="line">                    <span class="keyword">if</span> dpv[i][j] == dpv[i - <span class="number">1</span>][r] + k * p[i - <span class="number">1</span>]:</span><br><span class="line">                        <span class="comment"># # `i, j`下第一次取最大价值</span></span><br><span class="line">                        <span class="comment"># if dpn[i - 1][r] == 0:</span></span><br><span class="line">                        <span class="comment">#     dpn[i][j] = 1</span></span><br><span class="line">                        <span class="comment"># # 累加</span></span><br><span class="line">                        <span class="comment"># else:</span></span><br><span class="line">                        <span class="comment">#     dpn[i][j] += dpn[i - 1][r]</span></span><br><span class="line">                        <span class="comment"># ------ 或者 ------</span></span><br><span class="line">                        dpn[i][j] += max(<span class="number">1</span>, dpn[i - <span class="number">1</span>][r])</span><br><span class="line">        <span class="keyword">return</span> dpn[<span class="number">-1</span>][<span class="number">-1</span>]</span><br></pre></td></tr></table></figure>
 <p>输入<code>W = 10, w = [2, 3, 6, 7], p = [1, 5, 4, 4]</code>，得到表格如下</p>
 <ul>
-<li><p>$dpv$<br>  | itemidx \ W | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |<br>  | —- | —- | —- | —- | —- | —- | —- | —- | —- | —- | —- | —- |<br>  | 0 | 0 | <strong>0</strong> | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |<br>  | 1 | <strong>0</strong> | <strong>0</strong> | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |<br>  | 2 | 0 | 0 | 1 | <strong>5</strong> | <strong>5</strong> | 6 | 6 | 6 | 6 | 6 | 6 |<br>  | 3 | 0 | 0 | 1 | <strong>5</strong> | 5 | 6 | 6 | 6 | 6 | 9 | <strong>9</strong> |<br>  | 4 | 0 | 0 | 1 | 5 | 5 | 6 | 6 | 6 | 6 | <strong>9</strong> | <strong>9</strong> |</p>
-</li>
-<li><p>$dpn$<br>  | itemidx \ W | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |<br>  | —- | —- | —- | —- | —- | —- | —- | —- | —- | —- | —- | —- |<br>  | 0 | 0 | <strong>0</strong> | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |<br>  | 1 | <strong>0</strong> | <strong>0</strong> | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |<br>  | 2 | 0 | 0 | 1 | <strong>1</strong> | <strong>1</strong> | 1 | 1 | 1 | 1 | 1 | 1 |<br>  | 3 | 0 | 0 | 1 | <strong>1</strong> | 1 | 1 | 1 | 1 | 1 | 1 | <strong>1</strong> |<br>  | 4 | 0 | 0 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | <strong>2</strong> |</p>
-</li>
+<li>$dpv$</li>
 </ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>itemidx \ W</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td><strong>0</strong></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td><strong>0</strong></td>
+<td><strong>0</strong></td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td><strong>5</strong></td>
+<td><strong>5</strong></td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td><strong>5</strong></td>
+<td>5</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+<td>9</td>
+<td><strong>9</strong></td>
+</tr>
+<tr>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>5</td>
+<td>5</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+<td><strong>9</strong></td>
+<td><strong>9</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>$dpn$</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>itemidx \ W</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td><strong>0</strong></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td><strong>0</strong></td>
+<td><strong>0</strong></td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td><strong>1</strong></td>
+<td><strong>1</strong></td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td><strong>1</strong></td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td><strong>1</strong></td>
+</tr>
+<tr>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td><strong>2</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="https://github.com/tianyicui/pack" target="_blank" rel="noopener">背包9讲 - Github</a></li>
 </ul>
@@ -1420,6 +1604,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/26/Data-Mining-Data-Preprocessing/" rel="prev" title="Data Mining: Data Preprocessing">
+                Data Mining: Data Preprocessing <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -1497,7 +1685,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">104</span>
+                    <span class="site-state-item-count">106</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1571,7 +1759,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">14</span>
+                      
+                    
+                    <span class="site-state-item-count">15</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
