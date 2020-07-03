@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="目录 目录 Download and Installation SSH Java Hadoop   File System Streaming Reference  Download and InstallationSSH安装SSH服务端并启用12$ sudo apt-get install openssh-server$ sudo service ssh start 配置为无密码登录123$ c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Try To Play With Hadoop">
+<meta property="og:url" content="http://yoursite.com/2020/07/03/Try-To-Play-With-Hadoop/index.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="目录 目录 Download and Installation SSH Java Hadoop   File System Streaming Reference  Download and InstallationSSH安装SSH服务端并启用12$ sudo apt-get install openssh-server$ sudo service ssh start 配置为无密码登录123$ c">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/.com//mapreduce.jpg">
+<meta property="article:published_time" content="2020-07-03T11:04:34.000Z">
+<meta property="article:modified_time" content="2020-07-03T13:06:11.816Z">
+<meta property="article:author" content="Louis Hsu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/.com//mapreduce.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/07/03/Try-To-Play-With-Hadoop/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Try To Play With Hadoop | LOUIS' BLOG</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LOUIS' BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">To be better</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-guestbook">
+    <a href="/guestbook" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-guest"></i> <br />留言</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/03/Try-To-Play-With-Hadoop/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="ᵕ᷄ ≀ ̠˘᷅ 永远年轻，永远热泪盈眶">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Try To Play With Hadoop
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-07-03 19:04:34 / 修改时间：21:06:11" itemprop="dateCreated datePublished" datetime="2020-07-03T19:04:34+08:00">2020-07-03</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Data-Mining/" itemprop="url" rel="index"><span itemprop="name">Data Mining</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><ul>
+<li><a href="#目录">目录</a></li>
+<li><a href="#download-and-installation">Download and Installation</a><ul>
+<li><a href="#ssh">SSH</a></li>
+<li><a href="#java">Java</a></li>
+<li><a href="#hadoop">Hadoop</a></li>
+</ul>
+</li>
+<li><a href="#file-system">File System</a></li>
+<li><a href="#streaming">Streaming</a></li>
+<li><a href="#reference">Reference</a></li>
+</ul>
+<h1 id="Download-and-Installation"><a href="#Download-and-Installation" class="headerlink" title="Download and Installation"></a>Download and Installation</h1><h2 id="SSH"><a href="#SSH" class="headerlink" title="SSH"></a>SSH</h2><p>安装SSH服务端并启用<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install openssh-server</span><br><span class="line">$ sudo service ssh start</span><br></pre></td></tr></table></figure></p>
+<p>配置为无密码登录<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> ~/.ssh/</span><br><span class="line">$ ssh-keygen -t rsa</span><br><span class="line">$ cat ./id_rsa.pub &gt;&gt; ./authorized_keys</span><br></pre></td></tr></table></figure></p>
+<p>如果以下命令没有问题则安装成功<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">$ ssh localhost</span><br><span class="line">Welcome to Ubuntu 18.04.2 LTS (GNU/Linux 4.4.0-18362-Microsoft x86_64)</span><br><span class="line"></span><br><span class="line">* Documentation:  https://help.ubuntu.com</span><br><span class="line">* Management:     https://landscape.canonical.com</span><br><span class="line">* Support:        https://ubuntu.com/advantage</span><br><span class="line"></span><br><span class="line">System information as of Fri Jul  3 19:27:27 CST 2020</span><br><span class="line"></span><br><span class="line">System load:    0.52      Memory usage: 60%   Processes:       10</span><br><span class="line">Usage of /home: unknown   Swap usage:   0%    Users logged <span class="keyword">in</span>: 0</span><br><span class="line"></span><br><span class="line">=&gt; There were exceptions <span class="keyword">while</span> processing one or more plugins. See</span><br><span class="line">    /var/<span class="built_in">log</span>/landscape/sysinfo.log <span class="keyword">for</span> more information.</span><br><span class="line"></span><br><span class="line">128 packages can be updated.</span><br><span class="line">73 updates are security updates.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Last login: Fri Jun  5 15:53:16 2020 from 127.0.0.1</span><br></pre></td></tr></table></figure></p>
+<h2 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h2><p>Hadoop需要Java支持，可以选择用<code>apt-get</code>安装，这里选择的是清华大学开源软件镜像站的AdoptOpenJDK<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ wget https://mirrors.tuna.tsinghua.edu.cn/AdoptOpenJDK/8/jdk/x64/linux/OpenJDK8U-jdk_x64_linux_hotspot_8u252b09.tar.gz</span><br></pre></td></tr></table></figure></p>
+<p>下载后解压即可<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ tar -zxvf OpenJDK8U-jdk_x64_linux_hotspot_8u252b09.tar.gz</span><br><span class="line">$ ls</span><br><span class="line">OpenJDK8U-jdk_x64_linux_hotspot_8u252b09.tar.gz  jdk8u252-b09</span><br></pre></td></tr></table></figure></p>
+<p>然后配置环境变量，在<code>~/.bashrc</code>中添加以下命令<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> JAVA_HOME=/home/louishsu/Downloads/jdk8u252-b09</span><br><span class="line"><span class="built_in">export</span> JRE_HOME=<span class="variable">$&#123;JAVA_HOME&#125;</span>/jre</span><br><span class="line"><span class="built_in">export</span> CLASSPATH=.:<span class="variable">$&#123;JAVA_HOME&#125;</span>/lib:<span class="variable">$&#123;JRE_HOME&#125;</span>/lib:<span class="variable">$CLASSPATH</span></span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$&#123;JAVA_HOME&#125;</span>/bin:<span class="variable">$PATH</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="Hadoop"><a href="#Hadoop" class="headerlink" title="Hadoop"></a>Hadoop</h2><p>先从官网下载二进制包，并解压<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ wget https://www.apache.org/dyn/closer.cgi/hadoop/common/hadoop-3.2.1/hadoop-3.2.1.tar.gz</span><br><span class="line">$ tar -zxvf hadoop-3.2.1.tar.gz</span><br><span class="line">$ ls</span><br><span class="line">hadoop-3.2.1.tar.gz hadoop-3.2.1</span><br></pre></td></tr></table></figure></p>
+<p>配置<code>~/.bashrc</code>环境变量<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> HADOOP_HOME=/home/louishsu/Downloads/hadoop-3.2.1</span><br><span class="line"><span class="built_in">export</span> CLASSPATH=$(<span class="variable">$HADOOP_HOME</span>/bin/hadoop classpath):<span class="variable">$CLASSPATH</span></span><br><span class="line"><span class="built_in">export</span> HADOOP_COMMON_LIB_NATIVE_DIR=<span class="variable">$HADOOP_HOME</span>/lib/native</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$HADOOP_HOME</span>/bin:<span class="variable">$HADOOP_HOME</span>/sbin</span><br></pre></td></tr></table></figure></p>
+<p>在<code>hadoop-3.2.1/etc/hadoop/</code>目录下配置两份文件文件</p>
+<ul>
+<li><code>core-site.xml</code><br>  新建<code>hadoop-3.2.1/tmp/</code>目录，并修改配置  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;fs.defaultFS&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;hdfs://localhost:9000&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;hadoop.tmp.dir&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;file:/home/louishsu/Downloads/hadoop-3.2.1/tmp&lt;/value&gt;</span><br><span class="line">        &lt;description&gt;Abase <span class="keyword">for</span> other temporary directories.&lt;/description&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure></li>
+<li><code>hdfs-site.xml</code><br>  新建<code>hadoop-3.2.1/tmp/dfs/name/</code>和<code>hadoop-3.2.1/tmp/dfs/data/</code>目录，并修改配置  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.namenode.name.dir&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;file:/home/louishsu/Downloads/hadoop-3.2.1/tmp/dfs/name&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.datanode.data.dir&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;file:/home/louishsu/Downloads/hadoop-3.2.1/tmp/dfs/data&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.replication&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;1&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>以上就完成了基本配置，可以正常使用，但是如果需要Yarn作为分布式资源管理器，那么需另外配置两份文件</p>
+<ul>
+<li><code>mapred-site.xml</code>  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;!--指定运行mapreduce的环境是yarn--&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;mapreduce.framework.name&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;yarn&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;!--配置历史服务器--&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;mapreduce.jobhistory.address&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;hadoop-senior01.beifeng.com:10020&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;mapreduce.jobhistory.webapp.address&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;hadoop-senior01.beifeng.com:19888&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;!--HADOOP_MAPRED_HOME--&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;yarn.app.mapreduce.am.env&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;HADOOP_MAPRED_HOME=<span class="variable">$&#123;HADOOP_HOME&#125;</span>&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">        &lt;property&gt;</span><br><span class="line">        &lt;name&gt;mapreduce.map.env&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;HADOOP_MAPRED_HOME=<span class="variable">$&#123;HADOOP_HOME&#125;</span>&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;mapreduce.reduce.env&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;HADOOP_MAPRED_HOME=<span class="variable">$&#123;HADOOP_HOME&#125;</span>&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt; </span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure></li>
+<li><code>yarn-site.xml</code>  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;mapreduce_shuffle&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;yarn.resourcemanager.hostname&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;localhost&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>接下来格式化<code>namenode</code>，并启动全部组件<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ hdfs namenode -format</span><br><span class="line">$ start-all.sh</span><br></pre></td></tr></table></figure></p>
+<p>到此就可以愉快地玩耍了。</p>
+<h1 id="File-System"><a href="#File-System" class="headerlink" title="File System"></a>File System</h1><p>Hadoop分布式文件系统(HDFS)借鉴于Google的GFS，是一个分布式文件系统，有着高容错性，适合大文件的存储，抽象了一个多级的文件系统，调用文件系统(FS)Shell命令应使用<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/hadoop fs &lt;args&gt;</span><br></pre></td></tr></table></figure><br>所有的的FS shell命令使用URI路径作为参数，URI格式是<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scheme://authority/path</span><br></pre></td></tr></table></figure><br>其中<code>scheme</code>和<code>authority</code>参数都是可选的，如果未加指定，就会使用配置中指定的默认<code>scheme</code>。</p>
+<p>对HDFS文件系统，<code>scheme</code>是<code>hdfs</code>，对本地文件系统，<code>scheme</code>是<code>file</code>。例如，一个HDFS文件或目录<code>/parent/child</code>可以表示成<code>hdfs://namenode:namenodeport/parent/child</code>，或者更简单的<code>/parent/child</code>(假设你配置文件中的默认值是<code>namenode:namenodeport</code>)。</p>
+<p>大多数FS Shell命令的行为和对应的Unix Shell命令类似，不同之处会在下面介绍各命令使用详情时指出。出错信息会输出到<code>stderr</code>，其他信息输出到<code>stdout</code>，命令格式为<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hadoop fs -<span class="built_in">command</span> URI [URI …]</span><br></pre></td></tr></table></figure></p>
+<p>常用的指令在<a href="http://hadoop.apache.org/docs/r1.0.4/cn/hdfs_shell.html" target="_blank" rel="noopener">Hadoop Shell命令</a>，常用的有</p>
+<ul>
+<li>查看目录、文件：<code>cat</code>、<code>ls</code>、<code>tail</code>；</li>
+<li>新建、复制、删除：<code>touchz</code>、<code>mkdir</code>、<code>cp</code>、<code>mv</code>、<code>rm</code>；</li>
+<li>权限管理：<code>chgrp</code>、<code>chmod</code>、<code>chown</code>；</li>
+<li>上传、下载本地文件：<code>put</code>、<code>get</code>、<code>copyFromLocal</code>、<code>copyToLocal</code>；</li>
+<li>……</li>
+</ul>
+<h1 id="Streaming"><a href="#Streaming" class="headerlink" title="Streaming"></a>Streaming</h1><p>MapReduce是一种并行计算的编程模型。Hadoop的Streaming基于MapReduce，与标准的MapReduce(以下简称MR)一样的是整个MR过程依然由<code>mapper</code>、<code>[combiner]</code>、<code>reducer</code>组成(其中<code>combiner</code>为可选加入)。很重要的一点是，它可以将任意与标准输入/输出交互的软件作为<code>mapper</code>等，不是必须使用Java接口，其工作过程如下</p>
+<p><img src="/.com//mapreduce.jpg" alt="mapreduce"></p>
+<p>启动Streaming的命令如下，注意一定要保证<code>[genericOptions]</code>写在<code>[streamingOptions]</code>之前，否则Hadoop Streaming命令将失效。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hadoop jar <span class="variable">$&#123;HADOOP_HOME&#125;</span>/.../hadoop-streaming.jar \</span><br><span class="line">    [genericOptions] \</span><br><span class="line">    [streamingOptions]</span><br></pre></td></tr></table></figure>
+<p><strong>常用的<code>genericOptions</code>如下</strong>：</p>
+<ul>
+<li><code>-D property=value</code> 指定额外的配置信息变量，详情在后文介绍</li>
+<li><code>-files file1,file2,..</code>. 指定需要拷贝到集群节点的文件，格式以逗号分隔，通常为我们自己编写的<code>mapper</code>和<code>reducer</code>脚本或可执行程序，因为你的<code>mapper</code>和<code>reducer</code>通常要由集群中不同的节点来执行，而很可能你的脚本或可执行程序仅仅存在于你提交任务时所用的那个节点，因此遇到这种情况便需要将它们分发出去，<code>-files</code>其后的参数用不用引号括起来都可以。</li>
+</ul>
+<p><strong>常用的<code>streamingOptions</code>如下</strong>：</p>
+<ul>
+<li><code>-file filename</code> 指定需要拷贝到集群节点的文件，与<code>-files</code>的功能类似，只不过如果使用<code>-file</code>的话，就需要一个文件一个文件地去上传，比方说如果我要将我的<code>mapper.py</code>，<code>reducer.py</code>上传到集群上去运行，那就得需要两个<code>-file</code>参数。而在实际使用<code>-file</code>时，hadoop似乎并不希望我们使用<code>-file</code>参数，比如如下这条<code>warning：“18/03/26 20:17:40 WARN streaming.StreamJob: -file option is deprecated, please use generic option -files instead.”</code></li>
+<li><code>-input myInputDirs</code> 指定给<code>mapreduce</code>任务输入的文件位置，通常为<code>hdfs</code>上的文件路径，多个文件或目录用逗号隔开</li>
+<li><code>-output myOutputDir</code> 指定给<code>mapreduce</code>任务输出的目录，通常为<code>hdfs</code>上的文件路径。</li>
+<li><code>-mapper executable or JavaClassName</code> 用于<code>mapper</code>的可执行程序或java类，如果是脚本文件，应该以命令行完整调用的格式作为可执行程序参数并且须加引号，比如<code>-mapper &quot;python mapper.py&quot;</code>。</li>
+<li><code>-reducer executable or JavaClassName</code> 用于<code>reducer</code>的可执行程序或java类，要求同上</li>
+<li><code>-partitionerJavaClassName</code> 自定义的<code>partitionerjava</code>类</li>
+<li><code>-combiner streamingCommandor JavaClassName</code> 自定义的<code>combiner</code>类或命令</li>
+</ul>
+<p><strong>常用的<code>-D property=value</code>如下</strong>：</p>
+<ul>
+<li><code>-D mapred.job.name=jobname</code> 指定作业名称</li>
+<li><code>-D mapred.map.tasks=numofmap</code> 每个Job运行map task的数量</li>
+<li><code>-D mapred.reduce.tasks=numofreduce</code> 每个Job运行<code>reduce task</code>的数量，如果指定为0，则意味着提交了一个<code>map only</code>的任务</li>
+<li><code>-D stream.map.input.field.separator</code> 指定<code>map</code>输入时的分隔符，默认为<code>&quot;\t&quot;</code></li>
+<li><code>-D stream.map.output.field.separator</code> 指定<code>map</code>输出时使用的<code>key/value</code>分隔符，默认为<code>&quot;\t&quot;</code>，比如在我们的<code>mapper</code>中，输出<code>key/value pairs</code>的标准输出语句很可能是这样的<code>sys.stdout.write(&quot;%s,%s\n&quot;%(birthyear,gender))</code>，由于使用了非默认的分隔符，因此需要额外指定分隔符<code>&quot;,&quot;</code>。</li>
+<li><code>-D stream.reduce.input.field.separator</code> 指定<code>reduce</code>输入时的分隔符，默认为<code>&quot;\t&quot;</code></li>
+<li><code>-D stream.reduce.output.field.separator</code> 指定<code>reduce</code>输入时的分隔符，默认为<code>&quot;\t&quot;</code></li>
+<li><code>-D stream.num.map.output.key.fields=num</code> 指定<code>map</code>输出中第几个分隔符作为<code>key</code>和<code>value</code>的分隔点，默认为<code>1</code>。</li>
+<li><code>-D stream.num.reduce.output.fields=num</code> 指定<code>reduce</code>输出中第几个分隔符作为<code>key</code>和<code>value</code>的分隔点，默认为<code>1</code>。</li>
+<li><code>-D stream.non.zero.exit.is.failure=false/true</code> 指定当mapper和reducer未返回<code>0</code>时，<code>hadoop</code>是否该认为此任务执行失败。默认为<code>true</code>。当<code>mapper</code>和<code>reducer</code>的返回值不是<code>0</code>或没有返回值时，<code>hadoop</code>将认为该任务为异常任务，将被再次执行，默认尝试4次都不是<code>0</code>，整个job都将失败。因此，如果我们在编写<code>mapper</code>和<code>reducer</code>未返回0时，则应该将该参数设置为<code>false</code>，否则hadoop streaming任务将报出异常。</li>
+</ul>
+<hr>
+<p>例如，以下数据为一部分儿童的信息数据<code>samples.txt</code>，第一个属性为用户<code>id</code>，<code>birthday</code>为用户的生日，<code>gender</code>表示男女，<code>0</code>为女，<code>1</code>为男，<code>2</code>为未知。假设我们的问题是：<strong>在这些儿童中，每一年出生的男孩和女孩各是多少。</strong></p>
+<p>新建文本<code>samples.txt</code><br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">$ cat samples.txt</span><br><span class="line"><span class="comment"># user_id,birthday,gender</span></span><br><span class="line">2757,20130311,1</span><br><span class="line">415971,20121111,0</span><br><span class="line">1372572,20120130,1</span><br><span class="line">10339332,20110910,0</span><br><span class="line">10642245,20130213,0</span><br><span class="line">10923201,20110830,1</span><br><span class="line">11768880,20120107,1</span><br><span class="line">12519465,20130705,1</span><br><span class="line">12950574,20090708,0</span><br><span class="line">13735440,20120323,0</span><br><span class="line">14510892,20140812,1</span><br><span class="line">14905422,20110429,1</span><br><span class="line">15786531,20080922,0</span><br><span class="line">16265490,20091209,0</span><br><span class="line">17431245,20110115,0</span><br><span class="line">18190851,20110101,0</span><br><span class="line">20087991,20100808,0</span><br><span class="line">20570454,20081017,1</span><br><span class="line">21137271,20110204,1</span><br><span class="line">21415917,20060801,1</span><br><span class="line">21887268,20100526,0</span><br><span class="line">22602471,20090601,1</span><br><span class="line">23208537,20080416,1</span><br><span class="line">23927133,20081029,0</span><br><span class="line">24829944,20140826,1</span><br><span class="line">52529655,20130611,2</span><br></pre></td></tr></table></figure></p>
+<p>将其上传到hadoop文件系统<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ hadoop fs -mkdir /user</span><br><span class="line">$ hadoop fs -mkdir /user/louishsu</span><br><span class="line">$ hadoop fs -put samples.txt /user/louishsu</span><br><span class="line">$ hadoop fs -ls /user/louishsu</span><br><span class="line">-rw-r--r--   1 louishsu supergroup        539 2020-07-03 20:50 /user/louishsu/samples.txt</span><br></pre></td></tr></table></figure></p>
+<p>编写<code>mapper.py</code>如下，该文件将从标准输入读取数据，对每行进行处理后输出到标准输出，输出以<code>&quot;,&quot;</code>作为分隔符作为键值对，即<code>年份,性别</code><br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /bin/bash</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> sys.stdin:</span><br><span class="line">    <span class="keyword">if</span> line[<span class="number">0</span>] == <span class="string">'#'</span>: <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">    _, birthday, gender = line.strip().split(<span class="string">','</span>)</span><br><span class="line">    sys.stdout.write(<span class="string">','</span>.join([birthday[:<span class="number">4</span>], gender]) + <span class="string">'\n'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>简单运行结果如下<br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">$ cat samples.txt | python mapper.py</span><br><span class="line"><span class="number">2013</span>,<span class="number">1</span></span><br><span class="line"><span class="number">2012</span>,<span class="number">0</span></span><br><span class="line"><span class="number">2012</span>,<span class="number">1</span></span><br><span class="line"><span class="number">2011</span>,<span class="number">0</span></span><br><span class="line"><span class="number">2013</span>,<span class="number">0</span></span><br><span class="line"><span class="number">2011</span>,<span class="number">1</span></span><br><span class="line"><span class="number">2012</span>,<span class="number">1</span></span><br><span class="line"><span class="number">2013</span>,<span class="number">1</span></span><br><span class="line"><span class="number">2009</span>,<span class="number">0</span></span><br><span class="line"><span class="number">2012</span>,<span class="number">0</span></span><br><span class="line"><span class="number">2014</span>,<span class="number">1</span></span><br><span class="line"><span class="number">2011</span>,<span class="number">1</span></span><br><span class="line"><span class="number">2008</span>,<span class="number">0</span></span><br><span class="line"><span class="number">2009</span>,<span class="number">0</span></span><br><span class="line"><span class="number">2011</span>,<span class="number">0</span></span><br><span class="line"><span class="number">2011</span>,<span class="number">0</span></span><br><span class="line"><span class="number">2010</span>,<span class="number">0</span></span><br><span class="line"><span class="number">2008</span>,<span class="number">1</span></span><br><span class="line"><span class="number">2011</span>,<span class="number">1</span></span><br><span class="line"><span class="number">2006</span>,<span class="number">1</span></span><br><span class="line"><span class="number">2010</span>,<span class="number">0</span></span><br><span class="line"><span class="number">2009</span>,<span class="number">1</span></span><br><span class="line"><span class="number">2008</span>,<span class="number">1</span></span><br><span class="line"><span class="number">2008</span>,<span class="number">0</span></span><br><span class="line"><span class="number">2014</span>,<span class="number">1</span></span><br><span class="line"><span class="number">2013</span>,<span class="number">2</span></span><br></pre></td></tr></table></figure></p>
+<p>编写<code>reducer.py</code>如下，接收<code>mapper.py</code>输出进行归约，统计每年的性别人数<br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /bin/bash</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    yearDict = dict()</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> sys.stdin:</span><br><span class="line">        y, g = line.strip().split(<span class="string">','</span>)</span><br><span class="line">        yearDict[y] = yearDict.get(y, <span class="string">''</span>) + g</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> y, g <span class="keyword">in</span> yearDict.items():</span><br><span class="line">        counter = Counter(g)</span><br><span class="line">        sys.stdout.write(</span><br><span class="line">            <span class="string">'year: &#123;:s&#125;, male: &#123;:d&#125;, female: &#123;:d&#125;\n'</span>.format(</span><br><span class="line">                y, counter.get(<span class="string">'0'</span>, <span class="number">0</span>), counter.get(<span class="string">'1'</span>, <span class="number">0</span>)</span><br><span class="line">        ))</span><br></pre></td></tr></table></figure></p>
+<p>模拟MapReduce运行过程，结果如下<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ cat samples.txt | python mapper.py | sort -k1,1 | python reducer.py</span><br><span class="line">year: 2006, male: 0, female: 1</span><br><span class="line">year: 2008, male: 2, female: 2</span><br><span class="line">year: 2009, male: 2, female: 1</span><br><span class="line">year: 2010, male: 2, female: 0</span><br><span class="line">year: 2011, male: 3, female: 3</span><br><span class="line">year: 2012, male: 2, female: 2</span><br><span class="line">year: 2013, male: 1, female: 2</span><br><span class="line">year: 2014, male: 0, female: 2</span><br></pre></td></tr></table></figure></p>
+<p>在hadoop上运行命令<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ hadoop jar <span class="variable">$&#123;HADOOP_HOME&#125;</span>/share/hadoop/tools/lib/hadoop-streaming-3.2.1.jar \</span><br><span class="line">-input /user/louishsu/samples.txt \</span><br><span class="line">-output /user/louishsu/output \</span><br><span class="line">-mapper <span class="string">"python mapper.py"</span> \</span><br><span class="line">-reducer <span class="string">"python reducer.py"</span> \</span><br><span class="line">-file ~/mapper.py \</span><br><span class="line">-file ~/reducer.py</span><br></pre></td></tr></table></figure></p>
+<p>查看结果<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$ hadoop fs -ls /user/louishsu/output/</span><br><span class="line">Found 2 items</span><br><span class="line">-rw-r--r--   1 louishsu supergroup          0 2020-07-03 21:02 /user/louishsu/output/_SUCCESS</span><br><span class="line">-rw-r--r--   1 louishsu supergroup        256 2020-07-03 21:02 /user/louishsu/output/part-00000</span><br><span class="line">$ hadoop fs -cat /user/louishsu/output/part-00000</span><br><span class="line">year: 2006, male: 0, female: 1</span><br><span class="line">year: 2014, male: 0, female: 2</span><br><span class="line">year: 2008, male: 2, female: 2</span><br><span class="line">year: 2009, male: 2, female: 1</span><br><span class="line">year: 2011, male: 3, female: 3</span><br><span class="line">year: 2010, male: 2, female: 0</span><br><span class="line">year: 2013, male: 1, female: 2</span><br><span class="line">year: 2012, male: 2, female: 2</span><br></pre></td></tr></table></figure></p>
+<p>下载到本地<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ hadoop fs -get /user/louishsu/output/part-00000 output.txt</span><br><span class="line">$ cat output.txt</span><br><span class="line">year: 2006, male: 0, female: 1</span><br><span class="line">year: 2014, male: 0, female: 2</span><br><span class="line">year: 2008, male: 2, female: 2</span><br><span class="line">year: 2009, male: 2, female: 1</span><br><span class="line">year: 2011, male: 3, female: 3</span><br><span class="line">year: 2010, male: 2, female: 0</span><br><span class="line">year: 2013, male: 1, female: 2</span><br><span class="line">year: 2012, male: 2, female: 2</span><br></pre></td></tr></table></figure></p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="http://hadoop.apache.org/docs/r1.0.4/cn/index.html" target="_blank" rel="noopener">Apache &gt; Hadoop &gt; Core &gt; docs &gt; r1.0.4 &gt; cn - Hadoop</a></li>
+<li><a href="https://www.jianshu.com/p/d2f8c7153239" target="_blank" rel="noopener">Hadoop的安装和使用 - 简书</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/34903460" target="_blank" rel="noopener">Hadoop Streaming with Python(新手向) - 知乎</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/29/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%8D%95%E8%B0%83%E6%A0%88%E5%92%8C%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97/" rel="next" title="【算法】单调栈和单调队列">
+                <i class="fa fa-chevron-left"></i> 【算法】单调栈和单调队列
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.gif"
+                alt="Louis Hsu" />
+            
+              <p class="site-author-name" itemprop="name">Louis Hsu</p>
+              <p class="site-description motion-element" itemprop="description">ᵕ᷄ ≀ ̠˘᷅ 永远年轻，永远热泪盈眶</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/%20%7C%7C%20archive">
+                
+                    <span class="site-state-item-count">107</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/isLouisHsu" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://is.louishsu@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/islouishsu" target="_blank" title="Zhihu"><i class="fa fa-fw fa-zhihu"></i>Zhihu</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/islouishsu" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          <div id='music163player'>
+            <iframe 
+              frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=110 
+              src="//music.163.com/outchain/player?type=0&id=2703291040&auto=1&height=90">
+            </iframe>
+          </div>
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#目录"><span class="nav-number">1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Download-and-Installation"><span class="nav-number">2.</span> <span class="nav-text">Download and Installation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SSH"><span class="nav-number">2.1.</span> <span class="nav-text">SSH</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java"><span class="nav-number">2.2.</span> <span class="nav-text">Java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hadoop"><span class="nav-number">2.3.</span> <span class="nav-text">Hadoop</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#File-System"><span class="nav-number">3.</span> <span class="nav-text">File System</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Streaming"><span class="nav-number">4.</span> <span class="nav-text">Streaming</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Louis Hsu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: 'e65d27f7cf5c62feaf97',
+          clientSecret: '356386826698e8b817ca076b08d7c0e9814f52ea',
+          repo: 'isLouisHsu.github.io',
+          owner: 'isLouisHsu',
+          admin: ['isLouisHsu'],
+          id: md5(window.location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('3');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+
+  <script type="text/javascript" src="/js/click_show_text.js"></script>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+</html>
