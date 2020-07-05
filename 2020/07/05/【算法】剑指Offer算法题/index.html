@@ -1,0 +1,3622 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="【*数组中重复的数字-1】长度为$n$的数组中，数字范围为$0 \sim n-1$，其中某些数字是重复的，但重复数字与重复次数未知，找出任意一个重复的数字，如${2, 3, 1, 0, 2, 5, 3}$对应输出$2$或$3$；  点击查看提示   利用索引和元素值的关系，以{2, 3, 1, 0, 2, 5, 3}为例，下面程序的执行过程为     [2], 3, 1, 0,  2, 5, 3">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【算法】剑指Offer算法题">
+<meta property="og:url" content="http://yoursite.com/2020/07/05/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%89%91%E6%8C%87Offer%E7%AE%97%E6%B3%95%E9%A2%98/index.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="【*数组中重复的数字-1】长度为$n$的数组中，数字范围为$0 \sim n-1$，其中某些数字是重复的，但重复数字与重复次数未知，找出任意一个重复的数字，如${2, 3, 1, 0, 2, 5, 3}$对应输出$2$或$3$；  点击查看提示   利用索引和元素值的关系，以{2, 3, 1, 0, 2, 5, 3}为例，下面程序的执行过程为     [2], 3, 1, 0,  2, 5, 3">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-07-05T05:47:46.000Z">
+<meta property="article:modified_time" content="2020-07-05T12:09:27.216Z">
+<meta property="article:author" content="Louis Hsu">
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/07/05/【算法】剑指Offer算法题/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>【算法】剑指Offer算法题 | LOUIS' BLOG</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LOUIS' BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">To be better</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-guestbook">
+    <a href="/guestbook" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-guest"></i> <br />留言</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/05/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%89%91%E6%8C%87Offer%E7%AE%97%E6%B3%95%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="ᵕ᷄ ≀ ̠˘᷅ 永远年轻，永远热泪盈眶">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【算法】剑指Offer算法题
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-07-05 13:47:46 / 修改时间：20:09:27" itemprop="dateCreated datePublished" datetime="2020-07-05T13:47:46+08:00">2020-07-05</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ol>
+<li>【<strong>*数组中重复的数字-1</strong>】长度为$n$的数组中，数字范围为$0 \sim n-1$，其中某些数字是重复的，但重复数字与重复次数未知，找出任意一个重复的数字，如${2, 3, 1, 0, 2, 5, 3}$对应输出$2$或$3$； <details> <summary>点击查看提示</summary>
+ <p> 利用索引和元素值的关系，以{2, 3, 1, 0, 2, 5, 3}为例，下面程序的执行过程为 </p> 
+ <p> [2], 3, 1, 0,  2, 5, 3 <br>
+     [1], 3, 2, 0,  2, 5, 3 <br>
+     [3], 1, 2, 0,  2, 5, 3 <br>
+      0,  1, 2, 3, [2], 5, 3 </p>
+ <pre><code>
+ class Solution {
+ public:
+     // Parameters:
+     //        numbers:     an array of integers
+     //        length:      the length of array numbers
+     //        duplication: (Output) the duplicated number in the array number
+     // Return value:       true if the input is valid, and there are some duplications in the array number
+     //                     otherwise false
+     bool duplicate(int numbers[], int length, int* duplication) {
+         if (numbers == nullptr || length == 0 || duplication == nullptr)
+             return false;
+         int index = 0;
+         while (index < length) {
+             int num = numbers[index];
+             // 下标与索引一致
+             if (num == index) {
+                 index++; continue;
+             }
+             // 已经重复
+             if (numbers[num] == num) {
+                 *duplication = num;
+                 return true;
+             }
+             numbers[index] = numbers[num];
+             numbers[num] = num;
+         }
+         return false;
+     }
+ };
+ </code></pre>
+ </details></li>
+<li>【<strong>*数组中重复的数字-2</strong>】长度为$n+1$的数组中，数字范围为$1 \sim n$，其中某些数字是重复的，但重复数字与重复次数未知，<strong>在不修改数组的情况下</strong>，找出任意一个重复的数字； <details> <summary>点击查看提示</summary>
+ <p>若没有重复数字，那么数字范围为1 ~ n的数组最多有n个元素。<br>
+ 1. 用二分查找的思路，统计落入[1, n // 2], [n // 2 + 1, n]内数字的个数，若有重复那么区间内元素个数大于区间长度，时间复杂度O(nlogn)；<br> 
+ 2. 开辟新数组作为哈希表，将各数字放入对应位置，空间复杂度与时间复杂度都是O(n)。 
+ </p> </details></li>
+<li>【<strong>二维数组中的查找</strong>】给定二维整数数组，每一行从左至右元素递增，每一列从上至下元素递增，在这样的数组中查找指定整数； <details> <summary>点击查看提示</summary>
+ <p> 
+ 1. 首先按第一行查找，找第一个小于等于搜索数字的<b>列首</b>；<br> 
+ 2. 然后按最后一列进行查找，找第一个大于等于搜索数字的<b>行尾</b>；<br>
+ 3. 如此循环直至查找到，可以考虑将查找换成二分查找。
+ </p>
+ <p>
+ 例如下数组中查找数字6 <br>
+ 1 2 8 9 <br> 2 4  9 12 <br> 4 7 10 13 <br> 6 8 11 15 <br>
+ 按第一行查找后为 <br>
+ 1 2 <br> 2 4 <br> 4 7 <br> 6 8 <br>
+ 按最后列查找后为 <br>
+ 4 7 <br> 6 8 <br>
+ 再按第一行查找后为 <br>
+ 4 <br> 6 <br>
+ 按最后列查找后为 <br>
+ 6 <br>
+ </p>
+ <pre><code>
+ class Solution {
+ public:
+     bool Find(int target, vector<vector&lt;int&gt;> array) {
+         // 检查数组有效性
+         int rows = array.size();
+         if (rows == 0) return false;
+         int cols = array[0].size();
+         if (cols == 0) return false;
+         // 初始化索引：第一行、最后列
+         int r = 0, c = cols - 1;
+         while (true) {
+             // 按当前第一行查找第一个不大于target的元素
+             while (c >= 0 && array[r][c] > target) c--;
+             if (c == -1)
+                 return false;
+             if (array[r][c] == target)
+                 return true;
+             // 按当前最后列查找第一个不小于target的元素
+             while (r < rows && array[r][c] < target) r++;
+             if (r == rows)
+                 return false;
+             if (array[r][c] == target)
+                 return true;
+         }
+     }
+ };
+ </vector&lt;int&gt;></code></pre>
+ </details></li>
+<li>【<strong>替换字符串的空格</strong>】将字符串中每个空格替换成<code>&quot;%20&quot;</code>，例如<code>&quot;we are happy.&quot;</code>输出为<code>&quot;we%20are%20happy.&quot;</code>； <details> <summary>点击查看提示</summary>
+ <p> 内存管理；时间复杂度O(n)，空间复杂度O(1)；可应用于归并算法 </p>
+ <pre><code>
+ class Solution {
+ // 注：length是指str字符数组空间的大小，不是字符串长度
+ public:
+     void replaceSpace(char* str, int length) {
+         if (str == nullptr) return;
+         // 统计空格个数
+         char* end = str;
+         int spaceCnt = 0;
+         for (; *end != '\0'; end++) {
+             if (*end == ' ') spaceCnt++;
+         }
+         // 新字符串的末尾，一个空格需要额外2个字节的空间
+         char* endCpy = end + 2 * spaceCnt;
+         // 从后往前复制
+         for (char* ch = end; ch >= str; ch--) {
+             // 空格`' '`替换为`'%20'`
+             if (*ch == ' ') {
+                 *(endCpy--) = '0';
+                 *(endCpy--) = '2';
+                 *(endCpy--) = '%';
+             // 其余复制即可
+             } else {
+                 *(endCpy--) = *ch;
+             }
+         }
+     }
+ };
+ </code></pre></details></li>
+<li>【<strong>链表：从尾到头打印输出</strong>】输入单向链表头节点，不改变结构的情况下，从尾到头打印每个节点的值； <details> <summary>点击查看提示</summary> <p> 栈；若可更改链表结构，也可考虑链表翻转；或者将链表元素顺序存入数组后翻转。 </p>
+ <pre><code>
+ class Solution {
+ public:
+     vector&lt;int&gt; printListFromTailToHead(ListNode* head) {
+         vector&lt;int&gt; ret = {};
+         if (head == NULL) return ret;
+         // 顺序放入数组
+         ListNode* node = head;
+         while (node) {
+             ret.push_back(node->val);
+             node = node->next;
+         }
+         // 翻转
+         reverse(ret.begin(), ret.end());
+         return ret;
+     }
+ };
+ </code></pre></details></li>
+<li>【<strong>重建二叉树</strong>】给定某二叉树前序遍历和中序遍历的结果(不含重复数字)，重建该二叉树并返回根节点；<blockquote>
+<p>如前序遍历为${1, 2, 4, 7, 3, 5, 6, 8}$，中序遍历为${4, 7, 2, 1, 5, 3, 8, 6}$，重建树;</p>
+ <details> <summary>点击查看解析</summary>
+ <p> 1. 前序遍历中，第1个输出元素必定是根节点元素；中序遍历中，根节点元素输出位于左子树与右子数元素中间；</p>
+ <p> 2. 确定根节点元素在中序遍历中的位置，可确定左右子树元素数组，分别以左右侧子数组为输入，递归构建子树； </p>
+ <pre><code>  
+ class Solution {
+ public:
+     TreeNode* reConstructBinaryTree(vector&lt;int&gt; pre, vector&lt;int&gt; vin) {
+         // 终止条件
+         if (pre.size() == 0) return nullptr;
+         // 建立节点
+         TreeNode* root = new TreeNode(pre[0]);
+         // 在中序序列查找根节点位置
+         auto itRootVal = find(vin.begin(), vin.end(), pre[0]);
+         // 左子树重建
+         auto preBegin = pre.begin() + 1;
+         auto preEnd = preBegin + vinL.size();
+         vector&lt;int&gt; preL(preBegin, preEnd);
+         vector&lt;int&gt; vinL(vin.begin(), itRootVal);
+         TreeNode* leftChild = reConstructBinaryTree(preL, vinL);
+         // 右子树重建
+         preBegin = preEnd; preEnd = pre.end();
+         vector&lt;int&gt; preR(preBegin, preEnd);
+         vector&lt;int&gt; vinR(itRootVal + 1, vin.end());
+         TreeNode* rightChild = reConstructBinaryTree(preR, vinR);
+         // 联系根节点
+         root->left = leftChild;
+         root->right = rightChild;
+         return root;
+     }
+ };
+ </code></pre>
+ </details></blockquote>
+</li>
+<li><p>【<strong>*二叉树的下一个节点</strong>】给定一颗二叉树和其中的一个节点，如何找出中序遍历序列的下一个节点？树中的节点除了有两个分别指向左、右子节点的指针，还有一个指向父节点的指针。</p>
+ <details><summary>点击查看提示</summary>
+ <p>注意是中序遍历，考虑以下情况<br>
+ 1. 输入节点存在右子树，那么需要遍历其右子树；<br>
+ 2. 输入节点不存在右子树，那么子树遍历结束，又考虑是其父节点的左子节点还是右子节点。</p>
+ <pre><code>
+ class Solution {
+ public:
+     TreeLinkNode* GetNext(TreeLinkNode* pNode) {
+         if (!pNode) return nullptr;
+         TreeLinkNode* node = nullptr;
+         // 是否存在右子节点，若存在则返回右子树的最左子节点
+         if (pNode->right) {
+             node = pNode->right;
+             while (node->left)
+                 node = node->left;
+             return node;
+         }
+         // 是否为父节点的左子节点，若是，返回父节点
+         if (pNode->next && pNode == pNode->next->left)
+             return pNode->next;
+         // 为父节点的右子节点，子树遍历结束
+         // 向上查找第一个是父节点的左子节点的祖先节点
+         node = pNode;
+         while (node->next && node != node->next->left)
+             node = node->next;
+         return node->next;
+     }
+ };
+ </code></pre>
+ </details>
+</li>
+<li><p>【<strong>用两个栈实现队列/堆</strong>】用两个栈实现一个队列/堆；</p>
+<blockquote>
+<p>相关题目：用两个队列实现栈/堆。</p>
+ <details> <summary>点击查看提示</summary>
+ <pre><code>
+ class Solution
+ {
+ public:
+     void push(int val) {
+         swap(stack1, stack2);
+         stack2.push(val);
+     }
+     int pop() {
+         swap(stack2, stack1);
+         if (stack1.empty()) 
+             throw "Error! Empty!";
+         int ret = stack1.top();
+         stack1.pop();
+         return ret;
+     }
+     void swap(stack<int>& src, stack<int>& dst) {
+         while (!src.empty()) {
+             dst.push(src.top());
+             src.pop();
+         }
+     }
+ private:
+     stack<int> stack1;
+     stack<int> stack2;
+ };
+ </int></int></int></int></code></pre></details>
+</blockquote>
+</li>
+<li><p>【<strong>斐波那契数列</strong>】求斐波那契数列第$n$项；</p>
+<details> <summary>点击查看提示</summary>
+<p>
+1. 递归，直观但重复计算较多，指数级复杂度增长； <br> 
+2. 循环，仅计算最近两项，时间复杂度O(n)； <br>
+3. 状态方程法，其中矩阵的幂用分治法计算，时间复杂度O(log n)但不够实用。 </p>
+<pre><code>
+class Solution {
+public:
+    int Fibonacci(int n) {
+        if (n == 0) return 0;
+        int a = 1, b = 0;
+        for (int i = 1; i < n; i++){
+            // a, b = a + b, a
+            a = a + b;
+            b = a - b;
+        }
+        return a;
+    }
+};
+</code></pre>
+</details> 
+
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+    f(n + 1) \\ f(n)
+\end{bmatrix} = 
+\begin{bmatrix}
+    1 & 1 \\ 1 & 0
+\end{bmatrix} \times 
+\begin{bmatrix}
+    f(n) \\ f(n - 1)
+\end{bmatrix}, n \geq 2</script></li>
+<li><p>【<strong>青蛙跳台阶</strong>】一只青蛙一次可以跳上$1,2$级台阶，求跳上$n$级台阶共有几种跳法。</p>
+<details> <summary>点击查看提示</summary>
+<p> 定义函数f(n)为剩余n级台阶时的跳法，特殊处理1级或2级台阶；若取最优，即为动态规划； </p> </details> </li>
+<li>【<strong>旋转数组的最小数字</strong>】将数组最开始的若干个元素固定顺序搬到数组的末尾，称为数据的旋转。现输入非降序数组的一个旋转，输出旋转数组的最小元素；<blockquote>
+<p>如输入${1, 2, 3, 4, 5}$的一个旋转为${3, 4, 5, 1, 2}$，最小元素为$1$。</p>
+<details> <summary>点击查看提示</summary>
+<p> 二分法，前面子数组的数字必定大于后面子数组；注意特殊情况的处理如{0, 1, 1, 1}的旋转{1, 1, 0, 1}，因为l = 0, r = 3, m = 1时，nums[l] = nums[m] = nums[r]，无法确定应该向哪个方向移动 </p>
+<pre><code>
+class Solution {
+public:
+    int minNumberInRotateArray(vector&lt;int&gt; rotateArray) {
+        if (rotateArray.empty()) return 0;
+        int l = 0, r = rotateArray.size() - 1;
+        while (l <= 2 r) { int m="(r" - l) + l; 三个数相同，顺序查找最小 if (rotatearray[l]="=" rotatearray[m] && \ rotatearray[l]="=" rotatearray[r]) return *min_element( rotatearray.begin() l, r 1); } 前面子数组的数字必定大于后面子数组，注意下面两个判断的顺序 右边是非降序的，右边界收紧 (rotatearray[m] <="rotateArray[r])" 1; 左边是非降序的，左边界收紧 else>= rotateArray[l])
+                l = m + 1;
+        }
+        return rotateArray[l];
+    }
+};
+</=></code></pre>
+</details> </blockquote>
+</li>
+<li>【<strong>矩阵中的路径</strong>】设计函数判断一个矩阵中是否存在一条包含某字符串所有字符的路径，可从矩阵中任意字符出发，每一步可上下左右移动一格，且已经过的字符不可重复经过；<blockquote>
+<p>如下矩阵中，存在<code>&quot;bfce&quot;</code>的路径</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+    a & \bm{b} & t & g \\
+    c & \bm{f} & \bm{c} & s \\
+    j & d & \bm{e} & h
+\end{bmatrix}</script><details> <summary>点击查看提示</summary>
+<p> 参考迷宫老鼠问题(dfs/bfs两种实现)；需考虑字符串是否有序的要求； </p> 
+<pre><code>
+class Solution {
+public:
+    bool hasPath(char* matrix, int rows, int cols, char* str) {
+        if (!matrix || !str || rows == 0 || cols == 0) return false;
+        // 每个点作为起始点尝试
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                bool* visited = new bool[rows * cols];
+                memset(visited, 0, rows * cols * sizeof(bool));
+                bool has = hasPathDfs(matrix, visited, rows, cols, r, c, str, 0);
+                if (has) return true;
+            }
+        }
+        return false;
+    }
+    bool hasPathDfs(char* matrix, bool* visited, int rows, int cols, int r, int c, char* str, int index) {
+        // 终止条件1：字符串结束
+        if (str[index] == '\0') return true;
+        // 终止条件2：越界
+        if (r < 0 || r >= rows || c < 0 || c > cols) return false;
+        // 终止条件3：已经到达过
+        if (visited[r * cols + c] == true) return false;
+        // 终止条件4：字符不一致
+        if (matrix[r * cols + c] != str[index]) return false;
+        // ------------------------------------------
+        // 置位已到达
+        visited[r * cols + c] = true;
+        if (hasPathDfs(matrix, visited, rows, cols, r - 1, c, str, index + 1) || \
+            hasPathDfs(matrix, visited, rows, cols, r + 1, c, str, index + 1) || \
+            hasPathDfs(matrix, visited, rows, cols, r, c - 1, str, index + 1) || \
+            hasPathDfs(matrix, visited, rows, cols, r, c + 1, str, index + 1))
+            return true;
+        else
+            return false;
+    }
+};
+</code></pre>
+</details> </blockquote>
+</li>
+<li><p>【<strong>剪绳子</strong>】一根长度为$n(n&gt;1)$的绳子，剪成$m(m&gt;1)$段，每段长度为$k_1, \cdots, k_m (k_i \in N)$，求$\max \prod_i k_i$；</p>
+<details> <summary>点击查看解析</summary>
+<p> 典型的动态规划 </p> 
+<pre><code>
+class Solution {
+public:
+    int cutRope(int number) {
+        // 长度为1, 2, 3直接返回
+        if (number < 4) return number - 1;
+        // 注意数组下标1, 2, 3时与上面不同
+        int* dp = new int[number + 1];
+        for (int i = 0; i < number + 1; i++) {
+            if (i < 4) {
+                dp[i] = i;
+            } else {
+                dp[i] = max(
+                    max(dp[i - 1] * 1, dp[i - 2] * 2), dp[i - 3] * 3);
+            }
+        }
+        int ret = dp[number];
+        delete[] dp;
+        return ret;
+    }
+};
+</code></pre></details> 
+</li>
+<li><p>【<strong>*二进制数中$1$的个数</strong>】<strong>输入一个整数，输出该整数转换为二进制后$1$的位数；</strong></p>
+<details> <summary>点击查看解析</summary>
+<p> 
+1. 左移右移与算术运算的关系，移位运算符比算术运算快；<br>
+2. 若采用移位运算，注意负数的处理，因为左移是逻辑移位(右端补0)，右移是算术移位(左端补符号位，会导致负数移位后进入0xFFFFFFFF死循环)；<br>
+3. (x-1)&x相当于将x最右的1清0. </p> 
+<pre><code>
+class Solution {
+public:
+    int  NumberOf1(int n) {
+        int count = 0;
+        int mask = 0x01;
+        while (mask) {
+            if (n & mask)
+                count++;
+            mask <<= 1; } return count; }; -------------------------------- class solution { public: int numberof1(int n) count="0;" while (n !="0){" n &="(n" - 1); count++; < code></=></code></pre>
+</details>
+
+<blockquote>
+<p>相关题型：</p>
+<ol>
+<li>用一个语句判断一个数是否为$2$的整数次方；</li>
+<li>输入两个数$m, n$，计算$m$的二进制表示需改更改几位才能得到$n$；</li>
+</ol>
+</blockquote>
+</li>
+<li><p>【<strong>*数值的整数次方</strong>】实现函数<code>double power(double x, int n)</code>，求$x^n$，不考虑大数情况；</p>
+<details> <summary>点击查看解析</summary>
+<p> 
+1. 不可忽略n为非正数情况；并且此时若为边界输入power(0., -1)，需考虑异常处理；<br>
+2. 考虑性能采用分治、位运算(二路分治、判断n奇偶)。
+</p> 
+<pre><code>
+class Solution {
+public:
+    double Power(double base, int exponent) {
+        if (exponent < 0) {
+            // 无效输入
+            if (base == 0.)
+                throw "Invalid input: 0.0^n";
+            // 注意负指数的处理
+            exponent *= -1;
+            base = 1. / base;
+        }
+        return PowerCore(base, exponent);
+    }
+    double PowerCore(double base, int exponent) {
+        // 递归终止条件
+        if (exponent == 0)
+            return 1.;
+        if (exponent == 1)
+            return base;
+        // 分治法
+        double y = PowerCore(base, exponent >> 1);
+        return y * y * (exponent & 0x01? base: 1);
+    }
+};
+</code></pre>
+</details> </li>
+<li>【<strong>打印从$1$到最大的$n$位数</strong>】输入数字$n$，按顺序打印从$1$到最大的$n$位十进制数；<blockquote>
+<p>相关题型：实现任意两个整数的加法；</p>
+<details> <summary>点击查看提示</summary>
+<p> 方法1：考虑大数情况(溢出)，用字符串或数组表达大数；方法2：数字排列； </p> </details></blockquote>
+</li>
+<li>【<strong>在$O(1)$时间内删除链表的节点</strong>】<strong>给定单向链表的头指针和一个节点指针，要求在$O(1)$时间内从链表中删除该节点；</strong><details> <summary>点击查看提示</summary>
+<p> “腾出”下一个节点(覆盖本节点值后删除下一节点)；考虑只有一个节点、删除节点为尾节点的特殊情况，两种情况分别单独处理。 </p> </details></li>
+<li>【<strong>*删除链表中重复节点</strong>】在排序链表中，删除重复的节点；<details> <summary>点击查看提示</summary>
+<p> 题意要求 <br>
+1 -> 2 -> 3 -> 3 -> 4 -> 4 -> 5 <br>
+1 -> 2 -> 5 </p>
+<pre><code>
+class Solution {
+public:
+    ListNode* deleteDuplication(ListNode* pHead) {
+        if (pHead == nullptr) return nullptr;
+        if (pHead->next == nullptr) return pHead;
+        // 首节点重复，需要被删除，直至值不同的节点
+        if (pHead->val == pHead->next->val) {
+            int val = pHead->val;
+            while (pHead && pHead->val == val) {
+                ListNode* pNext = pHead->next;
+                delete pHead;
+                pHead = pNext;
+            }
+            pHead = deleteDuplication(pHead);
+        // 不重复，从下一个节点开始处理，并连接首节点
+        } else {
+            ListNode* pNext = deleteDuplication(pHead->next);
+            pHead->next = pNext;
+        }
+        return pHead;
+    }
+};
+</code></pre>
+<p> 保留一个重复节点的方法如下，即 <br>
+1 -> 2 -> 3 -> 3 -> 4 -> 4 -> 5 <br>
+1 -> 2 -> 3 -> 4 -> 5 </p>
+<pre><code>
+class Solution {
+public:
+    ListNode* deleteDuplication(ListNode* pHead) {
+        if (pHead == nullptr) return nullptr;
+        ListNode* pNode = pHead;
+        while (pNode && pNode->next) {
+            // 存在重复
+            if (pNode->val == pNode->next->val) {
+                ListNode* pNext = pNode->next;
+                pNode->next = pNext->next;
+                delete pNext;
+            } else {
+                pNode = pNode->next;
+            }
+        }
+        return pHead;
+    }
+};
+</code></pre>
+</details></li>
+<li>【<strong>*正则表达式匹配</strong>】<strong>实现函数匹配<code>&#39;.&#39;</code>和<code>&#39;*&#39;</code>的正则表达式，<code>&#39;.&#39;</code>表示匹配任意字符，<code>&#39;*&#39;</code>表示它之前的字符可以在此处出现任意次(含$0$次)；</strong><blockquote>
+<p>例如<code>&quot;aaa&quot;</code>与<code>&quot;a.a&quot;</code>、<code>&quot;ab*ac*a&quot;</code>匹配，但与<code>&quot;aa.a&quot;</code>或<code>&quot;ab*a&quot;</code>不匹配</p>
+<details> <summary>点击查看解析</summary>
+<p> 匹配形如("aaa", "a*(x* × n)a")的问题，只能考虑动态规划 </p> 
+<pre><code>
+bool match(const char* str, const char* pattern) {
+    if (str == nullptr || pattern == nullptr) return false;
+    if (*str == '\0' && *pattern == '\0') return true;      // str, pattern 同时结束，匹配成功
+    if (*str != '\0' && *pattern == '\0') return false;     // pattern提前结束，匹配失败
+    // ---- str是否提前结束引起匹配失败，需考虑通配符'.'、`*`的处理 ----
+    char c = (*pattern == '.') ? *str : *pattern;           // 当前待匹配字符
+    if (*(pattern + 1) == '*') {                            // 出现"x*"的形式，处理任意个数匹配
+        if (*pattern == '.' && *(pattern + 2) == '\0')      // pattern = ".*\0" 匹配成功
+            return true;
+        int cnt = 0; for (; *(str + cnt) == c; cnt++);      // 统计c在str起始个数
+        for (int i = 0; i < cnt + 1; i++) {                 // 动态规划，任意字符个数方案，匹配遍历
+            bool matched = match(str + i, pattern + 2);
+            if (matched) return true;       // 只需一种方案匹配成功
+        }
+        return false;                       // 全部方案均匹配失败
+    }
+    else {
+        if (*str == '\0') return false;     // str提前结束，匹配失败
+        if (c != *str) return false;        // 字符不相同，匹配失败
+        return match(str + 1, pattern + 1); // 继续下一字符匹配
+    }
+}
+void Test(const char* testName, const char* string, const char* pattern, bool expected)
+{
+    if (testName != nullptr)
+        printf("%s begins: ", testName);
+    if (match(string, pattern) == expected)
+        printf("Passed.\n");
+    else
+        printf("FAILED.\n");
+}
+int main(int argc, char* argv[])
+{
+    Test("Test01", "", "", true);
+    Test("Test02", "", ".*", true);
+    Test("Test03", "", ".", false);
+    Test("Test04", "", "c*", true);
+    Test("Test05", "a", ".*", true);
+    Test("Test06", "a", "a.", false);
+    Test("Test07", "a", "", false);
+    Test("Test08", "a", ".", true);
+    Test("Test09", "a", "ab*", true);
+    Test("Test10", "a", "ab*a", false);
+    Test("Test11", "aa", "aa", true);
+    Test("Test12", "aa", "a*", true);
+    Test("Test13", "aa", ".*", true);
+    Test("Test14", "aa", ".", false);
+    Test("Test15", "ab", ".*", true);
+    Test("Test17", "aaa", "aa*", true);
+    Test("Test18", "aaa", "aa.a", false);
+    Test("Test19", "aaa", "a.a", true);
+    Test("Test20", "aaa", ".a", false);
+    Test("Test21", "aaa", "a*a", true);
+    Test("Test22", "aaa", "ab*a", false);
+    Test("Test23", "aaa", "ab*ac*a", true);
+    Test("Test24", "aaa", "ab*a*c*a", true);
+    Test("Test25", "aaa", ".*", true);
+    Test("Test26", "aab", "c*a*b", true);
+    Test("Test27", "aaca", "ab*a*c*a", true);
+    Test("Test28", "aaba", "ab*a*c*a", false);
+    Test("Test29", "bbbba", ".*a*a", true);
+    Test("Test30", "bcbbabab", ".*a*a", false);
+    return 0;
+}
+</code></pre>
+</details></blockquote>
+</li>
+<li>【<strong>调整数组顺序使奇数位于偶数前 I</strong>】输入整数数组，实现函数使整数前半部分为奇数，后半部分为偶数； <details> <summary>点击查看解析</summary>
+<p> 用快速排序中，大小数据分组的思想，时间复杂度O(n) </p> 
+<pre><code>
+class Solution {
+public:
+    void reOrderArray(vector&lt;int&gt;& array) {
+        int l = 0, r = array.size() - 1;
+        while (l <= r) { 向右查找第一个偶数 while (l < array.size() && array[l] & 0x01) l++; 向左查找第一个奇数 (r>= 0 && !(array[r] & 0x01)) r--;
+            // 交换
+            if (l <= r) { int t="array[l];" array[l]="array[r];" array[r]="t;" } }; < code></=></=></code></pre>
+</details></li>
+<li><p>【<strong>调整数组顺序使奇数位于偶数前 II</strong>】输入整数数组，实现函数使整数前半部分为奇数，后半部分为偶数，要求奇数和奇数，偶数和偶数之间的相对位置不变；</p>
+<details> <summary>点击查看解析</summary>
+<p> 空间复杂度、时间复杂度都是O(n)的解法。 </p> 
+<pre><code>
+class Solution {
+public:
+    void reOrderArray(vector&lt;int&gt;& array) {
+        vector&lt;int&gt; odd, even;
+        for (int num : array) {
+            if (num & 0x01)
+                odd.push_back(num);
+            else
+                even.push_back(num);
+        }
+        odd.insert(odd.end(), even.begin(), even.end());
+        array = odd;
+    }
+};
+</code></pre>
+</details>
+</li>
+<li><p>【<strong>链表中倒数第$k$个节点</strong>】<strong>输入一个单向链表，输出倒数第$k$个节点(符合大多数人情况，$k$不是索引)；</strong></p>
+<blockquote>
+<p>相关题型：找到链表的中间节点。</p>
+<details> <summary>点击查看提示</summary>
+<p> “先后指针”，时间复杂度O(n)；注意k范围，大于0且不能超过链表长度； </p> 
+<pre><code>
+class Solution {
+public:
+    ListNode* FindKthToTail(ListNode* pListHead, unsigned int k) {
+        if (pListHead == nullptr) return nullptr;
+        // 先走k步
+        ListNode* fast = pListHead;
+        while (k > 0) {
+            // 长度不足k
+            if (fast == nullptr)
+                return nullptr;
+            fast = fast->next; k--;
+        }
+        // 走完链表
+        ListNode* slow = pListHead;
+        while (fast) {
+            fast = fast->next;
+            slow = slow->next;
+        }
+        return slow;
+    }
+};
+</code></pre>
+</details></blockquote>
+</li>
+<li>【<strong>*链表中环的入口节点</strong>】若一个单向链表由于误操作产生了环，如何确定环的入口节点位置？<details> <summary>点击查看提示</summary>
+<p> 快慢指针；子问题：是否包含环、确定环的长度(节点个数)； </p> 
+<pre><code>
+class Solution {
+public:
+    ListNode* EntryNodeOfLoop(ListNode* pHead) {
+        if (pHead == nullptr) return nullptr;
+        ListNode* fast = pHead;
+        ListNode* slow = pHead;
+        // --------- 是否包含环 ---------
+        while (fast->next) {
+            fast = fast->next->next;
+            slow = slow->next;
+            // 追及相遇
+            if (fast == slow) break;
+        }
+        // 不包含环
+        if (!fast->next) return nullptr;
+        // --- 包含环，此时为公共节点 ---
+        slow = pHead;
+        while (fast != slow) {
+            fast = fast->next;
+            slow = slow->next;
+        }
+        return slow;
+    }
+};
+</code></pre>
+</details></li>
+<li>【<strong>*反转链表</strong>】将一个单向链表中的节点反转，输出反转后链表的头节点；<details> <summary>点击查看解析</summary>
+<pre><code>
+ListNode * reverse(ListNode * head) {
+    if (!head) return nullptr;
+    ListNode* oriHead = head;
+    ListNode* node = head->next;
+    while(node){
+        ListNode* temp = node->next;    // 下个待操作节点，防止被覆盖
+        oriHead->next = node->next;     // 本来的头节点后移
+        node->next = head;              // node移动到当前头节点前
+        head = node;                    // 更新当前头节点
+        node = temp;
+    }
+    return head;
+}
+</code></pre>
+<pre><code>
+class Solution {
+public:
+    ListNode* ReverseList(ListNode* pHead) {
+        if (pHead == nullptr)
+            return nullptr;
+        // 递归查找尾节点
+        if (pHead->next == nullptr)
+            return pHead;
+        ListNode* ret = ReverseList(pHead->next);
+        // 修改指针方向
+        pHead->next->next = pHead;
+        pHead->next = nullptr;
+        return ret;
+    }
+};
+</code></pre>
+</details></li>
+<li>【<strong>合并两个排序的链表</strong>】输入两个递增的链表，合并两个链表使新链表中的节点仍然是递增的，如<code>1 -&gt; 3 -&gt; 5 -&gt; 7 -&gt; null</code>和<code>2 -&gt; 4 -&gt; 6 -&gt; 8 -&gt; null</code>合并为<code>1 -&gt;2 -&gt; 3 -&gt; 4 -&gt; 5 -&gt; 6 -&gt; 7 -&gt; 8 -&gt; null</code>；<details> <summary>点击查看解析</summary>
+<p> 难度不大；可用递归实现 </p>
+<pre><code>
+class Solution {
+public:
+    ListNode* Merge(ListNode* pHead1, ListNode* pHead2) {
+        if ((!pHead1) && (!pHead2)) {
+            return nullptr;
+        } else if (!pHead1) {
+            return pHead2;
+        } else if (!pHead2) {
+            return pHead1;
+        } else {
+            ListNode* pHead = nullptr;
+            ListNode* pNode = nullptr;
+            ListNode* pNode1 = pHead1;
+            ListNode* pNode2 = pHead2;
+            while (pNode1 && pNode2) {
+                if (pNode1->val > pNode2->val) {
+                    if (!pHead) {
+                        pHead = pNode = pNode2;
+                    } else {
+                        pNode->next = pNode2;
+                        pNode = pNode->next;
+                    }
+                    pNode2 = pNode2->next;
+                } else {
+                    if (!pHead) {
+                        pHead = pNode = pNode1;
+                    } else {
+                        pNode->next = pNode1;
+                        pNode = pNode->next;
+                    }
+                    pNode1 = pNode1->next;
+                }
+            }
+            if (pNode1) pNode->next = pNode1;
+            if (pNode2) pNode->next = pNode2;
+            return pHead;
+        }
+    }
+};
+</code></pre>
+</details></li>
+<li>【<strong>*树的子结构</strong>】输入二叉树A和B，判断B是否为A的子结构；<details> <summary>点击查看解析</summary>
+<pre><code>
+class Solution {
+public:
+    bool HasSubtree(TreeNode* pRoot1, TreeNode* pRoot2) {
+        // 空树不是任何树的子结构
+        if (pRoot2 == nullptr || pRoot1 == nullptr) return false;
+        // 匹配树当前节点值
+        if (matchSubtree(pRoot1, pRoot2)) return true;
+        // 匹配树左、右子树
+        if (HasSubtree(pRoot1->left, pRoot2)) return true;
+        if (HasSubtree(pRoot1->right, pRoot2)) return true;
+    }
+    bool matchSubtree(TreeNode* pRoot1, TreeNode* pRoot2) {
+        // 模板树已空，匹配成功
+        if (!pRoot2) return true;
+        // 模板树未空，而匹配树空，匹配失败
+        if (!pRoot1) return false;
+        // 节点匹配失败
+        if (pRoot1->val != pRoot2->val) return false;
+        // 需要左右子树同时匹配
+        bool matchL = matchSubtree(pRoot1->left, pRoot2->left);
+        bool matchR = matchSubtree(pRoot1->right, pRoot2->right);
+        return matchL && matchR;
+    }
+};
+</code></pre>
+</details></li>
+<li>【<strong>树的镜像</strong>】输入二叉树，输出该树的镜像；<details> <summary>点击查看提示</summary>
+<p> 二叉树子节点翻转 </p> 
+<pre><code>
+class Solution {
+public:
+    void Mirror(TreeNode *pRoot) {
+        if (!pRoot) return;
+        // 翻转本节点
+        TreeNode* temp = pRoot->left;
+        pRoot->left = pRoot->right;
+        pRoot->right = temp;
+        // 递归翻转子树
+        Mirror(pRoot->left);
+        Mirror(pRoot->right);
+    }
+};
+</code></pre>
+</details></li>
+<li>【<strong>对称的二叉树</strong>】<strong>输入二叉树，判断是否对称；</strong><details> <summary>点击查看解析</summary>
+<p> 可用递归实现；编写函数`isSymmetric(TreeNode*, TreeNode*)`判断两个节点为根的子树是否对称 </p>
+<pre><code>
+class Solution {
+public:
+    bool isSymmetrical(TreeNode* pRoot) {
+        return isSymmetrical(pRoot, pRoot);
+    }
+    bool isSymmetrical(TreeNode* pRoot1, TreeNode* pRoot2) {
+        // 两棵空树，对称
+        if (!pRoot1 && !pRoot2) return true;
+        // 仅有一棵空，不对称
+        else if (!pRoot1 || !pRoot2) return false;
+        // 本节点是否对称
+        if (pRoot1->val != pRoot2->val) return false;
+        // 递归，左右子树是否对称
+        return isSymmetrical(pRoot1->left, pRoot2->right) &&
+            isSymmetrical(pRoot1->right, pRoot2->left);
+    }
+};
+</code></pre>
+</details></li>
+<li>【<strong>顺时针打印矩阵</strong>】输入矩阵，左上角元素开始按照从外向内的顺序，依次打印每个数字；<details> <summary>点击查看提示</summary>
+<p> 将矩阵看作若干个圈，递归打印输出 </p>
+<pre><code>
+/*
+1  2  3  4
+5  6  7  8
+9 10 11 12
+13 14 15 16
+*/
+class Solution {
+public:
+    vector&lt;int&gt; printMatrix(vector<vector&lt;int&gt;> matrix) {
+        vector&lt;int&gt; ret;
+        int rows = 0, cols = 0;
+        // 矩阵的第一行
+        if (!checkMatrix(matrix, rows, cols)) return ret;
+        for (int c = 0; c < cols; c++) {
+            ret.push_back(matrix[0][c]);
+        }
+        matrix.erase(matrix.begin());
+        // 矩阵的最后列
+        if (!checkMatrix(matrix, rows, cols)) return ret;
+        for (int r = 0; r < rows; r++) {
+            ret.push_back(matrix[r][cols - 1]);
+            matrix[r].erase(matrix[r].end() - 1);
+        }
+        // 矩阵的最后行
+        if (!checkMatrix(matrix, rows, cols)) return ret;
+        for (int c = cols - 1; c >= 0; c--) {
+            ret.push_back(matrix[rows - 1][c]);
+        }
+        matrix.erase(matrix.end() - 1);
+        // 矩阵的第一列
+        if (!checkMatrix(matrix, rows, cols)) return ret;
+        for (int r = rows - 1; r >= 0; r--) {
+            ret.push_back(matrix[r][0]);
+            matrix[r].erase(matrix[r].begin());
+        }
+        // 递归打印内圈，插入`ret`
+        vector&lt;int&gt; inside = printMatrix(matrix);
+        ret.insert(ret.end(), inside.begin(), inside.end());
+        return ret;
+    }
+    bool checkMatrix(const vector<vector&lt;int&gt;>& matrix, int& rows, int& cols) {
+        rows = matrix.size();
+        if (rows == 0) {
+            return false;
+        }
+        cols = matrix[0].size();
+        if (cols == 0) {
+            return false;
+        }
+        return true;
+    }
+};
+</vector&lt;int&gt;></vector&lt;int&gt;></code></pre>
+</details></li>
+<li>【<strong>*包含<code>max</code>的栈</strong>】定义栈的数据结构，实现一个能得到最大元素的函数<code>max</code>，且$\rm{min, push, pop}$时间复杂度都是$O(1)$；<details> <summary>点击查看提示</summary>
+<p>
+辅助栈，每次数据栈压入数据时，将当前最大值压入辅助栈，出栈时两个栈同时出栈；<br> 
+也可在压入数据为<b>不小于</b>当前最大值时(考虑压入同一个数据的情况)，对辅助栈进行压入，出栈时若数据为最大值(辅助栈栈顶数据)，辅助栈也出栈，如下。
+</p> 
+<pre><code>
+class StackWithMax {
+public:
+    StackWithMax() {}
+    void push(int value) {
+        // 空，或者栈顶不小于`value`
+        if (mins.empty() || \
+                mins.top() >= value)
+            mins.push(value);
+        nums.push(value);
+    }
+    void pop() {
+        if (nums.size() == 0) return;
+        // `nums`栈顶等于`mins`栈顶
+        if (mins.top() == nums.top())
+            mins.pop();
+        nums.pop();
+    }
+    int top() {
+        if (nums.size() == 0) return 0;
+        return nums.top();
+    }
+    int min() {
+        if (mins.size() == 0) return 0;
+        return mins.top();
+    }
+private:
+    stack<int> nums;
+    stack<int> mins;
+};
+</int></int></code></pre>
+</details></li>
+<li>【<strong>*包含最大值的队列</strong>】定义队列实现<code>max</code>函数，时间复杂度为$O(1)$得到队列的最大值；<details> <summary>点击查看解析</summary>
+<p> 借用辅助队列，使辅助队列头部为当前最大值，并保证：1)数据降序排列(都为当前出队列后的最大值)、2)辅助队列长度与数据队列一致 </p>
+<pre><code>
+class QueueWithMax
+{
+public:
+    QueueWithMax() {}
+    void push(const T& x) {
+        if (nums.empty()) {
+            nums.push(x); maxs.push(x); return;
+        }
+        nums.push(x);
+        // update maximum
+        for (int i = 0; i < maxs.size(); i++) {
+            // 保证队列内单调
+            maxs.push(maxs.front() > x ? maxs.front() : x);
+            maxs.pop();
+        }
+        maxs.push(x);
+    }
+    void pop() {
+        if (nums.empty()) throw "queue is empty!";
+        nums.pop(); maxs.pop();
+    }
+    const T max() const {
+        if (nums.empty()) throw "queue is empty!";
+        return maxs.front();
+    }
+private:
+    queue&lt;int&gt; nums;
+    queue&lt;int&gt; maxs;
+};
+</code></pre>
+<p> 上面方案的入队列push(x)时间复杂度为O(n)，改进方法是，队列内只保存最大值，并保存相应标记(如计数符号)，当出数据队列元素标记与辅助队列头部元素标记一致，则进行辅助队列的弹出，这样时间复杂度为O(1)；并借助<b>两端开口的队列</b>； </p>
+<p>例如对于{1, 3, 5, 2}，相应辅助队列为{5, 5, 5, 2}。当4入队列后，辅助队列变为{5, 5, 5, 4, 4}</p>
+<pre><code>
+class QueueWithMax
+{
+    typedef pair&lt;int, int&gt; element;
+public:
+    QueueWithMax() : idx(0) {}
+    void push(const int& x) {
+        element e = make_pair(idx++, x);
+        nums.push_back(e);
+        // is empty
+        if (nums.empty()) {
+            nums.push_back(e); maxs.push_back(e); return;
+        }
+        // update maximum
+        while (maxs.size() > 0 && maxs.back().second < x) {
+            maxs.pop_back();
+        }
+        maxs.push_back(e);
+    }
+    void pop() {
+        if (nums.empty()) throw "queue is empty!";
+        if (nums.front().first == maxs.front().first) {
+            maxs.pop_front();
+        }
+        nums.pop_front();
+    }
+    const int max() const {
+        if (nums.empty()) throw "queue is empty!";
+        return maxs.front().second;
+    }
+private:
+    int idx;
+    deque&lt;element&gt; nums;
+    deque&lt;element&gt; maxs;
+};
+</code></pre>
+</details></li>
+<li>【<strong>栈的压入、弹出序列</strong>】输入两个整数序列(假设数字均不相等)，第一个表示栈的压入顺序，判断第二个是否可能为该栈的弹出顺序。<blockquote>
+<p>如：若压栈序列为${1, 2, 3, 4, 5}$，那么${4, 5, 3, 2, 1}$可能为该栈的出栈序列，而${4, 5, 3, 1, 2}$不可能；<br>相关内容：共有多少种出栈顺序(卡特兰数)。</p>
+<details> <summary>点击查看解析</summary>
+<pre><code>
+class Solution {
+public:
+    bool IsPopOrder(vector&lt;int&gt; pushV, vector&lt;int&gt; popV) {
+        stack<int> s;
+        // 入栈，过程中把能出栈的数删除
+        for (int num : pushV) {
+            if (num == popV[0])
+                popV.erase(popV.begin());
+            else
+                s.push(num);
+        }
+        // 顺序出栈
+        while (s.size() > 0) {
+            if (s.top() != popV[0])
+                return false;
+            popV.erase(popV.begin());
+            s.pop();
+        }
+        return true;
+    }
+};
+</int></code></pre>
+</details></blockquote>
+</li>
+<li>【<strong>从上到下打印二叉树</strong>】从上到下打印出二叉树的每个节点，同一层按从左到右的顺序打印；<details> <summary>点击查看解析</summary>
+<p> 层次遍历，广度优先搜索(BFS) </p>
+<pre><code>
+class Solution {
+public:
+    vector&lt;int&gt; PrintFromTopToBottom(TreeNode* root) {
+        vector&lt;int&gt; ret;
+        if (!root) return ret;
+        // bfs
+        queue&lt;TreeNode*&gt; q;
+        q.push(root);
+        while (q.size() > 0) {
+            // 队首出队列
+            TreeNode* node = q.front();
+            ret.push_back(node->val);
+            q.pop();
+            // 左右子节点入队列
+            if (node->left)
+                q.push(node->left);
+            if (node->right)
+                q.push(node->right);
+        }
+        return ret;
+    }
+};
+</code></pre>
+</details></li>
+<li>【<strong>从上到下打印二叉树</strong>】从上到下打印出二叉树的每个节点，<strong>要求层间分行</strong>，同一层按从左到右的顺序打印；<details> <summary>点击查看解析</summary>
+<pre><code>
+class Solution {
+public:
+    vector<vector&lt;int&gt;> Print(TreeNode* pRoot) {
+        vector<vector&lt;int&gt;> ret;
+        if (!pRoot) return ret;
+        // bfs
+        vector&lt;int&gt; line;
+        queue&lt;TreeNode*&gt; q;
+        q.push(pRoot);
+        q.push(nullptr);
+        while (q.size() > 0) {
+            // 队首出队列
+            TreeNode* node = q.front();
+            q.pop();
+            // 遇到换行标记
+            if (!node) {
+                // 更新返回结果
+                ret.push_back(line);
+                line = vector&lt;int&gt;();
+                // 如果队列只剩换行标记，那么遍历结束
+                if (q.size() == 0) break;
+                // 加入新的换行标记
+                q.push(nullptr);
+                continue;
+            }
+            // 更新本行数据
+            line.push_back(node->val);
+            // 左右子节点入队列
+            if (node->left)
+                q.push(node->left);
+            if (node->right)
+                q.push(node->right);
+        }
+        return ret;
+    }
+};
+</vector&lt;int&gt;></vector&lt;int&gt;></code></pre>
+</details></li>
+<li>【<strong>从上到下打印二叉树</strong>】从上到下打印出二叉树的每个节点，<strong>要求层间分行</strong>，且从左到右、从右往左循环(“之”字形)的顺序打印；<details> <summary>点击查看解析</summary>
+<p> 新增`left2right`标记位，交替从左到右从右到左 </p>
+<pre><code>
+class Solution {
+public:
+    vector<vector&lt;int&gt;> Print(TreeNode* pRoot) {
+        vector<vector&lt;int&gt;> ret;
+        if (!pRoot) return ret;
+        // bfs
+        vector&lt;int&gt; line;
+        bool left2right = true;             // 方向标记
+        queue&lt;TreeNode*&gt; q;
+        q.push(pRoot);
+        q.push(nullptr);
+        while (q.size() > 0) {
+            // 队首出队列
+            TreeNode* node = q.front();
+            q.pop();
+            // 遇到换行标记
+            if (!node) {
+                // 更新返回结果
+                if (!left2right)            // 方向标记
+                    reverse(line.begin(), line.end());
+                ret.push_back(line);
+                line = vector&lt;int&gt;();
+                // 如果队列只剩换行标记，那么遍历结束
+                if (q.size() == 0) break;
+                // 加入新的换行标记
+                q.push(nullptr);
+                left2right = !left2right;   // 方向标记
+                continue;
+            }
+            // 更新本行数据
+            line.push_back(node->val);
+            // 左右子节点入队列
+            if (node->left)
+                q.push(node->left);
+            if (node->right)
+                q.push(node->right);
+        }
+        return ret;
+    }
+};
+</vector&lt;int&gt;></vector&lt;int&gt;></code></pre>
+</details></li>
+<li>【<strong>*二叉搜索树的后序遍历序列</strong>】输入整数数组，判断该数组是否为某二叉搜索树的后序遍历结果，树中节点值无重复；<details> <summary>点击查看解析</summary>
+<p> 例如数组`[5, 7, 6, 9, 11, 10, 8]`，先以`8`为根节点，将序列划分为左右子树`[5, 7, 6]`和`[9, 11, 10]`，此时左子树序列内数字都应该小于`8`，右侧都大于`8`，若满足条件，递归判断左右子树 </p>
+<pre><code>
+class Solution {
+public:
+    bool VerifySquenceOfBST(vector&lt;int&gt; sequence) {
+        int n = sequence.size();
+        if (n == 0) return false;
+        if (n <= 1) return true; 根节点值 int rootval="sequence[n" - 1]; 划分左右子树 auto rbegin="sequence.begin();" while (rbegin !="sequence.end()" && \ * < rootval) rbegin++; 右子树内是否包含小于`rootval`的值 for (auto it="rBegin;" it++) { if (*it false; } 递归，添加判断防止数组越界 子树序列长度必须`>= 1`，否则与`if (n == 0) return false;`冲突
+        bool lValid = true;
+        if (rBegin > sequence.begin() + 1)
+            lValid = VerifySquenceOfBST(
+                vector&lt;int&gt;(sequence.begin(), rBegin - 1));
+        bool rValid = true;
+        if (rBegin < sequence.end() - 1)
+            rValid = VerifySquenceOfBST(
+                vector&lt;int&gt;(rBegin, sequence.end() - 1));
+        return lValid && rValid;
+    }
+};
+</=></code></pre>
+</details></li>
+<li>【<strong>二叉树中和为某值的路径</strong>】给定二叉树和某值，求二叉树中根节点到叶子节点值的和为给定数值的全部路径；<details> <summary>点击查看解析</summary>
+<pre><code>
+class Solution {
+public:
+    vector<vector&lt;int&gt;> FindPath(TreeNode* root,int expectNumber) {
+        vector<vector&lt;int&gt;> paths;
+        // dfs
+        FindPathCore(root, expectNumber, {}, paths);
+        return paths;
+    }
+    void FindPathCore(TreeNode* root, int expectNumber, 
+            vector&lt;int&gt; path, vector<vector&lt;int&gt;>& paths) {
+        if (root == nullptr) {
+            return;
+        }
+        // 本节点计入路程
+        path.push_back(root->val);
+        expectNumber -= root->val;
+        // 若无左右子树，即到达叶子节点，判断路程是否符合条件
+        if (root->left == nullptr and root->right == nullptr) {
+            if (expectNumber == 0)
+                paths.push_back(path);
+            return;
+        }
+        // 递归左右子树
+        FindPathCore(root->left,  expectNumber, path, paths);
+        FindPathCore(root->right, expectNumber, path, paths);
+    }
+};
+</vector&lt;int&gt;></vector&lt;int&gt;></vector&lt;int&gt;></code></pre>
+</details></li>
+<li>【<strong>复杂链表的复制</strong>】实现复杂链表的复制，复杂链表节点定义如下，其中<code>m_pSibing</code>指针保存链表内另一个节点的地址：<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">RandomListNode</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> label;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">RandomListNode</span> *<span class="title">next</span>, *<span class="title">random</span>;</span></span><br><span class="line">    RandomListNode(<span class="keyword">int</span> x) :</span><br><span class="line">            label(x), next(<span class="literal">NULL</span>), random(<span class="literal">NULL</span>) &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<details> <summary>点击查看解析</summary>
+<p>方法一：先复制链表前向部分，再复制支路部分，由于定位一个节点的sibing需要O(n)的搜索速度，总的时间复杂度为O(n^2)；<br>
+方法二：先复制链表前向部分，并在过程中创建哈希表建立原链表节点到复制链表节点的映射，那么每个节点的sibing只需O(1)即可定位，辅助空间为O(n)，时间复杂度O(n)，是一种空间换时间的方案；<br>
+方法三：在原链表每个节点后，插入节点的复制(“->N->N'->”的形式)，并相应拷贝sibing信息，然后将连个链表拆开，时间复杂度为O(n)，且无辅助空间。</p>
+<pre><code>
+class Solution {
+public:
+    RandomListNode* Clone(RandomListNode* pHead) {
+        if (pHead == nullptr) return nullptr;
+        // 在每个节点后插入复制节点
+        RandomListNode* pNode = pHead;
+        while (pNode) {
+            RandomListNode* pCopy = new RandomListNode(pNode->label);
+            pCopy->next = pNode->next;
+            pNode->next = pCopy;
+            // 下一节点
+            pNode = pNode->next->next;
+        }
+        // 复制复杂链表指针
+        pNode = pHead;
+        while (pNode) {
+            // 注意`pNode->random`为空的判断
+            if (pNode->random)
+                pNode->next->random = pNode->random->next;
+            // 下一节点
+            pNode = pNode->next->next;
+        }
+        // 分离链表
+        RandomListNode* pCloneHead = nullptr;
+        RandomListNode* pCloneNode = nullptr;
+        pNode = pHead;
+        while (pNode) {
+            RandomListNode* pNext = pNode->next->next;
+            // 连接复制的节点
+            if (pCloneHead == nullptr) {
+                pCloneHead = pCloneNode = pNode->next;
+            }
+            else {
+                pCloneNode->next = pNode->next;
+                pCloneNode = pCloneNode->next;
+            }
+            // 连接原链表节点
+            pNode->next = pNext;
+            // 下一节点
+            pNode = pNode->next;
+        }
+        return pCloneHead;
+    }
+};
+</code></pre>
+</details></li>
+<li>【<strong>*二叉搜索树和双向链表</strong>】将一棵二叉搜索树转换成排序的双向链表，要求不能创建新节点，只能调整节点指针信息(<code>left, right</code>分别对应<code>prev, next</code>)；<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">TreeNode</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> val;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">TreeNode</span> *<span class="title">left</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">TreeNode</span> *<span class="title">right</span>;</span></span><br><span class="line">    TreeNode(<span class="keyword">int</span> x) :</span><br><span class="line">            val(x), left(<span class="literal">NULL</span>), right(<span class="literal">NULL</span>) &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>如二叉树${4, 2, 5, 1, 3}$转换为链表$1 \leftrightarrow 2 \leftrightarrow 3 \leftrightarrow 4 \leftrightarrow 5$</p>
+<details> <summary>点击查看解析</summary>
+<pre><code>
+class Solution {
+public:
+    TreeNode* Convert(TreeNode* pRootOfTree) {
+        TreeNode* pHead = nullptr; TreeNode* pTail = nullptr;
+        ConvertCore(pRootOfTree , &pHead, &pTail);
+        return pHead;
+    }
+    void ConvertCore(TreeNode* pRoot, TreeNode** pHead, TreeNode** pTail) {
+        if (!pRoot) return;
+        // 后序遍历
+        TreeNode* pHeadL = nullptr; TreeNode* pTailL = nullptr;
+        ConvertCore(pRoot->left, &pHeadL, &pTailL);
+        TreeNode* pHeadR = nullptr; TreeNode* pTailR = nullptr;
+        ConvertCore(pRoot->right, &pHeadR, &pTailR);
+        // 左侧，需考虑左子树是否存在的问题
+        if (pHeadL) {
+            pTailL->right = pRoot;
+            pRoot->left = pTailL;
+            *pHead = pHeadL;
+        } else {
+            *pHead = pRoot;
+        }
+        // 右侧，需考虑右子树是否存在的问题
+        if (pHeadR) {
+            pHeadR->left = pRoot;
+            pRoot->right = pHeadR;
+            *pTail = pTailR;
+        } else {
+            *pTail = pRoot;
+        }
+    }
+};
+</code></pre>
+</details></blockquote>
+</li>
+<li>【<strong>*字符串的排列</strong>】输入一个字符串，打印出该字符串中字符的所有排列；<blockquote>
+<p>如输入<code>&quot;abc&quot;</code>，所有排列为<code>&quot;abc&quot;, &quot;acb&quot;, &quot;bac&quot;, &quot;bca&quot;, &quot;cab&quot;, &quot;cba&quot;</code>；<br>相关题型：</p>
+<ol>
+<li>求字符的所有排列，包含$1,2,3$个字符的组合；</li>
+<li>将$8$个数字放置在正方体的$8$个顶点上，判断是否有可能使相对的三组平面，四个顶点之和相等；</li>
+<li>八皇后问题：在$8 \times 8$棋盘上放置$8$个皇后，使皇后间不能相互攻击(不在同一列、同一行、同一对角线上)，问有多少种摆法？<details> <summary>点击查看解析</summary>
+<pre><code>
+class Solution {
+public:
+vector<string> Permutation(string str) {
+   vector<string> ret;
+   // 终止条件1：字符串空
+   if (str.size() == 0) return ret;
+   // 终止条件2：只有一个字符
+   if (str.size() == 1) {
+       ret.push_back(str);
+       return ret;
+   }
+   // 固定首字符
+   char ch = str[0];
+   // 剩余字符递归组合
+   vector<string> subper = Permutation(str.substr(1));
+   // 组合首字符
+   for (string sp : subper) {
+       int n = sp.size();
+       // 将首字符插入到字符串各个位置中
+       for (int i = 0; i < n + 1; i++) {
+           string spc(sp);
+           spc.insert(spc.begin() + i, ch);
+           // 顺序查找，去重
+           if (find(ret.begin(), ret.end(), spc) == ret.end())
+               ret.push_back(spc);
+       }
+   }
+   sort(ret.begin(), ret.end());
+   return ret;
+}
+};
+</string></string></string></code></pre>
+</details></li>
+</ol>
+</blockquote>
+</li>
+<li>【<strong>*数组中出现次数超过一半的数字</strong>】数组中有一个数字出现的次数超过数组长度的一半，找出该数字；<details> <summary>点击查看解析</summary>
+<p> 排序后数组中间的数即超过数组长度的一半的数，也就是寻找统计意义的中位数；即寻找第n/2个数，快速排序。 </p> 
+<pre><code>
+class Solution {
+public:
+    // 设置全局标志位，结果是否有效
+    bool isValid = false;
+    int MoreThanHalfNum_Solution(vector&lt;int&gt; numbers) {
+        int n = numbers.size();
+        // 边界条件！
+        if (n == 1) return numbers[0];
+        // 找中位数
+        int t = (n + 1) / 2;
+        quickSort(numbers, 0, n, t);
+        return isValid? numbers[t]: 0;
+    }
+    void quickSort(vector&lt;int&gt;& numbers, int begin, int end, int target) {
+        if (end - begin <= 1) return; 左右分区 int index="partition(numbers," begin, end); 找到该位置的数，直接退出不继续排序 if (index="=" target) { isvalid="true;" } 递归 quicksort(numbers, index, target); + 1, end, partition(vector&lt;int&gt;& numbers, end) pivot="numbers[begin];" l="begin," r="end" - 1; while (true) (l < end && numbers[l] l++; (r>= begin && numbers[r] >  pivot) r--;
+            if (l >= r) break;
+            // 交换
+            int t = numbers[l];
+            numbers[l] = numbers[r];
+            numbers[r] = t;
+        }
+        // 交换
+        numbers[begin] = numbers[l - 1];
+        numbers[l - 1] = pivot;
+        return l - 1;
+    }
+};
+</=></code></pre>
+</details></li>
+<li>【<strong>最小的$k$个数</strong>】<strong>找出数组中最小的$k$个数；</strong><details> <summary>点击查看解析</summary>
+<p> 1. 在能修改原数组元素位置的情况下，可以采用快速排序的算法，时间复杂度O(n)；</p> 
+<p> 2. 若不能修改元素位置，可以开辟容量为k的容器，初始化为数组前k个数，然后后续数字依次进入，若小于其中的元素将其替换；考虑到每次都是与容器内最大元素比较，可采用最大堆；该方案时间复杂度O(nlogk)，但适合海量数据的搜索问题。 </p> 
+<pre><code>
+class Solution {
+public:
+    vector&lt;int&gt; GetLeastNumbers_Solution(vector&lt;int&gt; input, int k) {
+        int n = input.size();
+        // 数据量不足k，返回空
+        if (n < k) return {};
+        // 求前k小的数字
+        vector&lt;int&gt; ret;
+        make_heap(input.begin(), input.end(), greater<int>());
+        while (k-- > 0 && input.size() > 0) {
+            pop_heap(input.begin(), input.end(), greater<int>());
+            ret.push_back(*(input.end() - 1));
+            input.pop_back();
+        }
+        return ret;
+    }
+};
+</int></int></code></pre>
+</details></li>
+<li>【<strong>数据流的中位数</strong>】求取数据流的中位数，数据数目随时间变化而增加；<details> <summary>点击查看解析</summary>
+<p> 最好的解决方法是AVLTree，但实现较为复杂。 </p> 
+<p> 用一个最大堆存放数据中较小的一半数据，用最小堆存放数据中较大的一般数据；<b>始终保证两个堆元素数目之差不大于1、最小堆堆顶数据大于最大堆堆顶</b>；堆顶数据即中位数附近的数。 </p> 
+<pre><code>
+template&lt;typename T&gt;
+class MedianOfDataflow
+{
+public:
+    MedianOfDataflow() {}
+    void push(T& x) {
+        if (lessData.size() + greaterData.size() == 0) {
+            lessData.push_back(x); 
+            push_heap(lessData.begin(), lessData.end(), greater&lt;T&gt;());
+            return;
+        }
+        // “较小一半”个数较多，此时应插入“较大一半”
+        if (lessData.size() > greaterData.size()) {
+            // 插入数据小于“较小一半”最大
+            // 若直接插入，会导致“较大一半”堆顶小于“较小一半”堆顶
+            // 将“较小一半”堆顶数据放置到“较大一半”中，该值将成为“较大一半”堆顶
+            if (x < lessData[0]) {
+                greaterData.push_back(lessData[0]); 
+                pop_heap(lessData.begin(), lessData.end(), less&lt;T&gt;()); 
+                lessData.pop_back();
+                push_heap(greaterData.begin(), greaterData.end(), greater&lt;T&gt;());
+            }
+            greaterData.push_back(x); 
+            push_heap(greaterData.begin(), greaterData.end(), greater&lt;T&gt;());
+        }
+        // “较大一半”个数较多，此时应插入“较小一半”
+        else {
+            if (x > greaterData[0]) {
+                lessData.push_back(greaterData[0]); 
+                pop_heap(greaterData.begin(), greaterData.end(), less&lt;T&gt;()); 
+                greaterData.pop_back();
+                push_heap(lessData.begin(), lessData.end(), less&lt;T&gt;());
+            }
+            lessData.push_back(x); 
+            push_heap(lessData.begin(), lessData.end(), less&lt;T&gt;());
+        }
+    }
+    T get() const {
+        if (greaterData.size() == 0 && lessData.size() == 0)
+            throw "无数据！";
+        if (greaterData.size() == lessData.size())
+            return (greaterData[0] + lessData[0]) / 2;
+        else if (greaterData.size() > lessData.size())
+            return greaterData[0];
+        else 
+            return lessData[0];
+    }
+private:
+    vector&lt;T&gt; lessData;     // 存放较小一半数据
+    vector&lt;T&gt; greaterData;  // 存放较大一半数据
+};
+</code></pre>
+</details></li>
+<li>【<strong>连续子数组的最大和</strong>】给定整数数组，有正数也有负数，数组中一个或连续多个整数构成子数组，求子数组和的最大值；</li>
+<li>【<strong>*$1 \sim n$整数中$1$出现的次数</strong>】<strong>给定$n$，求$1 \sim n$的整数中，$1$共出现了几次；</strong><details> <summary>点击查看解析</summary>
+<pre><code>
+class Solution {
+public:
+    int NumberOf1Between1AndN_Solution(int n) {
+        int count = 0;  // 1的个数
+        int i = 1;      // 当前位
+        int current = 0, after = 0, before = 0;
+        while ((n / i) != 0) {
+            // n = 21345, i = 2 -> 213, 4, 5
+            current = (n / i) % 10;     // 高位数字
+            before = n / (i * 10);      // 当前位数字
+            after = n - (n / i) * i;    // 低位数字
+            // 如果为0,出现1的次数由高位决定, 高位数字 * 当前位数
+            if (current == 0)
+                count += before * i;
+            // 如果为1,出现1的次数由高位和低位决定, 高位 * 当前位 + 低位 + 1
+            else if (current == 1)
+                count += before * i + after + 1;
+            // 如果大于1,出现1的次数由高位决定,（高位数字 + 1）* 当前位数
+            else {
+                count += (before + 1) * i;
+            }
+            //前移一位
+            i = i * 10;
+        }
+        return count;
+    }
+};
+</code></pre>
+</details></li>
+<li>【<strong>*数字序列中某位的数字</strong>】将自然数序列化为字符串<code>&quot;012345678910111213...&quot;</code>的形式，输入$n$，确定该序列内索引为$n$的字符对应的数字；<details> <summary>点击查看解析</summary>
+<p> 注意1位数、2位数、3位数……的个数 </p> 
+<pre><code>
+class Solution {
+public:
+    int digitsInSequence(int n)
+    {
+        if (n <= 0) return 0; ------------- 确认位于几位数范围内 int order="0;" 阶次，order + 1表示当前位于几位数范围内 cntnumseqskip="1;" 序列化后跳过字符的数目 while (true) { cntnum="9" * pow(10, order); (order 1)位数的总个数 cntnumseq="cntNum" 1); 1)位数序列化后字符总个数 添加后不超过n，则可跳过 if (cntnumseqskip < n) order++; 确定位数范围 } else break; ------------------ 确定该数 inumseq="n" - cntnumseqskip; 1)位数序列化后，第inumseq个字符 inum="iNumSeq" 1)位数中第inum个数字 base="pow(10," 1)位数的第1个数字，如3位数第一个数字是100 number="base" inum; 获取该数 iseq="iNumSeq" % 该数序列化后第iseq位字符(一共inumseq位，每个数占(order 1)位，相除即第几个数) digit="(number" (int)pow(10, iseq)) 10; 求这个数序列化后第iseq位字符对应的数字 digit; }; code></=></code></pre>
+</details></li>
+<li>【<strong>*把数组排成最小的数</strong>】输入正整数数组，把数组中的数字拼接起来排成一个数，使数字最小；<details> <summary>点击查看解析</summary>
+<p>关键是排序规则的制定</p>
+<pre><code>
+class Solution {
+public:
+    string PrintMinNumber(vector&lt;int&gt; numbers) {
+        int len = numbers.size();
+        // 边界条件
+        if (len == 0) return "";
+        // 排序
+        sort(numbers.begin(), numbers.end(), cmp);
+        // 组合结果
+        string res;
+        for (int i = 0; i < len; i++)
+            res += to_string(numbers[i]);
+        return res;
+    }
+    static bool cmp(int a, int b) {
+        // 将a、b组合后对比进行排序
+        string A = to_string(a) + to_string(b);
+        string B = to_string(b) + to_string(a);
+        return A < B;
+    }
+};
+</code></pre>
+</details></li>
+<li>【<strong>数字翻译为字符串</strong>】给定数字，按照如下规则翻译为字符串：$0 \rightarrow a, 1 \rightarrow b, \cdots, 25 \rightarrow z$，问该数可翻译成几种<blockquote>
+<p>如输入$12258$，有<code>&quot;bccfi&quot;, &quot;bwfi&quot;</code>等多种翻译方法。</p>
+<details> <summary>点击查看解析</summary>
+<p> 动态规划 </p> 
+<pre><code>
+class Solution {
+public:
+    int translateNum(int num) {
+        string str = to_string(num);
+        int n = str.size();
+        // 动态规划
+        vector&lt;int&gt; dp(n + 1, 0);
+        // 填表
+        for (int i = 0; i < n + 1; i++) {
+            // 边界条件：空字符、第一个字符
+            if (i <= 1) { dp[i]="1;" continue; } 单个字符一定能转换 - 1]; 两个字符 string substr="str.substr(i" 2, 2); 连续0只能翻译为一位，两位不符合转换条件 if (substr[0]="=" '0' || stoi(substr)> 25) continue;
+            dp[i] += dp[i - 2];
+        }
+        return dp[n];
+    }
+};
+</=></code></pre>
+</details></blockquote>
+</li>
+<li>【<strong>礼物的最大价值</strong>】在一个$m \times n$的棋盘，每一格都放有一个礼物，每个礼物具有价值(大于0)，从棋盘左上开始，每次向左或向下移动一格，直到棋盘右下角，计算最多能拿到多少价值；<details> <summary>点击查看解析</summary>
+<p> 动态规划；用递归的思路，设计循环的程序以提高性能；用表格的形式求解，不必保存所有中间结果。 </p> 
+<pre><code>
+class Solution {
+public:
+    int maxValue(vector&lt;vector&lt;int&gt;&gt;& grid) {
+        int rows = grid.size();
+        if (rows == 0) return 0;
+        int cols = grid[0].size();
+        if (cols == 0) return 0;
+        // 动态规划填表
+        vector&lt;vector&lt;int&gt;&gt; dp(rows, vector&lt;int&gt;(cols, 0));
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                // 边界条件和状态转移方程
+                if (r == 0 && c == 0)
+                    dp[r][c] = grid[r][c];
+                else if (r == 0)
+                    dp[r][c] = dp[r][c - 1] + grid[r][c];
+                else if (c == 0)
+                    dp[r][c] = dp[r - 1][c] + grid[r][c];
+                else
+                    dp[r][c] = max(dp[r][c - 1], dp[r - 1][c]) + grid[r][c];
+            }
+        }
+        return dp[rows - 1][cols - 1];
+    }
+};
+</code></pre>
+</details></li>
+<li><p>【<strong>最长不重复的子字符串</strong>】从字符串(只包含<code>&#39;a&#39;~&#39;z&#39;</code>)中找到一个最长的字符不重复的子字符串，并计算该字符串的长度；</p>
+<details> <summary>点击查看解析</summary>
+<p> 滑动窗口法。</p>
+<pre><code>
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        int n = s.size();
+        if (n == 0) return 0;
+        // 双指针
+        int maxlen = 0;
+        int fast = 0, slow = 0;
+        while (true) {
+            // 快指针
+            fast++;
+            // 注意终止条件
+            if (fast > n) break;
+            // 慢指针
+            while (isRepeat(s.substr(slow, fast - slow))) slow++;
+            // 更新返回结果
+            maxlen = max(maxlen, fast - slow);
+        }
+        return maxlen;
+    }
+
+    bool isRepeat(const string& s) {
+        vector<bool> isShown(256, false);
+        for (char ch : s) {
+            if (isShown[ch]) return true;
+            isShown[ch] = true;
+        }
+        return false;
+    }
+};
+</bool></code></pre>
+</details></li>
+<li>【<strong>丑数</strong>】把只包含因子$2, 3, 5$的数称为丑数，并定义$1$是第一个丑数，求从小到大排列的第$1500$个丑数；<details> <summary>点击查看解析</summary>
+<p>一个丑数是另一个较小的丑数乘2、3、5得到的结果；保存已求取的丑数，在这些丑数中寻找下一个更大的最小丑数；每次只找一个丑数； </p>
+<pre><code>
+class Solution {
+public:
+    int nthUglyNumber(int n) {
+        if (n == 0) return 0;
+        // 动态规划
+        vector&lt;int&gt; dp(n, 0);
+        // 边界条件：1是丑数
+        dp[0] = 1;
+        // a, b, c用于保存下一个丑数的来源丑数，减少遍历
+        int a = 0, b = 0, c = 0;
+        for (int i = 1; i < n; i++){
+            // 抽数来源
+            int a2 = dp[a] * 2, b3 = dp[b] * 3, c5 = dp[c] * 5;
+            dp[i] = min(a2, min(b3, c5));
+            // 下一丑数来源更新
+            if (dp[i] == a2) a++;
+            if (dp[i] == b3) b++;
+            if (dp[i] == c5) c++;
+        }
+        return dp[n - 1];
+    }
+};
+</code></pre>
+</details></li>
+<li>【<strong>字符串中首个只出现一次的字符</strong>】给定字符串，输出<strong>第一个只出现一次的字符</strong>在给定字符串中的<strong>索引</strong>；<blockquote>
+<p>相关题型：</p>
+<ol>
+<li>给定两个字符串，删除第一个字符串中在第二个字符串中出现过的所有字符；</li>
+<li>删除字符串中重复字符；</li>
+<li>若两个单词出现字母相同且字数相同，而顺序不同，这两个单词称作变位词，编写函数判断两个单词是否为变位词；</li>
+<li>字符串流中只出现一次的字符。<details> <summary>点击查看解析</summary>
+<p> 若遍历字符，对每个字符进行重复字符的查找，时间复杂度为O(n2)； </p>
+<p> 遍历两次给定字符串：第一次统计字符出现次数，第二次查找出现一次的字符；时间复杂度O(n)，空间复杂度O(1)； </p>
+<pre><code>
+class Solution {
+public:
+ char firstUniqChar(string s) {
+     int n = s.size();
+     // 数组用作哈希表
+     vector&lt;int&gt; showTime(256);
+     for (char ch: s) {
+         showTime[ch] += 1;
+     }
+     // 寻找第一个出现一次的字符
+     for (char ch: s) {
+         if (showTime[ch] == 1)
+             return ch;
+     }
+     // 没有找到，返回`' '`
+     return ' ';
+ }
+};
+</code></pre>
+</details></li>
+</ol>
+</blockquote>
+</li>
+<li><p>【<strong>*数组中的逆序对</strong>】数组中任意两个数字，若前一个数字大于后一个数字，这两个数字构成逆序对，编写函数输出给定数组中逆序对的个数；</p>
+<details> <summary>点击查看解析</summary>
+<p> 利用<b>归并排序</b>的方法：对两个已升序排序的子数组a、b进行逆序对的统计，注意到此时两个子数组中数字在原数组中前后关系未变化，即a中元素在原数组中处于b中元素之前。 </p>
+<p> <b>从a的末尾进行遍历</b>，在a_i元素时，对b进行<b>从尾遍历</b>，当b_j小于a_i时表示b_j之前(包括b_j)的元素与a_i构成逆序对，停止遍历，并记录逆序对个数。 </p>
+<p> 每次比较过程中，保存较大的数作为排序结果。 </p>
+<p> 这种基于归并排序的方案时间复杂度O(nlogn)，空间复杂度为O(n)，以空间换取时间效率。 </p>
+<pre><code>
+class Solution {
+public:
+    int count = 0;
+    int reversePairs(vector&lt;int&gt;& nums) {
+        mergeSort(nums, 0, nums.size());
+        return count;
+    }
+    void mergeSort(vector&lt;int&gt;& nums, int begin, int end) {
+        int n = end - begin;
+        if (n <= 1) return; int mid="begin" + (n>> 1);
+        mergeSort(nums, begin, mid);
+        mergeSort(nums, mid, end);
+        // 合并过程中计数
+        merge(nums, begin, mid, end);
+    }
+    void merge(vector&lt;int&gt;& nums, int begin, int mid, int end) {
+        int n = end - begin;
+        vector&lt;int&gt; buff(n, 0);
+
+        int i = begin, j = mid, k = 0;
+        while (i < mid && j < end) {
+            if (nums[i] <= nums[j]) { buff[k++]="nums[i++];" } else 累计逆序对个数 例如，[7, 8], [6, 8, 9]，此时6与左半数组每个数字组成逆序对 count +="mid" - i; 以下只会触发一个循环 while(i < mid) while(j end) 复制回nums for (k="0;" k n; k++) nums[k begin]="buff[k];" }; code></=></=></code></pre>
+</details></li>
+<li>【<strong>两个链表的第一个公共节点</strong>】输入两个单向链表，找到它们的第一个公共节点；<details> <summary>点击查看解析</summary>
+<p>
+方案一：暴力搜索，则时间复杂度为O(nm)；<br>
+方案二：用辅助空间(如栈)保存两个链表的节点地址，从尾部依次比较，时间复杂度O(n + m)，空间复杂度O(m + n)； <br>
+方案三：两个链表尾部相同，那么可以先遍历两个链表获得两个链表的长度，在较长的链表先走|n - m|步，然后同时走查找公共节点，该方案时间复杂度O(n + m)，而不需要辅助空间。
+ </p>
+<pre><code>
+class Solution {
+public:
+    ListNode* getIntersectionNode(ListNode* headA, ListNode* headB) {
+        if (!headA || !headB) return nullptr;
+        // 求长度
+        int lenA = lenOfList(headA);
+        int lenB = lenOfList(headB);
+        // 调整链表A为更长的链表
+        if (lenA < lenB) {
+            ListNode* headT = headA; headA = headB; headB = headT;
+            int lenT = lenA; lenA = lenB; lenB = lenT;
+        }
+        // 求长度差
+        int lenDiff = lenA - lenB;
+        // 求公共节点
+        while (lenDiff--) headA = headA->next;
+        while (headA != headB) {
+            headA = headA->next;
+            headB = headB->next;
+        }
+        return headA;
+    }
+    int lenOfList(ListNode* head) {
+        int len = 0;
+        while (head) {
+            len++; head = head->next;
+        }
+        return len;
+    }
+};
+</code></pre>
+</details></li>
+<li>【<strong>在排序数组中查找数字出现次数</strong>】给定排序数组，统计某数字出现的次数；<details> <summary>点击查看解析</summary>
+<p> 二分查找：左侧最先出现的索引、右侧最先出现的索引；尽管搜索了两次，但总的时间复杂度仍为O(logn) </p>
+<pre><code>
+class Solution {
+public:
+    int search(vector&lt;int&gt;& nums, int target) {
+        if (nums.size() == 0) return 0;
+        int l = bs_left(nums, target);
+        int r = bs_right(nums, target);
+        if (l == -1 || r == -1) return 0;
+        return r - l + 1;
+    }
+    // 左边界二分搜索
+    int bs_left(const vector&lt;int&gt;& nums, int target) {
+        int n = nums.size();
+        int l = 0, r = n - 1;
+        while (l <= r) { int m="l" + (r - l) 2; if (nums[m] < target) l="m" 1; } else> target) {
+                r = m - 1;
+            } else {
+                r = m - 1;
+            }
+        }
+        // 越界检查、查询检查
+        if (l >= n || nums[l] != target) return -1;
+        return l;
+    }
+    // 右边界二分搜索
+    int bs_right(const vector&lt;int&gt;& nums, int target) {
+        int n = nums.size();
+        int l = 0, r = n - 1;
+        while (l <= r) { int m="l" + (r - l) 2; if (nums[m] < target) l="m" 1; } else> target) {
+                r = m - 1;
+            } else {
+                l = m + 1;
+            }
+        }
+        // 越界检查、查询检查
+        if (r < 0 || nums[r] != target) return -1;
+        return r;
+    }
+};
+</=></=></code></pre>
+</details></li>
+<li>【<strong>$0 \sim n-1$中缺失的数字</strong>】长度为$n-1$的递增排序数组中所有数字唯一，并且每个数范围在$0 \sim n-1$内，那么有一个数字缺失，找出这个数字；<details> <summary>点击查看解析</summary>
+<p> 
+方案一：二分查找：第一个下标与数组元素不一致的数字；
+方案二：0 ~ n-1包含n个数字，且唯一，所以 0 + 1 + ... + (n - 1) - sum(nums) 即答案。
+</p>
+</details></li>
+<li>【<strong>数组中数值和下标相等的数字</strong>】数组中元素已升序排序，且数字唯一，找出<strong>第一个</strong>数值和下标一致的元素；<details> <summary>点击查看解析</summary>
+<p> 二分查找；由于已排序，若数值比索引小，向右搜索 </p>
+<pre><code>
+class Solution {
+public:
+    int numberSameAsIndex(int* nums, int n)
+    {
+        if (!nums || n == 0) return -1;
+        int left = 0; int right = n;
+        while (left < right) {
+            int middle = (left + right) / 2;        // 向下取整
+            nums[middle] < middle ? left = middle + 1 : right = middle;
+        }
+        return left;
+    }
+};
+</code></pre>
+</details></li>
+<li>【<strong>搜索二叉树的第$k$大元素</strong>】给定搜索二叉树，求第$k$大元素；<details> <summary>点击查看解析</summary>
+<p> 中序遍历输出为升序 </p>
+<pre><code>
+class Solution {
+public:
+    int kthLargest(TreeNode* root, int k) {
+        vector&lt;int&gt; nums = getOrderedNums(root);
+        return nums[nums.size() - k];
+    }
+    vector&lt;int&gt; getOrderedNums(TreeNode* root) {
+        // 中序遍历获取排序数字
+        if (!root) return {};
+        vector&lt;int&gt; numsL = getOrderedNums(root->left);
+        vector&lt;int&gt; numsR = getOrderedNums(root->right);
+        // 组合数字
+        vector&lt;int&gt; nums;
+        nums.insert(nums.end(), numsL.begin(), numsL.end());
+        nums.push_back(root->val);
+        nums.insert(nums.end(), numsR.begin(), numsR.end());
+        return nums;
+    }
+};
+</code></pre>
+</details></li>
+<li>【<strong>平衡二叉树判断</strong>】输入二叉树根节点，判定该树是否为平衡二叉树，即左右子树的深度不超过$1$；<details> <summary>点击查看解析</summary>
+<p> 可在每个节点处获取子树高度，判断高度差，但是这样会造成一个节点的重复遍历； </p>
+<p> 可以通过后续遍历，在某节点处先获取子树高度并进行判断，并返回该节点的高度。 </p>
+<pre><code>
+class Solution {
+public:
+    bool balanced = true;
+    bool isBalanced(TreeNode* root) {
+        if (!root) return true;
+        heightOf(root);
+        return balanced;
+    }
+    int heightOf(TreeNode* root) {
+        if (!root) return 0;
+        int heightL = heightOf(root->left );
+        int heightR = heightOf(root->right);
+        // 求高度过程中判断是否平衡，不平衡直接返回
+        if (abs(heightL - heightR) > 1) {
+            balanced = false;
+            return 0;
+        }
+        return max(heightL, heightR) + 1;
+    }
+};
+</code></pre>
+</details></li>
+<li>【<strong>*数组中只出现一次的数字</strong>】数组中除两个数字外仅出现一次外，其他数字都出现了两次，要求在时间复杂度$O(n)$，空间复杂度$O(1)$下找到这两个数字；<details> <summary>点击查看解析</summary>
+<p> 关键是如何将数字进行分组，使两个数字分别所在组别内，除这两个数字外其余数字都出现两次 </p>
+<pre><code>
+class Solution {
+public:
+    vector&lt;int&gt; singleNumber(vector&lt;int&gt;& nums) {
+        int exclusiveOr = 0;
+        for (int num: nums) exclusiveOr ^= num;
+        // 以某不为0的位，将数据分组，这里选择最低出现1的位数
+        int bitcount = 0;
+        while (!(exclusiveOr & 0x01)) {
+            exclusiveOr >>= 1;
+            bitcount++;
+        }
+        int mask = 0x01 << bitcount;
+        // 求这两个数
+        vector&lt;int&gt; sgNums(2, 0);
+        for (int num: nums) {
+            if (num & mask) {
+                sgNums[0] ^= num;
+            } else {
+                sgNums[1] ^= num;
+            }
+        }
+        return sgNums;
+    }
+};
+</code></pre>
+</details></li>
+<li>【<strong>*数组中只出现一次的数字</strong>】一个数组中一个数组仅出现一次，而其他数字均出现三次，找出这个数字；<details> <summary>点击查看解析</summary>
+<p> 将全部数的某位加和，若能被3整除，表示待查找数该位为1，否则为0。 </p>
+<pre><code>
+class Solution {
+public:
+    int singleNumber(vector&lt;int&gt;& nums) {
+        int sgNum = 0;
+        for (int bitcount = 0; bitcount < sizeof(int) * 8; bitcount++) {
+            // 所有数的第bitcount位累加
+            int sum = 0;
+            for (int num: nums)
+                sum += (num >> bitcount) & 0x01;
+            // 若不能被3整除，表示sgNum该位是1
+            sgNum += (sum % 3? 0x01: 0x00) << bitcount;
+        }
+        return sgNum;
+    }
+};
+</code></pre>
+</details></li>
+<li>【<strong>和为$s$的数字</strong>】输入递增排序的数组和一个数字，在数组中查找任意两个数字使和为$s$；<details> <summary>点击查看解析</summary>
+<p> 从数组的左右两侧步进搜索：当左右指针数据之和小于s，左侧自增，否则右侧自减；时间复杂度O(n)。 </p>
+<pre><code>
+class Solution {
+public:
+    vector&lt;int&gt; twoSum(vector&lt;int&gt;& nums, int target) {
+        int l = 0, r = nums.size() - 1;
+        while (l < r) {
+            int sum = nums[l] + nums[r];
+            if (sum == target)
+                return {nums[l], nums[r]};
+            sum < target? l++: r--;
+        }
+        return {0, 0};
+    }
+};
+</code></pre>
+</details></li>
+<li>【<strong>*和为$s$的连续正数序列</strong>】输入正数$s$，打印所有和为$s$的正数序列(最少有两个数)；<blockquote>
+<p>例如输入$s=15$，输出${1, 2, 3, 4, 5}, {4, 5, 6}, {7, 8}$</p>
+<details> <summary>点击查看解析</summary>
+<p> 与上题类似，寻找序列的最大和最小值 </p>
+<pre><code>
+class Solution {
+public:
+    vector&lt;vector&lt;int&gt;&gt; findContinuousSequence(int target) {
+        vector&lt;vector&lt;int&gt;&gt; sequence;
+        // 快慢指针，表示序列的第一个元素和最后一个元素
+        int begin = 1, end = 1;
+        // end不超过(target + 1) / 2
+        while (end <= (target + 1) 2) { int sum="sumOfSequence(begin," end); if (sum="=" target) sequence.push_back(getsequence(begin, end)); end++; continue; } < target? end++: begin++; return sequence; sumofsequence(int begin, end) begin ... end (begin * (end - 2; vector&lt;int&gt; getsequence(int nums; for (int num="begin;" num++) nums.push_back(num); }; code></=></code></pre>
+</details></blockquote>
+</li>
+<li>【<strong>翻转字符串</strong>】输入英文句子，将其中的单词翻转，但单词内字母顺序不变，标点与字母一样处理；<blockquote>
+<p>如<code>&quot;I am a student.&quot;</code>翻转后变成<code>&quot;student. a am I&quot;</code></p>
+<details> <summary>点击查看解析</summary>
+<p> 先将每个单词翻转，再翻转整句 </p>
+<pre><code>
+void reverse(char* begin, char* end)
+{
+    if (!begin || !end) return;
+    while (begin < end) {
+        char ch = *begin;
+        *begin = *end;
+        *end = ch;
+        begin++; end--;
+    }
+}
+void reverseSentence(char* sentence)
+{
+    if (!sentence) return;
+    // 翻转每个单词
+    char* begin = sentence;
+    char* end = sentence;
+    while (*end != '\0') {
+        if (*end == ' ') {
+            reverse(begin, end - 1);
+            begin = end + 1;
+        }
+        end++;
+    }
+    reverse(begin, end - 1);
+    // 翻转整句
+    reverse(sentence, end - 1);
+}
+</code></pre>
+</details></blockquote>
+</li>
+<li>【<strong>左旋转字符串</strong>】输入字符串和数目，将字符串前面的指定数目个字符移动到字符串末尾；<blockquote>
+<p>如<code>&quot;abcdefg&quot;</code>，$n=2$，旋转后变为<code>&quot;cdefgab&quot;</code></p>
+<details> <summary>点击查看解析</summary>
+<p> 调用3次上面的reverse函数 </p>
+<pre><code>
+void leftRotateString(char* str, int n)
+{
+    if (!str) return;
+    // end and length of the string
+    char* end = nullptr; for (end = str; *end != '\0'; end++);end--;
+    int strLen = end - str + 1;
+    if (n > strLen) return;
+    // left rotate
+    reverse(str, str + n - 1);
+    reverse(str + n, end);
+    reverse(str, end);
+}
+</code></pre>
+</details></blockquote>
+</li>
+<li>【<strong>*$n$个骰子的点数</strong>】将$n$个骰子扔在地上，所有骰子朝上的面的数字之和为$s$，求$s$所有可能的值出现的概率；<details> <summary>点击查看解析</summary>
+<pre><code>
+class Solution {
+public:
+    vector<double> twoSum(int n) {
+        vector&lt;int&gt; count(6 * n + 1, 0);
+        // 1 ~ n 个骰子依次计入
+        for (int i = 1; i < n + 1; i++) {
+            // 第 i 个骰子各值出现次数的计数
+            vector&lt;int&gt; countNext(6 * n + 1, 0);
+            // 第 1 个骰子
+            if (i == 1) {
+                for (int num = 6; num >= 1; num--)
+                    countNext[num] = 1;
+            } else {
+                // 第 i 个骰子的点数范围是 i ~ 6i
+                for (int j = 6 * i; j >= i; j--) {
+                    // 点数是 j 可能由上一次 j - num 得到
+                    for (int num = 6; num >= 1; num--) {
+                        // 上一次不可能投出小于等于0的数
+                        if (j - num <= 6 0) continue; 累加 countnext[j] +="count[j" - num]; } 更新 count="countNext;" 点数范围 n ~ 6n int countsum="0;" for (int i="n;" < * 1; i++) 计算概率 vector<double> prob(6 * n - n + 1);
+        for (int i = 0; i < 6 * n - n + 1; i++) {
+            prob[i] = (double)count[i + n] / (double)countSum;
+        }
+        return prob;
+    }
+};
+</=></double></code></pre>
+</details></li>
+<li>【<strong>扑克牌中的顺子</strong>】从扑克牌中随机抽取$5$张牌，判断是否为顺子(A~K连续5张)，大小王可视作任意牌；<details> <summary>点击查看解析</summary>
+<p> 统计大小王个数和间隔数，判断大小王是否足够填充间隔 </p>
+<pre><code>
+class Solution {
+public:
+    bool isStraight(vector&lt;int&gt;& nums) {
+        sort(nums.begin(), nums.end());
+        // 统计大小王个数
+        int nJoker = 0; 
+        for (int num: nums) {
+            if (num > 0) break;
+            nJoker += 1;
+        }
+        // 统计间隔数字
+        int nGap = 0;
+        int lastNum = -1;
+        for (int i = nJoker; i < nums.size(); i++) {
+            // 出现相同的数，不可能是顺子
+            if (nums[i] == lastNum) return false;
+            // 第一个数不计算 gap
+            if (lastNum != -1)
+                nGap += nums[i] - lastNum - 1;
+            lastNum = nums[i];
+        }
+        // 大小王是否足够填充间隔
+        return nGap <= njoker; } }; < code></=></code></pre>
+</details></li>
+<li>【<strong>*圆圈中最后剩下的数字</strong>】$0, 1, \cdots, n-1$这$n$个数字排成圆圈，从数字$0$开始，每次删除第$m$个数字，求这个圆圈内最后一个数字；<details> <summary>点击查看解析</summary>
+<p> 一种简单的解法是，实现一个环状链表(如使用vector容器)，但该方案会在环内重复遍历，时间复杂度O(mn)； </p>
+<pre><code>
+bool lastNumberInLoop(int n, int m, int* num)
+{
+    if (n < 1 || m < 0 || !num) return false;
+    vector&lt;int&gt; numbers(n); 
+    for (int i = 0; i < n; i++) numbers[i] = i;
+    int index = 0;
+    while (numbers.size() > 1) {
+        int size = numbers.size();
+        index = (index % size + (m - 1) % size) % size;  // 防止溢出
+        numbers.erase(numbers.begin() + index);
+    }
+    *num = numbers[0];
+    return true;
+}
+</code></pre>
+<p> 
+另一种方案， <br>
+第一轮是 [0, 1, 2, 3, 4] ，所以是 [0, 1, 2, 3, 4] 这个数组的多个复制。这一轮 2 删除了。<br>
+第二轮开始时，从 3 开始，所以是 [3, 4, 0, 1] 这个数组的多个复制。这一轮 0 删除了。<br>
+第三轮开始时，从 1 开始，所以是 [1, 3, 4] 这个数组的多个复制。这一轮 4 删除了。<br>
+第四轮开始时，还是从 1 开始，所以是 [1, 3] 这个数组的多个复制。这一轮 1 删除了。<br>
+最后剩下的数字是 3。<br><br>
+然后我们从最后剩下的 3 倒着看，我们可以反向推出这个数字在之前每个轮次的位置。<br>
+最后剩下的 3 的下标是 0。<br>
+第四轮反推，补上 m 个位置，然后模上当时的数组大小 2，3 的位置是(0 + 3) % 2 = 1。<br>
+第三轮反推，补上 m 个位置，然后模上当时的数组大小 3，3 的位置是(1 + 3) % 3 = 1。<br>
+第二轮反推，补上 m 个位置，然后模上当时的数组大小 4，3 的位置是(1 + 3) % 4 = 0。<br>
+第一轮反推，补上 m 个位置，然后模上当时的数组大小 5，3 的位置是(0 + 3) % 5 = 3。<br>
+总结一下反推的过程，就是 (当前index + m) % 上一轮剩余数字的个数。
+</p>
+<pre><code>
+class Solution {
+public:
+    int lastRemaining(int n, int m) {
+        int ans = 0;
+        // 最后一轮剩下2个人，所以从2开始反推
+        for (int i = 2; i <= n; i++) ans="(ans" + m) % i; return ans; } }; < code></=></code></pre>
+</details></li>
+<li>【<strong>股票的最大利润</strong>】假设把某股票的价格按时间先后顺序存储在数组中，问买卖该股票一次可能获得的最大利润是多少；<details> <summary>点击查看解析</summary>
+<pre><code>
+int maxDiff(int* nums, int n)
+{
+    if (!nums || n < 1) return -1;
+    int maxdiff = INT_MIN, minNum = INT_MAX;
+    for (int i = 0; i < n; i++) {
+        // 保存最低价
+        if (nums[i] < minNum) {
+            minNum = nums[i];
+        }
+        // 计算当前值与最低价的差额
+        int diff = nums[i] - minNum;
+        // 保存最大差额
+        if (diff > maxdiff) {
+            maxdiff = diff;
+        }
+    }
+    return maxdiff;
+}
+</code></pre>
+<p> 动态规划解法 </p>
+<pre><code>
+class Solution {
+public:
+    int maxProfit(vector&lt;int&gt;& prices) {
+        int n = prices.size();
+        if (n == 0) return 0;
+        vector&lt;int&gt; bought(n + 1, INT_MIN);
+        vector&lt;int&gt; sold(n + 1, 0);
+        for (int i = 1; i < n + 1; i++) {
+            bought[i] = max(
+                // 前一天第 1 次买入
+                bought[i - 1],
+                // 前一天第 0 次卖出，这天第 1 次买入
+                0 - prices[i - 1]
+            );
+            sold[i] = max(
+                // 前一天第 1 次卖出
+                sold[i - 1],
+                // 前一天第 1 次买入，这天第 1 次卖出
+                bought[i - 1] + prices[i - 1]
+            );
+        }
+        return sold[n];
+    }
+};
+</code></pre>
+</details></li>
+<li>【<strong>求$1 + 2 + \cdots + n$</strong>】不使用乘除法、for、while、if、else、switch、case等关键字及三目表达式计算$1 + 2 + \cdots + n$的值；<details> <summary>点击查看解析</summary>
+<p> 借助构造函数和静态成员变量；或&&运算符的短路原理配合递归 </p>
+<pre><code>
+class Solution {
+public:
+    int sumNums(int n) {
+        n && (n += sumNums(n - 1));
+        return n;
+    }
+};
+</code></pre>
+</details></li>
+<li>【<strong>用位运算实现加法</strong>】只使用位运算实现两个整数的加法；<details> <summary>点击查看解析</summary>
+<p> 位的加法规律与异或一致；注意进位位的处理；<br>
+例如 15 + 7 = 0b00001111 + 0b00000111 运算过程如下 <br>
+0b00001111, 0b00000111 <br>
+0b00001000, 0b00001110 <br>
+0b00000110, 0b00010000 <br>
+0b00010110, 0b00000000
+</p>
+<pre><code>
+class Solution {
+public:
+    int add(int a, int b) {
+        int sum = 0, carry = 0;
+        while (true) {
+            sum   = a ^ b;                          // 先用 ^ 求每位和
+            carry = (unsigned int)(a & b) << 1;     // 再用 & 每位相加后的进位
+            a = sum; b = carry;                     // 更新 a, b
+            if (b == 0) break;                      // 进位全部消除，停止
+        }
+        return sum;
+    }
+};
+</code></pre>
+</details></li>
+<li>【<strong>构建乘积数组</strong>】给定数组$A[0, 1, \cdots, n - 1]$，请构建数组$B[0, 1, \cdots, n - 1]$，满足$B[i] = \prod_{j \neq i} A[j]$，不能使用除法；<details> <summary>点击查看解析</summary>
+<pre><code>
+class Solution {
+public:
+    vector&lt;int&gt; constructArr(vector&lt;int&gt;& a) {
+        int n = a.size();
+        if (n == 0) return {};
+        // 自上而下计算
+        vector&lt;int&gt; left (n, 1);
+        for (int i = 1; i < n; i++)
+            left[i] = left[i - 1] * a[i - 1];
+        // 自下而上计算
+        vector&lt;int&gt; right(n, 1);
+        for (int i = n - 2; i >= 0; i--)
+            right[i] = right[i + 1] * a[i + 1];
+        // 计算结果
+        vector&lt;int&gt; arr(n, 0);
+        for (int i = 0; i < n; i++)
+            arr[i] = left[i] * right[i];
+        return arr;
+    }
+};
+</code></pre>
+</details></li>
+<li>【<strong>字符串转换为数字</strong>】输入字符串，实现<code>atoi</code>，将其转换为整数；<details> <summary>点击查看解析</summary>
+<p> 0) 输入异常判断；1) 正负号处理；2) 数字是否有效('0'~'9'范围内)；3) 溢出判断；4) 全局变量设置是否有效输出。 </p>
+<pre><code>
+class Solution {
+public:
+    int strToInt(string str) {
+        long res = 0;
+        // 默认sign = 1，正数
+        int i = 0, sign = 1;
+        // 查找第一个非空白字符
+        while (str[i] == ' ') i ++;
+        // 正负号
+        if (str[i] == '-') sign = -1;
+        if (str[i] == '-' || str[i] == '+') i++;
+        // 依次转换
+        for (; i < str.size() && isdigit(str[i]); i++)  {
+            // 当前位加入结果
+            res = res * 10 + (str[i] - '0');
+            // 溢出的处理
+            if (res >= INT_MAX && sign == 1) return  INT_MAX;
+            if (res > INT_MAX && sign == -1) return  INT_MIN;
+        } 
+        return sign * res;
+    }
+};
+</code></pre>
+</details></li>
+<li>【<strong>树中两个节点的最低公共祖先</strong>】给定初始化后的树，输出两个节点的最低公共祖先；<details> <summary>点击查看解析</summary>
+<p> 若为搜索二叉树，找到第一个元素值大小处于两个节点元素值之间的节点； </p>
+<pre><code>
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if (!root || !p || !q) return nullptr;
+        TreeNode* node = root;
+        while (true) {
+            int perr = p->val - node->val;
+            int qerr = q->val - node->val;
+            // 若此时节点的值与p或q值相同，或者处于两者之间，即为公共节点
+            if (perr * qerr <= 0 0) return node; 若都小于节点值，则向左子节点搜索 if (perr < && qerr node="node-">left;
+            // 若都大于节点值，则向右子节点搜索
+            else if (perr > 0 && qerr > 0)
+                node = node->right;
+        }
+        return nullptr;
+    }
+};
+</=></code></pre>
+<p> 若不为搜索二叉树，且已定义父节点指针，可将节点到根节点视作单向链表，转换为找两个链表尾端部分的公共节点问题； </p>
+<p> 若不为搜索二叉树，且未定义父节点指针，将根节点到给定节点的路径保存为两个链表，注意这两个链表前面部分为公共路径，节点地址相同。 </p>
+<pre><code>
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if (!root || !p || !q) return nullptr;
+        // 在二叉树中搜索节点，得到路径
+        vector&lt;TreeNode*&gt; pathP = getNodePath(root, p, {});
+        vector&lt;TreeNode*&gt; pathQ = getNodePath(root, q, {});
+        // 若某节点不存在路径，即节点不在树中，返回空
+        int nP = pathP.size(), nQ = pathQ.size();
+        if (nP == 0 || nQ == 0) return nullptr;
+        // 比较查找第一个公共祖先
+        int i = 0, j = 0;
+        while (true) {
+            if (i >= nP) return pathP[i - 1];
+            if (j >= nQ) return pathQ[j - 1];
+            if (pathP[i] != pathQ[j])
+                return pathP[i - 1];
+            i++; j++;
+        }
+    }
+    vector&lt;TreeNode*&gt; getNodePath(TreeNode* root, TreeNode* target, vector&lt;TreeNode*&gt; path) {
+        // 输入异常：目标节点空
+        if (!target) return {};
+        // 终止条件：路径结束，直接返回
+        if (!root) return {};
+        // 加入本节点
+        path.push_back(root);
+        // 本节点是否是查找结点
+        if (root == target) return path;
+        // 查找左右子节点
+        vector&lt;TreeNode*&gt; pathL = getNodePath(root->left, target, path);
+        if (pathL.size() > 0) return pathL;
+        vector&lt;TreeNode*&gt; pathR = getNodePath(root->right, target, path);
+        if (pathR.size() > 0) return pathR;
+        return {};
+    }
+};
+</code></pre>
+</details></li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/03/Try-To-Play-With-Hadoop/" rel="next" title="Try To Play With Hadoop">
+                <i class="fa fa-chevron-left"></i> Try To Play With Hadoop
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.gif"
+                alt="Louis Hsu" />
+            
+              <p class="site-author-name" itemprop="name">Louis Hsu</p>
+              <p class="site-description motion-element" itemprop="description">ᵕ᷄ ≀ ̠˘᷅ 永远年轻，永远热泪盈眶</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/%20%7C%7C%20archive">
+                
+                    <span class="site-state-item-count">108</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/isLouisHsu" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://is.louishsu@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/islouishsu" target="_blank" title="Zhihu"><i class="fa fa-fw fa-zhihu"></i>Zhihu</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/islouishsu" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          <div id='music163player'>
+            <iframe 
+              frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=110 
+              src="//music.163.com/outchain/player?type=0&id=2703291040&auto=1&height=90">
+            </iframe>
+          </div>
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Louis Hsu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: 'e65d27f7cf5c62feaf97',
+          clientSecret: '356386826698e8b817ca076b08d7c0e9814f52ea',
+          repo: 'isLouisHsu.github.io',
+          owner: 'isLouisHsu',
+          admin: ['isLouisHsu'],
+          id: md5(window.location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('3');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+
+  <script type="text/javascript" src="/js/click_show_text.js"></script>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
