@@ -116,7 +116,7 @@
 <meta property="og:description" content="目录 目录 前言 MLE&#x2F;MAP 最大似然估计(MLE) 最大后验概率估计(MAP)   线性回归&#x2F;逻辑斯蒂回归 线性回归 逻辑斯蒂回归(LR)   朴素贝叶斯 PCA&#x2F;LDA PCA 计算步骤 证明   LDA 计算步骤 证明     EM&#x2F;GMM EM算法 GMM模型   SVM KKT条件 核技巧 分类问题 线性可分 线性不可分   回归问题 求解优化问题   聚类 距离度量 KMeans">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-02-10T13:45:45.000Z">
-<meta property="article:modified_time" content="2020-06-11T15:27:44.500Z">
+<meta property="article:modified_time" content="2020-07-12T04:30:52.580Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
 
@@ -419,7 +419,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-06-11 23:27:44" itemprop="dateModified" datetime="2020-06-11T23:27:44+08:00">2020-06-11</time>
+                <time title="修改时间：2020-07-12 12:30:52" itemprop="dateModified" datetime="2020-07-12T12:30:52+08:00">2020-07-12</time>
               
             
           </span>
@@ -479,56 +479,56 @@
 
       
         <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><ul>
-<li><a href="#%e7%9b%ae%e5%bd%95">目录</a></li>
-<li><a href="#%e5%89%8d%e8%a8%80">前言</a></li>
+<li><a href="#目录">目录</a></li>
+<li><a href="#前言">前言</a></li>
 <li><a href="#mlemap">MLE/MAP</a><ul>
-<li><a href="#%e6%9c%80%e5%a4%a7%e4%bc%bc%e7%84%b6%e4%bc%b0%e8%ae%a1mle">最大似然估计(MLE)</a></li>
-<li><a href="#%e6%9c%80%e5%a4%a7%e5%90%8e%e9%aa%8c%e6%a6%82%e7%8e%87%e4%bc%b0%e8%ae%a1map">最大后验概率估计(MAP)</a></li>
+<li><a href="#最大似然估计mle">最大似然估计(MLE)</a></li>
+<li><a href="#最大后验概率估计map">最大后验概率估计(MAP)</a></li>
 </ul>
 </li>
-<li><a href="#%e7%ba%bf%e6%80%a7%e5%9b%9e%e5%bd%92%e9%80%bb%e8%be%91%e6%96%af%e8%92%82%e5%9b%9e%e5%bd%92">线性回归/逻辑斯蒂回归</a><ul>
-<li><a href="#%e7%ba%bf%e6%80%a7%e5%9b%9e%e5%bd%92">线性回归</a></li>
-<li><a href="#%e9%80%bb%e8%be%91%e6%96%af%e8%92%82%e5%9b%9e%e5%bd%92lr">逻辑斯蒂回归(LR)</a></li>
+<li><a href="#线性回归逻辑斯蒂回归">线性回归/逻辑斯蒂回归</a><ul>
+<li><a href="#线性回归">线性回归</a></li>
+<li><a href="#逻辑斯蒂回归lr">逻辑斯蒂回归(LR)</a></li>
 </ul>
 </li>
-<li><a href="#%e6%9c%b4%e7%b4%a0%e8%b4%9d%e5%8f%b6%e6%96%af">朴素贝叶斯</a></li>
+<li><a href="#朴素贝叶斯">朴素贝叶斯</a></li>
 <li><a href="#pcalda">PCA/LDA</a><ul>
 <li><a href="#pca">PCA</a><ul>
-<li><a href="#%e8%ae%a1%e7%ae%97%e6%ad%a5%e9%aa%a4">计算步骤</a></li>
-<li><a href="#%e8%af%81%e6%98%8e">证明</a></li>
+<li><a href="#计算步骤">计算步骤</a></li>
+<li><a href="#证明">证明</a></li>
 </ul>
 </li>
 <li><a href="#lda">LDA</a><ul>
-<li><a href="#%e8%ae%a1%e7%ae%97%e6%ad%a5%e9%aa%a4-1">计算步骤</a></li>
-<li><a href="#%e8%af%81%e6%98%8e-1">证明</a></li>
+<li><a href="#计算步骤-1">计算步骤</a></li>
+<li><a href="#证明-1">证明</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li><a href="#emgmm">EM/GMM</a><ul>
-<li><a href="#em%e7%ae%97%e6%b3%95">EM算法</a></li>
-<li><a href="#gmm%e6%a8%a1%e5%9e%8b">GMM模型</a></li>
+<li><a href="#em算法">EM算法</a></li>
+<li><a href="#gmm模型">GMM模型</a></li>
 </ul>
 </li>
 <li><a href="#svm">SVM</a><ul>
-<li><a href="#kkt%e6%9d%a1%e4%bb%b6">KKT条件</a></li>
-<li><a href="#%e6%a0%b8%e6%8a%80%e5%b7%a7">核技巧</a></li>
-<li><a href="#%e5%88%86%e7%b1%bb%e9%97%ae%e9%a2%98">分类问题</a><ul>
-<li><a href="#%e7%ba%bf%e6%80%a7%e5%8f%af%e5%88%86">线性可分</a></li>
-<li><a href="#%e7%ba%bf%e6%80%a7%e4%b8%8d%e5%8f%af%e5%88%86">线性不可分</a></li>
+<li><a href="#kkt条件">KKT条件</a></li>
+<li><a href="#核技巧">核技巧</a></li>
+<li><a href="#分类问题">分类问题</a><ul>
+<li><a href="#线性可分">线性可分</a></li>
+<li><a href="#线性不可分">线性不可分</a></li>
 </ul>
 </li>
-<li><a href="#%e5%9b%9e%e5%bd%92%e9%97%ae%e9%a2%98">回归问题</a></li>
-<li><a href="#%e6%b1%82%e8%a7%a3%e4%bc%98%e5%8c%96%e9%97%ae%e9%a2%98">求解优化问题</a></li>
+<li><a href="#回归问题">回归问题</a></li>
+<li><a href="#求解优化问题">求解优化问题</a></li>
 </ul>
 </li>
-<li><a href="#%e8%81%9a%e7%b1%bb">聚类</a><ul>
-<li><a href="#%e8%b7%9d%e7%a6%bb%e5%ba%a6%e9%87%8f">距离度量</a></li>
+<li><a href="#聚类">聚类</a><ul>
+<li><a href="#距离度量">距离度量</a></li>
 <li><a href="#kmeans">KMeans</a></li>
 <li><a href="#spectral">Spectral</a></li>
 </ul>
 </li>
-<li><a href="#%e5%86%b3%e7%ad%96%e6%a0%91">决策树</a><ul>
+<li><a href="#决策树">决策树</a><ul>
 <li><a href="#id3">ID3</a></li>
 <li><a href="#c45">C4.5</a></li>
 <li><a href="#cart">CART</a></li>
@@ -721,9 +721,9 @@
         \tilde{S_W} = u_1^T S_W u_1 \\ 
         \tilde{S_B} = u_1^T S_B u_1
     \end{cases} \\
-    定义优化目标为：u_1 = \arg \max \frac{\tilde{S_W}}{\tilde{S_B}} = \arg \max \frac{u_1^T S_W u_1}{u_1^T S_B u_1} \\
-    求取极值：\frac{\partial}{\partial u_1} \frac{u_1^T S_W u_1}{u_1^T S_B u_1} = \frac{(u_1^T S_B u_1)(2 S_w u_1) - (u_1^T S_w u_1)(2 S_B u_1)}{(u_1^T S_B u_1)^2} = 0 \Rightarrow \\
-    S_w u_1 = \underbrace{\frac{u_1^T S_W u_1}{u_1^T S_B u_1}}_{\lambda_1} S_B u_1，记\lambda_1 = \frac{u_1^T S_W u_1}{u_1^T S_B u_1}
+    定义优化目标为：u_1 = \arg \min \frac{\tilde{S_W}}{\tilde{S_B}} = \arg \min \frac{u_1^T S_W u_1}{u_1^T S_B u_1} \\
+    求取极值：\frac{\partial}{\partial u_1} \frac{u_1^T S_W u_1}{u_1^T S_B u_1} = \frac{(u_1^T S_B u_1)(2 S_W u_1) - (u_1^T S_W u_1)(2 S_B u_1)}{(u_1^T S_B u_1)^2} = 0 \Rightarrow \\
+    S_B u_1 = \underbrace{\frac{u_1^T S_B u_1}{u_1^T S_W u_1}}_{\lambda_1} S_W u_1，记\lambda_1 = \frac{u_1^T S_B u_1}{u_1^T S_W u_1}
 \end{aligned}</script><div style="page-break-after: always;"></div>
 
 <h1 id="EM-GMM"><a href="#EM-GMM" class="headerlink" title="EM/GMM"></a>EM/GMM</h1><h2 id="EM算法"><a href="#EM算法" class="headerlink" title="EM算法"></a>EM算法</h2><p>给定包含$N$对样本数据${(X^{(i)}, y^{(i)}), i = 1, \cdots, N}$。设分类模型为概率模型$P(X | \theta)$，其中$\theta$待估。该模型包含$K$种<strong>隐藏变量</strong>状态${w_k, k = 1, \cdots, K}$。那么证明过程总结如下</p>
@@ -1120,7 +1120,7 @@ L^{(i)} = \begin{cases}
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">108</span>
+                    <span class="site-state-item-count">109</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1155,7 +1155,9 @@ L^{(i)} = \begin{cases}
                     
                       
                     
-                    <span class="site-state-item-count">11</span>
+                      
+                    
+                    <span class="site-state-item-count">12</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
