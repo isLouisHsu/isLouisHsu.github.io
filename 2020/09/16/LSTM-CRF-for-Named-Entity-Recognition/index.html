@@ -1,0 +1,1752 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="目录 目录 命名实体识别 Long Short-Term Memory Conditional Random Field 概率无向图模型 条件随机场的定义和形式 定义 形式   概率计算和学习算法问题 与最大熵模型的联系 概率计算 学习算法 预测算法：维特比算法     LSTM-CRF Implementation Reference  命名实体识别命名实体识别(Named Entity Rec">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LSTM-CRF for Named Entity Recognition">
+<meta property="og:url" content="http://yoursite.com/2020/09/16/LSTM-CRF-for-Named-Entity-Recognition/index.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="目录 目录 命名实体识别 Long Short-Term Memory Conditional Random Field 概率无向图模型 条件随机场的定义和形式 定义 形式   概率计算和学习算法问题 与最大熵模型的联系 概率计算 学习算法 预测算法：维特比算法     LSTM-CRF Implementation Reference  命名实体识别命名实体识别(Named Entity Rec">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/.com//lstm.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//linear-crf.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//linear-crf-param.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//bi-lstm-crf.png">
+<meta property="og:image" content="http://yoursite.com/.com//emission-score.png">
+<meta property="article:published_time" content="2020-09-16T09:26:44.000Z">
+<meta property="article:modified_time" content="2020-09-21T09:53:24.442Z">
+<meta property="article:author" content="Louis Hsu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/.com//lstm.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/09/16/LSTM-CRF-for-Named-Entity-Recognition/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>LSTM-CRF for Named Entity Recognition | LOUIS' BLOG</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LOUIS' BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">To be better</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-guestbook">
+    <a href="/guestbook" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-guest"></i> <br />留言</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/16/LSTM-CRF-for-Named-Entity-Recognition/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="ᵕ᷄ ≀ ̠˘᷅ 永远年轻，永远热泪盈眶">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">LSTM-CRF for Named Entity Recognition
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-09-16 17:26:44" itemprop="dateCreated datePublished" datetime="2020-09-16T17:26:44+08:00">2020-09-16</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-09-21 17:53:24" itemprop="dateModified" datetime="2020-09-21T17:53:24+08:00">2020-09-21</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><ul>
+<li><a href="#目录">目录</a></li>
+<li><a href="#命名实体识别">命名实体识别</a></li>
+<li><a href="#long-short-term-memory">Long Short-Term Memory</a></li>
+<li><a href="#conditional-random-field">Conditional Random Field</a><ul>
+<li><a href="#概率无向图模型">概率无向图模型</a></li>
+<li><a href="#条件随机场的定义和形式">条件随机场的定义和形式</a><ul>
+<li><a href="#定义">定义</a></li>
+<li><a href="#形式">形式</a></li>
+</ul>
+</li>
+<li><a href="#概率计算和学习算法问题">概率计算和学习算法问题</a><ul>
+<li><a href="#与最大熵模型的联系">与最大熵模型的联系</a></li>
+<li><a href="#概率计算">概率计算</a></li>
+<li><a href="#学习算法">学习算法</a></li>
+<li><a href="#预测算法维特比算法">预测算法：维特比算法</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#lstm-crf">LSTM-CRF</a></li>
+<li><a href="#implementation">Implementation</a></li>
+<li><a href="#reference">Reference</a></li>
+</ul>
+<h1 id="命名实体识别"><a href="#命名实体识别" class="headerlink" title="命名实体识别"></a>命名实体识别</h1><p>命名实体识别(Named Entity Recognition)是NLP中一项非常基础的任务，是信息提取、问答系统、句法分析、机器翻译等众多NLP任务的重要基础工具，具体的任务是<strong>从文本中挑选出实体类型</strong>。</p>
+<p>常用的序列标注主要有<code>BIO</code>和<code>BIOES</code>标注两种：1) <code>BIO</code>将数据标注为<code>B-X, I-X, O</code>格式，其中<code>B</code>表示实体起始位置(Begin)，<code>I</code>表示实体中间(Intermediate)，<code>O</code>表示其他(Other)无关字符；2) <code>BIOES</code>在<code>BIO</code>基础上添加了<code>E</code>表示实体结尾(End)和<code>S</code>表示单个字符(Single)。<a href="https://www.clips.uantwerpen.be/conll2003/" target="_blank" rel="noopener">CoNLL2003</a>是常用的NER数据集。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">   BIO   BIOES</span><br><span class="line">--------------</span><br><span class="line">小 B-PER B-PER</span><br><span class="line">明 I-PER E-PER</span><br><span class="line">在 O     O</span><br><span class="line">北 B-ORG B-ORG</span><br><span class="line">京 I-ORG I-ORG</span><br><span class="line">大 I-ORG I-ORG</span><br><span class="line">学 I-ORG E-ORG</span><br><span class="line">的 O     O</span><br><span class="line">燕 B-LOC B-LOC </span><br><span class="line">园 I-LOC E-LOC </span><br><span class="line">看 O     O</span><br><span class="line">了 O     O</span><br><span class="line">中 B-ORG B-ORG</span><br><span class="line">国 I-ORG I-ORG</span><br><span class="line">男 I-ORG I-ORG</span><br><span class="line">篮 I-ORG E-ORG</span><br><span class="line">的 O     O</span><br><span class="line">一 O     O</span><br><span class="line">场 O     O</span><br><span class="line">比 O     O</span><br><span class="line">赛 O     O</span><br></pre></td></tr></table></figure></p>
+<h1 id="Long-Short-Term-Memory"><a href="#Long-Short-Term-Memory" class="headerlink" title="Long Short-Term Memory"></a>Long Short-Term Memory</h1><p><img src="/.com//lstm.jpg" alt="lstm"></p>
+<p>核心公式(Pytorch)</p>
+<script type="math/tex; mode=display">
+\begin{aligned} 
+    i_t &= \sigma(W_{ii} x_t + b_{ii} + W_{hi} h_{(t-1)} + b_{hi}) \\
+    f_t &= \sigma(W_{if} x_t + b_{if} + W_{hf} h_{(t-1)} + b_{hf}) \\
+    g_t &= \tanh(W_{ig} x_t + b_{ig} + W_{hg} h_{(t-1)} + b_{hg}) \\
+    c_t &= f_t * c_{(t-1)} + i_t * g_t \\
+    o_t &= \sigma(W_{io} x_t + b_{io} + W_{ho} h_{(t-1)} + b_{ho}) \\
+    h_t &= o_t * \tanh(c_t)
+\end{aligned}</script><h1 id="Conditional-Random-Field"><a href="#Conditional-Random-Field" class="headerlink" title="Conditional Random Field"></a>Conditional Random Field</h1><p><strong>条件随机场</strong>(conditional random field, CRF)是指给定一组输入随机变量条件下，输出一组构成马尔科夫随机场的随机变量的条件概率模型。下面依次介绍概率无向图模型、马尔科夫随机场的定义和形式、。</p>
+<h2 id="概率无向图模型"><a href="#概率无向图模型" class="headerlink" title="概率无向图模型"></a>概率无向图模型</h2><p><strong>概率无向图模型</strong>(probabilistic undirected graphical model)，又称<strong>马尔科夫随机场</strong>(Markov random field)，是一个用无向图表示的联合概率分布。给定用概率图$G(V, E)$表示的联合概率分布$P(Y)$，其中节点集和边集分别表示为$V$和$E$，节点$v \in V$表示随机变量$Y_v$，边$e \in E$表示随机变量之间的概率依赖关系，且联合概率分布$P(Y)$满足<strong>成对马尔科夫性(pairwise Markov property)、局部马尔科夫性(local Markov property)、全局马尔科夫性(global Markov property)</strong>的独立性假设，注意这三种性质是<strong>等价</strong>的。</p>
+<ul>
+<li><strong>成对马尔科夫性</strong>：设$u, v$是无向图$G$中<strong>两个无边连接的节点</strong>，分别对应随机变量$Y_u, Y_v$，其余节点为$O$，对应随机变量$Y_O$，那么给定$Y_O$的条件下，随机变量$Y_u, Y_v$条件独立，即$P(Y_u, Y_v | Y_O) = P(Y_u | Y_O) P(Y_v | Y_O)$；</li>
+<li><strong>局部马尔科夫性</strong>：设$v$是无向图$G$中的一个任意节点，$W$是<strong>与其有连接的所有节点集合</strong>，$O$是除$v, W$外的所有节点集合，那么在给定$Y_W$条件下，随机变量$Y_v, Y_O$条件独立，即$P(Y_v, Y_O | Y_W) = P(Y_v | Y_W) P(Y_O | Y_W)$；</li>
+<li><strong>全局马尔科夫性</strong>：设<strong>节点集$A, B$是在无向图$G$中被节点集合$C$分开的任意两组节点集合</strong>，那么在给定$Y_C$条件下，随机变量$Y_A, Y_B$条件独立，即$P(Y_A, Y_B | Y_C) = P(Y_A | Y_C) P(Y_B | Y_C)$；</li>
+</ul>
+<p>概率无向图可进行<strong>因子分解</strong>(factorization)，即将概率无向图模型的联合概率分布表示为其最大团上的随机变量的函数的乘积形式。首先给出<strong>最大团</strong>(maximal clique)的定义，无向图中任意两个节点均有边连接(强连通)的节点子集称为<strong>团</strong>(clique)，最大团是指无向图$G$中不能再加进任何一个其他$G$的节点使之成为更大的团。<strong>那么概率无向图的联合概率分布$P(Y)$可以写作图中所有最大团$C$上的函数$\Psi_C(Y_C)$的乘积形式(Hammersley-Clifford定理)</strong>，即</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    P(Y) & = \frac{1}{Z} \prod_C \Psi_C(Y_C) \\ 
+    Z & = \sum_Y \prod_C \Psi_C(Y_C)
+\end{aligned} \tag{1}</script><p>其中$\Psi_C(Y_C)$称为<strong>势函数</strong>(potential function)，要求严格正，一般定义为指数函数$\Psi_C(Y_C) = \exp{-E(Y_C)}$；$Z$为规范化因子，保证$P(Y)$构成概率分布。</p>
+<h2 id="条件随机场的定义和形式"><a href="#条件随机场的定义和形式" class="headerlink" title="条件随机场的定义和形式"></a>条件随机场的定义和形式</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p><strong>条件随机场</strong> 设$X, Y$是随机变量，$P(Y|X)$是在给定$X$的条件下$Y$的条件分布概率，若随机变量$Y$构成由无向图$G(V, E)$表示的马尔科夫随机场，即</p>
+<script type="math/tex; mode=display">P(Y_v | X, Y_w, w \neq v) = P(Y_v | X, Y_w, w \sim v) \tag{2}</script><p>对任意节点$v \in V$成立，那么称条件概率分布$P(Y|X)$为条件随机场，其中$w \sim v$表示在$G(V, E)$中与节点$v$有边连接的所有节点$w$，$w \neq v$表示节点$v$意外的所有节点。</p>
+<blockquote>
+<p>该式用到了局部马尔科夫性。</p>
+</blockquote>
+<p><strong>线性链条件随机场</strong> 设$X = (X_1, \cdots, X_n)$，$Y = (Y_1, \cdots, Y_n)$均为线性链表示的随机变量序列，若在给定随机变量序列$X$的条件下，随机变量序列$Y$的条件概率分布$P(Y|X)$构成条件随机场，即满足马尔科夫性，</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    P(Y_i | X, Y_1, \cdots, Y_{i - 1}, Y_{i + 1}, \cdots, Y_n) = P(Y_i | X, Y_{i - 1}, Y_{i + 1}) \\
+    i = 1, 2, \cdots, n(i = 1, n时只考虑单边)
+\end{aligned} \tag{3}</script><p>那么称$P(Y|X)$为线性链条件随机场，本文后面只讨论线性链条件随机场。</p>
+<p><img src="/.com//linear-crf.jpg" alt="linear-crf"></p>
+<h3 id="形式"><a href="#形式" class="headerlink" title="形式"></a>形式</h3><p><strong>线性链条件随机场的参数化形式</strong> 设$P(Y|X)$为线性链条件随机场，那么在随机变量$X$取$x$的条件下，随机变量$Y$取$y$得条件概率具有如下形式</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \Psi_C(Y_C) & = \exp \left(
+        \sum_{i,k} \lambda_k t_k(y_{i-1}, y_i, x, i) + 
+        \sum_{i.l} \mu_l s_l(y_i, x, i)
+    \right) \\
+    P(y|x) & = \frac{1}{Z(x)} \Psi_C(Y_C) \\
+    Z(x) & = \sum_Y \Psi_C(Y_C)
+\end{aligned} \tag{4}</script><p>其中</p>
+<ul>
+<li>$t_k(y_{i-1}, y_i, x, i)$为定义在边上的特征函数，称<strong>转移特征</strong>，依赖于当前和前一个位置；</li>
+<li>$s_l(y_i, x, i)$为定义在节点上的特征函数，称<strong>状态特征</strong>，依赖于当前位置；</li>
+<li>特征函数都依赖于位置，是局部特征，取值通常在${0, 1}$，条件随机场由参数$\lambda_k, \mu_l$决定；</li>
+<li>线性链条件随机场也是<strong>对数线性模型</strong>(log linear model)。</li>
+</ul>
+<blockquote>
+<p>这里特征函数可能有疑问，具体说明在<a href="#与最大熵模型的联系">与最大熵模型的联系</a>一节。</p>
+</blockquote>
+<p><strong>例1</strong> 有一标注问题，输入观测序列$X = (X_1, X_2, X_3)$，输出标记序列$Y = (Y_1, Y_2, Y_3)$，$Y_i \in {1, 2}$，假设有特征函数及其权值如下，求标记序列为$y = (1, 2, 2)$的非规范化条件概率。</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    t_1 &= t_1(y_{i-1}=1, y_i=2, x, i), \quad i = 2, 3, \quad \lambda_1 = 1 \\
+    t_2 &= t_2(y_{i-1}=1, y_i=1, x, i), \quad i = 2, \quad \lambda_2 = 0.6 \\
+    t_3 &= t_3(y_{i-1}=2, y_i=1, x, i), \quad i = 3, \quad \lambda_3 = 1 \\
+    t_4 &= t_4(y_{i-1}=2, y_i=1, x, i), \quad i = 2, \quad \lambda_4 = 1 \\
+    t_5 &= t_5(y_{i-1}=2, y_i=2, x, i), \quad i = 3, \quad \lambda_5 = 0.2 \\
+    s_1 &= s_1(y_i=1, x, i), \quad i = 1, \quad \mu_1 = 1 \\
+    s_2 &= s_2(y_i=2, x, i), \quad i = 1, 2, \quad \mu_2 = 0.5 \\
+    s_3 &= s_3(y_i=1, x, i), \quad i = 2, 3, \quad \mu_3 = 0.8 \\
+    s_4 &= s_4(y_i=2, x, i), \quad i = 3, \quad \mu_4 = 0.5
+\end{aligned}</script><p>以上看着很乱，整理成图如下，因此</p>
+<script type="math/tex; mode=display">P(y_1=1, y_2=2, y_3=2 | x) \propto \exp\left[ (\mu_1 + \mu_2 + \mu_3) + (\lambda_1 + \lambda_5) \right] = \exp(3.2)</script><p><img src="/.com//linear-crf-param.jpg" alt="linear-crf-param"></p>
+<hr>
+<p><strong>线性链条件随机场的简化形式</strong> 将同一特征在各个位置求和，即将局部特征函数转化为全局特征函数，可以表示为简化形式。设有$K_t$个转移特征、$K_s$个状态特征，记统一化的特征函数为</p>
+<script type="math/tex; mode=display">
+f_k(y_{i - 1}, y_i, x, i) = \begin{cases}
+    t_k(y_{i - 1}, y_i, x, i) & k = 1, \cdots, K_t \\
+    s_l(y_i, x, i) & k = K_t + 1, \cdots, K_t + K_s \\
+\end{cases} \tag{5}</script><p>那么对于特征$k$，其全局化特征为</p>
+<script type="math/tex; mode=display">f_k(y, x) = \sum_{i=1}^n f_k(y_{i - 1}, y_i, x, i), k = 1, \cdots,  K_t + K_s \tag{6}</script><p>记其对应特征</p>
+<script type="math/tex; mode=display">
+w_k = \begin{cases}
+    \lambda_k & k = 1, \cdots, K_t \\
+    \mu_l & k = K_t + 1, \cdots, K_t + K_s \\
+\end{cases} \tag{7}</script><p>那么(可写作内积形式，略)</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    P(y | x) &= \frac{1}{Z(x)} \exp \sum_k w_k f_k(y, x) \\
+    Z(x) &= \sum_y \exp \sum_k w_k f_k(y, x)
+\end{aligned} \tag{8}</script><hr>
+<p><strong>线性链条件随机场的矩阵形式</strong> 标记起点和终点状态$y_0 = \text{start}, y_{n+1} = \text{end}$，对观测序列$x$每个位置$i = 1, \cdots, n + 1$，定义$m$阶矩阵($m$为$y$取值的状态个数)$M_i = \begin{bmatrix} M_i(y_{i-1}, y_i | x) \end{bmatrix}$，其中$M_i(y_{i-1}, y_i | x) = \exp \sum_k w_k f_k(y_{i - 1}, y_i, x, i)$为全局特征函数。那么给定观测序列$x$和相应标记序列$y$，条件概率为</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    P_w(y | x) & = \frac{1}{Z_w(x)} \prod_{i=1}^{n + 1} M_i(y_{i-1}, y_i | x) \\
+    Z_w(x) &= \sum_y \prod_{i=1}^{n + 1} M_i(y_{i-1}, y_i | x) \\
+    & = \begin{bmatrix}
+        M_1(x) \cdots M_{n+1}(x)
+    \end{bmatrix}_{\text{start}, \text{stop}} \\ 
+    & (表示矩阵的第\text{start}行、第\text{stop}列元素)
+\end{aligned} \tag{9}</script><p>其中$\sum_y$表示$y={y_{\text{start}}, y_1, \cdots, y_n, y_{\text{end}}}$的所有组合累计求和。</p>
+<h2 id="概率计算和学习算法问题"><a href="#概率计算和学习算法问题" class="headerlink" title="概率计算和学习算法问题"></a>概率计算和学习算法问题</h2><h3 id="与最大熵模型的联系"><a href="#与最大熵模型的联系" class="headerlink" title="与最大熵模型的联系"></a>与最大熵模型的联系</h3><p>最大熵原理是概率模型学习的一个准则，<strong>认为在所有可能的概率模型(分布)中，熵最大的模型是最好的模型</strong>。用约束条件来确定概率模型的集合，因此最大熵原理也即在满足约束条件下的模型集合中，选择熵最大的模型。假定分类模型是条件概率$P(Y|X)$，$X, Y$分表表示输入输出，目标是在给定训练数据集$T = {(x_1, y_1), \cdots, (x_N, y_N)}$下，用最大熵模型选择最好的分类模型。</p>
+<p><strong>最大熵模型</strong> 假设满足所有约束条件的模型集合为$C = { P \in \mathbb{P} | E_{\tilde{P}}(f_i) = E_{P}(f_i), i = 1, \cdots, n }$，定义在条件概率分布$P(Y|X)$是的条件熵为$H(P) = - \sum_{x, y} \tilde{P}(x) P(y | x) \log P(y | x)$，那么$C$中条件熵$H(P)$最大的模型称最大熵模型。用<strong>特征函数</strong>(feature function)$f(x, y)$描述输入$x$和输出$y$之间的某个事实，即</p>
+<script type="math/tex; mode=display">f(x, y) = \begin{cases} 1 & x, y满足某一事实 \\ 0 & 否则 \end{cases} \tag{10}</script><p>那么特征函数$f(x, y)$关于经验分布$\tilde{P}(X, Y)$的期望$E_{\tilde{P}}(f) = \sum_{x, y} \tilde{P}(x, y) f(x, y)$，特征函数$f(x, y)$关于模型$P(Y|X)$与经验分布$\tilde{P}(X)$的期望$E_{P}(f) = \sum_{x, y} \tilde{P}(x) P(y|x) f(x, y)$。假定模型能学习数据信息，使得以上两个期望相等，那么有$\sum_{x, y} \tilde{P}(x, y) f(x, y) = \sum_{x, y} \tilde{P}(x) P(y|x) f(x, y)$，该式即模型学习的在特征条件$f(x, y)$下的约束条件，那么有$n$个特征函数$f_i(x, y), i = 1, \cdots, n$时就有$n$个约束条件。因此优化目标表述为</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \max_{P \in C} & \quad H(P) = - \sum_{x, y} \tilde{P}(x) P(y | x) \log P(y | x) \\
+    s.t. & \quad E_{P}(f_i) = E_{\tilde{P}}(f_i), i = 1, \cdots, n \\
+    & \sum_y P(y|x) = 1
+\end{aligned} \tag{11}</script><p>该优化问题可以作为<strong>带约束的最优化问题</strong>进行求解，引入拉格朗日乘子$w_0, w_1, \cdots, w_n$，定义拉格朗日函数$L(P, w)$</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    L(P, w) &= \underbrace{\sum_{x, y} \tilde{P}(x) P(y | x) \log P(y | x)}_{-H(P)} + \underbrace{w_0 \left( 1 - \sum_y P(y|x) \right)}_0 \\
+    & + \sum_{i=1}^n w_i \left( \sum_{x, y} \tilde{P}(x, y) f_i(x, y) - \sum_{x, y} \tilde{P}(x) P(y|x) f_i(x, y) \right)
+\end{aligned} \tag{12.1}</script><p>那么优化问题及其对偶问题为</p>
+<script type="math/tex; mode=display">\min_P \max_w L(P, w) \Rightarrow \max_w \min_P L(P, w) \tag{12.2}</script><p>求$L(P, w)$对$P(y|x)$的偏导数是</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \frac{\partial L(P, w)}{\partial P(y|x)} & = 
+    \sum_{x, y} \tilde{P}(x) (\log(P(y|x) + 1)) - \underbrace{\sum_y w_0}_{=\sum_x \tilde{P}(x) \sum_y w_0} - \sum_{i=1}^n w_i \sum_{x, y} \tilde{P}(x) f_i(x, y) \\
+    & = \sum_{x, y} \tilde{P}(x) \left( \log(P(y|x) + 1 - w_0 - \sum_{i=1}^n w_i f_i(x, y) \right)
+\end{aligned} \tag{12.3}</script><p>令$\frac{\partial L(P, w)}{\partial P(y|x)} = 0$，有</p>
+<script type="math/tex; mode=display">
+P(y|x) = \exp \left( \sum_{i=1}^n w_i f_i(x, y) + w_0 - 1 \right) = \frac{\exp \left( \sum_{i=1}^n w_i f_i(x, y) \right) }{\exp(1 - w_0)} \tag{12.4}</script><p>令$\sum_y P(y|x) = 1$有</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    P_w (y | x) &= \frac{1}{Z_w(x)} \exp \left( \sum_{i=1}^n w_i f_i(x, y) \right) \\
+    Z_w(x) &= \sum_y \exp \left( \sum_{i=1}^n w_i f_i(x, y) \right)
+\end{aligned} \tag{12}</script><hr>
+<p>可以看到上述模型与条件随机场有相同的形式，所以条件随机场可以理解为<strong>满足输出随机变量$Y$构成马尔科夫随机场(无向概率图)约束条件下的最大熵模型</strong>，为对数线性模型。继续，将$P_w(y|x)$代回$\max_w \min_P L(P, w)$，有优化目标</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    w^* & = \arg \max_w L(P_w(y|x), w) \\
+    & = \sum_{x, y} \tilde{P}(x) P_w(y|x) \log P_w(y|x) + \sum_{i=1}^n w_i \left( \sum_{x, y} \tilde{P}(x, y) f_i(x, y) - \sum_{x, y} \tilde{P}(x) P_w(y|x) f_i(x, y) \right) \\
+    & = \sum_{x, y} \tilde{P}(x, y) \sum_{i=1}^n w_i f_i(x, y) + \sum_{x, y} \tilde{P}(x) P_w(y|x) \left( \log P_w(y|x) - \sum_{i=1}^n w_i f_i(x, y) \right)
+\end{aligned} \tag{13.1}</script><p>其中</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    & \sum_{x, y} \tilde{P}(x) P_w(y|x) \left( \log P_w(y|x) - \sum_{i=1}^n w_i f_i(x, y) \right) \\
+    = & \sum_{x, y} \tilde{P}(x) P_w(y|x) \left( \log \frac{\cancel{\exp \left( \sum_{i=1}^n w_i f_i(x, y) \right)}}{Z_w(x)} - \cancel{\sum_{i=1}^n w_i f_i(x, y)} \right) \\
+    = & - \sum_{x, y} \tilde{P}(x) P_w(y|x) \log \sum_y \exp \left( \sum_{i=1}^n w_i f_i(x, y) \right) \\
+    = & - \sum_{x} \tilde{P}(x) \log \sum_y \exp \left( \sum_{i=1}^n w_i f_i(x, y) \right)
+\end{aligned} \tag{13.2}</script><p>综上</p>
+<script type="math/tex; mode=display">
+w^* = \arg \max_w \left( \sum_{x, y} \tilde{P}(x, y) \sum_{i=1}^n w_i f_i(x, y) - \sum_{x} \tilde{P}(x) \log \sum_y \exp \left( \sum_{i=1}^n w_i f_i(x, y) \right) \right) \tag{13}</script><hr>
+<p>注意上述方式求解等价于<strong>最大熵模型的极大似然估计</strong>求解，已知经验概率分布$\tilde{P}(x, y)$，那么条件概率分布$P(Y|X)$的对数似然函数为</p>
+<script type="math/tex; mode=display">L_{\tilde{P}}(P_w) = \log \prod_{x, y} P(y|x)^{\tilde{P}(x, y)} = \sum_{x, y} \tilde{P}(x, y) \log P(y|x) \tag{14.1}</script><p>将$(12)$代入，得到和$(13)$相同的形式</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    L_{\tilde{P}}(P_w) & = \sum_{x, y} \tilde{P}(x, y) \sum_{i=1}^n w_i f_i(x, y) - \sum_{x, y} \tilde{P}(x, y) \log Z_w(x) \\
+    & = \sum_{x, y} \tilde{P}(x, y) \sum_{i=1}^n w_i f_i(x, y) - \sum_{x} \tilde{P}(x) \log \sum_y \exp \left( \sum_{i=1}^n w_i f_i(x, y) \right)
+\end{aligned} \tag{14.2}</script><hr>
+<blockquote>
+<p>考虑条件随机场和逻辑斯蒂回归的联系：逻辑斯蒂回归可以看作无约束的最大熵模型，且特征函数表示是否考虑输入样本的各维特征，即</p>
+<script type="math/tex; mode=display">f_i(x, y) = \begin{cases} x_i & y与x相关联 \\ 0 & 否则\end{cases}, i = 1, 2</script><p>那么有</p>
+<script type="math/tex; mode=display">Z_w(x) = \exp(\sum_i w_i \times f_i(x, y)) + \exp(\sum_i w_i \times 0) = \exp\sum_i w_i x_i + 1</script><p>也就有</p>
+<script type="math/tex; mode=display">P(y=1|x) = \frac{\exp\sum_i w_i x_i}{\exp\sum_i w_i x_i + 1} = \frac{1}{1 + \exp (- \sum_i w_i x_i)}</script><p>同样地，多分类中最小化交叉熵，也即无约束的最大熵模型，优化目标等价为最大化多分类的对数似然函数。</p>
+</blockquote>
+<h3 id="概率计算"><a href="#概率计算" class="headerlink" title="概率计算"></a>概率计算</h3><p>定义$m$维<strong>前向概率</strong>向量</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \alpha_0(x) &= \begin{bmatrix} 0 & \cdots & 1_{y_0} & \cdots & 0 \end{bmatrix}^T \\
+    \alpha_i^T(x) &= \alpha_{i - 1}^T(x) M_i(x) \\
+    i &= 1, \cdots, n + 1
+\end{aligned} \tag{15.1.1}</script><p>即</p>
+<script type="math/tex; mode=display">\alpha_i(y_i | x) = \alpha_{i-1}(y_{i-1} | x) M_i(y_{i-1}, y_i, x) \tag{15.1.2}</script><p>定义$m$维<strong>后向概率</strong>向量</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \beta_{n+1}(x) &= \begin{bmatrix} 0 & \cdots & 1_{y_{n+1}} & \cdots & 0 \end{bmatrix}^T \\
+    \beta_i(x) &= M_{i+1}(x) \beta_{i+1}(x) \\
+    i &= 0, \cdots, n
+\end{aligned} \tag{15.2.1}</script><p>即</p>
+<script type="math/tex; mode=display">\beta_i(y_i | x) = M_i(y_i, y_{i+1}, x) \beta_{i+1}(y_{i+1} | x) \tag{15.2.2}</script><p>有</p>
+<script type="math/tex; mode=display">Z(x) = \alpha_n^T(x) \cdot \bm{1} = \bm{1}^T \cdot \beta_1(x) \tag{15.3}</script><p>那么$\alpha_i(y_i | x)$是在位置$i$处标记是$y_i$且到位置$i$的前部分标记序列的非规范化概率，$\beta_i(y_i | x)$是在位置$i$的标记为$y_i$并且从$i + 1$到$n$的后部分标记序列的非规范化概率，有</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    P(Y_i = y_i | x) &= \frac{\alpha_i(y_i | x) \beta_i(y_i | x)}{Z(x)} \\
+    P(Y_{i-1} = y_{i-1}, Y_i = y_i | x) &= \frac{\alpha_{i-1}(y_{i-1} | x) M_i(y_{i-1}, y_i | x) \beta_i(y_i | x)}{Z(x)}
+\end{aligned} \tag{15}</script><h3 id="学习算法"><a href="#学习算法" class="headerlink" title="学习算法"></a>学习算法</h3><p>这里仅介绍梯度下降法，可以与LSTM进行联合调优。对于条件随机场模型$(8)$</p>
+<script type="math/tex; mode=display">
+P_w(y|x) = \frac{\exp \left( \sum_{i=1}^n w_i f_i(x, y) \right)}{\sum_y \exp \left( \sum_{i=1}^n w_i f_i(x, y) \right)} \tag{8}</script><p>其优化目标函数经过对偶问题求解后转换为无约束优化目标$(13)$</p>
+<script type="math/tex; mode=display">
+w^* = \arg \min_w \left( \sum_{x} \tilde{P}(x) \log \sum_y \exp \left( \sum_{i=1}^n w_i f_i(x, y) \right) - \sum_{x, y} \tilde{P}(x, y) \sum_{i=1}^n w_i f_i(x, y) \right) \tag{13}</script><p>记损失函数</p>
+<script type="math/tex; mode=display">L(w) = \sum_{x} \tilde{P}(x) \log \sum_y \exp \left( \sum_{i=1}^n w_i f_i(x, y) \right) - \sum_{x, y} \tilde{P}(x, y) \sum_{i=1}^n w_i f_i(x, y) \tag{16}</script><p>相应的梯度计算略，可以用Pytorch等自动求导包计算。</p>
+<h3 id="预测算法：维特比算法"><a href="#预测算法：维特比算法" class="headerlink" title="预测算法：维特比算法"></a>预测算法：维特比算法</h3><p>给定条件随机场$P(Y|X)$和输入序列(观测序列)$x$，求条件概率最大的输出序列$y^*$，求满足约束条件下的非规范化概率最大的最优路径问题，即</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    y^* &= \arg \max_y P_w(y | x) \\
+    &= \arg \max_y \frac{\exp(w \cdot F(y, x))}{Z_w(x)} \\
+    &= \arg \max_y \exp(w \cdot F(y, x)) \\
+    &= \arg \max_y w \cdot F(y, x)
+\end{aligned} \tag{17}</script><blockquote>
+<p>Viterbi(维特比)算法在CRF(条件随机场)中是如何起作用的？ - 程序员一一涤生的文章 - 知乎<br><a href="https://zhuanlan.zhihu.com/p/94458082" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/94458082</a></p>
+</blockquote>
+<h1 id="LSTM-CRF"><a href="#LSTM-CRF" class="headerlink" title="LSTM-CRF"></a><a href="https://arxiv.org/abs/1508.01991" target="_blank" rel="noopener">LSTM-CRF</a></h1><p>整个BI-LSTM-CRF模型主要分为：1) 词嵌入(embedding)层；2) 双向LSTM特征提取层，以及之后的线性分类曾；3) 捕获标签间关系的条件随机场层。下面讲解说明各层的作用及计算方法。当然还有一些细节性的问题，如dropout的设置等，这里不过多展开。</p>
+<p><img src="/.com//bi-lstm-crf.png" alt="bi-lstm-crf"></p>
+<p>以最简单的方式处理文本(如不考虑停用词)后，输入的每个字对应一个$D$维度嵌入向量$x_i \in \mathbb{R}^{D}$，假设文本共有$T$个字，对应<strong>输入序列</strong>$X \in \mathbb{R}^{T \times D}$。经过双向LSTM提取特征后，得到$M$维<strong>隐层向量</strong>$H \in \mathbb{R}^{T \times M}$，经过线性分类层得到$C$维<strong>输出向量</strong>$Y \in \mathbb{R}^{T \times C}$，$C$为标签种类个数，元素$Y_{i, c}$表示序列中第$i$个词分类为第$c$个标签的打分值。</p>
+<p><img src="/.com//emission-score.png" alt="emission-score"></p>
+<p>上述计算输出可<strong>作为logits经softmax后进行分类</strong>，但未考虑标签间的关系，所以添加CRF层进行约束，得到句子级的序列标注，例如在<code>BIO</code>标注中可能学习得到以下约束：</p>
+<ul>
+<li>句子以<code>B-X</code>或<code>O</code>开始的的可能性较大，而不是<code>I-X</code>；</li>
+<li><code>B-X</code>后紧跟<code>I-X</code>或<code>O</code>，而不是<code>B-X</code>、<code>B-Y</code>或<code>I-Y</code>；</li>
+<li><code>O</code>后只能接<code>B-X</code>或<code>O</code>，而不是<code>I-X</code>；</li>
+<li>……</li>
+</ul>
+<p><a href="#条件随机场">条件随机场</a>可以简化表述为以下形式，其中$\text{score}(x, y)$即logits</p>
+<script type="math/tex; mode=display">P(y|x) = \frac{\exp(\text{score}(x, y))}{\sum_{y'} \exp(\text{score}(x, y'))} \qquad \Rightarrow \qquad \log P(y | x) = \text{score}(x, y) - \log \sum_{y'} \exp(\text{score}(x, y')) \tag{18.1}</script><p>其中$x, y$分别为输入序列和输出序列，$y’$是所有可能的输出序列，$\text{score}(x, y)$表示<strong>打分函数(全局特征)</strong>，由序列各位置<strong>局部特征</strong>$\Psi_i (x, y) (&gt; 0)$取对数后累加得到</p>
+<script type="math/tex; mode=display">\text{score}(x, y) = \sum_i \log \Psi_i (x, y) \tag{18.2}</script><p>序列位置$i$处的局部特征可以分为<strong>状态特征</strong>$\Psi_{EMI} (x_i \rightarrow y_i)$和<strong>转移特征</strong>$\Psi_{TRAN} (y_{i-1} \rightarrow y_i)$两类，因此</p>
+<script type="math/tex; mode=display">\text{score}(x, y) = \sum_i \log \Psi_{EMI} (x_i \rightarrow y_i) + \log \Psi_{TRAN} (y_{i-1} \rightarrow y_i) \tag{18.3}</script><p>其中</p>
+<ul>
+<li>$\log \Psi_{EMI} (x_i \rightarrow y_i)$即LSTM输出，构成Emission score matrix $\mathcal{E} \in \mathbb{R}^{T \times C}$；</li>
+<li>$\log \Psi_{TRAN} (y_{i-1} \rightarrow y_i)$为标签间的转移评分，定义为参数矩阵Transaction score matrix $\mathcal{T} \in \mathbb{R}^{C \times C}$，表示标签间的转移关系。</li>
+</ul>
+<hr>
+<p>具体地，对于序列长度为$T$、大小为$B$的样本集${(x^{(b)}, y^{(b)}), b = 1, \cdots, B}$，其中每个序列前后默认添加<code>&lt;start&gt;</code>、<code>&lt;end&gt;</code>标签，也即添加参数$\mathcal{T}_s, \mathcal{T}_e \in \mathbb{R}^{C}$，用于估计<code>&lt;start&gt; -&gt; y_1</code>、<code>y_T -&gt; &lt;end&gt;</code>的转移打分值$\mathcal{T}_{y^{(b)}_{0}, y^{(b)}_1}$、$\mathcal{T}_{y^{(b)}_{T}, y^{(b)}_{T+1}}$，那么有</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \text{score}(x^{(b)}, y^{(b)}) = \sum_{i=1}^{T} \mathcal{E}^{(b)}_{i, y^{(b)}_i} + \sum_{i=1}^{T+1} \mathcal{T}_{y^{(b)}_{i - 1}, y^{(b)}_i}
+\end{aligned}</script><p>对于$\log \sum_{y’} \exp(\text{score}(x^{(b)}, y’))$，需要遍历每种可能的$y$组合，记$s^{(b)}_{i, y_i}$为从<code>&lt;start&gt;</code>出发至第$i$个标签(包含)为${y_i}$为止的打分值，而在$i$处有$C$种可能的标签，故组成打分向量$s^{(b)}_i \in \mathbb{R}^{C}$，那么有</p>
+<script type="math/tex; mode=display">
+{s^{(b)}_{i}}_{y_i} = \begin{cases}
+    \mathcal{T}_{y_{i-1}, y_i} + \mathcal{E}^{(b)}_{i, y_i} & i = 1 & (\text{<start>} \rightarrow w_1) \\
+    \log \sum_{y_{i-1}=1}^{C} \exp \left( {s^{(b)}_{i-1}}_{y_{i-1}} + \mathcal{T}_{y_{i-1}, y_i} + \mathcal{E}^{(b)}_{i, y_i} \right) & i = 2, \cdots, T + 1 & (w_1 \rightarrow \text{<end>})
+\end{cases}</script><p>即$s^{(b)}_i = \begin{bmatrix}<br>    \cdots &amp;<br>    \log \sum_{y_{i-1}=1}^{C} \exp \left( {s^{(b)}_{i-1}}_{y_{i-1}} + \mathcal{T}_{y_{i-1}, y_i} + \mathcal{E}^{(b)}_{i, y_i} \right) &amp;<br>    \cdots<br>\end{bmatrix}^T$，其中$y_i = 1, \cdots, C$，注意到</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    \mathcal{T}_{y_0, y_1} = {\mathcal{T}_s}_{y_1} \\
+    \mathcal{T}_{y_T, y_{T+1}} = {\mathcal{T}_e}_{y_{T}} \\
+    \mathcal{E}^{(b)}_{T+1, y_{T+1}} = 0 \\
+    s^{(b)}_{T+1} \in \mathbb{R}
+\end{cases}</script><p>注意$\log \sum \exp$操作</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+      & \log \sum_{y_{i-1}=1}^{C} \exp \left( {s^{(b)}_{i-1}}_{y_{i-1}} + \mathcal{T}_{y_{i-1}, y_i} + \mathcal{E}^{(b)}_{i, y_i} \right) \\
+    = & \log \sum_{y_{i-1}=1}^{C} \exp \left( {s^{(b)}_{i-1}}_{y_{i-1}} \right) \times \exp \left( \mathcal{T}_{y_{i-1}, y_i} + \mathcal{E}^{(b)}_{i, y_i} \right) \\
+    = & \log \sum_{y_{i-1}=1}^{C} \left( \sum_{y_{i-2}=1}^{C} \exp \left( {s^{(b)}_{i-2}}_{y_{i-2}} + \mathcal{T}_{y_{i-2}, y_{i-1}} + \mathcal{E}^{(b)}_{i-1, y_{i-1}} \right) \right) \times \exp \left( \mathcal{T}_{y_{i-1}, y_i} + \mathcal{E}^{(b)}_{i, y_i} \right) \\
+    = & \cdots
+\end{aligned}</script><p>定义优化目标为<strong>最大化对数似然函数</strong>，通过梯度下降<strong>对整个网络的参数进行更新</strong>，即</p>
+<script type="math/tex; mode=display">
+L = \sum_b \log P(y^{(b)}|x^{(b)})</script><hr>
+<p>具体地，若对于数据样本</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>X</th>
+<th>Louis</th>
+<th>Hsu</th>
+<th>loves</th>
+<th>China</th>
+<th>.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Y</td>
+<td>B-PER</td>
+<td>I-PER</td>
+<td>O</td>
+<td>B-ORG</td>
+<td>O</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>其LSTM输出</p>
+<script type="math/tex; mode=display">
+\mathcal{E}^{(b)} = \begin{bmatrix}
+    & B-PER & I-PER & B-ORG & I-ORG & O \\
+    w_0 & \bm{1.5} & 0.9 & 0.1 & 0.08 & 0.05 \\
+    w_1 & 0.2 & \bm{0.4} & 0.1 & 0.11 & 0.05 \\
+    w_2 & 0.09 & 0.02 & 0.03 & 0.08 & \bm{0.1} \\
+    w_3 & 0.003 & 0.002 & \bm{0.2} & 0.07 & 0.05 \\
+    w_4 & 0.12 & 0.2 & 0.1 & 0.065 & \bm{0.5}
+\end{bmatrix}</script><p>此时转移打分参数矩阵</p>
+<script type="math/tex; mode=display">
+\mathcal{T} = \begin{bmatrix}
+    & B-PER & I-PER & B-ORG & I-ORG & O \\
+    B-PER & 0.6 & \bm{0.9} & 0.2 & 0.0006 & 0.6 \\
+    I-PER & 0.5 & 0.53 & 0.55 & 0.0003 & \bm{0.85} \\
+    B-ORG & 0.5 & 0.0003 & 0.25 & 0.8 & \bm{0.77} \\
+    I-ORG & 0.45 & 0.007 & 0.7 & 0.65 & 0.76 \\
+    O & 0.65 & 0.0007 & \bm{0.7} & 0.0008 & 0.9 \\
+\end{bmatrix}</script><p><code>&lt;start&gt;</code>转移到第一个标签的打分值为</p>
+<script type="math/tex; mode=display">
+\mathcal{T}_s = \begin{bmatrix}
+    B-PER & I-PER & B-ORG & I-ORG & O \\
+    \bm{0.8} & 0.007 & 0.7 & 0.0008 & 0.9
+\end{bmatrix}^T</script><p>最后一个标签转移到<code>&lt;end&gt;</code>的打分值为</p>
+<script type="math/tex; mode=display">
+\mathcal{T}_e = \begin{bmatrix}
+    B-PER & I-PER & B-ORG & I-ORG & O \\
+    0.009 & 0.008 & 0.006 & 0.2 & \bm{0.08}
+\end{bmatrix}^T</script><p>计算$\text{score}(x^{(b)}, y^{(b)})$的实现如下，<code>&lt;start&gt; -&gt; B-PER -&gt; I-PER -&gt; O -&gt; B-ORG -&gt; O -&gt; &lt;end&gt;</code>对应的标签序列为$y^{(b)} = (s, 0, 1, 4, 2, 4, e)$对应</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \text{score}(x^{(b)}, y^{(b)}) & = \mathcal{E}^{(b)}_{00} + \mathcal{E}^{(b)}_{11} + \mathcal{E}^{(b)}_{24} + \mathcal{E}^{(b)}_{32} + \mathcal{E}^{(b)}_{44} \\
+        & + {\mathcal{T}_s}_{0} + \mathcal{T}_{01} + \mathcal{T}_{14} + \mathcal{T}_{42} + \mathcal{T}_{24} +{\mathcal{T}_e}_{4} \\
+        & = 6.8
+\end{aligned}</script><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_compute_score</span><span class="params">(self, emissions: torch.Tensor,       # <span class="params">(seq_length, batch_size, num_tags)</span></span></span></span><br><span class="line"><span class="function"><span class="params">                   tags: torch.LongTensor,              # <span class="params">(seq_length, batch_size)</span></span></span></span><br><span class="line"><span class="function"><span class="params">                   mask: torch.ByteTensor               # <span class="params">(seq_length, batch_size)</span> torch.ones<span class="params">(...)</span> if not specified.</span></span></span><br><span class="line"><span class="function"><span class="params">    )</span> -&gt; torch.Tensor:</span></span><br><span class="line"></span><br><span class="line">    seq_length, batch_size = tags.size()</span><br><span class="line">    mask = mask.float()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Start transition score and first emission</span></span><br><span class="line">    <span class="comment"># shape: (batch_size,)</span></span><br><span class="line">    score = self.start_transitions[tags[<span class="number">0</span>]]</span><br><span class="line">    score += emissions[<span class="number">0</span>, torch.arange(batch_size), tags[<span class="number">0</span>]]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, seq_length):</span><br><span class="line">        <span class="comment"># Transition score to next tag(y_&#123;i-1&#125; -&gt; y_i), only added if next timestep is valid (mask == 1)</span></span><br><span class="line">        <span class="comment"># shape: (batch_size,)</span></span><br><span class="line">        score += self.transitions[tags[i - <span class="number">1</span>], tags[i]] * mask[i]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Emission score for next tag(x_i -&gt; y_i), only added if next timestep is valid (mask == 1)</span></span><br><span class="line">        <span class="comment"># shape: (batch_size,)</span></span><br><span class="line">        score += emissions[i, torch.arange(batch_size), tags[i]] * mask[i]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># End transition score</span></span><br><span class="line">    <span class="comment"># shape: (batch_size,)</span></span><br><span class="line">    seq_ends = mask.long().sum(dim=<span class="number">0</span>) - <span class="number">1</span></span><br><span class="line">    <span class="comment"># shape: (batch_size,)</span></span><br><span class="line">    last_tags = tags[seq_ends, torch.arange(batch_size)]</span><br><span class="line">    <span class="comment"># shape: (batch_size,)</span></span><br><span class="line">    score += self.end_transitions[last_tags]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> score</span><br></pre></td></tr></table></figure>
+<p>计算$\log \sum_{y’} \exp(\text{score}(x, y’))$的实现如下<br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_compute_normalizer</span><span class="params">(self, emissions: torch.Tensor,  # <span class="params">(seq_length, batch_size, num_tags)</span></span></span></span><br><span class="line"><span class="function"><span class="params">                        mask: torch.ByteTensor          # <span class="params">(seq_length, batch_size)</span> torch.ones<span class="params">(...)</span> if not specified.</span></span></span><br><span class="line"><span class="function"><span class="params">    )</span> -&gt; torch.Tensor:</span></span><br><span class="line"></span><br><span class="line">    seq_length = emissions.size(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Start transition score and first emission; score has size of</span></span><br><span class="line">    <span class="comment"># (batch_size, num_tags) where for each batch, the j-th column stores</span></span><br><span class="line">    <span class="comment"># the score that the first timestep has tag j</span></span><br><span class="line">    <span class="comment"># shape: (batch_size, num_tags)</span></span><br><span class="line">    score = self.start_transitions + emissions[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, seq_length):</span><br><span class="line">        <span class="comment"># Broadcast score for every possible next tag</span></span><br><span class="line">        <span class="comment"># shape: (batch_size, num_tags, 1)</span></span><br><span class="line">        broadcast_score = score.unsqueeze(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Broadcast emission score for every possible current tag</span></span><br><span class="line">        <span class="comment"># shape: (batch_size, 1, num_tags)</span></span><br><span class="line">        broadcast_emissions = emissions[i].unsqueeze(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Compute the score tensor of size (batch_size, num_tags, num_tags) where</span></span><br><span class="line">        <span class="comment"># for each sample, entry at row i and column j stores the sum of scores of all</span></span><br><span class="line">        <span class="comment"># possible tag sequences so far that end with transitioning from tag i to tag j</span></span><br><span class="line">        <span class="comment"># and emitting</span></span><br><span class="line">        <span class="comment"># shape: (batch_size, num_tags, num_tags)</span></span><br><span class="line">        <span class="comment"># y_&#123;i-1&#125; -&gt; y_i</span></span><br><span class="line">        next_score = broadcast_score + self.transitions + broadcast_emissions</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Sum over all possible current tags, but we're in score space, so a sum</span></span><br><span class="line">        <span class="comment"># becomes a log-sum-exp: for each sample, entry i stores the sum of scores of</span></span><br><span class="line">        <span class="comment"># all possible tag sequences so far, that end in tag i</span></span><br><span class="line">        <span class="comment"># shape: (batch_size, num_tags)</span></span><br><span class="line">        next_score = torch.logsumexp(next_score, dim=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Set score to the next score if this timestep is valid (mask == 1)</span></span><br><span class="line">        <span class="comment"># shape: (batch_size, num_tags)</span></span><br><span class="line">        score = torch.where(mask[i].unsqueeze(<span class="number">1</span>), next_score, score)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># End transition score</span></span><br><span class="line">    <span class="comment"># shape: (batch_size, num_tags)</span></span><br><span class="line">    score += self.end_transitions</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Sum (log-sum-exp) over all possible tags</span></span><br><span class="line">    <span class="comment"># shape: (batch_size,)</span></span><br><span class="line">    score = torch.logsumexp(score, dim=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> score</span><br></pre></td></tr></table></figure></p>
+<p>前向求log likelihood $\sum_b \log P(y^{(b)}|x^{(b)})$<br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, emissions: torch.Tensor,</span></span></span><br><span class="line"><span class="function"><span class="params">            tags: torch.LongTensor,</span></span></span><br><span class="line"><span class="function"><span class="params">            mask: Optional[torch.ByteTensor] = None,</span></span></span><br><span class="line"><span class="function"><span class="params">            reduction: str = <span class="string">'mean'</span>)</span> -&gt; torch.Tensor:</span></span><br><span class="line">    <span class="string">"""Compute the conditional log likelihood of a sequence of tags given emission scores.</span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        emissions (`~torch.Tensor`): Emission score tensor of size</span></span><br><span class="line"><span class="string">            ``(seq_length, batch_size, num_tags)`` if ``batch_first`` is ``False``,</span></span><br><span class="line"><span class="string">            ``(batch_size, seq_length, num_tags)`` otherwise.</span></span><br><span class="line"><span class="string">        tags (`~torch.LongTensor`): Sequence of tags tensor of size</span></span><br><span class="line"><span class="string">            ``(seq_length, batch_size)`` if ``batch_first`` is ``False``,</span></span><br><span class="line"><span class="string">            ``(batch_size, seq_length)`` otherwise.</span></span><br><span class="line"><span class="string">        mask (`~torch.ByteTensor`): Mask tensor of size ``(seq_length, batch_size)``</span></span><br><span class="line"><span class="string">            if ``batch_first`` is ``False``, ``(batch_size, seq_length)`` otherwise.</span></span><br><span class="line"><span class="string">        reduction: Specifies  the reduction to apply to the output:</span></span><br><span class="line"><span class="string">            ``none|sum|mean|token_mean``. ``none``: no reduction will be applied.</span></span><br><span class="line"><span class="string">            ``sum``: the output will be summed over batches. ``mean``: the output will be</span></span><br><span class="line"><span class="string">            averaged over batches. ``token_mean``: the output will be averaged over tokens.</span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        `~torch.Tensor`: The log likelihood. This will have size ``(batch_size,)`` if</span></span><br><span class="line"><span class="string">        reduction is ``none``, ``()`` otherwise.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">if</span> reduction <span class="keyword">not</span> <span class="keyword">in</span> (<span class="string">'none'</span>, <span class="string">'sum'</span>, <span class="string">'mean'</span>, <span class="string">'token_mean'</span>):</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">f'invalid reduction: <span class="subst">&#123;reduction&#125;</span>'</span>)</span><br><span class="line">    <span class="keyword">if</span> mask <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">        mask = torch.ones_like(tags, dtype=torch.uint8, device=tags.device)</span><br><span class="line">    <span class="keyword">if</span> mask.dtype != torch.uint8:</span><br><span class="line">        mask = mask.byte()</span><br><span class="line">    self._validate(emissions, tags=tags, mask=mask)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> self.batch_first:</span><br><span class="line">        emissions = emissions.transpose(<span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line">        tags = tags.transpose(<span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line">        mask = mask.transpose(<span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># shape: (batch_size,)</span></span><br><span class="line">    numerator = self._compute_score(emissions, tags, mask)</span><br><span class="line">    <span class="comment"># shape: (batch_size,)</span></span><br><span class="line">    denominator = self._compute_normalizer(emissions, mask)</span><br><span class="line">    <span class="comment"># log likelihood, shape: (batch_size,)</span></span><br><span class="line">    llh = numerator - denominator</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> reduction == <span class="string">'none'</span>:</span><br><span class="line">        <span class="keyword">return</span> llh</span><br><span class="line">    <span class="keyword">if</span> reduction == <span class="string">'sum'</span>:</span><br><span class="line">        <span class="keyword">return</span> llh.sum()</span><br><span class="line">    <span class="keyword">if</span> reduction == <span class="string">'mean'</span>:</span><br><span class="line">        <span class="keyword">return</span> llh.mean()</span><br><span class="line">    <span class="keyword">return</span> llh.sum() / mask.float().sum()</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p>在预测阶段时，需要从$P(y|x^{(b)})$的预测中得到概率最大的预测序列，用维特比(viterbi)算法进行解码求权重最大的路径</p>
+<blockquote>
+<p>如何简单地理解维特比算法（viterbi算法）？ - 白话NLP的回答 - 知乎<br><a href="https://www.zhihu.com/question/294202922/answer/1318907631" target="_blank" rel="noopener">https://www.zhihu.com/question/294202922/answer/1318907631</a></p>
+</blockquote>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_viterbi_decode</span><span class="params">(self, emissions: torch.FloatTensor,</span></span></span><br><span class="line"><span class="function"><span class="params">                    mask: torch.ByteTensor,</span></span></span><br><span class="line"><span class="function"><span class="params">                    pad_tag: Optional[int] = None)</span> -&gt; List[List[int]]:</span></span><br><span class="line">    <span class="comment"># emissions: (seq_length, batch_size, num_tags)</span></span><br><span class="line">    <span class="comment"># mask: (seq_length, batch_size)</span></span><br><span class="line">    <span class="comment"># return: (batch_size, seq_length)</span></span><br><span class="line">    <span class="keyword">if</span> pad_tag <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">        pad_tag = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    device = emissions.device</span><br><span class="line">    seq_length, batch_size = mask.shape</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Start transition and first emission</span></span><br><span class="line">    <span class="comment"># shape: (batch_size, num_tags)</span></span><br><span class="line">    score = self.start_transitions + emissions[<span class="number">0</span>]</span><br><span class="line">    history_idx = torch.zeros((seq_length, batch_size, self.num_tags), dtype=torch.long, device=device)</span><br><span class="line">    oor_idx = torch.zeros((batch_size, self.num_tags), dtype=torch.long, device=device)</span><br><span class="line">    oor_tag = torch.full((seq_length, batch_size), pad_tag, dtype=torch.long, device=device)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># - score is a tensor of size (batch_size, num_tags) where for every batch,</span></span><br><span class="line">    <span class="comment">#   value at column j stores the score of the best tag sequence so far that ends</span></span><br><span class="line">    <span class="comment">#   with tag j</span></span><br><span class="line">    <span class="comment"># - history_idx saves where the best tags candidate transitioned from; this is used</span></span><br><span class="line">    <span class="comment">#   when we trace back the best tag sequence</span></span><br><span class="line">    <span class="comment"># - oor_idx saves the best tags candidate transitioned from at the positions</span></span><br><span class="line">    <span class="comment">#   where mask is 0, i.e. out of range (oor)</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Viterbi algorithm recursive case: we compute the score of the best tag sequence</span></span><br><span class="line">    <span class="comment"># for every possible next tag</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, seq_length):</span><br><span class="line">        <span class="comment"># Broadcast viterbi score for every possible next tag</span></span><br><span class="line">        <span class="comment"># shape: (batch_size, num_tags, 1)</span></span><br><span class="line">        broadcast_score = score.unsqueeze(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Broadcast emission score for every possible current tag</span></span><br><span class="line">        <span class="comment"># shape: (batch_size, 1, num_tags)</span></span><br><span class="line">        broadcast_emission = emissions[i].unsqueeze(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Compute the score tensor of size (batch_size, num_tags, num_tags) where</span></span><br><span class="line">        <span class="comment"># for each sample, entry at row i and column j stores the score of the best</span></span><br><span class="line">        <span class="comment"># tag sequence so far that ends with transitioning from tag i to tag j and emitting</span></span><br><span class="line">        <span class="comment"># shape: (batch_size, num_tags, num_tags)</span></span><br><span class="line">        next_score = broadcast_score + self.transitions + broadcast_emission</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Find the maximum score over all possible current tag</span></span><br><span class="line">        <span class="comment"># shape: (batch_size, num_tags)</span></span><br><span class="line">        next_score, indices = next_score.max(dim=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Set score to the next score if this timestep is valid (mask == 1)</span></span><br><span class="line">        <span class="comment"># and save the index that produces the next score</span></span><br><span class="line">        <span class="comment"># shape: (batch_size, num_tags)</span></span><br><span class="line">        score = torch.where(mask[i].unsqueeze(<span class="number">-1</span>), next_score, score)</span><br><span class="line">        indices = torch.where(mask[i].unsqueeze(<span class="number">-1</span>), indices, oor_idx)</span><br><span class="line">        history_idx[i - <span class="number">1</span>] = indices</span><br><span class="line"></span><br><span class="line">    <span class="comment"># End transition score</span></span><br><span class="line">    <span class="comment"># shape: (batch_size, num_tags)</span></span><br><span class="line">    end_score = score + self.end_transitions</span><br><span class="line">    _, end_tag = end_score.max(dim=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># shape: (batch_size,)</span></span><br><span class="line">    seq_ends = mask.long().sum(dim=<span class="number">0</span>) - <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># insert the best tag at each sequence **end** (last position with mask == 1)</span></span><br><span class="line">    history_idx = history_idx.transpose(<span class="number">1</span>, <span class="number">0</span>).contiguous()                          <span class="comment"># (batch_size, seq_length, num_tags)</span></span><br><span class="line">    history_idx.scatter_(<span class="number">1</span>, seq_ends.view(<span class="number">-1</span>, <span class="number">1</span>, <span class="number">1</span>).expand(<span class="number">-1</span>, <span class="number">1</span>, self.num_tags),   <span class="comment"># (batch_size, 1, num_tags)</span></span><br><span class="line">                         end_tag.view(<span class="number">-1</span>, <span class="number">1</span>, <span class="number">1</span>).expand(<span class="number">-1</span>, <span class="number">1</span>, self.num_tags))       <span class="comment"># (batch_size, 1, num_tags)</span></span><br><span class="line">    history_idx = history_idx.transpose(<span class="number">1</span>, <span class="number">0</span>).contiguous()                          <span class="comment"># (seq_length, batch_size, num_tags)</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># The most probable path for each sequence</span></span><br><span class="line">    best_tags = torch.zeros(batch_size, <span class="number">1</span>, dtype=torch.long, device=device)</span><br><span class="line">    best_tags_arr = torch.zeros((seq_length, batch_size), dtype=torch.long, device=device)</span><br><span class="line">    <span class="keyword">for</span> idx <span class="keyword">in</span> range(seq_length - <span class="number">1</span>, <span class="number">-1</span>, <span class="number">-1</span>):</span><br><span class="line">        best_tags = torch.gather(history_idx[idx], <span class="number">1</span>, best_tags)                    <span class="comment"># (batch_size,)</span></span><br><span class="line">        best_tags_arr[idx] = best_tags.data.view(batch_size)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> torch.where(mask, best_tags_arr, oor_tag).transpose(<span class="number">0</span>, <span class="number">1</span>)                <span class="comment"># (batch_size, seq_length)</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>我理解BI-LSTM+CRF模型，所谓在LSTM上面套CRF其实是不严谨的说法，假如这样说，那实际上是两层sequence model了吗。我认为其实是说把LSTM和CRF融合起来。比如LSTM的产出只有发射概率，尽管这个发射概率考虑到了上下文，因为LSTM有门机制，可以记忆或者遗忘前面内容，然后双向，有前有后这样，但是毕竟没有转移概率，像CRF HMM这种，都是结合发射概率和转移概率的。比如在词性标注，最简单BIO这样，有显而易见的规则，就是B-X后面不会有I-Y。所以干脆搞出B-LSTM+CRF，结合发射概率和转移概率这样。实际上后面接的CRF并不是真的CRF，比如它又没有特征模板，它又不接受离散特征，他只是一次Viterbi推导而已。</p>
+<p>作者：uuisafresh<br>链接：<a href="https://www.zhihu.com/question/62399257/answer/206903718" target="_blank" rel="noopener">https://www.zhihu.com/question/62399257/answer/206903718</a><br>来源：知乎<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+</blockquote>
+<h1 id="Implementation"><a href="#Implementation" class="headerlink" title="Implementation"></a>Implementation</h1><p>具体代码查看<a href="https://github.com/isLouisHsu/ner.lstmcrf.pytorch" target="_blank" rel="noopener">isLouisHsu/ner.lstmcrf.pytorch</a>，需要注意的是，完全复现<code>gensim.models.Word2Vec</code>需要在环境中固定环境变量<code>PYTHONHASHSEED</code>，如下<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">export</span> PYTHONHASHSEED=99</span><br><span class="line">$ python train.py</span><br><span class="line">$ python test.py</span><br></pre></td></tr></table></figure></p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="https://zhuanlan.zhihu.com/p/88544122" target="_blank" rel="noopener">【NLP-NER】命名实体识别详解之一 - 知乎</a></li>
+<li><a href="https://arxiv.org/abs/1508.01991" target="_blank" rel="noopener">Huang Z , Xu W , Yu K . Bidirectional LSTM-CRF Models for Sequence Tagging[J]. Computer ence, 2015.</a></li>
+<li><a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/" target="_blank" rel="noopener">Understanding LSTM Networks</a></li>
+<li><a href="http://karpathy.github.io/2015/05/21/rnn-effectiveness/" target="_blank" rel="noopener">The Unreasonable Effectiveness of Recurrent Neural Networks</a></li>
+<li><a href="https://github.com/threelittlemonkeys/lstm-crf-pytorch" target="_blank" rel="noopener">threelittlemonkeys/lstm-crf-pytorch - Github</a></li>
+<li><a href="https://github.com/mali19064/LSTM-CRF-pytorch-faster" target="_blank" rel="noopener">mali19064/LSTM-CRF-pytorch-faster - Github</a></li>
+<li><a href="https://pytorch.org/tutorials/beginner/nlp/advanced_tutorial.html" target="_blank" rel="noopener">ADVANCED: MAKING DYNAMIC DECISIONS AND THE BI-LSTM CRF - pytorch.org</a></li>
+<li><a href="https://blog.csdn.net/b285795298/article/details/100764066#Emission%20score" target="_blank" rel="noopener">【NLP】命名实体识别（NER）的BiLSTM-CRF模型</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/08/15/MySQL%E9%9A%94%E7%A6%BB%E4%BA%8B%E5%8A%A1%E7%BA%A7%E5%88%AB/" rel="next" title="MySQL隔离事务级别">
+                <i class="fa fa-chevron-left"></i> MySQL隔离事务级别
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.gif"
+                alt="Louis Hsu" />
+            
+              <p class="site-author-name" itemprop="name">Louis Hsu</p>
+              <p class="site-description motion-element" itemprop="description">ᵕ᷄ ≀ ̠˘᷅ 永远年轻，永远热泪盈眶</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/%20%7C%7C%20archive">
+                
+                    <span class="site-state-item-count">112</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/isLouisHsu" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://is.louishsu@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/islouishsu" target="_blank" title="Zhihu"><i class="fa fa-fw fa-zhihu"></i>Zhihu</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/islouishsu" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          <div id='music163player'>
+            <iframe 
+              frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=110 
+              src="//music.163.com/outchain/player?type=0&id=2703291040&auto=1&height=90">
+            </iframe>
+          </div>
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#目录"><span class="nav-number">1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#命名实体识别"><span class="nav-number">2.</span> <span class="nav-text">命名实体识别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Long-Short-Term-Memory"><span class="nav-number">3.</span> <span class="nav-text">Long Short-Term Memory</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Conditional-Random-Field"><span class="nav-number">4.</span> <span class="nav-text">Conditional Random Field</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概率无向图模型"><span class="nav-number">4.1.</span> <span class="nav-text">概率无向图模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条件随机场的定义和形式"><span class="nav-number">4.2.</span> <span class="nav-text">条件随机场的定义和形式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#定义"><span class="nav-number">4.2.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#形式"><span class="nav-number">4.2.2.</span> <span class="nav-text">形式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#概率计算和学习算法问题"><span class="nav-number">4.3.</span> <span class="nav-text">概率计算和学习算法问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#与最大熵模型的联系"><span class="nav-number">4.3.1.</span> <span class="nav-text">与最大熵模型的联系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#概率计算"><span class="nav-number">4.3.2.</span> <span class="nav-text">概率计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#学习算法"><span class="nav-number">4.3.3.</span> <span class="nav-text">学习算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#预测算法：维特比算法"><span class="nav-number">4.3.4.</span> <span class="nav-text">预测算法：维特比算法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#LSTM-CRF"><span class="nav-number">5.</span> <span class="nav-text">LSTM-CRF</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Implementation"><span class="nav-number">6.</span> <span class="nav-text">Implementation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">7.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Louis Hsu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: 'e65d27f7cf5c62feaf97',
+          clientSecret: '356386826698e8b817ca076b08d7c0e9814f52ea',
+          repo: 'isLouisHsu.github.io',
+          owner: 'isLouisHsu',
+          admin: ['isLouisHsu'],
+          id: md5(window.location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('3');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+
+  <script type="text/javascript" src="/js/click_show_text.js"></script>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

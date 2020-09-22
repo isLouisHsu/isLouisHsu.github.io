@@ -357,7 +357,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/15/MYSQL%E9%9A%94%E7%A6%BB%E4%BA%8B%E5%8A%A1%E7%BA%A7%E5%88%AB/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/16/LSTM-CRF-for-Named-Entity-Recognition/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Louis Hsu">
@@ -376,8 +376,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/08/15/MYSQL%E9%9A%94%E7%A6%BB%E4%BA%8B%E5%8A%A1%E7%BA%A7%E5%88%AB/" itemprop="url">
-                  MYSQL隔离事务级别
+                <a class="post-title-link" href="/2020/09/16/LSTM-CRF-for-Named-Entity-Recognition/" itemprop="url">
+                  LSTM-CRF for Named Entity Recognition
                 </a>
               
             
@@ -403,12 +403,203 @@
                 
               
 
-              <time title="创建时间：2020-08-15 21:49:29 / 修改时间：23:49:16" itemprop="dateCreated datePublished" datetime="2020-08-15T21:49:29+08:00">2020-08-15</time>
+              <time title="创建时间：2020-09-16 17:26:44" itemprop="dateCreated datePublished" datetime="2020-09-16T17:26:44+08:00">2020-09-16</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-09-21 17:53:24" itemprop="dateModified" datetime="2020-09-21T17:53:24+08:00">2020-09-21</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          目录
+目录
+命名实体识别
+Long Short-Term Memory
+Conditional Random Field
+概率无向图模型
+条件随机场的定义和形式
+定义
+形式
+
+
+概率计算和学习算法问题
+与最大熵模型的联系
+概率计算
+学习算法
+预测算法：维特比算法
+
+
+
+
+LSTM-CRF
+Imple
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/09/16/LSTM-CRF-for-Named-Entity-Recognition/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/15/MySQL%E9%9A%94%E7%A6%BB%E4%BA%8B%E5%8A%A1%E7%BA%A7%E5%88%AB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="ᵕ᷄ ≀ ̠˘᷅ 永远年轻，永远热泪盈眶">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/08/15/MySQL%E9%9A%94%E7%A6%BB%E4%BA%8B%E5%8A%A1%E7%BA%A7%E5%88%AB/" itemprop="url">
+                  MySQL隔离事务级别
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-08-15 22:34:10" itemprop="dateCreated datePublished" datetime="2020-08-15T22:34:10+08:00">2020-08-15</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-08-16 22:37:38" itemprop="dateModified" datetime="2020-08-16T22:37:38+08:00">2020-08-16</time>
               
             
           </span>
@@ -462,7 +653,7 @@ ACID
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2020/08/15/MYSQL%E9%9A%94%E7%A6%BB%E4%BA%8B%E5%8A%A1%E7%BA%A7%E5%88%AB/#more" rel="contents">
+            <a class="btn" href="/2020/08/15/MySQL%E9%9A%94%E7%A6%BB%E4%BA%8B%E5%8A%A1%E7%BA%A7%E5%88%AB/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1498,7 +1689,7 @@ Download and InstallationSSH安装SSH服务端并启用12$ sudo apt-get install 
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-06-30 18:50:57" itemprop="dateModified" datetime="2020-06-30T18:50:57+08:00">2020-06-30</time>
+                <time title="修改时间：2020-09-02 19:51:26" itemprop="dateModified" datetime="2020-09-02T19:51:26+08:00">2020-09-02</time>
               
             
           </span>
@@ -1804,7 +1995,7 @@ Reference
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/13/Graph-Neural-Network/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/14/%E8%AE%B0%E4%B8%80%E6%AC%A1MySQL%E8%A7%A3%E5%86%B3%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E6%97%B6%E7%9A%84%E5%88%86%E8%A1%A8%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Louis Hsu">
@@ -1823,8 +2014,8 @@ Reference
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/06/13/Graph-Neural-Network/" itemprop="url">
-                  Graph Neural Network
+                <a class="post-title-link" href="/2020/06/14/%E8%AE%B0%E4%B8%80%E6%AC%A1MySQL%E8%A7%A3%E5%86%B3%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E6%97%B6%E7%9A%84%E5%88%86%E8%A1%A8%E9%97%AE%E9%A2%98/" itemprop="url">
+                  记一次MySQL解决大数据存储时的分表问题
                 </a>
               
             
@@ -1850,7 +2041,7 @@ Reference
                 
               
 
-              <time title="创建时间：2020-06-13 17:55:25" itemprop="dateCreated datePublished" datetime="2020-06-13T17:55:25+08:00">2020-06-13</time>
+              <time title="创建时间：2020-06-14 23:24:27" itemprop="dateCreated datePublished" datetime="2020-06-14T23:24:27+08:00">2020-06-14</time>
             
 
             
@@ -1867,29 +2058,11 @@ Reference
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-06-14 08:12:27" itemprop="dateModified" datetime="2020-06-14T08:12:27+08:00">2020-06-14</time>
+                <time title="修改时间：2020-08-16 20:56:10" itemprop="dateModified" datetime="2020-08-16T20:56:10+08:00">2020-08-16</time>
               
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a></span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -1920,211 +2093,21 @@ Reference
       
         
           
-          目录《深入浅出图神经网络》阅读笔记，这本书非常OK，看着没多少字，都是干货，比什么《xxx从入门到精通》类的书好太多。
-
+          目录
 目录
-图卷积神经网络(GCN)
-图信号
-拉普拉斯算子
-图傅里叶变换
-GFT与IGFT
-总变差(TV)
-图信号的频域描述
+问题
+方案
+根据主体分表
+容量可拓展
 
 
-图滤波器
-定义
-拉普拉斯矩阵多项式拓展形式
-空域角度
+实现
 
+问题试想有这样一种场景，多个主体以一定时间间隔(如10s)源源不断采集数据，并存入数据表。并且，主体个数可能在随后使用中新增或减少。若全部数据存入一张表，当数据量很大时，用SQL查询数据会非常慢。本节就是总结一次在实际中遇到这类问题的解决
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2020/06/13/Graph-Neural-Network/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Louis Hsu">
-      <meta itemprop="description" content="ᵕ᷄ ≀ ̠˘᷅ 永远年轻，永远热泪盈眶">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LOUIS' BLOG">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/06/12/Efficient-Feature-Selection/" itemprop="url">
-                  Efficient Feature Selection
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2020-06-12 13:04:00" itemprop="dateCreated datePublished" datetime="2020-06-12T13:04:00+08:00">2020-06-12</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-06-14 11:40:07" itemprop="dateModified" datetime="2020-06-14T11:40:07+08:00">2020-06-14</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          目录《数据挖掘》中介绍许多数据处理方法，但对特征选择没有深入介绍，本文对这方面的方法进行汇总介绍，并结合sklearn做一些样例。
-
-Data-Mining - LOUIS’ BLOG。
-
-
-目录
-过滤方法(Filter)
-方差阈值(Variance Threshold)
-单变量选择(Univari
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2020/06/12/Efficient-Feature-Selection/#more" rel="contents">
+            <a class="btn" href="/2020/06/14/%E8%AE%B0%E4%B8%80%E6%AC%A1MySQL%E8%A7%A3%E5%86%B3%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E6%97%B6%E7%9A%84%E5%88%86%E8%A1%A8%E9%97%AE%E9%A2%98/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2169,7 +2152,7 @@ Data-Mining - LOUIS’ BLOG。
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/2/">&lt;i class&#x3D;&quot;fa fa-angle-right&quot; aria-label&#x3D;&quot;下一页&quot;&gt;&lt;&#x2F;i&gt;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/2/">&lt;i class&#x3D;&quot;fa fa-angle-right&quot; aria-label&#x3D;&quot;下一页&quot;&gt;&lt;&#x2F;i&gt;</a>
   </nav>
 
 
@@ -2216,7 +2199,7 @@ Data-Mining - LOUIS’ BLOG。
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">110</span>
+                    <span class="site-state-item-count">112</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3004,6 +2987,6 @@ Data-Mining - LOUIS’ BLOG。
 
 
   <script type="text/javascript" src="/js/click_show_text.js"></script>
-  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
 </html>
