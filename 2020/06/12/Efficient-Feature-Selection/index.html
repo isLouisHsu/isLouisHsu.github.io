@@ -115,20 +115,20 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="目录《数据挖掘》中介绍许多数据处理方法，但对特征选择没有深入介绍，本文对这方面的方法进行汇总介绍，并结合sklearn做一些样例。  Data-Mining - LOUIS’ BLOG。   目录 过滤方法(Filter) 方差阈值(Variance Threshold) 单变量选择(Univariate Feature Selection) 相关系数(Correlation Coefficien">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/feature_engineering.jpg">
-<meta property="og:image" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/feature_selection_methods.png">
-<meta property="og:image" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/rfe.png">
-<meta property="og:image" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/L1.jpg">
-<meta property="og:image" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/L2.jpg">
-<meta property="og:image" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/ridge_plot.png">
-<meta property="og:image" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/ridge_param.png">
-<meta property="og:image" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/linear_regression_graph.jpg">
-<meta property="og:image" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/lar.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//feature_engineering.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//feature_selection_methods.png">
+<meta property="og:image" content="http://yoursite.com/.com//rfe.png">
+<meta property="og:image" content="http://yoursite.com/.com//L1.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//L2.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//ridge_plot.png">
+<meta property="og:image" content="http://yoursite.com/.com//ridge_param.png">
+<meta property="og:image" content="http://yoursite.com/.com//linear_regression_graph.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//lar.jpg">
 <meta property="article:published_time" content="2020-06-12T05:04:00.000Z">
 <meta property="article:modified_time" content="2020-06-14T03:40:07.393Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2020/06/12/Efficient-Feature-Selection/feature_engineering.jpg">
+<meta name="twitter:image" content="http://yoursite.com/.com//feature_engineering.jpg">
 
 
 
@@ -533,7 +533,7 @@
 </li>
 <li><a href="#reference">Reference</a></li>
 </ul>
-<p><img src="/2020/06/12/Efficient-Feature-Selection/feature_engineering.jpg" alt="feature_engineering"><br><img src="/2020/06/12/Efficient-Feature-Selection/feature_selection_methods.png" alt="feature_selection_methods"></p>
+<p><img src="/.com//feature_engineering.jpg" alt="feature_engineering"><br><img src="/.com//feature_selection_methods.png" alt="feature_selection_methods"></p>
 <h1 id="过滤方法-Filter"><a href="#过滤方法-Filter" class="headerlink" title="过滤方法(Filter)"></a>过滤方法(Filter)</h1><p>过滤法只用于检验特征向量和目标(响应变量)的相关度，不需要任何的机器学习的算法，不依赖于任何模型，只是应用统计量做筛选：我们根据统计量的大小，设置合适的阈值，将低于阈值的特征剔除。</p>
 <p>所以，从某种程度上来说，过滤法更像是一个数学问题，我们只在过滤之后的特征子集上进行建模和训练。</p>
 <h2 id="方差阈值-Variance-Threshold"><a href="#方差阈值-Variance-Threshold" class="headerlink" title="方差阈值(Variance Threshold)"></a>方差阈值(Variance Threshold)</h2><p>一种最简单的方法，<strong>移除方差较小的特征，</strong>可以用于离散或连续的变量。如下，三列方差分别为$0.13888889, 0.22222222, 0.25$，阈值设置为$0.8 \times (1 - 0.8) = 0.16$，第一列被删除。<br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> VarianceThreshold</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X = [[<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>], [<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>], [<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>], [<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>], [<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>], [<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>]]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>sel = VarianceThreshold(threshold=(<span class="number">.8</span> * (<span class="number">1</span> - <span class="number">.8</span>)))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>sel.fit_transform(X)</span><br><span class="line">array([[<span class="number">0</span>, <span class="number">1</span>],</span><br><span class="line">       [<span class="number">1</span>, <span class="number">0</span>],</span><br><span class="line">       [<span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">       [<span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">       [<span class="number">1</span>, <span class="number">0</span>],</span><br><span class="line">       [<span class="number">1</span>, <span class="number">1</span>]])</span><br></pre></td></tr></table></figure></p>
@@ -676,7 +676,7 @@
 </li>
 </ul>
 <p>例如将手写字每个像素作为特征维度，对其进行递归特征筛选，<strong><code>ranking</code>越小的特征重要性越大</strong><br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.svm <span class="keyword">import</span> SVC</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_digits</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> RFE</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="comment"># Load the digits dataset</span></span><br><span class="line"><span class="meta">... </span>digits = load_digits()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X = digits.images.reshape((len(digits.images), <span class="number">-1</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y = digits.target</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="comment"># Create the RFE object and rank each pixel</span></span><br><span class="line"><span class="meta">... </span>svc = SVC(kernel=<span class="string">"linear"</span>, C=<span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>rfe = RFE(estimator=svc, n_features_to_select=<span class="number">1</span>, step=<span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>rfe.fit(X, y)</span><br><span class="line">RFE(estimator=SVC(C=<span class="number">1</span>, kernel=<span class="string">'linear'</span>), n_features_to_select=<span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ranking = rfe.ranking_.reshape(digits.images[<span class="number">0</span>].shape)</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="comment"># Plot pixel ranking</span></span><br><span class="line"><span class="meta">... </span>plt.matshow(ranking, cmap=plt.cm.Blues)</span><br><span class="line">&lt;matplotlib.image.AxesImage object at <span class="number">0x0000019E756CDE48</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>plt.colorbar()</span><br><span class="line">&lt;matplotlib.colorbar.Colorbar object at <span class="number">0x0000019E755994E0</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>plt.title(<span class="string">"Ranking of pixels with RFE"</span>)</span><br><span class="line">Text(<span class="number">0.5</span>, <span class="number">1.05</span>, <span class="string">'Ranking of pixels with RFE'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>plt.show()</span><br></pre></td></tr></table></figure></p>
-<p><img src="/2020/06/12/Efficient-Feature-Selection/rfe.png" alt="rfe"></p>
+<p><img src="/.com//rfe.png" alt="rfe"></p>
 <h2 id="拉斯维加斯方法-Las-Vegas-Wrapper-LVW"><a href="#拉斯维加斯方法-Las-Vegas-Wrapper-LVW" class="headerlink" title="拉斯维加斯方法(Las Vegas Wrapper, LVW)"></a>拉斯维加斯方法(Las Vegas Wrapper, LVW)</h2><p><strong>LVW</strong>(Las Vegas Wrapper)是一种典型的包裹式特征选择方法，它在拉斯维加斯方法框架下使用<strong>随机策略</strong>来进行子集搜索，并以最终分类器的误差为特征子集评价准则。</p>
 <h3 id="LV随机算法"><a href="#LV随机算法" class="headerlink" title="LV随机算法"></a>LV随机算法</h3><p>拉斯维加斯算法是一种基于随机策略的算法设计方法，与蒙特卡洛方法对比有以下特点</p>
 <ul>
@@ -759,7 +759,7 @@ L(w, \lambda) = \frac{1}{N} || Y - Xw ||_2^2 + \lambda(|| w ||_1 - t)</script></
     w^* & = \arg_w \max \sum_i \left( \log p(y^{(i)} | X^{(i)}, w) + \log p(w) \right) \\
     & = \arg_w \max \sum_i \left( (y^{(i)} - w^T x^{(i)})^2 - \sum_j ( \frac{|w_j|}{\alpha} + \log(2 \alpha) ) \right)
 \end{aligned}</script><hr>
-<p>其几何意义如下，入了正则化项，相当于是对参数施加了约束，其中L1正则化将参数限制在一个菱形中，，从图中可以看出，L1正则化施加的约束会使得最优值在菱形顶点处取得，也就是说很多参数取值为$0$，得到<strong>稀疏的参数估计结果</strong><br><img src="/2020/06/12/Efficient-Feature-Selection/L1.jpg" alt="L1"></p>
+<p>其几何意义如下，入了正则化项，相当于是对参数施加了约束，其中L1正则化将参数限制在一个菱形中，，从图中可以看出，L1正则化施加的约束会使得最优值在菱形顶点处取得，也就是说很多参数取值为$0$，得到<strong>稀疏的参数估计结果</strong><br><img src="/.com//L1.jpg" alt="L1"></p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> Lasso</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> SelectFromModel</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X, y = load_iris(return_X_y=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>clf = Lasso()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>clf.fit(X, y)</span><br><span class="line">Lasso()</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>model = SelectFromModel(clf, prefit=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new = model.transform(X)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
 <p>又如在SVM中增加$L1$正则项<br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.svm <span class="keyword">import</span> LinearSVC</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> SelectFromModel</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X, y = load_iris(return_X_y=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>lsvc = LinearSVC(C=<span class="number">0.01</span>, penalty=<span class="string">"l1"</span>, dual=<span class="keyword">False</span>).fit(X, y)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>model = SelectFromModel(lsvc, prefit=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new = model.transform(X)</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">3</span>)</span><br></pre></td></tr></table></figure></p>
 <h3 id="Ridge-L2"><a href="#Ridge-L2" class="headerlink" title="Ridge(L2)"></a>Ridge(L2)</h3><p>在线性回归优化目标中添加$L2$正则项，得到Ridge优化目标</p>
@@ -789,7 +789,7 @@ L(w, \lambda) = \frac{1}{N} || Y - Xw ||_2^2 + \lambda(|| w ||_2^2 - t)</script>
         \sum_j ( \frac{w_j^2}{2 \alpha} + \frac{1}{2} \log(2 \pi \alpha) )
     \right)
 \end{aligned}</script><hr>
-<p>其几何意义如下，入了正则化项，相当于是对参数施加了约束，其中L2正则化将参数限制在一个圆中，会使得<strong>权重趋向于零</strong>(Weight Decay)，并倾向于在相关特征之间<strong>均匀分布权重</strong><br><img src="/2020/06/12/Efficient-Feature-Selection/L2.jpg" alt="L2"></p>
+<p>其几何意义如下，入了正则化项，相当于是对参数施加了约束，其中L2正则化将参数限制在一个圆中，会使得<strong>权重趋向于零</strong>(Weight Decay)，并倾向于在相关特征之间<strong>均匀分布权重</strong><br><img src="/.com//L2.jpg" alt="L2"></p>
 <hr>
 <p>由于参数$\lambda$并不是唯一确定的，所以得到的$\hat{w}(\lambda)$是回归参数$w$的一个<strong>估计族</strong>，$\hat{w}_{j}(\lambda) - \lambda$图称为<strong>岭迹图</strong>，根据以下规则可以筛选有效特征</p>
 <ul>
@@ -803,7 +803,7 @@ L(w, \lambda) = \frac{1}{N} || Y - Xw ||_2^2 + \lambda(|| w ||_2^2 - t)</script>
 </ul>
 </li>
 </ul>
-<p>一些岭迹图<br><img src="/2020/06/12/Efficient-Feature-Selection/ridge_plot.png" alt="ridge_plot"></p>
+<p>一些岭迹图<br><img src="/.com//ridge_plot.png" alt="ridge_plot"></p>
 <p>通过岭迹图<strong>选择参数$\lambda$的原则</strong></p>
 <ul>
 <li>各回归系数的岭估计基本稳定(如正负)；</li>
@@ -814,7 +814,7 @@ L(w, \lambda) = \frac{1}{N} || Y - Xw ||_2^2 + \lambda(|| w ||_2^2 - t)</script>
 <blockquote>
 <p>还有<strong>方差扩大因子法</strong>，注意不同方法建议的选择可能不一致。</p>
 </blockquote>
-<p><img src="/2020/06/12/Efficient-Feature-Selection/ridge_param.png" alt="ridge_param"></p>
+<p><img src="/.com//ridge_param.png" alt="ridge_param"></p>
 <p><strong>存在的问题</strong></p>
 <ul>
 <li>岭参数$\lambda$计算方法太多且差异很大；</li>
@@ -825,7 +825,7 @@ L(w, \lambda) = \frac{1}{N} || Y - Xw ||_2^2 + \lambda(|| w ||_2^2 - t)</script>
 <h3 id="Least-Angel-Regression-LARS"><a href="#Least-Angel-Regression-LARS" class="headerlink" title="Least Angel Regression(LARS)"></a>Least Angel Regression(LARS)</h3><p><strong>最小角回归</strong>(Least Angel Regression, LARS)是一种求解线性回归的方法。线性回归模型可以表示为</p>
 <script type="math/tex; mode=display">Y_{N \times 1} = X_{N \times (d + 1)} w_{(d + 1) \times 1}</script><p>根据矩阵乘法，可以将$Y$看作是所有特征$X_j, j = 1, \cdots, d+1$的线性组合，其特征空间内的基向量为${X_1, \cdots, X_{d+1}}$</p>
 <script type="math/tex; mode=display">Y = \sum_{j=1}^{d+1} w_j X_j</script><p>残差$R$定义为</p>
-<script type="math/tex; mode=display">R = Y - \hat{Y}</script><p>以$2$个样本为例($X_j$维度与样本数有关，再高无法可视化)，在图中表示为<br><img src="/2020/06/12/Efficient-Feature-Selection/linear_regression_graph.jpg" alt="linear_regression_graph"></p>
+<script type="math/tex; mode=display">R = Y - \hat{Y}</script><p>以$2$个样本为例($X_j$维度与样本数有关，再高无法可视化)，在图中表示为<br><img src="/.com//linear_regression_graph.jpg" alt="linear_regression_graph"></p>
 <p>其中</p>
 <ul>
 <li>$e_1, e_2, e_3$表示自然基；</li>
@@ -853,7 +853,7 @@ r_{AB} = \frac{\sum_{i=1}^n (a_i - \overline{A})(b_i - \overline{B})}{\sigma_A \
 <li>此时<strong>剩余的特征被丢弃</strong>，达到特征筛选的作用。</li>
 </ol>
 <p>如下图，当残差为$R_2$时，$R_2$几乎与$X_1, X_2$垂直，相关系数为$0$，停止游走，特征$X_3$被丢弃。</p>
-<p><img src="/2020/06/12/Efficient-Feature-Selection/lar.jpg" alt="lar"></p>
+<p><img src="/.com//lar.jpg" alt="lar"></p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> Lars</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> SelectFromModel</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X, y = load_iris(return_X_y=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>clf = Lars()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>clf.fit(X, y)</span><br><span class="line">Lars()</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>model = SelectFromModel(clf, prefit=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new = model.transform(X)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LassoLars</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> SelectFromModel</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X, y = load_iris(return_X_y=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>clf = LassoLars()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>clf.fit(X, y)</span><br><span class="line">LassoLars()</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>model = SelectFromModel(clf, prefit=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new = model.transform(X)</span><br><span class="line">C:\Apps\Anaconda3\envs\PR\lib\site-packages\sklearn\feature_selection\_base.py:<span class="number">81</span>: UserWarning: No features were selected: either the data <span class="keyword">is</span> too noisy <span class="keyword">or</span> the selection test too strict. UserWarning)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X_new.shape</span><br><span class="line">(<span class="number">150</span>, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
 <h2 id="基于树的方法-Tree-based"><a href="#基于树的方法-Tree-based" class="headerlink" title="基于树的方法(Tree-based)"></a>基于树的方法(Tree-based)</h2><p>在决策树训练过程中，就存在选择最优分裂特征的问题，这可以用于评估特征重要性(不进行详细介绍)。</p>
@@ -1012,7 +1012,7 @@ r_{AB} = \frac{\sum_{i=1}^n (a_i - \overline{A})(b_i - \overline{B})}{\sigma_A \
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">112</span>
+                    <span class="site-state-item-count">113</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1041,15 +1041,7 @@ r_{AB} = \frac{\sum_{i=1}^n (a_i - \overline{A})(b_i - \overline{B})}{\sigma_A \
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1812,6 +1804,6 @@ r_{AB} = \frac{\sum_{i=1}^n (a_i - \overline{A})(b_i - \overline{B})}{\sigma_A \
 
 
   <script type="text/javascript" src="/js/click_show_text.js"></script>
-  <script type="text/javascript" src="/js/hone_hone_clock.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>

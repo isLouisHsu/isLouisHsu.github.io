@@ -115,16 +115,16 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="IntroductionSSD主要做了以下工作  设计了one-stage检测算法，比同样是one-stage的YOLOv1更快更准确，相比较Faster R-CNN等two-stage检测算法，在不降低准确率的情况下速度更快； 其核心是用小卷积核，对特征图进行卷积运算，通过一系列的固定回归框进行预测； 用不同尺度的特征图产生不同尺度的预测，并且明确指定多种纵横比； 可进行端到端训练，即使是低分辨">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/2019/09/02/SSD-Single-Shot-MultiBox-Detector/im4x4_6x6_8x8_anchor.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/09/02/SSD-Single-Shot-MultiBox-Detector/Fig2.png">
-<meta property="og:image" content="http://yoursite.com/2019/09/02/SSD-Single-Shot-MultiBox-Detector/Tab1.png">
-<meta property="og:image" content="http://yoursite.com/2019/09/02/SSD-Single-Shot-MultiBox-Detector/Fig3.png">
+<meta property="og:image" content="http://yoursite.com/.com//im4x4_6x6_8x8_anchor.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//Fig2.png">
+<meta property="og:image" content="http://yoursite.com/.com//Tab1.png">
+<meta property="og:image" content="http://yoursite.com/.com//Fig3.png">
 <meta property="article:published_time" content="2019-09-02T01:28:53.000Z">
 <meta property="article:modified_time" content="2019-09-02T07:35:45.947Z">
 <meta property="article:author" content="Louis Hsu">
 <meta property="article:tag" content="Object Detection">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2019/09/02/SSD-Single-Shot-MultiBox-Detector/im4x4_6x6_8x8_anchor.jpg">
+<meta name="twitter:image" content="http://yoursite.com/.com//im4x4_6x6_8x8_anchor.jpg">
 
 
 
@@ -419,24 +419,6 @@
           </span>
 
           
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a></span>
-
-                
-                
-              
-            </span>
-          
 
           
             
@@ -490,12 +472,12 @@
     t_y = \frac{y_g - y_a}{h_a} \quad &
     t_w = \log (\frac{w_g}{w_a}) \quad &
     t_h = \log (\frac{h_g}{h_a})
-\end{aligned}</script><p><img src="/2019/09/02/SSD-Single-Shot-MultiBox-Detector/im4x4_6x6_8x8_anchor.jpg" alt="im4x4_6x6_8x8_anchor"></p>
+\end{aligned}</script><p><img src="/.com//im4x4_6x6_8x8_anchor.jpg" alt="im4x4_6x6_8x8_anchor"></p>
 <h2 id="关于anchor参数的设置"><a href="#关于anchor参数的设置" class="headerlink" title="关于anchor参数的设置"></a>关于anchor参数的设置</h2><p>这样带来的问题是，对于各个分辨率下的特征图，每个点处anchor参数是不同的，如上面随意设置的参数，可能实际使用时不适合，SSD是这样解决的。</p>
 <p>对于某一层特征图，设置五种纵横比：$a_r \in {\frac{1}{3}, \frac{1}{2}, 1, 2, 3}$，纵横比为$1$的anchor再缩放形成另一尺度的anchor，$s_k’ = \sqrt{s_k s_{k+1}}$，那么该层每个点处包含$6$个anchor。</p>
 <p>对于不同层间，特征图的尺度改变，anchor大小也需随之变化。设置$s_{min}=0.2, s_{max}=0.9$，若所用特征图总层数为$m$，则从浅层到深层，各层的anchor尺度为$s_k = s_{min} + \frac{k - 1}{m - 1}(s_{max} - s_{min}), k \in [1, m]$，在第$k$层，anchor尺寸为$w^a_k = h^a_k = \frac{s_k}{\sqrt{a_r}}$。</p>
 <p>anchor的中心定于$(\frac{i + 0.5}{|f_k|}, \frac{j + 0.5}{|f_k|})$，$|f_k|$为第$k$层特征图某点对应原图中网格的边长。实际上，锚框参数是人为指定的，是需要被解决的一个问题，应根据实际情况进行修改。</p>
-<h1 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h1><p><img src="/2019/09/02/SSD-Single-Shot-MultiBox-Detector/Fig2.png" alt="Fig2"></p>
+<h1 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h1><p><img src="/.com//Fig2.png" alt="Fig2"></p>
 <p>SSD接受$300 \times 300$的图像输入，以VGG-16作为backbone网络，从Conv5-3层截断，后面加上一些卷积层作为特征提取器($1 \times 1$与$3 \times 3$卷积层堆叠的形式)。SSD在多个特征图上进行候选框的预测，例如对于$m \times n \times p$的特征图，在该尺度上每个位置指定$k$种尺度的anchor，用$p \times 3 \times 3 \times [k \times (classes + 4)]$的卷积核进行运算，得到$m \times n \times [k \times (classes + 4)]$的特征图。注意，对于$C$个类别的识别，应包含背景，所以$classes = C + 1$。</p>
 <p>如上图，共生成$38^2 \times 4 + 19^2 \times 6 + 10^2 \times 6 + 5^2 \times 6 + 3^2 \times 4 + 1^2 \times 4 = 8732$个候选框。</p>
 <p>根据置信度，滤除一大部分候选框，再用NMS算法删除冗余框。</p>
@@ -517,8 +499,8 @@ L_{total} = \frac{1}{N} \left[\alpha \underbrace{\sum_{i, j, k, l} 1^{ij_k}_l \s
 </ol>
 <p>随机产生的patch边长在原始边长的$[0.1, 1]$范围内，纵横比范围为$[0.5, 2]$。此外依照$50\%$的概率进行水平翻转，并添加其余干扰。</p>
 <p>用SGD进行优化，批次大小32，初始学习率0.001，动量0.9，权重衰减0.0005。</p>
-<h1 id="Results"><a href="#Results" class="headerlink" title="Results"></a>Results</h1><p><img src="/2019/09/02/SSD-Single-Shot-MultiBox-Detector/Tab1.png" alt="Tab1"></p>
-<p><img src="/2019/09/02/SSD-Single-Shot-MultiBox-Detector/Fig3.png" alt="Fig3"></p>
+<h1 id="Results"><a href="#Results" class="headerlink" title="Results"></a>Results</h1><p><img src="/.com//Tab1.png" alt="Tab1"></p>
+<p><img src="/.com//Fig3.png" alt="Fig3"></p>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
 <li><a href="https://arxiv.org/abs/1512.02325" target="_blank" rel="noopener">SSD: Single Shot MultiBox Detector - arXiv.org</a></li>
 <li><a href="https://github.com/weiliu89/caffe/tree/ssd" target="_blank" rel="noopener">weiliu89/caffe - Github</a></li>
@@ -671,7 +653,7 @@ L_{total} = \frac{1}{N} \left[\alpha \underbrace{\sum_{i, j, k, l} 1^{ij_k}_l \s
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">112</span>
+                    <span class="site-state-item-count">113</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -700,15 +682,7 @@ L_{total} = \frac{1}{N} \left[\alpha \underbrace{\sum_{i, j, k, l} 1^{ij_k}_l \s
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1471,6 +1445,6 @@ L_{total} = \frac{1}{N} \left[\alpha \underbrace{\sum_{i, j, k, l} 1^{ij_k}_l \s
 
 
   <script type="text/javascript" src="/js/click_show_text.js"></script>
-  <script type="text/javascript" src="/js/hone_hone_clock.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>

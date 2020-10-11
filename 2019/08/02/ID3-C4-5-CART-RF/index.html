@@ -115,13 +115,13 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="前言决策树(Decision Tree)是一种基本的分类与回归方法，本文主要讨论分类决策树，它可被认作if-then的集合，也可以认作是定义在特征空间与类空间上的条件概率分布。 决策树决策树模型形式如下，由结点(node)，有向边(directed edge)组成，节点包含两种：内部节点(internal node)和叶节点(leaf node)，内部节点表示一个特征或属性，叶节点包含一个类。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/2019/08/02/ID3-C4-5-CART-RF/model.jfif">
-<meta property="og:image" content="http://yoursite.com/2019/08/02/ID3-C4-5-CART-RF/tree.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//model.jfif">
+<meta property="og:image" content="http://yoursite.com/.com//tree.jpg">
 <meta property="article:published_time" content="2019-08-02T02:29:41.000Z">
 <meta property="article:modified_time" content="2020-05-29T06:29:23.475Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2019/08/02/ID3-C4-5-CART-RF/model.jfif">
+<meta name="twitter:image" content="http://yoursite.com/.com//model.jfif">
 
 
 
@@ -428,24 +428,6 @@
           </span>
 
           
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
-
-                
-                
-              
-            </span>
-          
 
           
             
@@ -483,7 +465,7 @@
       
         <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>决策树(Decision Tree)是一种基本的分类与回归方法，本文主要讨论分类决策树，它可被认作<code>if-then</code>的集合，也可以认作是定义在特征空间与类空间上的条件概率分布。</p>
 <h1 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h1><p>决策树模型形式如下，由结点<code>(node)</code>，有向边<code>(directed edge)</code>组成，节点包含两种：内部节点<code>(internal node)</code>和叶节点<code>(leaf node)</code>，内部节点表示一个特征或属性，叶节点包含一个类。</p>
-<p><img src="/2019/08/02/ID3-C4-5-CART-RF/model.jfif" alt="model"></p>
+<p><img src="/.com//model.jfif" alt="model"></p>
 <p>决策树需要满足一个重要性质：互斥且完备。即每个实例<strong>都被且仅被</strong>一条路径或一条<code>if-then</code>规则覆盖。并且生成的决策树深度不能过大。</p>
 <p>决策树学习主要有3个步骤： 特征选择、决策树生成、决策树修剪。</p>
 <h2 id="引例"><a href="#引例" class="headerlink" title="引例"></a>引例</h2><p>现以下某贷款申请样本数据表为例进行解释说明。</p>
@@ -729,7 +711,7 @@ I(X; Y) = \sum_{x, y} p(x, y) \log \frac{p(x, y)}{p(x) p(y)}</script></li>
 <script type="math/tex; mode=display">C_{\alpha} (T) = C(T) + \alpha |T| \tag{4.3}</script><p><strong>利用损失函数最小原则仅剪枝就是用正则化的极大似然估计进行模型选择</strong>。可以通过<strong>动态规划</strong>递归地使叶子节点向上回缩，求取损失函数最小地子树$T_{\alpha}$。</p>
 <h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>详细查看<a href="https://github.com/isLouisHsu/Basic-Machine-Learning-Algorithm/blob/master/algorithm/p110_decision_tree.py" target="_blank" rel="noopener">Github: isLouisHsu/Basic-Machine-Learning-Algorithm</a></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Node</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Attributes:</span></span><br><span class="line"><span class="string">        index: 子树分类标签, 若为叶节点, 则为None</span></span><br><span class="line"><span class="string">        childNode: 子树，若为叶节点, 则为分类标签; 否则为字典</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        </span><br><span class="line">        self.index = <span class="keyword">None</span></span><br><span class="line">        self.childNode = <span class="keyword">None</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DecisionTree</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    @note:  </span></span><br><span class="line"><span class="string">        - categorical features;</span></span><br><span class="line"><span class="string">        - ID3</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        </span><br><span class="line">        self.tree = <span class="keyword">None</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fit</span><span class="params">(self, X, y)</span>:</span></span><br><span class="line">     </span><br><span class="line">        self.tree = self._creatNode(X, y)</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_creatNode</span><span class="params">(self, X, y)</span>:</span></span><br><span class="line">    </span><br><span class="line">        node = Node()</span><br><span class="line">        <span class="comment"># 若只含一种类别，则返回叶节点</span></span><br><span class="line">        <span class="keyword">if</span> len(set(y)) == <span class="number">1</span>: node.childNode = list(set(y))[<span class="number">0</span>]; <span class="keyword">return</span> node</span><br><span class="line"></span><br><span class="line">        <span class="comment"># entropy: H(D)</span></span><br><span class="line">        y_encoded = OneHotEncoder().fit_transform(y.reshape(<span class="number">-1</span>, <span class="number">1</span>)).toarray()</span><br><span class="line">        p_y = np.mean(y_encoded, axis=<span class="number">0</span>); p_y[p_y==<span class="number">0.0</span>] = <span class="number">1.0</span>       <span class="comment"># 因为 0*np.log(0)结果为nan, 而不是0, 用 1*np.log(1)替代</span></span><br><span class="line">        H_D = - np.sum(p_y * np.log(p_y))</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># conditional entropy: H(D|A)</span></span><br><span class="line">        H_D_A = np.zeros(shape=(X.shape[<span class="number">1</span>],))                       <span class="comment"># initialize</span></span><br><span class="line">        <span class="keyword">for</span> i_feature <span class="keyword">in</span> range(X.shape[<span class="number">1</span>]):</span><br><span class="line">            X_feature = X[:, i_feature]</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> len(set(X_feature)) == <span class="number">1</span>: </span><br><span class="line">                H_D_A[i_feature] = float(<span class="string">'inf'</span>); <span class="keyword">continue</span>           <span class="comment"># 若该特征只有一种取值，表示已使用该列作为分类特征</span></span><br><span class="line">        </span><br><span class="line">            X_feature_encoded = OneHotEncoder().fit_transform(X_feature.reshape((<span class="number">-1</span>, <span class="number">1</span>))).toarray()</span><br><span class="line">            p_X = np.mean(X_feature_encoded, axis=<span class="number">0</span>)                <span class="comment"># 每个取值的概率</span></span><br><span class="line">            </span><br><span class="line">            <span class="keyword">for</span> j_feature <span class="keyword">in</span> range(X_feature_encoded.shape[<span class="number">1</span>]):     <span class="comment"># 该特征取值有几种，编码后就有几列</span></span><br><span class="line">                y_encoded_feature = y_encoded[X_feature_encoded[:, j_feature]==<span class="number">1</span>]   <span class="comment"># 该特征某种取值下，其对应的标签值</span></span><br><span class="line">                p_y_X = np.mean(y_encoded_feature, axis=<span class="number">0</span>); p_y_X[p_y_X==<span class="number">0.0</span>] = <span class="number">1.0</span></span><br><span class="line"></span><br><span class="line">                H_D_feature = - np.sum(p_y_X * np.log(p_y_X))</span><br><span class="line">                H_D_A[i_feature] += p_X[j_feature] * H_D_feature    <span class="comment"># 条件熵</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># information gain: g(D, A) = H(D) - H(D|A)</span></span><br><span class="line">        g_D_A = H_D - H_D_A</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 选出最大的作为分类特征</span></span><br><span class="line">        node.index = np.argmax(g_D_A)</span><br><span class="line">        X_selected = X[:, node.index]</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 分类后继续建立树</span></span><br><span class="line">        node.childNode = dict()</span><br><span class="line">        <span class="keyword">for</span> val <span class="keyword">in</span> set(X_selected):</span><br><span class="line">            valIndex = (X_selected==val)</span><br><span class="line">            X_val, y_val = X[valIndex], y[valIndex]</span><br><span class="line">            node.childNode[val] = self._creatNode(X_val, y_val)     <span class="comment"># 存储在字典中，键为分类值，值为子树</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> node</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">predict</span><span class="params">(self, X)</span>:</span></span><br><span class="line">        y_pred = np.zeros(shape=(X.shape[<span class="number">0</span>],))</span><br><span class="line">        <span class="keyword">for</span> i_sample <span class="keyword">in</span> range(X.shape[<span class="number">0</span>]):</span><br><span class="line">            currentNode = self.tree                                 <span class="comment"># 初始化为父节点</span></span><br><span class="line">            <span class="keyword">while</span> <span class="keyword">not</span> currentNode.index==<span class="keyword">None</span>:                      <span class="comment"># 若为None, 表示为叶子结点</span></span><br><span class="line">                val = X[i_sample, currentNode.index]                <span class="comment"># 当前样本在分类特征上的值</span></span><br><span class="line">                currentNode = currentNode.childNode[val]            <span class="comment"># 递归</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                y_pred[i_sample] = currentNode.childNode</span><br><span class="line">        <span class="keyword">return</span> y_pred</span><br></pre></td></tr></table></figure>
-<p>最终生成分类树如下<br><img src="/2019/08/02/ID3-C4-5-CART-RF/tree.jpg" alt="tree"></p>
+<p>最终生成分类树如下<br><img src="/.com//tree.jpg" alt="tree"></p>
 <h1 id="随机森林-Random-Forest"><a href="#随机森林-Random-Forest" class="headerlink" title="随机森林(Random Forest)"></a>随机森林(Random Forest)</h1><p>随机森林是用Bagging策略，对包含$N$个样本的数据集<strong>进行$M$次的有放回的采样，每次随机取$N_m$个样本</strong>，得到$M$个样本数目为$N_m$的样本子集，对每个子集建立分类器。</p>
 <blockquote>
 <p><strong>Bootstrap采样</strong>：对于一个样本，它在某一次含$m$个样本的训练集的随机采样中，每次被采集到的概率是$1/m$。不被采集到的概率为$1−1/m$。如果$m$次采样都没有被采集中的概率是$(1−1/m)^m$。当$m→\infty$时，$\lim_{m \rightarrow \infty} (1−1/m)^m \approx 0.368$。也就是说，在bagging的每轮随机采样中，训练集中大约有36.8%的数据没有被采样集采集中。对于这部分大约$36.8\%$的没有被采样到的数据，我们常常称之为袋外数据(Out Of Bag, 简称OOB)。这些数据没有参与训练集模型的拟合，因此可以用来检测模型的泛化能力。</p>
@@ -895,7 +877,7 @@ I(X; Y) = \sum_{x, y} p(x, y) \log \frac{p(x, y)}{p(x) p(y)}</script></li>
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">112</span>
+                    <span class="site-state-item-count">113</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -924,15 +906,7 @@ I(X; Y) = \sum_{x, y} p(x, y) \log \frac{p(x, y)}{p(x) p(y)}</script></li>
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1695,6 +1669,6 @@ I(X; Y) = \sum_{x, y} p(x, y) \log \frac{p(x, y)}{p(x) p(y)}</script></li>
 
 
   <script type="text/javascript" src="/js/click_show_text.js"></script>
-  <script type="text/javascript" src="/js/hone_hone_clock.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>

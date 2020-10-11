@@ -115,17 +115,17 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="前言目前大多检测算法将物体视作边界框进行检测，并采用锚框(Anchor)，能很大程度提升检测算法的表现，但是Anchor难以确定参数，且增加大量网络运算量。目前的物体检测算法开始向无Anchor的方向发展，如本文的CenterNet，是把物体所在包围框作为点，并结合热图的形式进行。除物体检测外，此算法还可用于人体姿态识别、3D物体检测等。 个人理解，采用热图的形式，是将Anchor一定程度地连续化">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/2019/10/09/CenterNet-Objects-as-Points/Fig2.png">
-<meta property="og:image" content="http://yoursite.com/2019/10/09/CenterNet-Objects-as-Points/Fig3.png">
-<meta property="og:image" content="http://yoursite.com/2019/10/09/CenterNet-Objects-as-Points/Fig4.png">
-<meta property="og:image" content="http://yoursite.com/2019/10/09/CenterNet-Objects-as-Points/Tab1.png">
-<meta property="og:image" content="http://yoursite.com/2019/10/09/CenterNet-Objects-as-Points/Tab2.png">
+<meta property="og:image" content="http://yoursite.com/.com//Fig2.png">
+<meta property="og:image" content="http://yoursite.com/.com//Fig3.png">
+<meta property="og:image" content="http://yoursite.com/.com//Fig4.png">
+<meta property="og:image" content="http://yoursite.com/.com//Tab1.png">
+<meta property="og:image" content="http://yoursite.com/.com//Tab2.png">
 <meta property="article:published_time" content="2019-10-09T07:22:49.000Z">
 <meta property="article:modified_time" content="2019-10-09T09:57:57.374Z">
 <meta property="article:author" content="Louis Hsu">
 <meta property="article:tag" content="Object Detection">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2019/10/09/CenterNet-Objects-as-Points/Fig2.png">
+<meta name="twitter:image" content="http://yoursite.com/.com//Fig2.png">
 
 
 
@@ -420,24 +420,6 @@
           </span>
 
           
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a></span>
-
-                
-                
-              
-            </span>
-          
 
           
             
@@ -476,10 +458,10 @@
         <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>目前大多检测算法将物体视作边界框进行检测，并采用锚框(Anchor)，能很大程度提升检测算法的表现，但是Anchor难以确定参数，且增加大量网络运算量。目前的物体检测算法开始向无Anchor的方向发展，如本文的CenterNet，是把物体所在包围框作为点，并结合热图的形式进行。除物体检测外，此算法还可用于人体姿态识别、3D物体检测等。</p>
 <p>个人理解，采用热图的形式，是将Anchor一定程度地连续化了。</p>
 <h1 id="论文阅读"><a href="#论文阅读" class="headerlink" title="论文阅读"></a>论文阅读</h1><h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><blockquote>
-<p>In this paper, we provide a much simpler and more efficient alternative. We <strong>represent objects by a single point at their bounding box center</strong> (see Figure 2). Other properties, such as object size, dimension, 3D extent, orientation, and pose are then <strong>regressed directly from image features at the center location</strong>. Object detection is then a standard keypoint estimation problem [3,39,60]. We simply feed the input image to a fully convolutional network [37, 40] that generates a heatmap. <strong>Peaks in this heatmap correspond to object centers</strong>. Image features at each peak predict the objects bounding box height and weight. The model trains using standard dense supervised learning [39,60]. Inference is a single network forward-pass, <strong>without non-maximal suppression for post-processing</strong>.<br><img src="/2019/10/09/CenterNet-Objects-as-Points/Fig2.png" alt="Figure 2"><br><img src="/2019/10/09/CenterNet-Objects-as-Points/Fig3.png" alt="Figure 3"></p>
+<p>In this paper, we provide a much simpler and more efficient alternative. We <strong>represent objects by a single point at their bounding box center</strong> (see Figure 2). Other properties, such as object size, dimension, 3D extent, orientation, and pose are then <strong>regressed directly from image features at the center location</strong>. Object detection is then a standard keypoint estimation problem [3,39,60]. We simply feed the input image to a fully convolutional network [37, 40] that generates a heatmap. <strong>Peaks in this heatmap correspond to object centers</strong>. Image features at each peak predict the objects bounding box height and weight. The model trains using standard dense supervised learning [39,60]. Inference is a single network forward-pass, <strong>without non-maximal suppression for post-processing</strong>.<br><img src="/.com//Fig2.png" alt="Figure 2"><br><img src="/.com//Fig3.png" alt="Figure 3"></p>
 </blockquote>
 <h2 id="Preliminary"><a href="#Preliminary" class="headerlink" title="Preliminary"></a>Preliminary</h2><p>若有某三通道图片$I \in \mathcal{R}^{W \times H \times 3}$，经卷积神经网络后得到输出特征图$\left[\hat{Y} || \hat{O} || \hat{S} \right] \in [0, 1]^{\frac{W}{R} \times \frac{H}{R} \times (C + 4)}$。其中$R$为降采样系数，表示特征图上单个位置处的点映射回原图后网格的大小，文中默认为$R=4$；$C$可根据关键点类型指定，如人体姿态估计时指定$C=17$(17个关键点)，物体检测时指定$C=80$(80类物体)。$\hat{Y}_{x, y, c} = 1$表示对应关键点，$\hat{Y}_{x, y, c} = 0$表示为背景。</p>
-<p><img src="/2019/10/09/CenterNet-Objects-as-Points/Fig4.png" alt="Figure 4"></p>
+<p><img src="/.com//Fig4.png" alt="Figure 4"></p>
 <p>ground truth设置为热图(heatmap)的形式，采用高斯核</p>
 <script type="math/tex; mode=display">
 Y_{x, y, c} = 
@@ -518,14 +500,14 @@ L_k = - \frac{1}{N} \sum_{x, y, z}
         \hat{x}_i + \delta_{\hat{x}_i} + \hat{w}_i / 2, 
         \hat{y}_i + \delta_{\hat{y}_i} + \hat{h}_i / 2
     )
-\end{aligned} \tag{3}</script><h2 id="Implementation-details"><a href="#Implementation-details" class="headerlink" title="Implementation details"></a>Implementation details</h2><p>原文中分别采用ResNet-18, ResNet101, DLA-34, and Hourglass-104作为网络框架进行实验，效果对比如下<br><img src="/2019/10/09/CenterNet-Objects-as-Points/Tab1.png" alt="Table 1"></p>
+\end{aligned} \tag{3}</script><h2 id="Implementation-details"><a href="#Implementation-details" class="headerlink" title="Implementation details"></a>Implementation details</h2><p>原文中分别采用ResNet-18, ResNet101, DLA-34, and Hourglass-104作为网络框架进行实验，效果对比如下<br><img src="/.com//Tab1.png" alt="Table 1"></p>
 <p>训练细节如下</p>
 <ol>
 <li>输入图像分辨率为$512 \times 512$，输出特征图分辨率为$128 \times 128$；</li>
 <li>数据集扩增：随机翻转、尺度缩放($0.6$~$1.3$)、随即裁剪、颜色抖动；</li>
 <li>使用Adam优化器，批次大小、初始学习率、学习率调整策略与不同网络框架相关。</li>
 </ol>
-<h2 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h2><p><img src="/2019/10/09/CenterNet-Objects-as-Points/Tab2.png" alt="Table 2"></p>
+<h2 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h2><p><img src="/.com//Tab2.png" alt="Table 2"></p>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
 <li><a href="https://arxiv.org/abs/1904.07850v1" target="_blank" rel="noopener">Objects as Points - arXiv</a></li>
 <li><a href="https://arxiv.org/abs/1708.02002" target="_blank" rel="noopener">Focal Loss for Dense Object Detection - arXiv</a></li>
@@ -677,7 +659,7 @@ L_k = - \frac{1}{N} \sum_{x, y, z}
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">112</span>
+                    <span class="site-state-item-count">113</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -706,15 +688,7 @@ L_k = - \frac{1}{N} \sum_{x, y, z}
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1477,6 +1451,6 @@ L_k = - \frac{1}{N} \sum_{x, y, z}
 
 
   <script type="text/javascript" src="/js/click_show_text.js"></script>
-  <script type="text/javascript" src="/js/hone_hone_clock.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>

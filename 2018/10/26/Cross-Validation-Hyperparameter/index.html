@@ -115,14 +115,14 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="交叉验证与超参数选择交叉验证以下简称交叉验证(Cross Validation)为CV.CV是用来验证分类器的性能一种统计分析方法,基本思想是把在某种意义下将原始数据(dataset)进行分组,一部分做为训练集(train set),另一部分做为验证集(validation set),首先用训练集对分类器进行训练,在利用验证集来测试训练得到的模型(model),以此来做为评价分类器的性能指标。 交">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/2018/10/26/Cross-Validation-Hyperparameter/k-fold.jpg">
-<meta property="og:image" content="http://yoursite.com/2018/10/26/Cross-Validation-Hyperparameter/LPO.jpg">
-<meta property="og:image" content="http://yoursite.com/2018/10/26/Cross-Validation-Hyperparameter/cross_validation_sklearn.png">
+<meta property="og:image" content="http://yoursite.com/.com//k-fold.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//LPO.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//cross_validation_sklearn.png">
 <meta property="article:published_time" content="2018-10-26T10:19:53.000Z">
 <meta property="article:modified_time" content="2020-05-29T06:27:36.241Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2018/10/26/Cross-Validation-Hyperparameter/k-fold.jpg">
+<meta name="twitter:image" content="http://yoursite.com/.com//k-fold.jpg">
 
 
 
@@ -429,24 +429,6 @@
           </span>
 
           
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
-
-                
-                
-              
-            </span>
-          
 
           
             
@@ -489,17 +471,17 @@
 <li>将全部训练集$S$分成$k$个不相交的子集，假设$S$中的训练样例个数为$m$，则每个子集中有$(\frac{m}{k})$个训练样例，相应子集称作${s_1, s_2, …, s_k}$；</li>
 <li>每次从分好的子集中，拿出$1$个作为测试集，其他$k-1$个作为训练集；</li>
 <li>在$k-1$个训练集上训练出学习器模型，将模型放到测试集上，得到分类率；</li>
-<li>计算k次求得的分类率平均值，作为该模型或者假设函数的真实分类率<br><img src="/2018/10/26/Cross-Validation-Hyperparameter/k-fold.jpg" alt="k-fold"></li>
+<li>计算k次求得的分类率平均值，作为该模型或者假设函数的真实分类率<br><img src="/.com//k-fold.jpg" alt="k-fold"></li>
 </ol>
 </li>
 <li><p><strong>留一法交叉验证(Leave One Out - LOO)</strong><br>  假设有$N$个样本，将每个样本作为测试样本，其他$(N-1)$个样本作为训练样本。这样得到$N$个分类器，$N$个测试结果。用这$N$个结果的平均值衡量模型的性能。</p>
 </li>
 <li><p><strong>留P法交叉验证(Leave P Out - LPO)</strong><br>  将$P$个样本作为测试样本，其他$(N-P)$个样本作为训练样本。这样得到$\left(\begin{matrix}</p>
 <pre><code>  P \\ N
-</code></pre><p>  \end{matrix}\right)$个训练测试对。当$P＞1$时，测试集会发生重叠。当$P=1$时，变成$LOO$。<br>  <img src="/2018/10/26/Cross-Validation-Hyperparameter/LPO.jpg" alt="LPO"></p>
+</code></pre><p>  \end{matrix}\right)$个训练测试对。当$P＞1$时，测试集会发生重叠。当$P=1$时，变成$LOO$。<br>  <img src="/.com//LPO.jpg" alt="LPO"></p>
 </li>
 </ul>
-<h3 id="scikit-learn中的交叉验证"><a href="#scikit-learn中的交叉验证" class="headerlink" title="scikit-learn中的交叉验证"></a><code>scikit-learn</code>中的交叉验证</h3><p><img src="/2018/10/26/Cross-Validation-Hyperparameter/cross_validation_sklearn.png" alt="cross_validation_sklearn"></p>
+<h3 id="scikit-learn中的交叉验证"><a href="#scikit-learn中的交叉验证" class="headerlink" title="scikit-learn中的交叉验证"></a><code>scikit-learn</code>中的交叉验证</h3><p><img src="/.com//cross_validation_sklearn.png" alt="cross_validation_sklearn"></p>
 <ul>
 <li><p><strong>K-fold</strong></p>
   <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; import numpy as np</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; from sklearn.model_selection import KFold</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; X = [<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>, <span class="string">"d"</span>]</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; kf = KFold(n_splits=2)</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; <span class="keyword">for</span> train, <span class="built_in">test</span> <span class="keyword">in</span> kf.split(X):</span></span><br><span class="line">... print("%s %s" % (train, test))</span><br><span class="line">[2 3] [0 1]</span><br><span class="line">[0 1] [2 3]</span><br></pre></td></tr></table></figure>
@@ -705,7 +687,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">112</span>
+                    <span class="site-state-item-count">113</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -734,15 +716,7 @@
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1505,6 +1479,6 @@
 
 
   <script type="text/javascript" src="/js/click_show_text.js"></script>
-  <script type="text/javascript" src="/js/hone_hone_clock.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>

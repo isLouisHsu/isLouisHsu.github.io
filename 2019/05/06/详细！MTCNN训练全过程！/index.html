@@ -115,16 +115,16 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="前言记录一下详细的MTCNN训练过程，之前损失函数的问题，训练得到网络效果一般，就拖到了最近。原理在之前写的博客Face Detection: MTCNN中已说明，本文不做详细介绍。详细代码可见本人代码仓库MTCNN_Darknet - Github。 数据集  数据集使用的是WIDER FACE: A Face Detection Benchmark与Deep Convolutional Net">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/2019/05/06/%E8%AF%A6%E7%BB%86%EF%BC%81MTCNN%E8%AE%AD%E7%BB%83%E5%85%A8%E8%BF%87%E7%A8%8B%EF%BC%81/%E8%AF%A6%E7%BB%86%EF%BC%81MTCNN%E8%AE%AD%E7%BB%83%E5%85%A8%E8%BF%87%E7%A8%8B%EF%BC%81/dataset1.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/05/06/%E8%AF%A6%E7%BB%86%EF%BC%81MTCNN%E8%AE%AD%E7%BB%83%E5%85%A8%E8%BF%87%E7%A8%8B%EF%BC%81/%E8%AF%A6%E7%BB%86%EF%BC%81MTCNN%E8%AE%AD%E7%BB%83%E5%85%A8%E8%BF%87%E7%A8%8B%EF%BC%81/dataset2.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/05/06/%E8%AF%A6%E7%BB%86%EF%BC%81MTCNN%E8%AE%AD%E7%BB%83%E5%85%A8%E8%BF%87%E7%A8%8B%EF%BC%81/%E8%AF%A6%E7%BB%86%EF%BC%81MTCNN%E8%AE%AD%E7%BB%83%E5%85%A8%E8%BF%87%E7%A8%8B%EF%BC%81/1.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/05/06/%E8%AF%A6%E7%BB%86%EF%BC%81MTCNN%E8%AE%AD%E7%BB%83%E5%85%A8%E8%BF%87%E7%A8%8B%EF%BC%81/%E8%AF%A6%E7%BB%86%EF%BC%81MTCNN%E8%AE%AD%E7%BB%83%E5%85%A8%E8%BF%87%E7%A8%8B%EF%BC%81/2.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/05/06/%E8%AF%A6%E7%BB%86%EF%BC%81MTCNN%E8%AE%AD%E7%BB%83%E5%85%A8%E8%BF%87%E7%A8%8B%EF%BC%81/%E8%AF%A6%E7%BB%86%EF%BC%81MTCNN%E8%AE%AD%E7%BB%83%E5%85%A8%E8%BF%87%E7%A8%8B%EF%BC%81/3.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//dataset1.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//dataset2.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//1.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//2.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//3.jpg">
 <meta property="article:published_time" content="2019-05-06T14:05:37.000Z">
 <meta property="article:modified_time" content="2020-06-18T09:32:38.661Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2019/05/06/%E8%AF%A6%E7%BB%86%EF%BC%81MTCNN%E8%AE%AD%E7%BB%83%E5%85%A8%E8%BF%87%E7%A8%8B%EF%BC%81/%E8%AF%A6%E7%BB%86%EF%BC%81MTCNN%E8%AE%AD%E7%BB%83%E5%85%A8%E8%BF%87%E7%A8%8B%EF%BC%81/dataset1.jpg">
+<meta name="twitter:image" content="http://yoursite.com/.com//dataset1.jpg">
 
 
 
@@ -431,24 +431,6 @@
           </span>
 
           
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a></span>
-
-                
-                
-              
-            </span>
-          
 
           
             
@@ -485,8 +467,8 @@
 
       
         <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>记录一下详细的MTCNN训练过程，之前损失函数的问题，训练得到网络效果一般，就拖到了最近。原理在之前写的博客<a href="https://louishsu.xyz/2019/05/05/Face-Detection-MTCNN/" target="_blank" rel="noopener">Face Detection: MTCNN</a>中已说明，本文不做详细介绍。详细代码可见本人代码仓库<a href="https://github.com/isLouisHsu/MTCNN_Darknet" target="_blank" rel="noopener">MTCNN_Darknet - Github</a>。</p>
-<h1 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h1><p><img src="/2019/05/06/%E8%AF%A6%E7%BB%86%EF%BC%81MTCNN%E8%AE%AD%E7%BB%83%E5%85%A8%E8%BF%87%E7%A8%8B%EF%BC%81/详细！MTCNN训练全过程！/dataset1.jpg" alt="dataset1"></p>
-<p><img src="/2019/05/06/%E8%AF%A6%E7%BB%86%EF%BC%81MTCNN%E8%AE%AD%E7%BB%83%E5%85%A8%E8%BF%87%E7%A8%8B%EF%BC%81/详细！MTCNN训练全过程！/dataset2.jpg" alt="dataset2"></p>
+<h1 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h1><p><img src="/.com//dataset1.jpg" alt="dataset1"></p>
+<p><img src="/.com//dataset2.jpg" alt="dataset2"></p>
 <p>数据集使用的是<a href="http://shuoyang1213.me/WIDERFACE/index.html" target="_blank" rel="noopener">WIDER FACE: A Face Detection Benchmark</a>与<a href="http://mmlab.ie.cuhk.edu.hk/archive/CNN_FacePoint.htm" target="_blank" rel="noopener">Deep Convolutional Network Cascade for Facial Point Detection</a>，前者用于生成识别分类任务、定位回归任务的数据，后者用于生成关键点回归任务的数据。</p>
 <p>我们所需的文件有<code>WIDER_train.zip</code>，<code>WIDER_valid.zip</code>，<code>wider_face_split.zip</code>，<code>train.zip</code>，解压整理后得到文件目录如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">data&#x2F;</span><br><span class="line">├─WIDER&#x2F;</span><br><span class="line">│   ├── wider_face_train_bbx_gt.txt</span><br><span class="line">│   ├── wider_face_val_bbx_gt.txt</span><br><span class="line">│   ├── WIDER_train&#x2F;</span><br><span class="line">│   └── WIDER_val&#x2F;</span><br><span class="line">└─Align&#x2F;</span><br><span class="line">    ├── lfw_5590&#x2F;</span><br><span class="line">    ├── net_7876&#x2F;</span><br><span class="line">    ├── testImageList.txt</span><br><span class="line">    └── trainImageList.txt</span><br></pre></td></tr></table></figure></p>
 <p>运行<a href="https://github.com/isLouisHsu/MTCNN_Darknet/blob/master/prepare_data/merge_annotations.py" target="_blank" rel="noopener">prepare_data/merge_annotations.py</a>后，合并标注文件得到<code>data/annotations.txt</code>。</p>
@@ -517,7 +499,7 @@
 <p><code>12x12_*.txt</code>三个文件为对<code>12x12.txt</code>进行一定比例划分得到的标注文件，这里采用的比例为<code>0.6: 0.15: 0.25</code>。</p>
 <p>经统计，其样本数量与比例详细信息如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">Totally 3397282 images</span><br><span class="line">Pos(1): Neg(0): Part(-1): Landmark(-2) &#x3D; 0.3107857987650127: 0.3618628067967275: 0.12916354897827145: 0.1981878454599883</span><br><span class="line">--------------------------------------------------</span><br><span class="line">Cls      | Pos(1)              : Neg(0)   &#x3D; 0.858849798674096</span><br><span class="line">Offset   | [Pos(1) + Part(-1)] : n_samples &#x3D; 0.4399493477432842</span><br><span class="line">Landmark | Landmark(-2)         : n_samples &#x3D; 0.1981878454599883</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br></pre></td></tr></table></figure></p>
 <h2 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h2><p>数据准备就绪后，可进行网络训练，运行<a href="https://github.com/isLouisHsu/MTCNN_Darknet/blob/master/mtcnn_py/main_pnet.py" target="_blank" rel="noopener">mtcnn_py/main_pnet.py</a>。批次大小设置为512，初始学习率0.01，权重衰减设置为4e-5，采用Adam优化器，学习率调整使用指数衰减策略，每代衰减95%，对于PNet，进行20代训练即可，得到权重文件<code>mtcnn_py/ckptdir/PNet.pkl</code>。</p>
-<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p><img src="/2019/05/06/%E8%AF%A6%E7%BB%86%EF%BC%81MTCNN%E8%AE%AD%E7%BB%83%E5%85%A8%E8%BF%87%E7%A8%8B%EF%BC%81/详细！MTCNN训练全过程！/1.jpg" alt="1"></p>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p><img src="/.com//1.jpg" alt="1"></p>
 <h1 id="RNet"><a href="#RNet" class="headerlink" title="RNet"></a>RNet</h1><h2 id="网络结构-1"><a href="#网络结构-1" class="headerlink" title="网络结构"></a>网络结构</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">layer     filters    size           input                output</span><br><span class="line">0 conv     28       3 x 3 &#x2F; 1    24 x  24 x   3   -&gt;    22 x  22 x  28  0.001 BFLOPs</span><br><span class="line">1 max               3 x 3 &#x2F; 2    22 x  22 x  28   -&gt;    11 x  11 x  28</span><br><span class="line">2 conv     48       3 x 3 &#x2F; 1    11 x  11 x  28   -&gt;     9 x   9 x  48  0.002 BFLOPs</span><br><span class="line">3 max               3 x 3 &#x2F; 2     9 x   9 x  48   -&gt;     4 x   4 x  48</span><br><span class="line">4 conv     64       2 x 2 &#x2F; 1     4 x   4 x  48   -&gt;     3 x   3 x  64  0.000 BFLOPs</span><br><span class="line">5 connected                                 576   -&gt;               128</span><br><span class="line">6 connected                                 128   -&gt;                15</span><br></pre></td></tr></table></figure>
 <h2 id="数据准备-1"><a href="#数据准备-1" class="headerlink" title="数据准备"></a>数据准备</h2><p>运行<a href="https://github.com/isLouisHsu/MTCNN_Darknet/blob/master/prepare_data/rnet_24x24.py" target="_blank" rel="noopener">prepare_data/rnet_24x24.py</a>，生成以下文件及文件夹</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">data&#x2F;</span><br><span class="line">├── 24x24&#x2F;</span><br><span class="line">├── 24x24.txt</span><br><span class="line">├── 24x24_train.txt</span><br><span class="line">├── 24x24_valid.txt</span><br><span class="line">├── 24x24_test.txt</span><br><span class="line">└── rDets.npy</span><br></pre></td></tr></table></figure>
@@ -526,7 +508,7 @@
 <p>经统计，样本数目如下</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">Totally 1954946 images</span><br><span class="line">Pos(1): Neg(0): Part(-1): Landmark(-2) &#x3D; 0.05522607785585893: 0.10885466913152589: 0.2848656689238475: 0.5510535840887677</span><br><span class="line">--------------------------------------------------</span><br><span class="line">Cls      | Pos(1)              : Neg(0)   &#x3D; 0.507337703531402</span><br><span class="line">Offset   | [Pos(1) + Part(-1)] : n_samples &#x3D; 0.34009174677970644</span><br><span class="line">Landmark | Landmark(-2)         : n_samples &#x3D; 0.5510535840887677</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br></pre></td></tr></table></figure>
 <h2 id="训练-1"><a href="#训练-1" class="headerlink" title="训练"></a>训练</h2><p>运行<a href="https://github.com/isLouisHsu/MTCNN_Darknet/blob/master/mtcnn_py/main_rnet.py" target="_blank" rel="noopener">mtcnn_py/main_rnet.py</a>。批次大小设置为512，初始学习率0.01，权重衰减设置为4e-5，采用Adam优化器，学习率调整使用指数衰减策略，每代衰减95%，进行50代训练，得到权重文件<code>mtcnn_py/ckptdir/RNet.pkl</code>。。</p>
-<h2 id="测试-1"><a href="#测试-1" class="headerlink" title="测试"></a>测试</h2><p><img src="/2019/05/06/%E8%AF%A6%E7%BB%86%EF%BC%81MTCNN%E8%AE%AD%E7%BB%83%E5%85%A8%E8%BF%87%E7%A8%8B%EF%BC%81/详细！MTCNN训练全过程！/2.jpg" alt="2"></p>
+<h2 id="测试-1"><a href="#测试-1" class="headerlink" title="测试"></a>测试</h2><p><img src="/.com//2.jpg" alt="2"></p>
 <h1 id="ONet"><a href="#ONet" class="headerlink" title="ONet"></a>ONet</h1><h2 id="网络结构-2"><a href="#网络结构-2" class="headerlink" title="网络结构"></a>网络结构</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">layer     filters    size              input                output</span><br><span class="line">0 conv     32       3 x 3 &#x2F; 1    48 x  48 x   3   -&gt;    46 x  46 x  32  0.004 BFLOPs</span><br><span class="line">1 max               3 x 3 &#x2F; 2    46 x  46 x  32   -&gt;    23 x  23 x  32</span><br><span class="line">2 conv     64       3 x 3 &#x2F; 1    23 x  23 x  32   -&gt;    21 x  21 x  64  0.016 BFLOPs</span><br><span class="line">3 max               3 x 3 &#x2F; 2    21 x  21 x  64   -&gt;    10 x  10 x  64</span><br><span class="line">4 conv     64       3 x 3 &#x2F; 1    10 x  10 x  64   -&gt;     8 x   8 x  64  0.005 BFLOPs</span><br><span class="line">5 max               2 x 2 &#x2F; 2     8 x   8 x  64   -&gt;     4 x   4 x  64</span><br><span class="line">6 conv    128       2 x 2 &#x2F; 1     4 x   4 x  64   -&gt;     3 x   3 x 128  0.001 BFLOPs</span><br><span class="line">7 connected                                1152   -&gt;               256</span><br><span class="line">8 connected                                 256   -&gt;                15</span><br></pre></td></tr></table></figure>
 <h2 id="数据准备-2"><a href="#数据准备-2" class="headerlink" title="数据准备"></a>数据准备</h2><p>运行<a href="https://github.com/isLouisHsu/MTCNN_Darknet/blob/master/prepare_data/onet_48x48.py" target="_blank" rel="noopener">prepare_data/onet_48x48.py</a>，生成以下文件及文件夹</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">data&#x2F;</span><br><span class="line">├── 48x48&#x2F;</span><br><span class="line">├── 48x48.txt</span><br><span class="line">├── 48x48_train.txt</span><br><span class="line">├── 48x48_valid.txt</span><br><span class="line">├── 48x48_test.txt</span><br><span class="line">└── oDets.npy</span><br></pre></td></tr></table></figure>
@@ -535,7 +517,7 @@
 <p>经统计，样本数目如下</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">Totally 1106392 images</span><br><span class="line">Pos(1): Neg(0): Part(-1): Landmark(-2) &#x3D; 0.04348278006348564: 0.12449656179726534: 0.10240583807547415: 0.7296148200637749</span><br><span class="line">--------------------------------------------------</span><br><span class="line">Cls      | Pos(1)              : Neg(0)   &#x3D; 0.34926892305905244</span><br><span class="line">Offset   | [Pos(1) + Part(-1)] : n_samples &#x3D; 0.14588861813895979</span><br><span class="line">Landmark | Landmark(-2)         : n_samples &#x3D; 0.7296148200637749</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br></pre></td></tr></table></figure>
 <h2 id="训练-2"><a href="#训练-2" class="headerlink" title="训练"></a>训练</h2><p>运行<a href="https://github.com/isLouisHsu/MTCNN_Darknet/blob/master/mtcnn_py/main_onet.py" target="_blank" rel="noopener">mtcnn_py/main_onet.py</a>，批次大小设置为512，初始学习率0.01，权重衰减设置为4e-5，采用Adam优化器，学习率调整使用指数衰减策略，每代衰减95%，进行30代训练，得到权重文件<code>mtcnn_py/ckptdir/RNet.pkl</code>。</p>
-<h2 id="测试-2"><a href="#测试-2" class="headerlink" title="测试"></a>测试</h2><p><img src="/2019/05/06/%E8%AF%A6%E7%BB%86%EF%BC%81MTCNN%E8%AE%AD%E7%BB%83%E5%85%A8%E8%BF%87%E7%A8%8B%EF%BC%81/详细！MTCNN训练全过程！/3.jpg" alt="3"></p>
+<h2 id="测试-2"><a href="#测试-2" class="headerlink" title="测试"></a>测试</h2><p><img src="/.com//3.jpg" alt="3"></p>
 <h1 id="转C语言"><a href="#转C语言" class="headerlink" title="转C语言"></a>转C语言</h1><p>C语言框架使用的是<a href="https://github.com/pjreddie/darknet" target="_blank" rel="noopener">darknet</a>，我对它进行了一些修改，在<a href="https://github.com/isLouisHsu/DarkerNet" target="_blank" rel="noopener">isLouisHsu/DarkerNet</a>，安装使用说明在仓库文档说明。</p>
 <p>运行<a href="https://github.com/isLouisHsu/MTCNN_Darknet/blob/master/mtcnn_py/extract_weights.py" target="_blank" rel="noopener">mtcnn_py/extract_weights.py</a>生成权重<code>mtcnn_c/weights/*.weights</code>，运行</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd mtcnn_c/</span><br><span class="line">mkdir build &amp;&amp; cd build</span><br><span class="line">cmake .. &amp;&amp; make</span><br><span class="line">cd ..</span><br><span class="line">./mtcnn -h</span><br></pre></td></tr></table></figure>
@@ -685,7 +667,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">112</span>
+                    <span class="site-state-item-count">113</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -714,15 +696,7 @@
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1485,6 +1459,6 @@
 
 
   <script type="text/javascript" src="/js/click_show_text.js"></script>
-  <script type="text/javascript" src="/js/hone_hone_clock.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>

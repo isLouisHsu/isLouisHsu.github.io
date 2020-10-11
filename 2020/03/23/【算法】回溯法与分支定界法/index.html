@@ -115,15 +115,15 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="回溯法回溯法(backtracking)是对候选集进行系统检查的两种方法，该算法策略有以下几步  定义问题的解空间(solution space)，这个空间至少包含一个问题的(最优的)解； 组织解空间，使解空间便于搜索，典型的组织方法是图和树； 例如迷宫老鼠问题：指定$3 \times 3$的迷宫，部分位置不可通行，求解最短的通行路径。该问题如果用树描述，那么不考虑是否能通行，每个节点处有$4$个">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/2020/03/23/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%9B%9E%E6%BA%AF%E6%B3%95%E4%B8%8E%E5%88%86%E6%94%AF%E5%AE%9A%E7%95%8C%E6%B3%95/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%9B%9E%E6%BA%AF%E6%B3%95%E4%B8%8E%E5%88%86%E6%94%AF%E5%AE%9A%E7%95%8C%E6%B3%95/maze_eg.jpg">
-<meta property="og:image" content="http://yoursite.com/2020/03/23/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%9B%9E%E6%BA%AF%E6%B3%95%E4%B8%8E%E5%88%86%E6%94%AF%E5%AE%9A%E7%95%8C%E6%B3%95/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%9B%9E%E6%BA%AF%E6%B3%95%E4%B8%8E%E5%88%86%E6%94%AF%E5%AE%9A%E7%95%8C%E6%B3%95/maze_dfs.jpg">
-<meta property="og:image" content="http://yoursite.com/2020/03/23/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%9B%9E%E6%BA%AF%E6%B3%95%E4%B8%8E%E5%88%86%E6%94%AF%E5%AE%9A%E7%95%8C%E6%B3%95/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%9B%9E%E6%BA%AF%E6%B3%95%E4%B8%8E%E5%88%86%E6%94%AF%E5%AE%9A%E7%95%8C%E6%B3%95/tsp_eg.jpg">
-<meta property="og:image" content="http://yoursite.com/2020/03/23/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%9B%9E%E6%BA%AF%E6%B3%95%E4%B8%8E%E5%88%86%E6%94%AF%E5%AE%9A%E7%95%8C%E6%B3%95/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%9B%9E%E6%BA%AF%E6%B3%95%E4%B8%8E%E5%88%86%E6%94%AF%E5%AE%9A%E7%95%8C%E6%B3%95/maze_bfs.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//maze_eg.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//maze_dfs.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//tsp_eg.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//maze_bfs.jpg">
 <meta property="article:published_time" content="2020-03-23T04:39:06.000Z">
 <meta property="article:modified_time" content="2020-04-26T04:56:09.675Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2020/03/23/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%9B%9E%E6%BA%AF%E6%B3%95%E4%B8%8E%E5%88%86%E6%94%AF%E5%AE%9A%E7%95%8C%E6%B3%95/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%9B%9E%E6%BA%AF%E6%B3%95%E4%B8%8E%E5%88%86%E6%94%AF%E5%AE%9A%E7%95%8C%E6%B3%95/maze_eg.jpg">
+<meta name="twitter:image" content="http://yoursite.com/.com//maze_eg.jpg">
 
 
 
@@ -430,24 +430,6 @@
           </span>
 
           
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a></span>
-
-                
-                
-              
-            </span>
-          
 
           
             
@@ -486,7 +468,7 @@
         <h1 id="回溯法"><a href="#回溯法" class="headerlink" title="回溯法"></a>回溯法</h1><p><strong>回溯法</strong>(backtracking)是对候选集进行系统检查的两种方法，该算法策略有以下几步</p>
 <ol>
 <li>定义问题的<strong>解空间</strong>(solution space)，这个空间至少包含一个问题的(最优的)解；</li>
-<li><strong>组织解空间</strong>，使解空间便于搜索，典型的组织方法是图和树；<br> 例如<strong>迷宫老鼠问题</strong>：指定$3 \times 3$的迷宫，部分位置不可通行，求解最短的通行路径。该问题如果用树描述，那么不考虑是否能通行，每个节点处有$4$个抉择，树结构较大，用图描述较为简便，如下<br> <img src="/2020/03/23/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%9B%9E%E6%BA%AF%E6%B3%95%E4%B8%8E%E5%88%86%E6%94%AF%E5%AE%9A%E7%95%8C%E6%B3%95/【算法】回溯法与分支定界法/maze_eg.jpg" alt="maze_eg"></li>
+<li><strong>组织解空间</strong>，使解空间便于搜索，典型的组织方法是图和树；<br> 例如<strong>迷宫老鼠问题</strong>：指定$3 \times 3$的迷宫，部分位置不可通行，求解最短的通行路径。该问题如果用树描述，那么不考虑是否能通行，每个节点处有$4$个抉择，树结构较大，用图描述较为简便，如下<br> <img src="/.com//maze_eg.jpg" alt="maze_eg"></li>
 <li>在确定解空间的组织方法后，这个空间可以按<strong>深度优先方式</strong>进行搜索。<ol>
 <li>初始化<strong>E-结点</strong>(expansion node)为起始点，标记搜索过程中经过的节点为<strong>活动节点</strong>(live node)，那么起始点也是一个活动节点；</li>
 <li>在E-节点处，尝试可能的选择节点并移动：1) <strong>若存在这样的节点</strong>，将当前E-节点新到达节点成为E-节点，并标记新节点也为活动节点；2)<strong>若不存在这样的节点</strong>(<strong>没有可供选择的节点，或超过约束限制</strong>)，将当前E-节点标记为死节点(用来杀死该节点的策略称为<strong>界定函数</strong>(bounding function))，并将E-节点返回至最近的活动节点(<strong>回溯</strong>)；</li>
@@ -495,10 +477,10 @@
 </li>
 </ol>
 <blockquote>
-<p>以迷宫老鼠为例，初始节点$(1, 1)$标记为活动节点，同时也为E-节点，在该节点处可达节点为$(1,2),(2,1)$，那么标记$(1,2)$为活动节点，E-节点更新为$(1,2)$。当E-节点为$(1,3)$时，该节点无可达节点(即界定函数)，标记为死结点，并更新E-节点为最近的活动节点，即$(1,2)$，此时该节点也被标记为死结点，E-节点更新为$(1,1)$。此时存在可达节点$(2,1)$，将其标记为活动节点，并更新E-节点。以此类推，当E-节点为出口$(3,3)$时，结束算法。<br>注：此时活动节点有$(1,1), (2,1), (3,1), (3,2), (3,3)$。<br><img src="/2020/03/23/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%9B%9E%E6%BA%AF%E6%B3%95%E4%B8%8E%E5%88%86%E6%94%AF%E5%AE%9A%E7%95%8C%E6%B3%95/【算法】回溯法与分支定界法/maze_dfs.jpg" alt="maze_dfs"></p>
+<p>以迷宫老鼠为例，初始节点$(1, 1)$标记为活动节点，同时也为E-节点，在该节点处可达节点为$(1,2),(2,1)$，那么标记$(1,2)$为活动节点，E-节点更新为$(1,2)$。当E-节点为$(1,3)$时，该节点无可达节点(即界定函数)，标记为死结点，并更新E-节点为最近的活动节点，即$(1,2)$，此时该节点也被标记为死结点，E-节点更新为$(1,1)$。此时存在可达节点$(2,1)$，将其标记为活动节点，并更新E-节点。以此类推，当E-节点为出口$(3,3)$时，结束算法。<br>注：此时活动节点有$(1,1), (2,1), (3,1), (3,2), (3,3)$。<br><img src="/.com//maze_dfs.jpg" alt="maze_dfs"></p>
 </blockquote>
 <p>注意区别回溯法和动态规划，两者有一定程度的相似性。动态规划是自底向上的，回溯法是自顶向下的。</p>
-<p><strong>例(旅行商问题, TSP)：给定一个$n$顶点的有权网络(有向或无向)，找出一个包含$n$个顶点且具有最小耗费的环路，例如给定下图的网络：</strong><br><img src="/2020/03/23/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%9B%9E%E6%BA%AF%E6%B3%95%E4%B8%8E%E5%88%86%E6%94%AF%E5%AE%9A%E7%95%8C%E6%B3%95/【算法】回溯法与分支定界法/tsp_eg.jpg" alt="tsp_eg"></p>
+<p><strong>例(旅行商问题, TSP)：给定一个$n$顶点的有权网络(有向或无向)，找出一个包含$n$个顶点且具有最小耗费的环路，例如给定下图的网络：</strong><br><img src="/.com//tsp_eg.jpg" alt="tsp_eg"></p>
 <p>该问题的<strong>约束条件</strong>是：1) 环路包含$n$个节点；2) 节点间拓扑结构已确定。<strong>优化目标</strong>是环路耗费最低，用矩阵描述该图为</p>
 <script type="math/tex; mode=display">
 \begin{bmatrix}
@@ -521,7 +503,7 @@
 <li>最小耗费或最大收益法：借助小根堆/大根堆，将堆顶节点弹出作为E-节点，并将其可达节点全部加入堆。</li>
 </ol>
 <blockquote>
-<p>那么迷宫老鼠问题中，迷宫的路径搜索节点顺序如下<br><img src="/2020/03/23/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%9B%9E%E6%BA%AF%E6%B3%95%E4%B8%8E%E5%88%86%E6%94%AF%E5%AE%9A%E7%95%8C%E6%B3%95/【算法】回溯法与分支定界法/maze_bfs.jpg" alt="maze_bfs"></p>
+<p>那么迷宫老鼠问题中，迷宫的路径搜索节点顺序如下<br><img src="/.com//maze_bfs.jpg" alt="maze_bfs"></p>
 </blockquote>
 <p>以下借助<strong>队列</strong>实现<strong>广先搜索</strong>解决TSP问题，将<a href="#dfs">回溯法</a>中栈修改为队列即可</p>
 <p><div id="bfs"></div><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Queue</span><span class="params">()</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self._data = []</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__len__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> len(self._data)</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">push</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        self._data += [x]</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">pop</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self._data.pop(<span class="number">-1</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f2</span><span class="params">(A)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Params:</span></span><br><span class="line"><span class="string">        A: &#123;ndarray(n, n)&#125; 原始图</span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    n = A.shape[<span class="number">0</span>]</span><br><span class="line">    path = []</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 从0号结点开始</span></span><br><span class="line">    queue = Queue()</span><br><span class="line">    queue.push((A, <span class="number">0</span>, [<span class="number">0</span>]))  <span class="comment"># 栈内元素：(当前图，当前节点，当前路径)</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(len(queue) &gt; <span class="number">0</span>):</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># E-节点出栈</span></span><br><span class="line">        a, i, p = queue.pop()</span><br><span class="line">        <span class="comment"># 已经过所有节点，保存退出</span></span><br><span class="line">        <span class="keyword">if</span> len(p) == n:</span><br><span class="line">            path += [p]</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="comment"># 删除可达E-节点的路径</span></span><br><span class="line">        b = a.copy(); b[:, i] = float(<span class="string">'inf'</span>)</span><br><span class="line">        <span class="comment"># E-节点的可达节点入栈，这些节点即活动节点</span></span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(n):</span><br><span class="line">            <span class="keyword">if</span> np.isinf(b[i, j]): <span class="keyword">continue</span></span><br><span class="line">            queue.push((b, j, p + [j]))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 取最小耗费的路径</span></span><br><span class="line">    cost = list(map(<span class="keyword">lambda</span> x: getCost(A, x), path))</span><br><span class="line">    index = cost.index(min(cost))</span><br><span class="line">    <span class="keyword">return</span> cost[index], path[index]</span><br></pre></td></tr></table></figure></p>
@@ -667,7 +649,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">112</span>
+                    <span class="site-state-item-count">113</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -696,15 +678,7 @@
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1467,6 +1441,6 @@
 
 
   <script type="text/javascript" src="/js/click_show_text.js"></script>
-  <script type="text/javascript" src="/js/hone_hone_clock.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>

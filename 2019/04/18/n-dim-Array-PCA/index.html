@@ -115,18 +115,18 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="前言在PCA中介绍了1维数据的主成分分析，那么对于多维数据，如何进行处理呢？有一种做法是，将单份的样本数据展开为1维向量，再进行PCA，例如著名的Eigenface，如图所示  这有一个缺点是，忽略了多维数据的空间信息，且计算时，若展开后维度过大，协方差矩阵的求逆过程非常耗时间，以下介绍多维主成分分析。 原理对于单维$n$维度数据$X &#x3D; \left[\begin{matrix} x^{(1)}">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/2019/04/18/n-dim-Array-PCA/Eigenfaces.png">
-<meta property="og:image" content="http://yoursite.com/2019/04/18/n-dim-Array-PCA/d1.JPG">
-<meta property="og:image" content="http://yoursite.com/2019/04/18/n-dim-Array-PCA/d2.JPG">
-<meta property="og:image" content="http://yoursite.com/2019/04/18/n-dim-Array-PCA/d3.JPG">
-<meta property="og:image" content="http://yoursite.com/2019/04/18/n-dim-Array-PCA/origin_data.png">
-<meta property="og:image" content="http://yoursite.com/2019/04/18/n-dim-Array-PCA/transform.png">
-<meta property="og:image" content="http://yoursite.com/2019/04/18/n-dim-Array-PCA/inv_transform.png">
+<meta property="og:image" content="http://yoursite.com/.com//Eigenfaces.png">
+<meta property="og:image" content="http://yoursite.com/.com//d1.JPG">
+<meta property="og:image" content="http://yoursite.com/.com//d2.JPG">
+<meta property="og:image" content="http://yoursite.com/.com//d3.JPG">
+<meta property="og:image" content="http://yoursite.com/.com//origin_data.png">
+<meta property="og:image" content="http://yoursite.com/.com//transform.png">
+<meta property="og:image" content="http://yoursite.com/.com//inv_transform.png">
 <meta property="article:published_time" content="2019-04-18T11:24:50.000Z">
 <meta property="article:modified_time" content="2020-05-29T06:11:28.163Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2019/04/18/n-dim-Array-PCA/Eigenfaces.png">
+<meta name="twitter:image" content="http://yoursite.com/.com//Eigenfaces.png">
 
 
 
@@ -433,24 +433,6 @@
           </span>
 
           
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
-
-                
-                
-              
-            </span>
-          
 
           
             
@@ -487,7 +469,7 @@
 
       
         <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在<a href="https://louishsu.xyz/2018/10/22/PCA/" target="_blank" rel="noopener">PCA</a>中介绍了1维数据的主成分分析，那么对于多维数据，如何进行处理呢？有一种做法是，将单份的样本数据展开为1维向量，再进行PCA，例如著名的<a href="https://zh.wikipedia.org/wiki/%E7%89%B9%E5%BE%81%E8%84%B8" target="_blank" rel="noopener">Eigenface</a>，如图所示</p>
-<p><img src="/2019/04/18/n-dim-Array-PCA/Eigenfaces.png" alt="Eigenfaces"></p>
+<p><img src="/.com//Eigenfaces.png" alt="Eigenfaces"></p>
 <p>这有一个缺点是，忽略了多维数据的空间信息，且计算时，若展开后维度过大，协方差矩阵的求逆过程非常耗时间，以下介绍多维主成分分析。</p>
 <h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>对于单维$n$维度数据$X = \left[\begin{matrix} x^{(1)} \ x^{(2)} \ … \ x^{(N)} \end{matrix}\right]$，我们有</p>
 <script type="math/tex; mode=display">
@@ -506,13 +488,13 @@ X^{d_1, ..., d_n}_{N \times n'_{d_1} \times .. \times n'_{d_i} \times ... \times
 <p>以3维张量$X(H, W, C)$为例，指定降维顺序为$(d_1, d_2, d_3)$，其降维过程表示如图</p>
 <ul>
 <li><p>在$H$维度上</p>
-<p>  <img src="/2019/04/18/n-dim-Array-PCA/d1.JPG" alt="d1"></p>
+<p>  <img src="/.com//d1.JPG" alt="d1"></p>
 </li>
 <li><p>在$W$维度上</p>
-<p>  <img src="/2019/04/18/n-dim-Array-PCA/d2.JPG" alt="d2"></p>
+<p>  <img src="/.com//d2.JPG" alt="d2"></p>
 </li>
 <li><p>在$C$维度上</p>
-<p>  <img src="/2019/04/18/n-dim-Array-PCA/d3.JPG" alt="d3"></p>
+<p>  <img src="/.com//d3.JPG" alt="d3"></p>
 </li>
 </ul>
 <h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><p>同样的，以3维张量$X(H, W, C)$为例，指定降维顺序为$(d_1, d_2, d_3)$</p>
@@ -547,11 +529,11 @@ X^{d_1, ..., d_n}_{N \times n'_{d_1} \times .. \times n'_{d_i} \times ... \times
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">transform</span><span class="params">(self, X)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Params:</span></span><br><span class="line"><span class="string">        X: &#123;ndarray(n_samples, d0, d1, d2, ..., dn-1)&#125; n-dim array</span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        X: &#123;ndarray(n_samples, d0, d1, d2, ..., dn-1)&#125; n-dim array</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">assert</span> self.n_dims == len(X.shape) - <span class="number">1</span>, <span class="string">'please check input dimension! '</span></span><br><span class="line">    idx = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(len(X.shape))]   <span class="comment"># index of dimensions</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i_dim <span class="keyword">in</span> range(self.n_dims):</span><br><span class="line">            </span><br><span class="line">        <span class="comment">## transpose tensor</span></span><br><span class="line">        idx[<span class="number">-1</span>], idx[i_dim + <span class="number">1</span>] = idx[i_dim + <span class="number">1</span>], idx[<span class="number">-1</span>]</span><br><span class="line">        X = X.transpose(idx)</span><br><span class="line">        shape = list(X.shape)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 1-dim pca</span></span><br><span class="line">        X = X.reshape((<span class="number">-1</span>, shape[<span class="number">-1</span>]))</span><br><span class="line">        X = self.decomposers[i_dim].transform(X)</span><br><span class="line"></span><br><span class="line">        <span class="comment">## transpose tensor</span></span><br><span class="line">        X = X.reshape(shape[:<span class="number">-1</span>]+[X.shape[<span class="number">-1</span>]])</span><br><span class="line">        X = X.transpose(idx)</span><br><span class="line">        idx[<span class="number">-1</span>], idx[i_dim + <span class="number">1</span>] = idx[i_dim + <span class="number">1</span>], idx[<span class="number">-1</span>]</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">return</span> X</span><br></pre></td></tr></table></figure>
 <h1 id="实验显示"><a href="#实验显示" class="headerlink" title="实验显示"></a>实验显示</h1><p>将2维数据降维，指定通道维度数目从$3$降至$1$，得到实验结果如下</p>
 <ul>
-<li><p>原始数据<br>  <img src="/2019/04/18/n-dim-Array-PCA/origin_data.png" alt="origin_data"></p>
+<li><p>原始数据<br>  <img src="/.com//origin_data.png" alt="origin_data"></p>
 </li>
-<li><p>降维后数据<br>  <img src="/2019/04/18/n-dim-Array-PCA/transform.png" alt="transform"></p>
+<li><p>降维后数据<br>  <img src="/.com//transform.png" alt="transform"></p>
 </li>
-<li><p>重建数据<br>  <img src="/2019/04/18/n-dim-Array-PCA/inv_transform.png" alt="inv_transform"></p>
+<li><p>重建数据<br>  <img src="/.com//inv_transform.png" alt="inv_transform"></p>
 </li>
 </ul>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
@@ -698,7 +680,7 @@ X^{d_1, ..., d_n}_{N \times n'_{d_1} \times .. \times n'_{d_i} \times ... \times
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">112</span>
+                    <span class="site-state-item-count">113</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -727,15 +709,7 @@ X^{d_1, ..., d_n}_{N \times n'_{d_1} \times .. \times n'_{d_i} \times ... \times
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1498,6 +1472,6 @@ X^{d_1, ..., d_n}_{N \times n'_{d_1} \times .. \times n'_{d_i} \times ... \times
 
 
   <script type="text/javascript" src="/js/click_show_text.js"></script>
-  <script type="text/javascript" src="/js/hone_hone_clock.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>

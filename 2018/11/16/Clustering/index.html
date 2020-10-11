@@ -115,25 +115,25 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="目录这是第一篇关于无监督学习的博文，无监督的学习则不是尝试预测任何东西，而是寻找数据中的特征，在无监督学习中，有一个重要的方法称为聚类，是把具有相同特征的数据聚集在一组。  目录 基础知识 距离度量方法 hard vs. soft clustering 聚类方法的分类   常用聚类方法 K均值(K-means) 原理 计算步骤 缺点与部分解决方法 改进 类似的算法 代码   均值漂移(Meansh">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/2018/11/16/Clustering/cosine_distance.png">
-<meta property="og:image" content="http://yoursite.com/2018/11/16/Clustering/kmeans_example.gif">
-<meta property="og:image" content="http://yoursite.com/2018/11/16/Clustering/k_means_init.png">
-<meta property="og:image" content="http://yoursite.com/2018/11/16/Clustering/k_means_choose_K.png">
-<meta property="og:image" content="http://yoursite.com/2018/11/16/Clustering/DBSCAN4.jpg">
-<meta property="og:image" content="http://yoursite.com/2018/11/16/Clustering/DBSCAN3.jpg">
-<meta property="og:image" content="http://yoursite.com/2018/11/16/Clustering/meanshift_example1.gif">
-<meta property="og:image" content="http://yoursite.com/2018/11/16/Clustering/meanshift_example2.gif">
-<meta property="og:image" content="http://yoursite.com/2018/11/16/Clustering/DBSCAN5.jpg">
-<meta property="og:image" content="http://yoursite.com/2018/11/16/Clustering/cut.jpg">
-<meta property="og:image" content="http://yoursite.com/2018/11/16/Clustering/spectral_clustering.png">
-<meta property="og:image" content="http://yoursite.com/2018/11/16/Clustering/DBSCAN1.jpg">
-<meta property="og:image" content="http://yoursite.com/2018/11/16/Clustering/DBSCAN2.jpg">
-<meta property="og:image" content="http://yoursite.com/2018/11/16/Clustering/%E5%B1%82%E6%AC%A1%E8%81%9A%E7%B1%BB.png">
+<meta property="og:image" content="http://yoursite.com/.com//cosine_distance.png">
+<meta property="og:image" content="http://yoursite.com/.com//kmeans_example.gif">
+<meta property="og:image" content="http://yoursite.com/.com//k_means_init.png">
+<meta property="og:image" content="http://yoursite.com/.com//k_means_choose_K.png">
+<meta property="og:image" content="http://yoursite.com/.com//DBSCAN4.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//DBSCAN3.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//meanshift_example1.gif">
+<meta property="og:image" content="http://yoursite.com/.com//meanshift_example2.gif">
+<meta property="og:image" content="http://yoursite.com/.com//DBSCAN5.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//cut.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//spectral_clustering.png">
+<meta property="og:image" content="http://yoursite.com/.com//DBSCAN1.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//DBSCAN2.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//%E5%B1%82%E6%AC%A1%E8%81%9A%E7%B1%BB.png">
 <meta property="article:published_time" content="2018-11-16T09:32:44.000Z">
 <meta property="article:modified_time" content="2020-05-30T13:22:53.883Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2018/11/16/Clustering/cosine_distance.png">
+<meta name="twitter:image" content="http://yoursite.com/.com//cosine_distance.png">
 
 
 
@@ -569,7 +569,7 @@ y = [y_1, y_2, ..., y_n]^T</script><ul>
 <li><p>余弦距离<code>(Cosine)</code></p>
 <script type="math/tex; mode=display">
   d = \frac{x^T y}{||x||_2 ||y||_2} = \frac{\sum_i x_i y_i}{\sqrt{\sum_i x_i^2} \sqrt{\sum_i y_i^2}}</script><blockquote>
-<p>突然想到为什么向量的夹角余弦是怎么来的，高中学习一直背的公式，现在给一下证明。<br>证明：向量的夹角公式<br><img src="/2018/11/16/Clustering/cosine_distance.png" alt="cosine_distance"></p>
+<p>突然想到为什么向量的夹角余弦是怎么来的，高中学习一直背的公式，现在给一下证明。<br>证明：向量的夹角公式<br><img src="/.com//cosine_distance.png" alt="cosine_distance"></p>
 <p>从余弦定理(余弦定理用几何即可)出发，有</p>
 <script type="math/tex; mode=display">
 \cos \theta = \frac{a^2+b^2-c^2}{2ab}</script><p>其中</p>
@@ -623,16 +623,16 @@ r^{(i)} = [0, ..., 1_k, ..., 0]^T</script><p>在迭代过程中，损失函数�
 <li>计算每个聚类的平均值，作为新的中心点；</li>
 <li>重复步骤2-步骤4，直到这k个中线点不再变化(收敛)，或执行了足够多的迭代；</li>
 </ol>
-<p><code>K-means</code>更新迭代过程如下图<br><img src="/2018/11/16/Clustering/kmeans_example.gif" alt="kmeans_example"></p>
+<p><code>K-means</code>更新迭代过程如下图<br><img src="/.com//kmeans_example.gif" alt="kmeans_example"></p>
 <h3 id="缺点与部分解决方法"><a href="#缺点与部分解决方法" class="headerlink" title="缺点与部分解决方法"></a>缺点与部分解决方法</h3><ul>
 <li>局部最优</li>
-<li>初值敏感<br>  初始点的选择会影响<code>K-means</code>聚类的结果，即可能会陷入局部最优解，如下图<br>  <img src="/2018/11/16/Clustering/k_means_init.png" alt="k_means_init"><br>  可通过如下方法解决<ul>
+<li>初值敏感<br>  初始点的选择会影响<code>K-means</code>聚类的结果，即可能会陷入局部最优解，如下图<br>  <img src="/.com//k_means_init.png" alt="k_means_init"><br>  可通过如下方法解决<ul>
 <li>多次选择初始点运行<code>K-means</code>算法，选择最优的作为输出结果；</li>
 <li><code>K-means++</code></li>
 </ul>
 </li>
 <li>需要定义<code>mean</code>，对于标称型<code>(categorical)</code>数据不适用</li>
-<li>需要给定聚类簇数目$K$<br>  这里给出一种选择簇数目的方法，选择多个$K$值进行聚类，计算代价函数，做成折线图后如下，可以看到在$K=3$处损失值的变化率出现较大变化，则可选择簇的数目为$3$。<br>  <img src="/2018/11/16/Clustering/k_means_choose_K.png" alt="k_means_choose_K"></li>
+<li>需要给定聚类簇数目$K$<br>  这里给出一种选择簇数目的方法，选择多个$K$值进行聚类，计算代价函数，做成折线图后如下，可以看到在$K=3$处损失值的变化率出现较大变化，则可选择簇的数目为$3$。<br>  <img src="/.com//k_means_choose_K.png" alt="k_means_choose_K"></li>
 <li>噪声数据干扰大</li>
 <li>对于非凸集<code>(non-convex)</code>数据无能为力<br>  谱聚类可解决非凸集数据的聚类问题。</li>
 </ul>
@@ -653,7 +653,7 @@ r^{(i)} = [0, ..., 1_k, ..., 0]^T</script><p>在迭代过程中，损失函数�
 <h3 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h3><p>有一个滑动窗口的思想，即利用当前中心点一定范围内(通常为球域)的点迭代更新中心点，重复移动窗口，直到满足收敛条件。简单的说，<code>Meanshift</code>就是沿着密度上升的方向寻找同属一个簇的数据点。</p>
 <p>定义点$x_0$的$\epsilon$球域如下</p>
 <script type="math/tex; mode=display">
-S_h(x_0) = \{ x | (x - x_0)^T (x - x_0) \leq \epsilon \}</script><p>若有$n$个点$(x_1, …, x_n)$落在中心点$ptCentroid$的邻域内，其分布如图<br><img src="/2018/11/16/Clustering/DBSCAN4.jpg" alt="DBSCAN4"></p>
+S_h(x_0) = \{ x | (x - x_0)^T (x - x_0) \leq \epsilon \}</script><p>若有$n$个点$(x_1, …, x_n)$落在中心点$ptCentroid$的邻域内，其分布如图<br><img src="/.com//DBSCAN4.jpg" alt="DBSCAN4"></p>
 <p>则偏移向量计算方式为</p>
 <script type="math/tex; mode=display">
 vecShift = \frac{1}{n} \sum_{i=1}^n (x_i - ptCentroid)</script><p>中心点更新公式为</p>
@@ -664,9 +664,9 @@ ptCentroid := ptCentroid + vecShift</script><blockquote>
 vecShift
 = \frac{1}{n} \sum_{i=1}^n x_i - ptCentroid</script><script type="math/tex; mode=display">
 ptCentroid :=  \frac{1}{n} \sum_{i=1}^n x_i</script></blockquote>
-<p><img src="/2018/11/16/Clustering/DBSCAN3.jpg" alt="DBSCAN3"></p>
-<p>一个滑动窗口的动态更新过程如下图<br><img src="/2018/11/16/Clustering/meanshift_example1.gif" alt="meanshift_example1"><br>初始化多个滑动窗口进行<code>MeanShift</code>算法，其更新过程如下，其中每个黑点代表滑动窗口的质心，每个灰点代表一个数据点<br><img src="/2018/11/16/Clustering/meanshift_example2.gif" alt="meanshift_example2"></p>
-<h3 id="高斯权重"><a href="#高斯权重" class="headerlink" title="高斯权重"></a>高斯权重</h3><p>基本思想是，距离当前中心点近的向量对更新结果权重大，而远的权重小，可减小远点的干扰，如下图，$vecShift_2$为高斯权重下的偏移向量<br><img src="/2018/11/16/Clustering/DBSCAN5.jpg" alt="DBSCAN5"></p>
+<p><img src="/.com//DBSCAN3.jpg" alt="DBSCAN3"></p>
+<p>一个滑动窗口的动态更新过程如下图<br><img src="/.com//meanshift_example1.gif" alt="meanshift_example1"><br>初始化多个滑动窗口进行<code>MeanShift</code>算法，其更新过程如下，其中每个黑点代表滑动窗口的质心，每个灰点代表一个数据点<br><img src="/.com//meanshift_example2.gif" alt="meanshift_example2"></p>
+<h3 id="高斯权重"><a href="#高斯权重" class="headerlink" title="高斯权重"></a>高斯权重</h3><p>基本思想是，距离当前中心点近的向量对更新结果权重大，而远的权重小，可减小远点的干扰，如下图，$vecShift_2$为高斯权重下的偏移向量<br><img src="/.com//DBSCAN5.jpg" alt="DBSCAN5"></p>
 <p>其偏移向量计算方式为</p>
 <script type="math/tex; mode=display">
 vecShift = \frac{1}{n} \sum_{i=1}^n w_i · (x_i - ptCentroid)</script><script type="math/tex; mode=display">
@@ -795,7 +795,7 @@ W(A, B) = \sum_{i \in A, j \in B} w_{ij}</script><blockquote>
 cut(V_1, ..., V_K) = \frac{1}{2} \sum_{i=1}^K cut(V_i, \overline{V_i})</script><script type="math/tex; mode=display">
 cut(V_i, \overline{V_i}) = W (V_i, \overline{V_i})</script><p>其中$\overline{V_i}$表示$V_i$的补集，或者</p>
 <script type="math/tex; mode=display">
-\overline{V_i} = \bigcup_{k \neq i} V_k</script><p>通过最小化$cut(V_1, …, V_K)$使子图内权重和大，而子图间权重和小。但是这种方法存在问题，如下图<br><img src="/2018/11/16/Clustering/cut.jpg" alt="cut"></p>
+\overline{V_i} = \bigcup_{k \neq i} V_k</script><p>通过最小化$cut(V_1, …, V_K)$使子图内权重和大，而子图间权重和小。但是这种方法存在问题，如下图<br><img src="/.com//cut.jpg" alt="cut"></p>
 <p>选择一个权重最小的边缘的<strong>点</strong>，比如$C$和$H$之间进行$cut$，这样可以最小化$cut(V_1, …, V_K)$，但是却不是最优的切图。</p>
 <p>为解决上述问题，需要对每个子图的规模做出限定，以下介绍两种切图方式。</p>
 <h5 id="Ratio-Cut"><a href="#Ratio-Cut" class="headerlink" title="Ratio Cut"></a>Ratio Cut</h5><p>不仅考虑最小化$cut(V_1, …, V_K)$，而且最大化每个子图的点个数，即</p>
@@ -915,7 +915,7 @@ cut(V_i, \overline{V_i}) = W (V_i, \overline{V_i})</script><blockquote>
 </ol>
 <p>注意是$K_1$个最小特征值对应的特征向量，别问我为什么知道。。。</p>
 <h3 id="代码-2"><a href="#代码-2" class="headerlink" title="代码"></a>代码</h3><p><a href="https://github.com/isLouisHsu/Python-Examples-for-Pattern-Recognition-Course/blob/master/examples/p86_spectral_clustering.py" target="_blank" rel="noopener">@Github: Spectral Clustering</a><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SpectralClustering</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Attributes:</span></span><br><span class="line"><span class="string">        k: &#123;int&#125;, k &lt; n_samples</span></span><br><span class="line"><span class="string">        sigma: &#123;float&#125;</span></span><br><span class="line"><span class="string">    Notes:</span></span><br><span class="line"><span class="string">        Steps:</span></span><br><span class="line"><span class="string">            - similarity matrix [W_&#123;n×n&#125;]</span></span><br><span class="line"><span class="string">            - diagonal matrix [D_&#123;n×n&#125;] is defined as</span></span><br><span class="line"><span class="string">                    D_&#123;ii&#125; = \begin&#123;cases&#125;</span></span><br><span class="line"><span class="string">                                \sum_j W_&#123;ij&#125; &amp; i \neq j \\</span></span><br><span class="line"><span class="string">                                0 &amp; i = j</span></span><br><span class="line"><span class="string">                            \end&#123;cases&#125;</span></span><br><span class="line"><span class="string">            - Laplacian matrix [L_&#123;n×n&#125;], Laplacian matrix is defined as</span></span><br><span class="line"><span class="string">                    L = D - W or L = D^&#123;-1&#125; (D - W)</span></span><br><span class="line"><span class="string">            - EVD: L \alpha_i = \lambda_i \alpha_i</span></span><br><span class="line"><span class="string">            - takes the eigenvector corresponding to the largest eigenvalue as</span></span><br><span class="line"><span class="string">                    B_&#123;n×k&#125; = [\beta_1, \beta_2, ..., \beta_k]</span></span><br><span class="line"><span class="string">            - apply K-Means to the row vectors of matrix B</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, k, n_clusters=<span class="number">2</span>, sigma=<span class="number">1.0</span>)</span>:</span></span><br><span class="line">        self.kmeans = KMeans(n_clusters=n_clusters)</span><br><span class="line">        self.k = k</span><br><span class="line">        self.sigma = sigma</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">predict</span><span class="params">(self, X)</span>:</span></span><br><span class="line">        n_samples = X.shape[<span class="number">0</span>]</span><br><span class="line">        <span class="comment"># step 1</span></span><br><span class="line">        kernelGaussian = <span class="keyword">lambda</span> z, sigma: np.exp(<span class="number">-0.5</span> * np.square(z/sigma))</span><br><span class="line">        W = np.zeros((n_samples, n_samples))</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(n_samples):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(i):</span><br><span class="line">                W[i, j] = kernelGaussian(np.linalg.norm(X[i] - X[j]), self.sigma)</span><br><span class="line">                W[j, i] = W[i, j]</span><br><span class="line">        <span class="comment"># step 2</span></span><br><span class="line">        D = np.diag(np.sum(W, axis=<span class="number">1</span>))</span><br><span class="line">        <span class="comment"># step 3</span></span><br><span class="line">        L = D - W</span><br><span class="line">        L = np.linalg.inv(D).dot(L)</span><br><span class="line">        <span class="comment"># step 4</span></span><br><span class="line">        eigval, eigvec = np.linalg.eig(L)</span><br><span class="line">        <span class="comment"># step 5</span></span><br><span class="line">        order = np.argsort(eigval)</span><br><span class="line">        eigvec = eigvec[:, order]</span><br><span class="line">        beta = eigvec[:, :self.k]</span><br><span class="line">        <span class="comment"># step 6</span></span><br><span class="line">        self.kmeans.fit(beta)</span><br><span class="line">        <span class="keyword">return</span> self.kmeans.labels_</span><br></pre></td></tr></table></figure></p>
-<p><img src="/2018/11/16/Clustering/spectral_clustering.png" alt="spectral_clustering"></p>
+<p><img src="/.com//spectral_clustering.png" alt="spectral_clustering"></p>
 <h2 id="DBSCAN"><a href="#DBSCAN" class="headerlink" title="DBSCAN"></a>DBSCAN</h2><p><code>DBSCAN(Density-Based Spatial Clustering of Applications with Noise)</code>，具有噪声的基于密度的聚类方法。假定类别可以通过样本分布的紧密程度决定。同一类别的样本，他们之间的紧密相连的。</p>
 <blockquote>
 <p><a href="https://www.cnblogs.com/pinard/p/6208966.html" target="_blank" rel="noopener">DBSCAN密度聚类算法 - 刘建平Pinard - 博客园</a></p>
@@ -931,13 +931,13 @@ cut(V_i, \overline{V_i}) = W (V_i, \overline{V_i})</script><blockquote>
 <li>密度可达<br>  若存在样本序列$p_1, p_2, …, p_T$，满足$p_1 = x^{(i)}, p_T = x^{(j)}$，且$p_{t+1}$可由$p_t$密度直达，也就是说$p_1, p_2, …, p_{T-1}$均为核心对象，则称$x^{(j)}$由$x^{(i)}$密度可达。也不满足对称性。如图，$x^{(4)}$可由$x^{(1)}$密度可达，而$x^{(2)}$不可由$x^{(4)}$密度可达，因为$x^{(4)}$不为核心对象。</li>
 <li>密度相连<br>  存在核心对象$x^{(k)}$，使得$x^{(i)}$与$x^{(j)}$均由$x^{(k)}$密度可达，则称$x^{(i)}$与$x^{(j)}$密度相连。注意密度相连满足对称性。如图，$x^{(8)}$与$x^{(4)}$均可由$x^{(1)}$密度可达，则$x^{(8)}$与$x^{(4)}$密度相连。</li>
 </ul>
-<p><img src="/2018/11/16/Clustering/DBSCAN1.jpg" alt="DBSCAN1"></p>
+<p><img src="/.com//DBSCAN1.jpg" alt="DBSCAN1"></p>
 <h3 id="计算思想"><a href="#计算思想" class="headerlink" title="计算思想"></a>计算思想</h3><p><code>DBSCAN</code>的聚类思想是，由<strong>密度可达关系</strong>导出的最大密度相连的样本集合，即为我们最终聚类的一个簇，这个簇里可能只有一个核心对象，也可能有多个核心对象，若有多个，则簇里的任意一个核心对象的$\epsilon$-邻域中一定有一个其他的核心对象，否则这两个核心对象无法密度可达。</p>
 <p>另外，考虑以下三个问题</p>
 <ul>
 <li>噪音点<br>  一些异常样本点或者说少量游离于簇外的样本点，这些点不在任何一个核心对象在周围，这些样本点标记为噪音点，<code>with Noise</code>就是这个意思。</li>
 <li>距离的度量<br>  一般采用最近邻思想，采用某一种距离度量来衡量样本距离，比如欧式距离。这和<code>KNN</code>算法的最近邻思想完全相同。对应少量的样本，寻找最近邻可以直接去计算所有样本的距离，如果样本量较大，则一般采用<code>KDTree</code>或者球树来快速的搜索最近邻。</li>
-<li>类别重复时的判别<br>  某些样本可能到两个核心对象的距离都小于$\epsilon$，但是这两个核心对象如下图所示，不是密度直达，又不属于同一个聚类簇，那么如果界定这个样本的类别呢？<br>  <img src="/2018/11/16/Clustering/DBSCAN2.jpg" alt="DBSCAN2"><br>  一般来说，此时<code>DBSCAN</code>采用<strong>先来后到</strong>，先进行聚类的类别簇会标记这个样本为它的类别。也就是说<code>BDSCAN</code>不是完全稳定的算法。</li>
+<li>类别重复时的判别<br>  某些样本可能到两个核心对象的距离都小于$\epsilon$，但是这两个核心对象如下图所示，不是密度直达，又不属于同一个聚类簇，那么如果界定这个样本的类别呢？<br>  <img src="/.com//DBSCAN2.jpg" alt="DBSCAN2"><br>  一般来说，此时<code>DBSCAN</code>采用<strong>先来后到</strong>，先进行聚类的类别簇会标记这个样本为它的类别。也就是说<code>BDSCAN</code>不是完全稳定的算法。</li>
 </ul>
 <h3 id="算法步骤"><a href="#算法步骤" class="headerlink" title="算法步骤"></a>算法步骤</h3><p>对于给定的$N$维数据集$X = (x^{(1)}, x^{(2)}, …, x^{(M)})$，指定邻域参数$(\epsilon, minPts)$与样本距离度量方式，将其划分为$K$类。</p>
 <ol>
@@ -955,7 +955,7 @@ cut(V_i, \overline{V_i}) = W (V_i, \overline{V_i})</script><blockquote>
 </ol>
 <h2 id="高斯混合模型-GMM"><a href="#高斯混合模型-GMM" class="headerlink" title="高斯混合模型(GMM)"></a>高斯混合模型(GMM)</h2><p>详情查看<a href="https://louishsu.xyz/2018/11/12/EM%E7%AE%97%E6%B3%95-GMM%E6%A8%A1%E5%9E%8B/" target="_blank" rel="noopener">EM算法 &amp; GMM模型</a>。</p>
 <h2 id="层次聚类-Hierarchical-Clustering"><a href="#层次聚类-Hierarchical-Clustering" class="headerlink" title="层次聚类(Hierarchical Clustering)"></a>层次聚类(Hierarchical Clustering)</h2><p>层次聚类更多的是一种思想，而不是方法，通过从下往上不断合并簇，或者从上往下不断分离簇形成嵌套的簇。例如上面讲到的<code>DBSCAN</code>最后簇的合并就有这种思想。</p>
-<p>层次的类通过“树状图”来表示，如下<br><img src="/2018/11/16/Clustering/层次聚类.png" alt="层次聚类"></p>
+<p>层次的类通过“树状图”来表示，如下<br><img src="/.com//层次聚类.png" alt="层次聚类"></p>
 <p>主要的思想或方法有两种</p>
 <ul>
 <li>自底向上的凝聚方法<code>(agglomerative hierarchical clustering)</code><br>  如<code>AGNES</code>。</li>
@@ -1103,7 +1103,7 @@ cut(V_i, \overline{V_i}) = W (V_i, \overline{V_i})</script><blockquote>
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">112</span>
+                    <span class="site-state-item-count">113</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1132,15 +1132,7 @@ cut(V_i, \overline{V_i}) = W (V_i, \overline{V_i})</script><blockquote>
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1903,6 +1895,6 @@ cut(V_i, \overline{V_i}) = W (V_i, \overline{V_i})</script><blockquote>
 
 
   <script type="text/javascript" src="/js/click_show_text.js"></script>
-  <script type="text/javascript" src="/js/hone_hone_clock.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>

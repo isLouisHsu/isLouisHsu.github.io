@@ -115,19 +115,19 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="深度学习框架darknet【一】——简单使用 深度学习框架darknet【二】——目录结构 深度学习框架darknet【三】——调包大法好 深度学习框架darknet【四】——网络配置选项 深度学习框架darknet【五】——训练解析  前言目前可用于深度学习的著名框架有  tensorflow pytorch keras theano caffe …  这些给广大调参狗带来便利，但不利于学生党">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/2019/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E4%B8%80%E3%80%91%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E4%B8%80%E3%80%91%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/darknet.png">
-<meta property="og:image" content="http://yoursite.com/2019/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E4%B8%80%E3%80%91%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E4%B8%80%E3%80%91%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/fastfurious.jpeg">
-<meta property="og:image" content="http://yoursite.com/2019/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E4%B8%80%E3%80%91%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E4%B8%80%E3%80%91%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/fastfurious_predictions.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E4%B8%80%E3%80%91%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E4%B8%80%E3%80%91%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/darknet_build_win_no_gpu_sln.png">
-<meta property="og:image" content="http://yoursite.com/2019/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E4%B8%80%E3%80%91%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E4%B8%80%E3%80%91%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/darknet_build_win_release.png">
-<meta property="og:image" content="http://yoursite.com/2019/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E4%B8%80%E3%80%91%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E4%B8%80%E3%80%91%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/darknet_build_win_build.png">
-<meta property="og:image" content="http://yoursite.com/2019/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E4%B8%80%E3%80%91%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E4%B8%80%E3%80%91%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/darknet_build_win_success.png">
-<meta property="og:image" content="http://yoursite.com/2019/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E4%B8%80%E3%80%91%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E4%B8%80%E3%80%91%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/darknet_build_win_predict_dog.png">
+<meta property="og:image" content="http://yoursite.com/.com//darknet.png">
+<meta property="og:image" content="http://yoursite.com/.com//fastfurious.jpeg">
+<meta property="og:image" content="http://yoursite.com/.com//fastfurious_predictions.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//darknet_build_win_no_gpu_sln.png">
+<meta property="og:image" content="http://yoursite.com/.com//darknet_build_win_release.png">
+<meta property="og:image" content="http://yoursite.com/.com//darknet_build_win_build.png">
+<meta property="og:image" content="http://yoursite.com/.com//darknet_build_win_success.png">
+<meta property="og:image" content="http://yoursite.com/.com//darknet_build_win_predict_dog.png">
 <meta property="article:published_time" content="2019-12-08T12:34:00.000Z">
 <meta property="article:modified_time" content="2019-12-08T13:18:08.821Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2019/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E4%B8%80%E3%80%91%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E4%B8%80%E3%80%91%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/darknet.png">
+<meta name="twitter:image" content="http://yoursite.com/.com//darknet.png">
 
 
 
@@ -493,7 +493,7 @@
 </ul>
 <p>这些给广大调参狗带来便利，但不利于学生党理解底层实现，例如神经网络的BP算法。</p>
 <p>darknet是C语言实现的深度学习开源代码，细细品读，收获颇丰，开源万岁！</p>
-<p><img src="/2019/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E4%B8%80%E3%80%91%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/深度学习框架darknet【一】——简单使用/darknet.png" alt="darknet"></p>
+<p><img src="/.com//darknet.png" alt="darknet"></p>
 <p>附上官网链接和<code>Github</code>地址</p>
 <ul>
 <li><a href="https://pjreddie.com/darknet/yolo/" target="_blank" rel="noopener">YOLO: Real-Time Object Detection</a></li>
@@ -506,17 +506,17 @@
 <p>开始编译，编译完成后，除了新建三个目录<code>obj/</code>, <code>backup/</code>, <code>results/</code>外，还生成<strong>可执行文件<code>darknet</code>, 静态连接库<code>libdarknet.a</code>, 动态链接库<code>libdarknet.so</code></strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash">  make</span></span><br><span class="line">mkdir -p obj        # 新建目录 obj/</span><br><span class="line">mkdir -p backup     # 新建目录 backup/</span><br><span class="line">mkdir -p results    # 新建目录 results/</span><br><span class="line">gcc -Iinclude/ -Isrc/ -DOPENCV `pkg-config --cflags opencv`  -Wall -Wno-unused-result -Wno-unknown-pragmas -Wfatal-errors -fPIC -Ofast -DOPENCV -c ./src/gemm.c -o obj/gemm.o</span><br><span class="line">... # 略</span><br><span class="line">gcc -Iinclude/ -Isrc/ -DOPENCV `pkg-config --cflags opencv`  -Wall -Wno-unused-result -Wno-unknown-pragmas -Wfatal-errors -fPIC -Ofast -DOPENCV -c ./examples/darknet.c -o obj/darknet.o</span><br><span class="line">gcc -Iinclude/ -Isrc/ -DOPENCV `pkg-config --cflags opencv`  -Wall -Wno-unused-result -Wno-unknown-pragmas -Wfatal-errors -fPIC -Ofast -DOPENCV obj/captcha.o obj/lsd.o obj/super.o obj/art.o obj/tag.o obj/cifar.o obj/go.o obj/rnn.o obj/segmenter.o obj/regressor.o obj/classifier.o obj/coco.o obj/yolo.o obj/detector.o obj/nightmare.o obj/instance-segmenter.o obj/darknet.o libdarknet.a -o darknet -lm -pthread  `pkg-config --libs opencv` -lstdc++ libdarknet.a</span><br></pre></td></tr></table></figure></p>
 <p>尝试运行YOLO3检测算法，下载权重、选择cfg文件，并指定图片进行检测<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> wget https://pjreddie.com/media/files/yolov3.weights</span></span><br><span class="line">... # 略</span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"> ./darknet detect cfg/yolov3.cfg yolov3.weights data/fastfurious.jpeg </span></span><br><span class="line">layer     filters    size              input                output</span><br><span class="line">    0 conv     32  3 x 3 / 1   608 x 608 x   3   -&gt;   608 x 608 x  32  0.639 BFLOPs</span><br><span class="line">    1 conv     64  3 x 3 / 2   608 x 608 x  32   -&gt;   304 x 304 x  64  3.407 BFLOPs</span><br><span class="line">    2 conv     32  1 x 1 / 1   304 x 304 x  64   -&gt;   304 x 304 x  32  0.379 BFLOPs</span><br><span class="line">... # 略</span><br><span class="line">  105 conv    255  1 x 1 / 1    76 x  76 x 256   -&gt;    76 x  76 x 255  0.754 BFLOPs</span><br><span class="line">  106 yolo</span><br><span class="line">Loading weights from yolov3.weights...Done!</span><br><span class="line">data/fastfurious.jpeg: Predicted in 27.746693 seconds.</span><br><span class="line">car: 100%</span><br><span class="line">person: 100%</span><br></pre></td></tr></table></figure></p>
 <p>放上大光头靓照，检测效果非常好，由于未使用CUDA，所以检测速度较慢(27.7s)</p>
-<p><img src="/2019/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E4%B8%80%E3%80%91%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/深度学习框架darknet【一】——简单使用/fastfurious.jpeg" alt="fastfurious"></p>
-<p><img src="/2019/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E4%B8%80%E3%80%91%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/深度学习框架darknet【一】——简单使用/fastfurious_predictions.jpg" alt="fastfurious_predictions"></p>
+<p><img src="/.com//fastfurious.jpeg" alt="fastfurious"></p>
+<p><img src="/.com//fastfurious_predictions.jpg" alt="fastfurious_predictions"></p>
 <h1 id="Windows安装与使用"><a href="#Windows安装与使用" class="headerlink" title="Windows安装与使用"></a>Windows安装与使用</h1><ol>
 <li>新建项目文件夹<code>project</code>，复制<code>darknet_AlexeyAB</code>中文件到该目录下</li>
-<li>选择无gpu版本，打开<code>project/build/darknet/darknet_no_gpu.sln</code><br> <img src="/2019/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E4%B8%80%E3%80%91%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/深度学习框架darknet【一】——简单使用/darknet_build_win_no_gpu_sln.png" alt="darknet_build_win_no_gpu_sln"></li>
-<li>修改版本为<code>release</code><br> <img src="/2019/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E4%B8%80%E3%80%91%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/深度学习框架darknet【一】——简单使用/darknet_build_win_release.png" alt="darknet_build_win_release"></li>
+<li>选择无gpu版本，打开<code>project/build/darknet/darknet_no_gpu.sln</code><br> <img src="/.com//darknet_build_win_no_gpu_sln.png" alt="darknet_build_win_no_gpu_sln"></li>
+<li>修改版本为<code>release</code><br> <img src="/.com//darknet_build_win_release.png" alt="darknet_build_win_release"></li>
 <li>安装<code>OpenCV3</code></li>
-<li>一键<code>build</code>！如果需要生成<code>.dll</code>动态链接库，则配置<code>项目属性 -&gt; 常规 -&gt; 目标文件扩展名</code>为<code>.dll</code><br> <img src="/2019/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E4%B8%80%E3%80%91%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/深度学习框架darknet【一】——简单使用/darknet_build_win_build.png" alt="darknet_build_win_build"><br> <img src="/2019/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E4%B8%80%E3%80%91%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/深度学习框架darknet【一】——简单使用/darknet_build_win_success.png" alt="darknet_build_win_success"></li>
+<li>一键<code>build</code>！如果需要生成<code>.dll</code>动态链接库，则配置<code>项目属性 -&gt; 常规 -&gt; 目标文件扩展名</code>为<code>.dll</code><br> <img src="/.com//darknet_build_win_build.png" alt="darknet_build_win_build"><br> <img src="/.com//darknet_build_win_success.png" alt="darknet_build_win_success"></li>
 </ol>
 <p>从<code>https://pjreddie.com/media/files/yolov3.weights</code>下载<code>yolo_v3</code>权重，放到放在<code>project/build/darknet/x64</code>目录，执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&gt; .&#x2F;darknet_no_gpu.exe detect cfg&#x2F;yolov3.cfg yolov3.weights data&#x2F;dog.jpg</span><br><span class="line">layer     filters    size              input                output</span><br><span class="line">   0 conv     32  3 x 3 &#x2F; 1   416 x 416 x   3   -&gt;   416 x 416 x  32 0.299 BF</span><br><span class="line">   1 conv     64  3 x 3 &#x2F; 2   416 x 416 x  32   -&gt;   208 x 208 x  64 1.595 BF</span><br><span class="line">   2 conv     32  1 x 1 &#x2F; 1   208 x 208 x  64   -&gt;   208 x 208 x  32 0.177 BF</span><br><span class="line">   3 conv     64  3 x 3 &#x2F; 1   208 x 208 x  32   -&gt;   208 x 208 x  64 1.595 BF</span><br><span class="line">   4 Shortcut Layer: 1</span><br><span class="line">   5 conv    128  3 x 3 &#x2F; 2   208 x 208 x  64   -&gt;   104 x 104 x 128 1.595 BF</span><br><span class="line">   6 conv     64  1 x 1 &#x2F; 1   104 x 104 x 128   -&gt;   104 x 104 x  64 0.177 BF</span><br><span class="line">   7 conv    128  3 x 3 &#x2F; 1   104 x 104 x  64   -&gt;   104 x 104 x 128 1.595 BF</span><br><span class="line">   </span><br><span class="line">   ...</span><br><span class="line">  </span><br><span class="line">  94 yolo</span><br><span class="line">  95 route  91</span><br><span class="line">  96 conv    128  1 x 1 &#x2F; 1    26 x  26 x 256   -&gt;    26 x  26 x 128 0.044 BF</span><br><span class="line">  97 upsample            2x    26 x  26 x 128   -&gt;    52 x  52 x 128</span><br><span class="line">  98 route  97 36</span><br><span class="line">  99 conv    128  1 x 1 &#x2F; 1    52 x  52 x 384   -&gt;    52 x  52 x 128 0.266 BF</span><br><span class="line"> 100 conv    256  3 x 3 &#x2F; 1    52 x  52 x 128   -&gt;    52 x  52 x 256 1.595 BF</span><br><span class="line"> 101 conv    128  1 x 1 &#x2F; 1    52 x  52 x 256   -&gt;    52 x  52 x 128 0.177 BF</span><br><span class="line"> 102 conv    256  3 x 3 &#x2F; 1    52 x  52 x 128   -&gt;    52 x  52 x 256 1.595 BF</span><br><span class="line"> 103 conv    128  1 x 1 &#x2F; 1    52 x  52 x 256   -&gt;    52 x  52 x 128 0.177 BF</span><br><span class="line"> 104 conv    256  3 x 3 &#x2F; 1    52 x  52 x 128   -&gt;    52 x  52 x 256 1.595 BF</span><br><span class="line"> 105 conv    255  1 x 1 &#x2F; 1    52 x  52 x 256   -&gt;    52 x  52 x 255 0.353 BF</span><br><span class="line"> 106 yolo</span><br><span class="line">Total BFLOPS 65.864</span><br><span class="line">Loading weights from yolov3.weights...Done!</span><br></pre></td></tr></table></figure></p>
-<p><img src="/2019/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6darknet%E3%80%90%E4%B8%80%E3%80%91%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/深度学习框架darknet【一】——简单使用/darknet_build_win_predict_dog.png" alt="darknet_build_win_predict_dog"></p>
+<p><img src="/.com//darknet_build_win_predict_dog.png" alt="darknet_build_win_predict_dog"></p>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
 <li><a href="https://blog.csdn.net/KayChanGEEK/article/details/84979441" target="_blank" rel="noopener">Windows配置darknet - 楷尘·极客 - CSDN博客</a></li>
 </ol>
@@ -661,7 +661,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">112</span>
+                    <span class="site-state-item-count">113</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -690,15 +690,7 @@
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1461,6 +1453,6 @@
 
 
   <script type="text/javascript" src="/js/click_show_text.js"></script>
-  <script type="text/javascript" src="/js/hone_hone_clock.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>

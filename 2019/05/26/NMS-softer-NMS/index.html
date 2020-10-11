@@ -115,20 +115,20 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="前言在目标检测中，若多个回归框(Bounding Box)重叠内容较多，则可以保留其中几个，删除其余冗余的框，非极大值抑制(Non-Maximum Suppression, NMS)算法可实现该功能。 那么用什么指标评价两个回归框重叠过多呢，以下介绍图像的交并比IoU(Intersection over Union)。 IoU原理IoU的思路非常简单，即计算两个回归框交集部分面积与并集面积的比值，">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/2019/05/26/NMS-softer-NMS/IoU1.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/05/26/NMS-softer-NMS/IoU2.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/05/26/NMS-softer-NMS/NMS1.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/05/26/NMS-softer-NMS/soft-NMS1.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/05/26/NMS-softer-NMS/NMS2.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/05/26/NMS-softer-NMS/f1.png">
-<meta property="og:image" content="http://yoursite.com/2019/05/26/NMS-softer-NMS/f2.png">
-<meta property="og:image" content="http://yoursite.com/2019/05/26/NMS-softer-NMS/f3.png">
+<meta property="og:image" content="http://yoursite.com/.com//IoU1.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//IoU2.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//NMS1.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//soft-NMS1.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//NMS2.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//f1.png">
+<meta property="og:image" content="http://yoursite.com/.com//f2.png">
+<meta property="og:image" content="http://yoursite.com/.com//f3.png">
 <meta property="article:published_time" content="2019-05-26T03:17:09.000Z">
 <meta property="article:modified_time" content="2020-05-29T06:14:05.901Z">
 <meta property="article:author" content="Louis Hsu">
 <meta property="article:tag" content="Object Detection">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2019/05/26/NMS-softer-NMS/IoU1.jpg">
+<meta name="twitter:image" content="http://yoursite.com/.com//IoU1.jpg">
 
 
 
@@ -435,24 +435,6 @@
           </span>
 
           
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a></span>
-
-                
-                
-              
-            </span>
-          
 
           
             
@@ -492,13 +474,13 @@
 <p>那么用什么指标评价两个回归框重叠过多呢，以下介绍图像的交并比<code>IoU(Intersection over Union)</code>。</p>
 <h1 id="IoU"><a href="#IoU" class="headerlink" title="IoU"></a>IoU</h1><h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p><code>IoU</code>的思路非常简单，即计算两个回归框交集部分面积与并集面积的比值，如下图，其计算公式为</p>
 <script type="math/tex; mode=display">IoU_{a, b} = \frac{Area_{inter}}{Area_{union}}</script><p>其中</p>
-<script type="math/tex; mode=display">Area_{union} = Area_{a} + Area_{b} - Area_{inter}</script><script type="math/tex; mode=display">Area_{inter} = w_{inter}*h_{inter}</script><script type="math/tex; mode=display">w_{inter} = x^a_2 - x^b_1</script><script type="math/tex; mode=display">h_{inter} = y^a_2 - y^b_1</script><p><img src="/2019/05/26/NMS-softer-NMS/IoU1.jpg" alt="iou1"></p>
+<script type="math/tex; mode=display">Area_{union} = Area_{a} + Area_{b} - Area_{inter}</script><script type="math/tex; mode=display">Area_{inter} = w_{inter}*h_{inter}</script><script type="math/tex; mode=display">w_{inter} = x^a_2 - x^b_1</script><script type="math/tex; mode=display">h_{inter} = y^a_2 - y^b_1</script><p><img src="/.com//IoU1.jpg" alt="iou1"></p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p>算法实现中，比较关键的一点是计算交集部分的坐标点，记两个回归框$a, b$左上角坐标为$(x^<em>_1, y^</em>_1)$，右下角为$(x^<em>_2, y^</em>_2)$</p>
 <p>则应有</p>
-<script type="math/tex; mode=display">x^{inter}_1 = \max \{x^a_1, x^b_1\}, y^{inter}_1 = \max \{y^a_1, y^b_1\}</script><script type="math/tex; mode=display">x^{inter}_2 = \min \{x^a_2, x^b_2\}, y^{inter}_2 = \min \{y^a_2, y^b_2\}</script><p><img src="/2019/05/26/NMS-softer-NMS/IoU2.jpg" alt="IoU2"></p>
+<script type="math/tex; mode=display">x^{inter}_1 = \max \{x^a_1, x^b_1\}, y^{inter}_1 = \max \{y^a_1, y^b_1\}</script><script type="math/tex; mode=display">x^{inter}_2 = \min \{x^a_2, x^b_2\}, y^{inter}_2 = \min \{y^a_2, y^b_2\}</script><p><img src="/.com//IoU2.jpg" alt="IoU2"></p>
 <p>使用C/C++实现如下<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="keyword">float</span> x1, y1, x2, y2;</span><br><span class="line">&#125;bbox;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">bbox_overlap</span><span class="params">(<span class="keyword">float</span> ax1, <span class="keyword">float</span> ax2, <span class="keyword">float</span> bx1, <span class="keyword">float</span> bx2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">float</span> left  = _max(ax1, bx1);</span><br><span class="line">    <span class="keyword">float</span> right = _min(ax2, bx2);</span><br><span class="line">    <span class="keyword">float</span> gap = right - left;</span><br><span class="line">    <span class="keyword">return</span> gap;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">bbox_intersection</span><span class="params">(bbox a, bbox b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">float</span> w = bbox_overlap(a.x1, a.x2, b.x1, b.x2);</span><br><span class="line">    <span class="keyword">float</span> h = bbox_overlap(a.y1, a.y2, b.y1, b.y2);</span><br><span class="line">    <span class="keyword">if</span>(w &lt; <span class="number">0</span> || h &lt; <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">float</span> area = w*h;</span><br><span class="line">    <span class="keyword">return</span> area;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">bbox_area</span><span class="params">(bbox a)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">float</span> w = a.x2 - a.x1;</span><br><span class="line">    <span class="keyword">float</span> h = a.y2 - a.y1;</span><br><span class="line">    <span class="keyword">return</span> w*h;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">bbox_union</span><span class="params">(bbox a, bbox b, <span class="keyword">int</span> mode)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">float</span> u = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">float</span> area_a = bbox_area(a);</span><br><span class="line">    <span class="keyword">float</span> area_b = bbox_area(b);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (mode == <span class="number">0</span>)&#123;</span><br><span class="line">        u = area_a + area_b - bbox_intersection(a, b);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (mode == <span class="number">1</span>)&#123;</span><br><span class="line">        u = _min(area_a, area_b);</span><br><span class="line">    &#125; </span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> u;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">bbox_iou</span><span class="params">(bbox a, bbox b, <span class="keyword">int</span> mode)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">float</span> i = bbox_intersection(a, b);</span><br><span class="line">    <span class="keyword">float</span> u = bbox_union(a, b, mode);</span><br><span class="line">    <span class="keyword">return</span> i/u;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h1 id="NMS"><a href="#NMS" class="headerlink" title="NMS"></a>NMS</h1><p>以下图为例，其中三个候选框$a,b,c$，其评分依次为0.8, 0.7, 0.9，设定<code>IoU</code>阈值</p>
-<script type="math/tex; mode=display">thresh=0.4</script><p>计算步骤如下<br><img src="/2019/05/26/NMS-softer-NMS/NMS1.jpg" alt="NMS1"></p>
+<script type="math/tex; mode=display">thresh=0.4</script><p>计算步骤如下<br><img src="/.com//NMS1.jpg" alt="NMS1"></p>
 <ol>
 <li>将其排序，如降序排序， 得到结果$c,a,b$；</li>
 <li>保存当前评分最高的回归框，即$c$；</li>
@@ -518,8 +500,8 @@
 </li>
 </ol>
 <h1 id="Soft-NMS"><a href="#Soft-NMS" class="headerlink" title="Soft-NMS"></a>Soft-NMS</h1><h2 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h2><p>对于两个相邻较近的同类物体，如下图，<code>NMS</code>可能将左框删除，这是由于在删除同类别框时，只考虑了<code>IoU</code>重叠大小，并没有将两个框的评分引入计算，当两个框相邻很近但评分都较高时，不能简单地删除。</p>
-<p><img src="/2019/05/26/NMS-softer-NMS/soft-NMS1.jpg" alt="soft-NMS1"></p>
-<p>改进后的<code>soft-NMS</code>伪代码如下<br><img src="/2019/05/26/NMS-softer-NMS/NMS2.jpg" alt="NMS2"></p>
+<p><img src="/.com//soft-NMS1.jpg" alt="soft-NMS1"></p>
+<p>改进后的<code>soft-NMS</code>伪代码如下<br><img src="/.com//NMS2.jpg" alt="NMS2"></p>
 <p>也可统一写作</p>
 <script type="math/tex; mode=display">
 s_i \leftarrow s_i f(iou(\mathcal{M}, b_i))</script><p>其中<code>NMS</code>算法引入<code>hard threshold</code>，即</p>
@@ -527,7 +509,7 @@ s_i \leftarrow s_i f(iou(\mathcal{M}, b_i))</script><p>其中<code>NMS</code>算
 f(iou(\mathcal{M}, b_i)) = \begin{cases}
     1 & iou(\mathcal{M}, b_i) < N_t \\
     0 & iou(\mathcal{M}, b_i) \geq N_t
-\end{cases}</script><p><img src="/2019/05/26/NMS-softer-NMS/f1.png" alt="f1"></p>
+\end{cases}</script><p><img src="/.com//f1.png" alt="f1"></p>
 <p>应考虑以下因素</p>
 <ul>
 <li>相邻检测的分数应该降低到它们具有增加假阳性率<code>(false positive rate)</code>的可能性较小的程度，同时在排序的检测列表中高于明显的假阳性。</li>
@@ -539,13 +521,13 @@ f(iou(\mathcal{M}, b_i)) = \begin{cases}
 f(iou(\mathcal{M}, b_i)) = \begin{cases}
     1 & iou(\mathcal{M}, b_i) < N_t \\
     1 - iou(\mathcal{M}, b_i) & iou(\mathcal{M}, b_i) \geq N_t
-\end{cases}</script><p>其函数图像如下，在超过阈值时，为线性函数，且重叠越多，其抑制效果越大或称惩罚越多<br><img src="/2019/05/26/NMS-softer-NMS/f2.png" alt="f2"></p>
+\end{cases}</script><p>其函数图像如下，在超过阈值时，为线性函数，且重叠越多，其抑制效果越大或称惩罚越多<br><img src="/.com//f2.png" alt="f2"></p>
 <p>但该函数不连续，可能导致NMS结果的突然改变，故修改为非线性连续函数如下</p>
 <script type="math/tex; mode=display">
 f(iou(\mathcal{M}, b_i)) = \exp (-\frac{iou(\mathcal{M}, b_i)^2}{\sigma}), \forall b_i \notin \mathcal{D}</script><blockquote>
 <p>注意到$x = \sqrt{\frac{\sigma}{2}}$为函数$f(x)$的拐点</p>
 </blockquote>
-<p><img src="/2019/05/26/NMS-softer-NMS/f3.png" alt="f3"></p>
+<p><img src="/.com//f3.png" alt="f3"></p>
 <h2 id="代码-2"><a href="#代码-2" class="headerlink" title="代码"></a>代码</h2><p>对上面代码作如下修改</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">float</span> _f(<span class="keyword">float</span> x, <span class="keyword">float</span> sigma, <span class="keyword">int</span> soft)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">float</span> y = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (soft == <span class="number">0</span>)&#123;</span><br><span class="line">        y = x &lt; sigma? <span class="number">1</span>: <span class="number">0</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        y = <span class="built_in">exp</span>(- <span class="built_in">pow</span>(x, <span class="number">2</span>) / sigma);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> y;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> _nms(detect* dets, <span class="keyword">int</span> n, <span class="keyword">float</span> sigma, <span class="keyword">int</span> mode, <span class="keyword">int</span> soft)</span><br><span class="line">&#123;</span><br><span class="line">    bsort(&amp;dets, n);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// do nms</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (dets[i].score == <span class="number">0</span>) <span class="keyword">continue</span>;</span><br><span class="line">        bbox a = dets[i].bx;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; n; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            bbox b = dets[j].bx;</span><br><span class="line">            <span class="comment">// if (bbox_iou(a, b, mode) &gt; thresh)</span></span><br><span class="line">            <span class="comment">//     dets[j].score = 0;          // 删除该框</span></span><br><span class="line">            dets[j].score *= _f(bbox_iou(a, b, mode), sigma, soft);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
@@ -702,7 +684,7 @@ f(iou(\mathcal{M}, b_i)) = \exp (-\frac{iou(\mathcal{M}, b_i)^2}{\sigma}), \fora
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">112</span>
+                    <span class="site-state-item-count">113</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -731,15 +713,7 @@ f(iou(\mathcal{M}, b_i)) = \exp (-\frac{iou(\mathcal{M}, b_i)^2}{\sigma}), \fora
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1502,6 +1476,6 @@ f(iou(\mathcal{M}, b_i)) = \exp (-\frac{iou(\mathcal{M}, b_i)^2}{\sigma}), \fora
 
 
   <script type="text/javascript" src="/js/click_show_text.js"></script>
-  <script type="text/javascript" src="/js/hone_hone_clock.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>

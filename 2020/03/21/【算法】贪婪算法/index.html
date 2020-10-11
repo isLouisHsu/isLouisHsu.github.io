@@ -115,14 +115,14 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="在贪婪算法(greedy method)中，逐步构造一个最优解，每一步都是在贪婪准则(greedy criterion)下做出的最优决策。 例($0&#x2F;1$背包问题)：有$n$个物品和一个容量为$c$的背包，第$i$个物品重量为$w_i$、价值为$p_i$，求取物品总价值最高的可行的背包装载，即  \begin{aligned}     \max \sum_{i&#x3D;1}^n p_i x_i \\">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/2020/03/21/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E8%B4%AA%E5%A9%AA%E7%AE%97%E6%B3%95/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E8%B4%AA%E5%A9%AA%E7%AE%97%E6%B3%95/kruskal_prim_sollin_eg.jpg">
-<meta property="og:image" content="http://yoursite.com/2020/03/21/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E8%B4%AA%E5%A9%AA%E7%AE%97%E6%B3%95/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E8%B4%AA%E5%A9%AA%E7%AE%97%E6%B3%95/kruskal_prim_sollin_kruskal.jpg">
-<meta property="og:image" content="http://yoursite.com/2020/03/21/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E8%B4%AA%E5%A9%AA%E7%AE%97%E6%B3%95/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E8%B4%AA%E5%A9%AA%E7%AE%97%E6%B3%95/kruskal_prim_sollin_prim.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//kruskal_prim_sollin_eg.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//kruskal_prim_sollin_kruskal.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//kruskal_prim_sollin_prim.jpg">
 <meta property="article:published_time" content="2020-03-21T01:25:09.000Z">
 <meta property="article:modified_time" content="2020-03-21T09:36:46.613Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2020/03/21/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E8%B4%AA%E5%A9%AA%E7%AE%97%E6%B3%95/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E8%B4%AA%E5%A9%AA%E7%AE%97%E6%B3%95/kruskal_prim_sollin_eg.jpg">
+<meta name="twitter:image" content="http://yoursite.com/.com//kruskal_prim_sollin_eg.jpg">
 
 
 
@@ -417,24 +417,6 @@
           </span>
 
           
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a></span>
-
-                
-                
-              
-            </span>
-          
 
           
             
@@ -487,11 +469,11 @@
 <p>根据价值，首先选择装载$3, 4$，但该方案重量为$13$不可行，选择$2, 4$可行，此时背包剩余空间$2$，剩余方案$1, 3, 1+3$按价值密度降序为$1, 1+3, 3$，但重量均超过$c$，故不继续装入背包，该方案最终为$x = [0, 1, 0, 1], w_x = 11, p_x = 23$。</p>
 <p><strong>例(最小成本生成树)：给出加权图，求取最小生成树，使得成本(选取路径的成本之和)最低。</strong></p>
 <p>$n$个节点的最小生成树有$n-1$条边，有三种不同的贪婪策略，产生两个算法：Kruskal、Prim。</p>
-<p><img src="/2020/03/21/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E8%B4%AA%E5%A9%AA%E7%AE%97%E6%B3%95/【算法】贪婪算法/kruskal_prim_sollin_eg.jpg" alt="kruskal_prim_sollin_eg"></p>
+<p><img src="/.com//kruskal_prim_sollin_eg.jpg" alt="kruskal_prim_sollin_eg"></p>
 <ol>
-<li><p>Kruskal<br> 分步选择$n-1$条边，从剩下的边中选择<strong>成本最小</strong>且不<strong>会产生回路</strong>的边，加入已选择的边集。<br> “不会产生回路”可通过检查<strong>待加入边两个顶点是否在已选定边组成的图中已连通</strong>判定，判断连通可通过<strong>检查其中一个顶点通过的路径中是否包含另一个顶点</strong>。用该算法对上图进行的生成树选择示意图如下<br> <img src="/2020/03/21/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E8%B4%AA%E5%A9%AA%E7%AE%97%E6%B3%95/【算法】贪婪算法/kruskal_prim_sollin_kruskal.jpg" alt="kruskal_prim_sollin_kruskal"></p>
+<li><p>Kruskal<br> 分步选择$n-1$条边，从剩下的边中选择<strong>成本最小</strong>且不<strong>会产生回路</strong>的边，加入已选择的边集。<br> “不会产生回路”可通过检查<strong>待加入边两个顶点是否在已选定边组成的图中已连通</strong>判定，判断连通可通过<strong>检查其中一个顶点通过的路径中是否包含另一个顶点</strong>。用该算法对上图进行的生成树选择示意图如下<br> <img src="/.com//kruskal_prim_sollin_kruskal.jpg" alt="kruskal_prim_sollin_kruskal"></p>
 </li>
-<li><p>Prim<br> 分步选择$n-1$条边，从剩下的边中选择<strong>成本最小</strong>的边，加入已选择的边集，<strong>使该边集构成一棵树</strong>。<br> 即选择<strong>与已选边集的顶点关联的、成本最小的边</strong>加入边集。<br> <img src="/2020/03/21/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E8%B4%AA%E5%A9%AA%E7%AE%97%E6%B3%95/【算法】贪婪算法/kruskal_prim_sollin_prim.jpg" alt="kruskal_prim_sollin_prim"></p>
+<li><p>Prim<br> 分步选择$n-1$条边，从剩下的边中选择<strong>成本最小</strong>的边，加入已选择的边集，<strong>使该边集构成一棵树</strong>。<br> 即选择<strong>与已选边集的顶点关联的、成本最小的边</strong>加入边集。<br> <img src="/.com//kruskal_prim_sollin_prim.jpg" alt="kruskal_prim_sollin_prim"></p>
 </li>
 </ol>
 
@@ -626,7 +608,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">112</span>
+                    <span class="site-state-item-count">113</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -655,15 +637,7 @@
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1410,6 +1384,6 @@
 
 
   <script type="text/javascript" src="/js/click_show_text.js"></script>
-  <script type="text/javascript" src="/js/hone_hone_clock.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>

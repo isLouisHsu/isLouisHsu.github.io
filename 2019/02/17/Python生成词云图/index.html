@@ -115,13 +115,13 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="前言一个没什么用的小技能 模块 wordcloud · PyPI https:&#x2F;&#x2F;pypi.org&#x2F;project&#x2F;wordcloud&#x2F;  安装该模块1&gt; pip install wordcloud 主要用到的为12345678wordcloud.WordCloud(font_path&#x3D;None, width&#x3D;400, height&#x3D;200, margin&#x3D;2,">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/2019/02/17/Python%E7%94%9F%E6%88%90%E8%AF%8D%E4%BA%91%E5%9B%BE/Python%E7%94%9F%E6%88%90%E8%AF%8D%E4%BA%91%E5%9B%BE/mask.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/02/17/Python%E7%94%9F%E6%88%90%E8%AF%8D%E4%BA%91%E5%9B%BE/Python%E7%94%9F%E6%88%90%E8%AF%8D%E4%BA%91%E5%9B%BE/wc.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//mask.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//wc.jpg">
 <meta property="article:published_time" content="2019-02-17T10:57:21.000Z">
 <meta property="article:modified_time" content="2019-07-17T12:12:36.918Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2019/02/17/Python%E7%94%9F%E6%88%90%E8%AF%8D%E4%BA%91%E5%9B%BE/Python%E7%94%9F%E6%88%90%E8%AF%8D%E4%BA%91%E5%9B%BE/mask.jpg">
+<meta name="twitter:image" content="http://yoursite.com/.com//mask.jpg">
 
 
 
@@ -428,24 +428,6 @@
           </span>
 
           
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a></span>
-
-                
-                
-              
-            </span>
-          
 
           
             
@@ -488,8 +470,8 @@
 <p>安装该模块<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> pip install wordcloud</span></span><br></pre></td></tr></table></figure></p>
 <p>主要用到的为<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">wordcloud.WordCloud(font_path=<span class="keyword">None</span>, width=<span class="number">400</span>, height=<span class="number">200</span>, margin=<span class="number">2</span>,</span><br><span class="line">                ranks_only=<span class="keyword">None</span>, prefer_horizontal=<span class="number">.9</span>, mask=<span class="keyword">None</span>, scale=<span class="number">1</span>,</span><br><span class="line">                color_func=<span class="keyword">None</span>, max_words=<span class="number">200</span>, min_font_size=<span class="number">4</span>,</span><br><span class="line">                stopwords=<span class="keyword">None</span>, random_state=<span class="keyword">None</span>, background_color=<span class="string">'black'</span>,</span><br><span class="line">                max_font_size=<span class="keyword">None</span>, font_step=<span class="number">1</span>, mode=<span class="string">"RGB"</span>,</span><br><span class="line">                relative_scaling=<span class="string">'auto'</span>, regexp=<span class="keyword">None</span>, collocations=<span class="keyword">True</span>,</span><br><span class="line">                colormap=<span class="keyword">None</span>, normalize_plurals=<span class="keyword">True</span>, contour_width=<span class="number">0</span>,</span><br><span class="line">                contour_color=<span class="string">'black'</span>, repeat=<span class="keyword">False</span>)</span><br></pre></td></tr></table></figure></p>
 <h1 id="使用例程"><a href="#使用例程" class="headerlink" title="使用例程"></a>使用例程</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> wordcloud <span class="keyword">import</span> WordCloud</span><br><span class="line"></span><br><span class="line">font = <span class="string">'C:/Windows/Fonts/SIMYOU.TTF'</span>    <span class="comment"># 幼圆</span></span><br><span class="line">string = <span class="string">'LouisHsu 单键 小叔叔 想静静 95后 傲娇 skrrrrrrr 大猫座 佛了 要秃 嘤嘤嘤 真香'</span></span><br><span class="line"></span><br><span class="line">mask = cv2.imread(<span class="string">'./mask.jpg'</span>, cv2.IMREAD_GRAYSCALE)</span><br><span class="line">thresh, mask = cv2.threshold(mask, <span class="number">127</span>, <span class="number">255</span>, cv2.THRESH_BINARY)</span><br><span class="line"></span><br><span class="line">wc = WordCloud(</span><br><span class="line">        font_path=font, </span><br><span class="line">        background_color=<span class="string">'white'</span>,</span><br><span class="line">        color_func=<span class="keyword">lambda</span> *args, **kwargs: (<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>),</span><br><span class="line">        mask=mask,</span><br><span class="line">        max_words=<span class="number">500</span>,</span><br><span class="line">        min_font_size=<span class="number">4</span>,</span><br><span class="line">        max_font_size=<span class="keyword">None</span>,</span><br><span class="line">        contour_width=<span class="number">1</span>,</span><br><span class="line">        repeat=<span class="keyword">True</span>                     <span class="comment"># 允许词重复</span></span><br><span class="line">    )</span><br><span class="line">wc.generate_from_text(string)</span><br><span class="line">wc.to_file(<span class="string">'./wc.jpg'</span>)                  <span class="comment">#保存图片</span></span><br></pre></td></tr></table></figure>
-<p>输入原图为<br><img src="/2019/02/17/Python%E7%94%9F%E6%88%90%E8%AF%8D%E4%BA%91%E5%9B%BE/Python生成词云图/mask.jpg" alt="mask"></p>
-<p>生成图像<br><img src="/2019/02/17/Python%E7%94%9F%E6%88%90%E8%AF%8D%E4%BA%91%E5%9B%BE/Python生成词云图/wc.jpg" alt="wc"></p>
+<p>输入原图为<br><img src="/.com//mask.jpg" alt="mask"></p>
+<p>生成图像<br><img src="/.com//wc.jpg" alt="wc"></p>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><blockquote>
 <p>python WordCloud 简单实例 - 博客 - CSDN博客 <a href="https://blog.csdn.net/cy776719526/article/details/80171790" target="_blank" rel="noopener">https://blog.csdn.net/cy776719526/article/details/80171790</a></p>
 </blockquote>
@@ -634,7 +616,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">112</span>
+                    <span class="site-state-item-count">113</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -663,15 +645,7 @@
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1410,6 +1384,6 @@
 
 
   <script type="text/javascript" src="/js/click_show_text.js"></script>
-  <script type="text/javascript" src="/js/hone_hone_clock.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>

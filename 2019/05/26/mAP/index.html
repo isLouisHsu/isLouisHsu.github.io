@@ -115,17 +115,17 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="前言本文介绍一种目标检测任务的评价指标mean Average Precison(mAP)，有以下几个重点  如何绘制Precision-Recall曲线； 如何用插值方法计算Average Precison； 理解目标检测中mAP的计算；  Precision, Recall, Average Precision计算方法以上定义查看Metrics&#x2F;分类(classification)评估指标，计">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/2019/05/26/mAP/2-class-precision-recall.png">
-<meta property="og:image" content="http://yoursite.com/2019/05/26/mAP/2-class-precision-recall-approximated.png">
-<meta property="og:image" content="http://yoursite.com/2019/05/26/mAP/2-class-precision-recall-interpolated.png">
-<meta property="og:image" content="http://yoursite.com/2019/05/26/mAP/2-class-precision-recall-11points.png">
-<meta property="og:image" content="http://yoursite.com/2019/05/26/mAP/P-R.png">
+<meta property="og:image" content="http://yoursite.com/.com//2-class-precision-recall.png">
+<meta property="og:image" content="http://yoursite.com/.com//2-class-precision-recall-approximated.png">
+<meta property="og:image" content="http://yoursite.com/.com//2-class-precision-recall-interpolated.png">
+<meta property="og:image" content="http://yoursite.com/.com//2-class-precision-recall-11points.png">
+<meta property="og:image" content="http://yoursite.com/.com//P-R.png">
 <meta property="article:published_time" content="2019-05-26T03:36:22.000Z">
 <meta property="article:modified_time" content="2019-07-17T12:12:05.695Z">
 <meta property="article:author" content="Louis Hsu">
 <meta property="article:tag" content="Object Detection">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2019/05/26/mAP/2-class-precision-recall.png">
+<meta name="twitter:image" content="http://yoursite.com/.com//2-class-precision-recall.png">
 
 
 
@@ -432,24 +432,6 @@
           </span>
 
           
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a></span>
-
-                
-                
-              
-            </span>
-          
 
           
             
@@ -497,23 +479,23 @@
 <h3 id="召回率-Recall"><a href="#召回率-Recall" class="headerlink" title="召回率(Recall)"></a>召回率<code>(Recall)</code></h3><p>即所有预测的正样本中，真正为正样本的比例</p>
 <script type="math/tex; mode=display">R = \frac{TP}{TP + NP}</script><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">recall_score</span><span class="params">(gt, pred)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Params:</span></span><br><span class="line"><span class="string">        gt:     &#123;ndarray(N)&#125; `0` or `1`</span></span><br><span class="line"><span class="string">        pred:   &#123;ndarray(N)&#125; `0` or `1`</span></span><br><span class="line"><span class="string">    Returns：</span></span><br><span class="line"><span class="string">        r:      &#123;float&#125;</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    index = gt == <span class="number">1</span></span><br><span class="line">    _pred = pred[index]</span><br><span class="line">    tp = _pred[_pred == <span class="number">1</span>].shape[<span class="number">0</span>]</span><br><span class="line">    gp = _pred.shape[<span class="number">0</span>]</span><br><span class="line">    r = tp / gp <span class="keyword">if</span> gp != <span class="number">0</span> <span class="keyword">else</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">return</span> r</span><br></pre></td></tr></table></figure>
 <h3 id="平均精确度-Average-Precision"><a href="#平均精确度-Average-Precision" class="headerlink" title="平均精确度(Average Precision)"></a>平均精确度<code>(Average Precision)</code></h3><p>依次设定不同的阈值，根据预测评分，得到不同的预测标签结果，那么就可以计算得到不同的$P$和$R$，做出$P-R$曲线，其与坐标轴面积即平均精确度。</p>
-<h4 id="Average-Precision"><a href="#Average-Precision" class="headerlink" title="Average Precision"></a>Average Precision</h4><p><img src="/2019/05/26/mAP/2-class-precision-recall.png" alt="2-class-precision-recall"></p>
+<h4 id="Average-Precision"><a href="#Average-Precision" class="headerlink" title="Average Precision"></a>Average Precision</h4><p><img src="/.com//2-class-precision-recall.png" alt="2-class-precision-recall"></p>
 <blockquote>
 <p>该图来自<a href="https://arleyzhang.github.io/articles/c521a01c/" target="_blank" rel="noopener">目标检测评价标准-AP mAP</a>，侵删。</p>
 </blockquote>
 <p>那么AP计算公式为</p>
 <script type="math/tex; mode=display">AP = \int_0^1 P(r) dr \tag{1}</script><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">average_precision</span><span class="params">(p, r)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Params:</span></span><br><span class="line"><span class="string">        p: &#123;ndarray(n)&#125; Precision</span></span><br><span class="line"><span class="string">        r: &#123;ndarray(n)&#125; Recall</span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        AP:&#123;float&#125;</span></span><br><span class="line"><span class="string">    Notes:</span></span><br><span class="line"><span class="string">        AP = \int_0^1 P(r) dr</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    n = len(p)</span><br><span class="line">    AP = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n):</span><br><span class="line">        deltaR = r[i] - r[i<span class="number">-1</span>]</span><br><span class="line">        P_inter = (p[i] + p[i<span class="number">-1</span>]) / <span class="number">2</span></span><br><span class="line">        AP += P_inter * deltaR  <span class="comment"># 梯形面积</span></span><br><span class="line">    <span class="keyword">return</span> AP</span><br></pre></td></tr></table></figure>
-<h4 id="Approximated-Average-Precision"><a href="#Approximated-Average-Precision" class="headerlink" title="Approximated Average Precision"></a>Approximated Average Precision</h4><p><img src="/2019/05/26/mAP/2-class-precision-recall-approximated.png" alt="2-class-precision-recall-approximated"></p>
+<h4 id="Approximated-Average-Precision"><a href="#Approximated-Average-Precision" class="headerlink" title="Approximated Average Precision"></a>Approximated Average Precision</h4><p><img src="/.com//2-class-precision-recall-approximated.png" alt="2-class-precision-recall-approximated"></p>
 <p>注意图中折线上每个点代表一个样本，则将$(1)$离散化，累积<strong>每个样本点</strong>带来的面积变化</p>
 <script type="math/tex; mode=display">AP_{approx} = \sum_{k=1}^N P(k) \Delta r(k) \tag{2}</script><p>其中$N$为样本总数，$k$为样本数，且</p>
 <script type="math/tex; mode=display">\Delta r(k) = r(k) - r(k-1)</script><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">average_precision_approximated</span><span class="params">(p, r)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Params:</span></span><br><span class="line"><span class="string">        p: &#123;ndarray(n)&#125; Precision</span></span><br><span class="line"><span class="string">        r: &#123;ndarray(n)&#125; Recall</span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        AP:&#123;float&#125;</span></span><br><span class="line"><span class="string">    Notes:</span></span><br><span class="line"><span class="string">        AP_&#123;approx&#125; = \sum_&#123;k=1&#125;^N P(k) \Delta r(k)</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    n = len(p)</span><br><span class="line">    AP = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n):</span><br><span class="line">        deltaR = r[i] - r[i<span class="number">-1</span>]</span><br><span class="line">        P_inter = p[i]          <span class="comment"># 每个点处的Precision</span></span><br><span class="line">        AP += P_inter * deltaR  <span class="comment"># 矩形面积</span></span><br><span class="line">    <span class="keyword">return</span> AP</span><br></pre></td></tr></table></figure>
-<h4 id="Interpolated-average-precision"><a href="#Interpolated-average-precision" class="headerlink" title="Interpolated average precision"></a>Interpolated average precision</h4><p><img src="/2019/05/26/mAP/2-class-precision-recall-interpolated.png" alt="2-class-precision-recall-interpolated"></p>
+<h4 id="Interpolated-average-precision"><a href="#Interpolated-average-precision" class="headerlink" title="Interpolated average precision"></a>Interpolated average precision</h4><p><img src="/.com//2-class-precision-recall-interpolated.png" alt="2-class-precision-recall-interpolated"></p>
 <p>换一种插值方法计算$P(k)$</p>
 <script type="math/tex; mode=display">P_{inter}(k) = \max_{\hat{k} \geq k} P(\hat{k})</script><script type="math/tex; mode=display">AP_{inter} = \sum_{k=1}^{N} P_{inter}(k) \Delta r(k) \tag{3}</script><p>其中$\hat{k}$为第$k$个样本点后的样本索引，也即，<strong>$P_{inter}(k)$为第$k$个样本点后，最大的<code>Precision</code>值</strong>。</p>
 <p>因为正样本影响<code>Recall</code>阈值，故式$(3)$也可写作</p>
 <script type="math/tex; mode=display">P_{inter}(k) = \max_{\hat{k} \geq k} P(\hat{k})</script><script type="math/tex; mode=display">AP_{inter} = \sum_{k=1}^{K} P_{inter}(k) \Delta r(k) \tag{4}</script><p>其中$K$表示正样本的个数。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">average_precision_interpolated</span><span class="params">(p, r)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Params:</span></span><br><span class="line"><span class="string">        p: &#123;ndarray(n)&#125; Precision</span></span><br><span class="line"><span class="string">        r: &#123;ndarray(n)&#125; Recall</span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        AP:&#123;float&#125;</span></span><br><span class="line"><span class="string">    Notes:</span></span><br><span class="line"><span class="string">        P_&#123;inter&#125;(k) = \max_&#123;\hat&#123;k&#125; \geq k&#125; P(\hat&#123;k&#125;)</span></span><br><span class="line"><span class="string">        AP_&#123;inter&#125; = \sum_&#123;k=1&#125;^&#123;N&#125; P_&#123;inter&#125;(k) \Delta r(k)</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    n = len(p)</span><br><span class="line">    AP = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n):</span><br><span class="line">        deltaR = r[i] - r[i<span class="number">-1</span>]</span><br><span class="line">        P_inter = max(p[i:])    <span class="comment"># 每个点后最大的Precision</span></span><br><span class="line">        AP += P_inter * deltaR  <span class="comment"># 矩形面积</span></span><br><span class="line">    <span class="keyword">return</span> AP</span><br></pre></td></tr></table></figure>
-<h4 id="11-points-Interpolated-Average-Precision"><a href="#11-points-Interpolated-Average-Precision" class="headerlink" title="11 points Interpolated Average Precision"></a>11 points Interpolated Average Precision</h4><p><img src="/2019/05/26/mAP/2-class-precision-recall-11points.png" alt="2-class-precision-recall-11points"></p>
+<h4 id="11-points-Interpolated-Average-Precision"><a href="#11-points-Interpolated-Average-Precision" class="headerlink" title="11 points Interpolated Average Precision"></a>11 points Interpolated Average Precision</h4><p><img src="/.com//2-class-precision-recall-11points.png" alt="2-class-precision-recall-11points"></p>
 <p>固定选取${0, 0.1, \cdots, 1.0}$ 11个<code>Recall</code>阈值，<strong>选取$P_{inter}(k)$为每个阈值点后最大<code>Precision</code>值</strong>，进行计算</p>
 <script type="math/tex; mode=display">P_{inter}(k) = \max_{r(\hat{k}) \geq R(k)} P(\hat{k}), R \in \{0.0, 0.1, \cdots, 1.0\}</script><script type="math/tex; mode=display">AP_{inter} = \sum_{k=1}^{K} P_{inter}(k) \Delta r(k) \tag{4}</script><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">average_precision_11_points</span><span class="params">(p, r)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Params:</span></span><br><span class="line"><span class="string">        p: &#123;ndarray(n)&#125; Precision</span></span><br><span class="line"><span class="string">        r: &#123;ndarray(n)&#125; Recall</span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        AP:&#123;float&#125;</span></span><br><span class="line"><span class="string">    Notes:</span></span><br><span class="line"><span class="string">        P_&#123;inter&#125;(k) = \max_&#123;r(\hat&#123;k&#125;) \geq R(k)&#125; P(\hat&#123;k&#125;), R \in \&#123;0.0, 0.1, \cdots, 1.0\&#125;</span></span><br><span class="line"><span class="string">        AP_&#123;inter&#125; = \sum_&#123;k=1&#125;^&#123;K&#125; P_&#123;inter&#125;(k) \Delta r(k)</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    AP = <span class="number">0</span></span><br><span class="line">    deltaR = <span class="number">0.1</span></span><br><span class="line">    p = np.array(p); r = np.array(r)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">11</span>):</span><br><span class="line">        <span class="keyword">if</span> i == <span class="number">10</span>: </span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        R = i*deltaR</span><br><span class="line">        P_inter = np.max(p[r&gt;R])<span class="comment"># 每个阈值点后最大的Precision</span></span><br><span class="line">        AP += P_inter * deltaR  <span class="comment"># 矩形面积</span></span><br><span class="line">    <span class="keyword">return</span> AP</span><br></pre></td></tr></table></figure>
 <h2 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h2><p>以一个二分类任务为例，假设我们得到样本真实标签与预测评分如下</p>
@@ -733,7 +715,7 @@
 </tbody>
 </table>
 </div>
-<p>$P-R$曲线如下<br><img src="/2019/05/26/mAP/P-R.png" alt="P-R"></p>
+<p>$P-R$曲线如下<br><img src="/.com//P-R.png" alt="P-R"></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## 准备数据</span></span><br><span class="line">gt = np.array([<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>], dtype=<span class="string">'int'</span>)</span><br><span class="line">pred = np.array([<span class="number">0.4</span>, <span class="number">0.7</span>, <span class="number">0.6</span>, <span class="number">0.45</span>, <span class="number">0.2</span>, <span class="number">0.2</span>, <span class="number">0.3</span>, <span class="number">0.6</span>, <span class="number">0.9</span>, <span class="number">0.8</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">## 作P-R曲线，每个点均需计算</span></span><br><span class="line">thresh = list(np.sort(pred))[::<span class="number">-1</span>]</span><br><span class="line">p = []; r = []</span><br><span class="line"><span class="keyword">for</span> t <span class="keyword">in</span> thresh:</span><br><span class="line">    label = score2label(pred, t)</span><br><span class="line">    n = pred[pred==t].shape[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(n):</span><br><span class="line">        p += [precision_score(gt, label)]</span><br><span class="line">        r += [recall_score(gt, label)]</span><br><span class="line"></span><br><span class="line">plt.figure(<span class="string">"P-R"</span>)</span><br><span class="line">plt.xlabel(<span class="string">"recall"</span>); plt.ylabel(<span class="string">"precision"</span>)</span><br><span class="line">plt.ylim([<span class="number">0</span>, <span class="number">1.2</span>])</span><br><span class="line">plt.grid()</span><br><span class="line">plt.plot(r, p)</span><br><span class="line">plt.scatter(r, p)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
 <h1 id="mAP"><a href="#mAP" class="headerlink" title="mAP"></a>mAP</h1><p>对每一类计算<code>AP</code>，求其均值</p>
 <script type="math/tex; mode=display">
@@ -915,7 +897,7 @@ IoU_{gt, p} = \frac{area(B_p \bigcap B_{gt})}{area(B_p \bigcup B_{gt})} \geq 0.5
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">112</span>
+                    <span class="site-state-item-count">113</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -944,15 +926,7 @@ IoU_{gt, p} = \frac{area(B_p \bigcap B_{gt})}{area(B_p \bigcup B_{gt})} \geq 0.5
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1715,6 +1689,6 @@ IoU_{gt, p} = \frac{area(B_p \bigcap B_{gt})}{area(B_p \bigcup B_{gt})} \geq 0.5
 
 
   <script type="text/javascript" src="/js/click_show_text.js"></script>
-  <script type="text/javascript" src="/js/hone_hone_clock.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>

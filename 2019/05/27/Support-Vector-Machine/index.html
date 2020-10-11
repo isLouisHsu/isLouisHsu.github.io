@@ -115,22 +115,22 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="前言Github: isLouisHsu&#x2F;Basic-Machine-Learning-Algorithm&#x2F;algorithm&#x2F;p97_svm.py 补一补支持向量机的笔记。 支持向量机(SVM)为有监督学习算法，可用于回归、分类甚至聚类(支持向量聚类)，其主要特点为  将样本表示为超空间中的点； 求取支持向量，其余样本点对超平面无影响； 对于线性不可分问题，利用核函数映射到高维空间，使其线性可分">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/distance.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/kernel_poly.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/svm-3-conditions.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/r.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/regression.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/linear.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/non-linear.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/epsilon.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/y1neqy2.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/y1eqy2.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//distance.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//kernel_poly.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//svm-3-conditions.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//r.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//regression.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//linear.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//non-linear.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//epsilon.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//y1neqy2.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//y1eqy2.jpg">
 <meta property="article:published_time" content="2019-05-27T01:32:15.000Z">
 <meta property="article:modified_time" content="2020-05-02T13:27:29.670Z">
 <meta property="article:author" content="Louis Hsu">
 <meta property="article:tag" content="监督学习">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2019/05/27/Support-Vector-Machine/distance.jpg">
+<meta name="twitter:image" content="http://yoursite.com/.com//distance.jpg">
 
 
 
@@ -504,7 +504,7 @@
 <script type="math/tex; mode=display">w^T x + b = 0 \tag{1}</script><p> 其中$w,x$为$n$维列向量，$x$表示超平面上的点($n$维)，$w$表示超平面的法向量，决定超平面的方向，$b$为实数。</p>
 <script type="math/tex; mode=display">x = (x_1, x_2, \cdots, x_n)^T</script><script type="math/tex; mode=display">w = (w_1, w_2, \cdots, w_n)^T</script><p> 例如$3$维空间中的$2$维平面方程为</p>
 <script type="math/tex; mode=display">Ax + By + Cz + D = 0</script></li>
-<li><p>点到超平面的距离<br> <img src="/2019/05/27/Support-Vector-Machine/distance.jpg" alt="distance"></p>
+<li><p>点到超平面的距离<br> <img src="/.com//distance.jpg" alt="distance"></p>
 <p> 对于样本空间中任一点$x$，到超平面$\mathcal{P}_{w,b}$的距离，可表示为</p>
 <script type="math/tex; mode=display">\mathcal{D} = \frac{|w^T x + b|}{||w||} \tag{2}</script><p> 其中$||w||$为向量$w$的$2$范数，即</p>
 <script type="math/tex; mode=display">||w|| = \sqrt{w_1^2 + w_2^2 + \cdots + w_n^2} \tag{3}</script><blockquote>
@@ -532,7 +532,7 @@
 <script type="math/tex; mode=display">\kappa(x_i, x_j) = \left[(x_{i1}, x_{i2}) (x_{j1}, x_{j2})^T \right]^2 = (x_{i1}x_{j1} + x_{i2}x_{j2})^2</script><script type="math/tex; mode=display">= x_{i1}^2 x_{j1}^2 + 2x_{i1}x_{j1}x_{i2}x_{j2} + x_{i2}^2 x_{j2}^2</script><p> 把以上$3$项多项式表示成$3$维向量内积，即</p>
 <script type="math/tex; mode=display">\kappa(x_i, x_j) = \left[ \begin{matrix} x_{i1}^2 & \sqrt{2}x_{i1}x_{i2} & x_{i2}^2 \end{matrix} \right] 
                          \left[ \begin{matrix} x_{j1}^2 & \sqrt{2}x_{j1}x_{j2} & x_{j2}^2 \end{matrix} \right]^T</script><p> 由上式与式$(4)$可得，该核函数对应的映射函数为</p>
-<script type="math/tex; mode=display">\mathit{\Phi}(x) = \left[ \begin{matrix} x_1^2 & \sqrt{2}x_1x_2 & x_2^2 \end{matrix} \right]^T \tag{4.b}</script><p> 这样就把$2$维空间中的点映射到了$3$维空间，作图如下。<br> <img src="/2019/05/27/Support-Vector-Machine/kernel_poly.jpg" alt="kernel_poly"></p>
+<script type="math/tex; mode=display">\mathit{\Phi}(x) = \left[ \begin{matrix} x_1^2 & \sqrt{2}x_1x_2 & x_2^2 \end{matrix} \right]^T \tag{4.b}</script><p> 这样就把$2$维空间中的点映射到了$3$维空间，作图如下。<br> <img src="/.com//kernel_poly.jpg" alt="kernel_poly"></p>
 </li>
 </ol>
 <pre><code><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">X = np.array([</span><br><span class="line">[<span class="number">1</span>,<span class="number">1</span>],[<span class="number">1</span>,<span class="number">2</span>],[<span class="number">1</span>,<span class="number">3</span>],[<span class="number">1</span>,<span class="number">4</span>],[<span class="number">2</span>,<span class="number">1</span>],[<span class="number">2</span>,<span class="number">2</span>],[<span class="number">3</span>,<span class="number">1</span>],[<span class="number">4</span>,<span class="number">1</span>],[<span class="number">5</span>,<span class="number">1</span>],[<span class="number">5</span>,<span class="number">2</span>],</span><br><span class="line">[<span class="number">6</span>,<span class="number">1</span>],[<span class="number">6</span>,<span class="number">2</span>],[<span class="number">6</span>,<span class="number">3</span>],[<span class="number">6</span>,<span class="number">4</span>],[<span class="number">3</span>,<span class="number">3</span>],[<span class="number">3</span>,<span class="number">4</span>],[<span class="number">3</span>,<span class="number">5</span>],[<span class="number">4</span>,<span class="number">3</span>],[<span class="number">4</span>,<span class="number">4</span>],[<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line">])</span><br><span class="line">Y=np.array([<span class="number">-1</span>] * <span class="number">14</span> + [<span class="number">1</span>] * <span class="number">6</span>)</span><br><span class="line"></span><br><span class="line">plt.figure(<span class="number">0</span>)</span><br><span class="line">plt.scatter(X[:, <span class="number">0</span>], X[:, <span class="number">1</span>], c=Y)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将数据映射到高维后显示</span></span><br><span class="line"><span class="comment"># 映射函数为Φ(x)=[x1^2 √2*x1*x2 x2^2]</span></span><br><span class="line">FX = np.zeros((<span class="number">0</span>, <span class="number">3</span>))</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(X.shape[<span class="number">0</span>]):</span><br><span class="line">    tmp = np.array([X[i, <span class="number">0</span>]**<span class="number">2</span>, np.sqrt(<span class="number">2</span>)*X[i, <span class="number">0</span>]*X[i, <span class="number">1</span>], X[i, <span class="number">1</span>]**<span class="number">2</span>]).reshape(<span class="number">1</span>, <span class="number">-1</span>)</span><br><span class="line">    FX = np.r_[FX, tmp]</span><br><span class="line"></span><br><span class="line">fig = plt.figure(<span class="number">1</span>)</span><br><span class="line">figAx = Axes3D(fig)</span><br><span class="line">figAx.scatter(FX[:, <span class="number">0</span>], FX[:, <span class="number">1</span>], FX[:, <span class="number">2</span>], c=Y)</span><br><span class="line"></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
@@ -582,7 +582,7 @@
 </li>
 </ol>
 <h2 id="线性支持向量机"><a href="#线性支持向量机" class="headerlink" title="线性支持向量机"></a>线性支持向量机</h2><p>对于线性可分得情况，目标为求解一个超平面$w^T \mathit{\Phi}(x) + b = 0$使两类点落在超平面两侧。</p>
-<p><img src="/2019/05/27/Support-Vector-Machine/svm-3-conditions.jpg" alt="svm-3-conditions"></p>
+<p><img src="/.com//svm-3-conditions.jpg" alt="svm-3-conditions"></p>
 <p>观察以上两图，图$(c)$分割最佳，应有</p>
 <ul>
 <li>超平面在两类点间隔内，可平移距离最大；<script type="math/tex; mode=display">r = \max (r_+ - r_-)</script></li>
@@ -606,7 +606,7 @@
 <script type="math/tex; mode=display">y \left[ w^T \mathit{\Phi}(x) + b \right] > 1</script><p>现希望优化两个平面间的距离，使其达到最大，即优化目标为</p>
 <script type="math/tex; mode=display">w, b = \arg \max r</script><script type="math/tex; mode=display">s.t.\qquad y \left[ w^T \mathit{\Phi}(x) + b \right] > 1 \tag{7}</script><p><strong>那么如何求解支撑超平面间距离$r$呢？</strong>，有两种思路</p>
 <ol>
-<li><p>思路一<br> <img src="/2019/05/27/Support-Vector-Machine/r.jpg" alt="r"></p>
+<li><p>思路一<br> <img src="/.com//r.jpg" alt="r"></p>
 <p> 过超平面$\mathcal{P}$任一点$\mathit{\Phi}(x)$作垂线，分别交$\mathcal{P}_{+/-}$于向量$\mathit{\Phi}(x_{+/-})$，则</p>
 <script type="math/tex; mode=display">
  \begin{cases}
@@ -630,7 +630,7 @@
 L^{(i)} = \begin{cases}
     0 & | y^{(i)} - w^T \mathit{\Phi}(x^{(i)}) - b | \leq \epsilon \\
     | y^{(i)} - w^T \mathit{\Phi}(x^{(i)}) - b | - \epsilon & \text{otherwise}
-\end{cases}</script><p><img src="/2019/05/27/Support-Vector-Machine/regression.jpg" alt="regression"></p>
+\end{cases}</script><p><img src="/.com//regression.jpg" alt="regression"></p>
 <h1 id="优化问题的求解与SMO算法"><a href="#优化问题的求解与SMO算法" class="headerlink" title="优化问题的求解与SMO算法"></a>优化问题的求解与SMO算法</h1><h2 id="带约束的优化问题求解"><a href="#带约束的优化问题求解" class="headerlink" title="带约束的优化问题求解"></a>带约束的优化问题求解</h2><ol>
 <li><p>纯等式约束<br> 一般形式为</p>
 <script type="math/tex; mode=display">\vec{w} = \arg \min f(\vec{w})</script><script type="math/tex; mode=display">s.t. \qquad h_j(\vec{w}) = 0, \quad j = 1, 2, \cdots, m \tag{11}</script><p> 其中$f(\vec{w}), h_j(\vec{w})$均可导</p>
@@ -684,7 +684,7 @@ L^{(i)} = \begin{cases}
  \end{cases} \tag{13.b}</script><p> 上式即$K.K.T.$条件。</p>
 </li>
 </ol>
-<h2 id="线性可分情况下求解"><a href="#线性可分情况下求解" class="headerlink" title="线性可分情况下求解"></a>线性可分情况下求解</h2><p><img src="/2019/05/27/Support-Vector-Machine/linear.jpg" alt="linear"></p>
+<h2 id="线性可分情况下求解"><a href="#线性可分情况下求解" class="headerlink" title="线性可分情况下求解"></a>线性可分情况下求解</h2><p><img src="/.com//linear.jpg" alt="linear"></p>
 <p>对于优化问题$(10.b)$</p>
 <script type="math/tex; mode=display">w, b = \arg \max \frac{2}{||w||}</script><script type="math/tex; mode=display">s.t.\qquad y \left[ w^T \mathit{\Phi}(x) + b \right] \geq 1 \tag{10.b}</script><p>利用拉格朗日乘子法</p>
 <script type="math/tex; mode=display">L(w, b, \mu) = \frac{1}{2} ||w||^2 + \sum_i \mu^{(i)} \left\{ 1 - y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] \right\} \tag{14}</script><p>则带求解问题为</p>
@@ -719,7 +719,7 @@ L^{(i)} = \begin{cases}
     w = \sum_i \mu^{(i)} y^{(i)} \mathit{\Phi}(x^{(i)}) \\
     y^{sup} \left[ w^T \mathit{\Phi}(x^{sup}) + b \right] = 1
 \end{cases} \tag{19}</script><p>可能存在多个支持向量，均满足等式$(19.2)$。</p>
-<h2 id="线性不可分情况下求解"><a href="#线性不可分情况下求解" class="headerlink" title="线性不可分情况下求解"></a>线性不可分情况下求解</h2><p><img src="/2019/05/27/Support-Vector-Machine/non-linear.jpg" alt="non-linear"></p>
+<h2 id="线性不可分情况下求解"><a href="#线性不可分情况下求解" class="headerlink" title="线性不可分情况下求解"></a>线性不可分情况下求解</h2><p><img src="/.com//non-linear.jpg" alt="non-linear"></p>
 <p>如上图，存在部分样本点线性不可分，有两种方法可解决</p>
 <ol>
 <li>核函数</li>
@@ -736,7 +736,7 @@ f(x) = \sum_n \frac{f^{(n)}(x - x_0)}{n!} (x - x_0)^{(n)}</script><p>核函数�
 <script type="math/tex; mode=display">y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] \geq 1 - \epsilon^{(i)} \tag{20}</script><blockquote>
 <p>仅仅对于落在支撑超平面间的样本点满足$\epsilon^{(i)} &gt; 0$</p>
 </blockquote>
-<p>形象解释，即对于<strong>落在支撑超平面间的样本点$x^{(i)}$</strong>，视其为<strong>软间隔支持向量(自创)</strong>，调整$\epsilon^{(i)}$将支撑超平面进行微量的位移$d_{\epsilon^{(i)}}$，如下图<br><img src="/2019/05/27/Support-Vector-Machine/epsilon.jpg" alt="epsilon"></p>
+<p>形象解释，即对于<strong>落在支撑超平面间的样本点$x^{(i)}$</strong>，视其为<strong>软间隔支持向量(自创)</strong>，调整$\epsilon^{(i)}$将支撑超平面进行微量的位移$d_{\epsilon^{(i)}}$，如下图<br><img src="/.com//epsilon.jpg" alt="epsilon"></p>
 <p>但是呢，也要对不满足该条件的样本个数进行限制，希望越少越好。那么加入<strong>惩罚系数$C$(超参数)</strong>，对不满足条件的样本进行惩罚，使$\sum_i \epsilon^{(i)}$越小越好，则优化目标变更为</p>
 <script type="math/tex; mode=display">w, b = \arg \min_{w,b} \left( \frac{1}{2} ||w||^2 + C \sum_i \epsilon^{(i)} \right)</script><script type="math/tex; mode=display">s.t. \qquad y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] \geq 1 - \epsilon^{(i)}</script><script type="math/tex; mode=display">\qquad \epsilon^{(i)} \geq 0 \tag{21}</script><p>同样的，构造拉格朗日函数</p>
 <script type="math/tex; mode=display">L(w, b, \epsilon, \mu_1, \mu_2) = \left( \frac{1}{2} ||w||^2 + C \sum_i \epsilon^{(i)} \right) + \sum_i \mu_1^{(i)} \left\{ 1 - \epsilon^{(i)} - y^{(i)} \left[ w^T \mathit{\Phi}(x^{(i)}) + b \right] \right\} + \sum_i \mu_2^{(i)} \left( - \epsilon^{(i)} \right) \tag{22}</script><p>根据$K.K.T.$条件</p>
@@ -891,7 +891,7 @@ const \tag{34}</script><p>记$\epsilon = - \sum_{i=3} \mu^{(i)} y^{(i)}$，则</
      0 \leq \mu^{(1)}_{old} \leq C \\
      0 \leq \mu^{(2)}_{old} \leq C \\
  \end{cases}
- \Rightarrow 0 - \epsilon_{\neq} \leq \mu^{(2)}_{old} = \mu^{(1)}_{old} - \epsilon_{\neq} \leq C - \epsilon_{\neq}</script><p> <img src="/2019/05/27/Support-Vector-Machine/y1neqy2.jpg" alt="y1neqy2"></p>
+ \Rightarrow 0 - \epsilon_{\neq} \leq \mu^{(2)}_{old} = \mu^{(1)}_{old} - \epsilon_{\neq} \leq C - \epsilon_{\neq}</script><p> <img src="/.com//y1neqy2.jpg" alt="y1neqy2"></p>
 <p> 此时上下界为</p>
 <script type="math/tex; mode=display">
  \begin{cases}
@@ -911,7 +911,7 @@ const \tag{34}</script><p>记$\epsilon = - \sum_{i=3} \mu^{(i)} y^{(i)}$，则</
      0 \leq \mu^{(1)}_{old} \leq C \\
      0 \leq \mu^{(2)}_{old} \leq C \\
  \end{cases}
- \Rightarrow - C + \epsilon_{=} \leq - \mu^{(1)}_{old} + \epsilon_{=} \leq 0 + \epsilon_{=}</script><p> <img src="/2019/05/27/Support-Vector-Machine/y1eqy2.jpg" alt="y1eqy2"></p>
+ \Rightarrow - C + \epsilon_{=} \leq - \mu^{(1)}_{old} + \epsilon_{=} \leq 0 + \epsilon_{=}</script><p> <img src="/.com//y1eqy2.jpg" alt="y1eqy2"></p>
 <p> 此时上下界为</p>
 <script type="math/tex; mode=display">
  \begin{cases}
@@ -1159,7 +1159,7 @@ b = \begin{cases}
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">112</span>
+                    <span class="site-state-item-count">113</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1188,15 +1188,7 @@ b = \begin{cases}
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1959,6 +1951,6 @@ b = \begin{cases}
 
 
   <script type="text/javascript" src="/js/click_show_text.js"></script>
-  <script type="text/javascript" src="/js/hone_hone_clock.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>
