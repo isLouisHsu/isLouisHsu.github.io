@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="论文地址：http:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;1810.00826 目录 目录 Introduction Preliminary Theoretical Framework: Overview Building Powerful Graph Neural Networks Graph Isomorphism Network(GIN) Graph-Level Readout of GIN">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How Powerful are Graph Neural Networks?">
+<meta property="og:url" content="http://yoursite.com/2020/10/11/How-Powerful-are-Graph-Neural-Networks/index.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="论文地址：http:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;1810.00826 目录 目录 Introduction Preliminary Theoretical Framework: Overview Building Powerful Graph Neural Networks Graph Isomorphism Network(GIN) Graph-Level Readout of GIN">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/.com//fig1.png">
+<meta property="og:image" content="http://yoursite.com/.com//fig2-fig3.png">
+<meta property="og:image" content="http://yoursite.com/.com//fig4.png">
+<meta property="og:image" content="http://yoursite.com/.com//tab1.png">
+<meta property="article:published_time" content="2020-10-11T09:42:10.000Z">
+<meta property="article:modified_time" content="2020-10-18T10:35:21.309Z">
+<meta property="article:author" content="Louis Hsu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/.com//fig1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/10/11/How-Powerful-are-Graph-Neural-Networks/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>How Powerful are Graph Neural Networks? | LOUIS' BLOG</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LOUIS' BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">To be better</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-guestbook">
+    <a href="/guestbook" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-guest"></i> <br />留言</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/isLouisHsu" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/10/11/How-Powerful-are-Graph-Neural-Networks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louis Hsu">
+      <meta itemprop="description" content="ᵕ᷄ ≀ ̠˘᷅ 永远年轻，永远热泪盈眶">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LOUIS' BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">How Powerful are Graph Neural Networks?
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-10-11 17:42:10" itemprop="dateCreated datePublished" datetime="2020-10-11T17:42:10+08:00">2020-10-11</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-10-18 18:35:21" itemprop="dateModified" datetime="2020-10-18T18:35:21+08:00">2020-10-18</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>论文地址：<a href="http://arxiv.org/abs/1810.00826" target="_blank" rel="noopener">http://arxiv.org/abs/1810.00826</a></p>
+<h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><ul>
+<li><a href="#目录">目录</a></li>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#preliminary">Preliminary</a></li>
+<li><a href="#theoretical-framework-overview">Theoretical Framework: Overview</a></li>
+<li><a href="#building-powerful-graph-neural-networks">Building Powerful Graph Neural Networks</a><ul>
+<li><a href="#graph-isomorphism-networkgin">Graph Isomorphism Network(GIN)</a></li>
+<li><a href="#graph-level-readout-of-gin">Graph-Level Readout of GIN</a></li>
+</ul>
+</li>
+<li><a href="#less-powerful-but-still-interesting-gnns">Less Powerful But Still Interesting GNNs</a><ul>
+<li><a href="#1-layer-perception-are-not-sufficient">1-Layer Perception Are Not Sufficient</a></li>
+<li><a href="#structures-that-confuse-mean-and-max-pooling">Structures that Confuse Mean and Max-Pooling</a></li>
+<li><a href="#mean-learns-distribution">Mean Learns Distribution</a></li>
+<li><a href="#max-pooling-learns-sets-with-distinct-elements">Max-Pooling Learns Sets with Distinct Elements</a></li>
+<li><a href="#remarks-on-other-aggregators">Remarks on Other Aggregators</a></li>
+</ul>
+</li>
+<li><a href="#experiments">Experiments</a></li>
+<li><a href="#reference">Reference</a></li>
+</ul>
+<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>GNN通过聚合邻居节点信息(或消息传递)的机制，经过$k$论聚合后，每个节点根据$k-hop$邻居，得到相应的嵌入表示。通过池化(pooling)，例如将所有节点的表示特征求和可以得到全图的嵌入表示。</p>
+<p>本文<strong>主要贡献</strong>有</p>
+<ul>
+<li>证明在区分图结构是否同构方面，GNN有着与Weisfeiler-Lehman(WL)测试一样强大的能力；</li>
+<li>将某节点的邻居视作multiset(i.e. a set with possibly repeating elements)，GNN中的聚合操作可以视为对multiset中元素的聚合。对于不同的multiset，一个表达能力足够强大的GNN应该获取对应不同的representation；</li>
+<li>研究了不同聚合函数在各种GNN变体中的有效性；</li>
+<li>设计了图同构网络(Graph Isomorphism Network, GIN)，该网络理论上是最优的。</li>
+</ul>
+<h1 id="Preliminary"><a href="#Preliminary" class="headerlink" title="Preliminary"></a>Preliminary</h1><p>定义图$G = (V, E)$，节点$v \in V$的特征向量为$X_v$，有被以下两类任务：</p>
+<ol>
+<li><strong>节点分类</strong>：每个节点$v$对应标签$y_v$，目标是学习节点$v$的表示特征$h_v$使其被用作节点分类$y_v = f(h_v)$；</li>
+<li><strong>图分类</strong>：给定图的集合${G_1, \cdots, G_N} \subseteq \mathcal{G}$及其对应标签${y_1, \cdots, y_N} \subseteq \mathcal{Y}$，目标是学习图的嵌入表示$h_G$使其被用作图分类$y_G = g(h_G)$。</li>
+</ol>
+<p><strong>Graph Neural Networks</strong> GNN通过邻居聚合策略，即根据每个节点的邻居节点的状态迭代更新representation。经过$k$轮聚合后，某个节点的representation已包含$k-hop$的邻居节节点特征，例如第$k$次聚合/层网络如下</p>
+<script type="math/tex; mode=display">\begin{aligned}
+  a_v^{(k)} &= \text{AGGREGATE}^{(k)}\left(\left\{ h_u^{k-1}: u \in \mathcal{N}(v) \right\}\right) \\
+  h_v^{k} &= \text{COMBINE}^{(k)} \left( h_v^{k-1}, a_v^{(k)} \right)
+\end{aligned} \tag{2.1}</script><p>其中$h_v^{(k)}$是节点$v$在第$k$次聚合后的特征($h_v^{(0)} = X_v$)，$\mathcal{N}(v)$至节点$v$的一阶邻居，$\text{AGGREGATE}^{(k)}(\cdot)$与$\text{COMBINE}^{(k)}(\cdot)$的选取十分重要，例如</p>
+<ul>
+<li>GraphSAGE中聚合函数定义为$a_v^{(k)} = \text{MAX}\left( \left{\text{ReLU}(W \cdot h_u^{(k-1)}, \forall u \in \mathcal{N}(v))\right}\right)$，即邻居节点线性变换后取最大池化，其中$W$是参数矩阵；更新函数定义为线性映射$W \cdot \left[ h_v^{(k-1)}, a_v^{(k)} \right]$；</li>
+<li>Graph Convolutional Networks(GCN)中，两个步骤被联合定义为$h_v^{(k)} = \text{ReLU}\left( W \cdot \text{MEAN} \left{ h_u^{k-1}, \forall u \in \mathcal{N}(v) \cup {v} \right} \right)$，即$v$及其邻居$\mathcal{N}(v)$特征取均值池化后，经一层$\text{MLP}$得到聚合特征。</li>
+</ul>
+<p>对于图分类任务，还需要$\text{READOUT}(\cdot)$函数聚合所有节点特征，以得到全图的特征表示，可以是一个简单的permutation invariant function例如加和，也可以是更sophisticated graph-level pooling function</p>
+<script type="math/tex; mode=display">
+h_G = \text{READOUT}(\{h_v^{K} | v \in G \})\tag{2.4}</script><p><strong>Weisfeiler-Lehman test</strong> 图同构问题是指判断两个图是否具有相同的拓扑结构，WL test迭代地进行以下操作直至两个非同构的图产生了不同的标签：</p>
+<ol>
+<li>聚合各节点及其邻居节点的标签；</li>
+<li>由聚合后的标签得到新的唯一的标签。</li>
+</ol>
+<p>基于WL test，Shervashidze等人提出了WL subtree kernel来评估图之间的相似性，即将<strong>迭代过程中标签一致的节点个数作为特征向量的元素</strong>，以该向量作为评估输入。在第$k$轮WL迭代后，节点的标签可以视作以该节点为根节点的子树，如下图。</p>
+<p><img src="/.com//fig1.png" alt="fig1"></p>
+<h1 id="Theoretical-Framework-Overview"><a href="#Theoretical-Framework-Overview" class="headerlink" title="Theoretical Framework: Overview"></a>Theoretical Framework: Overview</h1><p><strong>定义1(Multiset)：</strong> multiset是指允许包含重复元素的集合，可以定义为2-元组$X = (S, m)$，其中$S$为具有不重复元素的集合，$m: S \rightarrow \mathbb{N}_{\geq 1}$为元素的重复项。</p>
+<p>为了研究一个GNN的表达能力，文中分析了GNN何时会将两个节点映射到嵌入空间的同一个位置。直观地来说，只有当两个节点<strong>具有相同的子树结构和相同的特征</strong>时，两个节点才会被映射到嵌入空间的同一位置。由于子树结构是通过节点邻居递归定义的，问题可以转化为，两个邻居节点集合(multiset)是否会被映射为相同的嵌入表示。<strong>一个表达能力很强的GNN永远不会从不同的邻居节点集合(或特征向量的multiset)得到相同的嵌入表示</strong>，也就是说聚合操作必须是<strong>单射的</strong>(injective)。因此GNN的聚合操作可以被描述为一类函数：a class of function over multiset that their neural networks can represent，并分析这类函数是否能满足<strong>单射性</strong>。</p>
+<h1 id="Building-Powerful-Graph-Neural-Networks"><a href="#Building-Powerful-Graph-Neural-Networks" class="headerlink" title="Building Powerful Graph Neural Networks"></a>Building Powerful Graph Neural Networks</h1><p>一个表达能力足够强大的GNN会将两个不同的图映射为不同的嵌入表示，这也就是说GNN具有解决图同构问题的能力。换句话说，同构的图可以被映射为相同的嵌入，而不同构的图映射为不同的。WL test可以作为衡量GNN的表达能力的较弱的准则(slightly weaker criterion)。</p>
+<p><strong>引理2：</strong> 定义两个非同构的图$G_1, G_2$，若图神经网络$\mathcal{A}: \mathcal{G} \rightarrow \mathbb{R}^d$将其映射为不同的嵌入，那么WL test也可以区分两个图是异构的。</p>
+<blockquote>
+<p>即GNN的表达能力上限是WL test。</p>
+</blockquote>
+<p><strong>定理3：</strong> 定义$\mathcal{A}: \mathcal{G} \rightarrow \mathbb{R}^d$是具有指定层数的GNN，若以下两个条件满足，那么该GNN具有和WL test相似的表达能力：</p>
+<ol>
+<li>$\mathcal{A}$ 通过$h_v^{(k)} = \phi\left( h_v^{(k-1)}, f\left( \left{ h_u^{(k-1)}: u \in \mathcal{N}(v) \right} \right) \right)$迭代地聚合和更新节点特征，其中函数$\phi(\cdot), f(\cdot)$满足单射性；</li>
+<li>$\mathcal{A}$定义在multiset${h_v^{K}}$上的全局readout满足单射性。</li>
+</ol>
+<p><strong>引理4：</strong> 假设输入特征空间$\mathcal{X}$是可数的，$g^{(k)}$是定义在multiset$X \subset \mathcal{X}$上的、GNN的第$k$层($k = 1, \cdots, L$)函数，那么节点的隐层特征$h_v^{(k)}$也是可数的。</p>
+<p>由于WL test只能输出one-hot编码，只能被用作判断两张图是否同构，而不能判断两个图的相似性。而GNN可以将子树嵌入为低维度特征，以描述两个图的相似性。</p>
+<h2 id="Graph-Isomorphism-Network-GIN"><a href="#Graph-Isomorphism-Network-GIN" class="headerlink" title="Graph Isomorphism Network(GIN)"></a>Graph Isomorphism Network(GIN)</h2><p><strong>引理5：</strong> 假定$\mathcal{X}$是可数的，存在函数$f: \mathcal{X} \rightarrow \mathbb{R}^n$，使得$h(X) = \sum_{x \in X} f(x)$是唯一的，其中$X \subset \mathcal{X}$是具有有限大小的multiset。任意multiset function $g$可以被分解为$g(X) = \phi(\sum_{x \in X} f(x))$。</p>
+<p><strong>结论6：</strong> 假定$\mathcal{X}$是可数的，存在函数$f: \mathcal{X} \rightarrow \mathbb{R}^n$，使得$h(c, X) = (1 + \epsilon) \cdot f(c) + \sum_{x \in X} f(x)$对于每一对$(c, X)$都是唯一的，，其中$\epsilon$为任意数(for infinitely many choices, including all irrational numbers)，$c \in \mathcal{X}$，$X \in \mathcal{X}$是有限大小的multiset。另外，任意接受$(c, X)$作为参数的函数$g$可以被分解为$g(c, X) = \varphi\left( (1 + \epsilon) \cdot f(c) + \sum_{x \in X} f(x) \right)$。</p>
+<p>可以用多层感知机($\text{MLP}$)学习函数$f(\cdot), \varphi(\cdot)$，实际上，$f^{(k+1)} \circ \varphi^{(k)}$可以用单个$\text{MLP}$进行建模。$\epsilon$可以作为可学习参数或者固定参数，那么GIN被定义为</p>
+<script type="math/tex; mode=display">
+h_v^{(k)} = \text{MLP}^{(k)} \left(
+    \left( 1 + \epsilon^{(k)} \right) \cdot h_v^{(k - 1)} + \sum_{u \in \mathcal{N}(v)} h_u^{(k-1)}
+\right) \tag{4.1}</script><h2 id="Graph-Level-Readout-of-GIN"><a href="#Graph-Level-Readout-of-GIN" class="headerlink" title="Graph-Level Readout of GIN"></a>Graph-Level Readout of GIN</h2><p>readout函数根据每个节点的嵌入，生成全图的嵌入表示。随着图卷积的迭代，感受野越大，也就能获取到越全局的信息。足够的迭代次数是使网络具有强大区分能力的关键。但是考虑到最初几次的迭代可能具有更好的通用性(generalize better)，<strong>所以图卷积每次的迭代产生的信息都会被添加到输出</strong>，即</p>
+<script type="math/tex; mode=display">
+h_G = \text{CONCAT}\left(
+    \text{READOUT}\left(
+        \left\{h_v^{(k)} | v \in G   \right\}
+    \right) | k = 0, 1, \cdots, K
+\right) \tag{4.2}</script><p>根据<strong>定理3</strong>和<strong>结论6</strong>，使用$\text{sum}(\cdot)$作为$\text{READOUT}(\cdot)$函数时(根据$4.1$式，在加和聚合前也不需要额外的$\text{MLP}$)，GIN能力可以与WL test类似。</p>
+<h1 id="Less-Powerful-But-Still-Interesting-GNNs"><a href="#Less-Powerful-But-Still-Interesting-GNNs" class="headerlink" title="Less Powerful But Still Interesting GNNs"></a>Less Powerful But Still Interesting GNNs</h1><p>接下来分析没有满足<strong>定理3</strong>的GNN，包括GCN和GraphSAGE。针对等式$4.1$中的aggregator的两方面做了消融实验：</p>
+<ol>
+<li>用单层感知机代替$\text{MLP}$；</li>
+<li>用$\text{mean}, \text{max-pooling}$代替$\text{sum}$。</li>
+</ol>
+<h2 id="1-Layer-Perception-Are-Not-Sufficient"><a href="#1-Layer-Perception-Are-Not-Sufficient" class="headerlink" title="1-Layer Perception Are Not Sufficient"></a>1-Layer Perception Are Not Sufficient</h2><p><strong>引理5</strong>中的函数$f$可以将一组multiset映射为唯一嵌入，可以用$\text{MLP}$对其进行估计。但是许多GNN采用单层的感知机$\sigma \circ W$，即一层线性映射加一个非线性激活函数，可以视作Generalized Linear Model。因此，有必要了解单层的$\text{MLP}$是否足够图学习。</p>
+<p><strong>引理7：</strong> 存在有限multiset$X_1 \neq X_2$，使得对于线性映射$W$有$\sum_{x \in X_1} \text{ReLU}(Wx) = \sum_{x \in X_2} \text{ReLU}(Wx)$。</p>
+<blockquote>
+<p>Nonetheless, unlike models using MLPs, the 1-layer perceptron (even with the bias term) is not a universal approximator of multiset functions. Consequently, even if GNNs with 1-layer perceptrons can embed different graphs to different locations to some degree, such embeddings may not adequately capture structural similarity, and can be difficult for simple classifiers, e.g., linear<br>classifiers, to fit.</p>
+</blockquote>
+<h2 id="Structures-that-Confuse-Mean-and-Max-Pooling"><a href="#Structures-that-Confuse-Mean-and-Max-Pooling" class="headerlink" title="Structures that Confuse Mean and Max-Pooling"></a>Structures that Confuse Mean and Max-Pooling</h2><p>$\text{mean}, \text{max-pooling}$聚合由于具有排列不变性，是定义在multiset上良好的聚合函数，但是他们不是单射的。图2根据三种函数的表达能力进行了排序，图3展示了一些$\text{mean}, \text{max-pooling}$不能区别的图结构。以$3(a)$为例，假设特征均为$a$，那么$\text{mean}, \text{max-pooling}$产生的结果分别为$(a + a) / 2 = a, (a + a + a) / 3 = a$与$\max (a, a) = a, \max (a, a, a) = a$，而$\text{sum}$产生的结果是$a + a = 2a, a + a + a = 3a$。</p>
+<p><img src="/.com//fig2-fig3.png" alt="fig2-fig3"></p>
+<h2 id="Mean-Learns-Distribution"><a href="#Mean-Learns-Distribution" class="headerlink" title="Mean Learns Distribution"></a>Mean Learns Distribution</h2><p>假定有两个集合$X_1 = (S, m), X_2 = (S, k \cdot m)$，其中$X_1, X_2$去重后元素相同，但$X_2$中还包括每个元素的$k$份拷贝。那么均值聚合从这两个集合得到相同的嵌入，因此$\text{mean}$从multiset中捕获了元素的分布(比例)，而不是确切的multiset。</p>
+<p><strong>结论8：</strong> 假定$\mathcal{X}$可数，当且仅当multiset$X_1$与$X_2$具有相同分布时，有$h(X) = \frac{1}{|X|} \sum_{x \in X} f(x), h(X_1) = h(X_2)$。</p>
+<p>在任务更重视分布信息(distributional information)而不是确切的结构(exact structure)时，或者节点特征几乎都不一致时，均值聚合具有良好的性能。这也解释了为什么在节点分类任务中均值聚合是有效的，因为这类任务中节点的特征是很丰富的，邻居的特征分布对这项任务具有很有效的信号。</p>
+<h2 id="Max-Pooling-Learns-Sets-with-Distinct-Elements"><a href="#Max-Pooling-Learns-Sets-with-Distinct-Elements" class="headerlink" title="Max-Pooling Learns Sets with Distinct Elements"></a>Max-Pooling Learns Sets with Distinct Elements</h2><p>最大池化聚合既没有捕获图的结构，也没有捕获图的分布，他可能适用于学习图信号的“主干”(However, it may be suitable for tasks where it is important to identify representative elements or the “skeleton”)，对噪声和异常点非常鲁棒。</p>
+<p><strong>结论9：</strong> 假定$\mathcal{X}$可数，当且仅当multiset$X_1$与$X_2$具有相同underlying set时，有$f: \mathcal{X} \rightarrow \mathbb{R}^{\infty}$，使得$h(X) = \max_{x \in X} f(x), h(X_1) = h(X_2)$。</p>
+<h2 id="Remarks-on-Other-Aggregators"><a href="#Remarks-on-Other-Aggregators" class="headerlink" title="Remarks on Other Aggregators"></a>Remarks on Other Aggregators</h2><p>本文没有进行研究其他聚合函数，如通过attention求带权均值、LSTM等。</p>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><p><img src="/.com//fig4.png" alt="fig4"></p>
+<blockquote>
+<p>We evaluate GINs (Eqs. 4.1 and 4.2) and the less powerful GNN variants. Under the GIN framework, we consider two variants: </p>
+<ol>
+<li>a GIN that learns $\epsilon$ in Eq. 4.1 by gradient descent, which we call <strong>GIN-$\epsilon$</strong>, and </li>
+<li>a simpler (slightly less powerful) GIN, where $\epsilon$ in Eq. 4.1 is fixed to 0, which we call <strong>GIN-0</strong>. </li>
+</ol>
+<p>As we will see, GIN-0 shows strong empirical performance: not only does GIN-0 fit training data equally well as GIN-$\epsilon$, it also demonstrates good generalization, slightly but consistently outperforming GIN-$\epsilon$ in terms of test accuracy. </p>
+<p>For the less powerful GNN variants, we consider architectures that replace the sum in the GIN-0 aggregation with mean or max-pooling, or replace MLPs with 1-layer perceptrons, i.e., a linear mapping followed by ReLU. In Figure 4 and Table 1, a model is <strong>named by the aggregator/perceptron it uses</strong>. Here <strong>mean–1-layer</strong> and <strong>max–1-layer</strong> correspond to GCN and GraphSAGE, respectively, up to minor architecture modifications. </p>
+<p>We apply the same graph-level readout (READOUT in Eq. 4.2) for GINs and all the GNN variants, specifically, sum readout on bioinformatics datasets and mean readout on social datasets due to better test performance.</p>
+</blockquote>
+<p><img src="/.com//tab1.png" alt="tab1"></p>
+<blockquote>
+<p>We compare the GNNs above with a number of state-of-the-art baselines for graph classification: </p>
+<ol>
+<li>the WL subtree kernel (Shervashidze et al., 2011), where C-SVM (Chang &amp; Lin, 2011) was used as a classifier; the hyper-parameters we tune are C of the SVM and the number of WL iterations ∈ {1, 2, . . . , 6}; </li>
+<li>state-of-the-art deep learning architectures, i.e., Diffusionconvolutional neural networks (DCNN) (Atwood &amp; Towsley, 2016), PATCHY-SAN (Niepert et al., 2016) and Deep Graph CNN (DGCNN) (Zhang et al., 2018);</li>
+<li>Anonymous Walk Embeddings (AWL) (Ivanov &amp; Burnaev, 2018). </li>
+</ol>
+<p>For the deep learning methods and AWL, we report the accuracies reported in the original papers.</p>
+</blockquote>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="https://zhuanlan.zhihu.com/p/66589334" target="_blank" rel="noopener">图神经网络的背后：HOW POWERFUL ARE GRAPH NEURAL NETWORKS？</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Louis Hsu 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/10/11/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E9%97%AE%E7%AD%94KBQA%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" rel="next" title="知识图谱问答KBQA论文阅读">
+                <i class="fa fa-chevron-left"></i> 知识图谱问答KBQA论文阅读
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.gif"
+                alt="Louis Hsu" />
+            
+              <p class="site-author-name" itemprop="name">Louis Hsu</p>
+              <p class="site-description motion-element" itemprop="description">ᵕ᷄ ≀ ̠˘᷅ 永远年轻，永远热泪盈眶</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/%20%7C%7C%20archive">
+                
+                    <span class="site-state-item-count">114</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/isLouisHsu" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://is.louishsu@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/islouishsu" target="_blank" title="Zhihu"><i class="fa fa-fw fa-zhihu"></i>Zhihu</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/islouishsu" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          <div id='music163player'>
+            <iframe 
+              frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=110 
+              src="//music.163.com/outchain/player?type=0&id=2703291040&auto=1&height=90">
+            </iframe>
+          </div>
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#目录"><span class="nav-number">1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">2.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Preliminary"><span class="nav-number">3.</span> <span class="nav-text">Preliminary</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Theoretical-Framework-Overview"><span class="nav-number">4.</span> <span class="nav-text">Theoretical Framework: Overview</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Building-Powerful-Graph-Neural-Networks"><span class="nav-number">5.</span> <span class="nav-text">Building Powerful Graph Neural Networks</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Graph-Isomorphism-Network-GIN"><span class="nav-number">5.1.</span> <span class="nav-text">Graph Isomorphism Network(GIN)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Graph-Level-Readout-of-GIN"><span class="nav-number">5.2.</span> <span class="nav-text">Graph-Level Readout of GIN</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Less-Powerful-But-Still-Interesting-GNNs"><span class="nav-number">6.</span> <span class="nav-text">Less Powerful But Still Interesting GNNs</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Layer-Perception-Are-Not-Sufficient"><span class="nav-number">6.1.</span> <span class="nav-text">1-Layer Perception Are Not Sufficient</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Structures-that-Confuse-Mean-and-Max-Pooling"><span class="nav-number">6.2.</span> <span class="nav-text">Structures that Confuse Mean and Max-Pooling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mean-Learns-Distribution"><span class="nav-number">6.3.</span> <span class="nav-text">Mean Learns Distribution</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Max-Pooling-Learns-Sets-with-Distinct-Elements"><span class="nav-number">6.4.</span> <span class="nav-text">Max-Pooling Learns Sets with Distinct Elements</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Remarks-on-Other-Aggregators"><span class="nav-number">6.5.</span> <span class="nav-text">Remarks on Other Aggregators</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Experiments"><span class="nav-number">7.</span> <span class="nav-text">Experiments</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">8.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Louis Hsu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: 'e65d27f7cf5c62feaf97',
+          clientSecret: '356386826698e8b817ca076b08d7c0e9814f52ea',
+          repo: 'isLouisHsu.github.io',
+          owner: 'isLouisHsu',
+          admin: ['isLouisHsu'],
+          id: md5(window.location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('3');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+
+  <script type="text/javascript" src="/js/click_show_text.js"></script>
+  <script type="text/javascript" src="/js/hone_hone_clock.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+</html>
