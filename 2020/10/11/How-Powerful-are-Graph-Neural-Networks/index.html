@@ -120,7 +120,7 @@
 <meta property="og:image" content="http://yoursite.com/.com//fig4.png">
 <meta property="og:image" content="http://yoursite.com/.com//tab1.png">
 <meta property="article:published_time" content="2020-10-11T09:42:10.000Z">
-<meta property="article:modified_time" content="2020-10-18T10:35:21.309Z">
+<meta property="article:modified_time" content="2020-10-19T15:43:41.628Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://yoursite.com/.com//fig1.png">
@@ -424,7 +424,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-10-18 18:35:21" itemprop="dateModified" datetime="2020-10-18T18:35:21+08:00">2020-10-18</time>
+                <time title="修改时间：2020-10-19 23:43:41" itemprop="dateModified" datetime="2020-10-19T23:43:41+08:00">2020-10-19</time>
               
             
           </span>
@@ -506,8 +506,10 @@
   h_v^{k} &= \text{COMBINE}^{(k)} \left( h_v^{k-1}, a_v^{(k)} \right)
 \end{aligned} \tag{2.1}</script><p>其中$h_v^{(k)}$是节点$v$在第$k$次聚合后的特征($h_v^{(0)} = X_v$)，$\mathcal{N}(v)$至节点$v$的一阶邻居，$\text{AGGREGATE}^{(k)}(\cdot)$与$\text{COMBINE}^{(k)}(\cdot)$的选取十分重要，例如</p>
 <ul>
-<li>GraphSAGE中聚合函数定义为$a_v^{(k)} = \text{MAX}\left( \left{\text{ReLU}(W \cdot h_u^{(k-1)}, \forall u \in \mathcal{N}(v))\right}\right)$，即邻居节点线性变换后取最大池化，其中$W$是参数矩阵；更新函数定义为线性映射$W \cdot \left[ h_v^{(k-1)}, a_v^{(k)} \right]$；</li>
-<li>Graph Convolutional Networks(GCN)中，两个步骤被联合定义为$h_v^{(k)} = \text{ReLU}\left( W \cdot \text{MEAN} \left{ h_u^{k-1}, \forall u \in \mathcal{N}(v) \cup {v} \right} \right)$，即$v$及其邻居$\mathcal{N}(v)$特征取均值池化后，经一层$\text{MLP}$得到聚合特征。</li>
+<li>GraphSAGE中聚合函数定义为<script type="math/tex; mode=display">
+  a_v^{(k)} = \text{MAX}\left( \left\{\text{ReLU}(W \cdot h_u^{(k-1)}, \forall u \in \mathcal{N}(v))\right\}\right)</script>  即邻居节点线性变换后取最大池化，其中$W$是参数矩阵；更新函数定义为线性映射$W \cdot \left[ h_v^{(k-1)}, a_v^{(k)} \right]$；</li>
+<li>Graph Convolutional Networks(GCN)中，两个步骤被联合定义为<script type="math/tex; mode=display">
+  h_v^{(k)} = \text{ReLU}\left( W \cdot \text{MEAN} \left\{ h_u^{k-1}, \forall u \in \mathcal{N}(v) \cup \{v\} \right\} \right)</script>  即$v$及其邻居$\mathcal{N}(v)$特征取均值池化后，经一层$\text{MLP}$得到聚合特征。</li>
 </ul>
 <p>对于图分类任务，还需要$\text{READOUT}(\cdot)$函数聚合所有节点特征，以得到全图的特征表示，可以是一个简单的permutation invariant function例如加和，也可以是更sophisticated graph-level pooling function</p>
 <script type="math/tex; mode=display">
@@ -527,7 +529,8 @@ h_G = \text{READOUT}(\{h_v^{K} | v \in G \})\tag{2.4}</script><p><strong>Weisfei
 </blockquote>
 <p><strong>定理3：</strong> 定义$\mathcal{A}: \mathcal{G} \rightarrow \mathbb{R}^d$是具有指定层数的GNN，若以下两个条件满足，那么该GNN具有和WL test相似的表达能力：</p>
 <ol>
-<li>$\mathcal{A}$ 通过$h_v^{(k)} = \phi\left( h_v^{(k-1)}, f\left( \left{ h_u^{(k-1)}: u \in \mathcal{N}(v) \right} \right) \right)$迭代地聚合和更新节点特征，其中函数$\phi(\cdot), f(\cdot)$满足单射性；</li>
+<li>$\mathcal{A}$通过下式迭代地聚合和更新节点特征：<script type="math/tex; mode=display">
+ h_v^{(k)} = \phi\left( h_v^{(k-1)}, f\left( \left\{ h_u^{(k-1)}: u \in \mathcal{N}(v) \right\} \right) \right)</script> 其中函数$\phi(\cdot), f(\cdot)$满足单射性；</li>
 <li>$\mathcal{A}$定义在multiset${h_v^{K}}$上的全局readout满足单射性。</li>
 </ol>
 <p><strong>引理4：</strong> 假设输入特征空间$\mathcal{X}$是可数的，$g^{(k)}$是定义在multiset$X \subset \mathcal{X}$上的、GNN的第$k$层($k = 1, \cdots, L$)函数，那么节点的隐层特征$h_v^{(k)}$也是可数的。</p>
@@ -553,7 +556,7 @@ h_G = \text{CONCAT}\left(
 <h2 id="1-Layer-Perception-Are-Not-Sufficient"><a href="#1-Layer-Perception-Are-Not-Sufficient" class="headerlink" title="1-Layer Perception Are Not Sufficient"></a>1-Layer Perception Are Not Sufficient</h2><p><strong>引理5</strong>中的函数$f$可以将一组multiset映射为唯一嵌入，可以用$\text{MLP}$对其进行估计。但是许多GNN采用单层的感知机$\sigma \circ W$，即一层线性映射加一个非线性激活函数，可以视作Generalized Linear Model。因此，有必要了解单层的$\text{MLP}$是否足够图学习。</p>
 <p><strong>引理7：</strong> 存在有限multiset$X_1 \neq X_2$，使得对于线性映射$W$有$\sum_{x \in X_1} \text{ReLU}(Wx) = \sum_{x \in X_2} \text{ReLU}(Wx)$。</p>
 <blockquote>
-<p>Nonetheless, unlike models using MLPs, the 1-layer perceptron (even with the bias term) is not a universal approximator of multiset functions. Consequently, even if GNNs with 1-layer perceptrons can embed different graphs to different locations to some degree, such embeddings may not adequately capture structural similarity, and can be difficult for simple classifiers, e.g., linear<br>classifiers, to fit.</p>
+<p>Nonetheless, unlike models using MLPs, the 1-layer perceptron (even with the bias term) is not a universal approximator of multiset functions. Consequently, even if GNNs with 1-layer perceptrons can embed different graphs to different locations to some degree, such embeddings may not adequately capture structural similarity, and can be difficult for simple classifiers, e.g., linear classifiers, to fit.</p>
 </blockquote>
 <h2 id="Structures-that-Confuse-Mean-and-Max-Pooling"><a href="#Structures-that-Confuse-Mean-and-Max-Pooling" class="headerlink" title="Structures that Confuse Mean and Max-Pooling"></a>Structures that Confuse Mean and Max-Pooling</h2><p>$\text{mean}, \text{max-pooling}$聚合由于具有排列不变性，是定义在multiset上良好的聚合函数，但是他们不是单射的。图2根据三种函数的表达能力进行了排序，图3展示了一些$\text{mean}, \text{max-pooling}$不能区别的图结构。以$3(a)$为例，假设特征均为$a$，那么$\text{mean}, \text{max-pooling}$产生的结果分别为$(a + a) / 2 = a, (a + a + a) / 3 = a$与$\max (a, a) = a, \max (a, a, a) = a$，而$\text{sum}$产生的结果是$a + a = 2a, a + a + a = 3a$。</p>
 <p><img src="/.com//fig2-fig3.png" alt="fig2-fig3"></p>
@@ -648,6 +651,10 @@ h_G = \text{CONCAT}\left(
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2021/03/24/BERT-flow/" rel="prev" title="BERT-flow">
+                BERT-flow <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -724,7 +731,7 @@ h_G = \text{CONCAT}\left(
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">114</span>
+                    <span class="site-state-item-count">115</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -890,7 +897,7 @@ h_G = \text{CONCAT}\left(
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
