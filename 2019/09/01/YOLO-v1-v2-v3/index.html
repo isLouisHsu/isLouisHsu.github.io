@@ -115,32 +115,32 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="前言YOLO是You Only Look Once的简称，是one-stage检测算法，在2016年刚提出时风靡一时，现在看可能存在一些缺点，后续有许多one-stage检测算法都参考YOLO的思路，如SSD。目前位置，YOLO共发布了3代，论文链接在Reference中。 YOLOv1YOLO的一个关键点是，将目标检测作为回归任务，将分离的边界框回归和分类联合起来，可进行端到端的优化。  We">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/.com//prepareDataV1.png">
-<meta property="og:image" content="http://yoursite.com/.com//dog.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//resized.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//annotated.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//groudtruth.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//YOLOv1-architecture.PNG">
-<meta property="og:image" content="http://yoursite.com/.com//test_step.png">
-<meta property="og:image" content="http://yoursite.com/.com//VOC2012_Leaderboard.png">
-<meta property="og:image" content="http://yoursite.com/.com//YOLOv2-Table2.png">
-<meta property="og:image" content="http://yoursite.com/.com//anchor.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//groudtruth_32x32.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//groudtruth_24x48.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//groudtruth_48x24.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//YOLOv2-Figure2.png">
-<meta property="og:image" content="http://yoursite.com/.com//groudtruth_32x32_new.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//groudtruth_24x48_new.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//groudtruth_48x24_new.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//YOLOv2-Figure5.png">
-<meta property="og:image" content="http://yoursite.com/.com//YOLOv3-Darknet-53.png">
-<meta property="og:image" content="http://yoursite.com/.com//YOLOv3-Figure3.png">
+<meta property="og:image" content="http://yoursite/prepareDataV1.png">
+<meta property="og:image" content="http://yoursite/dog.jpg">
+<meta property="og:image" content="http://yoursite/resized.jpg">
+<meta property="og:image" content="http://yoursite/annotated.jpg">
+<meta property="og:image" content="http://yoursite/groudtruth.jpg">
+<meta property="og:image" content="http://yoursite/YOLOv1-architecture.PNG">
+<meta property="og:image" content="http://yoursite/test_step.png">
+<meta property="og:image" content="http://yoursite/VOC2012_Leaderboard.png">
+<meta property="og:image" content="http://yoursite/YOLOv2-Table2.png">
+<meta property="og:image" content="http://yoursite/anchor.jpg">
+<meta property="og:image" content="http://yoursite/groudtruth_32x32.jpg">
+<meta property="og:image" content="http://yoursite/groudtruth_24x48.jpg">
+<meta property="og:image" content="http://yoursite/groudtruth_48x24.jpg">
+<meta property="og:image" content="http://yoursite/YOLOv2-Figure2.png">
+<meta property="og:image" content="http://yoursite/groudtruth_32x32_new.jpg">
+<meta property="og:image" content="http://yoursite/groudtruth_24x48_new.jpg">
+<meta property="og:image" content="http://yoursite/groudtruth_48x24_new.jpg">
+<meta property="og:image" content="http://yoursite/YOLOv2-Figure5.png">
+<meta property="og:image" content="http://yoursite/YOLOv3-Darknet-53.png">
+<meta property="og:image" content="http://yoursite/YOLOv3-Figure3.png">
 <meta property="article:published_time" content="2019-09-01T09:48:27.000Z">
 <meta property="article:modified_time" content="2019-11-16T03:45:27.939Z">
 <meta property="article:author" content="Louis Hsu">
 <meta property="article:tag" content="Object Detection">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/.com//prepareDataV1.png">
+<meta name="twitter:image" content="http://yoursite/prepareDataV1.png">
 
 
 
@@ -516,13 +516,13 @@
 <p>这里有个疑问，是训练样本confidence真实值如何确定，难道是计算cell与真实框的IoU？这样计算得到的值很小。</p>
 </blockquote>
 <p>下图为论文前3个版本中的示意图。</p>
-<p><img src="/.com//prepareDataV1.png" alt="prepareDataV1"></p>
+<p><img src="//yoursite/prepareDataV1.png" alt="prepareDataV1"></p>
 <p>上述说明比较抽象，用代码说明生成的target是个什么玩意。假如我们有图像如下</p>
-<p><img src="/.com//dog.jpg" alt="dog"></p>
+<p><img src="//yoursite/dog.jpg" alt="dog"></p>
 <p>首先将其裁剪为正方形，并缩放至$448 \times 448$，得到</p>
-<p><img src="/.com//resized.jpg" alt="resized"></p>
+<p><img src="//yoursite/resized.jpg" alt="resized"></p>
 <p>将图像分成$7 \times 7$个网格，并假设其标注位置为：狗$( 95, 295, 140, 250)$、自行车$(205, 212, 340, 214)$、汽车$(365,  92, 150,  64)$，在图上为</p>
-<p><img src="/.com//annotated.jpg" alt="annotated"></p>
+<p><img src="//yoursite/annotated.jpg" alt="annotated"></p>
 <p>假设在$7 \times 7$特征图上，某cell的位置为$(i, j)$，其中$0 \leq i, j &lt; 7$，应有$i = \lfloor\frac{x}{cellsize}\rfloor, j = \lfloor\frac{y}{cellsize}\rfloor$。若映射回原图后，该cell内包含某真实标记框$(x, y, h, w)$的中心，则置$c=1$，且对应类别的特征图上置$(i, j, class)$处类别信息为1。关于ground truth标记框相对于cell的各个偏移量计算与可视化输出如下</p>
 <script type="math/tex; mode=display">
 \begin{cases}
@@ -531,9 +531,9 @@
     t_h = \frac{h}{cellsize} \\
     t_w = \frac{w}{cellsize}
 \end{cases}</script><p>其中$x, y, cellsize$等都除以图像尺寸进行归一化。</p>
-<p><img src="/.com//groudtruth.jpg" alt="groudtruth"></p>
+<p><img src="//yoursite/groudtruth.jpg" alt="groudtruth"></p>
 <p>类别特征图$(S \times S \times C)$比较好理解，在上图中用颜色表示，展开为张量即可。</p>
-<h2 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h2><p><img src="/.com//YOLOv1-architecture.PNG" alt="YOLOv1-architecture"></p>
+<h2 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h2><p><img src="//yoursite/YOLOv1-architecture.PNG" alt="YOLOv1-architecture"></p>
 <p>网络共包含24个卷积层与2个全连接层。卷积的基本结构是先通过$1 \times 1$卷积层减少前层输出特征图的通道数，再紧接用$3 \times 3$卷积层进行运算。其使用darknet训练的配置文件如<a href="https://github.com/pjreddie/darknet/blob/master/cfg/yolov1.cfg" target="_blank" rel="noopener">yolov1.cfg</a>，PyTorch实现可查看<a href="https://github.com/isLouisHsu/isLouisHsu.github.io/blob/master/2019/09/01/YOLO-v1-v2-v3/yolo.py" target="_blank" rel="noopener">yolo.py</a>，文中插代码很不地道。</p>
 <h2 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h2><p>损失函数由三部分组成，使用sum-square error作为误差函数，因为易于优化</p>
 <script type="math/tex; mode=display">L = \sum_i (y_i - \hat{y_i})^2</script><p>定义</p>
@@ -580,8 +580,8 @@
 <h2 id="测试阶段"><a href="#测试阶段" class="headerlink" title="测试阶段"></a>测试阶段</h2><p>测试阶段，置信度的计算包含两个部分的乘积，即框内是否含物体$\rm{Pr}(\rm{object})$与候选框与真实框之间的交并比$\rm{IoU}(truth, pred)$，计算方法如下</p>
 <script type="math/tex; mode=display">
 \rm{Confidence} = \rm{Pr}(Class_i | Object) * \rm{Pr}(Object) * \rm{IoU}^{truth}_{pred} = \rm{Pr}(Class_i) * \rm{IoU}^{truth}_{pred}</script><p>根据置信度，先删除一些评分较低的候选框，之后用NMS算法删除冗余框。其最终输出可由下图说明</p>
-<p><img src="/.com//test_step.png" alt="test_step"></p>
-<h2 id="结果对比"><a href="#结果对比" class="headerlink" title="结果对比"></a>结果对比</h2><p><img src="/.com//VOC2012_Leaderboard.png" alt="VOC2012_Leaderboard"></p>
+<p><img src="//yoursite/test_step.png" alt="test_step"></p>
+<h2 id="结果对比"><a href="#结果对比" class="headerlink" title="结果对比"></a>结果对比</h2><p><img src="//yoursite/VOC2012_Leaderboard.png" alt="VOC2012_Leaderboard"></p>
 <h2 id="缺点和限制"><a href="#缺点和限制" class="headerlink" title="缺点和限制"></a>缺点和限制</h2><ol>
 <li>每个单元网格只能预测两个框，且两个框同属于一类，这限制了模型对相邻物体的检测；</li>
 <li>另外，对于聚集的小物体，如鸟群等，很难检测到；</li>
@@ -591,7 +591,7 @@
 </ol>
 <h1 id="YOLOv2"><a href="#YOLOv2" class="headerlink" title="YOLOv2"></a>YOLOv2</h1><p>YOLOv2即YOLO9000，在上一代YOLO的基础上进行改进。首先，它可以接受任意尺寸图像的输入而不是固定的$448 \times 448$，速度更快。此外，一个比较重要的点是，在训练YOLO9000时，联合使用分类数据，用带标记的图像进行学习精确定位，而分类图像添加到样本集中，用作分类部分的训练。</p>
 <h2 id="Better"><a href="#Better" class="headerlink" title="Better"></a>Better</h2><p>YOLOv2进行了众多实验，添加别的组件，验证新模型在识别率上的表现，如下表</p>
-<p><img src="/.com//YOLOv2-Table2.png" alt="YOLOv2-Table2"></p>
+<p><img src="//yoursite/YOLOv2-Table2.png" alt="YOLOv2-Table2"></p>
 <ol>
 <li><p>Batch Normalization</p>
 <p> 添加批归一化层后，mAP升高$2\%$以上。并且可减少其他形式的正则化惩罚，如移除了dropout层。</p>
@@ -604,18 +604,18 @@
 <p> 在不添加锚框时，一个cell仅能输出$7 \times 7 \times 2 = 98$个候选框。而每个cell设置锚框后，对每个锚框均进行预测，而不是仅考虑cell的空间位置，可生成更多的候选框。</p>
 <p> 没有锚框的情况下，模型指标为$69.5$mAP与$81\%$的召回率，增加后，mAP降低为$69.2$，召回率上升到$88\%$，这说明模型还有较大空间可以调整。</p>
 <p> 对于锚框，文中没有提及，以下进行一些说明，现在每个cell的尺寸为$32\times32$，假定对单个cell设置$3$种纵横比的anchor，如$32 \times 32, 24 \times 48, 48 \times 24$，那么对于下图中包含物体的cell，锚框可视化为</p>
-<p> <img src="/.com//anchor.jpg" alt="anchor"></p>
+<p> <img src="//yoursite/anchor.jpg" alt="anchor"></p>
 <p> 对于上述三个锚框，从上至下分别为$32 \times 32, 24 \times 48, 48 \times 24$的锚框对应的特征图显示如下</p>
-<p> <img src="/.com//groudtruth_32x32.jpg" alt="groudtruth_32x32"></p>
-<p> <img src="/.com//groudtruth_24x48.jpg" alt="groudtruth_24x48"></p>
-<p> <img src="/.com//groudtruth_48x24.jpg" alt="groudtruth_48x24"></p>
+<p> <img src="//yoursite/groudtruth_32x32.jpg" alt="groudtruth_32x32"></p>
+<p> <img src="//yoursite/groudtruth_24x48.jpg" alt="groudtruth_24x48"></p>
+<p> <img src="//yoursite/groudtruth_48x24.jpg" alt="groudtruth_48x24"></p>
 <blockquote>
 <p>此外，每个纵横比下可分别设置$3$种尺度。</p>
 </blockquote>
 </li>
 <li><p>Dimension Clusters</p>
 <p> 至此遇到两个问题。第一，锚框的纵横比、尺度等是人为指定的，网络可以适应指定的锚框，但不是最优的，希望能够从数据中得到锚框的参数。所以对标注框的长宽尺寸进行K-Means聚类，注意到，如果使用欧式距离作为聚类指标，框越大它造成的误差也越大，希望的是IOU评分上升，所以定义指标为</p>
-<script type="math/tex; mode=display">d(\rm{box}, \rm{centroid}) = 1 - \rm{IoU}(\rm{box}, \rm{centroid})</script><p> 最终确定为$k=5$，在VOC和MSCOCO数据机上可能有所差异，详情查看下图<br> <img src="/.com//YOLOv2-Figure2.png" alt="YOLOv2-Figure2"></p>
+<script type="math/tex; mode=display">d(\rm{box}, \rm{centroid}) = 1 - \rm{IoU}(\rm{box}, \rm{centroid})</script><p> 最终确定为$k=5$，在VOC和MSCOCO数据机上可能有所差异，详情查看下图<br> <img src="//yoursite/YOLOv2-Figure2.png" alt="YOLOv2-Figure2"></p>
 </li>
 <li><p>Direct location prediction</p>
 <p> 对于偏移量，如果沿用一般的计算方法，则有</p>
@@ -646,9 +646,9 @@
      \sigma(t_y) = \frac{y}{cellsize} - \lfloor\frac{y}{cellsize}\rfloor \\
      t_w = \log \frac{b_w}{p_w} \\
      t_h = \log \frac{b_h}{p_h} 
- \end{cases}</script><p> <img src="/.com//groudtruth_32x32_new.jpg" alt="groudtruth_32x32_new"></p>
-<p> <img src="/.com//groudtruth_24x48_new.jpg" alt="groudtruth_24x48_new"></p>
-<p> <img src="/.com//groudtruth_48x24_new.jpg" alt="groudtruth_48x24_new"></p>
+ \end{cases}</script><p> <img src="//yoursite/groudtruth_32x32_new.jpg" alt="groudtruth_32x32_new"></p>
+<p> <img src="//yoursite/groudtruth_24x48_new.jpg" alt="groudtruth_24x48_new"></p>
+<p> <img src="//yoursite/groudtruth_48x24_new.jpg" alt="groudtruth_48x24_new"></p>
 </li>
 <li><p>Fine-Grained Features</p>
 <p> 为获得更细粒度的特征，用于小物体的检测，如Faster-RCNN与SSD是在各层特征图上进行候选框的生成。YOLOv2添加了passthrough层，将浅层特征与深层特征堆叠起来。这提升了$1\%$的表现。</p>
@@ -694,7 +694,7 @@
 </li>
 <li><p>Dataset combination with WordTree</p>
 <p> 借助于WordTree的多层级结构，构建多标签分类模型，如下图，进行多次softmax运算</p>
-<p> <img src="/.com//YOLOv2-Figure5.png" alt="YOLOv2-Figure5"></p>
+<p> <img src="//yoursite/YOLOv2-Figure5.png" alt="YOLOv2-Figure5"></p>
 </li>
 <li><p>Joint classification and detection</p>
 <p> 在MSCOCO与ImageNet数据集上，产生了9000多个类别。此外我们需要对模型进行验证。</p>
@@ -713,9 +713,9 @@
 <li>仍使用K-Means确定锚框的纵横比，最终确定9种纵横比$10 \times 13, 16 \times 30, 33 \times 23, 30 \times 61, 62 \times 45, 59 \times 119, 116 \times 90, 156 \times 198, 373 \times 326$，每个纵横比下3种尺度，共27个锚框。</li>
 </ul>
 <p>网络仍使用$3 \times 3$与$1 \times 1$卷积层的堆叠，加入shortcut使深度大大增加，最终形成Darknet-53。</p>
-<p><img src="/.com//YOLOv3-Darknet-53.png" alt="YOLOv3-Darknet-53"></p>
+<p><img src="//yoursite/YOLOv3-Darknet-53.png" alt="YOLOv3-Darknet-53"></p>
 <p>YOLOv3运算速度相当快，准确率也可以</p>
-<p><img src="/.com//YOLOv3-Figure3.png" alt="YOLOv3-Figure3"></p>
+<p><img src="//yoursite/YOLOv3-Figure3.png" alt="YOLOv3-Figure3"></p>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
 <li><a href="https://pjreddie.com/darknet/yolo/" target="_blank" rel="noopener">YOLO: Real Time Object Detection</a></li>
 <li><a href="https://arxiv.org/abs/1506.02640" target="_blank" rel="noopener">You Only Look Once: Unified, Real-Time Object Detection</a></li>
@@ -869,7 +869,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">115</span>
+                    <span class="site-state-item-count">116</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -898,7 +898,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -941,7 +951,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

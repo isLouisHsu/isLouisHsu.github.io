@@ -115,13 +115,13 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="前言深度学习网络可通过mini-batch随机梯度下降的方式进行优化，然而在优化过程中，存在梯度消失、收敛不稳定的问题。 原理机器学习中，假定训练数据与测试数据独立同分布(independent and identical independent)，当输入数据进行白化操作后，可使模型收敛速度加快，这被称作Covariate Shift。 而在神经网络内部，各层的特征图数据分布不均匀，称为Inter">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/.com//emoji.jpg">
+<meta property="og:image" content="http://yoursite/emoji.jpg">
 <meta property="article:published_time" content="2019-08-27T10:20:55.000Z">
 <meta property="article:modified_time" content="2019-09-02T07:45:02.048Z">
 <meta property="article:author" content="Louis Hsu">
 <meta property="article:tag" content="Module Layer">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/.com//emoji.jpg">
+<meta name="twitter:image" content="http://yoursite/emoji.jpg">
 
 
 
@@ -428,6 +428,24 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -470,7 +488,7 @@
 <li>为防止网络发散，网络参数初始化一般服从均值为$0$的正态分布；</li>
 <li>激活函数敏感区域一般定义在零点位置，如<code>logistic</code>函数，在零点出该处梯度最大，而其他位置容易出现梯度消失问题；</li>
 </ol>
-<p><img src="/.com//emoji.jpg" alt="emoji"></p>
+<p><img src="//yoursite/emoji.jpg" alt="emoji"></p>
 <p>内部白化后，输出数据近似服从标准正态分布。一般用于卷积层后、激活函数前。</p>
 <h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><p>Batch Normalization层通常包含参数<code>mean</code>, <code>variance</code>, <code>rolling_mean</code>, <code>rolling_variance</code>，其中<code>mean</code>与<code>variance</code>为训练时根据批次数据计算得到，在训练阶段使用以归一化批次数据；<code>rolling_mean</code>与<code>rolling_variance</code>为该层实际学习的参数，在测试阶段使用以归一化批次数据。</p>
 <p>对于某批次输入的数据$X_{\mathcal{B}}$，尺寸为$(N, H, W, C)$，计算该批次数据每个维度上的均值<code>mean</code>与方差<code>variance</code>，尺寸均为$(H, W, C)$，即</p>
@@ -631,7 +649,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">115</span>
+                    <span class="site-state-item-count">116</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -660,7 +678,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -703,7 +731,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

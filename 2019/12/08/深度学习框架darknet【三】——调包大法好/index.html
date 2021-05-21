@@ -115,12 +115,12 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="深度学习框架darknet【一】——简单使用 深度学习框架darknet【二】——目录结构 深度学习框架darknet【三】——调包大法好 深度学习框架darknet【四】——网络配置选项 深度学习框架darknet【五】——训练解析  前言本节以YOLO为例，介绍如何调用darknet函数来进行网络训练和测试，对框架有一个整体的认识。 Main主函数入口在examples&#x2F;darknet.c&#x2F;">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/.com//cfg.jpg">
+<meta property="og:image" content="http://yoursite/cfg.jpg">
 <meta property="article:published_time" content="2019-12-08T12:34:22.000Z">
 <meta property="article:modified_time" content="2020-04-24T10:46:07.494Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/.com//cfg.jpg">
+<meta name="twitter:image" content="http://yoursite/cfg.jpg">
 
 
 
@@ -817,7 +817,7 @@ network *load_network(char *cfg, char *weights, int clear)
   <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span>&#123;</span></span><br><span class="line">    <span class="keyword">char</span> *type;     <span class="comment">// 记录`[xxx]`</span></span><br><span class="line">    <span class="built_in">list</span> *options;  <span class="comment">// 记录选项</span></span><br><span class="line">&#125;section;</span><br></pre></td></tr></table></figure>
 <p>  <code>sections -&gt; s -&gt; options</code>也为链表，其元素为<code>kvp*</code>，用以存储键值对</p>
   <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span>&#123;</span></span><br><span class="line">    <span class="keyword">char</span> *key;</span><br><span class="line">    <span class="keyword">char</span> *val;</span><br><span class="line">    <span class="keyword">int</span> used;</span><br><span class="line">&#125; kvp;</span><br></pre></td></tr></table></figure>
-<p>  示意图如下<br>  <img src="/.com//cfg.jpg" alt="cfg"></p>
+<p>  示意图如下<br>  <img src="//yoursite/cfg.jpg" alt="cfg"></p>
 </li>
 <li><p>之后按上述输出的参数，构建网络</p>
 <ul>
@@ -1566,7 +1566,7 @@ void test_yolo(char *cfgfile, char *weightfile, char *filename, float thresh)
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">115</span>
+                    <span class="site-state-item-count">116</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1595,7 +1595,17 @@ void test_yolo(char *cfgfile, char *weightfile, char *filename, float thresh)
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1638,7 +1648,9 @@ void test_yolo(char *cfgfile, char *weightfile, char *filename, float thresh)
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

@@ -115,22 +115,22 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="前言MTCNN即Multi-task Cascaded Convolutional Networks，利用深度学习方法进行人脸识别、检测与关键点定位，可谓结合机器视觉领域三大任务为一体。 该算法中，人脸检测与识别视作分类任务，即判别框内图像是否包含人脸；定位视作回归任务，共需确定7个坐标点，依次为：回归框左上、右下坐标，左眼、右眼、鼻尖、左嘴角、右嘴角坐标。 在设计损失函数时，分类任务采用交叉熵(">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/.com//detect_algorithm.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//mtcnn.png">
-<meta property="og:image" content="http://yoursite.com/.com//detect_demo.png">
-<meta property="og:image" content="http://yoursite.com/.com//landmark_demo.png">
-<meta property="og:image" content="http://yoursite.com/.com//offsets.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//pnet1.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//pnet2.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//pnet_gen_box.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//rnet.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//nms.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//iou.jpg">
+<meta property="og:image" content="http://yoursite/detect_algorithm.jpg">
+<meta property="og:image" content="http://yoursite/mtcnn.png">
+<meta property="og:image" content="http://yoursite/detect_demo.png">
+<meta property="og:image" content="http://yoursite/landmark_demo.png">
+<meta property="og:image" content="http://yoursite/offsets.jpg">
+<meta property="og:image" content="http://yoursite/pnet1.jpg">
+<meta property="og:image" content="http://yoursite/pnet2.jpg">
+<meta property="og:image" content="http://yoursite/pnet_gen_box.jpg">
+<meta property="og:image" content="http://yoursite/rnet.jpg">
+<meta property="og:image" content="http://yoursite/nms.jpg">
+<meta property="og:image" content="http://yoursite/iou.jpg">
 <meta property="article:published_time" content="2019-05-05T14:05:37.000Z">
 <meta property="article:modified_time" content="2019-07-17T12:13:57.971Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/.com//detect_algorithm.jpg">
+<meta name="twitter:image" content="http://yoursite/detect_algorithm.jpg">
 
 
 
@@ -493,9 +493,9 @@
         <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>MTCNN即Multi-task Cascaded Convolutional Networks，利用深度学习方法进行人脸识别、检测与关键点定位，可谓结合机器视觉领域三大任务为一体。</p>
 <p>该算法中，人脸检测与识别视作分类任务，即判别框内图像是否包含人脸；定位视作回归任务，共需确定7个坐标点，依次为：回归框左上、右下坐标，左眼、右眼、鼻尖、左嘴角、右嘴角坐标。</p>
 <p>在设计损失函数时，分类任务采用交叉熵<code>(Cross Entropy)</code>，回归任务采用均方误差<code>(MSE)</code>，并且三个任务的损失，可给定不同的系数进行网络训练，使各网络侧重点不同，即<code>PNet</code>与<code>RNet</code>侧重于人脸识别与回归框定位，<code>ONet</code>侧重于关键点定位。</p>
-<h1 id="算法对比"><a href="#算法对比" class="headerlink" title="算法对比"></a>算法对比</h1><p><img src="/.com//detect_algorithm.jpg" alt="detect_algorithm"></p>
+<h1 id="算法对比"><a href="#算法对比" class="headerlink" title="算法对比"></a>算法对比</h1><p><img src="//yoursite/detect_algorithm.jpg" alt="detect_algorithm"></p>
 <h1 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h1><p>共设计3个卷积网络，每个网络均可输出识别概率(1)、回归框坐标(2×2)、关键点坐标(5×2)，三个网络级联以获得良好的预测结果。各网络结构图如下</p>
-<p><img src="/.com//mtcnn.png" alt="mtcnn"></p>
+<p><img src="//yoursite/mtcnn.png" alt="mtcnn"></p>
 <p>分类任务输出层可采用<code>softmax</code>，即视作多分类任务；或者采用<code>sigmoid</code>，视作二分类任务。</p>
 <h2 id="1-P-Net：-Proposal-Network"><a href="#1-P-Net：-Proposal-Network" class="headerlink" title="1. P-Net： Proposal Network"></a>1. P-Net： Proposal Network</h2><p>检测任务比较重要的一步是产生数目足够多的候选框，<code>PNet</code>设计全卷积网络，可接受任意大小的图片输入，利用输出的特征图生成候选框，具体生成算法在检测算法中说明。该网络在训练时接受$12×12×3$的图像输入，各层参数如下。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">layer     filters    size           input                output</span><br><span class="line">0 conv      10      3 x 3 &#x2F; 1    12 x  12 x   3   -&gt;    10 x  10 x  10  0.000 BFLOPs</span><br><span class="line">1 max               2 x 2 &#x2F; 2    10 x  10 x  10   -&gt;     5 x   5 x  10</span><br><span class="line">2 conv      16      3 x 3 &#x2F; 1     5 x   5 x  10   -&gt;     3 x   3 x  16  0.000 BFLOPs</span><br><span class="line">3 conv      32      3 x 3 &#x2F; 1     3 x   3 x  16   -&gt;     1 x   1 x  32  0.000 BFLOPs</span><br><span class="line">4 conv      15      1 x 1 &#x2F; 1     1 x   1 x  32   -&gt;     1 x   1 x  15  0.000 BFLOPs</span><br></pre></td></tr></table></figure>
@@ -514,18 +514,18 @@
 </ul>
 </li>
 </ul>
-<p><img src="/.com//detect_demo.png" alt="detect_demo"></p>
+<p><img src="//yoursite/detect_demo.png" alt="detect_demo"></p>
 <ul>
 <li><p>关键点定位<br>  <a href="http://mmlab.ie.cuhk.edu.hk/archive/CNN_FacePoint.htm" target="_blank" rel="noopener">CNN FACE POINT</a>，包含5个关键点位置。</p>
 <blockquote>
 <p>Training set: <a href="http://mmlab.ie.cuhk.edu.hk/archive/CNN/data/train.zip" target="_blank" rel="noopener">Download</a><br>  It contains 5,590 LFW images and 7,876 other images downloaded from the web. The training set and validation set are defined in trainImageList.txt and testImageList.txt, respectively. Each line of these text files starts with the image name, followed by the boundary positions of the face bounding box retured by our face detector, then followed by the positions of the five facial points.<br>Testing set: <a href="http://mmlab.ie.cuhk.edu.hk/archive/CNN/data/test.zip" target="_blank" rel="noopener">Download</a><br>  It contains the 1,521 BioID images, 781 LFPW training images, and 249 LFPW test images used in our testing, together with the text files recording the boundary positions of the face bounding box retured by our face detector for each dataset. A few images that our face detector failed are not listed in the text files. LFPW images are renamed for the convenience of processing.</p>
 </blockquote>
-<p>  <img src="/.com//landmark_demo.png" alt="landmark_demo"></p>
+<p>  <img src="//yoursite/landmark_demo.png" alt="landmark_demo"></p>
 </li>
 </ul>
 <h2 id="2-训练数据生成"><a href="#2-训练数据生成" class="headerlink" title="2. 训练数据生成"></a>2. 训练数据生成</h2><p>采用了<code>Hard Example Mining</code>，后一网络的训练数据由前一网络结果生成，即先用训练好的前一网络进行数据评估，在评分较低、难以检测的数据中继续采样。在生成数据时，使用数据增广。</p>
 <p>七个关键点坐标转换为偏移量<code>(offset)</code>，使其不受图像缩放影响，且数值较小便于网络收敛，计算方法如下</p>
-<p><img src="/.com//offsets.jpg" alt="offsets"></p>
+<p><img src="//yoursite/offsets.jpg" alt="offsets"></p>
 <ul>
 <li><p>Bounding Box</p>
 <script type="math/tex; mode=display">
@@ -647,9 +647,9 @@ loss_coef = {
 </details>
 
 <h1 id="检测算法"><a href="#检测算法" class="headerlink" title="检测算法"></a>检测算法</h1><p>检测算法以功能区分，主要分成两个部分：候选框生成与候选框筛除。</p>
-<h2 id="1-候选框生成"><a href="#1-候选框生成" class="headerlink" title="1. 候选框生成"></a>1. 候选框生成</h2><p><img src="/.com//pnet1.jpg" alt="pnet1"></p>
-<p><img src="/.com//pnet2.jpg" alt="pnet2"></p>
-<p><img src="/.com//pnet_gen_box.jpg" alt="pnet_gen_box"></p>
+<h2 id="1-候选框生成"><a href="#1-候选框生成" class="headerlink" title="1. 候选框生成"></a>1. 候选框生成</h2><p><img src="//yoursite/pnet1.jpg" alt="pnet1"></p>
+<p><img src="//yoursite/pnet2.jpg" alt="pnet2"></p>
+<p><img src="//yoursite/pnet_gen_box.jpg" alt="pnet_gen_box"></p>
 <p>该步骤使用的网络为<code>PNet</code>。指定超参数<code>minface</code>，对于任意尺寸输入的图像<code>H × W</code>，先将其缩放</p>
 <script type="math/tex; mode=display">
 H_c = H × \frac{12}{minface}</script><script type="math/tex; mode=display">
@@ -664,7 +664,7 @@ x_1 = stride × i × \frac{1}{scale}</script><script type="math/tex; mode=displa
 y_1 = stride × j × \frac{1}{scale}</script><script type="math/tex; mode=display">
 x_2 = x_1 + \frac{cellsize}{scale}</script><script type="math/tex; mode=display">
 y_2 = y_1 + \frac{cellsize}{scale}</script><p>其中<code>cellsize</code>为超参数，一般指定为<code>cellsize=12</code></p>
-<h2 id="2-候选框筛除"><a href="#2-候选框筛除" class="headerlink" title="2. 候选框筛除"></a>2. 候选框筛除</h2><p><img src="/.com//rnet.jpg" alt="rnet"></p>
+<h2 id="2-候选框筛除"><a href="#2-候选框筛除" class="headerlink" title="2. 候选框筛除"></a>2. 候选框筛除</h2><p><img src="//yoursite/rnet.jpg" alt="rnet"></p>
 <p>改步使用网络<code>PNet</code>与<code>ONet</code>，依次对上一层网络进行<code>refine</code>，计算方法一致。</p>
 <ul>
 <li>获取上一层网络输出回归框，截取图片中相应位置的图像数据，并缩放到对应尺寸；</li>
@@ -672,14 +672,14 @@ y_2 = y_1 + \frac{cellsize}{scale}</script><p>其中<code>cellsize</code>为超�
 <li>设定阈值，只保留分类评估大于阈值的结果；</li>
 <li>对剩余结果进行<code>NMS</code>，输出结果；</li>
 </ul>
-<h2 id="3-NMS"><a href="#3-NMS" class="headerlink" title="3. NMS"></a>3. NMS</h2><p><img src="/.com//nms.jpg" alt="nms"></p>
+<h2 id="3-NMS"><a href="#3-NMS" class="headerlink" title="3. NMS"></a>3. NMS</h2><p><img src="//yoursite/nms.jpg" alt="nms"></p>
 <p>例如，有中三个候选框a, b, c，其评分依次为0.8, 0.7, 0.9，设定NMS阈值</p>
 <script type="math/tex; mode=display">
 thresh=0.4</script><ol>
 <li>先将其排序，以降序排序为c, a, b；</li>
 <li>保存当前评分最高的回归框，即c；</li>
 <li><p>计算c与a, b的IoU，计算方法如下</p>
-<p> <img src="/.com//iou.jpg" alt="iou"></p>
+<p> <img src="//yoursite/iou.jpg" alt="iou"></p>
 <script type="math/tex; mode=display">
  IoU = \frac{Intersection}{Union}</script><p> 其中</p>
 <script type="math/tex; mode=display">
@@ -918,7 +918,7 @@ thresh=0.4</script><ol>
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">115</span>
+                    <span class="site-state-item-count">116</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -947,7 +947,17 @@ thresh=0.4</script><ol>
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -990,7 +1000,9 @@ thresh=0.4</script><ol>
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

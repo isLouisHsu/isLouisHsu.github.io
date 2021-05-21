@@ -115,14 +115,14 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="原因分析放上一张非常经典的图，以下分别表示二分类模型中的欠拟合(underfit)、恰好(just right)、过拟合(overfit)，来自吴恩达课程笔记。  欠拟合的成因大多是模型不够复杂、拟合函数的能力不够； 过拟合成因是给定的数据集相对过于简单，使得模型在拟合函数时过分地考虑了噪声等不必要的数据间的关联，或者说相对于给定数据集，模型过于复杂、拟合能力过强。  判别方法学习曲线可通过学习曲">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/.com//underfit_justright_overfit.png">
-<meta property="og:image" content="http://yoursite.com/.com//learning_curve_nb.png">
-<meta property="og:image" content="http://yoursite.com/.com//learning_curve.png">
+<meta property="og:image" content="http://yoursite/underfit_justright_overfit.png">
+<meta property="og:image" content="http://yoursite/learning_curve_nb.png">
+<meta property="og:image" content="http://yoursite/learning_curve.png">
 <meta property="article:published_time" content="2018-10-26T10:55:07.000Z">
 <meta property="article:modified_time" content="2019-07-17T12:13:10.288Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/.com//underfit_justright_overfit.png">
+<meta name="twitter:image" content="http://yoursite/underfit_justright_overfit.png">
 
 
 
@@ -429,6 +429,24 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -464,7 +482,7 @@
       
 
       
-        <h1 id="原因分析"><a href="#原因分析" class="headerlink" title="原因分析"></a>原因分析</h1><p>放上一张非常经典的图，以下分别表示二分类模型中的欠拟合(underfit)、恰好(just right)、过拟合(overfit)，来自吴恩达课程笔记。<br><img src="/.com//underfit_justright_overfit.png" alt="underfit_justright_overfit"></p>
+        <h1 id="原因分析"><a href="#原因分析" class="headerlink" title="原因分析"></a>原因分析</h1><p>放上一张非常经典的图，以下分别表示二分类模型中的欠拟合(underfit)、恰好(just right)、过拟合(overfit)，来自吴恩达课程笔记。<br><img src="//yoursite/underfit_justright_overfit.png" alt="underfit_justright_overfit"></p>
 <ul>
 <li>欠拟合的成因大多是模型不够复杂、拟合函数的能力不够；</li>
 <li>过拟合成因是给定的数据集相对过于简单，使得模型在拟合函数时过分地考虑了噪声等不必要的数据间的关联，或者说相对于给定数据集，模型过于复杂、拟合能力过强。</li>
@@ -472,12 +490,12 @@
 <h1 id="判别方法"><a href="#判别方法" class="headerlink" title="判别方法"></a>判别方法</h1><h2 id="学习曲线"><a href="#学习曲线" class="headerlink" title="学习曲线"></a>学习曲线</h2><p>可通过学习曲线<code>(Learning curve)</code>进行欠拟合与过拟合的判别。</p>
 <p>学习曲线就是通过画出<strong>不同训练集大小</strong>时训练集和交叉验证的准确率，可以看到模型在新数据上的表现，进而来判断模型是否方差偏高或偏差过高，以及增大训练集是否可以减小过拟合。</p>
 <h2 id="绘制"><a href="#绘制" class="headerlink" title="绘制"></a>绘制</h2><p>横轴为训练样本的数量，纵轴为损失或其他<a href>评估准则</a>。<br><code>sklearn</code>中学习曲线绘制例程如下<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> sklearn.naive_bayes <span class="keyword">import</span> GaussianNB</span><br><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_digits</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> learning_curve</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> ShuffleSplit</span><br><span class="line"></span><br><span class="line">digits = load_digits(); X, y = digits.data, digits.target</span><br><span class="line"></span><br><span class="line">cv = ShuffleSplit(n_splits=<span class="number">100</span>, test_size=<span class="number">0.2</span>, random_state=<span class="number">0</span>)</span><br><span class="line">estimator = GaussianNB()</span><br><span class="line">train_sizes, train_scores, test_scores = learning_curve(</span><br><span class="line">        estimator, X, y, cv=cv, n_jobs=<span class="number">4</span>, train_sizes=np.linspace(<span class="number">.1</span>, <span class="number">1.0</span>, <span class="number">5</span>))</span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">plt.title(<span class="string">"Learning Curves (Naive Bayes)"</span>)</span><br><span class="line">plt.xlabel(<span class="string">"Training examples"</span>)</span><br><span class="line">plt.ylabel(<span class="string">"Score"</span>)</span><br><span class="line"></span><br><span class="line">train_scores_mean = np.mean(train_scores, axis=<span class="number">1</span>)</span><br><span class="line">train_scores_std = np.std(train_scores, axis=<span class="number">1</span>)</span><br><span class="line">test_scores_mean = np.mean(test_scores, axis=<span class="number">1</span>)</span><br><span class="line">test_scores_std = np.std(test_scores, axis=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">plt.fill_between(train_sizes, </span><br><span class="line">                train_scores_mean - train_scores_std,</span><br><span class="line">                train_scores_mean + train_scores_std,</span><br><span class="line">                alpha=<span class="number">0.1</span>, color=<span class="string">"r"</span>)</span><br><span class="line">plt.fill_between(train_sizes,</span><br><span class="line">                test_scores_mean - test_scores_std,</span><br><span class="line">                test_scores_mean + test_scores_std,</span><br><span class="line">                alpha=<span class="number">0.1</span>, color=<span class="string">"g"</span>)</span><br><span class="line">plt.plot(train_sizes, train_scores_mean, <span class="string">'o-'</span>, color=<span class="string">"r"</span>, label=<span class="string">"Training score"</span>)</span><br><span class="line">plt.plot(train_sizes, test_scores_mean,  <span class="string">'o-'</span>, color=<span class="string">"g"</span>, label=<span class="string">"Cross-validation score"</span>)</span><br><span class="line"></span><br><span class="line">plt.grid(); plt.legend(loc=<span class="string">"best"</span>)</span><br><span class="line"></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></p>
-<p><img src="/.com//learning_curve_nb.png" alt="learning_curve_nb"></p>
+<p><img src="//yoursite/learning_curve_nb.png" alt="learning_curve_nb"></p>
 <h2 id="判别"><a href="#判别" class="headerlink" title="判别"></a>判别</h2><ul>
 <li><strong>欠拟合</strong>，即高偏差<code>(high bias)</code>，训练集和测试集的误差收敛但却很高；</li>
 <li><strong>过拟合</strong>，即高方差<code>(high variance)</code>，训练集和测试集的误差之间有大的差距。</li>
 </ul>
-<p><img src="/.com//learning_curve.png" alt="learning_curve"></p>
+<p><img src="//yoursite/learning_curve.png" alt="learning_curve"></p>
 <h1 id="欠拟合解决方法"><a href="#欠拟合解决方法" class="headerlink" title="欠拟合解决方法"></a>欠拟合解决方法</h1><ul>
 <li>增加迭代次数继续训练</li>
 <li>增加模型复杂度</li>
@@ -648,7 +666,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">115</span>
+                    <span class="site-state-item-count">116</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -677,7 +695,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -720,7 +748,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

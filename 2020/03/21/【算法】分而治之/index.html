@@ -115,13 +115,13 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="分治算法是将一个问题的大实例分成若干个更小的实例，分别解决后将小实例的解组合成原始大实例的解。一般来说，大实例分解前是用重复的步骤进行求解的，分解后的子问题也可通过同一种算法解决，用递归解决。 例(金块问题)：有$n$个金块，从中找出最重与最轻的金块。 如果用顺序查找的方式，先通过$n-1$次比较选出最重的，再通过$n-2$次比较选出最轻的，共进行$2n-3$次比较，时间复杂度为$O(n)$。 通">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/.com//merge_sort.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//quicksort.jpg">
+<meta property="og:image" content="http://yoursite/merge_sort.jpg">
+<meta property="og:image" content="http://yoursite/quicksort.jpg">
 <meta property="article:published_time" content="2020-03-21T01:26:40.000Z">
 <meta property="article:modified_time" content="2020-03-24T06:23:33.328Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/.com//merge_sort.jpg">
+<meta name="twitter:image" content="http://yoursite/merge_sort.jpg">
 
 
 
@@ -428,6 +428,24 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a></span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -472,12 +490,12 @@
 <p><strong>例(递归排序)：利用分治思想设计排序。</strong></p>
 <p>将$n$个数进行<strong>二路划分</strong>，对每个子集合进行排(如插入、冒泡等)，再依次组合归并有序集合得到整个有序集合，可以看作是别的排序算法的递归实现。注意到将两个子集合归并时，两子集和已有序，故改进合并算法为<strong>直接归并排序</strong>(straight merge sort)，不采用其他排序算法进行合并，减少时间复杂度，相应的会增加空间空间复杂度。</p>
 <p>如下图，对${8, 4, 7, 3, 6, 1, 2, 9, 10, 5}$进行排序，归并排序共进行$22$次比较，而使用冒泡排序时，需进行$39$次比较。</p>
-<p><img src="/.com//merge_sort.jpg" alt="merge_sort"></p>
+<p><img src="//yoursite/merge_sort.jpg" alt="merge_sort"></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">merge</span><span class="params">(T a[], <span class="keyword">int</span> begin, <span class="keyword">int</span> middle, <span class="keyword">int</span> end)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    T* b = <span class="keyword">new</span> T[end];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将有序子数组合并到b</span></span><br><span class="line">    <span class="keyword">int</span> i = begin, j = middle, k = begin;</span><br><span class="line">    <span class="keyword">while</span> (k &lt; end) &#123;</span><br><span class="line">        <span class="keyword">int</span> idx = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (i == middle)</span><br><span class="line">            idx = j++;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (j == end)</span><br><span class="line">            idx = i++;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            idx = a[i] &lt; a[j] ? i++ : j++;</span><br><span class="line">        &#125;</span><br><span class="line">        b[k++] = a[idx]; mvCnt++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 拷贝至原数组</span></span><br><span class="line">    <span class="keyword">for</span> (i = begin; i &lt; end; a[i] = b[i++]);</span><br><span class="line">    <span class="keyword">delete</span> [] b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">mergeSort</span><span class="params">(T a[], <span class="keyword">int</span> begin, <span class="keyword">int</span> end)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (end - begin &lt; <span class="number">2</span>) <span class="keyword">return</span>;</span><br><span class="line">	</span><br><span class="line">    <span class="keyword">int</span> middle = (begin + end) / <span class="number">2</span>;</span><br><span class="line">    mergeSort(a, begin, middle);</span><br><span class="line">    mergeSort(a, middle, end);</span><br><span class="line"></span><br><span class="line">    merge(a, begin, middle, end);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">mergeSort</span><span class="params">(T a[], <span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    mergeSort(a, <span class="number">0</span>, n);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>例(快速排序)：一种不稳定但速度很快的排序算法</strong></p>
 <p>快速排序是在待排序数组中寻找一个<strong>支点</strong>(pivot)，将当前待排序数组进行划分，使支点左侧的数据均小于支点，右侧的数据均大于支点，然后再分别对两侧进行迭代的排序进行<strong>分治</strong>，子数组排序完成后依次<strong>回溯</strong>使整个数组完成排序，示意图如下</p>
 <p>与冒泡等不同，<strong>当有序数组输入时为最坏情况</strong>。此时支点始终在最左侧或最右侧，时间复杂度为$O(n)$。为改善上述情况，可将用<strong>三值取中原则</strong>(median-of-three rule)进行支点的选择，在$a[begin], a[(begin + end)/2], a[end]$三个元素中选择大小居中的元素。</p>
-<p><img src="/.com//quicksort.jpg" alt="quicksort"></p>
+<p><img src="//yoursite/quicksort.jpg" alt="quicksort"></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">quickSort</span><span class="params">(T a[], <span class="keyword">int</span> begin, <span class="keyword">int</span> end)</span>   <span class="comment">// a[begin] ~ a[end - 1]</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> cmpCnt = <span class="number">0</span>; <span class="keyword">int</span> mvCnt = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (end - begin &lt; <span class="number">2</span>) <span class="keyword">return</span>;    <span class="comment">// 仅包含1个数，无需排序</span></span><br><span class="line"></span><br><span class="line">    T pivot = a[begin];	<span class="comment">// 当前子数组的头元素视作支点</span></span><br><span class="line">    <span class="keyword">int</span> left = begin, right = end - <span class="number">1</span>;	<span class="comment">// 左右索引</span></span><br><span class="line">    <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">        <span class="keyword">while</span> (a[left] &lt;= pivot &amp;&amp; left &lt; end) left++;	<span class="comment">// 搜索从左至右大于支点的元素a[left]</span></span><br><span class="line">        <span class="keyword">while</span> (a[right] &gt;= pivot &amp;&amp; right &gt; <span class="number">0</span>) right--;	<span class="comment">// 搜索从右至左小于支点的元素a[right]</span></span><br><span class="line"></span><br><span class="line">        cmpCnt++;</span><br><span class="line">            <span class="keyword">if</span> (left &lt; right) &#123;								<span class="comment">// 交换a[left]与a[right]</span></span><br><span class="line">            mvCnt++;</span><br><span class="line">            T temp = a[left];</span><br><span class="line">            a[left] = a[right];</span><br><span class="line">            a[right] = temp;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 此时索引为`begin + 1 ~ left - 1`的数都小于支点，索引为`left ~ end - 1`的数都大于支点；</span></span><br><span class="line">    <span class="comment">// 将支点调整至left - 1处，使支点左侧元素都小于支点，右侧都大于支点</span></span><br><span class="line">    mvCnt++;</span><br><span class="line">    a[begin] = a[left - <span class="number">1</span>];</span><br><span class="line">    a[left - <span class="number">1</span>] = pivot;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 划分子数组，递归</span></span><br><span class="line">    quickSort(a, begin, left - <span class="number">1</span>);  <span class="comment">// a[left-1]位置已确定</span></span><br><span class="line">    quickSort(a, left, end);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"比较"</span> &lt;&lt; cmpCnt &lt;&lt; <span class="string">"次 移动"</span> &lt;&lt; mvCnt &lt;&lt; <span class="string">"次"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">quickSort</span><span class="params">(T a[], <span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    quickSort(a, <span class="number">0</span>, n);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>例：将快速排序应用到寻找数组中升序排序中，次序为$k$的数</strong></p>
 <p>在快速排序的某次递归中，支点左侧均小于支点，右侧均大于支点，那么支点的位置在整个数组中已确定。在寻找次序为$k$的数时，不在最坏情况下，不需要等排序结束就可解决。</p>
@@ -620,7 +638,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">115</span>
+                    <span class="site-state-item-count">116</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -649,7 +667,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -692,7 +720,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

@@ -115,13 +115,13 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="目录 目录 问题 方案 根据主体分表 容量可拓展   实现  问题试想有这样一种场景，多个主体以一定时间间隔(如10s)源源不断采集数据，并存入数据表。并且，主体个数可能在随后使用中新增或减少。若全部数据存入一张表，当数据量很大时，用SQL查询数据会非常慢。本节就是总结一次在实际中遇到这类问题的解决方案，为解决查询慢的问题，可以从两方面入手  加快查询主体的速度：根据主体进行分表； 主体数目拓展：">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/.com//1.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//2.jpg">
+<meta property="og:image" content="http://yoursite/1.jpg">
+<meta property="og:image" content="http://yoursite/2.jpg">
 <meta property="article:published_time" content="2020-06-14T15:24:27.000Z">
 <meta property="article:modified_time" content="2020-08-16T12:56:10.062Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/.com//1.jpg">
+<meta name="twitter:image" content="http://yoursite/1.jpg">
 
 
 
@@ -479,9 +479,9 @@
 <li>主体数目拓展：主体个数到达一定数目时，进行容量拓展。</li>
 </ul>
 <h1 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h1><h2 id="根据主体分表"><a href="#根据主体分表" class="headerlink" title="根据主体分表"></a>根据主体分表</h2><p>主体个数较多，为减少单个表内数据量、加快主体查询速度，这里采用了哈希的思路进行分表。具体地，指定分表数目$N$，设计合理的哈希函数，利用主体唯一标识符(例如主体id)查询对应分表表明，将全部主体尽可能平均地划分到各个分表中。例如，我们可以选择如下哈希函数</p>
-<script type="math/tex; mode=display">\text{hash}(subject id) = \text{hex}(\text{md5}(subject id)) \% N</script><p><img src="/.com//1.jpg" alt="1"></p>
+<script type="math/tex; mode=display">\text{hash}(subject id) = \text{hex}(\text{md5}(subject id)) \% N</script><p><img src="//yoursite/1.jpg" alt="1"></p>
 <h2 id="容量可拓展"><a href="#容量可拓展" class="headerlink" title="容量可拓展"></a>容量可拓展</h2><p>考虑到主体可能新增或减少，当主体数目较多时还是会存在一张表存储大量主体数据的问题，所以考虑横向容量拓展，即设置$N$个分表最大可容纳主体数$M$，当新增主体id大于该阈值时，向新的“分区”建立分表并写入数据，即</p>
-<script type="math/tex; mode=display">\text{table}(subject id) = \text{hash}(subject id) + subject id // M</script><p><img src="/.com//2.jpg" alt="2"></p>
+<script type="math/tex; mode=display">\text{table}(subject id) = \text{hash}(subject id) + subject id // M</script><p><img src="//yoursite/2.jpg" alt="2"></p>
 <h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><p>具体代码查看<a href="https://github.com/isLouisHsu/AH/blob/master/abnormal_sequence_detection/vts_database_module.py" target="_blank" rel="noopener">vts_database_module.py</a></p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MySQLdbModule</span><span class="params">()</span>:</span></span><br><span class="line"></span><br><span class="line">    SPLIT_TABLE = <span class="string">"table_#&#123;:04d&#125;"</span></span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_hash_id</span><span class="params">(self, subject)</span>:</span></span><br><span class="line">        <span class="string">""" Hash</span></span><br><span class="line"><span class="string">        Parameters</span></span><br><span class="line"><span class="string">        ----------</span></span><br><span class="line"><span class="string">        subject : &#123;str&#125;</span></span><br><span class="line"><span class="string">        Returns</span></span><br><span class="line"><span class="string">        -------</span></span><br><span class="line"><span class="string">        hash_value : &#123;int&#125;</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        md5 = hashlib.md5(subject.encode(encoding=<span class="string">'UTF-8'</span>)).hexdigest()</span><br><span class="line">        <span class="keyword">return</span> int(md5[:<span class="number">2</span>] + md5[<span class="number">-2</span>:], <span class="number">16</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_table_id</span><span class="params">(self, subject)</span>:</span></span><br><span class="line">        <span class="string">""" Get the subject's table id</span></span><br><span class="line"><span class="string">        Parameters</span></span><br><span class="line"><span class="string">        ----------</span></span><br><span class="line"><span class="string">        subject : &#123;str&#125;</span></span><br><span class="line"><span class="string">        Returns</span></span><br><span class="line"><span class="string">        -------</span></span><br><span class="line"><span class="string">        table_id : &#123;int&#125;</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="comment"># generate id for subject</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> self._check_if_subject_exists_in_vts_table(subject):</span><br><span class="line">            self._update_subject_table(subject, <span class="keyword">None</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># query the id of subject</span></span><br><span class="line">        self.cursor.execute(<span class="string">"SELECT `id` FROM `&#123;:s&#125;` WHERE `subject` = '&#123;:s&#125;'"</span>.\</span><br><span class="line">                    format(self.HOST_TABLE, subject))</span><br><span class="line">        subject_id = self.cursor.fetchall()[<span class="number">0</span>][<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># hash</span></span><br><span class="line">        table_id = self._hash_id(subject) % self.number_of_split_tables + \</span><br><span class="line">            self.number_of_split_tables * subject_id // self.number_of_subjects_for_expansion</span><br><span class="line">        <span class="keyword">return</span> table_id</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># ----------------------------------------------------</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_table_name</span><span class="params">(self, subject)</span>:</span></span><br><span class="line">        <span class="string">""" Get the subject's table name</span></span><br><span class="line"><span class="string">        Parameters</span></span><br><span class="line"><span class="string">        ----------</span></span><br><span class="line"><span class="string">        subject : &#123;str&#125;</span></span><br><span class="line"><span class="string">        Returns</span></span><br><span class="line"><span class="string">        -------</span></span><br><span class="line"><span class="string">        table_name : &#123;str&#125;</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">return</span> self.SPLIT_TABLE.format(self._table_id(subject_name))</span><br></pre></td></tr></table></figure>
       
@@ -624,7 +624,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">115</span>
+                    <span class="site-state-item-count">116</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -653,7 +653,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -696,7 +706,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

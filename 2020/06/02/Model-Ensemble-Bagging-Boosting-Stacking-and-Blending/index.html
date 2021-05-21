@@ -115,13 +115,13 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="目录 目录 模型集成 原理 策略 平均法 投票法 学习法     Bagging 自助采样法 随机森林   Boosting AdaBoost 分类 回归：AdaBoost R2 多分类：SAMME 带概率输出的多分类：SAMME.R     Blending Stacking 多样性 误差-分歧分解(Error-Ambiguity Decomposition) 多样性度量 多样性增强   Ref">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/.com//figure_1.png">
-<meta property="og:image" content="http://yoursite.com/.com//blending.jpg">
+<meta property="og:image" content="http://yoursite/figure_1.png">
+<meta property="og:image" content="http://yoursite/blending.jpg">
 <meta property="article:published_time" content="2020-06-02T09:15:23.000Z">
 <meta property="article:modified_time" content="2020-06-16T11:12:42.351Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/.com//figure_1.png">
+<meta name="twitter:image" content="http://yoursite/figure_1.png">
 
 
 
@@ -587,7 +587,7 @@
 <li><p>计算分类器$h_m$在训练数据集上的分类误差率如下，即所有误分类的加权和，<strong>若$e_m \geq 1 / 2$，算法终止</strong>；</p>
 <script type="math/tex; mode=display">e_m = \sum_i w_m^{(i)} I(h_m(X^{(i)}) \neq y^{(i)}) \in (0， 1/2)</script></li>
 <li><p>计算分类器$h_m$的权重系数如下，评估该分类器在集成模型中的重要性，注意到该函数为单调递减函数，说明误差越小的分类器权重越大；</p>
-<script type="math/tex; mode=display">\alpha_m = \frac{1}{2} \log \frac{1 - e_m}{e_m} \in (- \infty, 0)</script><p><img src="/.com//figure_1.png" alt="figure_1"></p>
+<script type="math/tex; mode=display">\alpha_m = \frac{1}{2} \log \frac{1 - e_m}{e_m} \in (- \infty, 0)</script><p><img src="//yoursite/figure_1.png" alt="figure_1"></p>
 </li>
 <li><p>更新数据集的权重分布$W_{m+1} = \begin{bmatrix} w_{m+1}^{(1)}, \cdots, w_{m+1}^{(N)} \end{bmatrix}^T$</p>
 <script type="math/tex; mode=display">z_m^{(i)} = w_m^{(i)} \exp \left( - \alpha_m y^{(i)} h_m(X^{(i)}) \right)</script><script type="math/tex; mode=display">w_{m+1}^{(i)} = z_m^{(i)} / \sum_j z_m^{(j)}</script><p><strong>注意</strong>：分类正确时，$w_{m+1}^{(i)} = w_m^{(i)} \exp(-\alpha_m) / \sum_j z_m^{(j)}$，分类错误时，$w_{m+1}^{(i)} = w_m^{(i)} \exp(+ \alpha_m) / \sum_j z_m^{(j)}$，因此错误分类样本权重是正确分类样本权重的$\exp(2 \alpha_m)$倍。</p>
@@ -660,7 +660,7 @@
 <li>创建第二层模型。用validpred作为训练集训练这多个模型；</li>
 <li>用上述模型对testpred1进行预测，作为整个测试集的结果输出testpred。</li>
 </ol>
-<p><img src="/.com//blending.jpg" alt="blending"></p>
+<p><img src="//yoursite/blending.jpg" alt="blending"></p>
 <h1 id="Stacking"><a href="#Stacking" class="headerlink" title="Stacking"></a>Stacking</h1><p>Stacking涉及<strong>交叉验证</strong>，流程与Blending类似，具体代码参考<a href="https://github.com/log0/vertebral/blob/master/stacked_generalization.py" target="_blank" rel="noopener">log0/vertebral/stacked_generalization.py </a></p>
 <ol>
 <li>数据划分为训练集trainset和测试集testset；</li>
@@ -925,7 +925,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">115</span>
+                    <span class="site-state-item-count">116</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -954,7 +954,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -997,7 +1007,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

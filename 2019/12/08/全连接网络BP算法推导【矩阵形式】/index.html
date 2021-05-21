@@ -115,13 +115,13 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="前言在Feedforward Neural Network&#x2F;5. 梯度推导中介绍了前馈神经网络的BP算法，但是推导结果为对元素的梯度，不便于编程且影响计算效率。本节以3层前馈全连接神经网络为例，介绍矩阵形式的BP算法推导。 网络定义定义多层全连接网络：【输入(input)】 -&gt; 全连接层 -&gt; sigmoid -&gt; 【隐藏层(hidden)】-&gt; 全连接层 -&gt; 【">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/.com//nn.svg">
+<meta property="og:image" content="http://yoursite/nn.svg">
 <meta property="article:published_time" content="2019-12-08T09:43:23.000Z">
 <meta property="article:modified_time" content="2019-12-08T13:32:26.495Z">
 <meta property="article:author" content="Louis Hsu">
 <meta property="article:tag" content="理论">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/.com//nn.svg">
+<meta name="twitter:image" content="http://yoursite/nn.svg">
 
 
 
@@ -416,6 +416,24 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -454,7 +472,7 @@
         <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在<a href="https://louishsu.xyz/2018/10/20/Feedforward-Neural-Network/" target="_blank" rel="noopener">Feedforward Neural Network/5. 梯度推导</a>中介绍了前馈神经网络的BP算法，但是推导结果为<strong>对元素的梯度</strong>，不便于编程且影响计算效率。本节<strong>以3层前馈全连接神经网络为例</strong>，介绍矩阵形式的BP算法推导。</p>
 <h1 id="网络定义"><a href="#网络定义" class="headerlink" title="网络定义"></a>网络定义</h1><p>定义多层全连接网络：<br>【输入(input)】 -&gt; 全连接层 -&gt; sigmoid -&gt; 【隐藏层(hidden)】-&gt; 全连接层 -&gt; 【输出(output)】 -&gt; 损失函数层 -&gt; 损失值(loss)。</p>
 <p>示意图如下(已省略激活函数层)</p>
-<p><img src="/.com//nn.svg" alt="nn"></p>
+<p><img src="//yoursite/nn.svg" alt="nn"></p>
 <p>其<strong>符号定义</strong>为</p>
 <ul>
 <li>$\vec{x}^{(l-1)}$: 第$l$层的输入向量，维度为$n_{l-1} \times 1$；</li>
@@ -775,7 +793,7 @@ W^{(l)} \vec{x}^{(l-1)} + \vec{b}^{(l)} =
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">115</span>
+                    <span class="site-state-item-count">116</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -804,7 +822,17 @@ W^{(l)} \vec{x}^{(l-1)} + \vec{b}^{(l)} =
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -847,7 +875,9 @@ W^{(l)} \vec{x}^{(l-1)} + \vec{b}^{(l)} =
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

@@ -115,15 +115,15 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="前言高维数据可视化需要通过降维的方式，而PCA、LDA等线性降维算法，忽视了数据点间的空间结构特征，本文介绍的局部线性嵌入(LLE)算法为非线性降维方法，基于谱的降维方法，所以很靠谱 :-)。 原理设有$M$个$N$维数据点，构成矩阵$X$，如下 X &#x3D; \left[ \begin{matrix} \vec{x}^{(1)} &amp; \vec{x}^{(2)} &amp; \cdots &amp; \vec{x}^{">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/.com//sklearn.png">
-<meta property="og:image" content="http://yoursite.com/.com//custom.png">
+<meta property="og:image" content="http://yoursite/sklearn.png">
+<meta property="og:image" content="http://yoursite/custom.png">
 <meta property="article:published_time" content="2019-08-09T06:41:55.000Z">
 <meta property="article:modified_time" content="2019-08-12T03:40:19.507Z">
 <meta property="article:author" content="Louis Hsu">
 <meta property="article:tag" content="降维">
 <meta property="article:tag" content="manifold">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/.com//sklearn.png">
+<meta name="twitter:image" content="http://yoursite/sklearn.png">
 
 
 
@@ -430,6 +430,24 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -553,9 +571,9 @@
 </ol>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LocallyLinearEmbedding</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">""" Locally Linear Embedding</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Attributes:</span></span><br><span class="line"><span class="string">        n_neighbors:  &#123;int&#125;</span></span><br><span class="line"><span class="string">        n_components: &#123;int&#125;</span></span><br><span class="line"><span class="string">        W: &#123;ndarray&#125; </span></span><br><span class="line"><span class="string">            $$ W = \left[ \begin&#123;matrix&#125; w_1 &amp; w_2 &amp; \cdots &amp; w_&#123;n_samples&#125; \end&#123;matrix&#125; \right] $$</span></span><br><span class="line"><span class="string">            $$ w_i = \left[ \begin&#123;matrix&#125; w_&#123;i1&#125; &amp; w_&#123;i2&#125; &amp; \cdots &amp; w_&#123;i, n_samples&#125; \end&#123;matrix&#125; \right]^T $$</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, n_neighbors, n_components=<span class="number">2</span>)</span>:</span></span><br><span class="line">        </span><br><span class="line">        self.n_neighbors  = n_neighbors</span><br><span class="line">        self.n_components = n_components</span><br><span class="line">        self.W = <span class="keyword">None</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fit</span><span class="params">(self, X)</span>:</span></span><br><span class="line">        <span class="string">""" </span></span><br><span class="line"><span class="string">        Params:</span></span><br><span class="line"><span class="string">            X: &#123;ndarray(n_samples, n_features)&#125;</span></span><br><span class="line"><span class="string">        Returns:</span></span><br><span class="line"><span class="string">            W: &#123;ndarray(n_samples, n_samples)&#125;</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">from</span> sklearn.neighbors <span class="keyword">import</span> KDTree</span><br><span class="line">        kdtree = KDTree(X, metric=<span class="string">'euclidean'</span>)</span><br><span class="line">        </span><br><span class="line">        n_samples, n_features = X.shape</span><br><span class="line">        self.W = np.zeros((n_samples, n_samples))</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(n_samples):</span><br><span class="line"></span><br><span class="line">            <span class="comment">## 获取近邻样本点</span></span><br><span class="line">            x = X[i]</span><br><span class="line">            idx = kdtree.query(x.reshape(<span class="number">1</span>, <span class="number">-1</span>), self.n_neighbors + <span class="number">1</span>, return_distance=<span class="keyword">False</span>)[<span class="number">0</span>][<span class="number">1</span>: ]</span><br><span class="line">            <span class="comment">## 求取矩阵 Z = (x - N).dot((x - N).T)</span></span><br><span class="line">            N = X[idx]</span><br><span class="line">            Z = (x - N).dot((x - N).T)</span><br><span class="line">            <span class="comment">## 求取权重 w_i</span></span><br><span class="line">            Z_inv = np.linalg.inv(Z + np.finfo(float).eps * np.eye(self.n_neighbors))</span><br><span class="line">            w = np.sum(Z_inv, axis=<span class="number">1</span>) / np.sum(Z_inv)</span><br><span class="line">            <span class="comment">## 保存至 W</span></span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(self.n_neighbors):</span><br><span class="line">                self.W[idx[j], i] = w[j]</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> self.W</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">transform</span><span class="params">(self, X)</span>:</span></span><br><span class="line">        <span class="string">""" </span></span><br><span class="line"><span class="string">        Params:</span></span><br><span class="line"><span class="string">            X: &#123;ndarray(n_samples, n_features)&#125;</span></span><br><span class="line"><span class="string">        Returns:</span></span><br><span class="line"><span class="string">            Y: &#123;ndarray(n_samples, n_components)&#125;</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        n_samples, n_features = X.shape</span><br><span class="line"></span><br><span class="line">        <span class="comment">## 求取矩阵 A = (I - W)(I - W)^T</span></span><br><span class="line">        I = np.eye(n_samples)</span><br><span class="line">        A = (I - self.W).dot((I - self.W).T)</span><br><span class="line"></span><br><span class="line">        <span class="comment">## 对 A 进行特征分解，并按特征值升序排序</span></span><br><span class="line">        eigval, eigvec = np.linalg.eig(A)</span><br><span class="line">        eigvec = eigvec[:, np.argsort(eigval)]</span><br><span class="line"></span><br><span class="line">        <span class="comment">## 选取 D 维</span></span><br><span class="line">        k_skip = <span class="number">1</span></span><br><span class="line">        Y = eigvec[:, k_skip: self.n_components + k_skip]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> Y</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fit_transform</span><span class="params">(self, X)</span>:</span></span><br><span class="line">        <span class="string">""" </span></span><br><span class="line"><span class="string">        Params:</span></span><br><span class="line"><span class="string">            X: &#123;ndarray(n_samples, n_features)&#125;</span></span><br><span class="line"><span class="string">        Returns:</span></span><br><span class="line"><span class="string">            Y: &#123;ndarray(n_samples, n_components)&#125;</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        </span><br><span class="line">        self.fit(X)</span><br><span class="line">        Y = self.transform(X)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> Y</span><br></pre></td></tr></table></figure>
 <h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><p>在<code>scikit learn</code>官网有具体实现<a href="https://scikit-learn.org/stable/auto_examples/manifold/plot_lle_digits.html#sphx-glr-auto-examples-manifold-plot-lle-digits-py" target="_blank" rel="noopener">基于手写数据集的几种基于谱的降维方法对比</a>。</p>
-<p><img src="/.com//sklearn.png" alt="sphx_glr_plot_lle_digits_008"></p>
+<p><img src="//yoursite/sklearn.png" alt="sphx_glr_plot_lle_digits_008"></p>
 <p>以下为上述代码实现的结果<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.datasets  <span class="keyword">import</span> load_digits</span><br><span class="line"></span><br><span class="line">digits = load_digits(n_class=<span class="number">6</span>)</span><br><span class="line">X = digits.data</span><br><span class="line">y = digits.target</span><br><span class="line">images = digits.images</span><br><span class="line"></span><br><span class="line">lle = LocallyLinearEmbedding(<span class="number">30</span>, <span class="number">2</span>)</span><br><span class="line">X_lle = lle.fit_transform(X)</span><br><span class="line"></span><br><span class="line">plot_embedding(X_lle, y, images, title=<span class="keyword">None</span>, t=<span class="number">2e-3</span>, figsize=(<span class="number">12</span>, <span class="number">9</span>))</span><br></pre></td></tr></table></figure></p>
-<p><img src="/.com//custom.png" alt="custom"></p>
+<p><img src="//yoursite/custom.png" alt="custom"></p>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
 <li><a href="https://www.jianshu.com/p/25a2a47bb60b" target="_blank" rel="noopener">(十二)LLE局部线性嵌入降维算法 - 简书</a></li>
 <li><a href="https://scikit-learn.org/stable/modules/manifold.html#locally-linear-embedding" target="_blank" rel="noopener">2.2.3. Locally Linear Embedding - scikit learn</a></li>
@@ -710,7 +728,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">115</span>
+                    <span class="site-state-item-count">116</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -739,7 +757,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -782,7 +810,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

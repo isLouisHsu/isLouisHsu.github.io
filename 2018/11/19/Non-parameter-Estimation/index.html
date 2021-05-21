@@ -115,22 +115,22 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="前言若参数估计时我们不知道样本的分布形式，那么就无法确定需要估计的概率密度函数，无法用最大似然估计、贝叶斯估计等参数估计方法，应该用非参数估计方法。 需要知道的是，作为非参数方法的共同问题是对样本数量需求较大，只要样本数目足够大众可以保证收敛于任何复杂的位置密度，但是计算量和存储量都比较大。当样本数很少时，如果能够对密度函数有先验认识，则参数估计能取得更好的估计效果。 基本原理若有$M$个样本$x">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/.com//hist_matplotlib.png">
-<meta property="og:image" content="http://yoursite.com/.com//hist_ploy.png">
-<meta property="og:image" content="http://yoursite.com/.com//Parzen_window.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//01_h_0.5.png">
-<meta property="og:image" content="http://yoursite.com/.com//01_h_0.8.png">
-<meta property="og:image" content="http://yoursite.com/.com//01_h_1.0.png">
-<meta property="og:image" content="http://yoursite.com/.com//01_h_2.0.png">
-<meta property="og:image" content="http://yoursite.com/.com//gaussian_h_0.5.png">
-<meta property="og:image" content="http://yoursite.com/.com//gaussian_h_0.8.png">
-<meta property="og:image" content="http://yoursite.com/.com//gaussian_h_1.0.png">
-<meta property="og:image" content="http://yoursite.com/.com//gaussian_h_2.0.png">
+<meta property="og:image" content="http://yoursite/hist_matplotlib.png">
+<meta property="og:image" content="http://yoursite/hist_ploy.png">
+<meta property="og:image" content="http://yoursite/Parzen_window.jpg">
+<meta property="og:image" content="http://yoursite/01_h_0.5.png">
+<meta property="og:image" content="http://yoursite/01_h_0.8.png">
+<meta property="og:image" content="http://yoursite/01_h_1.0.png">
+<meta property="og:image" content="http://yoursite/01_h_2.0.png">
+<meta property="og:image" content="http://yoursite/gaussian_h_0.5.png">
+<meta property="og:image" content="http://yoursite/gaussian_h_0.8.png">
+<meta property="og:image" content="http://yoursite/gaussian_h_1.0.png">
+<meta property="og:image" content="http://yoursite/gaussian_h_2.0.png">
 <meta property="article:published_time" content="2018-11-19T02:55:43.000Z">
 <meta property="article:modified_time" content="2019-08-02T02:16:38.061Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/.com//hist_matplotlib.png">
+<meta name="twitter:image" content="http://yoursite/hist_matplotlib.png">
 
 
 
@@ -437,6 +437,24 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -536,8 +554,8 @@ d_n = \frac{\max x_n - \min x_n}{K}</script><p>假设样本落到各个小空间
 </li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">def histEstimate(X, n_bins, showfig&#x3D;False):</span><br><span class="line">    &quot;&quot;&quot; 直方图密度估计</span><br><span class="line">    Args:</span><br><span class="line">        n_bins: &#123;int&#125; 直方图的条数</span><br><span class="line">    Returns:</span><br><span class="line">        hist: &#123;ndarray(n_bins,)&#125;</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    n, bins, patches &#x3D; plt.hist(X, bins&#x3D;n_bins, normed&#x3D;1, facecolor&#x3D;&#39;lightblue&#39;, edgecolor&#x3D;&#39;white&#39;)</span><br><span class="line">    if showfig: plt.show()</span><br><span class="line">    return n, bins, patches</span><br></pre></td></tr></table></figure>
-<p><code>matplotlib</code>直方图显示如下<br><img src="/.com//hist_matplotlib.png" alt="hist_matplotlib"></p>
-<p>拟合各中心点显示如下<br><img src="/.com//hist_ploy.png" alt="hist_ploy"></p>
+<p><code>matplotlib</code>直方图显示如下<br><img src="//yoursite/hist_matplotlib.png" alt="hist_matplotlib"></p>
+<p>拟合各中心点显示如下<br><img src="//yoursite/hist_ploy.png" alt="hist_ploy"></p>
 <h1 id="K-n-近邻估计法"><a href="#K-n-近邻估计法" class="headerlink" title="$K_n$近邻估计法"></a>$K_n$近邻估计法</h1><p>随着样本数的增加，区域的体积应该尽可能小，同时又必须保证区域内有充分多的样本，但是每个区域的样本数有必须是总样本数的很小的一部分，而不是与直方图估计那样体积不变。</p>
 <p>那么我们想，能否根据样本的分布调整分区大小呢，$K$近邻估计法就是一种采用可变大小区间的密度估计方法。</p>
 <h2 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h2><p>根据总样本确定参数$K_n$，在求样本$x$处的密度估计$\hat{p}(x)$时，调整区域体积$V(x)$，直到区域内恰好落入$K_n$个样本，估计公式为</p>
@@ -552,7 +570,7 @@ K_n = a × \sqrt{M} \tag{8}</script><blockquote>
 <h1 id="Parzen窗法"><a href="#Parzen窗法" class="headerlink" title="Parzen窗法"></a>Parzen窗法</h1><p>又称核密度估计。</p>
 <h2 id="原理-2"><a href="#原理-2" class="headerlink" title="原理"></a>原理</h2><p>我们暂时假设待估计点$x$的附近区间$R$为一个$N$维的<strong>超立方体</strong>，用$h$表示边的长度，那么</p>
 <script type="math/tex; mode=display">
-V_i = h^N</script><p>即<br><img src="/.com//Parzen_window.jpg" alt="Parzen_window"><br>定义窗函数$\varphi(·)$，表示落入以$x$为中心的超立方体的区域的点</p>
+V_i = h^N</script><p>即<br><img src="//yoursite/Parzen_window.jpg" alt="Parzen_window"><br>定义窗函数$\varphi(·)$，表示落入以$x$为中心的超立方体的区域的点</p>
 <script type="math/tex; mode=display">
 \varphi \left(\frac{x_i-x}{h}\right) 
 = \begin{cases}
@@ -604,23 +622,23 @@ p(x)
 <p>定义核函数如下<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 高斯核</span></span><br><span class="line">gaussian = <span class="keyword">lambda</span> z: np.exp(<span class="number">-0.5</span>*(np.linalg.norm(z)**<span class="number">2</span>)) / np.sqrt(<span class="number">2</span>*np.pi)</span><br><span class="line"><span class="comment"># 均匀核</span></span><br><span class="line">square = <span class="keyword">lambda</span> z: <span class="number">1</span> <span class="keyword">if</span> (np.linalg.norm(z) &lt;= <span class="number">0.5</span>) <span class="keyword">else</span> <span class="number">0</span></span><br></pre></td></tr></table></figure></p>
 <p>密度估计函数如下，需要对连续范围内的各个点，即$x \in [min(X), max(X)]$进行估计获得<code>p</code>，作图显示$x-p$即可<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parzenEstimate</span><span class="params">(X, kernel, h, n_num=<span class="number">50</span>)</span>:</span></span><br><span class="line">    <span class="string">""" 核参数估计</span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        X: &#123;ndarray(n_samples,)&#125;</span></span><br><span class="line"><span class="string">        kernel: &#123;function&#125; 可调用的核函数</span></span><br><span class="line"><span class="string">        h: &#123;float&#125; 核函数的参数</span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        p: &#123;ndarray(n_num,)&#125;</span></span><br><span class="line"><span class="string">    Notes:</span></span><br><span class="line"><span class="string">        - 一维，故`V_i = h`</span></span><br><span class="line"><span class="string">        - p(x) = \frac&#123;1&#125;&#123;M&#125; \sum_&#123;i=1&#125;^M \kappa \left( \frac&#123;x_i - x&#125;&#123;h&#125; \right)</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    x = np.linspace(np.min(X), np.max(X), num=n_num)</span><br><span class="line">    p = np.zeros(shape=(x.shape[<span class="number">0</span>],))</span><br><span class="line">    z = <span class="keyword">lambda</span> x, x_i, h: (x - x_i) / h</span><br><span class="line">    V_i = h; n_samples = X.shape[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">for</span> idx <span class="keyword">in</span> range(x.shape[<span class="number">0</span>]):</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(X.shape[<span class="number">0</span>]):</span><br><span class="line">            p[idx] += kernel(z(x[idx], X[i], h)) / V_i</span><br><span class="line">        p[idx] /= n_samples</span><br><span class="line">    <span class="keyword">return</span> p</span><br></pre></td></tr></table></figure></p>
 <h3 id="均匀核"><a href="#均匀核" class="headerlink" title="均匀核"></a>均匀核</h3><ul>
-<li><p>$h=0.5$<br>  <img src="/.com//01_h_0.5.png" alt="01_h_0.5"></p>
+<li><p>$h=0.5$<br>  <img src="//yoursite/01_h_0.5.png" alt="01_h_0.5"></p>
 </li>
-<li><p>$h=0.8$<br>  <img src="/.com//01_h_0.8.png" alt="01_h_0.8"></p>
+<li><p>$h=0.8$<br>  <img src="//yoursite/01_h_0.8.png" alt="01_h_0.8"></p>
 </li>
-<li><p>$h=1.0$<br>  <img src="/.com//01_h_1.0.png" alt="01_h_1.0"></p>
+<li><p>$h=1.0$<br>  <img src="//yoursite/01_h_1.0.png" alt="01_h_1.0"></p>
 </li>
-<li><p>$h=2.0$<br>  <img src="/.com//01_h_2.0.png" alt="01_h_2.0"></p>
+<li><p>$h=2.0$<br>  <img src="//yoursite/01_h_2.0.png" alt="01_h_2.0"></p>
 </li>
 </ul>
 <h3 id="高斯核"><a href="#高斯核" class="headerlink" title="高斯核"></a>高斯核</h3><ul>
-<li><p>$h=0.5$<br>  <img src="/.com//gaussian_h_0.5.png" alt="gaussian_h_0.5"></p>
+<li><p>$h=0.5$<br>  <img src="//yoursite/gaussian_h_0.5.png" alt="gaussian_h_0.5"></p>
 </li>
-<li><p>$h=0.8$<br>  <img src="/.com//gaussian_h_0.8.png" alt="gaussian_h_0.8"></p>
+<li><p>$h=0.8$<br>  <img src="//yoursite/gaussian_h_0.8.png" alt="gaussian_h_0.8"></p>
 </li>
-<li><p>$h=1.0$<br>  <img src="/.com//gaussian_h_1.0.png" alt="gaussian_h_1.0"></p>
+<li><p>$h=1.0$<br>  <img src="//yoursite/gaussian_h_1.0.png" alt="gaussian_h_1.0"></p>
 </li>
-<li><p>$h=2.0$<br>  <img src="/.com//gaussian_h_2.0.png" alt="gaussian_h_2.0"></p>
+<li><p>$h=2.0$<br>  <img src="//yoursite/gaussian_h_2.0.png" alt="gaussian_h_2.0"></p>
 </li>
 </ul>
 
@@ -764,7 +782,7 @@ p(x)
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">115</span>
+                    <span class="site-state-item-count">116</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -793,7 +811,17 @@ p(x)
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -836,7 +864,9 @@ p(x)
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

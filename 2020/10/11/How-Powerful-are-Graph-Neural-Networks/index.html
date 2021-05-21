@@ -115,15 +115,15 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="论文地址：http:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;1810.00826 目录 目录 Introduction Preliminary Theoretical Framework: Overview Building Powerful Graph Neural Networks Graph Isomorphism Network(GIN) Graph-Level Readout of GIN">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/.com//fig1.png">
-<meta property="og:image" content="http://yoursite.com/.com//fig2-fig3.png">
-<meta property="og:image" content="http://yoursite.com/.com//fig4.png">
-<meta property="og:image" content="http://yoursite.com/.com//tab1.png">
+<meta property="og:image" content="http://yoursite/fig1.png">
+<meta property="og:image" content="http://yoursite/fig2-fig3.png">
+<meta property="og:image" content="http://yoursite/fig4.png">
+<meta property="og:image" content="http://yoursite/tab1.png">
 <meta property="article:published_time" content="2020-10-11T09:42:10.000Z">
 <meta property="article:modified_time" content="2020-10-19T15:43:41.628Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/.com//fig1.png">
+<meta name="twitter:image" content="http://yoursite/fig1.png">
 
 
 
@@ -519,7 +519,7 @@ h_G = \text{READOUT}(\{h_v^{K} | v \in G \})\tag{2.4}</script><p><strong>Weisfei
 <li>由聚合后的标签得到新的唯一的标签。</li>
 </ol>
 <p>基于WL test，Shervashidze等人提出了WL subtree kernel来评估图之间的相似性，即将<strong>迭代过程中标签一致的节点个数作为特征向量的元素</strong>，以该向量作为评估输入。在第$k$轮WL迭代后，节点的标签可以视作以该节点为根节点的子树，如下图。</p>
-<p><img src="/.com//fig1.png" alt="fig1"></p>
+<p><img src="//yoursite/fig1.png" alt="fig1"></p>
 <h1 id="Theoretical-Framework-Overview"><a href="#Theoretical-Framework-Overview" class="headerlink" title="Theoretical Framework: Overview"></a>Theoretical Framework: Overview</h1><p><strong>定义1(Multiset)：</strong> multiset是指允许包含重复元素的集合，可以定义为2-元组$X = (S, m)$，其中$S$为具有不重复元素的集合，$m: S \rightarrow \mathbb{N}_{\geq 1}$为元素的重复项。</p>
 <p>为了研究一个GNN的表达能力，文中分析了GNN何时会将两个节点映射到嵌入空间的同一个位置。直观地来说，只有当两个节点<strong>具有相同的子树结构和相同的特征</strong>时，两个节点才会被映射到嵌入空间的同一位置。由于子树结构是通过节点邻居递归定义的，问题可以转化为，两个邻居节点集合(multiset)是否会被映射为相同的嵌入表示。<strong>一个表达能力很强的GNN永远不会从不同的邻居节点集合(或特征向量的multiset)得到相同的嵌入表示</strong>，也就是说聚合操作必须是<strong>单射的</strong>(injective)。因此GNN的聚合操作可以被描述为一类函数：a class of function over multiset that their neural networks can represent，并分析这类函数是否能满足<strong>单射性</strong>。</p>
 <h1 id="Building-Powerful-Graph-Neural-Networks"><a href="#Building-Powerful-Graph-Neural-Networks" class="headerlink" title="Building Powerful Graph Neural Networks"></a>Building Powerful Graph Neural Networks</h1><p>一个表达能力足够强大的GNN会将两个不同的图映射为不同的嵌入表示，这也就是说GNN具有解决图同构问题的能力。换句话说，同构的图可以被映射为相同的嵌入，而不同构的图映射为不同的。WL test可以作为衡量GNN的表达能力的较弱的准则(slightly weaker criterion)。</p>
@@ -559,14 +559,14 @@ h_G = \text{CONCAT}\left(
 <p>Nonetheless, unlike models using MLPs, the 1-layer perceptron (even with the bias term) is not a universal approximator of multiset functions. Consequently, even if GNNs with 1-layer perceptrons can embed different graphs to different locations to some degree, such embeddings may not adequately capture structural similarity, and can be difficult for simple classifiers, e.g., linear classifiers, to fit.</p>
 </blockquote>
 <h2 id="Structures-that-Confuse-Mean-and-Max-Pooling"><a href="#Structures-that-Confuse-Mean-and-Max-Pooling" class="headerlink" title="Structures that Confuse Mean and Max-Pooling"></a>Structures that Confuse Mean and Max-Pooling</h2><p>$\text{mean}, \text{max-pooling}$聚合由于具有排列不变性，是定义在multiset上良好的聚合函数，但是他们不是单射的。图2根据三种函数的表达能力进行了排序，图3展示了一些$\text{mean}, \text{max-pooling}$不能区别的图结构。以$3(a)$为例，假设特征均为$a$，那么$\text{mean}, \text{max-pooling}$产生的结果分别为$(a + a) / 2 = a, (a + a + a) / 3 = a$与$\max (a, a) = a, \max (a, a, a) = a$，而$\text{sum}$产生的结果是$a + a = 2a, a + a + a = 3a$。</p>
-<p><img src="/.com//fig2-fig3.png" alt="fig2-fig3"></p>
+<p><img src="//yoursite/fig2-fig3.png" alt="fig2-fig3"></p>
 <h2 id="Mean-Learns-Distribution"><a href="#Mean-Learns-Distribution" class="headerlink" title="Mean Learns Distribution"></a>Mean Learns Distribution</h2><p>假定有两个集合$X_1 = (S, m), X_2 = (S, k \cdot m)$，其中$X_1, X_2$去重后元素相同，但$X_2$中还包括每个元素的$k$份拷贝。那么均值聚合从这两个集合得到相同的嵌入，因此$\text{mean}$从multiset中捕获了元素的分布(比例)，而不是确切的multiset。</p>
 <p><strong>结论8：</strong> 假定$\mathcal{X}$可数，当且仅当multiset$X_1$与$X_2$具有相同分布时，有$h(X) = \frac{1}{|X|} \sum_{x \in X} f(x), h(X_1) = h(X_2)$。</p>
 <p>在任务更重视分布信息(distributional information)而不是确切的结构(exact structure)时，或者节点特征几乎都不一致时，均值聚合具有良好的性能。这也解释了为什么在节点分类任务中均值聚合是有效的，因为这类任务中节点的特征是很丰富的，邻居的特征分布对这项任务具有很有效的信号。</p>
 <h2 id="Max-Pooling-Learns-Sets-with-Distinct-Elements"><a href="#Max-Pooling-Learns-Sets-with-Distinct-Elements" class="headerlink" title="Max-Pooling Learns Sets with Distinct Elements"></a>Max-Pooling Learns Sets with Distinct Elements</h2><p>最大池化聚合既没有捕获图的结构，也没有捕获图的分布，他可能适用于学习图信号的“主干”(However, it may be suitable for tasks where it is important to identify representative elements or the “skeleton”)，对噪声和异常点非常鲁棒。</p>
 <p><strong>结论9：</strong> 假定$\mathcal{X}$可数，当且仅当multiset$X_1$与$X_2$具有相同underlying set时，有$f: \mathcal{X} \rightarrow \mathbb{R}^{\infty}$，使得$h(X) = \max_{x \in X} f(x), h(X_1) = h(X_2)$。</p>
 <h2 id="Remarks-on-Other-Aggregators"><a href="#Remarks-on-Other-Aggregators" class="headerlink" title="Remarks on Other Aggregators"></a>Remarks on Other Aggregators</h2><p>本文没有进行研究其他聚合函数，如通过attention求带权均值、LSTM等。</p>
-<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><p><img src="/.com//fig4.png" alt="fig4"></p>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><p><img src="//yoursite/fig4.png" alt="fig4"></p>
 <blockquote>
 <p>We evaluate GINs (Eqs. 4.1 and 4.2) and the less powerful GNN variants. Under the GIN framework, we consider two variants: </p>
 <ol>
@@ -577,7 +577,7 @@ h_G = \text{CONCAT}\left(
 <p>For the less powerful GNN variants, we consider architectures that replace the sum in the GIN-0 aggregation with mean or max-pooling, or replace MLPs with 1-layer perceptrons, i.e., a linear mapping followed by ReLU. In Figure 4 and Table 1, a model is <strong>named by the aggregator/perceptron it uses</strong>. Here <strong>mean–1-layer</strong> and <strong>max–1-layer</strong> correspond to GCN and GraphSAGE, respectively, up to minor architecture modifications. </p>
 <p>We apply the same graph-level readout (READOUT in Eq. 4.2) for GINs and all the GNN variants, specifically, sum readout on bioinformatics datasets and mean readout on social datasets due to better test performance.</p>
 </blockquote>
-<p><img src="/.com//tab1.png" alt="tab1"></p>
+<p><img src="//yoursite/tab1.png" alt="tab1"></p>
 <blockquote>
 <p>We compare the GNNs above with a number of state-of-the-art baselines for graph classification: </p>
 <ol>
@@ -731,7 +731,7 @@ h_G = \text{CONCAT}\left(
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">115</span>
+                    <span class="site-state-item-count">116</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -760,7 +760,17 @@ h_G = \text{CONCAT}\left(
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -803,7 +813,9 @@ h_G = \text{CONCAT}\left(
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

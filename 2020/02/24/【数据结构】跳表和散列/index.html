@@ -115,14 +115,14 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="字典定义及抽象数据描述定义：字典(dictionary)是由一些形如$(k, v)$的数对所组成的集合，其中$k$为关键字，$v$是与关键字$k$对应的值。 抽象数据描述：1234567891011抽象数据类型 dictionary&amp;#123;    实例:        关键字各不相同的一组数据对；    操作：        empty();        &#x2F;&#x2F; 判断是否为空        s">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/.com//skiplist.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//hashtabel_insert.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//hashchain_insert.jpg">
+<meta property="og:image" content="http://yoursite/skiplist.jpg">
+<meta property="og:image" content="http://yoursite/hashtabel_insert.jpg">
+<meta property="og:image" content="http://yoursite/hashchain_insert.jpg">
 <meta property="article:published_time" content="2020-02-24T05:29:43.000Z">
 <meta property="article:modified_time" content="2020-04-28T03:28:41.025Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/.com//skiplist.jpg">
+<meta name="twitter:image" content="http://yoursite/skiplist.jpg">
 
 
 
@@ -489,7 +489,7 @@
 <p>若采用数组描述的线性表，其二分查找较容易实现(实现略)。而对于链表描述的线性表，可引入跳表(<a href="#%e8%b7%b3%e8%a1%a8%e6%8f%8f%e8%bf%b0">跳表描述</a>)减少时间复杂度，</p>
 <h2 id="跳表描述"><a href="#跳表描述" class="headerlink" title="跳表描述"></a>跳表描述</h2><p>对于线性表描述(链表描述)的字典，对$n$个数对进行查找，至多需要$n$此关键字比较。若添加中间节点的指针信息，其比较次数可减少到$(n/2 + 1)$。由此引入<strong>跳表</strong>(skiplist)，在不同的节点位置处添加多级指针信息。</p>
 <p>跳表可用<strong>对数形式</strong>进行<strong>级的分配</strong>。例如，对于$n$个数，$0$级链表包括所有数对，$1$级链表每$2$个数对取一个，$2$级链表每$4$个数对取一个，以此类推。那么对于一个<strong>属于$i$级链表的数对</strong>，当且仅当它属于$0~i$级链表，但不属于$i+1$级链表。如下图所示，键为$20$的数对属于$0,1$级链表，不属于$2$级链表。</p>
-<p><img src="/.com//skiplist.jpg" alt="skiplist"></p>
+<p><img src="//yoursite/skiplist.jpg" alt="skiplist"></p>
 <p>但是采用对数形式描述跳表，需在插入或删除数对后更新各级链表，其<strong>指针不易维护</strong>。对于该问题，可采用<strong>概率形式</strong>解决，<strong>在查询位置处(仍需满足有序线性表)</strong>插入结点时生成随机数判定级别，使s它属于$i-1$级链表的情况下，又属于$i$级链表的概率服从<strong>均匀分布</strong>，使$n$个数对在各级中分布是均匀的，即</p>
 <script type="math/tex; mode=display">P(属于i级链表|属于i-1级链表) = p</script><p>具体实现如下，构造键值对对象<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//linkeddictionary.h</span></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Pair</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	Pair() &#123; m_key = <span class="keyword">new</span> K; m_value = <span class="keyword">new</span> V; &#125;;</span><br><span class="line">	Pair(<span class="keyword">const</span> K k, <span class="keyword">const</span> V v) &#123; m_key = <span class="keyword">new</span> K; *m_key = k;  m_value = <span class="keyword">new</span> V; *m_value = v; &#125;;</span><br><span class="line">	~Pair() &#123; <span class="keyword">delete</span> m_key; <span class="keyword">delete</span> m_value; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">setKey</span><span class="params">(<span class="keyword">const</span> K k)</span> </span>&#123; *m_key = k; &#125;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">setVal</span><span class="params">(<span class="keyword">const</span> V v)</span> </span>&#123; *m_value = v; &#125;</span><br><span class="line">	<span class="function">K <span class="title">getKey</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> *m_key; &#125;</span><br><span class="line">	<span class="function">V <span class="title">getVal</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> *m_value; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	K* m_key;</span><br><span class="line">	V* m_value;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
 <p>以下几点说明：</p>
@@ -539,7 +539,7 @@
 </li>
 </ol>
 <p>主函数测试如下<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>** argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    HashTabel&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; dict(<span class="number">10</span>, <span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"insert: "</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++) &#123;</span><br><span class="line">        </span><br><span class="line">        dict.insert(<span class="number">2</span> * i, i);</span><br><span class="line">        dict.print();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"erase: "</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">4</span>; i &lt; <span class="number">8</span>; i++) &#123;</span><br><span class="line">        dict.erase(<span class="number">2</span> * i);</span><br><span class="line">        dict.print();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>插入过程如下图所示<br><img src="/.com//hashtabel_insert.jpg" alt="hashtabel_insert"></p>
+<p>插入过程如下图所示<br><img src="//yoursite/hashtabel_insert.jpg" alt="hashtabel_insert"></p>
 <blockquote>
 <p>输出格式为<code>|[index] key: value| -&gt; ...</code><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">insert:</span><br><span class="line">|[0]0: 0| -&gt;|[1] -&gt; |[2] -&gt; |[3] -&gt; |[4] -&gt; |[5] -&gt; |[6] -&gt; |[7] -&gt; |[8] -&gt; |[9] -&gt;</span><br><span class="line">|[0]0: 0| -&gt;|[1] -&gt; |[2]2: 1| -&gt;|[3] -&gt; |[4] -&gt; |[5] -&gt; |[6] -&gt; |[7] -&gt; |[8] -&gt; |[9] -&gt;</span><br><span class="line">|[0]0: 0| -&gt;|[1]4: 2| -&gt;|[2]2: 1| -&gt;|[3] -&gt; |[4] -&gt; |[5] -&gt; |[6] -&gt; |[7] -&gt; |[8] -&gt; |[9] -&gt;</span><br><span class="line">|[0]0: 0| -&gt;|[1]4: 2| -&gt;|[2]2: 1| -&gt;|[3]6: 3| -&gt;|[4] -&gt; |[5] -&gt; |[6] -&gt; |[7] -&gt; |[8] -&gt; |[9] -&gt;</span><br><span class="line">|[0]0: 0| -&gt;|[1]4: 2| -&gt;|[2]2: 1| -&gt;|[3]6: 3| -&gt;|[4]8: 4| -&gt;|[5] -&gt; |[6] -&gt; |[7] -&gt; |[8] -&gt; |[9] -&gt;</span><br><span class="line">|[0]0: 0| -&gt;|[1]4: 2| -&gt;|[2]2: 1| -&gt;|[3]6: 3| -&gt;|[4]8: 4| -&gt;|[5]10: 5| -&gt;|[6] -&gt; |[7] -&gt; |[8] -&gt; |[9] -&gt;</span><br><span class="line">|[0]0: 0| -&gt;|[1]4: 2| -&gt;|[2]2: 1| -&gt;|[3]6: 3| -&gt;|[4]8: 4| -&gt;|[5]10: 5| -&gt;|[6]12: 6| -&gt;|[7] -&gt; |[8] -&gt; |[9] -&gt;</span><br><span class="line">|[0]0: 0| -&gt;|[1]4: 2| -&gt;|[2]2: 1| -&gt;|[3]6: 3| -&gt;|[4]8: 4| -&gt;|[5]10: 5| -&gt;|[6]12: 6| -&gt;|[7]14: 7| -&gt;|[8] -&gt; |[9] -&gt;</span><br><span class="line">erase:</span><br><span class="line">|[0]0: 0| -&gt;|[1]4: 2| -&gt;|[2]2: 1| -&gt;|[3]6: 3| -&gt;|[4] -&gt; |[5]10: 5| -&gt;|[6]12: 6| -&gt;|[7]14: 7| -&gt;|[8] -&gt; |[9] -&gt;</span><br><span class="line">|[0]0: 0| -&gt;|[1]4: 2| -&gt;|[2]2: 1| -&gt;|[3]6: 3| -&gt;|[4] -&gt; |[5] -&gt; |[6]12: 6| -&gt;|[7]14: 7| -&gt;|[8] -&gt; |[9] -&gt;</span><br><span class="line">|[0]0: 0| -&gt;|[1]4: 2| -&gt;|[2]2: 1| -&gt;|[3]6: 3| -&gt;|[4] -&gt; |[5] -&gt; |[6] -&gt; |[7]14: 7| -&gt;|[8] -&gt; |[9] -&gt;</span><br><span class="line">|[0]0: 0| -&gt;|[1]4: 2| -&gt;|[2]2: 1| -&gt;|[3]6: 3| -&gt;|[4] -&gt; |[5] -&gt; |[6] -&gt; |[7] -&gt; |[8] -&gt; |[9] -&gt;</span><br></pre></td></tr></table></figure></p>
 </blockquote>
@@ -557,7 +557,7 @@
 </li>
 </ol>
 <p>主函数测试如下<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>** argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    HashChains&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; dict(<span class="number">10</span>, <span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"insert: "</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++) &#123;</span><br><span class="line">        </span><br><span class="line">        dict.insert(<span class="number">2</span> * i, i);</span><br><span class="line">        dict.print();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"erase: "</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">4</span>; i &lt; <span class="number">8</span>; i++) &#123;</span><br><span class="line">        dict.erase(<span class="number">2</span> * i);</span><br><span class="line">        dict.print();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>分析：插入过程如下图<br><img src="/.com//hashchain_insert.jpg" alt="hashchain_insert"></p>
+<p>分析：插入过程如下图<br><img src="//yoursite/hashchain_insert.jpg" alt="hashchain_insert"></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">insert:</span><br><span class="line">[0]0:0 -&gt;  | [1] | [2] | [3] | [4] | [5] | [6] | [7] | [8] | [9] |</span><br><span class="line">[0]0:0 -&gt;  | [1] | [2]2:1 -&gt;  | [3] | [4] | [5] | [6] | [7] | [8] | [9] |</span><br><span class="line">[0]0:0 -&gt;  | [1]4:2 -&gt;  | [2]2:1 -&gt;  | [3] | [4] | [5] | [6] | [7] | [8] | [9] |</span><br><span class="line">[0]6:3 -&gt; 0:0 -&gt;  | [1]4:2 -&gt;  | [2]2:1 -&gt;  | [3] | [4] | [5] | [6] | [7] | [8] | [9] |</span><br><span class="line">[0]6:3 -&gt; 0:0 -&gt;  | [1]4:2 -&gt;  | [2]8:4 -&gt; 2:1 -&gt;  | [3] | [4] | [5] | [6] | [7] | [8] | [9] |</span><br><span class="line">[0]6:3 -&gt; 0:0 -&gt;  | [1]10:5 -&gt; 4:2 -&gt;  | [2]8:4 -&gt; 2:1 -&gt;  | [3] | [4] | [5] | [6] | [7] | [8] | [9] |</span><br><span class="line">[0]12:6 -&gt; 6:3 -&gt; 0:0 -&gt;  | [1]10:5 -&gt; 4:2 -&gt;  | [2]8:4 -&gt; 2:1 -&gt;  | [3] | [4] | [5] | [6] | [7] | [8] | [9] |</span><br><span class="line">[0]12:6 -&gt; 6:3 -&gt; 0:0 -&gt;  | [1]10:5 -&gt; 4:2 -&gt;  | [2]14:7 -&gt; 8:4 -&gt; 2:1 -&gt;  | [3] | [4] | [5] | [6] | [7] | [8] | [9] |</span><br><span class="line">erase:</span><br><span class="line">[0]12:6 -&gt; 6:3 -&gt; 0:0 -&gt;  | [1]10:5 -&gt; 4:2 -&gt;  | [2]14:7 -&gt; 2:1 -&gt;  | [3] | [4] | [5] | [6] | [7] | [8] | [9] |</span><br><span class="line">[0]12:6 -&gt; 6:3 -&gt; 0:0 -&gt;  | [1]4:2 -&gt;  | [2]14:7 -&gt; 2:1 -&gt;  | [3] | [4] | [5] | [6] | [7] | [8] | [9] |</span><br><span class="line">[0]6:3 -&gt; 0:0 -&gt;  | [1]4:2 -&gt;  | [2]14:7 -&gt; 2:1 -&gt;  | [3] | [4] | [5] | [6] | [7] | [8] | [9] |</span><br><span class="line">[0]6:3 -&gt; 0:0 -&gt;  | [1]4:2 -&gt;  | [2]2:1 -&gt;  | [3] | [4] | [5] | [6] | [7] | [8] | [9] |</span><br></pre></td></tr></table></figure>
       
     </div>
@@ -699,7 +699,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">115</span>
+                    <span class="site-state-item-count">116</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -728,7 +728,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -771,7 +781,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

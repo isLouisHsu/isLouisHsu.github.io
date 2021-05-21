@@ -115,21 +115,21 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="引言PCA全称Principal Component Analysis，即主成分分析，是一种常用的数据降维方法。它可以通过线性变换将原始数据变换为一组各维度线性无关的表示，以此来提取数据的主要线性分量。 向量的投影现有两个任意不共线向量$\vec{u}, \vec{v}$，将$\vec{u}$投射到$\vec{v}$上 投影后，可以得到两个正交向量 \vec{u}&#39; · (\vec{u} - \v">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/.com//%E5%90%91%E9%87%8F%E6%8A%95%E5%BD%B1.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//PCA%E5%8A%A8%E6%80%81%E5%9B%BE.gif">
-<meta property="og:image" content="http://yoursite.com/.com//pca_restructure1.png">
-<meta property="og:image" content="http://yoursite.com/.com//pca_restructure2.png">
-<meta property="og:image" content="http://yoursite.com/.com//kernel_pca.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//2d_restructed.png">
-<meta property="og:image" content="http://yoursite.com/.com//face_origin.png">
-<meta property="og:image" content="http://yoursite.com/.com//face_reduced.png">
-<meta property="og:image" content="http://yoursite.com/.com//face_restructed.png">
+<meta property="og:image" content="http://yoursite/%E5%90%91%E9%87%8F%E6%8A%95%E5%BD%B1.jpg">
+<meta property="og:image" content="http://yoursite/PCA%E5%8A%A8%E6%80%81%E5%9B%BE.gif">
+<meta property="og:image" content="http://yoursite/pca_restructure1.png">
+<meta property="og:image" content="http://yoursite/pca_restructure2.png">
+<meta property="og:image" content="http://yoursite/kernel_pca.jpg">
+<meta property="og:image" content="http://yoursite/2d_restructed.png">
+<meta property="og:image" content="http://yoursite/face_origin.png">
+<meta property="og:image" content="http://yoursite/face_reduced.png">
+<meta property="og:image" content="http://yoursite/face_restructed.png">
 <meta property="article:published_time" content="2018-10-22T13:34:09.000Z">
 <meta property="article:modified_time" content="2020-04-27T13:35:11.944Z">
 <meta property="article:author" content="Louis Hsu">
 <meta property="article:tag" content="降维">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/.com//%E5%90%91%E9%87%8F%E6%8A%95%E5%BD%B1.jpg">
+<meta name="twitter:image" content="http://yoursite/%E5%90%91%E9%87%8F%E6%8A%95%E5%BD%B1.jpg">
 
 
 
@@ -490,7 +490,7 @@
 
       
         <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p><code>PCA</code>全称<code>Principal Component Analysis</code>，即主成分分析，是一种常用的数据降维方法。它可以通过线性变换将原始数据变换为一组各维度线性无关的表示，以此来提取数据的主要线性分量。</p>
-<h1 id="向量的投影"><a href="#向量的投影" class="headerlink" title="向量的投影"></a>向量的投影</h1><p>现有两个任意不共线向量$\vec{u}, \vec{v}$，将$\vec{u}$投射到$\vec{v}$上<br><img src="/.com//向量投影.jpg" alt="向量投影"></p>
+<h1 id="向量的投影"><a href="#向量的投影" class="headerlink" title="向量的投影"></a>向量的投影</h1><p>现有两个任意不共线向量$\vec{u}, \vec{v}$，将$\vec{u}$投射到$\vec{v}$上<br><img src="//yoursite/向量投影.jpg" alt="向量投影"></p>
 <p>投影后，可以得到两个正交向量</p>
 <script type="math/tex; mode=display">\vec{u}' · (\vec{u} - \vec{u}') = 0</script><p>我们设</p>
 <script type="math/tex; mode=display">\vec{u}' = \mu \vec{v} \tag{1}</script><p>代入后有</p>
@@ -531,7 +531,7 @@ d
 <li>提取了方差较大的几个特征，为主要线性分量。</li>
 </ul>
 </blockquote>
-<p>以二维空间中的数据$x^{(i)} = \left[\begin{matrix}<br>    x^{(i)}_1 \ x^{(i)}_2<br>\end{matrix}\right]$为例，每个样本点可降至一维空间，如下图所示。<br><img src="/.com//PCA动态图.gif" alt="PCA动态图"></p>
+<p>以二维空间中的数据$x^{(i)} = \left[\begin{matrix}<br>    x^{(i)}_1 \ x^{(i)}_2<br>\end{matrix}\right]$为例，每个样本点可降至一维空间，如下图所示。<br><img src="//yoursite/PCA动态图.gif" alt="PCA动态图"></p>
 <p>主轴可有无穷多种选择，那么问题就是<strong>如何选取最优的主轴</strong>。先给出<code>PCA</code>的计算步骤。</p>
 <h2 id="计算步骤"><a href="#计算步骤" class="headerlink" title="计算步骤"></a>计算步骤</h2><p>输入的$M$个$N$维样本，有样本矩阵</p>
 <script type="math/tex; mode=display">
@@ -627,7 +627,7 @@ B_{N×K} = \left[ \beta_1, \beta_2, ..., \beta_K \right]</script><p>$K$的选取
  S = B^T X</script><p> 其中$S_{K×M}$，$B_{N×K}$，$X_{N×M}$</p>
 </li>
 </ol>
-<p>若取$K=N$，可进行数据重建，去除维度间的相关性，如下<br><img src="/.com//pca_restructure1.png" alt="pca_restructure1"><br><img src="/.com//pca_restructure2.png" alt="pca_restructure2"></p>
+<p>若取$K=N$，可进行数据重建，去除维度间的相关性，如下<br><img src="//yoursite/pca_restructure1.png" alt="pca_restructure1"><br><img src="//yoursite/pca_restructure2.png" alt="pca_restructure2"></p>
 <h3 id="复原"><a href="#复原" class="headerlink" title="复原"></a>复原</h3><p>第$5$步中，样本点向量$X^{(i)}$的主要分量投射到$K$个$N$维向量上，投影坐标为$S^{(i)}_k$，即</p>
 <script type="math/tex; mode=display">
 X^{(i)} \approx \sum_{k=1}^K S^{(i)}_k \beta_k</script><p>以上就是样本点的复原公式，矩阵形式即</p>
@@ -805,7 +805,7 @@ i = 1, ..., r-1 \tag{8}</script><blockquote>
 \kappa(i, j) = \Phi(X^{(i)}) \Phi(X^{(i)})^T</script><blockquote>
 <p>关于核技巧，移步<a href>非线性支持向量机</a></p>
 </blockquote>
-<p><img src="/.com//kernel_pca.jpg" alt="kernel_pca"></p>
+<p><img src="//yoursite/kernel_pca.jpg" alt="kernel_pca"></p>
 <h1 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h1><p>可利用<code>PCA</code>与线性回归求解$3$维空间中平面的法向量</p>
 <ol>
 <li>利用<code>PCA</code>重建数据(不降维，此时为$3$维)，此时第$1, 2$主成分轴可张成所求平面，即该平面可表示为<script type="math/tex; mode=display">
@@ -862,13 +862,13 @@ P = X (X^TX+\lambda I)^{-1} X^T</script></blockquote>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PrincipalComponentAnalysis</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, n_component=<span class="number">-1</span>)</span>:</span></span><br><span class="line">        self.n_component = n_component</span><br><span class="line">        self.meanVal = <span class="keyword">None</span></span><br><span class="line">        self.axis = <span class="keyword">None</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fit</span><span class="params">(self, X, prop=<span class="number">0.99</span>)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        the parameter 'prop' is only for 'n_component = -1'</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">        <span class="comment"># 第一步: 归一化</span></span><br><span class="line">        self.meanVal = np.mean(X, axis=<span class="number">0</span>)                   <span class="comment"># 训练样本每个特征上的的均值</span></span><br><span class="line">        X_normalized = (X - self.meanVal)                   <span class="comment"># 归一化训练样本</span></span><br><span class="line">        <span class="comment"># 第二步：计算协方差矩阵</span></span><br><span class="line">        <span class="comment"># cov = X_normalized.T.dot(X_normalized)</span></span><br><span class="line">        cov = np.cov(X_normalized.T)                        <span class="comment"># 协方差矩阵</span></span><br><span class="line">        eigVal, eigVec = np.linalg.eig(cov)                 <span class="comment"># EVD</span></span><br><span class="line">        order = np.argsort(eigVal)[::<span class="number">-1</span>]                    <span class="comment"># 从大到小排序</span></span><br><span class="line">        eigVal = eigVal[order]</span><br><span class="line">        eigVec = eigVec.T[order].T</span><br><span class="line">        <span class="comment"># 选择主成分的数量</span></span><br><span class="line">        <span class="keyword">if</span> self.n_component == <span class="number">-1</span>:</span><br><span class="line">            sumOfEigVal = np.sum(eigVal)</span><br><span class="line">            sum_tmp = <span class="number">0</span></span><br><span class="line">            <span class="keyword">for</span> k <span class="keyword">in</span> range(eigVal.shape[<span class="number">0</span>]):</span><br><span class="line">                sum_tmp += eigVal[k]</span><br><span class="line">                <span class="keyword">if</span> sum_tmp &gt; prop * sumOfEigVal:            <span class="comment"># 平均均方误差与训练集方差的比例尽可能小的情况下选择尽可能小的 K 值</span></span><br><span class="line">                    self.n_component = k + <span class="number">1</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">        <span class="comment"># 选择投影坐标轴</span></span><br><span class="line">        self.axis = eigVec[:, :self.n_component]            <span class="comment"># 选择前n_component个特征向量作为投影坐标轴</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">transform</span><span class="params">(self, X)</span>:</span></span><br><span class="line">        <span class="comment"># 第一步：归一化</span></span><br><span class="line">        X_normalized = (X - self.meanVal)                   <span class="comment"># 归一化测试样本</span></span><br><span class="line">        <span class="comment"># 第二步：投影 X_nxk · V_kxk' = X'_nxk'</span></span><br><span class="line">        X_transformed = X_normalized.dot(self.axis)</span><br><span class="line">        <span class="keyword">return</span> X_transformed</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fit_transform</span><span class="params">(self, X, prop=<span class="number">0.99</span>)</span>:</span></span><br><span class="line">        self.fit(X, prop=prop)</span><br><span class="line">        <span class="keyword">return</span> self.transform(X)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">transform_inv</span><span class="params">(self, X_transformed)</span>:</span></span><br><span class="line">        <span class="comment"># 视投影向量长度为一个单位长度，投影结果为投影向量上的坐标</span></span><br><span class="line">        <span class="comment"># X'_nxk' · V_kxk'.T = X''_nxk</span></span><br><span class="line">        X_restructed = X_transformed.dot(self.axis.T)</span><br><span class="line">        <span class="comment"># 还原数据</span></span><br><span class="line">        X_restructed = X_restructed + self.meanVal</span><br><span class="line">        <span class="keyword">return</span> X_restructed</span><br></pre></td></tr></table></figure>
 <p>实验结果</p>
 <ul>
-<li><p>Demo1: PCA applied on 2-d datasets<br>  <img src="/.com//2d_restructed.png" alt="2d_restructed"></p>
+<li><p>Demo1: PCA applied on 2-d datasets<br>  <img src="//yoursite/2d_restructed.png" alt="2d_restructed"></p>
 </li>
 <li><p>Demo2: PCA applied on wild face</p>
 <ul>
-<li>origin<br><img src="/.com//face_origin.png" alt="origin"></li>
-<li>reduced<br><img src="/.com//face_reduced.png" alt="reduced"></li>
-<li>restructured<br><img src="/.com//face_restructed.png" alt="restructured"></li>
+<li>origin<br><img src="//yoursite/face_origin.png" alt="origin"></li>
+<li>reduced<br><img src="//yoursite/face_reduced.png" alt="reduced"></li>
+<li>restructured<br><img src="//yoursite/face_restructed.png" alt="restructured"></li>
 </ul>
 </li>
 </ul>
@@ -1019,7 +1019,7 @@ P = X (X^TX+\lambda I)^{-1} X^T</script></blockquote>
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">115</span>
+                    <span class="site-state-item-count">116</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1048,7 +1048,17 @@ P = X (X^TX+\lambda I)^{-1} X^T</script></blockquote>
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1091,7 +1101,9 @@ P = X (X^TX+\lambda I)^{-1} X^T</script></blockquote>
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

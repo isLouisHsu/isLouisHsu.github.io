@@ -115,14 +115,14 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="目录 目录 简介 句级嵌入空间分析 具体方法 Flow-based Glow BERT-flow   参考  简介BERT一直以模型参数量大、语义表征能力强著称，通常来说用BERT获取句级表征有两种方法，一种是将[CLS]对应的编码词向量输入到多层感知机后的输出作为句子的表征，另一种是对句中词向量进行聚合(如最大聚合、均值聚合)。但是经实践发现，BERT不经过微调直接获得的句级表征下游相似度匹配任">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/.com//table1.png">
-<meta property="og:image" content="http://yoursite.com/.com//table2.png">
-<meta property="og:image" content="http://yoursite.com/.com//figure1.png">
+<meta property="og:image" content="http://yoursite/table1.png">
+<meta property="og:image" content="http://yoursite/table2.png">
+<meta property="og:image" content="http://yoursite/figure1.png">
 <meta property="article:published_time" content="2021-03-24T12:29:32.000Z">
 <meta property="article:modified_time" content="2021-03-30T08:57:51.928Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/.com//table1.png">
+<meta name="twitter:image" content="http://yoursite/table1.png">
 
 
 
@@ -492,7 +492,7 @@
 \end{aligned} \tag{2}</script><p>其中$\text{PMI}(w, c)$是点互信息(point-wise mutual information)，描述了两个词的关联度(衡量共现与独立出现事件的关联)，而$\log p(w)$、$\lambda_c$分别与词和上下文相关。那么也就是说以$h_c^T x_w$衡量词向量和上下文嵌入向量之间的相似度是完全合理的。</p>
 <p><strong>高阶共现关系</strong>：基于上述分析，预训练过程中$c$与$c’$的语义相似度是通过两者与词的相似度关联起来的，例如如果两者同时出现词$w$，两处上下文可能是语义相似的。因为当$c$中出现$w$时，$h_c$与$x_w$间的距离会减小，而$h_c$与$x_{w’}, w’ \neq w$距离会增大，$c’$与$w$的关系类似，那么$c$与$c’$的相似度也就得到了提升，因此$h_c$与$h_{c’}$包含的信息量是足以评估两者相似度的。这种共现关系可以在训练过程中被模型建模，称之为高阶共现关系。</p>
 <p>至此，第一个问题就得到了解答，接下来探讨为什么在不经过微调的情况下，BERT产生的句级嵌入在下游相似度匹配任务中效果不佳的问题。作者认为BERT词向量和句向量是分布在同一嵌入空间中的，可以通过分析词向量在空间中的分布得到结论。文中统计了词向量到坐标原点的$l_2$距离(也即词向量的模)和词向量与其$k$近邻的$l_2$距离，得到表格如下，可以发现：1) 高频词距离原点更近，而低频词分布在离原点更远的位置；2) 高频词之间的距离更小，低频词分布相比较更为稀疏。换句话说，词向量空间呈现<strong>各向异性</strong>，低频词对应的词向量包含的语义信息量丰富程度远不及高频词，破坏了词向量空间的凸性，而通过取词向量平均获取句级表征的操作是保凸的，导致这种方式获得的句级表征是语义不完全的。</p>
-<p><img src="/.com//table1.png" alt="table1"></p>
+<p><img src="//yoursite/table1.png" alt="table1"></p>
 <h1 id="具体方法"><a href="#具体方法" class="headerlink" title="具体方法"></a>具体方法</h1><h2 id="Flow-based"><a href="#Flow-based" class="headerlink" title="Flow-based"></a>Flow-based</h2><p>在介绍BERT-flow前，有必要先介绍流式生成模型。流式生成模型是由多个可逆变换组成的变换，即$f = f_1 \circ f_2 \circ \cdots \circ f_K$，用于将变量$\pmb{x} \sim p_X(\pmb{x})$变换到另一隐变量$\pmb{h} \sim p_H(\pmb{h})$，即$\pmb{h} = f(\pmb{x})$。通常来说，$p_X(\pmb{x})$是观测空间内的未知分布，$p_H(\pmb{h})$是隐变量空间内的已知分布(如高斯分布)，另外$f(\cdot)$是可逆的，即$\pmb{h} = f(\pmb{x}) \Leftrightarrow \pmb{x} = f^{-1}(\pmb{h})$。</p>
 <p>由变量变换定理(Change of Variable Theorem)，有</p>
 <script type="math/tex; mode=display">
@@ -519,10 +519,10 @@
     \right)
 \end{aligned} \tag{5}</script><p>其中$\text{sum}(\cdot)$表示取向量所有元素的和，$\text{diag}$是取矩阵的对角元素，$\log$取逐元素的对数，$\log \lvert \det (\partial \pmb{h}_i / \partial \pmb{h}_{i-1}) \rvert$称为对数行列式(log-determinant)。</p>
 <h2 id="Glow"><a href="#Glow" class="headerlink" title="Glow"></a>Glow</h2><p>Glow是一种流式生成模型。变换流中每个函数由三个函数组成：Actnorm、Invertible $1 \times 1$ convolution和Affine Coupling Layer，各函数雅可比矩阵都是三角矩阵，前向、反向和对数行列式如下表。</p>
-<p><img src="/.com//table2.png" alt="table2"></p>
+<p><img src="//yoursite/table2.png" alt="table2"></p>
 <h2 id="BERT-flow"><a href="#BERT-flow" class="headerlink" title="BERT-flow"></a>BERT-flow</h2><p>BERT-flow的具体方法是这样的，首先通过将句向量$\pmb{x}$经Glow方法构造的流式生成模型$f_{\Theta}(\pmb{x})$，将其映射为隐向量$\pmb{h}$，计算该隐向量在标准正态分布下的对数概率，即$\log p_H(\pmb{h}) = \log \mathcal{N}(0, 1)(\pmb{h})$，目标函数设置为最大化对数似然概率，估计参数$\Theta$，即</p>
 <script type="math/tex; mode=display">
-\Theta = \argmax_{\Theta} \log p_H(f_{\Theta}(\pmb{x}))</script><p><img src="/.com//figure1.png" alt="figure1"></p>
+\Theta = \argmax_{\Theta} \log p_H(f_{\Theta}(\pmb{x}))</script><p><img src="//yoursite/figure1.png" alt="figure1"></p>
 <h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
 <li><a href="https://github.com/bohanli/BERT-flow" target="_blank" rel="noopener">bohanli/BERT-flow - Github</a></li>
 <li><a href="https://github.com/chaiyujin/glow-pytorch" target="_blank" rel="noopener">chaiyujin/glow-pytorch - Github</a></li>
@@ -592,6 +592,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/05/19/%E5%85%A8%E7%90%83%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0%E5%A4%A7%E8%B5%9B%E3%80%90%E8%B5%9B%E9%81%93%E4%B8%80%E3%80%91%EF%BC%9A%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E6%8A%A5%E5%91%8A%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B/" rel="prev" title="全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测">
+                全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -669,7 +673,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">115</span>
+                    <span class="site-state-item-count">116</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -698,7 +702,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -741,7 +755,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

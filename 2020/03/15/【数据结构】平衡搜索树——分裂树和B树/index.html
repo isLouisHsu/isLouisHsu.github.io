@@ -115,21 +115,21 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="分裂树定义与概念在字典的很多实际应用中，令我们更感兴趣的不是一个单独操作所需时间，而是一个操作序列所需时间，此时应用的时间复杂度取决于一个字典操作序列而不是任意一个操作。 伸展树基于以下假设：想要对一个二叉查找树执行一系列的查找操作，为了使整个查找时间更小，根据每次的搜索关键字对树的结构进行自调整，使得被查频率高的那些条目就应当经常处于靠近树根的位置。 定义：分裂树(splay tree)，又叫伸">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/.com//slay_options.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//avl_insert_ll.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//splay_tree_eg.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//m_way_search_tree_eg.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//3_order.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//insert_3.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//insert_25.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//delete_90.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//delete_90_86.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//delete_90_96.jpg">
+<meta property="og:image" content="http://yoursite/slay_options.jpg">
+<meta property="og:image" content="http://yoursite/avl_insert_ll.jpg">
+<meta property="og:image" content="http://yoursite/splay_tree_eg.jpg">
+<meta property="og:image" content="http://yoursite/m_way_search_tree_eg.jpg">
+<meta property="og:image" content="http://yoursite/3_order.jpg">
+<meta property="og:image" content="http://yoursite/insert_3.jpg">
+<meta property="og:image" content="http://yoursite/insert_25.jpg">
+<meta property="og:image" content="http://yoursite/delete_90.jpg">
+<meta property="og:image" content="http://yoursite/delete_90_86.jpg">
+<meta property="og:image" content="http://yoursite/delete_90_96.jpg">
 <meta property="article:published_time" content="2020-03-15T04:58:13.000Z">
 <meta property="article:modified_time" content="2020-06-24T07:09:32.361Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/.com//slay_options.jpg">
+<meta name="twitter:image" content="http://yoursite/slay_options.jpg">
 
 
 
@@ -494,11 +494,11 @@
 <p><strong>定义</strong>：<strong>分裂树</strong>(splay tree)，又叫伸展树，<strong>是一种二叉搜索树</strong>，对一个单独的字典操作，其时间复杂度是$O(n)$，而对于$f$个查找、$i$个插入、$d$个删除所组成的操作序列，其时间复杂度是$O((f + i + d) \log i)$，与使用AVL树或RB树的渐近时间复杂度相同，编码更容易。</p>
 <p><strong>定义</strong>：<strong>分裂节点</strong>(slay node)是在字典操作中所检查的最深层的节点。<strong>插入操作</strong>时，可能生成新节点，或覆盖已存在节点。此时新<strong>生成的节点</strong>或<strong>被覆盖节点</strong>即分裂节点；<strong>删除操作</strong>时，被删除节点不在树中，不可能为分裂节点，所以<strong>被删除节点的父节点</strong>成为分裂节点。</p>
 <p><strong>分裂操作</strong>是通过一个<strong>分裂步骤</strong>序列，将<strong>分裂节点</strong>移动到<strong>根节点的位置</strong>上。分裂步骤可将指定节点向上移动一层或两层，移动一层的可分为$L, R 2$种，移动两层的可分为$LL, LR, RR, RL 4$种。记$q$分别为分裂节点、$p, g$分别为$q$的父节点、祖父节点，<strong>当$g$存在时选用移动两层的分裂操作</strong>。分裂操作示意图如下，<strong>注意分裂步骤与AVL树的相似性和区别，子树$\mathcal{T}_g$的$LL/RR$型分裂操作是指自顶向下的，$LR/RL$型分裂操作是自底向上的。</strong></p>
-<p><img src="/.com//slay_options.jpg" alt="slay_options"></p>
+<p><img src="//yoursite/slay_options.jpg" alt="slay_options"></p>
 <p>AVL树在插入时遇到$LL$型不平衡时，旋转矫正前后对比图如下</p>
-<p><img src="/.com//avl_insert_ll.jpg" alt="avl_insert_ll"></p>
+<p><img src="//yoursite/avl_insert_ll.jpg" alt="avl_insert_ll"></p>
 <p>以下图所示的二叉搜索树为例，展示<strong>对节点$2$与节点$3$两次查询</strong>后，树的结构变化</p>
-<p><img src="/.com//splay_tree_eg.jpg" alt="splay_tree_eg"></p>
+<p><img src="//yoursite/splay_tree_eg.jpg" alt="splay_tree_eg"></p>
 <h2 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h2><p>由<code>BinarySearchTree&lt;K, V&gt;</code>公有派生，添加分裂操作<code>slay</code>，重写插入<code>insert</code>、删除<code>erase</code>函数</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SplayTree</span> :</span> <span class="keyword">public</span> BinarySearchTree&lt;K, V&gt;</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	SplayTree() : BinarySearchTree&lt;K, V&gt;() &#123;&#125;</span><br><span class="line">	~SplayTree()&#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="keyword">const</span> K&amp;, <span class="keyword">const</span> V&amp;)</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">erase</span><span class="params">(<span class="keyword">const</span> K&amp;)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">slay</span><span class="params">(BinaryTreeNode&lt; Pair&lt;K, V&gt;*&gt;*)</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p>分裂操作实现时有以下<strong>注意点</strong></p>
@@ -537,7 +537,7 @@
 </li>
 </ol>
 <p>下图为省略外部节点的$7$叉搜索树</p>
-<p><img src="/.com//m_way_search_tree_eg.jpg" alt="m_way_search_tree_eg"></p>
+<p><img src="//yoursite/m_way_search_tree_eg.jpg" alt="m_way_search_tree_eg"></p>
 <p>一棵高度为$h$的$m$叉搜索树(不包含外部节点)，最少有$h$个元素，最多有$m^h-1$个元素。</p>
 <blockquote>
 <ul>
@@ -569,7 +569,7 @@
 <p>疑问：$2$阶B-树特征2：$\lceil m/2 \rceil = 1$，为什么内部节点至少有$2$个孩子？</p>
 </blockquote>
 <p>下图为一棵$2-3$树，当插入$14,16$到$[10]$节点后，该树又变成了$2-3-4$树</p>
-<p><img src="/.com//3_order.jpg" alt="3_order"></p>
+<p><img src="//yoursite/3_order.jpg" alt="3_order"></p>
 <p><strong>定理</strong>：设$\mathcal{T}$是一棵高度为$h$的$m$阶B-树。令$d = \lceil m/2 \rceil$，$n$是$\mathcal{T}$的元素个数，那么</p>
 <ol>
 <li>$2d^{h-1} - 1 \leq n \leq m^h - 1$</li>
@@ -591,7 +591,7 @@
 \end{aligned}</script><p><strong>若$e_d$插入父节点导致父节点满，则需要对父节点进行分裂操作，以此类推直到至根节点路径上没有饱和节点</strong>。</p>
 <p>当插入操作引起$s$个节点分裂时，磁盘访问的次数为$h + 2s + 1$(读取搜索路径上的节点 + 回写分裂出的两个新节点 + 回写新的根节点火插入后没有导致分裂的节点)，最多可达到$3h + 1$。</p>
 <blockquote>
-<p>以下图$7$阶B-树为例，插入$3$时，在最后一个内部节点节点$[2, 4, 6]$处搜索失败，且该节点未饱和，将其插入该节点得到$[2, 3, 4, 6]$<br><img src="/.com//insert_3.jpg" alt="insert_3"></p>
+<p>以下图$7$阶B-树为例，插入$3$时，在最后一个内部节点节点$[2, 4, 6]$处搜索失败，且该节点未饱和，将其插入该节点得到$[2, 3, 4, 6]$<br><img src="//yoursite/insert_3.jpg" alt="insert_3"></p>
 <hr>
 <p>而插入元素$25$时，节点$[20, 30, 40, 50, 60, 70]$是最后一个内部节点，但已饱和，需要进行分裂操作。将新元素插入后溢出节点序列为</p>
 <script type="math/tex; mode=display">7, (0), (20, 0), (25, 0), (30, 0), (40, 0), (50, 0), (60, 0), (70, 0)</script><p>此时$d = 4$，在元素$40$处进行分裂，得到两个新节点序列</p>
@@ -600,7 +600,7 @@
     P: 3, (0), (20, 0), (25, 0), (30, 0) \\
     Q: 3, (0), (50, 0), (60, 0), (70, 0)
 \end{aligned}</script><p>将$(40, Q)$插入父节点，此时父节点为($L, R$表示$10$左边的节点，$R$表示$80$右边的节点)</p>
-<script type="math/tex; mode=display">3, (L), (10, P), (40, Q), (80, R)</script><p>如下图<br><img src="/.com//insert_25.jpg" alt="insert_25"></p>
+<script type="math/tex; mode=display">3, (L), (10, P), (40, Q), (80, R)</script><p>如下图<br><img src="//yoursite/insert_25.jpg" alt="insert_25"></p>
 </blockquote>
 <p><strong>删除操作</strong>可分为两种情况：</p>
 <ol>
@@ -614,10 +614,10 @@
 </li>
 </ol>
 <blockquote>
-<p>以$7$阶B-树为例，删除元素$90$<br><img src="/.com//delete_90.jpg" alt="delete_90"><br>首先，寻找可以替换的叶子节点中的元素，可选择左近邻节点中的$86$，或右近邻中的$92$。</p>
+<p>以$7$阶B-树为例，删除元素$90$<br><img src="//yoursite/delete_90.jpg" alt="delete_90"><br>首先，寻找可以替换的叶子节点中的元素，可选择左近邻节点中的$86$，或右近邻中的$92$。</p>
 <ul>
-<li>当选择$86$作为替换元素时，节点$2, (0), (82, 0), (84, 0)$缺少一个元素，此时可从该节点的最近邻左兄弟节点取择元素$70$加入<br><img src="/.com//delete_90_86.jpg" alt="delete_90_86"></li>
-<li>当选择$96$作为替换元素时，节点$2, (0), (92, 0), (94, 0)$缺少一个元素，且$3, (0), (82, 0), (84, 0), (84, 0)$不包含多余元素，那么将这两个节点与父节点中的$92$合并为$6, (0), (82, 0), (84, 0), (84, 0), (86, 0), (92, 0), (94, 0), (96, 0)$<br><img src="/.com//delete_90_96.jpg" alt="delete_90_96"><br>以上两种方式都不会使根节点少于$2$个孩子。</li>
+<li>当选择$86$作为替换元素时，节点$2, (0), (82, 0), (84, 0)$缺少一个元素，此时可从该节点的最近邻左兄弟节点取择元素$70$加入<br><img src="//yoursite/delete_90_86.jpg" alt="delete_90_86"></li>
+<li>当选择$96$作为替换元素时，节点$2, (0), (92, 0), (94, 0)$缺少一个元素，且$3, (0), (82, 0), (84, 0), (84, 0)$不包含多余元素，那么将这两个节点与父节点中的$92$合并为$6, (0), (82, 0), (84, 0), (84, 0), (86, 0), (92, 0), (94, 0), (96, 0)$<br><img src="//yoursite/delete_90_96.jpg" alt="delete_90_96"><br>以上两种方式都不会使根节点少于$2$个孩子。</li>
 </ul>
 </blockquote>
 
@@ -761,7 +761,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">115</span>
+                    <span class="site-state-item-count">116</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -790,7 +790,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -833,7 +843,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

@@ -115,13 +115,13 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="栈定义及抽象数据描述定义：栈(stack)是一种特殊的线性表，其插入(aka. 入栈、压栈)和删除(aka. 出栈、弹栈)操作在表的同一端进行，即后进先出(last-in-first-out, LIFO)。两端称作栈顶(top)、栈底(bottom)。 抽象数据描述：1234567891011抽象数据类型 stack&amp;#123;    实例:        linearList;    操作：">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/.com//stack.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//queue.jpg">
+<meta property="og:image" content="http://yoursite/stack.jpg">
+<meta property="og:image" content="http://yoursite/queue.jpg">
 <meta property="article:published_time" content="2020-02-21T05:28:57.000Z">
 <meta property="article:modified_time" content="2020-02-23T05:59:08.866Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/.com//stack.jpg">
+<meta name="twitter:image" content="http://yoursite/stack.jpg">
 
 
 
@@ -428,6 +428,24 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a></span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -473,7 +491,7 @@
 <p>主函数测试<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>** argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    LinkedStack&lt;<span class="keyword">int</span>&gt; <span class="built_in">stack</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 入栈</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">        <span class="built_in">stack</span>.push(<span class="number">3</span> * i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">stack</span>.print();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 出栈</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++) &#123;</span><br><span class="line">        <span class="built_in">stack</span>.pop();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">stack</span>.print();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">12 9 6 3 0</span><br><span class="line">3 0</span><br></pre></td></tr></table></figure>
 <h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><p>例：一辆从前至后各车厢标号混乱的火车，从轨道入口驶入，出口驶出，与轨道垂直方向分布$k$个缓冲轨道(holding track)。要求利用缓冲轨道将车厢进行排序。</p>
-<p><img src="/.com//stack.jpg" alt="stack"></p>
+<p><img src="//yoursite/stack.jpg" alt="stack"></p>
 <p>实际上，此时缓冲轨道和入口轨道均可视作栈，均用<code>LinkedStack</code>表示。</p>
 <blockquote>
 <p>也可考虑入口至出口为双向链表，另一解决方案。</p>
@@ -492,7 +510,7 @@
 <p>主函数测试程序:<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>** argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    LinkedQueue&lt;<span class="keyword">int</span>&gt; <span class="built_in">queue</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 入栈</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">        <span class="built_in">queue</span>.push(<span class="number">3</span> * i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">queue</span>.print();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"front: "</span> &lt;&lt; <span class="built_in">queue</span>.front() &lt;&lt; <span class="built_in">endl</span> &lt;&lt; </span><br><span class="line">            <span class="string">"back: "</span> &lt;&lt; <span class="built_in">queue</span>.back() &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 出栈</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++) &#123;</span><br><span class="line">        <span class="built_in">queue</span>.pop();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">queue</span>.print();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">12 9 6 3 0</span><br><span class="line">front: 0</span><br><span class="line">back: 12</span><br><span class="line">12 9</span><br></pre></td></tr></table></figure>
 <h2 id="应用-1"><a href="#应用-1" class="headerlink" title="应用"></a>应用</h2><p>例：一辆从前至后各车厢标号混乱的火车，从轨道入口驶入，出口驶出，与轨道水平方向分布$k$个缓冲轨道(holding track)。要求利用缓冲轨道将车厢进行排序。</p>
-<p><img src="/.com//queue.jpg" alt="queue"></p>
+<p><img src="//yoursite/queue.jpg" alt="queue"></p>
 <p>此时，出入轨道、缓冲轨道均视作队列。</p>
 <p>两个功能性函数：1) 判断缓冲轨道是否为空；2) 寻找队首最小的缓冲轨道，返回其索引。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">isHoldingTracksEmpty</span><span class="params">(<span class="keyword">const</span> LinkedQueue&lt;<span class="keyword">int</span>&gt;* holdingTracks, <span class="keyword">int</span> k = <span class="number">3</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; k; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!holdingTracks[i].empty())</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">findHoldingTracksWithMinFront</span><span class="params">(<span class="keyword">const</span> LinkedQueue&lt;<span class="keyword">int</span>&gt;* holdingTracks, <span class="keyword">int</span> k = <span class="number">3</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> index = <span class="number">-1</span>; <span class="keyword">int</span> min = <span class="number">11</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; k; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (holdingTracks[i].empty()) <span class="keyword">continue</span>;</span><br><span class="line">        <span class="keyword">int</span> front = holdingTracks[i].front();</span><br><span class="line">        <span class="keyword">if</span> (front &lt; min) &#123;</span><br><span class="line">            index = i; min = front;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> index;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>算法说明如下：<br>1) 依次将火车车厢装入缓冲轨道。注意在第$i$节标号为$s_i$的车厢选择缓冲轨道时，选择<strong>队尾标号$t_j$小于$s_i$且$|t_j - s_i|$最小</strong>的缓冲轨道$j$，这样的目的是，使缓冲轨道内数字<strong>从队首至队尾按从小到大</strong>的顺序排列，且尽可能连续。<strong>注意，必须留下一条轨道用于存放1号车厢</strong>。<br>    <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">findHoldingTrack</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span> num, <span class="keyword">const</span> LinkedQueue&lt;<span class="keyword">int</span>&gt;* holdingTracks, <span class="keyword">int</span> k = <span class="number">3</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 寻找 `队尾 &lt; 当前车厢标号num` 且 `最接近num` 的栈</span></span><br><span class="line">    <span class="keyword">int</span> index = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">int</span> em = INT32_MAX;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; k; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> e = holdingTracks[i].back() - num;</span><br><span class="line">        <span class="keyword">if</span> (e &lt; <span class="number">0</span> &amp;&amp; <span class="built_in">abs</span>(e) &lt; em) &#123;</span><br><span class="line">            em = <span class="built_in">abs</span>(e); index = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> index;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>2) 将车厢放入出轨道，完成排序。<br>    <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">putIntoOutTrack</span><span class="params">(LinkedQueue&lt;<span class="keyword">int</span>&gt;&amp; outTrack, LinkedQueue&lt;<span class="keyword">int</span>&gt;* holdingTracks, <span class="keyword">int</span> k = <span class="number">3</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 缓冲车道的队首标记元素。</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; k; i++) holdingTracks[i].pop();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 注意，此时进入出轨道时时，按从小到大排序</span></span><br><span class="line">    <span class="keyword">while</span> (!isHoldingTracksEmpty(holdingTracks, k)) &#123;</span><br><span class="line">        <span class="keyword">int</span> itop = findHoldingTracksWithMinFront(holdingTracks, k);</span><br><span class="line">        outTrack.push(holdingTracks[itop].pop());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
@@ -639,7 +657,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">115</span>
+                    <span class="site-state-item-count">116</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -668,7 +686,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -711,7 +739,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

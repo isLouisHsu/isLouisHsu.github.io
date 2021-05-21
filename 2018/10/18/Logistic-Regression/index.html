@@ -115,14 +115,14 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="引言逻辑回归（Logistic Regression）是用于处理因变量为分类变量的回归问题，常见的是二分类或二项分布问题，也可以处理多分类问题，它实际上是属于一种分类方法。 模型先给出模型，推导过程稍后给出，逻辑回归包含Sigmoid函数 f(z) &#x3D; \frac{1}{1+e^{-z}}其图像如下 定义 z &#x3D; w^Tx其中$x&#x3D;[x_0, x_1, …, x_n]^T, x_0&#x3D;1$ h_w(">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/.com//Sigmoid.png">
-<meta property="og:image" content="http://yoursite.com/.com//Sigmoid_gradient.png">
-<meta property="og:image" content="http://yoursite.com/.com//logistic_regression_result.png">
+<meta property="og:image" content="http://yoursite/Sigmoid.png">
+<meta property="og:image" content="http://yoursite/Sigmoid_gradient.png">
+<meta property="og:image" content="http://yoursite/logistic_regression_result.png">
 <meta property="article:published_time" content="2018-10-18T11:05:16.000Z">
 <meta property="article:modified_time" content="2020-04-26T13:14:37.829Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/.com//Sigmoid.png">
+<meta name="twitter:image" content="http://yoursite/Sigmoid.png">
 
 
 
@@ -429,6 +429,24 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -466,7 +484,7 @@
       
         <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>逻辑回归（Logistic Regression）是用于处理因变量为分类变量的回归问题，常见的是二分类或二项分布问题，也可以处理多分类问题，它实际上是属于一种分类方法。</p>
 <h1 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h1><p>先给出模型，推导过程稍后给出，逻辑回归包含<code>Sigmoid</code>函数</p>
-<script type="math/tex; mode=display">f(z) = \frac{1}{1+e^{-z}}</script><p>其图像如下<br><img src="/.com//Sigmoid.png" alt="`Sigmod函数`"></p>
+<script type="math/tex; mode=display">f(z) = \frac{1}{1+e^{-z}}</script><p>其图像如下<br><img src="//yoursite/Sigmoid.png" alt="`Sigmod函数`"></p>
 <p>定义</p>
 <script type="math/tex; mode=display">z = w^Tx</script><p>其中$x=[x_0, x_1, …, x_n]^T, x_0=1$</p>
 <script type="math/tex; mode=display">h_w(x) = g(z) =  \frac{1}{1+e^{-z}}</script><h1 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h1><h2 id="由最大似然估计推导"><a href="#由最大似然估计推导" class="headerlink" title="由最大似然估计推导"></a>由最大似然估计推导</h2><p>对于二元分类问题，其取值作为随机变量，服从二项分布 $B(1, p)$，其中$p$即为预测输出概率$\hat{y}$</p>
@@ -513,7 +531,7 @@ f'(z) = (1 - f(z))f(z)</script><p>值得注意的是，从$f’(z)$的图像可�
 <script type="math/tex; mode=display">
 f'(z)_{max} = f'(z)|_{z=0} = 0.25</script><script type="math/tex; mode=display">
 \lim_{z \rightarrow \infty} f'(z) = 0</script><p>在多层神经网络反向传播更新参数时，由于梯度多次累乘，<code>Sigmoid</code>作为<a href="https://louishsu.xyz/2018/10/20/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/" target="_blank" rel="noopener">激活函数</a>会存在“梯度消失”的问题，使得参数更新非常缓慢。</p>
-<p><img src="/.com//Sigmoid_gradient.png" alt="`Sigmod导函数`"></p>
+<p><img src="//yoursite/Sigmoid_gradient.png" alt="`Sigmod导函数`"></p>
 <blockquote>
 <p>$ f’(z) $<br>$ = (\frac{1}{1+e^{-z}})’ $<br>$ = \frac<br>​          {-(1+e^{-z})’}<br>​          {(1+e^{-z})^2} $<br>$ = \frac<br>​          {e^{-z}}<br>​          {(1+e^{-z})^2} $<br>$ = \frac<br>​          {e^{-z}}<br>​          {1+e^{-z}}<br>​    \frac<br>​          {1}<br>​          {1+e^{-z}}$<br>$ = (1 - f(z))f(z)$</p>
 </blockquote>
@@ -536,7 +554,7 @@ f'(z)_{max} = f'(z)|_{z=0} = 0.25</script><script type="math/tex; mode=display">
 <h1 id="程序"><a href="#程序" class="headerlink" title="程序"></a>程序</h1><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p><a href="https://github.com/isLouisHsu/Python-Examples-for-ML/blob/master/Andrew%20Ng%2C%20Stanford%20University/mlclass-ex2-logisticregression/LogReg.py" target="_blank" rel="noopener">@Github: Code for Logistic Regression</a></p>
 <h2 id="cost-function"><a href="#cost-function" class="headerlink" title="cost function"></a>cost function</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">lossFunctionDerivative</span><span class="params">(self, X, theta, y_true)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    计算损失函数对参数theta的梯度</span></span><br><span class="line"><span class="string">    对theta[j]的梯度为：(y_pred - y_true)*x[j]</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    err = self.predict_prob(X, theta) - y_true</span><br><span class="line">    <span class="keyword">return</span> X.T.dot(err)/y_true.shape[<span class="number">0</span>]</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">lossFunction</span><span class="params">(self, y_pred_prob, y_true)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    未使用</span></span><br><span class="line"><span class="string">    计算损失值: Cross-Entropy</span></span><br><span class="line"><span class="string">    y_pred_prob, y_true: NumPy array, shape=(n,)</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    tmp = y_true*np.log(y_pred_prob) + (<span class="number">1</span> - y_true)*np.log(<span class="number">1</span> - y_pred_prob)</span><br><span class="line">    <span class="keyword">return</span> np.mean(-tmp)</span><br></pre></td></tr></table></figure>
 <h2 id="training-step"><a href="#training-step" class="headerlink" title="training step"></a>training step</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">gradDescent</span><span class="params">(self, min_acc, learning_rate=<span class="number">0.01</span>, max_iter=<span class="number">10000</span>)</span>:</span></span><br><span class="line">    acc = <span class="number">0</span>; n_iter = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> n_iter <span class="keyword">in</span> range(max_iter):</span><br><span class="line">        <span class="keyword">for</span> n <span class="keyword">in</span> range(self.n_batch):</span><br><span class="line">            X_batch = self.X[n*self.batch_size:(n+<span class="number">1</span>)*self.batch_size]</span><br><span class="line">            t_batch = self.t[n*self.batch_size:(n+<span class="number">1</span>)*self.batch_size]</span><br><span class="line">            grad = self.lossFunctionDerivative(X_batch, self.theta, t_batch)</span><br><span class="line">            self.theta -= learning_rate * grad <span class="comment"># 梯度下降</span></span><br><span class="line">            acc = self.accuracyRate(self.predict_prob(self.X, self.theta), self.t)</span><br><span class="line">            <span class="keyword">if</span> acc &gt; min_acc:</span><br><span class="line">                print(<span class="string">'第%d次迭代, 第%d批数据'</span> % (n_iter, n))</span><br><span class="line">                print(<span class="string">"当前总体样本准确率为: "</span>, acc)</span><br><span class="line">                print(<span class="string">"当前参数值为: "</span>, self.theta)</span><br><span class="line">                <span class="keyword">return</span> self.theta</span><br><span class="line">        <span class="keyword">if</span> n_iter%<span class="number">100</span> == <span class="number">0</span>:</span><br><span class="line">            print(<span class="string">'第%d次迭代'</span> % n_iter)</span><br><span class="line">            print(<span class="string">'准确率： '</span>, acc)</span><br><span class="line">    print(<span class="string">"超过迭代次数"</span>)</span><br><span class="line">    print(<span class="string">"当前总体样本准确率为: "</span>, acc)</span><br><span class="line">    print(<span class="string">"当前参数值为: "</span>, self.theta)</span><br><span class="line">    <span class="keyword">return</span> self.theta</span><br></pre></td></tr></table></figure>
-<h2 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h2><p><img src="/.com//logistic_regression_result.png" alt="实验结果"></p>
+<h2 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h2><p><img src="//yoursite/logistic_regression_result.png" alt="实验结果"></p>
 
       
     </div>
@@ -678,7 +696,7 @@ f'(z)_{max} = f'(z)|_{z=0} = 0.25</script><script type="math/tex; mode=display">
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">115</span>
+                    <span class="site-state-item-count">116</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -707,7 +725,17 @@ f'(z)_{max} = f'(z)|_{z=0} = 0.25</script><script type="math/tex; mode=display">
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -750,7 +778,9 @@ f'(z)_{max} = f'(z)|_{z=0} = 0.25</script><script type="math/tex; mode=display">
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

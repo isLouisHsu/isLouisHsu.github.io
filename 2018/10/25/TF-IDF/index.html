@@ -115,12 +115,12 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="引言正在做LintCode上的垃圾邮件分类，使用朴素贝叶斯方法解决，涉及到文本特征的提取。TF-IDF（词频-逆文档频率）算法是一种统计方法，用以评估一字词对于一个文件集或一个语料库中的其中一份文件的重要程度。字词的重要性随着它在文件中出现的次数成正比增加，但同时会随着它在语料库中出现的频率成反比下降。 计算步骤词频(TF)Term Frequency，就是某个关键字出现的频率，具体来讲，就是词库">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/.com//sklearn.jpg">
+<meta property="og:image" content="http://yoursite/sklearn.jpg">
 <meta property="article:published_time" content="2018-10-25T10:36:13.000Z">
 <meta property="article:modified_time" content="2020-05-29T06:31:37.658Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/.com//sklearn.jpg">
+<meta name="twitter:image" content="http://yoursite/sklearn.jpg">
 
 
 
@@ -427,6 +427,24 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Practice/" itemprop="url" rel="index"><span itemprop="name">Practice</span></a></span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -472,7 +490,7 @@ TF_{ij} = \frac{n_{ij}}{\sum_k n_{i, k}}</script><p>其中，$n_{ij}$表示关�
 IDF_j = \log \frac{|D|}{|D_j| + 1}</script><p>其中，$|D|$表示总的文档数目，$|D_j|$表示关键词$j$出现过的文档数目</p>
 <p><code>scikit-learn</code>内为</p>
 <script type="math/tex; mode=display">
-IDF_j = \log \frac{|D| + 1}{|D_j| + 1} + 1</script><p><img src="/.com//sklearn.jpg" alt="sklearn_tfidf"></p>
+IDF_j = \log \frac{|D| + 1}{|D_j| + 1} + 1</script><p><img src="//yoursite/sklearn.jpg" alt="sklearn_tfidf"></p>
 <h2 id="词频-逆文档频率-TF-IDF"><a href="#词频-逆文档频率-TF-IDF" class="headerlink" title="词频-逆文档频率(TF-IDF)"></a>词频-逆文档频率(TF-IDF)</h2><script type="math/tex; mode=display">
 TF-IDF_{i} = TF_i × IDF</script><h1 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h1><p>例如有如下$3$个文本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">文本1：My dog ate my homework.</span><br><span class="line">文本2：My cat ate the sandwich.</span><br><span class="line">文本3：A dolphin ate the homework.</span><br></pre></td></tr></table></figure></p>
 <p>提取字典，一般需要处理大小写、去除停用词<code>a</code>，处理结果为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ate, cat, dog, dolphin, homework, my, sandwich, the</span><br></pre></td></tr></table></figure></p>
@@ -629,7 +647,7 @@ TF-IDF_{i} = TF_i × IDF</script><h1 id="举例"><a href="#举例" class="header
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">115</span>
+                    <span class="site-state-item-count">116</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -658,7 +676,17 @@ TF-IDF_{i} = TF_i × IDF</script><h1 id="举例"><a href="#举例" class="header
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -701,7 +729,9 @@ TF-IDF_{i} = TF_i × IDF</script><h1 id="举例"><a href="#举例" class="header
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

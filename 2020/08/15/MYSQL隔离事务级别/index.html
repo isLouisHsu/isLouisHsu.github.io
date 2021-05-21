@@ -115,17 +115,17 @@
 <meta property="og:site_name" content="LOUIS&#39; BLOG">
 <meta property="og:description" content="目录 目录 事务 ACID 控制语句 存在的问题 脏读(Dirty) 不可重读(Non-repeatable Read) 幻读(Phantom Read)   隔离级别 读未提交(READ UNCOMMITTED) 读提交(READ COMMITTED) 可重读(REPEATABLE-READ) 串行化(SERIALIZABLE)   Reference  事务事务可以视作一组SQL语句集合，主要">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/.com//read-uncommitted.png">
-<meta property="og:image" content="http://yoursite.com/.com//read-committed.png">
-<meta property="og:image" content="http://yoursite.com/.com//repeatable-read.png">
-<meta property="og:image" content="http://yoursite.com/.com//repeatable-read-issue.png">
-<meta property="og:image" content="http://yoursite.com/.com//serializable.png">
-<meta property="og:image" content="http://yoursite.com/.com//serializable-committed.png">
+<meta property="og:image" content="http://yoursite/read-uncommitted.png">
+<meta property="og:image" content="http://yoursite/read-committed.png">
+<meta property="og:image" content="http://yoursite/repeatable-read.png">
+<meta property="og:image" content="http://yoursite/repeatable-read-issue.png">
+<meta property="og:image" content="http://yoursite/serializable.png">
+<meta property="og:image" content="http://yoursite/serializable-committed.png">
 <meta property="article:published_time" content="2020-08-15T14:34:10.000Z">
 <meta property="article:modified_time" content="2020-08-16T14:37:38.559Z">
 <meta property="article:author" content="Louis Hsu">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/.com//read-uncommitted.png">
+<meta name="twitter:image" content="http://yoursite/read-uncommitted.png">
 
 
 
@@ -552,18 +552,18 @@
 <p>默认事务级别为可重读，如下<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select @@tx_isolation;</span><br><span class="line">+<span class="comment">-----------------+</span></span><br><span class="line">| @@tx_isolation  |</span><br><span class="line">+<span class="comment">-----------------+</span></span><br><span class="line">| REPEATABLE-READ |</span><br><span class="line">+<span class="comment">-----------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span>, <span class="number">1</span> <span class="keyword">warning</span> (<span class="number">0.01</span> sec)</span><br></pre></td></tr></table></figure></p>
 <h2 id="读未提交-READ-UNCOMMITTED"><a href="#读未提交-READ-UNCOMMITTED" class="headerlink" title="读未提交(READ UNCOMMITTED)"></a>读未提交(READ UNCOMMITTED)</h2><p><strong>读未提交</strong>下，两个事务A、B同时进行时，若A事务已执行但未提交，B事务能直接查询到A事务更新后的数据，且A事务回滚后，B与A保持同步。</p>
 <p>如下情况则发生了幻读，同样的也会发生不可重读、幻读</p>
-<p><img src="/.com//read-uncommitted.png" alt="read-uncommitted"></p>
+<p><img src="//yoursite/read-uncommitted.png" alt="read-uncommitted"></p>
 <h2 id="读提交-READ-COMMITTED"><a href="#读提交-READ-COMMITTED" class="headerlink" title="读提交(READ COMMITTED)"></a>读提交(READ COMMITTED)</h2><p><strong>读提交</strong>下，两个事务A、B同时进行时，若A事务已经执行但未提交，B事务无法查询到此时A更新的数据，但A提交后B就能查询到，这种情况下B就发生了不可重读</p>
-<p><img src="/.com//read-committed.png" alt="read-committed"></p>
+<p><img src="//yoursite/read-committed.png" alt="read-committed"></p>
 <h2 id="可重读-REPEATABLE-READ"><a href="#可重读-REPEATABLE-READ" class="headerlink" title="可重读(REPEATABLE-READ)"></a>可重读(REPEATABLE-READ)</h2><p><strong>可重读</strong>下，A事务无论执行多少次，只要不提交，B事务查询值都不变；B事务仅查询B事务开始时那一瞬间的数据快照。也就是说A事务提交不影响B的查询结果，只有B通过<code>commit</code>更新快照后才会看到A提交的结果。</p>
-<p><img src="/.com//repeatable-read.png" alt="repeatable-read"></p>
+<p><img src="//yoursite/repeatable-read.png" alt="repeatable-read"></p>
 <p>但是可重读下，仍旧存在幻读问题，如下</p>
-<p><img src="/.com//repeatable-read-issue.png" alt="repeatable-read-issue"></p>
+<p><img src="//yoursite/repeatable-read-issue.png" alt="repeatable-read-issue"></p>
 <h2 id="串行化-SERIALIZABLE"><a href="#串行化-SERIALIZABLE" class="headerlink" title="串行化(SERIALIZABLE)"></a>串行化(SERIALIZABLE)</h2><p>这是最高的隔离级别，不允许读写并发操作，写操作时读必须等待，这种情况下就失去了并发能力。</p>
 <p>例如，在A写入时，B一直等待，直至A事务完成提交</p>
-<p><img src="/.com//serializable.png" alt="serializable"></p>
+<p><img src="//yoursite/serializable.png" alt="serializable"></p>
 <p>提交后B成功读数据</p>
-<p><img src="/.com//serializable-committed.png" alt="serializable-committed"></p>
+<p><img src="//yoursite/serializable-committed.png" alt="serializable-committed"></p>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="http://www.zsythink.net/archives/1233/" target="_blank" rel="noopener">mysql/mariadb知识点总结（21）：事务隔离级别 (事务总结之三)</a></li>
 </ul>
@@ -708,7 +708,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">115</span>
+                    <span class="site-state-item-count">116</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -737,7 +737,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -780,7 +790,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
