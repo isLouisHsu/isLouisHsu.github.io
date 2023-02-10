@@ -1,0 +1,892 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖) | LOUIS' BLOG</title><meta name="keywords" content="竞赛相关"><meta name="author" content="徐耀彬"><meta name="copyright" content="徐耀彬"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="目录  目录 赛题介绍  赛题背景 赛题描述  赛题数据 提交要求 评估标准   赛题思路   数据处理  探索分析 数据划分 样本重加权 数据增强   模型训练  模型结构 预训练 微调   模型集成 方案优化 大赛结果 Top方案 不足与展望 参考文献 附录  半监督学习 Blending    赛题介绍 赛题背景    影像科医生在工作时会观察医学影像（如CT、核磁共振影像），并对其作出描述">
+<meta property="og:type" content="article">
+<meta property="og:title" content="全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖)">
+<meta property="og:url" content="http://louishsu.xyz/2021/05/19/%E5%85%A8%E7%90%83%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0%E5%A4%A7%E8%B5%9B%E3%80%90%E8%B5%9B%E9%81%93%E4%B8%80%E3%80%91%EF%BC%9A%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E6%8A%A5%E5%91%8A%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B(%E4%B8%89%E7%AD%89%E5%A5%96).html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="目录  目录 赛题介绍  赛题背景 赛题描述  赛题数据 提交要求 评估标准   赛题思路   数据处理  探索分析 数据划分 样本重加权 数据增强   模型训练  模型结构 预训练 微调   模型集成 方案优化 大赛结果 Top方案 不足与展望 参考文献 附录  半监督学习 Blending    赛题介绍 赛题背景    影像科医生在工作时会观察医学影像（如CT、核磁共振影像），并对其作出描述">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://tianchi-public.oss-cn-hangzhou.aliyuncs.com/public/files/forum/161037709574435991610377095138.jpeg">
+<meta property="article:published_time" content="2021-05-19T09:57:06.000Z">
+<meta property="article:modified_time" content="2023-02-10T00:45:30.309Z">
+<meta property="article:author" content="徐耀彬">
+<meta property="article:tag" content="竞赛相关">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tianchi-public.oss-cn-hangzhou.aliyuncs.com/public/files/forum/161037709574435991610377095138.jpeg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://louishsu.xyz/2021/05/19/%E5%85%A8%E7%90%83%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0%E5%A4%A7%E8%B5%9B%E3%80%90%E8%B5%9B%E9%81%93%E4%B8%80%E3%80%91%EF%BC%9A%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E6%8A%A5%E5%91%8A%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B(%E4%B8%89%E7%AD%89%E5%A5%96)"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-02-10 08:45:30'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><link rel="stylesheet" href="/css/background.css"><script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/touxiang.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">13</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 工具</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fas fa-pen"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/isLouisHsu/blog/tree/master/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-brands fa-app-store"></i><span> 利器</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://code.visualstudio.com/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> VSCode：微软旗下的跨平台代码编辑软件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mobaxterm.mobatek.net/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> MobaXterm：超好用的全能远程终端</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.zotero.org/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Zotero：便于收集、组织、引用、共享的文献管理工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/CopyTranslator/CopyTranslator"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> CopyTranslator：“复制即翻译”的外文辅助阅读翻译解决方案</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ditto-cp.sourceforge.io/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Ditto：强大的Windows剪贴板增强工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/indiff/qttabbar"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> QtTabBar：在Windows资源管理器中使用多标签功能扩展工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/sentialx/multrin"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Multrin：“窗口合并”辅助小工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/Wox-launcher/Wox"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Wox &amp; Everything：基于名称快速定位文件和文件夹的搜索工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/NickeManarin/ScreenToGif"><i class="fa-fw fa-regular fa-star"></i><span> ScreenToGif：快速录制屏幕指定区域并保存为动图文件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mathpix.com/"><i class="fa-fw fa-regular fa-star"></i><span> Mathpix Snipping：识别数学公式并转换成LaTeX</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://tianchi-public.oss-cn-hangzhou.aliyuncs.com/public/files/forum/161037709574435991610377095138.jpeg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">LOUIS' BLOG</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 工具</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fas fa-pen"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/isLouisHsu/blog/tree/master/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-brands fa-app-store"></i><span> 利器</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://code.visualstudio.com/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> VSCode：微软旗下的跨平台代码编辑软件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mobaxterm.mobatek.net/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> MobaXterm：超好用的全能远程终端</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.zotero.org/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Zotero：便于收集、组织、引用、共享的文献管理工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/CopyTranslator/CopyTranslator"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> CopyTranslator：“复制即翻译”的外文辅助阅读翻译解决方案</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ditto-cp.sourceforge.io/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Ditto：强大的Windows剪贴板增强工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/indiff/qttabbar"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> QtTabBar：在Windows资源管理器中使用多标签功能扩展工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/sentialx/multrin"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Multrin：“窗口合并”辅助小工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/Wox-launcher/Wox"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Wox &amp; Everything：基于名称快速定位文件和文件夹的搜索工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/NickeManarin/ScreenToGif"><i class="fa-fw fa-regular fa-star"></i><span> ScreenToGif：快速录制屏幕指定区域并保存为动图文件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mathpix.com/"><i class="fa-fw fa-regular fa-star"></i><span> Mathpix Snipping：识别数学公式并转换成LaTeX</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖)<a class="post-edit-link" href="https://github.com/isLouisHsu/blog/tree/master/source_posts/全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖).md" title="编辑" target="_blank"><i class="fas fa-pencil-square"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-05-19T09:57:06.000Z" title="发表于 2021-05-19 17:57:06">2021-05-19</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-02-10T00:45:30.309Z" title="更新于 2023-02-10 08:45:30">2023-02-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%AB%9E%E8%B5%9B%E7%9B%B8%E5%85%B3/">竞赛相关</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>33分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2021/05/19/%E5%85%A8%E7%90%83%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0%E5%A4%A7%E8%B5%9B%E3%80%90%E8%B5%9B%E9%81%93%E4%B8%80%E3%80%91%EF%BC%9A%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E6%8A%A5%E5%91%8A%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B(%E4%B8%89%E7%AD%89%E5%A5%96).html#post-comment"><span id="twikoo-count"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1>目录</h1>
+<ul>
+<li><a href="#%E7%9B%AE%E5%BD%95">目录</a></li>
+<li><a href="#%E8%B5%9B%E9%A2%98%E4%BB%8B%E7%BB%8D">赛题介绍</a>
+<ul>
+<li><a href="#%E8%B5%9B%E9%A2%98%E8%83%8C%E6%99%AF">赛题背景</a></li>
+<li><a href="#%E8%B5%9B%E9%A2%98%E6%8F%8F%E8%BF%B0">赛题描述</a>
+<ul>
+<li><a href="#%E8%B5%9B%E9%A2%98%E6%95%B0%E6%8D%AE">赛题数据</a></li>
+<li><a href="#%E6%8F%90%E4%BA%A4%E8%A6%81%E6%B1%82">提交要求</a></li>
+<li><a href="#%E8%AF%84%E4%BC%B0%E6%A0%87%E5%87%86">评估标准</a></li>
+</ul>
+</li>
+<li><a href="#%E8%B5%9B%E9%A2%98%E6%80%9D%E8%B7%AF">赛题思路</a></li>
+</ul>
+</li>
+<li><a href="#%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86">数据处理</a>
+<ul>
+<li><a href="#%E6%8E%A2%E7%B4%A2%E5%88%86%E6%9E%90">探索分析</a></li>
+<li><a href="#%E6%95%B0%E6%8D%AE%E5%88%92%E5%88%86">数据划分</a></li>
+<li><a href="#%E6%A0%B7%E6%9C%AC%E9%87%8D%E5%8A%A0%E6%9D%83">样本重加权</a></li>
+<li><a href="#%E6%95%B0%E6%8D%AE%E5%A2%9E%E5%BC%BA">数据增强</a></li>
+</ul>
+</li>
+<li><a href="#%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83">模型训练</a>
+<ul>
+<li><a href="#%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84">模型结构</a></li>
+<li><a href="#%E9%A2%84%E8%AE%AD%E7%BB%83">预训练</a></li>
+<li><a href="#%E5%BE%AE%E8%B0%83">微调</a></li>
+</ul>
+</li>
+<li><a href="#%E6%A8%A1%E5%9E%8B%E9%9B%86%E6%88%90">模型集成</a></li>
+<li><a href="#%E6%96%B9%E6%A1%88%E4%BC%98%E5%8C%96">方案优化</a></li>
+<li><a href="#%E5%A4%A7%E8%B5%9B%E7%BB%93%E6%9E%9C">大赛结果</a></li>
+<li><a href="#top%E6%96%B9%E6%A1%88">Top方案</a></li>
+<li><a href="#%E4%B8%8D%E8%B6%B3%E4%B8%8E%E5%B1%95%E6%9C%9B">不足与展望</a></li>
+<li><a href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE">参考文献</a></li>
+<li><a href="#%E9%99%84%E5%BD%95">附录</a>
+<ul>
+<li><a href="#%E5%8D%8A%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0">半监督学习</a></li>
+<li><a href="#blending">Blending</a></li>
+</ul>
+</li>
+</ul>
+<h1>赛题介绍</h1>
+<h2 id="赛题背景">赛题背景</h2>
+<p>   影像科医生在工作时会观察医学影像（如CT、核磁共振影像），并对其作出描述，这些描述中包含了大量医学信息，对医疗AI具有重要意义。<strong>本任务需要参赛队伍根据医生对CT的影像描述文本数据，判断身体若干目标区域是否有异常以及异常的类型</strong>。初赛阶段仅需判断各区域是否有异常，复赛阶段除了判断有异常的区域外，还需判断异常的类型。判断的结果按照指定评价指标进行评测和排名，得分最优者获胜。</p>
+<blockquote>
+<p>赛题链接：<a target="_blank" rel="noopener" href="https://tianchi.aliyun.com/competition/entrance/531852/introduction?spm=5176.12281957.1004.9.38b03eaf8ds5LL">Link</a></p>
+</blockquote>
+<h2 id="赛题描述">赛题描述</h2>
+<h3 id="赛题数据">赛题数据</h3>
+<p>大赛分为初赛A/B榜、复赛A/B榜以及决赛答辩，各时间点公布的数据文件及时间如下</p>
+<table>
+<thead>
+<tr>
+<th>数据文件</th>
+<th>发布时间</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>track1_round1_train_20210222.csv</td>
+<td>2021.03.02(初赛A榜)</td>
+<td>仅包含区域标注</td>
+</tr>
+<tr>
+<td>track1_round1_testA_20210222.csv</td>
+<td>2021.03.02(初赛A榜)</td>
+<td>测试集数据，无标注</td>
+</tr>
+<tr>
+<td>track1_round1_testB.csv</td>
+<td>2021.04.08(初赛B榜)</td>
+<td>测试集数据，无标注</td>
+</tr>
+<tr>
+<td>train.csv</td>
+<td>2021.04.15(复赛A榜)</td>
+<td>包含区域与类型标注</td>
+</tr>
+<tr>
+<td>testA.csv</td>
+<td>2021.04.15(复赛A榜)</td>
+<td>测试集数据，无标注，不开放下载</td>
+</tr>
+<tr>
+<td>testB.csv</td>
+<td>2021.05.08(复赛B榜)</td>
+<td>测试集数据，无标注，不开放下载</td>
+</tr>
+</tbody>
+</table>
+<p>初赛训练数据格式如下</p>
+<table>
+<thead>
+<tr>
+<th>列名</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>report_ID</td>
+<td>数据标号，整型</td>
+<td>1</td>
+</tr>
+<tr>
+<td>description</td>
+<td>脱敏后的影像描述，以字为单位使用空格分割</td>
+<td>101 47 12 66 74 90 0 411 234 79 175</td>
+</tr>
+<tr>
+<td>label</td>
+<td>由多个异常区域ID组成，以空格分隔。若此描述中无异常区域，则为空</td>
+<td>3 4</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">0|,|623 328 538 382 399 400 478 842 698 137 492 266 521 177 415 381 693 700 132 706 317 534 830 290 512 729 327 548 520 445 51 240 711 818 445 358 240 711 693 623 328 380 172 54 175 563 470 609 |,|2 </span><br><span class="line">1|,|48 328 538 382 809 623 434 355 382 382 363 145 424 389 693 808 266 751 335 832 47 693 583 328 305 206 461 204 48 328 740 204 411 204 549 728 832 122 |,|</span><br><span class="line">2|,|623 656 293 851 636 842 698 493 338 266 369 691 693 380 136 363 399 556 698 66 432 449 177 830 381 332 290 380 26 343 28 177 415 832 14 |,|15 </span><br><span class="line">3|,|48 328 380 259 439 107 380 265 172 470 290 693 556 698 54 623 34 138 351 761 693 657 305 342 809 618 282 300 654 556 698 432 449 693 380 834 809 343 809 832 47 693 514 569 428 614 34 846 138 693 358 380 136 363 399 556 698 313 66 432 449 177 415 145 693 380 172 809 380 654 439 380 834 832 47 750 256 514 837 231 113 256 |,|</span><br><span class="line">4|,|623 328 399 698 493 338 266 14 177 415 511 647 693 852 60 328 380 172 54 788 591 487 |,|16 </span><br><span class="line">5|,|80 328 328 54 172 439 741 380 172 842 698 177 777 415 832 14 381 693 623 328 697 382 38 582 382 363 177 257 415 145 755 404 386 106 566 521 |,|15 </span><br><span class="line">6|,|48 322 795 856 374 439 48 328 443 380 597 172 320 842 698 494 149 266 218 415 106 521 79 693 380 361 200 737 813 306 693 556 698 554 232 823 34 138 351 761 693 305 654 809 282 300 654 678 195 698 432 449 693 66 834 809 343 809 654 556 104 698 832 47 617 256 514 129 231 614 34 138 693 91 382 569 231 134 698 313 66 432 623 |,|4 11 15 </span><br><span class="line">7|,|623 328 659 486 582 162 711 289 606 405 809 78 477 693 697 777 582 162 716 854 832 122 693 697 582 38 582 2 498 165 397 455 693 724 328 697 698 494 504 382 672 514 381 |,|</span><br><span class="line">8|,|852 328 471 585 117 458 399 607 693 380 522 623 304 160 380 303 789 439 852 328 419 571 769 256 661 809 621 499 300 832 582 698 493 338 266 521 177 415 381 |,|6 12 14 15 </span><br><span class="line">9|,|229 172 200 737 437 547 651 693 623 328 355 653 382 579 488 776 591 487 693 91 400 478 698 477 300 797 415 381 |,|1 3 </span><br><span class="line">10|,|852 328 305 461 71 413 728 479 122 693 697 382 809 461 486 382 809 357 471 809 777 382 494 504 584 265 363 818 776 389 522 426 693 427 363 170 607 590 618 |,|</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>复赛训练数据格式如下</p>
+<table>
+<thead>
+<tr>
+<th>列名</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>report_ID</td>
+<td>数据标号，整型</td>
+<td>1</td>
+</tr>
+<tr>
+<td>description</td>
+<td>脱敏后的影像描述，以字为单位使用空格分割</td>
+<td>101 47 12 66 74 90 0 411 234 79 175</td>
+</tr>
+<tr>
+<td>label</td>
+<td>string，由两部分组成。第一部分为若干异常区域ID，用空格分割。第二部分为若干异常类型ID，用空格分割。两部分用逗号“,”分割。若定义中所有区域均无异常，则两部分均为空，此项为“,”。</td>
+<td>3 4,0 2</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">0|,|623 355 582 617 265 162 498 289 169 137 405 693 399 842 698 335 266 14 177 415 381 693 48 328 461 478 439 473 851 636 739 374 698 494 504 656 575 754 421 421 791 200 103 718 569 |,|,</span><br><span class="line">1|,|623 328 328 380 172 54 823 487 391 693 256 433 569 231 171 852 770 693 48 328 305 461 406 333 399 698 177 415 14 381 |,|,</span><br><span class="line">2|,|708 328 328 380 172 470 455 693 256 514 569 231 113 256 693 852 328 328 380 172 300 320 842 698 149 338 266 521 415 381 693 700 830 273 332 |,|15 ,2 </span><br><span class="line">3|,|48 697 91 399 28 400 478 809 623 697 538 265 478 284 498 289 399 698 335 266 477 300 381 693 38 582 623 697 382 382 363 397 455 |,|0 7 ,9 </span><br><span class="line">4|,|411 657 399 698 17 36 575 548 435 142 51 519 421 569 183 693 380 136 363 556 698 432 449 177 415 381 693 477 767 809 712 477 767 37 11 693 430 698 251 391 |,|15 ,11 </span><br><span class="line">5|,|852 261 669 105 259 160 362 341 639 693 747 750 399 842 837 161 372 14 177 415 693 623 328 411 204 399 842 698 160 338 177 415 832 14 381 |,|,</span><br><span class="line">6|,|852 328 355 382 610 538 382 382 327 543 381 |,|,</span><br><span class="line">7|,|8 266 627 93 333 832 47 693 380 598 200 737 470 290 693 380 834 809 342 809 257 654 832 47 693 852 328 566 357 659 439 697 582 162 498 289 169 405 |,|,</span><br><span class="line">8|,|443 380 172 56 180 345 693 380 809 343 218 654 832 47 402 690 693 256 696 569 233 306 256 |,|,</span><br><span class="line">9|,|623 328 554 232 461 204 399 842 698 177 832 14 381 |,|,</span><br><span class="line">10|,|328 697 538 678 355 661 698 335 338 408 521 86 415 693 240 221 104 328 328 380 172 12 187 394 174 506 37 788 313 66 832 429 |,|0 1 2 ,2</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>测试集数据</p>
+<table>
+<thead>
+<tr>
+<th>列名</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>report_ID</td>
+<td>数据标号，整型</td>
+<td>1</td>
+</tr>
+<tr>
+<td>description</td>
+<td>脱敏后的影像描述，以字为单位使用空格分割</td>
+<td>101 47 12 66 74 90 0 411 234 79 175</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">0|,|852 328 697 538 142 355 582 800 728 4 647 169 750 703 488 82 487 693 852 328 697 582 809 538 729 327 194 79 728 478 333 832 47 </span><br><span class="line">1|,|380 358 343 654 171 832 47 832 690 693 48 563 380 609 532 50 470 651 693 380 434 343 832 47 693 256 514 569 231 113 256 </span><br><span class="line">2|,|751 335 834 582 717 583 585 693 623 328 107 380 698 808 549 14 455 415 381 </span><br><span class="line">3|,|623 328 649 582 488 12 578 623 538 382 382 265 363 832 424 389 693 91 785 414 78 571 693 374 698 338 266 521 5 415 381 439 173 257 642 493 149 13 177 722 265 14 381 693 48 328 380 834 380 654 532 50 386 832 47 693 256 514 10 231 113 256 </span><br><span class="line">4|,|83 293 398 797 382 363 145 424 693 698 800 691 693 731 700 243 165 317 846 693 852 328 355 382 488 12 591 487 693 506 330 91 400 321 695 698 646 750 669 730 381 </span><br><span class="line">5|,|623 328 305 461 204 842 750 160 107 837 14 177 415 414 693 740 328 697 661 149 338 266 14 177 415 381 </span><br><span class="line">6|,|380 741 200 737 439 73 834 809 809 654 556 698 448 290 693 256 514 569 231 118 3 693 48 54 419 571 769 256 524 439 328 514 380 172 320 257 363 399 842 698 493 566 266 177 415 106 521 381 693 700 384 261 7 </span><br><span class="line">7|,|597 714 328 697 382 698 422 259 693 158 56 79 328 697 68 539 582 617 233 306 162 498 289 554 232 405 </span><br><span class="line">8|,|48 305 461 312 439 740 204 698 177 415 832 14 381 693 623 328 520 66 557 86 675 657 380 498 104 289 442 415 617 823 </span><br><span class="line">9|,|380 129 514 569 231 113 256 693 91 382 556 134 227 382 327 622 351 761 777 204 779 374 556 698 313 66 38 </span><br><span class="line">10|,|48 328 328 380 172 809 192 497 380 172 716 854 618 380 172 399 552 698 494 504 14 165 415 45 693 623 328 765 172 268 693 256 514 437 463 852 615 138 </span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<h3 id="提交要求">提交要求</h3>
+<p>所需提交文件格式为</p>
+<table>
+<thead>
+<tr>
+<th>列名</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>report_ID</td>
+<td>数据标号，整型</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Prediction</td>
+<td>预测输出向量（初赛为17维，复赛为29维），以空格分割，值在0到1之间，表示区域/类型包含异常类型的概率</td>
+<td>0.68 0.82 0.92 0.59 0.71 0.23 0.45 0.36 0.46 0.64 0.92 0.66 0.3 0.5 0.94 0.7 0.38 0.05 0.97 0.71 0.5 0.64 0.0 0.54 0.5 0.49 0.41 0.06 0.07</td>
+</tr>
+</tbody>
+</table>
+<h3 id="评估标准">评估标准</h3>
+<p>评估指标较为严格，以测试集数据上对提交结果计算的<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>mlogloss</mtext></mrow><annotation encoding="application/x-tex">\text{mlogloss}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord text"><span class="mord">mlogloss</span></span></span></span></span>指标为基础，记样本个数为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span>，每个样本对应<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi></mrow><annotation encoding="application/x-tex">M</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span></span></span></span>个预测值，那么首先计算<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>×</mo><mi>N</mi></mrow><annotation encoding="application/x-tex">M \times N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span>个预测值的均值如下<br>
+$$<br>
+\text{mlogloss}(y, \tilde{y}) = -<br>
+\frac{1}{M} \sum_{m=1}^M<br>
+\frac{1}{N} \sum_{m=1}^N<br>
+\left [<br>
+y_{nm} \log \tilde{y}<em>{nm} + (1 - y</em>{nm}) \log (1 - \tilde{y}_{nm})<br>
+\right] \tag{1}<br>
+$$</p>
+<p>两阶段计算有所区别：</p>
+<ul>
+<li>
+<p><strong>初赛阶段</strong>：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><mn>1</mn><mo>−</mo><mtext>mlogloss</mtext></mrow><annotation encoding="application/x-tex">S = 1 - \text{mlogloss}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord text"><span class="mord">mlogloss</span></span></span></span></span>。</p>
+</li>
+<li>
+<p><strong>复赛阶段</strong>：为了让分数区间更合理，复赛阶段调整为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mn>2</mn><mo>×</mo><mtext>mlogloss</mtext></mrow><annotation encoding="application/x-tex">1 - 2 \times \text{mlogloss}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord text"><span class="mord">mlogloss</span></span></span></span></span>。另外，复赛阶段分数由两部分组成：</p>
+<ul>
+<li>第一部分（区域）得分<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>S</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">S_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>计算方式与初赛一致，对<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>×</mo><msub><mi>M</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">N \times M_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>个预测值计算指标；</li>
+<li>第二部分（类型）得分<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>S</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">S_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>对所有实际存在异常区域的测试样本计算<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>mlogloss</mtext></mrow><annotation encoding="application/x-tex">\text{mlogloss}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord text"><span class="mord">mlogloss</span></span></span></span></span>指标，例如<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span>个样本中包含<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi></mrow><annotation encoding="application/x-tex">K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span>个存在区域异常的样本，那么对<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mo>×</mo><msub><mi>M</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">K \times M_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>个预测值计算<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>mlogloss</mtext></mrow><annotation encoding="application/x-tex">\text{mlogloss}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord text"><span class="mord">mlogloss</span></span></span></span></span>指标。</li>
+</ul>
+<p>最终复赛得分为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><mn>0.6</mn><mo>×</mo><msub><mi>S</mi><mn>1</mn></msub><mo>+</mo><mn>0.4</mn><mo>×</mo><msub><mi>S</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">S = 0.6 \times S_1 + 0.4 \times S_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">0.6</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">0.4</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>。</p>
+</li>
+</ul>
+<h2 id="赛题思路">赛题思路</h2>
+<ol>
+<li>文本数据脱敏是该题一方面的限制，因为不能利用公开的预训练模型对应的词表，也就不能直接在公开模型基础上微调，需要<strong>重新生成词表并预训练</strong>；</li>
+<li>该任务是一个典型的<strong>多标签分类任务</strong>，需要对每个标签进行异常判别，在微调阶段采用二分类交叉熵（BCE）损失，与评测指标一致。</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/%E5%85%A8%E7%90%83%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0%E5%A4%A7%E8%B5%9B%E3%80%90%E8%B5%9B%E9%81%93%E4%B8%80%E3%80%91%EF%BC%9A%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E6%8A%A5%E5%91%8A%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B(%E4%B8%89%E7%AD%89%E5%A5%96)/Fig1_pretrain_finetune.png" alt="Fig1_pretrain_finetune"></p>
+<h1>数据处理</h1>
+<h2 id="探索分析">探索分析</h2>
+<p>各文件给定文本长度统计：<br>
+<img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/%E5%85%A8%E7%90%83%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0%E5%A4%A7%E8%B5%9B%E3%80%90%E8%B5%9B%E9%81%93%E4%B8%80%E3%80%91%EF%BC%9A%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E6%8A%A5%E5%91%8A%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B(%E4%B8%89%E7%AD%89%E5%A5%96)/Fig2_eda1.png" alt="Fig2_eda1"></p>
+<p>各文件给定文本词频统计：<br>
+<img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/%E5%85%A8%E7%90%83%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0%E5%A4%A7%E8%B5%9B%E3%80%90%E8%B5%9B%E9%81%93%E4%B8%80%E3%80%91%EF%BC%9A%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E6%8A%A5%E5%91%8A%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B(%E4%B8%89%E7%AD%89%E5%A5%96)/Fig2_eda2.png" alt="Fig2_eda2"></p>
+<p>初赛/复赛样本标签频数统计：<br>
+<img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/%E5%85%A8%E7%90%83%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0%E5%A4%A7%E8%B5%9B%E3%80%90%E8%B5%9B%E9%81%93%E4%B8%80%E3%80%91%EF%BC%9A%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E6%8A%A5%E5%91%8A%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B(%E4%B8%89%E7%AD%89%E5%A5%96)/Fig2_eda3.png" alt="Fig2_eda3"></p>
+<ul>
+<li><strong>数据总数</strong>：初赛训练集共10000条，A/B榜测试集分别有3000条；复赛训练集共20000条，A/B榜测试集分别有5000条。</li>
+<li><strong>文本长度</strong>：长度最小为2，最大长度都短于128。</li>
+<li><strong>词表统计</strong>：词表大小为852，词频分布较为一致。</li>
+<li><strong>标签统计</strong>：初赛和复赛在标签上的分布存在不一致。</li>
+</ul>
+<h2 id="数据划分">数据划分</h2>
+<p>数据划分的目的是：</p>
+<ul>
+<li>从训练集总体中划分一部分作为验证集(dev)，用作early-stopping；</li>
+<li>模型使用不同划分的数据训练，能增大模型差异，为后续模型集成作准备。</li>
+</ul>
+<p>尝试使用多种数据划分方式，如</p>
+<ul>
+<li>多次随机划分(<code>sklearn.model_selection.ShuffleSplit</code>)；</li>
+<li>普通K折划分(<code>sklearn.model_selection.KFold</code>)；</li>
+<li>多标签分层K折采样(<code>iterstrat.ml_stratifiers.MultilabelStratifiedKFold</code>)；</li>
+<li>对抗验证(adversarial validation)。</li>
+</ul>
+<blockquote>
+<p>adversarial validation 详情参考：<a target="_blank" rel="noopener" href="https://lonepatient.top/2018/07/10/Adversarial%20validation.html">Link</a></p>
+</blockquote>
+<p>实验发现多标签分层K折采样训练得到的模型，在集成中收益最大，可能原因如下</p>
+<ul>
+<li>K折划分获得的多折训练集两两间都存在差异，可以增大模型差异，提升集成效果；</li>
+<li>划分过程中，需尽量使训练集的数据分布尽可能与原始数据分布保持一致，分层(stratified)能使标签分布保持一致。</li>
+</ul>
+<p>考虑到以下几点，取<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mo>=</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">K=5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">5</span></span></span></span>：</p>
+<ul>
+<li>K取值越大时，每折训练集中样本个数越多，模型训练次数也越多，导致训练时间过长；</li>
+<li>会导致折间差异变小，影响模型融合效果。</li>
+</ul>
+<h2 id="样本重加权">样本重加权</h2>
+<p>   本地验证集上能达到<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.96</mn><mo>+</mo></mrow><annotation encoding="application/x-tex">0.96+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">0.96</span><span class="mord">+</span></span></span></span>的分数，但实际LB的分数最高也只有<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.94</mn></mrow><annotation encoding="application/x-tex">0.94</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.94</span></span></span></span>左右，因此线上线下存在较大的不一致。为了减少不一致，对训练集样本进行重加权，权值由TFIDF与余弦相似度评估，具体计算方法是：用给定文本语料训练TFIDF参数，然后计算训练集与测试集样本两两间的句级相似度，取均值得到各训练集样本权重，如下图所示。<br>
+<img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/%E5%85%A8%E7%90%83%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0%E5%A4%A7%E8%B5%9B%E3%80%90%E8%B5%9B%E9%81%93%E4%B8%80%E3%80%91%EF%BC%9A%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E6%8A%A5%E5%91%8A%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B(%E4%B8%89%E7%AD%89%E5%A5%96)/Fig3_reweight.png" alt="Fig3_reweight"></p>
+<h2 id="数据增强">数据增强</h2>
+<p>   受目前视觉领域Mixup、Cutout与CutMix数据增强方式<a href="#ref"><sup>[1]</sup></a>启发，本方案设计了与其类似的数据增强方式，具体方法为：从训练样本集中随机选择两个原始样本，随机打乱顺序后拼接得到扩增样本，并将两个原始样本的标签进行合并，具体如下，注意此时要调整模型的最大输入长度。</p>
+<table>
+<thead>
+<tr>
+<th>样本</th>
+<th>tokens</th>
+<th>label</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>原始样本1</td>
+<td>708 328 328 380 172 470 455 693 256 514 569 231 113 256 693 852 328 328 380 172 300 320 842 698 149 338 266 521 415 381 693 700 830 273 332</td>
+<td>15, 2</td>
+</tr>
+<tr>
+<td>原始样本2</td>
+<td>411 657 399 698 17 36 575 548 435 142 51 519 421 569 183 693 380 136 363 556 698 432 449 177 415 381 693 477 767 809 712 477 767 37 11 693 430 698 251 391</td>
+<td>15, 11</td>
+</tr>
+<tr>
+<td>扩增样本</td>
+<td>708 328 328 380 172 470 455 693 256 514 569 231 113 256 693 852 328 328 380 172 300 320 842 698 149 338 266 521 415 381 693 700 830 273 332 411 657 399 698 17 36 575 548 435 142 51 519 421 569 183 693 380 136 363 556 698 432 449 177 415 381 693 477 767 809 712 477 767 37 11 693 430 698 251 391</td>
+<td>2, 11, 15</td>
+</tr>
+</tbody>
+</table>
+<p>另外，尝试使用了EDA数据增强<a href="#ref"><sup>[2]</sup></a>，但效果欠佳</p>
+<ul>
+<li>同义词替换(Synonyms Replace, SR)：不考虑stopwords，在句子中随机抽取n个词，然后从同义词词典中随机抽取同义词，并进行替换。</li>
+<li>随机插入(Randomly Insert, RI)：不考虑stopwords，随机抽取一个词，然后在该词的同义词集合中随机选择一个，插入原句子中的随机位置。该过程可以重复n次。</li>
+<li>随机交换(Randomly Swap, RS)：句子中，随机选择两个词，位置交换。该过程可以重复n次。</li>
+<li>随机删除(Randomly Delete, RD)：句子中的每个词，以概率p随机删除。</li>
+</ul>
+<h1>模型训练</h1>
+<h2 id="模型结构">模型结构</h2>
+<p>   目前，NLP领域的SOTA都是预训练加微调的方案，其中预训练模型(Pre-training Language Models, PLMs)是在大量语料上进行无监督训练得到的，网络结构采用Transformer模型(Encoder或Decoder)，常见的有：BERT<a href="#ref"><sup>[3]</sup></a>、RoBERTa<a href="#ref"><sup>[4]</sup></a>、XLNet<a href="#ref"><sup>[5]</sup></a>、GPT<a href="#ref"><sup>[6]</sup></a>、UniLM<a href="#ref"><sup>[7,8,9]</sup></a>等，国内相关技术如百度的ERNIE<a href="#ref"><sup>[10]</sup></a>、华为的NEZHA<a href="#ref"><sup>[11]</sup></a>等。本方案使用了两种预训练模型，分别是华为提出的NEZHA、苏剑林(苏神)提出的RoFormer<a href="#ref"><sup>[12,16]</sup></a>。选择这两种预训练模型的原因是：</p>
+<ol>
+<li>两种模型都对位置编码(Position Embedding, PE)做了优化，其中NEZHA采用相对位置编码，RoFormer采用了旋转式位置编码，原文实验结果都表明了其有效性；</li>
+<li>自注意力计算复杂度较高(<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>)，在预训练阶段为减少训练时间，设置的最大文本长度为128，而微调阶段使用数据增强时设置的最大文本长度为256。此时若采用可学习PE会导致128~256位置的参数学习不充分，而NEZHA和RoFormer的PE参数是固定无需学习的，不存此问题。</li>
+</ol>
+<p>   另外，本文在句级表征获取方面进行了设计。用BERT类模型获取句级表征一般是通过特殊token<code>[CLS]</code>获取，也有部分方法通过对各输入token对应的编码特征进行池化操作得到句级表征，如均值池化、最大值池化、LSTM池化等。初赛阶段方案采用<code>[CLS]</code>对应编码输出作为句级表征，但后续实验发现<strong>为每个标签设置单独的表征</strong>能极大提升分类的性能，两者方案对比如下：</p>
+<blockquote>
+<p><strong>反直觉</strong>：微调过程中尝试多种方法建模标签间依赖都失效，如Self-Attention、GCN等，而将两个任务分开训练能得到更好的实验结果，也就是说区域预测与类型预测间没有较大的关联性，更有部分选手采用小型深度模型(如RNN)对各个标签单独建模。</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/%E5%85%A8%E7%90%83%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0%E5%A4%A7%E8%B5%9B%E3%80%90%E8%B5%9B%E9%81%93%E4%B8%80%E3%80%91%EF%BC%9A%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E6%8A%A5%E5%91%8A%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B(%E4%B8%89%E7%AD%89%E5%A5%96)/Fig5_model1.png" alt="Fig5_model1"></p>
+<p>同时，各标签间解耦也能提升模型的性能，通过修改<code>attention_mask</code>为以下形式实现，多头注意力每个头的注意力掩码一致</p>
+<p><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/%E5%85%A8%E7%90%83%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0%E5%A4%A7%E8%B5%9B%E3%80%90%E8%B5%9B%E9%81%93%E4%B8%80%E3%80%91%EF%BC%9A%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E6%8A%A5%E5%91%8A%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B(%E4%B8%89%E7%AD%89%E5%A5%96)/Fig5_attention_mask.png" alt="Fig5_attention_mask"></p>
+<h2 id="预训练">预训练</h2>
+<p>   谷歌BERT模型预训练以自监督方式进行，进行的两个任务分别为token级的Masked Laguage Model(MLM)和句级的Next Sequence Prediction(NSP)<a href="#ref"><sup>[3]</sup></a>。此后大量研究对这方面进行了改进，即对预训练任务进行了调整，旨在提高模型的语义表达能力。在<strong>token级任务</strong>上，SpanBERT<a href="#ref"><sup>[13]</sup></a>期望模型能得到连续范围的预测输出，科大讯飞为中文文本处理提出了Whole Word Mask Language Model(wwm-MLM)任务<a href="#ref"><sup>[14]</sup></a>，取得了较为不错的实验结果，wwm-MLM与MLM的对比如下图所示。在<strong>句级分类任务</strong>上，RoBERTa<a href="#ref"><sup>[4]</sup></a>移除了NSP任务，仅保留MLM；ALBERT在BERT基础上，将NLP任务修改为Sentence Order Prediction(SOP)；苏剑林等人提出SimBERT<a href="#ref"><sup>[20]</sup></a>，将文本匹配的有监督信息用于预训练任务中。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/%E5%85%A8%E7%90%83%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0%E5%A4%A7%E8%B5%9B%E3%80%90%E8%B5%9B%E9%81%93%E4%B8%80%E3%80%91%EF%BC%9A%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E6%8A%A5%E5%91%8A%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B(%E4%B8%89%E7%AD%89%E5%A5%96)/Fig4_wwm.png" alt="Fig4_wwm"></p>
+<p>   本方案预训练模型结构如下，在token级任务上采用了wwm-MLM任务，在句级任务上进行了创新。具体地，在同批次数据内对每个待预测标签进行匹配，如果两个样本具有相同标签，那么求取两者对应标签的句级编码的内积进行相似度匹配，利用二分类交叉熵计算匹配损失,如果样本属于测试集，无标签信息，那么不进行匹配。这样做的目的是希望将模型通过相似度匹配任务学习到的语义表达能力推广应用到分类任务中。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/%E5%85%A8%E7%90%83%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0%E5%A4%A7%E8%B5%9B%E3%80%90%E8%B5%9B%E9%81%93%E4%B8%80%E3%80%91%EF%BC%9A%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E6%8A%A5%E5%91%8A%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B(%E4%B8%89%E7%AD%89%E5%A5%96)/Fig5_model2.png" alt="Fig5_model2"></p>
+<p>具体例子如下，若读取的某批次(bs=8)数据的标签为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">  | 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28</span><br><span class="line">-----------------------------------------------------------------------------------------</span><br><span class="line">0 | 1  1  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0</span><br><span class="line">1 | 0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  1  0  1  0  0  0  0  0  0  0  0  0</span><br><span class="line">2 | 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  1  0  0  0  0  0  0  0  0  0</span><br><span class="line">3 | 0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0</span><br><span class="line">4 | 1  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0</span><br><span class="line">5 |-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1</span><br><span class="line">6 | 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0</span><br><span class="line">7 | 0  0  0  0  1  0  0  0  0  0  0  1  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0</span><br></pre></td></tr></table></figure>
+<p>那么<strong>标签19</strong>的匹配标签矩阵，如下，其中<code>0</code>表示不匹配，<code>1</code>表示匹配，<code>-1</code>表示忽略(不计算损失)。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">  |  0  1  2  3  4  5  6  7</span><br><span class="line">---------------------------</span><br><span class="line">0 | -1  0  0  0  1 -1  1  0</span><br><span class="line">1 | -1 -1  1  1  0 -1  0  1</span><br><span class="line">2 | -1 -1 -1  1  0 -1  0  1</span><br><span class="line">3 | -1 -1 -1 -1  0 -1  0  1</span><br><span class="line">4 | -1 -1 -1 -1 -1 -1  1  0</span><br><span class="line">5 | -1 -1 -1 -1 -1 -1 -1 -1</span><br><span class="line">6 | -1 -1 -1 -1 -1 -1 -1  0</span><br><span class="line">7 | -1 -1 -1 -1 -1 -1 -1 -1</span><br></pre></td></tr></table></figure>
+<p>存在的问题以及相应的解决方案：</p>
+<ol>
+<li>wwm-MLM需要使用分词信息得到词语的划分，而本赛题文本已脱敏化，解决方案是：
+<ul>
+<li>为了能使用目前的分词工具，如jieba，首先将脱敏token映射为中文字符；</li>
+<li>采用了新词发现算法寻找可能存在的由2~4个字组成的词语，仅保留了200个以减少噪声干扰。经统计发现词频最低的token组合是<code>830 290 724 486</code>，在语料中共出现18次，其余提取的词语出现次数都远大于该词，一定程度上验证了新词发现的有效性。</li>
+</ul>
+</li>
+<li>这种预训练方案导致微调时验证集标签泄露，容易过拟合：重新初始化<code>[CLS 0]~[CLS n]</code>对应的嵌入向量；</li>
+<li>当无标签数据过多时，单个批次内匹配的标签对比较稀疏，导致模型学习不充分：训练时减少无标签数据。</li>
+</ol>
+<p>   模型参数量与BERT(base)一致(<code>L12_A12_H768</code>)，部分关键训练参数如下表。最终损失在0.1~0.3之间，该范围内的预训练模型对后续模型微调效果差距不大。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>初赛</th>
+<th>复赛</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数据文件</td>
+<td>track1_round1_train_20210222.csv<br>track1_round1_testA_20210222.csv<br>track1_round1_testB.csv</td>
+<td>track1_round1_train_20210222.csv<br>train.csv<br>testA/B.csv</td>
+</tr>
+<tr>
+<td>batch matching</td>
+<td>w/o</td>
+<td>w/</td>
+</tr>
+<tr>
+<td>mlm probability</td>
+<td>0.3</td>
+<td>0.2</td>
+</tr>
+<tr>
+<td>learning rate</td>
+<td>0.000176</td>
+<td>0.000176</td>
+</tr>
+<tr>
+<td>max sequence length</td>
+<td>45(误)</td>
+<td>128</td>
+</tr>
+<tr>
+<td>batch size</td>
+<td>256</td>
+<td>64</td>
+</tr>
+<tr>
+<td>warmup steps</td>
+<td>500</td>
+<td>5000</td>
+</tr>
+<tr>
+<td>total steps</td>
+<td>16000</td>
+<td>90090</td>
+</tr>
+<tr>
+<td>optimizer</td>
+<td>AdamW</td>
+<td>AdamW</td>
+</tr>
+<tr>
+<td>scheduler</td>
+<td>linear</td>
+<td>linear</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody>
+</table>
+<h2 id="微调">微调</h2>
+<p>   微调阶段模型比较简单，是在预训练模型基础上添加线性变换层进行二分类训练，即每个分类标签对应编码向量作Logistic回归，预测异常概率，如下图所示</p>
+<p><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/%E5%85%A8%E7%90%83%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0%E5%A4%A7%E8%B5%9B%E3%80%90%E8%B5%9B%E9%81%93%E4%B8%80%E3%80%91%EF%BC%9A%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E6%8A%A5%E5%91%8A%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B(%E4%B8%89%E7%AD%89%E5%A5%96)/Fig5_model3.png" alt="Fig5_model3"></p>
+<p>损失函数对不同样本重加权后取均值，见<a href="#%E6%A0%B7%E6%9C%AC%E9%87%8D%E5%8A%A0%E6%9D%83">样本重加权</a>。计算方法与指标计算保持一致。初赛阶段计算每个预测值的<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>mlogloss</mtext></mrow><annotation encoding="application/x-tex">\text{mlogloss}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord text"><span class="mord">mlogloss</span></span></span></span></span>，复赛阶段损失由两部分组成：</p>
+<ul>
+<li>第一部分（区域）损失<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>L</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">L_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">L</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>计算方式与初赛一致，对<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>×</mo><msub><mi>M</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">N \times M_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>个预测值计算损失；</li>
+<li>第二部分（类型）损失<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>L</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">L_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">L</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>对所有实际存在异常区域的测试样本计算<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>mlogloss</mtext></mrow><annotation encoding="application/x-tex">\text{mlogloss}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord text"><span class="mord">mlogloss</span></span></span></span></span>指标，例如<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span>个样本中包含<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi></mrow><annotation encoding="application/x-tex">K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span>个存在区域异常的样本，那么对<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mo>×</mo><msub><mi>M</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">K \times M_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>个预测值计算<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>mlogloss</mtext></mrow><annotation encoding="application/x-tex">\text{mlogloss}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord text"><span class="mord">mlogloss</span></span></span></span></span>指标。</li>
+</ul>
+<p>最终复赛阶段损失为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><mn>0.6</mn><mo>×</mo><msub><mi>L</mi><mn>1</mn></msub><mo>+</mo><mn>0.4</mn><mo>×</mo><msub><mi>L</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">L = 0.6 \times L_1 + 0.4 \times L_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">L</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">0.6</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">L</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">0.4</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">L</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>。一些部分关键训练参数范围如下</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>adv_epsilon</td>
+<td>1.5 ~ 3.0</td>
+</tr>
+<tr>
+<td>batch size</td>
+<td>32</td>
+</tr>
+<tr>
+<td>warmup ratio</td>
+<td>0.1</td>
+</tr>
+<tr>
+<td>learning_rate(bert)</td>
+<td>2e-5, 3e-5, 5e-5</td>
+</tr>
+<tr>
+<td>learning_rate(other)</td>
+<td>1e-4 ~ 1e-3</td>
+</tr>
+<tr>
+<td>epochs</td>
+<td>3 ~ 4</td>
+</tr>
+<tr>
+<td>optimizer</td>
+<td>AdamW</td>
+</tr>
+<tr>
+<td>scheduler</td>
+<td>linear</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody>
+</table>
+<h1>模型集成</h1>
+<p>   这题模型集成带来的收益是极大的，如单个NEZHA模型在5折下LB为0.928+，加入RoFormer模型LB能达到0.934+，集成过程示意图如下。将训练数据<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi></mrow><annotation encoding="application/x-tex">K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span>折划分，确定超参数范围后从中选择一组参数训练<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi></mrow><annotation encoding="application/x-tex">K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span>个模型，每个模型在测试集上的结果取均值作为该组参数下的结果，反复多组参数训练并以<a href="#blending">Blending</a>组合多组参数的输出结果。但实际过程中发现，Blending求取的参数非常稀疏，许多参数都是0，因此最终采用均值集成。<br>
+   复赛提交时，对数据进行5折划分，一共2个不同的模型，共设定6组训练参数，两个任务分别训练，对单个任务来说共<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>5</mn><mo>×</mo><mn>6</mn><mo>=</mo><mn>60</mn></mrow><annotation encoding="application/x-tex">2 \times 5 \times 6 = 60</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">5</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">6</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">60</span></span></span></span>个模型集成。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/%E5%85%A8%E7%90%83%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0%E5%A4%A7%E8%B5%9B%E3%80%90%E8%B5%9B%E9%81%93%E4%B8%80%E3%80%91%EF%BC%9A%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E6%8A%A5%E5%91%8A%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B(%E4%B8%89%E7%AD%89%E5%A5%96)/Fig7_ensemble1.png" alt="Fig7_ensemble1"></p>
+<h1>方案优化</h1>
+<table>
+<thead>
+<tr>
+<th>优化方向</th>
+<th>方法</th>
+<th>说明</th>
+<th>是否有效</th>
+<th>原因分析</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数据</td>
+<td>数据增强——CutMix</td>
+<td>从训练样本集中随机选择两个原始样本，随机打乱顺序后拼接得到扩增样本，并将两个原始样本的标签进行合并</td>
+<td>是</td>
+<td>扩增样本集</td>
+</tr>
+<tr>
+<td>数据</td>
+<td>数据增强——EDA</td>
+<td>随机替换、删除、交换、插入其他token</td>
+<td>否</td>
+<td>因数据集而异</td>
+</tr>
+<tr>
+<td>数据</td>
+<td>样本重加权</td>
+<td>用训练集样本和测试集样本相似度计算权重，减少样本分布不一致</td>
+<td>是</td>
+<td>一定程度上对齐训练集与测试集</td>
+</tr>
+<tr>
+<td>数据</td>
+<td>多标签分层K折划分</td>
+<td>使每折中各类标签分布一致，避免改变样本集分布</td>
+<td>是</td>
+<td>减少样本分布不一致问题的影响</td>
+</tr>
+<tr>
+<td>模型</td>
+<td>设置分类标签嵌入</td>
+<td>为每个标签设置嵌入向量，并优化注意力掩码矩阵</td>
+<td>是</td>
+<td>使多标签间解耦</td>
+</tr>
+<tr>
+<td>模型</td>
+<td>复用公开预训练模型权重</td>
+<td>考虑BERT模型的编码器可能包含较强的语义编码能力，因此尝试在模型预训练阶段复用公开预训练模型权重。具体地，载入预训练模型的编码器部分权重、重新初始化嵌入层参数，在此基础上进行Mask Language Model训练</td>
+<td>否</td>
+<td>可能是BERT编码器与嵌入层参数间存在较大的耦合性</td>
+</tr>
+<tr>
+<td>模型</td>
+<td>更多特征</td>
+<td>加入其他句级特征，如Word2Vec、TFIDF特征</td>
+<td>否</td>
+<td>低阶特征对性能影响不大</td>
+</tr>
+<tr>
+<td>模型</td>
+<td>句级特征正态分布约束</td>
+<td>BERT模型获取的编码特征存在各向异性，添加句级特征正态分布约束来改进，思路来源BERT-flow</td>
+<td>否</td>
+<td>太多的限制对模型参数优化不佳</td>
+</tr>
+<tr>
+<td>损失</td>
+<td>损失计算改进</td>
+<td>复赛阶段损失分为两部分计算</td>
+<td>是</td>
+<td>损失计算和指标计算一致</td>
+</tr>
+<tr>
+<td>损失</td>
+<td>Label Smoothing</td>
+<td>对标签进行一定程度的平滑</td>
+<td>否</td>
+<td>评估指标较为严格，若以准确率为指标可能会有提升</td>
+</tr>
+<tr>
+<td>损失</td>
+<td>Focal Loss</td>
+<td>调整α参数进行困难样本挖掘，调整γ参数增大正样本权重</td>
+<td>否</td>
+<td>评估指标较为严格，若以准确率为指标可能会有提升</td>
+</tr>
+<tr>
+<td>损失</td>
+<td>Asymmetric Loss</td>
+<td>基于Focal Loss提出的用于多标签分类的非对称损失</td>
+<td>否</td>
+<td>参数调整不佳</td>
+</tr>
+<tr>
+<td>损失</td>
+<td>负样本采样</td>
+<td>各标签正负样本存在严重的类别不平衡问题，希望通过负样本采样来平衡</td>
+<td>否</td>
+<td>验证集上正样本分数提升但负样本分数下降，由于负样本更多导致总体分数下降</td>
+</tr>
+<tr>
+<td>学习策略</td>
+<td>对抗训练</td>
+<td>微调训练过程中使用了FGM对抗学习<a href="#ref"><sup>[17,18]</sup></a>，即对词向量添加一定的扰动生成对抗样本，也可以视作数据增强</td>
+<td>是</td>
+<td>扩增样本集、增强模型鲁棒性</td>
+</tr>
+<tr>
+<td>学习策略</td>
+<td>学习率衰减策略</td>
+<td>如余弦衰减、线性衰减</td>
+<td>线性衰减有效</td>
+<td>因数据集而异</td>
+</tr>
+<tr>
+<td>学习策略</td>
+<td>半监督学习</td>
+<td>利用无标签数据训练，详情见<a href="#%E5%8D%8A%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0">半监督学习</a></td>
+<td>初赛阶段提升结果较大，但复赛阶段无效</td>
+<td>未知</td>
+</tr>
+<tr>
+<td>学习策略</td>
+<td>伪标签</td>
+<td>半监督的一种，用训练好的模型在测试上获取标签，标签预测概率较高的样本用作测试集</td>
+<td>否</td>
+<td>受模型性能影响，噪声较大</td>
+</tr>
+<tr>
+<td>其他</td>
+<td>略</td>
+<td>略</td>
+<td>略</td>
+<td>略</td>
+</tr>
+</tbody>
+</table>
+<h1>大赛结果</h1>
+<p><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/%E5%85%A8%E7%90%83%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0%E5%A4%A7%E8%B5%9B%E3%80%90%E8%B5%9B%E9%81%93%E4%B8%80%E3%80%91%EF%BC%9A%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E6%8A%A5%E5%91%8A%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B(%E4%B8%89%E7%AD%89%E5%A5%96)/Fig6_res1.png" alt="Fig6_res1"><br>
+<img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/%E5%85%A8%E7%90%83%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0%E5%A4%A7%E8%B5%9B%E3%80%90%E8%B5%9B%E9%81%93%E4%B8%80%E3%80%91%EF%BC%9A%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E6%8A%A5%E5%91%8A%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B(%E4%B8%89%E7%AD%89%E5%A5%96)/Fig6_res2.png" alt="Fig6_res2"></p>
+<h1>Top方案</h1>
+<p>   <br>
+TODO:</p>
+<h1>不足与展望</h1>
+<ol>
+<li>在模型方面，BERT模型的多头注意力机制关注的是全局特征，ConvBERT<a href="#ref"><sup>[15]</sup></a>也提出其中部分头是冗余的，考虑是否能通过修改<code>attention_mask</code>使模型获取到局部的语义信息，这种方式比ConvBERT更简单；</li>
+<li>微调的分类损失函数采用交叉熵，没有尝试其他原理上较为不同的损失函数，如Soft-F1<a href="#ref"><sup>[19]</sup></a>；</li>
+<li>数据增强方面，受Mixup启发，可以将两句输入的词向量和标签加权累加获得扩增样本，有效性待确定；</li>
+<li>大赛要求复赛LB能复现，导致复赛A榜调试时过度关注全流程问题，影响有效调参次数(每日限制提交3次，但实际最多提交2次)，需做好时间安排；</li>
+<li>在实验调参过程中，必须做好消融实验，保存各种日志，另外妥善修改代码确保各版本稳定可复现；</li>
+</ol>
+<h1>参考文献</h1>
+<div id="ref"></div>
+<p>[1] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1905.04899v2">Yun S ,  Han D ,  Oh S J , et al. CutMix: Regularization Strategy to Train Strong Classifiers with Localizable Features[J].  2019.</a><br>
+[2] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1901.11196">Wei J ,  Zou K . EDA: Easy Data Augmentation Techniques for Boosting Performance on Text Classification Tasks[J].  2019.</a><br>
+[3] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1810.04805">Devlin J ,  Chang M W ,  Lee K , et al. BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding[J].  2018.</a><br>
+[4] <a target="_blank" rel="noopener" href="http://arxiv.org/abs/1907.11692v1">Liu Y ,  Ott M ,  Goyal N , et al. RoBERTa: A Robustly Optimized BERT Pretraining Approach[J].  2019.</a><br>
+[5] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1906.08237">Yang Z ,  Dai Z ,  Yang Y , et al. XLNet: Generalized Autoregressive Pretraining for Language Understanding[J].  2019.</a><br>
+[6] <a target="_blank" rel="noopener" href="http://arxiv.org/abs/2005.14165">Brown T B ,  Mann B ,  Ryder N , et al. Language Models are Few-Shot Learners[J].  2020.</a><br>
+[7] <a target="_blank" rel="noopener" href="http://arxiv.org/abs/2002.10957">Wang W ,  Wei F ,  Dong L , et al. MiniLM: Deep Self-Attention Distillation for Task-Agnostic Compression of Pre-Trained Transformers[J].  2020.</a><br>
+[8] <a target="_blank" rel="noopener" href="http://arxiv.org/abs/1905.03197">Dong L ,  Yang N ,  Wang W , et al. Unified Language Model Pre-training for Natural Language Understanding and Generation[J].  2019.</a><br>
+[9] <a target="_blank" rel="noopener" href="http://arxiv.org/abs/2002.12804v1">Bao H ,  Dong L ,  Wei F , et al. UniLMv2: Pseudo-Masked Language Models for Unified Language Model Pre-Training[J].  2020.</a><br>
+[10] <a target="_blank" rel="noopener" href="http://arxiv.org/abs/1905.07129v1">Zhang Z ,  Han X ,  Liu Z , et al. ERNIE: Enhanced Language Representation with Informative Entities[C]// Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics. 2019.</a><br>
+[11] <a target="_blank" rel="noopener" href="http://arxiv.org/abs/1909.00204">Wei J ,  Ren X ,  Li X , et al. NEZHA: Neural Contextualized Representation for Chinese Language Understanding[J].  2019.</a><br>
+[12] <a target="_blank" rel="noopener" href="http://www.researchgate.net/publication/351019664_RoFormer_Enhanced_Transformer_with_Rotary_Position_Embedding">Su J ,  Lu Y ,  Pan S , et al. RoFormer: Enhanced Transformer with Rotary Position Embedding.  2021.</a><br>
+[13] <a target="_blank" rel="noopener" href="http://www.researchgate.net/publication/339887954_SpanBERT_Improving_Pre-training_by_Representing_and_Predicting_Spans/download">Joshi M ,  Chen D ,  Liu Y , et al. SpanBERT: Improving Pre-training by Representing and Predicting Spans[J]. Transactions of the Association for Computational Linguistics, 2020, 8:64-77.</a><br>
+[14] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1906.08101v2">Cui Y ,  Che W ,  Liu T , et al. Pre-Training with Whole Word Masking for Chinese BERT[J].  2019.</a><br>
+[15] <a target="_blank" rel="noopener" href="http://arxiv.org/abs/2008.02496">Jiang Z ,  Yu W ,  Zhou D , et al. ConvBERT: Improving BERT with Span-based Dynamic Convolution[J].  2020.</a><br>
+[16] <a target="_blank" rel="noopener" href="https://www.kexue.fm/archives/8265">Transformer升级之路：2、博采众长的旋转式位置编码 - 科学空间</a><br>
+[17] <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/103593948">一文搞懂NLP中的对抗训练FGSM/FGM/PGD/FreeAT/YOPO/FreeLB/SMART - 知乎</a><br>
+[18] <a target="_blank" rel="noopener" href="https://blog.csdn.net/xixiaoyaoww/article/details/104851198">对抗学习在NLP中的应用 - 夕小瑶/CSDN</a><br>
+[19] <a target="_blank" rel="noopener" href="https://towardsdatascience.com/the-unknown-benefits-of-using-a-soft-f1-loss-in-classification-systems-753902c0105d">The Unknown Benefits of using a Soft-F1 Loss in Classification Systems - towardsdatascience.com/</a><br>
+[20] <a target="_blank" rel="noopener" href="https://spaces.ac.cn/archives/7427">鱼与熊掌兼得：融合检索和生成的SimBERT模型</a></p>
+<h1>附录</h1>
+<h2 id="半监督学习">半监督学习</h2>
+<p>   考虑到伪标签半监督方法存在以下两个问题：1) 严重依赖输出测试集预测的模型的性能；2) 以两阶段的形式进行，同时训练时间较长。本文设计了一种端到端的半监督学习方法。具体地，在训练时训练集数据(有标签)与测试集数据(无标签)同时读取到某个批次中，模型对该批次前向推断计算每个样本每个标签的概率输出。设定阈值<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo separator="true">,</mo><mn>0</mn><mo>≤</mo><mi>t</mi><mo>≤</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">t, 0 \leq t \leq 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">t</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">0</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7719em;vertical-align:-0.136em;"></span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span>，将无标签数据预测结果中大于<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6151em;"></span><span class="mord mathnormal">t</span></span></span></span>的作为正样本，小于<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>t</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(1 - t)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">t</span><span class="mclose">)</span></span></span></span>的作为负样本，这些被标记的预测输出与有标签数据同时计算损失。另外，为了减少错误预测带来的噪声影响，这些被标记的无标签样本计算损失时，真实值采用模型输出的概率值，而不是0或1的取值。</p>
+<h2 id="Blending">Blending</h2>
+<p>   设定某组训练参数<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi></mrow><annotation encoding="application/x-tex">p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">p</span></span></span></span>下，进行<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi></mrow><annotation encoding="application/x-tex">K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span>折模型训练得到<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi></mrow><annotation encoding="application/x-tex">K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span>个模型，每个模型对其验证集数据进行推断，得到相应的验证集输出<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mover accent="true"><mi>y</mi><mo>~</mo></mover><mi>k</mi><mi>p</mi></msubsup></mrow><annotation encoding="application/x-tex">\tilde{y}_{k}^{p}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0836em;vertical-align:-0.3013em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6679em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span><span style="top:-3.35em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1944em;"><span class="mord">~</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.7823em;"><span style="top:-2.3987em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span style="top:-3.1809em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">p</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3013em;"><span></span></span></span></span></span></span></span></span></span>，将<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">{</mo><msubsup><mover accent="true"><mi>y</mi><mo>~</mo></mover><mn>1</mn><mi>p</mi></msubsup><mo separator="true">,</mo><msubsup><mover accent="true"><mi>y</mi><mo>~</mo></mover><mn>2</mn><mi>p</mi></msubsup><mo separator="true">,</mo><msubsup><mover accent="true"><mi>y</mi><mo>~</mo></mover><mn>3</mn><mi>p</mi></msubsup><mo separator="true">,</mo><msubsup><mover accent="true"><mi>y</mi><mo>~</mo></mover><mn>4</mn><mi>p</mi></msubsup><mo separator="true">,</mo><msubsup><mover accent="true"><mi>y</mi><mo>~</mo></mover><mn>5</mn><mi>p</mi></msubsup><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\{\tilde{y}_{1}^{p}, \tilde{y}_{2}^{p}, \tilde{y}_{3}^{p}, \tilde{y}_{4}^{p}, \tilde{y}_{5}^{p}\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0486em;vertical-align:-0.2663em;"></span><span class="mopen">{</span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6679em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span><span style="top:-3.35em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1944em;"><span class="mord">~</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.7823em;"><span style="top:-2.4337em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span><span style="top:-3.1809em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">p</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2663em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6679em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span><span style="top:-3.35em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1944em;"><span class="mord">~</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.7823em;"><span style="top:-2.4337em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.1809em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">p</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2663em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6679em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span><span style="top:-3.35em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1944em;"><span class="mord">~</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.7823em;"><span style="top:-2.4337em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">3</span></span></span></span><span style="top:-3.1809em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">p</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2663em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6679em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span><span style="top:-3.35em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1944em;"><span class="mord">~</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.7823em;"><span style="top:-2.4337em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">4</span></span></span></span><span style="top:-3.1809em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">p</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2663em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6679em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span><span style="top:-3.35em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1944em;"><span class="mord">~</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.7823em;"><span style="top:-2.4337em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">5</span></span></span></span><span style="top:-3.1809em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">p</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2663em;"><span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span>合并后得到推断输出<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mover accent="true"><mi>y</mi><mo>~</mo></mover><mi>p</mi></msup></mrow><annotation encoding="application/x-tex">\tilde{y}^{p}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8623em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6679em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span><span style="top:-3.35em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1944em;"><span class="mord">~</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">p</span></span></span></span></span></span></span></span></span></span></span></span>，该输出集可以视作该组参数对训练集的推断结果，由<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi></mrow><annotation encoding="application/x-tex">M</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span></span></span></span>组参数<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">{</mo><msub><mi>p</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>p</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>⋯</mo><mtext> </mtext><mo separator="true">,</mo><msub><mi>p</mi><mi>M</mi></msub><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\{p_1, p_2, \cdots, p_M\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">⋯</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">M</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span>分别得到的结果计算加权参数。</p>
+<p>   假设共<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span>个训练集样本，在<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi></mrow><annotation encoding="application/x-tex">M</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span></span></span></span>组参数下训练得到<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi></mrow><annotation encoding="application/x-tex">M</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span></span></span></span>个输出结果，初始化参数<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>w</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>⋯</mo><mtext> </mtext><mo separator="true">,</mo><msub><mi>w</mi><mi>M</mi></msub></mrow><annotation encoding="application/x-tex">w_1, w_2, \cdots, w_M</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">⋯</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">M</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，设定优化目标为</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.25em" columnalign="right left" columnspacing="0em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>J</mi><mo stretchy="false">(</mo><mi>w</mi><mo stretchy="false">)</mo><mspace width="1em"></mspace></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><munder><mrow><mi>min</mi><mo>⁡</mo></mrow><mrow><msub><mi>w</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>w</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>⋯</mo><mtext> </mtext><mo separator="true">,</mo><msub><mi>w</mi><mi>M</mi></msub></mrow></munder><mfrac><mn>1</mn><mi>N</mi></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mtext>score</mtext><mo stretchy="false">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo separator="true">,</mo><mfrac><mn>1</mn><mi>M</mi></mfrac><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>M</mi></munderover><msub><mi>w</mi><mi>j</mi></msub><msubsup><mover accent="true"><mi>y</mi><mo>~</mo></mover><mi>i</mi><msub><mi>p</mi><mi>j</mi></msub></msubsup><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>s</mi><mi mathvariant="normal">.</mi><mi>t</mi><mi mathvariant="normal">.</mi><mspace width="1em"></mspace></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>M</mi></munderover><msub><mi>w</mi><mi>j</mi></msub><mo>=</mo><mn>1</mn></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mn>0</mn><mo>≤</mo><msub><mi>w</mi><mi>j</mi></msub><mo>≤</mo><mn>1</mn><mo separator="true">,</mo><mi>j</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mo>⋯</mo><mtext> </mtext><mo separator="true">,</mo><mi>M</mi></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}
+    J(w) \quad &amp; = \min_{w_1, w_2, \cdots, w_M} \frac{1}{N} \sum_{i=1}^N \text{score}(
+        y_i, \frac{1}{M} \sum_{j=1}^M w_j \tilde{y}_i^{p_j}
+    ) \\
+    s.t. \quad &amp; \sum_{j=1}^M w_j = 1 \\
+         &amp; 0 \leq w_j \leq 1, j = 1, \cdots, M
+\end{aligned}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:8.5842em;vertical-align:-4.0421em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:4.5421em;"><span style="top:-6.5421em;"><span class="pstrut" style="height:3.8283em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.09618em;">J</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="mclose">)</span><span class="mspace" style="margin-right:1em;"></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3.8283em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="mord">.</span><span class="mord mathnormal">t</span><span class="mord">.</span><span class="mspace" style="margin-right:1em;"></span></span></span><span style="top:-0.4462em;"><span class="pstrut" style="height:3.8283em;"></span><span class="mord"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:4.0421em;"><span></span></span></span></span></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:4.5421em;"><span style="top:-6.5421em;"><span class="pstrut" style="height:3.8283em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6679em;"><span style="top:-2.4em;margin-left:0em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3173em;"><span style="top:-2.357em;margin-left:-0.0269em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3173em;"><span style="top:-2.357em;margin-left:-0.0269em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="minner mtight">⋯</span><span class="mspace mtight" style="margin-right:0.1952em;"></span><span class="mpunct mtight">,</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3567em;margin-left:-0.0269em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">M</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1433em;"><span></span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span><span class="mop">min</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.8361em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8283em;"><span style="top:-1.8723em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.05em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">N</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2777em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord text"><span class="mord">score</span></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">M</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8283em;"><span style="top:-1.8723em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.05em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">M</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.4138em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6679em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span><span style="top:-3.35em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1944em;"><span class="mord">~</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8435em;"><span style="top:-2.4231em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span><span style="top:-3.2421em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3281em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2819em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2769em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3.8283em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8283em;"><span style="top:-1.8723em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.05em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">M</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.4138em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord">1</span></span></span><span style="top:-0.4462em;"><span class="pstrut" style="height:3.8283em;"></span><span class="mord"><span class="mord"></span><span class="mord">0</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.05724em;">j</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">⋯</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:4.0421em;"><span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p>其中<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>score</mtext><mo stretchy="false">(</mo><mo>⋅</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\text{score}(\cdot)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">score</span></span><span class="mopen">(</span><span class="mord">⋅</span><span class="mclose">)</span></span></span></span>是评估函数，分数越小表示集成效果越好。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">徐耀彬</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://louishsu.xyz/2021/05/19/%E5%85%A8%E7%90%83%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0%E5%A4%A7%E8%B5%9B%E3%80%90%E8%B5%9B%E9%81%93%E4%B8%80%E3%80%91%EF%BC%9A%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E6%8A%A5%E5%91%8A%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B(%E4%B8%89%E7%AD%89%E5%A5%96).html">http://louishsu.xyz/2021/05/19/%E5%85%A8%E7%90%83%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0%E5%A4%A7%E8%B5%9B%E3%80%90%E8%B5%9B%E9%81%93%E4%B8%80%E3%80%91%EF%BC%9A%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E6%8A%A5%E5%91%8A%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B(%E4%B8%89%E7%AD%89%E5%A5%96).html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://louishsu.xyz" target="_blank">LOUIS' BLOG</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%AB%9E%E8%B5%9B%E7%9B%B8%E5%85%B3/">竞赛相关</a></div><div class="post_share"><div class="social-share" data-image="https://tianchi-public.oss-cn-hangzhou.aliyuncs.com/public/files/forum/161037709574435991610377095138.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/10/22/%E4%B8%AD%E5%9B%BD%E6%B3%95%E5%BE%8B%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E8%AF%84%E6%B5%8B(CAIL2021)%EF%BC%9A%E4%BF%A1%E6%81%AF%E6%8A%BD%E5%8F%96(Rank2).html"><img class="prev-cover" src="http://cail.cipsc.org.cn/img/index_mainpic.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">中国法律智能技术评测(CAIL2021)：信息抽取(Rank2)</div></div></a></div><div class="next-post pull-right"><a href="/2020/09/16/%E8%AF%A6%E8%A7%A3%E5%91%BD%E5%90%8D%E5%AE%9E%E4%BD%93%E8%AF%86%E5%88%AB%E6%A8%A1%E5%9E%8B%EF%BC%9ALSTM-CRF.html"><img class="next-cover" src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic1.zhimg.com%2Fv2-1ed6a10dbb239a148e42df088c5870a6_1440w.jpg%3Fsource%3D172ae18b&amp;refer=http%3A%2F%2Fpic1.zhimg.com&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=jpeg?sec=1638183974&amp;t=4632f13fd487ed1cfcb12d67a6b71e52" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">详解命名实体识别模型：LSTM-CRF</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/11/17/2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖).html" title="2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖)"><img class="cover" src="https://cdn.kesci.com/upload/image/r7j60un866.png?imageView2/2/w/2500/h/2500" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-11-17</div><div class="title">2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖)</div></div></a></div><div><a href="/2021/10/22/中国法律智能技术评测(CAIL2021)：信息抽取(Rank2).html" title="中国法律智能技术评测(CAIL2021)：信息抽取(Rank2)"><img class="cover" src="http://cail.cipsc.org.cn/img/index_mainpic.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-22</div><div class="title">中国法律智能技术评测(CAIL2021)：信息抽取(Rank2)</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/touxiang.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">徐耀彬</div><div class="author-info__description">专注于自然语言处理前沿技术与应用价值！</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">13</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/isLouisHsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/isLouisHsu" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:is.louishsu@foxmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">记录和分享一些学习和开源内容，若有问题可通过邮箱is.louishsu@foxmail.com联系，欢迎交流！！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">赛题介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B5%9B%E9%A2%98%E8%83%8C%E6%99%AF"><span class="toc-number">2.1.</span> <span class="toc-text">赛题背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B5%9B%E9%A2%98%E6%8F%8F%E8%BF%B0"><span class="toc-number">2.2.</span> <span class="toc-text">赛题描述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B5%9B%E9%A2%98%E6%95%B0%E6%8D%AE"><span class="toc-number">2.2.1.</span> <span class="toc-text">赛题数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%90%E4%BA%A4%E8%A6%81%E6%B1%82"><span class="toc-number">2.2.2.</span> <span class="toc-text">提交要求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%84%E4%BC%B0%E6%A0%87%E5%87%86"><span class="toc-number">2.2.3.</span> <span class="toc-text">评估标准</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B5%9B%E9%A2%98%E6%80%9D%E8%B7%AF"><span class="toc-number">2.3.</span> <span class="toc-text">赛题思路</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">数据处理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A2%E7%B4%A2%E5%88%86%E6%9E%90"><span class="toc-number">3.1.</span> <span class="toc-text">探索分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%88%92%E5%88%86"><span class="toc-number">3.2.</span> <span class="toc-text">数据划分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B7%E6%9C%AC%E9%87%8D%E5%8A%A0%E6%9D%83"><span class="toc-number">3.3.</span> <span class="toc-text">样本重加权</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%A2%9E%E5%BC%BA"><span class="toc-number">3.4.</span> <span class="toc-text">数据增强</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">模型训练</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84"><span class="toc-number">4.1.</span> <span class="toc-text">模型结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%84%E8%AE%AD%E7%BB%83"><span class="toc-number">4.2.</span> <span class="toc-text">预训练</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BE%AE%E8%B0%83"><span class="toc-number">4.3.</span> <span class="toc-text">微调</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">模型集成</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">方案优化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">大赛结果</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Top方案</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">不足与展望</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">参考文献</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">附录</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%8A%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0"><span class="toc-number">11.1.</span> <span class="toc-text">半监督学习</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Blending"><span class="toc-number">11.2.</span> <span class="toc-text">Blending</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/02/10/Arxiv%E6%AF%8F%E6%97%A5%E9%80%9F%E9%80%92.html" title="Arxiv每日速递(2023-02-10)"><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/Arxiv%E6%AF%8F%E6%97%A5%E9%80%9F%E9%80%92/wc.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv每日速递(2023-02-10)"/></a><div class="content"><a class="title" href="/2023/02/10/Arxiv%E6%AF%8F%E6%97%A5%E9%80%9F%E9%80%92.html" title="Arxiv每日速递(2023-02-10)">Arxiv每日速递(2023-02-10)</a><time datetime="2023-02-10T00:43:44.400Z" title="发表于 2023-02-10 08:43:44">2023-02-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/26/%E5%8D%87%E7%BA%A7%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E5%85%A8%E6%94%BB%E7%95%A5.html" title="升级深度学习开发环境全攻略"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="升级深度学习开发环境全攻略"/></a><div class="content"><a class="title" href="/2022/11/26/%E5%8D%87%E7%BA%A7%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E5%85%A8%E6%94%BB%E7%95%A5.html" title="升级深度学习开发环境全攻略">升级深度学习开发环境全攻略</a><time datetime="2022-11-26T15:29:06.000Z" title="发表于 2022-11-26 23:29:06">2022-11-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/17/2022%E5%85%A8%E7%90%83%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0%E5%A4%A7%E8%B5%9B(GAIIC2022)%EF%BC%9A%E5%95%86%E5%93%81%E6%A0%87%E9%A2%98%E5%AE%9E%E4%BD%93%E8%AF%86%E5%88%AB(%E4%BA%8C%E7%AD%89%E5%A5%96).html" title="2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖)"><img src="https://cdn.kesci.com/upload/image/r7j60un866.png?imageView2/2/w/2500/h/2500" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖)"/></a><div class="content"><a class="title" href="/2022/11/17/2022%E5%85%A8%E7%90%83%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0%E5%A4%A7%E8%B5%9B(GAIIC2022)%EF%BC%9A%E5%95%86%E5%93%81%E6%A0%87%E9%A2%98%E5%AE%9E%E4%BD%93%E8%AF%86%E5%88%AB(%E4%BA%8C%E7%AD%89%E5%A5%96).html" title="2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖)">2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖)</a><time datetime="2022-11-17T14:29:06.000Z" title="发表于 2022-11-17 22:29:06">2022-11-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/10/22/%E4%B8%AD%E5%9B%BD%E6%B3%95%E5%BE%8B%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E8%AF%84%E6%B5%8B(CAIL2021)%EF%BC%9A%E4%BF%A1%E6%81%AF%E6%8A%BD%E5%8F%96(Rank2).html" title="中国法律智能技术评测(CAIL2021)：信息抽取(Rank2)"><img src="http://cail.cipsc.org.cn/img/index_mainpic.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="中国法律智能技术评测(CAIL2021)：信息抽取(Rank2)"/></a><div class="content"><a class="title" href="/2021/10/22/%E4%B8%AD%E5%9B%BD%E6%B3%95%E5%BE%8B%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E8%AF%84%E6%B5%8B(CAIL2021)%EF%BC%9A%E4%BF%A1%E6%81%AF%E6%8A%BD%E5%8F%96(Rank2).html" title="中国法律智能技术评测(CAIL2021)：信息抽取(Rank2)">中国法律智能技术评测(CAIL2021)：信息抽取(Rank2)</a><time datetime="2021-10-22T14:29:06.000Z" title="发表于 2021-10-22 22:29:06">2021-10-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/19/%E5%85%A8%E7%90%83%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0%E5%A4%A7%E8%B5%9B%E3%80%90%E8%B5%9B%E9%81%93%E4%B8%80%E3%80%91%EF%BC%9A%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E6%8A%A5%E5%91%8A%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B(%E4%B8%89%E7%AD%89%E5%A5%96).html" title="全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖)"><img src="https://tianchi-public.oss-cn-hangzhou.aliyuncs.com/public/files/forum/161037709574435991610377095138.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖)"/></a><div class="content"><a class="title" href="/2021/05/19/%E5%85%A8%E7%90%83%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0%E5%A4%A7%E8%B5%9B%E3%80%90%E8%B5%9B%E9%81%93%E4%B8%80%E3%80%91%EF%BC%9A%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E6%8A%A5%E5%91%8A%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B(%E4%B8%89%E7%AD%89%E5%A5%96).html" title="全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖)">全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖)</a><time datetime="2021-05-19T09:57:06.000Z" title="发表于 2021-05-19 17:57:06">2021-05-19</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2023 By 徐耀彬</div><div class="footer_custom_text"><p><a style="margin-inline:5px"target="_blank"href="https://hexo.io/"><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&logo=hexo"title="博客框架为Hexo"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://butterfly.js.org/"><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&logo=bitdefender"title="主题采用butterfly"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://www.jsdelivr.com/"><img src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&logo=jsDelivr"title="本站使用JsDelivr为静态资源提供CDN加速"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://github.com/"><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&logo=GitHub"title="本站项目由Gtihub托管"alt="img"></a><a style="margin-inline:5px"target="_blank"href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&logo=Claris"alt="img"title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"></a></br></p></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>(()=>{
+  const $countDom = document.getElementById('twikoo-count')
+  const init = () => {
+    let initData = {
+      el: '#twikoo-wrap',
+      envId: 'blog-',
+      region: ''
+    }
+
+    if (false) {
+      const otherData = false
+      initData = Object.assign(initData, otherData)
+    }
+    
+    twikoo.init(initData)
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'blog-',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      $countDom.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const loadTwikoo = (bool = false) => {
+    if (typeof twikoo === 'object') {
+      init()
+      bool && $countDom && setTimeout(getCount,0)
+    } else {
+      getScript('https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(()=> {
+        init()
+        bool && $countDom && setTimeout(getCount,0)
+      })
+    }
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo(true)
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --> <script data-pjax>if(document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    var parent = document.getElementById('recent-posts');
+    var child = '<div class="recent-post-item" style="width:100%;height: auto"><div id="catalog_magnet"><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/机器学习/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🐱 机器学习 (1)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (1)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/竞赛相关/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 竞赛相关 (3)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/阅读笔记/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 阅读笔记 (1)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><a class="magnet_link_more"  href="http://louishsu.xyz/categories" style="flex:1;text-align: center;margin-bottom: 10px;">查看更多...</a></div></div>';
+    console.log('已挂载magnet')
+    parent.insertAdjacentHTML("afterbegin",child)}
+     </script><style>#catalog_magnet{flex-wrap: wrap;display: flex;width:100%;justify-content:space-between;padding: 10px 10px 0 10px;align-content: flex-start;}.magnet_item{flex-basis: calc(50% - 5px);background: #f2f2f2;margin-bottom: 10px;border-radius: 8px;transition: all 0.2s ease-in-out;}.magnet_item:hover{background: #b30070}.magnet_link_more{color:#555}.magnet_link{color:black}.magnet_link:hover{color:white}@media screen and (max-width: 600px) {.magnet_item {flex-basis: 100%;}}.magnet_link_context{display:flex;padding: 10px;font-size:16px;transition: all 0.2s ease-in-out;}.magnet_link_context:hover{padding: 10px 20px;}</style>
+    <style></style>
+  <script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/hexo-github-calendar@1.21/hexo_githubcalendar.js"></script>
+  <script data-pjax>
+        function GithubCalendarConfig(){
+            var git_githubapiurl ="https://python-github-calendar-api.vercel.app/api?isLouisHsu";
+            var git_color =['#ebedf0', '#fdcdec', '#fc9bd9', '#fa6ac5', '#f838b2', '#f5089f', '#c4067e', '#92055e', '#540336', '#48022f', '#30021f'];
+            var git_user ="isLouisHsu";
+            var parent_div_git = document.getElementById('recent-posts');
+            var git_div_html = '<div class="recent-post-item" style="width:100%;height:auto;padding:10px;"><div id="github_loading" style="width:10%;height:100%;margin:0 auto;display: block"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 50 50" style="enable-background:new 0 0 50 50" xml:space="preserve"><path fill="#d0d0d0" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z" transform="rotate(275.098 25 25)"><animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animateTransform></path></svg></div><div id="github_container"></div></div>';
+            if(parent_div_git && location.pathname =='/'){
+                console.log('已挂载github calendar')
+                // parent_div_git.innerHTML=git_div_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",git_div_html) // 有报错，但不影响使用(支持pjax跳转)
+            };
+            GithubCalendar(git_githubapiurl,git_color,git_user)
+        }
+        if(document.getElementById('recent-posts')){
+            GithubCalendarConfig()
+        }
+    </script>
+    <style>#github_container{min-height:280px}@media screen and (max-width:650px) {#github_container{background-image:;min-height:0px}}</style>
+    <style></style><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><!-- hexo injector body_end end --><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>
