@@ -1,0 +1,618 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>【转载】通向AGI之路：大型语言模型（LLM）技术精要 | LOUIS' BLOG</title><meta name="author" content="徐耀彬"><meta name="copyright" content="徐耀彬"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="转载自通向AGI之路：大型语言模型（LLM）技术精要 - 知乎&#x2F;张俊林   目前规模最大的LLM模型，几乎清一色都是类似GPT 3.0这种“自回归语言模型+Prompting”模式的，比如GPT 3、PaLM、GLaM、Gopher、Chinchilla、MT-NLG、LaMDA等，没有例外。为什么会这样呢？  自然语言生成任务，在表现形式上可以兼容自然语言理解任务，若反过来，则很难做到这一点。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【转载】通向AGI之路：大型语言模型（LLM）技术精要">
+<meta property="og:url" content="http://louishsu.xyz/2023/03/26/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91%E9%80%9A%E5%90%91AGI%E4%B9%8B%E8%B7%AF%EF%BC%9A%E5%A4%A7%E5%9E%8B%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%EF%BC%88LLM%EF%BC%89%E6%8A%80%E6%9C%AF%E7%B2%BE%E8%A6%81.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="转载自通向AGI之路：大型语言模型（LLM）技术精要 - 知乎&#x2F;张俊林   目前规模最大的LLM模型，几乎清一色都是类似GPT 3.0这种“自回归语言模型+Prompting”模式的，比如GPT 3、PaLM、GLaM、Gopher、Chinchilla、MT-NLG、LaMDA等，没有例外。为什么会这样呢？  自然语言生成任务，在表现形式上可以兼容自然语言理解任务，若反过来，则很难做到这一点。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picx.zhimg.com/v2-8eab4d7521252501ef5d836e786c45c6_1440w.jpg?source=172ae18b">
+<meta property="article:published_time" content="2023-03-26T14:55:45.000Z">
+<meta property="article:modified_time" content="2023-08-14T00:36:11.504Z">
+<meta property="article:author" content="徐耀彬">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picx.zhimg.com/v2-8eab4d7521252501ef5d836e786c45c6_1440w.jpg?source=172ae18b"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://louishsu.xyz/2023/03/26/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91%E9%80%9A%E5%90%91AGI%E4%B9%8B%E8%B7%AF%EF%BC%9A%E5%A4%A7%E5%9E%8B%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%EF%BC%88LLM%EF%BC%89%E6%8A%80%E6%9C%AF%E7%B2%BE%E8%A6%81"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2023-08-14 08:36:11'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><link rel="stylesheet" href="/css/background.css"><script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/touxiang.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">18</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 工具</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fas fa-pen"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/isLouisHsu/blog/tree/master/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-brands fa-app-store"></i><span> 利器</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://code.visualstudio.com/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> VSCode：微软旗下的跨平台代码编辑软件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mobaxterm.mobatek.net/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> MobaXterm：超好用的全能远程终端</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.zotero.org/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Zotero：便于收集、组织、引用、共享的文献管理工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/CopyTranslator/CopyTranslator"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> CopyTranslator：“复制即翻译”的外文辅助阅读翻译解决方案</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ditto-cp.sourceforge.io/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Ditto：强大的Windows剪贴板增强工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/indiff/qttabbar"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> QtTabBar：在Windows资源管理器中使用多标签功能扩展工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/sentialx/multrin"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Multrin：“窗口合并”辅助小工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/Wox-launcher/Wox"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Wox &amp; Everything：基于名称快速定位文件和文件夹的搜索工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/NickeManarin/ScreenToGif"><i class="fa-fw fa-regular fa-star"></i><span> ScreenToGif：快速录制屏幕指定区域并保存为动图文件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mathpix.com/"><i class="fa-fw fa-regular fa-star"></i><span> Mathpix Snipping：识别数学公式并转换成LaTeX</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://picx.zhimg.com/v2-8eab4d7521252501ef5d836e786c45c6_1440w.jpg?source=172ae18b')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">LOUIS' BLOG</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 工具</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fas fa-pen"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/isLouisHsu/blog/tree/master/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-brands fa-app-store"></i><span> 利器</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://code.visualstudio.com/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> VSCode：微软旗下的跨平台代码编辑软件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mobaxterm.mobatek.net/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> MobaXterm：超好用的全能远程终端</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.zotero.org/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Zotero：便于收集、组织、引用、共享的文献管理工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/CopyTranslator/CopyTranslator"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> CopyTranslator：“复制即翻译”的外文辅助阅读翻译解决方案</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ditto-cp.sourceforge.io/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Ditto：强大的Windows剪贴板增强工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/indiff/qttabbar"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> QtTabBar：在Windows资源管理器中使用多标签功能扩展工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/sentialx/multrin"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Multrin：“窗口合并”辅助小工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/Wox-launcher/Wox"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Wox &amp; Everything：基于名称快速定位文件和文件夹的搜索工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/NickeManarin/ScreenToGif"><i class="fa-fw fa-regular fa-star"></i><span> ScreenToGif：快速录制屏幕指定区域并保存为动图文件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mathpix.com/"><i class="fa-fw fa-regular fa-star"></i><span> Mathpix Snipping：识别数学公式并转换成LaTeX</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">【转载】通向AGI之路：大型语言模型（LLM）技术精要<a class="post-edit-link" href="https://github.com/isLouisHsu/blog/tree/master/source_posts/【转载】通向AGI之路：大型语言模型（LLM）技术精要.md" title="编辑" target="_blank"><i class="fas fa-pencil-square"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-03-26T14:55:45.000Z" title="发表于 2023-03-26 22:55:45">2023-03-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-14T00:36:11.504Z" title="更新于 2023-08-14 08:36:11">2023-08-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/">自然语言处理</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">9.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>27分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2023/03/26/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91%E9%80%9A%E5%90%91AGI%E4%B9%8B%E8%B7%AF%EF%BC%9A%E5%A4%A7%E5%9E%8B%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%EF%BC%88LLM%EF%BC%89%E6%8A%80%E6%9C%AF%E7%B2%BE%E8%A6%81.html#post-comment"><span id="twikoo-count"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><blockquote>
+<p>转载自<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/597586623">通向AGI之路：大型语言模型（LLM）技术精要 - 知乎/张俊林</a></p>
+</blockquote>
+<ol>
+<li><strong>目前规模最大的LLM模型，几乎清一色都是类似GPT 3.0这种“自回归语言模型+Prompting”模式的</strong>，比如GPT 3、PaLM、GLaM、Gopher、Chinchilla、MT-NLG、LaMDA等，没有例外。为什么会这样呢？
+<ul>
+<li><strong>自然语言生成任务，在表现形式上可以兼容自然语言理解任务</strong>，若反过来，则很难做到这一点。这样的好处是：同一个LLM生成模型，可以解决几乎所有NLP问题。而如果仍然采取Bert模式，则这个LLM模型无法很好处理生成任务。既然这样，我们当然倾向于使用生成模型，这是一个原因。</li>
+<li>现在已有研究（参考：On the Role of Bidirectionality in Language Model Pre-Training）证明：如果是以fine-tuning方式解决下游任务，Bert模式的效果优于GPT模式；若是以zero shot/few shot prompting这种模式解决下游任务，则GPT模式效果要优于Bert模式。这说明了，<strong>生成模型更容易做好zero shot/few shot prompting方式的任务</strong>，而Bert模式以这种方式做任务，是天然有劣势的。</li>
+</ul>
+</li>
+<li><strong>什么样的LLM模型，对我们是最理想的？</strong>
+<ul>
+<li><strong>首先，LLM应该具备强大的自主学习能力</strong>。假设我们把世界上能获得的所有文本或者图片等不同类型的数据喂给它，它应该能够自动从中学习到里面包含的所有知识点，学习过程不需要人的介入，并且能灵活应用所学知识，来解决实际问题。因为数据是海量的，要吸收所有知识，就要非常多的模型参数来存储知识，<strong>所以这个模型必然会是一个巨无霸模型</strong>。</li>
+<li>其次，LLM应该能解决NLP任何子领域的问题，而不仅支持有限领域，甚至它应该可以响应NLP之外其它领域的问题，最好是<strong>任意领域</strong>的问题都能得到很好地回答。</li>
+<li>再者，当我们使用LLM解决某个具体领域问题的时候，应该用我们人类习惯的表达方式，就是说LLM应该理解人类的命令。<strong>这体现出让LLM适配人，而不是反过来，让人去适配LLM模型。</strong></li>
+</ul>
+</li>
+<li>为什么我们要追求<strong>zero shot/few shot prompting</strong>这种方式来做任务呢？
+<ul>
+<li><strong>第一，这个LLM模型规模必然非常巨大</strong><br>
+有能力作出这个模型，或改动这个模型参数的机构必然很少。而任务需求方是千千万万的中小机构甚至是个人，就算你把模型开源出来，他们也无力部署这个模型，更不用说再用Fine-tuning这种模式去修改模型参数了。
+<ul>
+<li><strong>应该追求不修正模型参数，就能让任务需求方完成任务的方式</strong>，也就是应该采取prompt模式完成任务，而非Fine-tuning模式</li>
+<li>作为服务支持方，考虑到千变万化的用户需求，所以LLM模型制作方<strong>更要追求让LLM能完成尽可能多类型的任务</strong></li>
+</ul>
+</li>
+<li><strong>第二，本来我们希望LLM能够用人类常用的命令方式来执行某个任务，但是目前技术还做不到</strong>，所以退而求其次，用这些替代技术来表达人类的任务需求
+<ul>
+<li>zero shot prompting的初衷，其实就是<strong>人类和LLM的理想接口</strong>，直接用人类所习惯的任务表述方式让LLM做事情，但是发现LLM并不能很好地理解，<strong>效果也不好</strong></li>
+<li>经过继续研究，转而发现：对于某项任务，如果给LLM几个示例，用这些示例来代表任务描述，效果会比zero shot prompting好，于是大家都去研究更好的few shot prompting技术</li>
+</ul>
+</li>
+<li>如果理解了上述逻辑，很容易得出如下结论：few shot prompting（也被称为In Context Learning）<strong>只是一种过渡时期的技术</strong>。如果我们能够更自然地去描述一个任务，而且LLM可以理解，那么，我们肯定会毫不犹豫地抛弃这些过渡期的技术，<strong>原因很明显，用这些方法来描述任务需求，并不符合人类的使用习惯</strong>。</li>
+</ul>
+</li>
+<li>ChatGPT的出现，改变了这个现状，<strong>用Instruct取代了Prompting</strong>，由此带来新的技术范式转换，<strong>并产生若干后续影响</strong>
+<ul>
+<li><strong>影响一：让LLM适配人的新型交互接口</strong>
+<ul>
+<li>ChatGPT的最大贡献在于：基本实现了理想LLM的接口层，让LLM适配人的习惯命令表达方式，而不是反过来让人去适配LLM，绞尽脑汁地想出一个能Work的命令（这就是instruct技术出来之前，prompt技术在做的事情），<strong>而这增加了LLM的易用性和用户体验</strong>。</li>
+<li>相对之前的few shot prompting，它是一种<strong>更符合人类表达习惯的人和LLM进行交互的人机接口技术</strong>。</li>
+</ul>
+</li>
+<li><strong>影响二：很多NLP子领域不再具备独立研究价值</strong>
+<ul>
+<li>目前研究表明，很多NLP任务，随着LLM模型规模增长，效果会大幅提升。据此，我觉得可得到如下推论：大多数某领域所谓“独有”的问题，大概率只是缺乏领域知识导致的一种外在表象，<strong>只要领域知识足够多，这个所谓领域独有的问题，就可以被很好地解决掉</strong>，其实并不需要专门针对某个具体领域问题，冥思苦想去提出专用解决方案。</li>
+<li><strong>未来的技术发展趋势应该是</strong>：追求规模越来越大的LLM模型，通过增加预训练数据的多样性，来涵盖越来越多的领域，LLM自主从领域数据中通过预训练过程学习领域知识，随着模型规模不断增大，很多问题随之得到解决。**研究重心会投入到如何构建这个理想LLM模型，而非去解决某个领域的具体问题。**这样，越来越多NLP的子领域会被纳入LLM的技术体系，进而逐步消失。</li>
+<li><strong>判断某个具体领域是否该立即停止独立研究</strong>，其判断标准可采取以下两种方法
+<ul>
+<li>第一，判断某个任务，<strong>是否LLM的研究效果超过人类表</strong>现，对于那些LLM效果超过人类的研究领域，已无独立研究的必要。</li>
+<li>第二，对比两种模式的任务效果，第一种模式是用较大的领域专用数据进行Fine-tuning，第二种是few-shot prompting或instruct-based方法。<strong>如果第二种方法效果达到或超过第一种方法</strong>，则意味着这个领域没有继续独立存在的必要性。</li>
+</ul>
+</li>
+<li>对于很多NLP领域的研究人员，将面临往何处去的选择，是继续做领域独有问题呢？还是放弃这种看似前途不大的方式，转而去建设更好的LLM？如果选择转向去建设LLM，又有哪些机构有能力、有条件去做这个事情呢？<strong>你对这个问题的回答会是什么呢？</strong></li>
+</ul>
+</li>
+<li><strong>影响三：更多NLP之外的研究领域将被纳入LLM技术体系</strong>
+<ul>
+<li>ChatGPT除了展示出以流畅的对话形式解决各种NLP任务外，也具备强大的代码能力。<strong>很自然的，之后越来越多其它的研究领域，也会被逐步纳入LLM体系中，成为通用人工智能的一部分。</strong></li>
+<li>我的判断是无论是图像还是多模态，未来被融入LLM成为好用的功能，可能比我们想象的进度要慢。主要原因在于：
+<ul>
+<li>尽管图像领域最近两年也一直在模仿Bert预训练的路子，尝试引入自监督学习，释放模型自主从图像数据中学习知识的能力，典型技术就是“对比学习”和MAE，这是两条不同的技术路线。</li>
+<li>然而，从目前效果来看，尽管取得了很大的技术进步，但貌似这条路尚未走通，这体现在图像领域预训练模型应用到下游任务，带来的效果收益，远不如Bert或GPT应用在NLP下游任务那样显著。</li>
+<li>所以，图像预处理模型仍需深入探索，以释放图像数据的潜力，而这会迟滞它们被统一到LLM大模型的时间。</li>
+<li>当然，如果哪天这条路被趟通，大概率会复现NLP领域目前的局面，就是图像处理各个研究子领域可能会逐步消失，被融入到大型LLM中来，直接完成终端任务。</li>
+</ul>
+</li>
+<li>除了图像与多模态，很明显，<strong>其它领域也会逐渐被纳入到理想LLM中来</strong>，这个方向方兴未艾，是具备高价值的研究主题。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>GPT 3.0之后LLM模型的主流技术进展
+<ul>
+<li>第一类是关于<strong>LLM模型如何从数据中吸收知识</strong>，也包括模型规模增长对LLM吸收知识能力带来的影响
+<blockquote>
+<p>对应“学习者：从无尽数据到海量知识”；</p>
+</blockquote>
+</li>
+<li>第二类是关于<strong>如何使用LLM内在能力来解决任务的人机接口</strong>，包括In Context Learning和Instruct两种模式
+<blockquote>
+<p>对应“人机接口:从In Context Learning到Instruct理解”、“智慧之光：如何增强LLM的推理能力”。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><strong>学习者：从无尽数据到海量知识</strong>
+<ul>
+<li><strong>求知之路：LLM学到了什么知识</strong><br>
+可以分为语言类知识和世界知识两大类
+<ul>
+<li><strong>语言类知识</strong>指的是词法、词性、句法、语义等有助于人类或机器理解自然语言的知识
+<ul>
+<li>各种实验充分证明LLM可以学习各种层次类型的语言学知识</li>
+<li>各种研究也证明了浅层语言知识比如词法、词性、句法等知识存储在Transformer的低层和中层，而抽象的语言知识比如语义类知识，广泛分布在Transformer的中层和高层结构中</li>
+</ul>
+</li>
+<li><strong>世界知识</strong>指的是在这个世界上发生的一些真实事件（事实型知识，Factual Knowledge），以及一些常识性知识(Common Sense Knowledge)
+<ul>
+<li>LLM确实从训练数据中吸收了大量世界知识，而这类知识主要分布在Transformer的中层和高层，尤其聚集在中层</li>
+<li>而且，随着Transformer模型层深增加，能够学习到的知识数量逐渐以指数级增加（可参考：BERTnesia: Investigating the capture and forgetting of knowledge in BERT）</li>
+<li>其实，你把LLM看作是一种以模型参数体现的隐式知识图谱，如果这么理解，我认为是一点问题也没有的</li>
+</ul>
+</li>
+<li>“When Do You Need Billions of Words of Pre-training Data?”这篇文章研究了<strong>预训练模型学习到的知识量与训练数据量的关系</strong>
+<ul>
+<li>它的结论是：对于Bert类型的语言模型来说，只用1000万到1亿单词的语料，就能学好句法语义等语言学知识，但是要学习事实类知识，则要更多的训练数据。</li>
+<li>这个结论其实也是在意料中的，毕竟语言学知识相对有限且静态，而事实类知识则数量巨大，且处于不断变化过程中。</li>
+<li>随着增加训练数据量，预训练模型在各种下游任务中效果越好，这说明了从增量的训练数据中学到的更主要是世界知识。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>记忆之地：LLM如何存取知识</strong>
+<ul>
+<li>MHA主要用于计算单词或知识间的相关强度，并对全局信息进行集成，更可能是在建立知识之间的联系，大概率不会存储具体知识点，那么很容易推论出LLM模型的知识主体是存储在Transformer的FFN结构里</li>
+<li>“Transformer Feed-Forward Layers Are Key-Value Memories”给出了一个比较新颖的观察视角，它把Transformer的FFN看成存储大量具体知识的Key-Value存储器。</li>
+<li>这篇文章还指出，Transformer低层对句子的表层模式作出反应，高层对语义模式作出反应，就是说低层FFN存储词法、句法等表层知识，中层和高层存储语义及事实概念知识，这和其它研究结论是一致的。</li>
+</ul>
+</li>
+<li><strong>知识涂改液：如何修正LLM里存储的知识</strong>
+<ul>
+<li>第一类方法<strong>从训练数据的源头</strong>来修正知识。
+<ul>
+<li>假设我们想要删除某条知识，则可首先定位到其对应的数据源头，删除数据源，然后重新预训练整个LLM模型，这样即可达成删除LLM中相关知识的目的。</li>
+<li>这种方法不会太有发展前景，<strong>可能比较适合那种对于某个特定类别数据的一次性大规模删除场合</strong>，不适合少量多次的常规知识修正场景，比如可能比较适合用来做去除偏见等去toxic内容的处理。</li>
+</ul>
+</li>
+<li>第二类方法是对LLM模型做一次<strong>fine-tuning</strong>来修正知识。
+<ul>
+<li>我们可以根据要修正成的新知识来构建训练数据，然后让LLM模型在这个训练数据上做fine-tuning，这样指导LLM记住新的知识，遗忘旧的知识。</li>
+<li>首先它会带来灾难遗忘问题，就是说除了忘掉该忘的知识，还忘掉了不该忘的知识，导致这么做了之后有些下游任务效果下降。</li>
+<li>另外，因为目前的LLM模型规模非常大，即使是做fine-tuning，如果次数频繁，其实成本也相当高。</li>
+</ul>
+</li>
+<li>另外一类方法直接修改LLM里某些知识对应的<strong>模型参数</strong>来修正知识。
+<ul>
+<li>首先我们想办法在LLM模型参数中，定位到存储旧知识的FFN节点，然后可以强行调整更改FFN中对应的模型参数，将旧知识替换成新的知识。</li>
+<li>可以看出，这种方法涉及到两项关键技术：首先是如何在LLM参数空间中定位某条知识的具体存储位置；其次是如何修正模型参数，来实现旧知识到新知识的修正。</li>
+<li>理解这个修正LLM知识的过程，其实对于更深入理解LLM的内部运作机制是很有帮助的。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>规模效应：当LLM越来越大时会发生什么</strong>
+<ul>
+<li>一般我们的直觉是：如果LLM模型在预训练阶段的指标越好，自然它解决下游任务的能力就越强。然而，事实并非完全如此。现有研究已证明，预训练阶段的优化指标确实和下游任务表现出正相关关系，但是并非完全正相关。<strong>也就是说，只看预训练阶段的指标，来判断一个LLM模型是否够好，这是不够的。</strong></li>
+<li><strong>从预训练阶段来看模型规模的影响</strong>
+<ul>
+<li>当我们<strong>独立增加训练数据量、模型参数规模或者延长模型训练时间（比如从1个Epoch到2个Epoch）</strong>，预训练模型在测试集上的Loss都会单调降低，也就是说模型效果越来越好。</li>
+<li>既然三个因素都重要，那么我们在实际做预训练的时候，就有一个算力如何分配的决策问题。此消彼长，某个要素规模增长，就要降低其它因素的规模，以维持总算力不变，所以这里有各种可能的<strong>算力分配方案</strong>：
+<ul>
+<li>OpenAI选择了同时增加训练数据量和模型参数，但是采用早停策略(early stopping)来减少训练步数的方案。因为它证明了：
+<ul>
+<li>对于训练数据量和模型参数这两个要素，如果只单独增加其中某一个，这不是最好的选择，最好能按照一定比例同时增加两者</li>
+<li>它的结论是优先增加模型参数，然后才是训练数据量。假设用于训练LLM的算力总预算增加了10倍，那么应该增加5.5倍的模型参数量，1.8倍的训练数据量，此时模型效果最佳。</li>
+</ul>
+</li>
+<li>DeepMind的一项研究（参考：Training Compute-Optimal Large Language Models）更深入地探究了这个问题：
+<ul>
+<li>其基本结论和OpenAI的结论差不多，比如确实需要同时增加训练数据量和模型参数，模型效果才会更好。</li>
+<li>很多大模型在做预训练的时候，并没有考虑这一点，很多LLM大模型只是单调增加模型参数，而固定住了训练数据量，这个做法其实是不对的，限制了LLM模型的潜力。</li>
+<li>但是它修正了两者的比例关系，认为训练数据量和模型参数是同等重要的，也就是说，假设用于训练LLM的算力总预算增加了10倍，那么应该增加3.3倍的模型参数量，3.3倍的训练数据量，这样模型效果才最好。</li>
+</ul>
+</li>
+<li>DeepMind在设计Chinchilla模型时，在算力分配上选择了另外一种配置：
+<ul>
+<li>对标数据量300B、模型参数量280B的Gopher模型，Chinchilla选择增加4倍的训练数据，但是将模型参数降低为Gopher的四分之一，大约为70B。但是无论预训练指标，还是很多下游任务指标，Chinchilla效果都要优于规模更大的Gopher。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>这带给我们如下启示：<strong>我们可以选择放大训练数据，并同比例地减少LLM模型参数，以达到在不降低模型效果的前提下，极大缩小模型规模的目的</strong>。缩小模型规模有很多好处，比如在应用的时候，推理速度会快很多等，无疑这是一个很有前途的LLM发展路线。</li>
+</ul>
+</li>
+<li><strong>从LLM解决下游具体任务效果的角度来看</strong>，随着模型规模增大，不同类型的任务有不同的表现：
+<ul>
+<li>第一类任务完美体现了LLM模型的scaling law，就是说<strong>随着模型规模逐步放大，任务的表现越来越好</strong>
+<ul>
+<li>这类任务通常符合如下共性：它们往往都是<strong>知识密集型任务</strong>，也就是说如果LLM模型包含的知识量越多，这类任务表现越好。</li>
+<li>而很多研究已经证明越大的LLM模型学习效率越高，也就是说相同训练数据量，模型越大任务效果越好，说明面对的即使是同样的一批训练数据，更大的LLM模型相对规模小一些的模型，从中学到了更多的知识。</li>
+<li>更何况一般情况下，在增大LLM模型参数的时候，往往会同步增加训练数据量，这意味着大模型可以从更多数据中学习更多的知识点。</li>
+<li>大多数传统的自然语言理解类任务，其实都属于这种知识密集型任务，而很多任务在近两年获得了极大的效果提升，甚至超过了人类表现。很明显，这大概率是LLM模型的规模增长带来的，而非归功于某项具体的技术改进。</li>
+</ul>
+</li>
+<li>第二类任务展现出LLM具备某种<strong>涌现能力（Emergent Ability）</strong>，如上图（b）所示。
+<ul>
+<li>所谓“涌现能力”，指的是当模型参数规模未能达到某个阀值时，模型基本不具备解决此类任务的任何能力，体现为其性能和随机选择答案效果相当，<strong>但是当模型规模跨过阀值，LLM模型对此类任务的效果就出现突然的性能增长</strong>。</li>
+<li>“Beyond the Imitation Game: Quantifying and extrapolating the capabilities of language models”这篇文章指出，这类体现出“涌现能力”的任务也有一些共性：这些任务一般由多步骤构成，要解决这些任务，往往需要先解决多个中间步骤，而逻辑推理能力在最终解决这类任务中发挥重要作用。</li>
+<li>上述文章以及“Emergent Abilities of Large Language Models”给出了几个可能的解释：
+<ul>
+<li>一种可能解释是有些任务的<strong>评价指标</strong>不够平滑。
+<ul>
+<li>比如说有些生成任务的判断标准，它要求模型输出的字符串，要和标准答案完全匹配才算对，否则就是0分。</li>
+<li>所以，即使随着模型增大，其效果在逐步变好，体现为输出了更多的正确字符片段，但是因为没有完全对，只要有任何小错误都给0分，只有当模型足够大，输出片段全部正确才能得分。</li>
+<li>也就是说，因为指标不够平滑，所以不能体现LLM其实正在逐步改善任务效果这一现实，看起来就是“涌现能力”这种外在表现。</li>
+</ul>
+</li>
+<li>另外一种可能的解释是：有些任务由若干中间步骤构成，随着模型规模增大，<strong>解决每个步骤的能力也在逐步增强</strong>，但是只要有一个中间步骤是错的，最终答案就是错的，于是也会导致这种表面的“涌现能力”现象。</li>
+<li>当然，上面的解释目前还都是猜想，至于为何LLM会出现这种现象，还需要进一步更深入的研究。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>还有少部分任务，随着模型规模增长，任务的效果曲线展现出U形特性：随着模型规模逐渐变大，任务效果逐渐变差，但是当模型规模进一步增长，则效果开始越来越好，呈现出<strong>U形增长趋势</strong>
+<ul>
+<li>“Inverse scaling can become U-shaped”这篇文章给出了一种解释：这些任务，内部其实隐含了两种不同类型的子任务，一种是真正的任务，另外一种是“干扰任务（distractor task）”。
+<ul>
+<li>当模型规模小的时候，无法识别任意一种子任务，所以模型的表现跟随机选择答案差不多</li>
+<li>当模型增长到中等规模的时候，主要执行的是干扰任务，所以对真正的任务效果有负面影响，体现为真正任务效果的下降</li>
+<li>而当进一步增加模型规模，则LLM可以忽略干扰任务，执行真正的任务，体现为效果开始增长。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>人机接口:从In Context Learning到Instruct理解</strong>
+<ul>
+<li>神秘的In Context Learning
+<ul>
+<li><strong>In Context Learning和few shot prompting意思类似</strong>，就是给LLM几个示例作为范本，然后让LLM解决新问题。</li>
+<li>看似In Context Learning没从例子里学习知识，实际上，难道LLM通过一种奇怪的方式去学习？还是说，它确实也没学啥？关于这个问题的答案，目前仍是未解之谜。</li>
+</ul>
+</li>
+<li>神奇的Instruct理解
+<ul>
+<li><strong>zero shot prompting我理解其实就是现在的Instruct的早期叫法</strong>，以前大家习惯叫zero shot，现在很多改成叫Instruct。尽管是一个内涵，但是具体做法是两种做法：
+<ul>
+<li>早期大家做zero shot prompting，实际上就是不知道怎么表达一个任务才好，于是就换不同的单词或者句子，反复在尝试好的任务表达方式，这种做法目前已经被证明是在拟合训练数据的分布，其实没啥意思。</li>
+<li>目前Instruct的做法则是给定命令表述语句，试图让LLM理解它。</li>
+</ul>
+</li>
+<li>目前关于Instruct的研究可以分成两种：
+<ul>
+<li>第一种：<strong>偏学术研究的Instruct</strong>。它的核心研究主题是多任务场景下，LLM模型对Instruct理解的泛化能力。
+<ul>
+<li>如上图中FLAN模型所示，就是说有很多NLP任务，对于每个任务，研究人员构造一个或者多个Prompt模版作为任务的Instruct，然后用训练例子对LLM模型进行微调，让LLM以同时学习多个任务。训练好模型后，给LLM模型一个它没见过的全新任务的Instruct，然后让LLM 解决zero shot任务，从任务解决得是否足够好，来判断LLM模型是否有对Instruct理解的泛化能力。</li>
+<li>能够有效增加LLM模型Instruct泛化能力的因素包括：增加多任务的任务数量、增加LLM模型大小、提供CoT Prompting，以及增加任务的多样性。</li>
+</ul>
+</li>
+<li>第二种：<strong>关于人类真实需求描述的Instruct</strong>，这类研究以InstructGPT和ChatGPT为代表。
+<ul>
+<li>这类工作也是基于多任务的，但是和偏向学术研究类工作最大的不同，在于它是面向人类用户真实需求的。</li>
+<li>这里所谓的“真实需求”，体现在两个方面：
+<ul>
+<li>首先，因为是从用户提交的任务描述里随机抽取的，所以涵盖的任务类型更多样化，也更符合用户的真实需求；</li>
+<li>其次，某个任务的prompt描述，是用户提交的，体现了一般用户在表达任务需求时会怎么说，而不是你认为用户会怎么说。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>In Context Learning和Instruct的联系
+<ul>
+<li>通过提供给LLM完成某个任务的若干具体示例，能让LLM找出其对应的自然语言描述的Instruct命令</li>
+<li>这说明了：具象的任务示例和任务的自然语言描述之间，有种神秘的内在联系。至于这种联系到底是什么？我们目前对此还一无所知。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>智慧之光：如何增强LLM的推理能力</strong>
+<ul>
+<li><strong>当模型规模足够大的时候，LLM本身是具备推理能力的</strong>，在简单推理问题上，LLM已经达到了很好的能力，但是复杂推理问题上，还需要更多深入的研究。</li>
+<li>如果梳理现有<strong>LLM推理相关工作</strong>的话，我把它们归到两大类，体现出挖掘或促进LLM推理能力不同的技术思路：
+<ul>
+<li>第一类研究比较多，可以统称为<strong>基于Prompt的方法</strong>，核心思想是通过合适的提示语或提示样本，更好地激发出LLM本身就具备的推理能力，Google在这个方向做了大量很有成效的工作。</li>
+<li>第二类做法是<strong>在预训练过程中引入程序代码</strong>，和文本一起参与预训练，以此进一步增强LLM的推理能力，这应该是OpenAI实践出的思路。比如ChatGPT肯定具备很强的推理能力，但它并不要求用户必须提供一些推理示例，所以ChatGPT强大的推理能力，大概率来源于使用代码参与GPT 3.5的预训练。</li>
+<li>这两种思路其实大方向是迥异的：利用代码增强LLM推理能力，这体现出一种<strong>通过增加多样性的训练数据</strong>，来直接增强LLM推理能力的思路；而基于Prompt的方法，它并不会促进LLM本身的推理能力，只是让LLM在解决问题过程中<strong>更好地展示出这种能力</strong>的技术方法。</li>
+</ul>
+</li>
+<li><strong>基于Prompt的方法</strong>大致可以分为三条技术路线：
+<blockquote>
+<p>对于没有能力做出、或者改动这个模型参数的机构、个人，这块内容是核心内容，即如何激发已有LLM的能力。</p>
+</blockquote>
+<ul>
+<li>第一种思路是<strong>直接在问题上追加辅助推理Prompt</strong>。
+<ul>
+<li>具体而言，分为两个阶段（如上图所示）：
+<ul>
+<li>第一阶段在提问的问题上追加“Let’s think step by step”这句提示语，LLM会输出具体的推理过程；</li>
+<li>第二阶段，在第一阶段的问题后，拼接LLM输出的具体推理过程，并再追加Prompt=“Therefore, the answer (arabic numerals) is”，此时LLM会给出答案。</li>
+</ul>
+</li>
+<li>如果你看过后面介绍的标准CoT做法，会发现Zero-shot CoT 本质上和标准CoT很可能没什么区别，只是标准CoT由人工来写推理步骤的示例，而Zero-shot CoT大概率是通过提示语，<strong>激活了记忆中的某些包含推理步骤的示例</strong>，很可能是如此区别。</li>
+<li>这侧面说明了一个道理，就是LLM本身是具备推理能力的，只是我们没有办法把它的这种能力激发出来而已，<strong>通过合适的提示语来进行两步提示，就在一定程度上可以释放出它的这种潜力</strong>。</li>
+</ul>
+</li>
+<li>第二种思路一般被称<strong>为基于示例的思维链（few-shot CoT,Chain of Thought）Prompting</strong>。
+<ul>
+<li>CoT的主体思想其实很直白：为了教会LLM模型学会推理，给出一些人工写好的推理示例，示例里把得到最终答案前，一步步的具体推理步骤说清楚，而这些人工写的详细推理过程，就是思维链Prompting。</li>
+<li>“Self-Consistency”的思路也很直观（参考上图）：首先可以利用CoT给出几个写了推理过程的示例，然后要求LLM对给定的问题进行推理，要求LLM输出多个不同的推理过程和答案，然后采用投票的方式选出最佳答案。</li>
+</ul>
+</li>
+<li>第三种思路体现了<strong>一种分治算法的思想</strong>。
+<ul>
+<li>这种思路的核心思想是：对于一个复杂的推理问题，我们把它分解成若干容易解决的子问题，一一解决掉子问题后，我们再从子问题的答案推导复杂问题的答案。</li>
+<li>我们以“Least-to-most prompting”技术为例来说明这种思路的一种具体实现方式，它分为两个阶段：
+<ul>
+<li>第一个阶段，从原始问题我们可以得知最终要问的问题是什么，我们假设最终问题是Final Q，然后从原始问题填充Prompt模版：“如果要解决Final Q问题，那么我需要先解决”，然后把原始问题和这个Prompt交给LLM，让LLM模型给出答案，等于让LLM给出最终问题的前置子问题Sub Q。</li>
+<li>接下来我们进入第二个阶段，让LLM先回答刚才拿到的子问题Sub Q，并拿到对应的答案，然后原始问题拼接子问题Sub Q及对应答案，再去问LLM最终那个问题Final Q，此时LLM会给出最后的答案。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>代码预训练</strong>增强LLM推理能力
+<ul>
+<li>除了文本外，如果能够加入程序代码一起参与模型预训练，则能大幅提升LLM模型的推理能力。</li>
+<li>一个自然的疑问是：<strong>为何预训练模型可以从代码的预训练中获得额外的推理能力</strong>？确切原因目前未知，值得深入探索。</li>
+</ul>
+</li>
+<li>关于LLM推理能力的思考
+<ul>
+<li>首先，我比较赞同上述分治算法的主体思路，我觉得LLM推理本质上很可能会是如下两种可能的其中之一：不断和LLM进行交互的图上推理问题，抑或是不断和LLM进行交互的程序流程图执行问题
+<blockquote>
+<p>LLM查询知识库，先得到查询结果，再由查询结果生成答案，本质上是否就是解决子问题的过程？</p>
+</blockquote>
+</li>
+<li>假设这个思路大致正确的话，也许可以从这个角度来解释为何加入代码会增强预训练模型的推理能力：大概率因为&lt;文本，代码&gt;的多模态预训练模型，在模型内部是通过类似这种隐含的程序流程图作为两个模态的桥梁，将两者联系起来的，即由文本描述到隐含的流程图，再映射到由流程图产生具体的代码。</li>
+<li>当然，上述思路最大的问题是，我们如何根据文本描述的问题，能够靠LLM模型，或者其它模型，得到图结构或者流程图结构？这个可能是其中的难点。
+<ul>
+<li>一种可能的思路就类似继续增强文本和更高质量的代码预训练，走隐式学习内部隐含结构的方法。</li>
+<li>而目前的CoT技术，如果套到上述思路来思考的话，可以这么理解：
+<ul>
+<li>标准CoT，其实就是靠自然语言文本来描述图结构或者程序流程图的；</li>
+<li>而“Least-to-most prompting”技术，则是试图根据最后一个图节点，靠倒推来试图推导出其中的图结构，但是很明显，目前的方法限制了它倒推的深度，也就是说它只能推导出非常简单的图结构，这正是限制它能力的所在。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>未来之路：LLM研究趋势及值得研究的重点方向</strong>
+<ul>
+<li>探索LLM模型的规模天花板</li>
+<li>增强LLM的复杂推理能力</li>
+<li>LLM纳入NLP之外更多其它研究领域</li>
+<li>更易用的人和LLM的交互接口</li>
+<li>建设高难度的综合任务评测数据集</li>
+<li>高质量数据工程</li>
+<li>超大LLM模型Transformer的稀疏化</li>
+</ul>
+</li>
+<li><strong>取经之路：复刻ChatGPT时要注意些什么</strong>
+<ul>
+<li>首先，在预训练模型上，我们有三种选择，<strong>应选择GPT这种自回归语言模型</strong>，其原因在本文范式转换部分有做分析。</li>
+<li>第二，<strong>强大的推理能力是让用户认可LLM的重要心理基础</strong>，而如果希望LLM能够具备强大的推理能力，根据目前经验，最好在做预训练的时候，要引入大量代码和文本一起进行LLM训练。</li>
+<li>第三，如果希望模型参数规模不要那么巨大，但又希望效果仍然足够好，此时有两个技术选项可做配置：
+<ul>
+<li>要么增强<strong>高质量数据</strong>收集、挖掘、清理等方面的工作</li>
+<li>另外一个可以有效减小模型规模的路线是采取<strong>文本检索（Retrieval based）模型+LLM的路线</strong>，这样也可以在效果相当的前提下，极大减少LLM模型的参数规模</li>
+<li><strong>这两个技术选型不互斥，反而是互补的</strong>，也即是说，可以同时采取这两个技术，在模型规模相对比较小的前提下，达到超级大模型类似的效果</li>
+</ul>
+</li>
+<li>第四，随着模型越来越大，<strong>LLM模型Sparse化</strong>是一个应该考虑的选项。</li>
+<li>第五，应该重视<strong>通过增加数据多样性来增加LLM新能力</strong>的思路。</li>
+<li>第六，<strong>易用的人机操作接口</strong>
+<ul>
+<li>人类用他们自己习惯的表达方式来描述任务，而LLM要能够理解这些Instruct的真实含义。</li>
+<li>另外，也要注意这些Instruct是符合人类真实需求的，就是说，<strong>要从最终用户那里收集任务表述方式，而不能靠研发人员自己的臆想或猜测</strong>。ChatGPT给我最大的启发其实是这一点，至于是否用增强学习我倒觉得不重要，其它替代技术应该也能做类似的事情。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>ChatGPT:为什么是OpenAI
+<ul>
+<li>在OpenAI眼中，未来的AGI应该长这个样子：<strong>有一个任务无关的超大型LLM，用来从海量数据中学习各种知识，这个LLM以生成一切的方式，来解决各种各样的实际问题，而且它应该能听懂人类的命令，以便于人类使用。</strong></li>
+<li>OpenAI的理念比较超前，对自我定位从一开始就定得比较高，始终坚定不移地探索上述方式是否可以实现AGI。OpenAI之所以能作出ChatGPT，胜在<strong>一个是定位比较高，另一个是不受外界干扰，态度上坚定不移</strong>。</li>
+</ul>
+</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">徐耀彬</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://louishsu.xyz/2023/03/26/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91%E9%80%9A%E5%90%91AGI%E4%B9%8B%E8%B7%AF%EF%BC%9A%E5%A4%A7%E5%9E%8B%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%EF%BC%88LLM%EF%BC%89%E6%8A%80%E6%9C%AF%E7%B2%BE%E8%A6%81.html">http://louishsu.xyz/2023/03/26/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91%E9%80%9A%E5%90%91AGI%E4%B9%8B%E8%B7%AF%EF%BC%9A%E5%A4%A7%E5%9E%8B%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%EF%BC%88LLM%EF%BC%89%E6%8A%80%E6%9C%AF%E7%B2%BE%E8%A6%81.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://louishsu.xyz" target="_blank">LOUIS' BLOG</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://picx.zhimg.com/v2-8eab4d7521252501ef5d836e786c45c6_1440w.jpg?source=172ae18b" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/03/27/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91ChatGPT%20%E6%A0%87%E6%B3%A8%E6%8C%87%E5%8D%97%EF%BC%9A%E4%BB%BB%E5%8A%A1%E3%80%81%E6%95%B0%E6%8D%AE%E4%B8%8E%E8%A7%84%E8%8C%83.html"><img class="prev-cover" src="https://openaicom.imgix.net/8d14e8f0-e267-4b8b-a9f2-a79120808f5a/chatgpt.jpg?auto=compress%2Cformat&amp;fit=min&amp;fm=jpg&amp;q=80&amp;rect=0%2C0%2C2048%2C2048&amp;w=3200" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">【转载】ChatGPT 标注指南：任务、数据与规范</div></div></a></div><div class="next-post pull-right"><a href="/2023/03/11/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0.html"><img class="next-cover" src="https://img0.baidu.com/it/u=3005164807,267475947&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=804&amp;h=500" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">强化学习</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/touxiang.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">徐耀彬</div><div class="author-info__description">专注于自然语言处理前沿技术与应用价值！</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">18</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/isLouisHsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/isLouisHsu" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:is.louishsu@foxmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">记录和分享一些学习和开源内容，若有问题可通过邮箱is.louishsu@foxmail.com联系，欢迎交流！！</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/08/14/Arxiv%E6%AF%8F%E6%97%A5%E9%80%9F%E9%80%92.html" title="Arxiv每日速递(2023-08-14)"><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/Arxiv%E6%AF%8F%E6%97%A5%E9%80%9F%E9%80%92/wc.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv每日速递(2023-08-14)"/></a><div class="content"><a class="title" href="/2023/08/14/Arxiv%E6%AF%8F%E6%97%A5%E9%80%9F%E9%80%92.html" title="Arxiv每日速递(2023-08-14)">Arxiv每日速递(2023-08-14)</a><time datetime="2023-08-14T00:34:35.949Z" title="发表于 2023-08-14 08:34:35">2023-08-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/05/07/%E3%80%90%E6%A2%B3%E7%90%86%E3%80%91%E9%99%86%E5%A5%87%E6%9C%80%E6%96%B0%E6%BC%94%E8%AE%B2%E5%AE%9E%E5%BD%95%EF%BC%9A%E6%88%91%E7%9A%84%E5%A4%A7%E6%A8%A1%E5%9E%8B%E4%B8%96%E7%95%8C%E8%A7%82%20.html" title="【梳理】陆奇最新演讲实录：我的大模型世界观"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【梳理】陆奇最新演讲实录：我的大模型世界观"/></a><div class="content"><a class="title" href="/2023/05/07/%E3%80%90%E6%A2%B3%E7%90%86%E3%80%91%E9%99%86%E5%A5%87%E6%9C%80%E6%96%B0%E6%BC%94%E8%AE%B2%E5%AE%9E%E5%BD%95%EF%BC%9A%E6%88%91%E7%9A%84%E5%A4%A7%E6%A8%A1%E5%9E%8B%E4%B8%96%E7%95%8C%E8%A7%82%20.html" title="【梳理】陆奇最新演讲实录：我的大模型世界观">【梳理】陆奇最新演讲实录：我的大模型世界观</a><time datetime="2023-05-07T11:07:45.000Z" title="发表于 2023-05-07 19:07:45">2023-05-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/05/05/%E5%8F%98%E5%88%86%E8%87%AA%E7%BC%96%E7%A0%81%E5%99%A8(Variational%20AutoEncoder).html" title="变分自编码器(Variational AutoEncoder)"><img src="https://lilianweng.github.io/posts/2018-08-12-vae/autoencoder-architecture.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="变分自编码器(Variational AutoEncoder)"/></a><div class="content"><a class="title" href="/2023/05/05/%E5%8F%98%E5%88%86%E8%87%AA%E7%BC%96%E7%A0%81%E5%99%A8(Variational%20AutoEncoder).html" title="变分自编码器(Variational AutoEncoder)">变分自编码器(Variational AutoEncoder)</a><time datetime="2023-05-05T11:28:37.000Z" title="发表于 2023-05-05 19:28:37">2023-05-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/08/transformers.generation.GenerationMixin.html" title="transformers.generation.GenerationMixin"><img src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="transformers.generation.GenerationMixin"/></a><div class="content"><a class="title" href="/2023/04/08/transformers.generation.GenerationMixin.html" title="transformers.generation.GenerationMixin">transformers.generation.GenerationMixin</a><time datetime="2023-04-08T13:42:45.000Z" title="发表于 2023-04-08 21:42:45">2023-04-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/27/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91ChatGPT%20%E6%A0%87%E6%B3%A8%E6%8C%87%E5%8D%97%EF%BC%9A%E4%BB%BB%E5%8A%A1%E3%80%81%E6%95%B0%E6%8D%AE%E4%B8%8E%E8%A7%84%E8%8C%83.html" title="【转载】ChatGPT 标注指南：任务、数据与规范"><img src="https://openaicom.imgix.net/8d14e8f0-e267-4b8b-a9f2-a79120808f5a/chatgpt.jpg?auto=compress%2Cformat&amp;fit=min&amp;fm=jpg&amp;q=80&amp;rect=0%2C0%2C2048%2C2048&amp;w=3200" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【转载】ChatGPT 标注指南：任务、数据与规范"/></a><div class="content"><a class="title" href="/2023/03/27/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91ChatGPT%20%E6%A0%87%E6%B3%A8%E6%8C%87%E5%8D%97%EF%BC%9A%E4%BB%BB%E5%8A%A1%E3%80%81%E6%95%B0%E6%8D%AE%E4%B8%8E%E8%A7%84%E8%8C%83.html" title="【转载】ChatGPT 标注指南：任务、数据与规范">【转载】ChatGPT 标注指南：任务、数据与规范</a><time datetime="2023-03-27T14:35:45.000Z" title="发表于 2023-03-27 22:35:45">2023-03-27</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2023 By 徐耀彬</div><div class="footer_custom_text"><p><a style="margin-inline:5px"target="_blank"href="https://hexo.io/"><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&logo=hexo"title="博客框架为Hexo"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://butterfly.js.org/"><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&logo=bitdefender"title="主题采用butterfly"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://www.jsdelivr.com/"><img src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&logo=jsDelivr"title="本站使用JsDelivr为静态资源提供CDN加速"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://github.com/"><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&logo=GitHub"title="本站项目由Gtihub托管"alt="img"></a><a style="margin-inline:5px"target="_blank"href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&logo=Claris"alt="img"title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"></a></br></p></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>(()=>{
+  const $countDom = document.getElementById('twikoo-count')
+  const init = () => {
+    let initData = {
+      el: '#twikoo-wrap',
+      envId: 'blog-',
+      region: ''
+    }
+
+    if (false) {
+      const otherData = false
+      initData = Object.assign(initData, otherData)
+    }
+    
+    twikoo.init(initData)
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'blog-',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      $countDom.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const loadTwikoo = (bool = false) => {
+    if (typeof twikoo === 'object') {
+      init()
+      bool && $countDom && setTimeout(getCount,0)
+    } else {
+      getScript('https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(()=> {
+        init()
+        bool && $countDom && setTimeout(getCount,0)
+      })
+    }
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo(true)
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --> <script data-pjax>if(document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    var parent = document.getElementById('recent-posts');
+    var child = '<div class="recent-post-item" style="width:100%;height: auto"><div id="catalog_magnet"><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/机器学习/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🐱 机器学习 (3)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (5)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/竞赛相关/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 竞赛相关 (3)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/阅读笔记/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 阅读笔记 (1)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><a class="magnet_link_more"  href="http://louishsu.xyz/categories" style="flex:1;text-align: center;margin-bottom: 10px;">查看更多...</a></div></div>';
+    console.log('已挂载magnet')
+    parent.insertAdjacentHTML("afterbegin",child)}
+     </script><style>#catalog_magnet{flex-wrap: wrap;display: flex;width:100%;justify-content:space-between;padding: 10px 10px 0 10px;align-content: flex-start;}.magnet_item{flex-basis: calc(50% - 5px);background: #f2f2f2;margin-bottom: 10px;border-radius: 8px;transition: all 0.2s ease-in-out;}.magnet_item:hover{background: #b30070}.magnet_link_more{color:#555}.magnet_link{color:black}.magnet_link:hover{color:white}@media screen and (max-width: 600px) {.magnet_item {flex-basis: 100%;}}.magnet_link_context{display:flex;padding: 10px;font-size:16px;transition: all 0.2s ease-in-out;}.magnet_link_context:hover{padding: 10px 20px;}</style>
+    <style></style>
+  <script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/hexo-github-calendar@1.21/hexo_githubcalendar.js"></script>
+  <script data-pjax>
+        function GithubCalendarConfig(){
+            var git_githubapiurl ="https://python-github-calendar-api.vercel.app/api?isLouisHsu";
+            var git_color =['#ebedf0', '#fdcdec', '#fc9bd9', '#fa6ac5', '#f838b2', '#f5089f', '#c4067e', '#92055e', '#540336', '#48022f', '#30021f'];
+            var git_user ="isLouisHsu";
+            var parent_div_git = document.getElementById('recent-posts');
+            var git_div_html = '<div class="recent-post-item" style="width:100%;height:auto;padding:10px;"><div id="github_loading" style="width:10%;height:100%;margin:0 auto;display: block"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 50 50" style="enable-background:new 0 0 50 50" xml:space="preserve"><path fill="#d0d0d0" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z" transform="rotate(275.098 25 25)"><animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animateTransform></path></svg></div><div id="github_container"></div></div>';
+            if(parent_div_git && location.pathname =='/'){
+                console.log('已挂载github calendar')
+                // parent_div_git.innerHTML=git_div_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",git_div_html) // 有报错，但不影响使用(支持pjax跳转)
+            };
+            GithubCalendar(git_githubapiurl,git_color,git_user)
+        }
+        if(document.getElementById('recent-posts')){
+            GithubCalendarConfig()
+        }
+    </script>
+    <style>#github_container{min-height:280px}@media screen and (max-width:650px) {#github_container{background-image:;min-height:0px}}</style>
+    <style></style><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><!-- hexo injector body_end end --><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>
