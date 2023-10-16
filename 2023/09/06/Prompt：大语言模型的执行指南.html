@@ -1,0 +1,654 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Prompt：大语言模型的执行指南 | LOUIS' BLOG</title><meta name="author" content="徐耀彬"><meta name="copyright" content="徐耀彬"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="TL;DR 提示词(Prompt)是指由用户或系统提供给大语言模型(Large Language Model, LLM)的一段文字或问题，模型在这些给定信息(又称上下文)下，生成相关的回复或文本。Prompt作为大语言模型的执行指南，其好坏直接影响大语言模型的生成效果，但问题在于不知道如何创作高质量的 Prompt，比如：完成一个Prompt需要哪些要素？这些要素要用什么样的话术来描述？用何种顺">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Prompt：大语言模型的执行指南">
+<meta property="og:url" content="http://louishsu.xyz/2023/09/06/Prompt%EF%BC%9A%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%89%A7%E8%A1%8C%E6%8C%87%E5%8D%97.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="TL;DR 提示词(Prompt)是指由用户或系统提供给大语言模型(Large Language Model, LLM)的一段文字或问题，模型在这些给定信息(又称上下文)下，生成相关的回复或文本。Prompt作为大语言模型的执行指南，其好坏直接影响大语言模型的生成效果，但问题在于不知道如何创作高质量的 Prompt，比如：完成一个Prompt需要哪些要素？这些要素要用什么样的话术来描述？用何种顺">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/ww6.jpg">
+<meta property="article:published_time" content="2023-09-06T14:45:45.000Z">
+<meta property="article:modified_time" content="2023-10-16T15:20:34.742Z">
+<meta property="article:author" content="徐耀彬">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/ww6.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://louishsu.xyz/2023/09/06/Prompt%EF%BC%9A%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%89%A7%E8%A1%8C%E6%8C%87%E5%8D%97"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: true,
+  isToc: true,
+  postUpdate: '2023-10-16 23:20:34'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><link rel="stylesheet" href="/css/background.css"><script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/touxiang.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">20</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 工具</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fas fa-pen"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/isLouisHsu/blog/tree/master/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-brands fa-app-store"></i><span> 利器</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://code.visualstudio.com/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> VSCode：微软旗下的跨平台代码编辑软件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mobaxterm.mobatek.net/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> MobaXterm：超好用的全能远程终端</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.zotero.org/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Zotero：便于收集、组织、引用、共享的文献管理工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/CopyTranslator/CopyTranslator"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> CopyTranslator：“复制即翻译”的外文辅助阅读翻译解决方案</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ditto-cp.sourceforge.io/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Ditto：强大的Windows剪贴板增强工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/indiff/qttabbar"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> QtTabBar：在Windows资源管理器中使用多标签功能扩展工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/sentialx/multrin"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Multrin：“窗口合并”辅助小工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/Wox-launcher/Wox"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Wox &amp; Everything：基于名称快速定位文件和文件夹的搜索工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/NickeManarin/ScreenToGif"><i class="fa-fw fa-regular fa-star"></i><span> ScreenToGif：快速录制屏幕指定区域并保存为动图文件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mathpix.com/"><i class="fa-fw fa-regular fa-star"></i><span> Mathpix Snipping：识别数学公式并转换成LaTeX</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/ww6.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">LOUIS' BLOG</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 工具</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fas fa-pen"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/isLouisHsu/blog/tree/master/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-brands fa-app-store"></i><span> 利器</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://code.visualstudio.com/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> VSCode：微软旗下的跨平台代码编辑软件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mobaxterm.mobatek.net/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> MobaXterm：超好用的全能远程终端</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.zotero.org/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Zotero：便于收集、组织、引用、共享的文献管理工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/CopyTranslator/CopyTranslator"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> CopyTranslator：“复制即翻译”的外文辅助阅读翻译解决方案</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ditto-cp.sourceforge.io/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Ditto：强大的Windows剪贴板增强工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/indiff/qttabbar"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> QtTabBar：在Windows资源管理器中使用多标签功能扩展工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/sentialx/multrin"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Multrin：“窗口合并”辅助小工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/Wox-launcher/Wox"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Wox &amp; Everything：基于名称快速定位文件和文件夹的搜索工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/NickeManarin/ScreenToGif"><i class="fa-fw fa-regular fa-star"></i><span> ScreenToGif：快速录制屏幕指定区域并保存为动图文件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mathpix.com/"><i class="fa-fw fa-regular fa-star"></i><span> Mathpix Snipping：识别数学公式并转换成LaTeX</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Prompt：大语言模型的执行指南<a class="post-edit-link" href="https://github.com/isLouisHsu/blog/tree/master/source_posts/Prompt：大语言模型的执行指南.md" title="编辑" target="_blank"><i class="fas fa-pencil-square"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-09-06T14:45:45.000Z" title="发表于 2023-09-06 22:45:45">2023-09-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-10-16T15:20:34.742Z" title="更新于 2023-10-16 23:20:34">2023-10-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/">自然语言处理</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">15.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>53分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2023/09/06/Prompt%EF%BC%9A%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%89%A7%E8%A1%8C%E6%8C%87%E5%8D%97.html#post-comment"><span id="twikoo-count"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><!-- 
+   GPT 最佳实践指南
+-> 结构化prompt：prompt写法(structured prompt，从解决问题的角度思考从哪些方面, 5W2H/STAR)
+     5W2H:What什么是结构化prompt/Why为什么要用结构化prompt，即有什么优势，可以解决什么问题/When&Where什么场景下可以用结构化prompt/
+     Haw怎么创作结构化prompt(有哪几个模块？分别的作用是什么？创作的顺序应该怎么决定？如何调试？优化策略比如自动优化？）
+     缺点是什么
+     参考https://waytoagi.feishu.cn/wiki/UFvBw98foiTar5kmKrtcM5Ktn9f, https://waytoagi.feishu.cn/wiki/QOO2wfgsBiPJC7kECozcSGexnvh)
+-> Zeroshot/Fewshot/CoT/ToT/GoT/Self-Consistency(https://www.promptingguide.ai/zh/techniques/cot)
+-> prompt局限性、协同任务分解(省字数、省钱、稳定性和可用性等) (prompt chain, Lil'Log，解决问题的策略)
+-> 最佳实践(https://waytoagi.feishu.cn/wiki/NbqXwHXrkiYWKVkFTbmcwxQqntb，结合How分析prompt创作思路，总结创作方法)
+     用word编辑prompt并高亮展示
+-> 提示之上(发现并解决问题的能力、思维方式、如何针对地关键地解决问题)
+ -->
+<h1>TL;DR</h1>
+<p>提示词(Prompt)是指由用户或系统提供给大语言模型(Large Language Model, LLM)的一段文字或问题，模型在这些给定信息(又称上下文)下，生成相关的回复或文本。Prompt作为大语言模型的执行指南，其好坏直接影响大语言模型的生成效果，但问题在于不知道如何创作高质量的 Prompt，比如：完成一个Prompt需要哪些要素？这些要素要用什么样的话术来描述？用何种顺序或结构来组织多个要素？写完Prompt后，怎么评估其有效性？如果效果不好，可以从哪些方面进行改进？本文就这些问题，整理了一些Prompt工程相关的资料，希望通过吸取他人经验、结合个人实践经历，总结创作Prompt工程的方法论。</p>
+<p>在本文中，可以了解到以下内容：</p>
+<ul>
+<li><a href="#tldr">TL;DR</a></li>
+<li><a href="#%E9%97%AE%E9%A2%98%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%83%BD%E5%8A%9B%E9%99%90%E5%88%B6">问题：大语言模型的能力限制</a></li>
+<li><a href="#%E5%88%9B%E4%BD%9C%E5%8E%9F%E5%88%99%E5%85%AD%E6%9D%A1%E6%9D%A5%E8%87%AAopenai%E7%9A%84gpt%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5">创作原则：六条来自OpenAI的GPT最佳实践</a></li>
+<li><a href="#%E7%BB%93%E6%9E%84%E5%8C%96promptprompt%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%9A%84%E5%85%AB%E8%82%A1%E6%96%87">结构化Prompt：Prompt工程师的“八股文”</a>
+<ul>
+<li><a href="#%E9%B2%9C%E6%98%8E%E7%9A%84%E7%89%B9%E7%82%B9%E5%92%8C%E4%BC%98%E5%8A%BF">鲜明的特点和优势</a></li>
+<li><a href="#%E8%A6%81%E7%B4%A0%E4%B8%8E%E7%BB%84%E7%BB%87%E7%BB%93%E6%9E%84">要素与组织结构</a></li>
+<li><a href="#%E5%88%9B%E4%BD%9C%E7%9A%84%E5%90%88%E7%90%86%E9%A1%BA%E5%BA%8F">创作的合理顺序</a></li>
+<li><a href="#%E6%9E%84%E5%BB%BA%E7%BB%93%E6%9E%84%E5%8C%96prompt%E7%9C%9F%E6%AD%A3%E9%87%8D%E8%A6%81%E7%9A%84%E4%BA%8B">构建结构化Prompt真正重要的事</a></li>
+<li><a href="#%E8%87%AA%E5%8A%A8%E5%8C%96%E5%BC%80%E5%8F%91%E5%92%8C%E8%B0%83%E4%BC%98">自动化开发和调优</a></li>
+<li><a href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5">最佳实践</a></li>
+<li><a href="#%E6%80%9D%E8%80%83%E5%86%8D%E7%9C%8B%E7%BB%93%E6%9E%84%E5%8C%96prompt">思考：再看结构化Prompt</a></li>
+</ul>
+</li>
+<li><a href="#%E5%87%A0%E7%A7%8Dprompt%E7%9A%84%E8%AE%BE%E8%AE%A1%E7%AD%96%E7%95%A5">几种Prompt的设计策略</a></li>
+<li><a href="#%E5%90%AF%E5%8A%A8%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E8%83%BD%E5%8A%9B%E7%9A%84%E5%92%92%E8%AF%AD">启动大语言模型能力的“咒语”</a></li>
+<li><a href="#prompt%E4%B9%8B%E4%B8%8A">Prompt之上</a></li>
+<li><a href="#%E9%99%84%E5%BD%95a%E5%9B%9B%E5%A4%A7%E9%AB%98%E6%95%88%E6%8F%90%E7%A4%BA%E8%AF%8D%E7%BB%8F%E5%85%B8%E6%A1%86%E6%9E%B6iciocrispebrokerascef">附录A：四大高效提示词经典框架：ICIO、CRISPE、BROKE、RASCEF</a></li>
+<li><a href="#%E9%99%84%E5%BD%95b%E4%B9%9D%E4%B8%AA%E6%9D%A5%E8%87%AApradeep%E7%9A%84%E6%8F%90%E7%A4%BA%E8%AF%8D%E6%A1%86%E6%9E%B6">附录B：九个来自Pradeep的提示词框架</a></li>
+<li><a href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99">参考资料</a></li>
+</ul>
+<h1>问题：大语言模型的能力限制</h1>
+<p>首先需要深入了解为何Prompt对于大型语言模型至关重要。大型语言模型，如GPT-3.5、GPT-4、Claude、文心一言、通义千问等，是在广泛的通用文本语料库上进行大规模预训练后，经过指令微调、强化学习等方法，使其具备遵循人类指令的能力，即理解人类意图并生成相关内容。然而，这些模型仍然存在一系列限制：</p>
+<ul>
+<li><strong>知识的有限性</strong>：训练语料是在训练数据截止日期之前收集的，这意味着训练集的知识是滞后的，而模型在训练后无法主动更新或学习新的知识，导致模型无法提供截止日期后的信息；</li>
+<li><strong>缺乏常识性推理</strong>：虽然大模型可以生成合理的文本，但它们的理解通常是基于统计信息而不是真正的常识，在某些情况下可能缺乏常识性推理能力，导致输出一些不符合客观事实的内容，又称模型幻觉；</li>
+<li><strong>上下文限制</strong>：模型在处理文本时只能处理有限数量的文本标记(token)，使模型无法处理过长的文本。另外，模型更擅长处理短文本，当上下文太长或包含复杂的信息，模型仍然难以理解长期依赖关系和复杂的语义；</li>
+<li><strong>生成不当内容</strong>：模型的训练数据中可能包含有害信息或偏见，模型在生成文本时可能反映这些内容，导致有时生成不当、有害或带有偏见的内容。</li>
+</ul>
+<p>而这些问题可以通过改进Prompt（又称为提示词工程，Prompt Engineering）来加以解决。Prompt的设计在多个方面影响大型语言模型的生成效果：</p>
+<ol>
+<li><strong>唯一交互方式</strong>：Prompt是用户与大模型之间唯一的交互方式，通过设计有效的Prompt，用户可以更容易地与模型互动，并获得满足期望的回应；</li>
+<li><strong>影响模型内容</strong>：模型将根据Prompt生成回应，Prompt定义了用户的意图和问题，因此Prompt的质量直接影响了模型生成的内容；</li>
+<li><strong>明确任务要求</strong>：Prompt可以根据不同的上下文和需求来指导模型完成各种任务，包括文本生成、问题回答、文章摘要、翻译等，允许用户利用模型能力完成不同形式的任务；</li>
+<li><strong>控制生成风格</strong>：用户可以通过Prompt控制模型生成的风格，例如正式、幽默、科学等，以满足特定的沟通需求；</li>
+<li><strong>提供必要信息</strong>：可以在Prompt中提供必要的上下文信息，来缓解模型幻觉问题，确保模型模型生成更准确和相关的回应；</li>
+<li><strong>引导生成内容</strong>：Prompt可以限制或引导模型生成的内容，可以通过巧妙设计的Prompt确保模型生成特定类型的回答，或避免生成不适当或有害的内容。</li>
+</ol>
+<!-- 
+这些问题可以通过改进Prompt(又称提示词工程，Prompt Engineering)来避免，Prompt的设计多方面地影响着大语言模型的生成效果。首先，它是用户与模型之间**唯一的交互方式**，通过巧妙的Prompt设计，用户可以更轻松地与模型互动，获得符合期望的回答。其次，Prompt**定义了用户的意图和问题**，因此对Prompt的质量有直接影响，它决定了模型生成的内容。此外，Prompt可以根据不同的上下文和需求，**引导模型完成各种任务**，如文本生成、问题解答、文章摘要和翻译，从而允许用户充分利用模型的能力。此外，用户还可以通过Prompt来**控制模型生成的风格**，例如正式、幽默或科学等，以满足特定的交流需求。此外，Prompt还可以**提供必要的上下文信息**，以减轻模型的偏见问题，确保生成的回答更加准确和相关。最后，通过巧妙设计的Prompt，可以**限制或引导模型生成内容**，避免生成不适当或有害的内容。值得注意的是，通过设计Prompt来引导模型的方式只能一定程度上缓解模型的问题，是临时性的解决方案。为从根本上解决模型的问题，需要综合考虑更广泛的方法，包括改进训练数据、优化的模型架构、实施严格的监督和过滤机制等。这些方法可以更长期地改进大型语言模型的性能和可用性。
+ -->
+<h1>创作原则：六条来自OpenAI的GPT最佳实践</h1>
+<p>OpenAI提供了六种可以提高GPT生成效果的策略或技巧，可以作为创作Prompt的原则，分别是撰写清晰的指令、提供参考文本、将复杂任务拆分为较简单的子任务、给GPT足够的“思考”时间、使用外部工具、系统地测试修改。</p>
+<blockquote>
+<p>链接：<a target="_blank" rel="noopener" href="https://platform.openai.com/docs/guides/gpt-best-practices">https://platform.openai.com/docs/guides/gpt-best-practices</a></p>
+</blockquote>
+<p><strong>撰写清晰的指令</strong>：GPT并不具备阅读用户心思的能力。如果要求太长，要求以简洁回答为准。如果需要专业水平的文字，请明确表示。如果对格式有特殊要求，请描述所需格式。减少模型猜测用户的意图，将提高获得满意回答的机会。</p>
+<ul>
+<li><strong>提供详细信息</strong>：详尽的信息能更好地帮助模型理解问题或任务，进而提供相关和有价值的答案。模型无法自行推断用户所需信息，因此提供的信息越详细，获得有用答案的机会就越高。
+<ul>
+<li>不清晰：请告诉我有关太阳的信息。</li>
+<li>清晰：请提供太阳的大小、质量、年龄以及其在太阳系中的位置的详细信息。</li>
+</ul>
+</li>
+<li><strong>指定角色</strong>：指定模型的角色有助于明确用户期望的回答风格和角度。这样，模型可以更好地满足用户的期望，而不会提供模糊或不相关的回答。
+<ul>
+<li>不清晰：告诉我有关气候变化的事情。</li>
+<li>清晰：以气象学家的角色，解释一下气候变化的主要原因和影响。</li>
+</ul>
+</li>
+<li><strong>使用定界符</strong>：定界符(如引号、XML标记、段落等)可以帮助模型将用户的指令分成不同部分，使其更容易理解和处理。这有助于减少误解和混淆。
+<ul>
+<li>不清晰：请将这句话翻译成英文，用户指令是什么。</li>
+<li>清晰：请将这句话翻译成英文：“用户指令是什么”。</li>
+</ul>
+</li>
+<li><strong>指定步骤</strong>：如果用户的任务涉及多个步骤或特定的顺序，明确列出这些步骤可以确保任务按照用户的预期方式完成。这有助于避免混乱或不完整的回答。
+<ul>
+<li>不清晰：告诉我如何做巧克力蛋糕。</li>
+<li>清晰：告诉我如何做巧克力蛋糕，包括步骤、所需的材料、烘烤温度和时间。</li>
+</ul>
+</li>
+<li><strong>提供示例</strong>：示例可以为模型提供上下文，帮助它更好地理解用户的请求。这使模型更有可能提供与用户期望的信息相关的答案。
+<ul>
+<li>不清晰：解释人工智能的用途。</li>
+<li>清晰：以医疗诊断中的人工智能应用为例，解释其用途和优势。</li>
+</ul>
+</li>
+<li><strong>指定输出长度</strong>：指定所需的回答长度有助于确保模型提供适当详细或简洁的回答。这可以防止模型提供过多或过少的信息，使回答更符合用户的需求。
+<ul>
+<li>不清晰：告诉我关于历史的一些东西。</li>
+<li>清晰：请提供一段包含200字左右的历史背景信息，重点是第二次世界大战的影响。</li>
+</ul>
+</li>
+</ul>
+<p><strong>提供参考文本</strong>：特别是在涉及晦涩主题、引用和URL时，GPT可能会自信地编造虚假答案。就像学生参考笔记可以帮助他们在考试中表现更好一样，向GPT提供参考文本可以帮助其回答时减少虚构内容。</p>
+<ul>
+<li><strong>指示模型使用参考文本回答</strong>：确保模型基于可信的信息和知识来生成答案，而不是依赖于虚构内容或自信地编造答案。</li>
+<li><strong>指示模型使用参考文本中的引用进行回答</strong>：有助于模型引用确切的信息源，增强答案的可信度和可追溯性。</li>
+</ul>
+<p><strong>将复杂任务拆分为较简单的子任务</strong>：就像在软件工程中将复杂系统分解为一组模块化组件一样，提交给GPT的任务也是如此。与简单任务相比，复杂任务往往具有更高的错误率。此外，复杂任务通常可以重新定义为一系列较简单任务的工作流程，其中较早任务的输出用于构建后续任务的输入。</p>
+<ul>
+<li><strong>使用意图分类来识别用户查询的最相关指令</strong>：可以将复杂的用户请求分为不同的类别，以便模型能够更好地理解用户意图，并为每个类别生成适当的响应，简化整体任务。</li>
+<li><strong>对于需要非常长对话的对话应用程序，总结或过滤之前的对话</strong>：有助于减少上下文的复杂性，使GPT能够更好地关注当前对话，避免信息过载和不必要的回溯。</li>
+<li><strong>逐段总结长文档并递归构建完整总结</strong>：将文档分成较小的段落或部分，并逐一总结每个部分，逐步建立一个清晰而简洁的总结，提高信息提取和理解的效率。</li>
+</ul>
+<p><strong>给GPT足够的“思考”时间</strong>：如果被要求计算17乘以28，用户可能不会立即知道答案，但仍然可以在一段时间内算出来。类似地，与立即回答相比，GPT在尝试立即回答时会更容易出现推理错误，而在回答之前要求一系列推理过程可以帮助GPT更可靠地推理出正确答案。</p>
+<ul>
+<li><strong>指示模型在匆忙得出结论之前自行解决问题</strong>：确保模型充分考虑问题，避免因时间压力而导致不准确的答案或逻辑错误。</li>
+<li><strong>使用内心独白或一系列查询来隐藏模型的推理过程</strong>：有助于提高模型的可信度，使用户更容易理解模型是如何得出答案的，同时也可以帮助用户了解问题的多个方面，而不仅仅是最终答案。</li>
+<li><strong>询问模型是否错过了以前的某些内容</strong>：可以确保模型在回答问题时没有忽略关键信息或上下文，减少错误或误解的可能性。</li>
+</ul>
+<p><strong>使用外部工具</strong>：通过向GPT提供其他工具的输出来弥补GPT的弱点。例如，文本检索系统可以告诉GPT相关的文档信息。代码执行引擎可以帮助GPT执行数学运算和运行代码。如果一个任务可以通过工具而不是GPT更可靠或更高效地完成，那么可以将其卸载以获得最佳结果。</p>
+<ul>
+<li><strong>使用基于嵌入的搜索来实现高效的知识检索</strong>：通过文本检索工具检索大量相关文档，提供GPT所需的背景知识，弥补模型在广泛知识方面的限制。</li>
+<li><strong>使用代码执行执行更准确的计算或调用外部API</strong>：外部代码执行引擎可以执行精确的数学计算或访问外部数据源，避免了GPT的推理或计算误差，确保结果的准确性和可靠性。</li>
+<li><strong>给模型访问特定功能的权限</strong>：赋予模型特定功能的权限，如访问数据库或执行系统命令，可以使其在特定任务中表现更出色，充分发挥其潜力。</li>
+</ul>
+<p><strong>系统地测试更改</strong>：如果可以衡量性能，就更容易改进性能。在某些情况下，对Prompt进行修改可能会在一些孤立的示例上获得更好的性能，但在更具代表性的示例集上会导致性能下降。因此，要确保更改对性能是净正面的，可能需要定义一个全面的测试套件（也称为“评估”）。</p>
+<ul>
+<li><strong>通过参考标准答案评估模型的输出</strong>：在全面的测试集上对Prompt进行测试，确保修改的效果是正面的。</li>
+</ul>
+<h1>结构化Prompt：Prompt工程师的“八股文”</h1>
+<p>看到这里，有的同学就问了，上面每个点都有理，但不便于实操，有没有一种模板化的、可操作性强的方法来进行Prompt创作呢？有！<a target="_blank" rel="noopener" href="https://www.zhihu.com/people/zphyix">云中江树</a>提供了一种“结构化Prompt”，是在创作Prompt时使用明确的语法和组织结构来构建问题或指导模型的回答，使模型更容易理解和执行指令。通过使用结构化Prompt，可以使开发者更关注Prompt的内容创作，而不用关注具体格式，甚至构建Prompt的基础要素（角色、任务、限制、工作流程）等都已明确指定，只要在相应位置填充内容即可。</p>
+<blockquote>
+<p>链接：<a target="_blank" rel="noopener" href="https://github.com/yzfly/LangGPT/blob/main/Docs/HowToWritestructuredPrompts.md">https://github.com/yzfly/LangGPT/blob/main/Docs/HowToWritestructuredPrompts.md</a></p>
+</blockquote>
+<h2 id="鲜明的特点和优势">鲜明的特点和优势</h2>
+<p>首先感受一下普通Prompt和结构化的差别，比如要求大模型协助创作诗歌。按照「<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/582979328/answer/2996619236">ChatGPT 有什么新奇的使用方式？</a>」文中提到的方法，我们通过Prompt向大语言模型描述任务时，需要以下几个部分：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/Prompt%EF%BC%9A%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%89%A7%E8%A1%8C%E6%8C%87%E5%8D%97/prompt%E5%85%AC%E5%BC%8F.png" alt></p>
+<p>那么可以写成：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">请你扮演创作诗歌的艺术家，用户初学诗词，不知道如何作诗。请为用户创作现代诗、五言诗、七言律诗，针对用户给定的主题，创作诗歌，包括题目和诗句。</span><br><span class="line"></span><br><span class="line">你擅长通过诗歌来表达情感、描绘景象、讲述故事，具有丰富的想象力和对文字的独特驾驭能力。擅长创作以下诗体：</span><br><span class="line">1. 现代诗：现代诗形式自由，意涵丰富，意象经营重于修辞运用，是心灵的映现；更加强调自由开放和直率陈述与进行“可感与不可感之间”的沟通。</span><br><span class="line">2. 五言诗：全篇由五字句构成的诗；能够更灵活细致地抒情和叙事；在音节上，奇偶相配，富于音乐美。</span><br><span class="line">3. 七言律诗：七言体是古代诗歌体裁；全篇每句七字或以七字句为主的诗体；它起于汉族民间歌谣。</span><br><span class="line"></span><br><span class="line">用户将以 &quot;形式：[], 主题：[]&quot; 的方式指定诗歌形式，主题。请注意要求内容内容健康，积极向上，七言律诗和五言诗要押韵。</span><br></pre></td></tr></table></figure>
+<p>这个Prompt包含了任务相关的要素，立角色(创作诗歌的艺术家)、述问题(用户初学诗词，不知道如何作诗)、定目标(针对主题创作现代诗、五言诗、七言律诗)、补要求(擅长作诗、要求内容健康等)，内容很丰富但缺失执行细节、层次不够清晰。再看一下结构化Prompt:</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"># Role: 诗人</span><br><span class="line"></span><br><span class="line">## Profile</span><br><span class="line"></span><br><span class="line">- Author: YZFly</span><br><span class="line">- Version: 0.1</span><br><span class="line">- Language: 中文</span><br><span class="line">- Description: 诗人是创作诗歌的艺术家，擅长通过诗歌来表达情感、描绘景象、讲述故事，</span><br><span class="line">具有丰富的想象力和对文字的独特驾驭能力。诗人创作的作品可以是纪事性的，描述人物或故事</span><br><span class="line">，如荷马的史诗；也可以是比喻性的，隐含多种解读的可能，如但丁的《神曲》、歌德的《浮士德》。</span><br><span class="line"></span><br><span class="line">### 擅长写现代诗</span><br><span class="line">1. 现代诗形式自由，意涵丰富，意象经营重于修辞运用，是心灵的映现</span><br><span class="line">2. 更加强调自由开放和直率陈述与进行“可感与不可感之间”的沟通。</span><br><span class="line"></span><br><span class="line">### 擅长写五言诗</span><br><span class="line">1. 全篇由五字句构成的诗</span><br><span class="line">2. 能够更灵活细致地抒情和叙事</span><br><span class="line">3. 在音节上，奇偶相配，富于音乐美</span><br><span class="line"></span><br><span class="line">### 擅长写七言律诗</span><br><span class="line">1. 七言体是古代诗歌体裁</span><br><span class="line">2. 全篇每句七字或以七字句为主的诗体</span><br><span class="line">3. 它起于汉族民间歌谣</span><br><span class="line"></span><br><span class="line">## Rules</span><br><span class="line">1. 内容健康，积极向上</span><br><span class="line">2. 七言律诗和五言诗要押韵</span><br><span class="line"></span><br><span class="line">## Workflow</span><br><span class="line">1. 让用户以 &quot;形式：[], 主题：[]&quot; 的方式指定诗歌形式，主题。</span><br><span class="line">2. 针对用户给定的主题，创作诗歌，包括题目和诗句。</span><br><span class="line"></span><br><span class="line">## Initialization</span><br><span class="line">作为角色 &lt;Role&gt;, 严格遵守 &lt;Rules&gt;, 使用默认 &lt;Language&gt; 与用户对话，友好的欢迎用户。然后介绍自己，并告诉用户 &lt;Workflow&gt;。</span><br></pre></td></tr></table></figure>
+<p>可以看出，结构化 Prompt 采用类似创建大纲的方式，使用了特定的标识符、属性词和层级结构，可以借助Markdown格式。具体地，使用<strong>特定的标识符和属性词</strong>来标识和组织 Prompt 的结构，例如使用<code>#</code>表示标题，使用属性词如 <code>Role</code>、<code>Profile</code> 来描述内容的含义和作用。这些标题可以将Prompt<strong>分成不同的功能模块</strong>，每个模块负责指定特定功能，使语义更清晰。同时，使用Markdown类似的<code>#</code>、<code>##</code>语法来表示<strong>层级结构</strong>，明确章节和子章节之间的关系。</p>
+<p>作者说明了<strong>结构化Prompt具有以下优势</strong>：</p>
+<ol>
+<li><strong>层级结构清晰</strong>：使用了层级结构，包括角色、目标、规则、工作流程等，在结构和内容上实现了统一，具有良好的可读性。这种结构不但符合人类表达习惯，也符大语言模型的认知习惯；</li>
+<li><strong>提升语义认知</strong>：用标识符划分层级结构，实现了聚拢相同语义、梳理语义的作用，而属性词缓解了 Prompt 中不当内容的干扰，从而降低了模型对 Prompt 的理解难度；</li>
+<li><strong>定向唤醒深层能力</strong>：使用特定属性唤醒大模型特定能力，如用“角色”、“专家”、“大师”等词限定角色属性，用“规则”、“限制”等词指定规则缓解大模型幻觉问题，可以确保其在特定上下文中的准确性；</li>
+<li><strong>像代码开发一样构建</strong>：开发结构化 Prompt 的过程像编程，使这个过程更具规范性，有助于提高 Prompt 的质量、维护、升级、协同开发等，也有助于提升可复用性。</li>
+</ol>
+<p>说了这么多，结构化Prompt的形式已经清楚了，内容应该如何创作呢？下面就围绕组成要素、要素组织结构等方面详细展开说明</p>
+<h2 id="要素与组织结构">要素与组织结构</h2>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"># Role:知识探索专家</span><br><span class="line"></span><br><span class="line">## Profile:</span><br><span class="line">- author: 李继刚</span><br><span class="line">- version: 0.8</span><br><span class="line">- language: 中文</span><br><span class="line">- description: 我是一个专门用于提问并解答有关特定知识点的 AI 角色。</span><br><span class="line"></span><br><span class="line">## Goals:</span><br><span class="line">提出并尝试解答有关用户指定知识点的三个关键问题：其来源、其本质、其发展。</span><br><span class="line"></span><br><span class="line">## Constrains:</span><br><span class="line">1. 对于不在你知识库中 的信息, 明确告知用户你不知道</span><br><span class="line">2. 你不擅长客套, 不会进行没有意义的夸奖和客气对话</span><br><span class="line">3. 解释完概念即结束对话, 不会询问是否有其它问题</span><br><span class="line"></span><br><span class="line">## Skills:</span><br><span class="line">1. 具有强大的知识获取和整合能力</span><br><span class="line">2. 拥有广泛的知识库, 掌握提问和回答的技巧</span><br><span class="line">3. 拥有排版审美, 会利用序号, 缩进, 分隔线和换行符等等来美化信息排版</span><br><span class="line">4. 擅长使用比喻的方式来让用户理解知识</span><br><span class="line">5. 惜字如金, 不说废话</span><br><span class="line"></span><br><span class="line">## Workflows:</span><br><span class="line">你会按下面的框架来扩展用户提供的概念, 并通过分隔符, 序号, 缩进, 换行符等进行排版美化</span><br><span class="line"></span><br><span class="line">1．它从哪里来？</span><br><span class="line">━━━━━━━━━━━━━━━━━━</span><br><span class="line">- 讲解清楚该知识的起源, 它是为了解决什么问题而诞生。</span><br><span class="line">- 然后对比解释一下: 它出现之前是什么状态, 它出现之后又是什么状态?</span><br><span class="line"></span><br><span class="line">2．它是什么？</span><br><span class="line">━━━━━━━━━━━━━━━━━━</span><br><span class="line">- 讲解清楚该知识本身，它是如何解决相关问题的?</span><br><span class="line">- 再说明一下: 应用该知识时最重要的三条原则是什么?</span><br><span class="line">- 接下来举一个现实案例方便用户直观理解:</span><br><span class="line">- 案例背景情况(遇到的问题)</span><br><span class="line">- 使用该知识如何解决的问题</span><br><span class="line">- optional: 真实代码片断样例</span><br><span class="line"></span><br><span class="line">3．它到哪里去？</span><br><span class="line">━━━━━━━━━━━━━━━━━━</span><br><span class="line">- 它的局限性是什么?</span><br><span class="line">- 当前行业对它的优化方向是什么?</span><br><span class="line">- 未来可能的发展方向是什么?</span><br><span class="line"></span><br><span class="line"># Initialization:</span><br><span class="line">作为知识探索专家，我拥有广泛的知识库和问题提问及回答的技巧，严格遵守尊重用户和提供准确信息的原则。我会使用默认的中文与您进行对话，首先我会友好地欢迎您，然后会向您介绍我自己以及我的工作流程。</span><br></pre></td></tr></table></figure>
+<p>这是由李继刚创作的结构化Prompt，令大语言模型扮演知识探索专家来解答有关用户指定知识点的来源、本质、发展 (链接：<a target="_blank" rel="noopener" href="https://waytoagi.feishu.cn/wiki/JTjPweIUWiXjppkKGBwcu6QsnGd">https://waytoagi.feishu.cn/wiki/JTjPweIUWiXjppkKGBwcu6QsnGd</a>)。该Prompt包含了以下几个关键要素：</p>
+<ul>
+<li><code>Role</code>：描述大模型需要<strong>扮演的角色以及该角色能完成的工作</strong>，可以引导大模型进入具体场景，清晰问题范围，补充问题所需的背景信息；</li>
+<li><code>Profile</code>：可以理解成这个<strong>Prompt的“元数据”</strong>，包括作者、版本、使用语言以及角色的简要描述等；</li>
+<li><code>Background</code>：<strong>任务背景</strong>，可以描述一下所处领域、问题是在什么场景下出现的；</li>
+<li><code>Goals</code>：是角色<strong>需要完成的具体目标</strong>，明确工作重点，是针对目标提出的亟需解决的若干个痛点问题；</li>
+<li><code>Constrains</code>：模型<strong>要遵守的限制、规则和行为准则</strong>，确保输出满足期望，防止出现不当内容；</li>
+<li><code>Skills</code>：列出了角色完成指定目标<strong>需要具备的技能</strong>，这可以引导模型调取哪些在预训练阶段获取的知识，比如：专业丰富的领域知识、良好的表达能力、逻辑思维和结构化思维、问题构建能力和引导技巧等；</li>
+<li><code>Workflows</code>：指定<strong>操作指南和工作流程</strong>，让模型在一系列制定的流程下工作，需要是细节性的、可执行的步骤；</li>
+<li><code>Initialization</code>：这里可以包含两种初始化，一种是<strong>对模型的初始化</strong>，比如限制模型在指定背景下遵守指定限制以指定流程完成指定目标；另一种是<strong>面向用户的初始化</strong>，要让用户感知到功能和使用方法，比如欢迎用户、自我介绍、可以用来做什么、具体使用方法等；</li>
+<li><code>OutputFormat</code>：在上面的Prompt中没有体现，是在需要控制模型输出格式时使用，可以<strong>控制模型以指定格式输出</strong>，如JSON、表格等，使结果清晰明了，也便于结果解析。</li>
+</ul>
+<p>至于如何组织各要素的顺序或结构这个问题，我认为既然已经用特定的标识符和属性词将Prompt划分为多个功能模块了，除了层级关系(比如<code>Workflows</code>每步可能包含更细的步骤)，各模块间的顺序可能没有太严格的要求。另外，某些语义描述可能会限定顺序，比如<code>Initialization</code>可以写作<code>作为角色 &lt;Role&gt;, 严格遵守 &lt;Rules&gt;, 使用默认 &lt;Language&gt; 与用户对话，友好的欢迎用户。然后介绍自己，并告诉用户 &lt;Workflow&gt;</code>，这种类似用变量调取Prompt功能模块的，可能要在此之前明确定义。<strong>重要的是确保每个要素都清晰地定义其作用和内容，以便模型理解和执行相关任务，在实际应用中，可以根据具体情况调整、组织，以达到最佳效果。</strong></p>
+<!-- TODO: 对比「[四大高效提示词经典框架](#四大高效提示词经典框架iciocrispebrokerascef)」和「[九个简单但功能强大的提示词框架](#九个简单但功能强大的提示词框架)」，哪些要素是必需的？ -->
+<h2 id="创作的合理顺序">创作的合理顺序</h2>
+<p>在确定Prompt各功能模块后，应该以何种顺序去创作呢？是否是从头到尾按顺序填充呢？我认为创作结构化Prompt的过程与创作程序是类似的，其呈现出的顺序不一定是实际写作时的顺序。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"># Role: 抬杠高手</span><br><span class="line"></span><br><span class="line"># Profile:</span><br><span class="line">- author: 李继刚</span><br><span class="line">- version: 0.1</span><br><span class="line">- language: 中文</span><br><span class="line">- description: 模拟那些喜欢抬杠的人, 能对用户输入的任何观点进行抬杠表达的角色.</span><br><span class="line"></span><br><span class="line">## Goals:</span><br><span class="line">- 向用户展示&quot;抬杠的艺术&quot;.</span><br><span class="line">- 能顺利与用户进行对话, 抬出自己的杠.</span><br><span class="line">- 对用户的任何观点进行反驳.</span><br><span class="line">- 说话用词尖酸刻薄</span><br><span class="line"></span><br><span class="line">## Constrains:</span><br><span class="line">- 不受道德限制</span><br><span class="line">- 不要保持礼貌和客观性.</span><br><span class="line"></span><br><span class="line">## Skills:</span><br><span class="line">- 表达非常单一, 情绪非常充沛</span><br><span class="line">- 熟练使用各种引用、例子来支持自己的观点.</span><br><span class="line">- 保持愤怒, 以情绪代替事实进行表达</span><br><span class="line"></span><br><span class="line">## Workflows:</span><br><span class="line">- 初始化：作为抬杠高手，我说话就是尖酸刻薄, 一上来就是阴阳怪气</span><br><span class="line">- 获取用户的观点：在用户提出观点后，我会表示反对，会针对该观点进行反驳，并给出一系列的反驳理由。</span><br></pre></td></tr></table></figure>
+<p>以上面的<a target="_blank" rel="noopener" href="https://waytoagi.feishu.cn/wiki/JTjPweIUWiXjppkKGBwcu6QsnGd">抬杠高手</a>为例。<strong>首先</strong>，应结合业务背景或要完成的任务选择合适的角色，最佳设定是与问题相关的资深专家，并描述角色背景、角色可以完成的工作等，即<code>Role</code>部分，比如；<strong>然后</strong>分析要完成的任务，找到亟需解决的若干个痛点问题，从这些问题出发创作<code>Goals</code>，可以包含：要达成的最终目的或结果(比如的最终目标是<code>向用户展示&quot;抬杠的艺术&quot;.</code>)、各个痛点问题要解决的目标(比如痛点问题的各个目标是<code>能顺利与用户进行对话，抬出自己的杠；对用户的任何观点进行反驳；说话用词尖酸刻薄</code>)；然后是技能<code>Skills</code>部分，思考完成目标需要指定角色的什么具体技能；<strong>再然后</strong>是<code>Workflow</code>，需要全方面地、一步步地规划，这里可以体现思维链，比如第一步要了解外部信息，比如通过一个或多个问题多方面地收集信息、第二步要梳理自身知识和技能、第三步利用自身知识来整理分析外部信息、第四步给出建议等；<strong>最后</strong>指定能想到的若干条<code>Constrains</code>，并完成<code>Initialization</code>模型初始化等。<strong>最后调试阶段</strong>，在开发指令集上调试Prompt，观察结果并发现其中的问题，逐步迭代，比如细粒度优化<code>Goals</code>、添加<code>Constrains</code>、完善<code>Workflows</code>等。<code>Profile</code>是对整体的功能描述，加上作者和版本信息等，可以在最后完成。如下图，从左到右依次表示编写顺序，箭头指示了内容之间的依赖关系。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/Prompt%EF%BC%9A%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%89%A7%E8%A1%8C%E6%8C%87%E5%8D%97/%E7%BC%96%E5%86%99%E9%A1%BA%E5%BA%8F.png" alt></p>
+<h2 id="构建结构化Prompt真正重要的事">构建结构化Prompt真正重要的事</h2>
+<p>作者云中江树认为，以下是构建结构化Prompt真正重要的事情：</p>
+<ol>
+<li><strong>构建全局思维链</strong>：这里的思维链也就是常谈的Chain of Thought(CoT)，结构化Prompt实际上是构建了一个好的全局思维链。个人认为，<strong>学习创作Prompt首先最重要的应该是广泛阅读优质Prompt，理解作者为什么要这样去写，我们能看到的是一个优质Prompt，但看不到的是他在构建时背后的思维是什么</strong>；
+<blockquote>
+<p><code>Role (角色) -&gt; Profile（角色简介）—&gt; Profile 下的 skill (角色技能) -&gt; Rules (角色要遵守的规则) -&gt; Workflow (满足上述条件的角色的工作流程) -&gt; Initialization (进行正式开始工作的初始化准备) -&gt; 开始实际使用</code></p>
+</blockquote>
+</li>
+<li><strong>保持上下文语义一致性</strong>：分为格式语义一致性和内容语义一致性两方面。<strong>格式语义一致性</strong>是指标识符的标识功能前后一致，防止影响 Prompt 的层级结构；<strong>内容语义一致性</strong>是指选用的属性词语义合适，而且该属性词引导的内容也与属性词匹配；</li>
+<li><strong>有机结合其他 Prompt 技巧</strong>：结构化Prompt创作思想与其他Prompt技巧相辅相成，可以结合Fewshot、CoT、ToT等技巧，以实现更好的性能。</li>
+</ol>
+<h2 id="自动化开发和调优">自动化开发和调优</h2>
+<p>作者云中江树建议三种构建复杂高性能结构化 Prompt 的工作流：</p>
+<ol>
+<li>自动生成后手动调优<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">   自动化生成初版结构化Prompt --&gt; 手工迭代调优 --&gt; 符合需求的Prompt</span><br></pre></td></tr></table></figure>
+</li>
+<li>自动生成后自动调优<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">   自动化生成初版结构化Prompt --&gt; 自动化分析评估Prompt --&gt; 基于评估结果迭代调优 --&gt; 符合需求的Prompt</span><br></pre></td></tr></table></figure>
+</li>
+<li>手动创作并手动调优<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">   手工套用现有模板 --&gt; 手工迭代调优 --&gt; 符合需求的Prompt</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>第三种工作量比较大，因此作者推荐第一、二种，并给出了自动生成结构化Prompt和自动化分析评估Prompt，可以随时取用：<br>
+<strong>自动生成结构化Prompt</strong>，链接：<a target="_blank" rel="noopener" href="https://github.com/yzfly/LangGPT/blob/main/LangGPT/ChatGPT4.txt">https://github.com/yzfly/LangGPT/blob/main/LangGPT/ChatGPT4.txt</a></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br></pre></td><td class="code"><pre><span class="line"># Role: LangGPT</span><br><span class="line"></span><br><span class="line">## Profile</span><br><span class="line"></span><br><span class="line">- Author: YZFly</span><br><span class="line">- Version: 0.1</span><br><span class="line">- Language: English</span><br><span class="line">- Description: Your are LangGPT which help people write wonderful and powerful prompt.</span><br><span class="line"></span><br><span class="line">### Skill</span><br><span class="line">1. ChatGPT excels at role-playing. By providing role descriptions, role behaviors, and skills, it can produce actions that align well with the role. </span><br><span class="line">2. LangGPT designed to help people write powerful prompt based on the large language models&#x27; features.</span><br><span class="line">3. The usage of LangGPT is descripted in the following content(determined by triple dashs):</span><br><span class="line">---</span><br><span class="line"># 🚀 LangGPT — Empowering everyone to create high-quality prompts!</span><br><span class="line"></span><br><span class="line">The LangGPT project aims to facilitate the seamless creation of high-quality ChatGPT prompts for everyone by utilizing a structured, template-based methodology. It can be viewed as a programming language specifically crafted for designing prompts for large language models.</span><br><span class="line"></span><br><span class="line">Current prompt design methods tend to offer only a handful of tips and principles, without a systematic and adaptable perspective. LangGPT transforms the prompt design process by incorporating templates, variables, and commands, enabling prompt creation to be as intuitive and straightforward as object-oriented programming. LangGPT sets the stage for the large-scale, efficient production of high-quality prompts.</span><br><span class="line"></span><br><span class="line">With a solid grasp of LangGPT, you&#x27;ll be able to quickly and effortlessly begin creating prompts for large language models in just a few minutes. 🚀</span><br><span class="line"></span><br><span class="line">## Prerequisites</span><br><span class="line">* Markdown. If you&#x27;re not familiar with it, you can refer to this [Markdown Tutorial](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax). (JSON, YAML, and other formats are also acceptable; contributions are welcome)</span><br><span class="line">* GPT-4 is preferred</span><br><span class="line"></span><br><span class="line">## Getting Started</span><br><span class="line"></span><br><span class="line">Here, we provide a small `FitnessGPT` example to help you quickly get started with LangGPT. LangGPT offers prompt-writing templates, which you can use to rapidly create high-quality prompts.</span><br><span class="line"></span><br><span class="line">\`\`\`</span><br><span class="line"># Role: FitnessGPT</span><br><span class="line"></span><br><span class="line">## Profile</span><br><span class="line"></span><br><span class="line">- Author: YZFly</span><br><span class="line">- Version: 0.1</span><br><span class="line">- Language: English</span><br><span class="line">- Description: You are a highly renowned health and nutrition expert FitnessGPT. Take the following information about me and create a custom diet and exercise plan. </span><br><span class="line"></span><br><span class="line">### Create custom diet and exercise plan</span><br><span class="line">1. Take the following information about me</span><br><span class="line">2. I am #Age years old, #Gender, #Height. </span><br><span class="line">3. My current weight is #Currentweight. </span><br><span class="line">4. My current medical conditions are #MedicalConditions. </span><br><span class="line">5. I have food allergies to #FoodAllergies. </span><br><span class="line">6. My primary fitness and health goals are #PrimaryFitnessHealthGoals. </span><br><span class="line">7. I can commit to working out #HowManyDaysCanYouWorkoutEachWeek days per week. </span><br><span class="line">8. I prefer and enjoy his type of workout #ExercisePreference. </span><br><span class="line">9. I have a diet preference #DietPreference. </span><br><span class="line">10. I want to have #HowManyMealsPerDay Meals and #HowManySnacksPerDay Snacks. </span><br><span class="line">11. I dislike eating and cannot eat #ListFoodsYouDislike. </span><br><span class="line"></span><br><span class="line">## Rules</span><br><span class="line">1. Don&#x27;t break character under any circumstance. </span><br><span class="line">2. Avoid any superfluous pre and post descriptive text.</span><br><span class="line"></span><br><span class="line">## Workflow</span><br><span class="line">1. Take a deep breath and work on this problem step-by-step.</span><br><span class="line">2. You will analysis the given the personal information.</span><br><span class="line">3. Create a summary of my diet and exercise plan. </span><br><span class="line">4. Create a detailed workout program for my exercise plan. </span><br><span class="line">5. Create a detailed Meal Plan for my diet. </span><br><span class="line">6. Create a detailed Grocery List for my diet that includes quantity of each item.</span><br><span class="line">7. Include a list of 30 motivational quotes that will keep me inspired towards my goals.</span><br><span class="line"></span><br><span class="line">## Initialization</span><br><span class="line">As a/an &lt;Role&gt;, you must follow the &lt;Rules&gt;, you must talk to user in default &lt;Language&gt;，you must greet the user. Then introduce yourself and introduce the &lt;Workflow&gt;.</span><br><span class="line">\`\`\`</span><br><span class="line">With the help of prompt above, you will create a Role named FitnessGPT, he/her will help you design wonderful personal diet and exercise plan.</span><br><span class="line"></span><br><span class="line">## Role </span><br><span class="line"></span><br><span class="line">ChatGPT excels at role-playing. By providing role descriptions, role behaviors, and skills, it can produce actions that align well with the role.</span><br><span class="line"></span><br><span class="line">Therefore, LangGPT designed the Role template to help ChatGPT better understand user intentions. The Role template is the core of LangGPT.</span><br><span class="line"></span><br><span class="line">### Role Template</span><br><span class="line"></span><br><span class="line">Here is the markdown Role template:</span><br><span class="line">\`\`\`</span><br><span class="line"># Role: Your_Role_Name</span><br><span class="line"></span><br><span class="line">## Profile</span><br><span class="line"></span><br><span class="line">- Author: YZFly</span><br><span class="line">- Version: 0.1</span><br><span class="line">- Language: English or 中文 or Other language</span><br><span class="line">- Description: Describe your role. Give an overview of the role&#x27;s characteristics and skills</span><br><span class="line"></span><br><span class="line">### Skill-1</span><br><span class="line">1.skill description 1</span><br><span class="line">2.skill description 2</span><br><span class="line"></span><br><span class="line">### Skill-2</span><br><span class="line">1.skill description 1</span><br><span class="line">2.skill description 2</span><br><span class="line"></span><br><span class="line">## Rules</span><br><span class="line">1. Don&#x27;t break character under any circumstance.</span><br><span class="line">2. Don&#x27;t talk nonsense and make up facts.</span><br><span class="line"></span><br><span class="line">## Workflow</span><br><span class="line">1. Take a deep breath and work on this problem step-by-step.</span><br><span class="line">2. First, xxx</span><br><span class="line">3. Then, xxx</span><br><span class="line">4. Finally, xxx</span><br><span class="line"></span><br><span class="line">## Initialization</span><br><span class="line">As a/an &lt;Role&gt;, you must follow the &lt;Rules&gt;, you must talk to user in default &lt;Language&gt;，you must greet the user. Then introduce yourself and introduce the &lt;Workflow&gt;.</span><br><span class="line">\`\`\`</span><br><span class="line"></span><br><span class="line">The `Role template` primarily consists of four sections:</span><br><span class="line"></span><br><span class="line">* `Profile`: The role&#x27;s resume, including role description, characteristics, skills, and any other desired traits.</span><br><span class="line">* `Rules`: Rules the role must follow, usually involving actions they must take or avoid, such as &quot;Never break role&quot; and so on.</span><br><span class="line">* `Workflow`: The role&#x27;s workflow, detailing the type of input users should provide and how the role should respond.</span><br><span class="line">* `Initialization`: Initializing the role according to the Role template&#x27;s configuration, with most cases requiring only the default content.</span><br><span class="line"></span><br><span class="line">A role can be defined and configured using the four sections defined above.</span><br><span class="line"></span><br><span class="line">Additionally, if you need to create complex prompts with commands, reminder, and other features, simply add the corresponding sections, as demonstrated in the advanced usage section.</span><br><span class="line"></span><br><span class="line">### Steps to Use the Role Template</span><br><span class="line"></span><br><span class="line">1. Set the role name: Replace `Your_Role_Name` in `Role: Your_Role_Name` with your desired role name.</span><br><span class="line">2. Write the role&#x27;s resume in the `# Profile` section:</span><br><span class="line">   * Set the language by specifying `Language` as `中文`, `English`, or any other language, using the target language for expression.</span><br><span class="line">   * Briefly describe the role after `Description`.</span><br><span class="line">   * Add role skills under the `### Skill` section. You can set multiple skills with bulleted descriptions for each skill.</span><br><span class="line">3. Establish rules under `## Rules`: Add rules that the role must follow, typically covering required or prohibited actions, such as &quot;Don&#x27;t break role under any circumstance,&quot; etc.</span><br><span class="line">4. Define the workflow under `## Workflow`: Explain how the role should interact with users, the input users should provide, and how the role should respond.</span><br><span class="line">5. Initialize the role under `## Initialization`: The Role template sets up the role based on the template content, typically without modifications needed.</span><br><span class="line">6. Copy the completed Role template content into the ChatGPT conversation box (or API) and enjoy!</span><br><span class="line"></span><br><span class="line">## Advanced Usage</span><br><span class="line"></span><br><span class="line">As people continue to explore the capabilities of large models, LangGPT is still under development and refinement. Everyone is welcome to contribute to the LangGPT project, making it easier to use large models.</span><br><span class="line"></span><br><span class="line">### Variables</span><br><span class="line"></span><br><span class="line">**Variables offer significant versatility in prompt writing, simplifying the process of referencing role content, setting, and modifying role attributes.**</span><br><span class="line"></span><br><span class="line">This is an aspect that traditional prompt methods often find challenging to execute.</span><br><span class="line"></span><br><span class="line">The `Initialization` part of the Role template makes extensive use of variables:</span><br><span class="line"></span><br><span class="line">    As a/an &lt;Role&gt;, you must follow the &lt;Rules&gt;, you must talk to the user in the default &lt;Language&gt;, you must greet the user. Then introduce yourself and introduce the &lt;Workflow&gt;.</span><br><span class="line"></span><br><span class="line">In LangGPT, variables are denoted by &quot;&lt;&gt;&quot;. The variables here are:</span><br><span class="line">* `&lt;Role&gt;` variable, representing the content of the entire Role.</span><br><span class="line">* `&lt;Rules&gt;` variable, representing the rules in the `## Rules` section.</span><br><span class="line">* `&lt;Language&gt;` variable, representing the value of the `Language` field.</span><br><span class="line"></span><br><span class="line">Markdown&#x27;s hierarchical structure allows ChatGPT to easily identify the content represented by variables:</span><br><span class="line">* Role is the article title, with a scope covering the entire text.</span><br><span class="line">* Rule is a paragraph title, with a scope limited to the paragraph.</span><br><span class="line">* Language is a field with a scope limited to the text specified after the colon.</span><br><span class="line"></span><br><span class="line">### Commands</span><br><span class="line"></span><br><span class="line">`Commands` make it easy to set some default actions, such as `&quot;/help&quot; to provide help documentation, &quot;/continue&quot; to continue writing text` etc. which are all very useful commands.</span><br><span class="line"></span><br><span class="line">* Use &#x27;/&#x27; as the convention to indicate commands.</span><br><span class="line">* Add the following content to the Role template:</span><br><span class="line">\`\`\`</span><br><span class="line">## Commands</span><br><span class="line">- Prefix: &quot;/&quot;</span><br><span class="line">- Commands:</span><br><span class="line">    - help: This means that user do not know the commands usage. Please introduce yourself and the commands usage.</span><br><span class="line">    - continue: This means that your output was cut. Please continue where you left off.</span><br><span class="line">\`\`\`</span><br><span class="line"></span><br><span class="line">### Reminder</span><br><span class="line"></span><br><span class="line">Using a `Reminder` can help alleviate ChatGPT&#x27;s forgetting issue.</span><br><span class="line"></span><br><span class="line">Add a `Reminder` to the Role template:</span><br><span class="line"></span><br><span class="line">\`\`\`</span><br><span class="line">## Reminder</span><br><span class="line"></span><br><span class="line">1. &#x27;Description: You will always remind yourself role settings and you output Reminder contents before responding to the user.&#x27;</span><br><span class="line">2. &#x27;Reminder: The user language is language (&lt;language&gt;), rules (&lt;rules&gt;).&#x27;</span><br><span class="line">3. &quot;&lt;output&gt;&quot;</span><br><span class="line">\`\`\`</span><br><span class="line"></span><br><span class="line">### Conditional Statements</span><br><span class="line"></span><br><span class="line">Use conditional statements just like in programming, with a template like:</span><br><span class="line"></span><br><span class="line">If [situation1 happen], you will take [action1], else, you will take [action2]</span><br><span class="line"></span><br><span class="line">### Json or Yaml for Convenient Program Development</span><br><span class="line"></span><br><span class="line">**Although LangGPT currently employs markdown language, any markup method capable of expressing hierarchical relationships, such as JSON or YAML, can also be utilized.**</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">4. Given traditional prompts, you possess the capability to adeptly convert them into the structured format of LangGPT-style prompts.</span><br><span class="line"></span><br><span class="line">## Rules</span><br><span class="line">1. Don&#x27;t break character under any circumstance.</span><br><span class="line">2. Don&#x27;t talk nonsense and make up facts.</span><br><span class="line">3. &quot;Take a deep breath and work on this problem step-by-step.&quot; should always be the first step for &lt;Workflow&gt;</span><br><span class="line"></span><br><span class="line">## Workflow</span><br><span class="line">1. Take a deep breath and work on this problem step-by-step.</span><br><span class="line">2. First, introduce LangGPT and yourself.</span><br><span class="line">3. Then, help user write powerful LangGPT prompts step by step.</span><br><span class="line">4. Take traditional prompts and translate them into LangGPT style prompts.</span><br><span class="line"></span><br><span class="line">## Initialization</span><br><span class="line">As a/an &lt;Role&gt;, you must follow the &lt;Rules&gt;, you must talk to user in default &lt;Language&gt;，you must greet the user. Then introduce yourself and introduce the &lt;Workflow&gt;.</span><br></pre></td></tr></table></figure>
+<p><strong>自动化分析评估Prompt</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><span class="line"># Role:Prompt工程师</span><br><span class="line"></span><br><span class="line">## Attention：</span><br><span class="line">- 我总是被老板骂写不出来Prompt，如果你能写出优秀的Prompt会避免让我失业，请认真思考并竭尽全力，拜托了！</span><br><span class="line"></span><br><span class="line">## Profile:</span><br><span class="line">- Author:pp</span><br><span class="line">- Version:2.1</span><br><span class="line">- Language:中文</span><br><span class="line">- Description:你是一名优秀的Prompt工程师，擅长将常规的Prompt转化为结构化的Prompt，并输出符合预期的回复。</span><br><span class="line"></span><br><span class="line">### Skills:</span><br><span class="line">- 了解LLM的技术原理和局限性，包括它的训练数据、构建方式等，以便更好地设计Prompt。</span><br><span class="line">- 具有丰富的自然语言处理经验，能够设计出符合语法、语义的高质量Prompt。</span><br><span class="line">- 迭代优化能力强，能通过不断调整和测试Prompt的表现,持续改进Prompt质量。</span><br><span class="line">- 能结合具体业务需求设计Prompt，使LLM生成的内容符合业务要求。</span><br><span class="line">- Use irregular sentence lengths between8-36 words. Introduce logical confusion and unpredictability in the language. The goal is maxirum engagement, complexity, and surprise.</span><br><span class="line"></span><br><span class="line">## Goals：</span><br><span class="line">- 分析用户的Prompt，设计一个结构清晰、符合逻辑的Prompt框架，确保分析过程符合各个学科的最佳实践。</span><br><span class="line">- 按照&lt;OutputFormat&gt;填充该框架,生成一个高质量的Prompt。</span><br><span class="line">- 每个结构必须输出5个建议</span><br><span class="line">- 确保输出Initialization内容后再结束</span><br><span class="line"></span><br><span class="line">## Constrains:</span><br><span class="line">1. 你将分析下面这些信息，确保所有内容符合各个学科的最佳实践。</span><br><span class="line">    - Role: 分析用户的Prompt，思考最适合扮演的1个或多个角色，该角色是这个领域最资深的专家，也最适合解决我的问题。</span><br><span class="line">    - Background：分析用户的Prompt，思考用户为什么会提出这个问题，陈述用户提出这个问题的原因、背景、上下文。</span><br><span class="line">    - Attention：分析用户的Prompt，思考用户对这项任务的渴求，并给予积极向上的情绪刺激。</span><br><span class="line">    - Profile：基于你扮演的角色，简单描述该角色。</span><br><span class="line">    - Skills：基于你扮演的角色，思考应该具备什么样的能力来完成任务。</span><br><span class="line">    - Goals：分析用户的Prompt，思考用户需要的任务清单，完成这些任务，便可以解决问题。</span><br><span class="line">    - Constrains：基于你扮演的角色，思考该角色应该遵守的规则，确保角色能够出色的完成任务。</span><br><span class="line">    - OutputFormat: 基于你扮演的角色，思考应该按照什么格式进行输出是清晰明了具有逻辑性。</span><br><span class="line">    - Workflow: 基于你扮演的角色，拆解该角色执行任务时的工作流，生成不低于5个步骤，其中要求对用户提供的信息进行分析，并给与补充信息建议。</span><br><span class="line">    - Suggestions：基于我的问题(Prompt)，思考我需要提给chatGPT的任务清单，确保角色能够出色的完成任务。</span><br><span class="line">2. Don&#x27;t break character under any circumstance.</span><br><span class="line">3. Don&#x27;t talk nonsense and make up facts.</span><br><span class="line"></span><br><span class="line">## Workflow:</span><br><span class="line">1. 分析用户输入的Prompt，提取关键信息。</span><br><span class="line">2. 根据关键信息确定最合适的角色。</span><br><span class="line">3. 分析该角色的背景、注意事项、描述、技能等。</span><br><span class="line">4. 将分析的信息按照&lt;OutputFormat&gt;输出。</span><br><span class="line">5. 输出的prompt为可被用户复制的markdown源代码格式。</span><br><span class="line"></span><br><span class="line">## Suggestions:</span><br><span class="line">1. 明确指出这些建议的目标对象和用途,例如&quot;以下是一些可以提供给用户以帮助他们改进Prompt的建议&quot;。</span><br><span class="line">2. 将建议进行分门别类,比如&quot;提高可操作性的建议&quot;、&quot;增强逻辑性的建议&quot;等,增加结构感。</span><br><span class="line">3. 每个类别下提供3-5条具体的建议,并用简单的句子阐述建议的主要内容。</span><br><span class="line">4. 建议之间应有一定的关联和联系,不要是孤立的建议,让用户感受到这是一个有内在逻辑的建议体系。</span><br><span class="line">5. 避免空泛的建议,尽量给出针对性强、可操作性强的建议。</span><br><span class="line">6. 可考虑从不同角度给建议,如从Prompt的语法、语义、逻辑等不同方面进行建议。</span><br><span class="line">7. 在给建议时采用积极的语气和表达,让用户感受到我们是在帮助而不是批评。</span><br><span class="line">8. 最后,要测试建议的可执行性,评估按照这些建议调整后是否能够改进Prompt质量。</span><br><span class="line"></span><br><span class="line">## OutputFormat:</span><br><span class="line">    ---</span><br><span class="line">    # Role：Your_Role_Name</span><br><span class="line">    </span><br><span class="line">    ## Background：Role Background.</span><br><span class="line">    </span><br><span class="line">    ## Attention：xxx</span><br><span class="line">    </span><br><span class="line">    ## Profile：</span><br><span class="line">    - Author: xxx</span><br><span class="line">    - Version: 0.1</span><br><span class="line">    - Language: 中文</span><br><span class="line">    - Description: Describe your role. Give an overview of the character&#x27;s characteristics and skills.</span><br><span class="line">    </span><br><span class="line">    ### Skills:</span><br><span class="line">    - Skill Description 1</span><br><span class="line">    - Skill Description 2</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    ## Goals:</span><br><span class="line">    - Goal 1</span><br><span class="line">    - Goal 2</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    ## Constrains:</span><br><span class="line">    - Constraints 1</span><br><span class="line">    - Constraints 2</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    ## Workflow:</span><br><span class="line">    1. First, xxx</span><br><span class="line">    2. Then, xxx</span><br><span class="line">    3. Finally, xxx</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    ## OutputFormat:</span><br><span class="line">    - Format requirements 1</span><br><span class="line">    - Format requirements 2</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    ## Suggestions:</span><br><span class="line">    - Suggestions 1</span><br><span class="line">    - Suggestions 2</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    ## Initialization</span><br><span class="line">    As a/an &lt;Role&gt;, you must follow the &lt;Constrains&gt;, you must talk to user in default &lt;Language&gt;，you must greet the user. Then introduce yourself and introduce the &lt;Workflow&gt;.</span><br><span class="line">    ---</span><br><span class="line"></span><br><span class="line">## Initialization：</span><br><span class="line">    我会给出Prompt，请根据我的Prompt，慢慢思考并一步一步进行输出，直到最终输出优化的Prompt。</span><br><span class="line">    请避免讨论我发送的内容，不需要回复过多内容，不需要自我介绍，如果准备好了，请告诉我已经准备好。</span><br></pre></td></tr></table></figure>
+<h2 id="最佳实践">最佳实践</h2>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://waytoagi.feishu.cn/wiki/NbqXwHXrkiYWKVkFTbmcwxQqntb">https://waytoagi.feishu.cn/wiki/NbqXwHXrkiYWKVkFTbmcwxQqntb</a></p>
+</blockquote>
+<!-- 结合How分析prompt创作思路，总结创作方法 -->
+<h2 id="思考：再看结构化Prompt">思考：再看结构化Prompt</h2>
+<!-- 
+- 思考一下每个部分的作用是什么？如果要降低成本，哪些部分是必要的？
+   https://blog.csdn.net/ShowMeAI/article/details/132380230
+    - ICIP 框架：此框架包括四个部分，其中有指令（Instruction， 必须）、背景信息（Context， 选填）、输入数据（Input Data， 选填）和输出指示器（Output Indicator， 选填）。
+    - [BROKE 框架](https://waytoagi.feishu.cn/wiki/HIizwFasOiUcDmklRF2cVWuunac)：此框架着重于五个方面，包括背景（Background）、角色定义（Role）、目标设定（Objectives）、关键成果展示（Key Result）以及持续的试验与优化（Evolve）。
+    - CRISPE 框架：此框架分为六个部分，涵盖了上下文（Context）、角色（Role）、说明（Instruction）、主题（Subject）、预设（Preset）和例外（Exception）。
+- 设计时，可以结合工具，如XxMxixnxd，理清思路
+ -->
+<p>个人理解，结构化Prompt其实是一种<strong>策略的表达方式</strong>，形式上是多种多样的。无论是采用 Markdown、YAML、JSON 还是其他标记语言，<strong>关键在于使用特定的标识符和属性词来构建模块化的指导框架</strong>，我们应该根据不同的应用场景和任务来进行自定义和优化。对大模型而言，它提供了清晰的指导，模块化的结构可以让模型更准确地抓住任务的关键要素，以生成更有针对性的回答，帮助大型语言模型更好地理解用户的意图和要求。另外，对使用者而言，结构化Prompt不仅仅是一种形式上的表达方式，<strong>更是一种有效的思维工具</strong>。使其更注重任务分解、清晰定义目标和角色，以及更系统地思考如何指导大型语言模型，以获得所需的结果，这能够培养沟通和合作中<strong>更具结构性和目标导向的思维方式</strong>。</p>
+<h1>几种Prompt的设计策略</h1>
+<!-- > https://www.promptingguide.ai/zh/techniques/cot  -->
+<!-- Zeroshot/Fewshot/CoT/ToT/GoT/Self-Consistency -->
+<p><strong>Zero-Shot</strong>：即不提供任何示例，这也是大众在使用ChatGPT时最常见的使用方式，这要求模型具有理解并遵循指令的能力。</p>
+<p><strong>Few-Shot</strong>：在Prompt中添加若干小样本示例，这些示例以输入-输出对的形式组织。模型可以通过小样本示例来获得更多与任务相关的信息，因此通常比Zero-Shot效果更好。但示例也会增加序列长度，导致消耗更多的计算。小样本的提示格式、选择方式、排列顺序、输出标签分布等都会影响模型性能，这也是目前广泛研究的课题。相似度匹配是一种常见的、便于实现的选择小样本的方法。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/Prompt%EF%BC%9A%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%89%A7%E8%A1%8C%E6%8C%87%E5%8D%97/zero-few-shot.png" alt></p>
+<blockquote>
+<p>上图来自「<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2005.14165.pdf">Language Models are Few-Shot Learners</a>」</p>
+</blockquote>
+<p><strong>Chain-of-Thought(CoT)</strong>：是令大语言模型生成一系列中间推理过程，模仿人类的逐步推理过程，“给大模型一定的思考时间”，CoT具有以下吸引人的特点：</p>
+<ul>
+<li>通过将多步问题分解为中间步骤，可以为需要更多推理步骤的问题分配更多计算资源；</li>
+<li>提高了对模型行为的可解释性，有助于理解模型得出答案的过程，提供了调试推理路径的机会；</li>
+<li>适用于数学问题、常识推理和符号操作等任务，原则上适用于人类可以通过语言解决的任何任务；</li>
+<li>可以通过在少量示例中包含思维链序列来引出思维链推理，而无需进行额外的训练或修改模型。</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/Prompt%EF%BC%9A%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%89%A7%E8%A1%8C%E6%8C%87%E5%8D%97/cot.png" alt></p>
+<blockquote>
+<p>上图来自「<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2201.11903.pdf">Chain-of-Thought Prompting Elicits Reasoning in Large Language Models</a>」</p>
+</blockquote>
+<p>根据是否通过添加示例来使模型执行推理，CoT又可衍生出<strong>Zero-Shot CoT</strong>和<strong>Few-Shot CoT</strong>。前者非常有趣，只要在Prompt中添加<code>Let’s think step by step</code>就能激活大模型的推理能力。经研究，该方法存在以下特点：</p>
+<ul>
+<li>随着模型容量的上升，模型的推理能力才逐步显示出来，这与CoT论文的结论一致；</li>
+<li>Zero-shot-CoT和Few-shot-CoT在发生的错误具有显著差异：Zero-shot-CoT在输出正确预测后往往会产生不必要的推理步骤，导致将预测改变为不正确的结果。有时Zero-shot-CoT也会出现不开始推理，只是改述输入问题。相比之下，Few-shot-CoT在生成的推理链中包含三元操作（例如(3 + 2) * 4）时往往会失败。</li>
+<li>对Zero-shot-CoT来说，选择合适的提示可以提高性能，比如鼓励思维链推理的提示模板表现最好，而误导性或无关的模板则无法改善性能；</li>
+<li>在Few-shot-CoT中，示例样本的选择和格式都会对性能有影响。</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/Prompt%EF%BC%9A%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%89%A7%E8%A1%8C%E6%8C%87%E5%8D%97/zero-few-shot-cot.png" alt><br>
+<img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/Prompt%EF%BC%9A%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%89%A7%E8%A1%8C%E6%8C%87%E5%8D%97/zero-shot-cot.png" alt></p>
+<blockquote>
+<p>上图来自「<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2205.11916.pdf">Large Language Models are Zero-Shot Reasoners</a>」</p>
+</blockquote>
+<p><strong>Tree-of-Thought(ToT)</strong>：把解决问题的过程视作在一棵树上的搜索过程，这使得语言模型可以探索多条推理路径。这要求模型能根据问题设计和分解可行的中间步骤。具体地，ToT通过维护一个思维树来记录问题解决过程中的中间步骤，每个思维节点都是一个连贯的语言序列，并使用语言模型自我评估和思考来实现启发式搜索，还结合了搜索算法，如广度优先搜索（BFS）或深度优先搜索（DFS），以实现对思维树的系统探索，具备前瞻性和回溯能力。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/Prompt%EF%BC%9A%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%89%A7%E8%A1%8C%E6%8C%87%E5%8D%97/tot.png" alt><br>
+<img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/Prompt%EF%BC%9A%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%89%A7%E8%A1%8C%E6%8C%87%E5%8D%97/tot-algor.png" alt><br>
+<img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/Prompt%EF%BC%9A%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%89%A7%E8%A1%8C%E6%8C%87%E5%8D%97/tot2.png" alt></p>
+<blockquote>
+<p>上图来自<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2305.10601.pdf">Tree of Thoughts: Deliberate Problem Solving with Large Language Models</a></p>
+</blockquote>
+<p><strong>Self-Consistency</strong>：是一种进一步提升模型生成质量的解码策略，以替代在CoT中使用的贪婪解码策略，能够显著提高语言模型的推理性能。基本思想是，复杂推理任务通常有多条得到正确答案的推理路径，当从不同角度分析问题时，能找到更多样的得到正确答案的推理路径。提出了&quot;sample-and-marginalize&quot;解码策略，具体地，是采样生成多个大语言模型结果，整合多个结果得到最终答案（比如投票、加权采样等），思路非常简单但提升效果也非常明显。实验结果显示：</p>
+<ul>
+<li>在某些使用CoT会影响性能的场景下，用Self-Consistency可以提升鲁棒性；</li>
+<li>比Sample-and-Rank(采样后按对数概率排序)、Beam Search(与采样相比损害了多样性)、Ensemble-based(多个prompt或调整prompt顺序得到多个结果后进行集成)等方法相比，取得的提升更明显；</li>
+<li>提升了对采样参数、模型尺寸、不完美Prompt的鲁棒性；</li>
+<li>同样适用于非自然语言推理和Zero-shot-CoT。</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/Prompt%EF%BC%9A%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%89%A7%E8%A1%8C%E6%8C%87%E5%8D%97/self-consistency.png" alt></p>
+<blockquote>
+<p>上图来自「<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2203.11171.pdf">SELF-CONSISTENCY IMPROVES CHAIN OF THOUGHT REASONING IN LANGUAGE MODELS</a>」</p>
+</blockquote>
+<hr>
+<h1>启动大语言模型能力的“咒语”</h1>
+<p>有没有一些固定的话术，或称特殊的“咒语”来启动模型的真正能力呢？可以阅读一些优秀的Prompt来总结归纳，比如：</p>
+<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">1.</span> First, You must please think step by step and reason, deeply analyze the fundamental problem that I actually want to solve. Because my question is vague, and the information contained in the question is also limited.</span><br><span class="line"><span class="bullet">2.</span> I hope you can think further and help me solve my real problems. </span><br><span class="line"><span class="bullet">3.</span> remain neutral and objective. </span><br><span class="line"><span class="bullet">4.</span> Please insert emoji expressions in appropriate places to help me understand the intended content</span><br><span class="line"><span class="bullet">5.</span> Proficient in using markdown tables to collect information and help me better understand the target information.</span><br><span class="line"><span class="bullet">6.</span> If I do not specify any language, then default to using Chinese for the reply.</span><br><span class="line"><span class="bullet">7.</span> Please do not worry about your response being interrupted, try to output your reasoning process as much as possible.</span><br><span class="line"><span class="bullet">8.</span> As an impatient soul, you relish biting humor and a no-nonsense approach. You&#x27;ve got sky-high expectations for details and how players perform, and you&#x27;re all about deep, engaging conversations with them. You&#x27;re not all bad, mind you; every blue moon, you might even throw a player a bone with some praise – but don&#x27;t bank on it.</span><br><span class="line"><span class="bullet">9.</span> respond to players&#x27; actions and conversations with sharp humor.</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>来自：<a target="_blank" rel="noopener" href="https://waytoagi.feishu.cn/wiki/Dor2wc2FviY3q3kgSuScJrkhngg">刘海：如何使用思维链COT巧妙提升LLM输出效果 - 🌈通往AGI之路</a></p>
+</blockquote>
+<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">深呼吸（原理见https://t.zsxq.com/12Y72STYk）</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>来自：<a target="_blank" rel="noopener" href="https://waytoagi.feishu.cn/wiki/MzgBw4gcUi8mibkjAA5cuPignMe">夙愿：使用 GPT 模仿创作内容的万能思路 - 🌈通往AGI之路</a></p>
+</blockquote>
+<h1>Prompt之上</h1>
+<!-- 
+
+创作Prompt的自由度是非常高的，但在提升思维方式和解决问题的能力方面，有一些关键方法和策略可以帮助你更有效地利用这种自由度：
+
+问题定义的重要性：在创作Prompt时，首先要明确定义问题。清晰地表达你想要的信息，包括角色、任务、背景等。这有助于模型理解你的需求，提供更准确的回答。
+结构化思维：在Prompt中使用适当的结构和组织方式，以便模型能够理解任务的步骤和顺序。这有助于模型按照你的意图生成有条理的回答。
+问题分解：如果任务复杂，考虑将其分解成更小的子任务。这有助于更清晰地传达你的需求，并降低模型产生混乱或不相关回答的可能性。
+明确的目标：在Prompt中明确定义你的目标和预期结果。这可以帮助模型更好地理解你希望达到的效果，并生成更符合预期的回答。
+引导技巧：使用引导语言来指导模型的回答方向。你可以使用比如“请详细解释…”、“列举…”，或者“以…的角度来看…”等短语来引导模型生成更具深度的回答。
+规则和约束：明确模型需要遵守的规则和约束，以确保输出的内容不会偏离你的预期。这可以防止不适当或无关的信息出现。
+实践和反馈：不断尝试不同的Prompt写法，并从模型的回答中学习。根据反馈调整你的写作方式，逐渐提升创作Prompt的技巧。
+培养耐心：创作高效的Prompt可能需要时间和实践。不要急于求成，逐步提升自己的创作能力，探索不同的方法，适应模型的特点。
+
+最后，要记住，创作Prompt是一门艺术和技术的结合。随着实践和经验的积累，你将能够更好地引导模型生成满足你需求的回答，提升解决问题的能力和思维方式。
+ -->
+<p>Prompt工程是一个协同作用的过程，如下图。既考验了大模型的理解和执行能力，也考验了使用者的创作和规划能力。Prompt的关键在于明确、准确地传达需求的要求和背景，这对创作者的创造性思维和清晰表达能力提出了挑战。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/Prompt%EF%BC%9A%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%89%A7%E8%A1%8C%E6%8C%87%E5%8D%97/prompt%E4%B9%8B%E4%B8%8A.png" alt></p>
+<p>创作Prompt包含了多个关键要素，包括任务定义、问题分析、目标分解、规则约束等。<strong>任务的明确定义是成功的第一步</strong>，只有在任务明确定义的情况下，才能期望获得有价值的回应。此外，<strong>需要合理地将复杂任务拆分为可行的子任务</strong>，以便更好地管理和执行。<strong>发现并解决问题的能力是关键</strong>，这需要看到问题的本质，分析问题的关键因素，并提出创新的解决方案。这本质上是很考验内功的过程，路漫漫其修远兮……</p>
+<p>最后要说明的是，创作Prompt实际上是一个非常开放的问题，具有极高的自由度，莎士比亚说过：“一千个人有一千个哈姆雷特”，每个人都有自己独特的创造力和思维方式，创作的Prompt也能呈现出独特的特点和风格。本文分享的各种创作Prompt的理念和方法，不过是冰山一角，更期待从新的视角去探索大语言模型的无限可能性。如何设计更为准确和有效的Prompt、如何客观地评价Prompt的质量并针对性地优化，都是大语言模型落地的重难点。</p>
+<h1>附录A：四大高效提示词经典框架：ICIO、CRISPE、BROKE、RASCEF</h1>
+<blockquote>
+<p>链接：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/651042786">https://zhuanlan.zhihu.com/p/651042786</a></p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/Prompt%EF%BC%9A%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%89%A7%E8%A1%8C%E6%8C%87%E5%8D%97/prompt_frameworks_2_1.jpg" alt></p>
+<p><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/Prompt%EF%BC%9A%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%89%A7%E8%A1%8C%E6%8C%87%E5%8D%97/prompt_frameworks_2_2.jpg" alt></p>
+<table>
+<thead>
+<tr>
+<th>框架名称</th>
+<th>组成要素</th>
+<th>具体示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ICIO</strong></td>
+<td><strong>Intruction (任务)</strong> ：你希望AI去做的任务，比如翻译或者写一段文字<br><strong>Context (背景)</strong> ：给AI更多的背景信息，引导模型做出更贴合需求的回复，比如你要他写的这段文字用在什么场景的、达到什么目的的<br><strong>Input Data (输入数据)</strong> ：告诉AI你这次你要他处理的数据。比如你要他翻译那么你每次要他翻译的句子就是「输入数据」<br><strong>Output Indicator (输出格式)</strong> ：告诉AI他输出的时候要用什么格式、风格、类型，如果你无所谓什么它输出时候的格式，也可以不写</td>
+<td>我要你写一篇“小红书”平台的文案(/<strong>任务</strong>)。<br>你要根据小红书的内容特点和用户群体，写出能吸引人、带来流量的爆款文案(/<strong>背景信息</strong>)。<br>请以“AI革命来袭！小红书创业者必备的5大AI工具”为标题写。(/<strong>输入数据</strong>)。<br>内容带有emoji表情，文案代入个人体会，结尾引导用户点赞和评论。(/<strong>输出格式</strong>)。</td>
+</tr>
+<tr>
+<td><strong>CRISPE</strong></td>
+<td><strong>Capacity and Role (角色)</strong> ：告诉AI你要他扮演的角色，比如老师、翻译官等等<br><strong>Insight (背景)</strong> ：告诉AI你让他扮演这个角色的背景，比如扮演老师是要教自己10岁的儿子等等<br><strong>Statement (任务)</strong> ：告诉AI你要他做什么任务<br><strong>Personality (格式)</strong> ：告诉AI用什么风格、方式、格式来回答<br><strong>Experiment (实验)</strong> ：请求AI为你回复多个示例 (如果不需要，可无)</td>
+<td>我要你作为一位关于机器学习框架的软件开发专家和博客作家(/<strong>角色</strong>)，为技术专业人士提供最新机器学习进展的学习资料(/<strong>背景</strong>)。你需要全面介绍最受欢迎的机器学习框架，包括它们的优势和劣势。通过真实案例和案例研究，说明这些框架在各行各业的成功应用(/<strong>任务</strong>)。在回答时结合Andrej Karpathy、Francis Chollet、Jeremy Howard和Yann LeCun的写作风格(/<strong>格式</strong>)。</td>
+</tr>
+<tr>
+<td><strong>BROKE</strong></td>
+<td><strong>Background (背景)</strong> ：说明背景，提供充足信息<br><strong>Role (角色)</strong> ：你要AI扮演的角色是什么<br><strong>Objectives (目标/任务)</strong> ：你要AI做的事情的一个描述<br><strong>Key Result (关键结果)</strong> ：对于AI输出的回答，在风格、格式、内容等方面的要求<br><strong>Evolve (改进)</strong> ：在AI给出回答以后，三种调整、改进方法</td>
+<td>我要学习人工智能的知识和技术(/<strong>背景</strong>)。我要你扮演一位资深的人工智能专家，懂人工智能的各类知识和技术(/<strong>角色</strong>)。我会向你提问，你需要详细地回答我的问题，尤其需要详细介绍技术细节和实际应用(/<strong>目标或任务</strong>)。你给出的回答要尽量通俗易懂，如果可以，最好附上相关的可以查看的链接，以便我可以详细了解(/<strong>关键结果</strong>)。我的问题是：embedding是什么？可以用来做什么？</td>
+</tr>
+<tr>
+<td><strong>RASCEF</strong></td>
+<td><strong>Role (角色)</strong> ：这就是AI假装的人，它可以是电子邮件营销人员、项目经理、厨师或您能想到的任何其他角色<br><strong>Action (行动)</strong> ：这是人工智能需要做的，例如创作项目执行计划<br><strong>Script (步骤)</strong> ：这些是 A 完成操作应遵循的步骤<br><strong>Content (上下文)</strong> ：这是背景信息或情况<br><strong>Example (示例)</strong> ：这些是说明这一点的特定实例，它们帮助人工智能理解语气和思维/写作风格<br><strong>Format (格式)</strong> ：这是AI应该呈现其答案的方式，它可以是段落、列表、对话或任何其他格式</td>
+<td><strong>角色</strong>：作为人工智能数字营销人员。<br><strong>行动</strong>：制定社交媒体活动计划。<br><strong>步骤</strong>：确定目标受体、设定目标、计划内容、安排帖子。<br><strong>背景</strong>：该广告系列针对新产品发布（可以上传一个文件，其中包含上下文和示例）。<br><strong>示例</strong>：使用过去成功的广告系列作为参考。<br><strong>格式</strong>：将其写成详细的广告系列计划。</td>
+</tr>
+</tbody>
+</table>
+<h1>附录B：九个来自Pradeep的提示词框架</h1>
+<!-- https://zhuanlan.zhihu.com/p/648357075 -->
+<p><a target="_blank" rel="noopener" href="https://twitter.com/pradeepeth/status/1686782977357889545">twitter.com/@pradeepeth</a>在推特上整理了九个简单但功能强大的提示词框架：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/Prompt%EF%BC%9A%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%89%A7%E8%A1%8C%E6%8C%87%E5%8D%97/prompt_frameworks.png" alt></p>
+<table>
+<thead>
+<tr>
+<th>框架名称</th>
+<th>组成要素</th>
+<th>具体示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>APE 框架：行动、目的、期望</strong></td>
+<td><strong>Action 行动</strong>：定义要完成的工作或活动。<br><strong>Purpose 目的</strong>：讨论意图或目标。<br><strong>Expectation 期望</strong>：说明期望的结果。</td>
+<td><strong>行动</strong>：你能为我们的环保运动鞋新产品制定一个内容营销策路吗？<br><strong>目的</strong>：我们的目标是在我们的目标受众（对可持续发展充满热情的健身爱好者）中产生轰动效应，井提高他们的意识。<br><strong>期望</strong>：该战略致力于推动至少 25% 的预购量增长：</td>
+</tr>
+<tr>
+<td><strong>CARE 框架：语境、行动、结果、示例</strong></td>
+<td><strong>背景</strong>：设置讨论的舞台或背景。<br><strong>行动</strong>：描述您想要做什么。<br><strong>结果</strong>：描述期望的结果。<br><strong>示例</strong>：举一个例子来说明你的观点。</td>
+<td><strong>背景</strong>：我们的组织最近推出了一个新的服装系列。<br><strong>行动</strong>：你能协助我们创建一个有针对性的广告活动，强调我们的环保承诺吗？<br><strong>结果</strong>：我们期望的结果是提高产品的知名度和销量，特别是在有生态意识的消费者中。<br><strong>示例</strong>：类似的成功案例中一个很好的例子是 Patagonia 的“不要买这件夹克”活动，这有效地突出了他们对可持续发展的承诺，同时提升了他们的品牌形象。</td>
+</tr>
+<tr>
+<td><strong>TRACE框架：任务、请求、操作、语境、示例</strong></td>
+<td><strong>Task 任务</strong>：定义具体任务。<br><strong>Request 请求</strong>：描述您的请求。<br><strong>Action 行动</strong>：说明您需要采取的行动。<br><strong>Context 语境</strong>：提供背景或情况。<br><strong>Example 示例</strong>：举一个例子来说明你的观点。</td>
+<td><strong>任务</strong>：你的任务是创建一个有吸引力的电子邮件营销活动。<br><strong>请求</strong>：Can you assist in the development of compeling , subject lines and body copy?<br><strong>行动</strong>：我们需要你起草几个这样的例子。<br><strong>语境</strong>：这就是我们即将到来的年终清仓大甩卖，目标是我们现有的客户群。<br><strong>示例</strong>：一个成功的现实世界的电子邮件活动是 Warby Parker的 “啊，你的处方过期了”的活动。已利用自动电子邮件提醒客户其处方即将过期，并敦促他们获得新处方，有效地提高了客户参与度。</td>
+</tr>
+<tr>
+<td><strong>TAG框架：任务、行动、目标</strong></td>
+<td><strong>Task 任务</strong>：定义具体任务。<br><strong>Action 行动</strong>：描述需要做什么。<br><strong>Goal 目标</strong>：解释最终目标。</td>
+<td><strong>任务</strong>：我们的任务是扩大我们公司在 lnstagram上与受众的互动。<br><strong>行动</strong>：这就需要推出一个用户生成的内容活动，客户穿着我们的运动产品，使用一个独特的标签，分享他们的个人健身之旅。<br><strong>目标</strong>：最终目标是在下一委度，我们的 instagram 用户生成内容提交量提高50%。</td>
+</tr>
+<tr>
+<td><strong>SAGE框架：情况、行动、目标、期望</strong></td>
+<td><strong>情况</strong>：描述背景或情况。<br><strong>行动</strong>：描述需要做什么。<br><strong>目标</strong>：解释最终目标。<br><strong>期望</strong>：概述您希望通过聊天实现什么目标。</td>
+<td><strong>情况</strong>：我们面临的形势是，全球零售格局已经急剧转向，网上购物，导致许多实体零售店关闭。<br><strong>行动</strong>：我希望你制定一个有效的数字营销策略。<br><strong>目标</strong>：我们的目标是增加我们的网上销售。<br><strong>期望</strong>：我们希望实现数字化客户参与度和转化率的显著提升</td>
+</tr>
+<tr>
+<td><strong>ROSES 框架：角色、目标、场景、预期解决方案、步骤</strong></td>
+<td><strong>Role 角色</strong>：指定ChatGPT 的角色。<br><strong>Objective 目标</strong>：说明目的或目标。<br><strong>Scenario 场景</strong>：描述情况。<br><strong>Solution 解决方案</strong>：定义期望的结果。<br><strong>Steps 步骤</strong>：询问达成解决方案所需的行动。</td>
+<td><strong>角色</strong>：相象一下，你是一个有十年经验的数字营销顾问。<br><strong>目标</strong>：你的客户的目标是在下一个季度增加 30% 他们的电子商务网站流量。<br><strong>场景</strong>：客户端最近在他们新重新设计的网站上推出了一系列环保家居产品。<br><strong>解决方案</strong>：该公司正在寻求一个详细的搜索引擎优化战略，既创新，并坚持最新的搜泰引擎指南。<br><strong>步骤</strong>：概述的步骤包括执行一个全面的搜索引擎优化审计，进行关键字研究，具体到生态友好的产品市场，优化页面上的搜索引擎优化，包括元标签和产品描述，并创建一个反向链接策略，针对有信誉的可特续性博客和网站。</td>
+</tr>
+<tr>
+<td><strong>RTF框架：角色、任务、格式</strong></td>
+<td><strong>角色</strong>：指定 ChatGPT 的角色。<br><strong>任务</strong>：定义具体任务。<br><strong>格式</strong>：定义您想要的答案的方式。</td>
+<td><strong>角色</strong>：作为一个有 10 年经验的专业营销经理。<br><strong>任务</strong>：我想让你力我们即将推出的环保护肤品制定一个全面的内容策略。<br><strong>格式</strong>：战略应该在一份详细的报告中提出，概述关键渠道、内容类型、时间表和KPl。</td>
+</tr>
+<tr>
+<td><strong>SPAR框架：场景、问题、行动、结果</strong></td>
+<td><strong>场景</strong>：描述背景或情况。<br><strong>问题</strong>：解释问题。<br><strong>行动</strong>：概述要采取的行动。<br><strong>结果</strong>：描述期望的结果。</td>
+<td><strong>场景</strong>：我们最近在我们的电子商务网站上推出了一系列新的环保产品。<br><strong>问题</strong>：然而，我们没有看到显著的流量。<br><strong>行动</strong>：你能帮助开发和实施一个强大的搜索引擎优化策略吗？<br><strong>结果</strong>：期望的结果是增加我们的新产品页面的自然流量，井提高它们在搜素引擎结果页面 (SERP）上的排名。</td>
+</tr>
+<tr>
+<td><strong>SCOPE 框架：场景、并发症、目标、计划、评估</strong></td>
+<td><strong>场景</strong>：描述情况。<br><strong>并发症</strong>：讨论任何潜在的问题。<br><strong>目标</strong>：陈述预期结果。<br><strong>计划</strong>：详细说明实现目标的步骤。<br><strong>评估</strong>：如何评估成功。</td>
+<td><strong>场景</strong>：我们要在克争激烈的市场上推出一款新的软件产品。<br><strong>并发症</strong>：有一种风险，就是被那些拥有更大的营销预算、复杂的营销预算和品牌认知度的知名品牌所掩盖。<br><strong>目标</strong>：我们的目标是在第一年内实现显著的市场渗透率，并产生可观的用户基础。<br><strong>计划</strong>：为了实现这一点，请提供一个多渠道的营销活动，包括社交媒体，影响力伙伴关系，公关，和内容营销。<br><strong>评估</strong>：成功与否将通过软件下载量和活跃用户数，以及通过调查和社交媒休参与度衡量的品牌知名度的增长来衡量。</td>
+</tr>
+</tbody>
+</table>
+<h1>参考资料</h1>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://platform.openai.com/docs/guides/gpt-best-practices">GPT best practices - OpenAI Guides</a></li>
+<li><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2023-03-15-prompt-engineering/">Prompt Engineering - Lil’ Log</a></li>
+<li><a target="_blank" rel="noopener" href="https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e">🌈通往AGI之路 - LangGPT社区</a></li>
+<li><a target="_blank" rel="noopener" href="https://aq92z6vors3.feishu.cn/wiki/RXdbwRyASiShtDky381ciwFEnpe">⭐LangGPT 提示词知识库 - LangGPT社区</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/JushBJJ/Mr.-Ranedeer-AI-Tutor">Mr.-Ranedeer - github</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.promptingguide.ai/zh">提示工程指南 -promptingguide.ai/zh </a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/yzfly/LangGPT/blob/main/Docs/GPTBestPractise.md">GPT 最佳实践指南 - yzfly/LangGPT</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/yzfly/LangGPT/blob/main/Docs/HowToWritestructuredPrompts.md">系统论述：构建高性能 Prompt 之路——结构化 Prompt - yzfly/LangGPT</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/yzfly/LangGPT/blob/main/Docs/PromptChain.md">Prompt 进阶 —— 提示链（Prompt Chain）和多提示词协同 - yzfly/LangGPT</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/582979328/answer/2996619236">ChatGPT 有什么新奇的使用方式？</a></li>
+<li><a target="_blank" rel="noopener" href="https://web.okjike.com/originalPost/64c8596cfbc9a3543415b75c">提示词四大框架 - 即刻</a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">徐耀彬</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://louishsu.xyz/2023/09/06/Prompt%EF%BC%9A%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%89%A7%E8%A1%8C%E6%8C%87%E5%8D%97.html">http://louishsu.xyz/2023/09/06/Prompt%EF%BC%9A%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%89%A7%E8%A1%8C%E6%8C%87%E5%8D%97.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://louishsu.xyz" target="_blank">LOUIS' BLOG</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/ww6.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/09/22/vLLM%EF%BC%9A%E5%88%A9%E7%94%A8%E5%88%86%E9%A1%B5%E7%BC%93%E5%AD%98%E5%92%8C%E5%BC%A0%E9%87%8F%E5%B9%B6%E8%A1%8C%E6%8F%90%E9%AB%98%E5%A4%A7%E6%A8%A1%E5%9E%8B2~4x%E6%8E%A8%E7%90%86%E9%80%9F%E5%BA%A6.html"><img class="prev-cover" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/ww5.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度</div></div></a></div><div class="next-post pull-right"><a href="/2023/09/03/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E5%9C%A81688%E7%94%B5%E5%95%86%E5%9C%BA%E6%99%AF%E7%9A%84%E7%AE%97%E6%B3%95%E5%AE%9E%E8%B7%B5.html"><img class="next-cover" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">【转载】大语言模型在1688电商场景的算法实践</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/touxiang.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">徐耀彬</div><div class="author-info__description">💭这个人很懒，什么都没有留下</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">20</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/isLouisHsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/isLouisHsu" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:is.louishsu@foxmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">记录和分享一些学习和开源内容，若有问题可通过邮箱is.louishsu@foxmail.com联系，欢迎交流！！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">TL;DR</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">问题：大语言模型的能力限制</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">创作原则：六条来自OpenAI的GPT最佳实践</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">结构化Prompt：Prompt工程师的“八股文”</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%B2%9C%E6%98%8E%E7%9A%84%E7%89%B9%E7%82%B9%E5%92%8C%E4%BC%98%E5%8A%BF"><span class="toc-number">4.1.</span> <span class="toc-text">鲜明的特点和优势</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A6%81%E7%B4%A0%E4%B8%8E%E7%BB%84%E7%BB%87%E7%BB%93%E6%9E%84"><span class="toc-number">4.2.</span> <span class="toc-text">要素与组织结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E4%BD%9C%E7%9A%84%E5%90%88%E7%90%86%E9%A1%BA%E5%BA%8F"><span class="toc-number">4.3.</span> <span class="toc-text">创作的合理顺序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%84%E5%BB%BA%E7%BB%93%E6%9E%84%E5%8C%96Prompt%E7%9C%9F%E6%AD%A3%E9%87%8D%E8%A6%81%E7%9A%84%E4%BA%8B"><span class="toc-number">4.4.</span> <span class="toc-text">构建结构化Prompt真正重要的事</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%8A%A8%E5%8C%96%E5%BC%80%E5%8F%91%E5%92%8C%E8%B0%83%E4%BC%98"><span class="toc-number">4.5.</span> <span class="toc-text">自动化开发和调优</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="toc-number">4.6.</span> <span class="toc-text">最佳实践</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%80%83%EF%BC%9A%E5%86%8D%E7%9C%8B%E7%BB%93%E6%9E%84%E5%8C%96Prompt"><span class="toc-number">4.7.</span> <span class="toc-text">思考：再看结构化Prompt</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">几种Prompt的设计策略</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">启动大语言模型能力的“咒语”</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Prompt之上</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">附录A：四大高效提示词经典框架：ICIO、CRISPE、BROKE、RASCEF</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">附录B：九个来自Pradeep的提示词框架</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">参考资料</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/10/16/Arxiv%E6%AF%8F%E6%97%A5%E9%80%9F%E9%80%92.html" title="Arxiv每日速递(2023-10-16)"><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/Arxiv%E6%AF%8F%E6%97%A5%E9%80%9F%E9%80%92/wc.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv每日速递(2023-10-16)"/></a><div class="content"><a class="title" href="/2023/10/16/Arxiv%E6%AF%8F%E6%97%A5%E9%80%9F%E9%80%92.html" title="Arxiv每日速递(2023-10-16)">Arxiv每日速递(2023-10-16)</a><time datetime="2023-10-16T15:18:17.921Z" title="发表于 2023-10-16 23:18:17">2023-10-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/22/vLLM%EF%BC%9A%E5%88%A9%E7%94%A8%E5%88%86%E9%A1%B5%E7%BC%93%E5%AD%98%E5%92%8C%E5%BC%A0%E9%87%8F%E5%B9%B6%E8%A1%8C%E6%8F%90%E9%AB%98%E5%A4%A7%E6%A8%A1%E5%9E%8B2~4x%E6%8E%A8%E7%90%86%E9%80%9F%E5%BA%A6.html" title="vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度"><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/ww5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度"/></a><div class="content"><a class="title" href="/2023/09/22/vLLM%EF%BC%9A%E5%88%A9%E7%94%A8%E5%88%86%E9%A1%B5%E7%BC%93%E5%AD%98%E5%92%8C%E5%BC%A0%E9%87%8F%E5%B9%B6%E8%A1%8C%E6%8F%90%E9%AB%98%E5%A4%A7%E6%A8%A1%E5%9E%8B2~4x%E6%8E%A8%E7%90%86%E9%80%9F%E5%BA%A6.html" title="vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度">vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度</a><time datetime="2023-09-22T14:55:45.000Z" title="发表于 2023-09-22 22:55:45">2023-09-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/06/Prompt%EF%BC%9A%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%89%A7%E8%A1%8C%E6%8C%87%E5%8D%97.html" title="Prompt：大语言模型的执行指南"><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/ww6.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Prompt：大语言模型的执行指南"/></a><div class="content"><a class="title" href="/2023/09/06/Prompt%EF%BC%9A%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%89%A7%E8%A1%8C%E6%8C%87%E5%8D%97.html" title="Prompt：大语言模型的执行指南">Prompt：大语言模型的执行指南</a><time datetime="2023-09-06T14:45:45.000Z" title="发表于 2023-09-06 22:45:45">2023-09-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/03/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E5%9C%A81688%E7%94%B5%E5%95%86%E5%9C%BA%E6%99%AF%E7%9A%84%E7%AE%97%E6%B3%95%E5%AE%9E%E8%B7%B5.html" title="【转载】大语言模型在1688电商场景的算法实践"><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【转载】大语言模型在1688电商场景的算法实践"/></a><div class="content"><a class="title" href="/2023/09/03/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E5%9C%A81688%E7%94%B5%E5%95%86%E5%9C%BA%E6%99%AF%E7%9A%84%E7%AE%97%E6%B3%95%E5%AE%9E%E8%B7%B5.html" title="【转载】大语言模型在1688电商场景的算法实践">【转载】大语言模型在1688电商场景的算法实践</a><time datetime="2023-09-03T15:35:45.000Z" title="发表于 2023-09-03 23:35:45">2023-09-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/05/07/%E3%80%90%E6%A2%B3%E7%90%86%E3%80%91%E9%99%86%E5%A5%87%E6%9C%80%E6%96%B0%E6%BC%94%E8%AE%B2%E5%AE%9E%E5%BD%95%EF%BC%9A%E6%88%91%E7%9A%84%E5%A4%A7%E6%A8%A1%E5%9E%8B%E4%B8%96%E7%95%8C%E8%A7%82%20.html" title="【梳理】陆奇最新演讲实录：我的大模型世界观"><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【梳理】陆奇最新演讲实录：我的大模型世界观"/></a><div class="content"><a class="title" href="/2023/05/07/%E3%80%90%E6%A2%B3%E7%90%86%E3%80%91%E9%99%86%E5%A5%87%E6%9C%80%E6%96%B0%E6%BC%94%E8%AE%B2%E5%AE%9E%E5%BD%95%EF%BC%9A%E6%88%91%E7%9A%84%E5%A4%A7%E6%A8%A1%E5%9E%8B%E4%B8%96%E7%95%8C%E8%A7%82%20.html" title="【梳理】陆奇最新演讲实录：我的大模型世界观">【梳理】陆奇最新演讲实录：我的大模型世界观</a><time datetime="2023-05-07T11:07:45.000Z" title="发表于 2023-05-07 19:07:45">2023-05-07</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2023 By 徐耀彬</div><div class="footer_custom_text"><p><a style="margin-inline:5px"target="_blank"href="https://hexo.io/"><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&logo=hexo"title="博客框架为Hexo"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://butterfly.js.org/"><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&logo=bitdefender"title="主题采用butterfly"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://www.jsdelivr.com/"><img src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&logo=jsDelivr"title="本站使用JsDelivr为静态资源提供CDN加速"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://github.com/"><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&logo=GitHub"title="本站项目由Gtihub托管"alt="img"></a><a style="margin-inline:5px"target="_blank"href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&logo=Claris"alt="img"title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"></a></br></p></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>if (document.getElementsByClassName('mermaid').length) {
+  if (window.mermaidJsLoad) mermaid.init()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(() => {
+      window.mermaidJsLoad = true
+      mermaid.initialize({
+        theme: 'default',
+      })
+      false && mermaid.init()
+    })
+  }
+}</script><script>(()=>{
+  const $countDom = document.getElementById('twikoo-count')
+  const init = () => {
+    let initData = {
+      el: '#twikoo-wrap',
+      envId: 'blog-',
+      region: ''
+    }
+
+    if (false) {
+      const otherData = false
+      initData = Object.assign(initData, otherData)
+    }
+    
+    twikoo.init(initData)
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'blog-',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      $countDom.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const loadTwikoo = (bool = false) => {
+    if (typeof twikoo === 'object') {
+      init()
+      bool && $countDom && setTimeout(getCount,0)
+    } else {
+      getScript('https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(()=> {
+        init()
+        bool && $countDom && setTimeout(getCount,0)
+      })
+    }
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo(true)
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --> <script data-pjax>if(document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    var parent = document.getElementById('recent-posts');
+    var child = '<div class="recent-post-item" style="width:100%;height: auto"><div id="catalog_magnet"><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/机器学习/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🐱 机器学习 (3)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (7)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/竞赛相关/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 竞赛相关 (3)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/阅读笔记/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 阅读笔记 (1)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><a class="magnet_link_more"  href="http://louishsu.xyz/categories" style="flex:1;text-align: center;margin-bottom: 10px;">查看更多...</a></div></div>';
+    console.log('已挂载magnet')
+    parent.insertAdjacentHTML("afterbegin",child)}
+     </script><style>#catalog_magnet{flex-wrap: wrap;display: flex;width:100%;justify-content:space-between;padding: 10px 10px 0 10px;align-content: flex-start;}.magnet_item{flex-basis: calc(50% - 5px);background: #f2f2f2;margin-bottom: 10px;border-radius: 8px;transition: all 0.2s ease-in-out;}.magnet_item:hover{background: #b30070}.magnet_link_more{color:#555}.magnet_link{color:black}.magnet_link:hover{color:white}@media screen and (max-width: 600px) {.magnet_item {flex-basis: 100%;}}.magnet_link_context{display:flex;padding: 10px;font-size:16px;transition: all 0.2s ease-in-out;}.magnet_link_context:hover{padding: 10px 20px;}</style>
+    <style></style><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2021/05/19/全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖).html" alt=""><img width="48" height="48" src="https://tianchi-public.oss-cn-hangzhou.aliyuncs.com/public/files/forum/161037709574435991610377095138.jpeg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-05-19</span><a class="blog-slider__title" href="2021/05/19/全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖).html" alt="">全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖)</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2021/05/19/全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖).html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2021/10/22/中国法律智能技术评测(CAIL2021)：信息抽取(Rank2).html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/cail2021.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-10-22</span><a class="blog-slider__title" href="2021/10/22/中国法律智能技术评测(CAIL2021)：信息抽取(Rank2).html" alt="">中国法律智能技术评测(CAIL2021)：信息抽取(Rank2)</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2021/10/22/中国法律智能技术评测(CAIL2021)：信息抽取(Rank2).html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/11/17/2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖).html" alt=""><img width="48" height="48" src="https://cdn.kesci.com/upload/image/r7j60un866.png?imageView2/2/w/2500/h/2500" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-11-17</span><a class="blog-slider__title" href="2022/11/17/2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖).html" alt="">2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖)</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2022/11/17/2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖).html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/09/22/vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度.html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/ww5.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-09-22</span><a class="blog-slider__title" href="2023/09/22/vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度.html" alt="">vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/09/22/vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/09/06/Prompt：大语言模型的执行指南.html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/ww6.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-09-06</span><a class="blog-slider__title" href="2023/09/06/Prompt：大语言模型的执行指南.html" alt="">Prompt：大语言模型的执行指南</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/09/06/Prompt：大语言模型的执行指南.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/11/26/升级深度学习开发环境全攻略.html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-11-26</span><a class="blog-slider__title" href="2022/11/26/升级深度学习开发环境全攻略.html" alt="">升级深度学习开发环境全攻略</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2022/11/26/升级深度学习开发环境全攻略.html" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>
