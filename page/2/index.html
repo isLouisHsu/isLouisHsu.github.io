@@ -1,0 +1,709 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LOUIS' BLOG - 探索、实践、沉淀、积累</title><meta name="author" content="徐耀彬"><meta name="copyright" content="徐耀彬"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="💭这个人很懒，什么都没有留下">
+<meta property="og:type" content="website">
+<meta property="og:title" content="LOUIS&#39; BLOG">
+<meta property="og:url" content="http://louishsu.xyz/page/2/index.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="💭这个人很懒，什么都没有留下">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://louishsu.xyz/img/touxiang.jpg">
+<meta property="article:author" content="徐耀彬">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://louishsu.xyz/img/touxiang.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://louishsu.xyz/page/2/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: true,
+  isToc: false,
+  postUpdate: '2024-04-11 08:40:01'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><link rel="stylesheet" href="/css/background.css"><script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/touxiang.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">23</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 工具</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fas fa-pen"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/isLouisHsu/blog/tree/master/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-brands fa-app-store"></i><span> 利器</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://code.visualstudio.com/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> VSCode：微软旗下的跨平台代码编辑软件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mobaxterm.mobatek.net/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> MobaXterm：超好用的全能远程终端</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/CopyTranslator/CopyTranslator"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> CopyTranslator：“复制即翻译”的外文辅助阅读翻译解决方案</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.zotero.org/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Zotero：便于收集、组织、引用、共享的文献管理工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://zealdocs.org/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Zeal：离线文档浏览器，其灵感来自 OS X平台上的 Dash，目前支持 Window 和 Liunx，基于 QT5</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ditto-cp.sourceforge.io/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Ditto：强大的Windows剪贴板增强工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://wise-system-monitor.en.softonic.com/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Wise System Monitor：监控从系统到本地网络的所有运行情况</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/indiff/qttabbar"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> QtTabBar：在Windows资源管理器中使用多标签功能扩展工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/sentialx/multrin"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Multrin：“窗口合并”辅助小工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/Wox-launcher/Wox"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Wox &amp; Everything：基于名称快速定位文件和文件夹的搜索工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/NickeManarin/ScreenToGif"><i class="fa-fw fa-regular fa-star"></i><span> ScreenToGif：快速录制屏幕指定区域并保存为动图文件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mathpix.com/"><i class="fa-fw fa-regular fa-star"></i><span> Mathpix Snipping：识别数学公式并转换成LaTeX</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="http://www.uderzo.it/main_products/space_sniffer/index.html"><i class="fa-fw fa-regular fa-star"></i><span> Space Sniffer：磁盘空间分析工具</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url('https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/wallroom-1920x1080-bg-f163bde.jpeg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">LOUIS' BLOG</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 工具</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fas fa-pen"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/isLouisHsu/blog/tree/master/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-brands fa-app-store"></i><span> 利器</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://code.visualstudio.com/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> VSCode：微软旗下的跨平台代码编辑软件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mobaxterm.mobatek.net/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> MobaXterm：超好用的全能远程终端</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/CopyTranslator/CopyTranslator"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> CopyTranslator：“复制即翻译”的外文辅助阅读翻译解决方案</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.zotero.org/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Zotero：便于收集、组织、引用、共享的文献管理工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://zealdocs.org/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Zeal：离线文档浏览器，其灵感来自 OS X平台上的 Dash，目前支持 Window 和 Liunx，基于 QT5</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ditto-cp.sourceforge.io/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Ditto：强大的Windows剪贴板增强工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://wise-system-monitor.en.softonic.com/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Wise System Monitor：监控从系统到本地网络的所有运行情况</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/indiff/qttabbar"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> QtTabBar：在Windows资源管理器中使用多标签功能扩展工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/sentialx/multrin"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Multrin：“窗口合并”辅助小工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/Wox-launcher/Wox"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Wox &amp; Everything：基于名称快速定位文件和文件夹的搜索工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/NickeManarin/ScreenToGif"><i class="fa-fw fa-regular fa-star"></i><span> ScreenToGif：快速录制屏幕指定区域并保存为动图文件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mathpix.com/"><i class="fa-fw fa-regular fa-star"></i><span> Mathpix Snipping：识别数学公式并转换成LaTeX</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="http://www.uderzo.it/main_products/space_sniffer/index.html"><i class="fa-fw fa-regular fa-star"></i><span> Space Sniffer：磁盘空间分析工具</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">LOUIS' BLOG</h1><div id="site_social_icons"><a class="social-icon" href="https://github.com/isLouisHsu" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:is.louishsu@foxmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2023/01/02/%E5%8F%98%E5%88%86%E8%87%AA%E7%BC%96%E7%A0%81%E5%99%A8(Variational%20AutoEncoder).html" title="变分自编码器(Variational AutoEncoder)">     <img class="post_bg" src="https://lilianweng.github.io/posts/2018-08-12-vae/autoencoder-architecture.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="变分自编码器(Variational AutoEncoder)"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/01/02/%E5%8F%98%E5%88%86%E8%87%AA%E7%BC%96%E7%A0%81%E5%99%A8(Variational%20AutoEncoder).html" title="变分自编码器(Variational AutoEncoder)">变分自编码器(Variational AutoEncoder)</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-01-02T11:28:37.000Z" title="发表于 2023-01-02 19:28:37">2023-01-02</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a></span></div><div class="content">TL;DR
+最近，AIGC是极火热的讨论话题，而文生图可以说是AIGC的代表性工作。目前，效果最好的文生图模型是基于扩散模型的，当进一步深入扩散模型时，又对他的损失函数产生了很大的疑问。通过查找各方资料，才发现扩散模型与变分自编码器在损失定义上同出一门，理解了变分自编码器的损失自然也能理解扩散模型的损失。
+另外，变分自编码器已经作为基础模型，集成到许多后续工作中，例如：
+
+Stable Diffusion用变分自编码器获取图片的潜在表征(latents)进行前向扩散，避免直接在像素空间中前向扩散，极大地提升了计算效率；
+作为变分自编码器的拓展性工作，向量化离散变分自编码器(Vector Quantised-Variational AutoEncoder, VQ-VAE)已经被广泛用作图像分词器，如BEIT、DALL·E等。
+
+可以说，变分自编码器是过不去的一个坎，极有必要对变分自编码器做细致的了解。
+但是，查阅已有资料发现，有关变分自编码器的教程总是伴随复杂的公式推导，而实现的代码又难以与公式严格对应。另外,理论部分还涉及变分推断、ELBO、重参数等等多种技巧，让人摸不着头脑。本文将从 ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2022/12/08/transformers.generation.GenerationMixin.html" title="transformers.generation.GenerationMixin">     <img class="post_bg" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/huggingface.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="transformers.generation.GenerationMixin"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/12/08/transformers.generation.GenerationMixin.html" title="transformers.generation.GenerationMixin">transformers.generation.GenerationMixin</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-12-08T13:42:45.000Z" title="发表于 2022-12-08 21:42:45">2022-12-08</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/">自然语言处理</a></span></div><div class="content">当谈到文本生成时，Transformer API是目前最受欢迎的NLP工具之一。 它提供了各种解码策略和参数，使用户可以自定义生成的文本。在本文中，我们将学习如何使用Transformer API生成文本。
+基本使用
+在使用Transformer API之前，需要安装PyTorch和Transformers包：
+1$ pip install torch transformers
+完成安装后，可以使用以下代码导入所需的模块：
+1from transformers import pipeline, set_seed
+其中pipeline模块提供了生成文本所需的所有功能，而set_seed允许我们设置随机种子以获得可重复的结果。
+以下是一段文本生成的例子：
+12345678910# 设置随机种子以获得可重复的结果set_seed(42)# 加载文本生成器pipelinegenerator = pipeline(&#x27;text-generation&#x27;, model=&#x27;gpt2&#x27;)# 生成文本text = generator(&#x27;The quick b ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2022/11/26/%E5%8D%87%E7%BA%A7%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E5%85%A8%E6%94%BB%E7%95%A5.html" title="升级深度学习开发环境全攻略">     <img class="post_bg" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="升级深度学习开发环境全攻略"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/11/26/%E5%8D%87%E7%BA%A7%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E5%85%A8%E6%94%BB%E7%95%A5.html" title="升级深度学习开发环境全攻略">升级深度学习开发环境全攻略</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-11-26T15:29:06.000Z" title="发表于 2022-11-26 23:29:06">2022-11-26</time></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/">开发环境</a></span></div><div class="content">前言
+配置过深度学习开发环境的同学都知道，这是一项繁琐工作，稍不注意就会发生问题。首先，要熟悉硬件配置以选择对应的软件版本。例如，RTX3090刚推出时，TensorFlow只支持CUDA10，但该显卡必须安装CUDA11，所以想要在RTX3090上使用TensorFlow，需安装nightly版本。其次，即使软件与硬件契合，在安装时也要考虑软件间的依赖问题。以PyTorch的torch-1.13.0-cp37-cp37m-manylinux1_x86_64.whl为例，该版本要求python为3.7.x、系统为32位或64位的linux，还要求计算机已安装对应版本的CUDA。
+配置环境也是一项机械的工作，我相信每位同学安装环境前，都会在百度搜索框搜索“深度学习环境安装”，根据网上整理的博客、攻略，查找各软件的安装指令，磕磕碰碰地进行环境配置。有时候装的过程中才发现，资料内容是关于旧版本的，而新版本安装方式早已更新，想必此时各位内心有一万头X泥马奔腾而过……
+
+所以，为了避免在配置环境上花费太多时间，我每次配置完环境后，很长一段时间不会更新(系统安装后自动更新就已被关闭)。但是随着技术 ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2022/11/17/2022%E5%85%A8%E7%90%83%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0%E5%A4%A7%E8%B5%9B(GAIIC2022)%EF%BC%9A%E5%95%86%E5%93%81%E6%A0%87%E9%A2%98%E5%AE%9E%E4%BD%93%E8%AF%86%E5%88%AB(%E4%BA%8C%E7%AD%89%E5%A5%96).html" title="2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖)">     <img class="post_bg" src="https://cdn.kesci.com/upload/image/r7j60un866.png?imageView2/2/w/2500/h/2500" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖)"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/11/17/2022%E5%85%A8%E7%90%83%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0%E5%A4%A7%E8%B5%9B(GAIIC2022)%EF%BC%9A%E5%95%86%E5%93%81%E6%A0%87%E9%A2%98%E5%AE%9E%E4%BD%93%E8%AF%86%E5%88%AB(%E4%BA%8C%E7%AD%89%E5%A5%96).html" title="2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖)">2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖)</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-11-17T14:29:06.000Z" title="发表于 2022-11-17 22:29:06">2022-11-17</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E7%AB%9E%E8%B5%9B%E7%9B%B8%E5%85%B3/">竞赛相关</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E7%AB%9E%E8%B5%9B%E7%9B%B8%E5%85%B3/">竞赛相关</a></span></div><div class="content">本方案由大华DahuaKG团队提供，在本次竞赛中本方案获二等奖。DahuaKG团队由来自浙江大华技术股份有限公司大数据研究院知识图谱团队的成员组成，大华知识图谱团队专注于行业知识图谱构建和自然语言处理等技术的研究与应用，并致力于相关技术在语义检索、信息提取、文本理解、图挖掘、智能交互等任务上完成产业落地，为大华数据智能解决方案提供NLP和知识图谱相关领域的算法支撑。
+整体上，我们基于预训练语言模型NeZha构建商品标题实体识别模型，通过继续预训练加微调的训练范式学习模型参数，并有效结合数据增强、损失函数优化、对抗训练等手段逐步提升模型性能。该方案简单有效，复现流程不超过36小时，线上推断1万条样本仅需254秒（NVIDIA T4，单卡）。
+赛题介绍
+赛题链接：https://www.heywhale.com/home/competition/620b34ed28270b0017b823ad
+本赛题要求选手用模型抽取出商品标题文本中的关键信息，是典型的命名实体识别任务。要求准确抽取商品标题中的相关实体，有助于提升检索、推荐等业务场景下的用户体验和平台效率，是电商平台一项核心的基础任务。
+ ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2021/10/22/%E4%B8%AD%E5%9B%BD%E6%B3%95%E5%BE%8B%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E8%AF%84%E6%B5%8B(CAIL2021)%EF%BC%9A%E4%BF%A1%E6%81%AF%E6%8A%BD%E5%8F%96(Rank2).html" title="中国法律智能技术评测(CAIL2021)：信息抽取(Rank2)">     <img class="post_bg" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/cail2021.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="中国法律智能技术评测(CAIL2021)：信息抽取(Rank2)"></a></div><div class="recent-post-info"><a class="article-title" href="/2021/10/22/%E4%B8%AD%E5%9B%BD%E6%B3%95%E5%BE%8B%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E8%AF%84%E6%B5%8B(CAIL2021)%EF%BC%9A%E4%BF%A1%E6%81%AF%E6%8A%BD%E5%8F%96(Rank2).html" title="中国法律智能技术评测(CAIL2021)：信息抽取(Rank2)">中国法律智能技术评测(CAIL2021)：信息抽取(Rank2)</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-10-22T14:29:06.000Z" title="发表于 2021-10-22 22:29:06">2021-10-22</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E7%AB%9E%E8%B5%9B%E7%9B%B8%E5%85%B3/">竞赛相关</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E7%AB%9E%E8%B5%9B%E7%9B%B8%E5%85%B3/">竞赛相关</a></span></div><div class="content">目录
+
+目录
+赛题介绍
+
+赛题背景
+赛题描述
+
+赛题数据
+提交要求
+评估标准
+
+
+
+
+数据分析
+数据处理
+
+数据划分
+数据增强
+
+
+模型训练
+
+模型结构
+训练策略
+
+不要停止预训练
+信息抽取任务微调
+
+
+模型集成
+后处理
+
+
+消融对比
+大赛结果
+不足与展望
+引用
+附录
+
+本项目是对2021年中国法律智能技术评测的信息抽取赛题第二名方案的总结复盘，本次比赛使用了新的模型和训练方法，出乎意料地取得了较好的结果，值得回顾一下。在调参、模型集成等方面尚有较大进步空间，再接再厉。
+赛题介绍
+赛题背景
+信息抽取是自然语言处理中一类基础任务，涉及命名实体识别与关联抽取等多类子任务。在法律文本中主要体现为对于案件关键信息如嫌疑人、涉案物品、犯罪事实等关键信息的精确抽取。信息抽取对于实现“智慧司法”建设具有现实意义，其结果将辅助司法办案人员快速阅卷、厘清案件信息，也是知识图谱构建、相似案例推荐、自动量刑建议等一系列任务的重要基础。该任务需要参赛队伍从包含案件情节描述的陈述文本中识别出关键信息实体，并按照规定格式返回结果进行评测。
+赛题描述
+赛题数据
+本次任务所使用的数据集主要来自于网络公开的若干罪名法律 ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2021/05/19/%E5%85%A8%E7%90%83%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0%E5%A4%A7%E8%B5%9B%E3%80%90%E8%B5%9B%E9%81%93%E4%B8%80%E3%80%91%EF%BC%9A%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E6%8A%A5%E5%91%8A%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B(%E4%B8%89%E7%AD%89%E5%A5%96).html" title="全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖)">     <img class="post_bg" src="https://tianchi-public.oss-cn-hangzhou.aliyuncs.com/public/files/forum/161037709574435991610377095138.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖)"></a></div><div class="recent-post-info"><a class="article-title" href="/2021/05/19/%E5%85%A8%E7%90%83%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0%E5%A4%A7%E8%B5%9B%E3%80%90%E8%B5%9B%E9%81%93%E4%B8%80%E3%80%91%EF%BC%9A%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E6%8A%A5%E5%91%8A%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B(%E4%B8%89%E7%AD%89%E5%A5%96).html" title="全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖)">全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖)</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-05-19T09:57:06.000Z" title="发表于 2021-05-19 17:57:06">2021-05-19</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E7%AB%9E%E8%B5%9B%E7%9B%B8%E5%85%B3/">竞赛相关</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E7%AB%9E%E8%B5%9B%E7%9B%B8%E5%85%B3/">竞赛相关</a></span></div><div class="content">目录
+
+目录
+赛题介绍
+
+赛题背景
+赛题描述
+
+赛题数据
+提交要求
+评估标准
+
+
+赛题思路
+
+
+数据处理
+
+探索分析
+数据划分
+样本重加权
+数据增强
+
+
+模型训练
+
+模型结构
+预训练
+微调
+
+
+模型集成
+方案优化
+大赛结果
+Top方案
+不足与展望
+参考文献
+附录
+
+半监督学习
+Blending
+
+
+
+赛题介绍
+赛题背景
+   影像科医生在工作时会观察医学影像（如CT、核磁共振影像），并对其作出描述，这些描述中包含了大量医学信息，对医疗AI具有重要意义。本任务需要参赛队伍根据医生对CT的影像描述文本数据，判断身体若干目标区域是否有异常以及异常的类型。初赛阶段仅需判断各区域是否有异常，复赛阶段除了判断有异常的区域外，还需判断异常的类型。判断的结果按照指定评价指标进行评测和排名，得分最优者获胜。
+
+赛题链接：Link
+
+赛题描述
+赛题数据
+大赛分为初赛A/B榜、复赛A/B榜以及决赛答辩，各时间点公布的数据文件及时间如下
+
+
+
+数据文件
+发布时间
+备注
+
+
+
+
+track1_round1_train_20210222.csv
+2021.03.02(初赛A榜)
+仅包含区域标注
+
+
+track1_ ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2020/05/05/grep-sed-awk.html" title="grep, sed, awk三剑客">     <img class="post_bg" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/grep-sed-awk.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="grep, sed, awk三剑客"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/05/05/grep-sed-awk.html" title="grep, sed, awk三剑客">grep, sed, awk三剑客</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2020-05-05T10:47:36.000Z" title="发表于 2020-05-05 18:47:36">2020-05-05</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">
+grep: Globally search a Regular Expression and Print
+
+基本用法
+参数说明
+
+
+sed: Stream Editor
+
+基本用法
+参数说明
+编辑命令
+实例
+
+
+awk:  Alfred Aho, Peter Weinberger, Brian Kernighan
+
+基本用法
+参数说明
+常用内置变量
+语法
+
+运算符
+BEGIN/END
+分支、循环、数组
+
+分支: if
+循环: do while, for
+数组
+
+
+
+
+常用字符串函数
+
+
+
+grep: Globally search a Regular Expression and Print
+强大的文本搜索工具，它能使用特定模式匹配（包括正则表达式）查找文本，并默认输出匹配行到STDOUT。
+基本用法
+1$ grep [-abcEFGhHilLnqrsvVwxy][-A&lt;显示列数&gt;][-B&lt;显示列数&gt;][-C&lt;显示列数&gt;][-d&lt;进行动作&gt;][-e&lt;范本样式&gt;][-f&lt;范本文件&gt;][--help][范本样式][文 ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2020/05/04/Shell-Programming.html" title="Shell Programming">     <img class="post_bg" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/shell.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Shell Programming"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/05/04/Shell-Programming.html" title="Shell Programming">Shell Programming</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2020-05-04T15:23:34.000Z" title="发表于 2020-05-04 23:23:34">2020-05-04</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/shell/">shell</a></span></div><div class="content">目录
+
+目录
+Shell基础
+
+常用指令
+父子shell
+环境变量
+输入/输出重定向
+
+执行时重定向
+
+输入重定向
+输出重定向
+错误重定向
+
+
+脚本中重定向
+
+输入/输出
+自定义文件描述符
+重定向到已有文件描述符
+
+
+
+
+管道
+
+
+变量
+
+字符串
+变量参数
+数组参数
+
+
+参数传递
+
+位置参数
+命名参数
+
+
+用户输入
+
+基本输入: read
+文件输入: cat | read
+
+
+脚本退出: exit
+命令替换: ( command )
+运算和测试
+
+数学运算
+
+$( expr expression )
+$[ expression ]
+let expression, $(( expression ))
+内建计算器bc
+
+
+测试命令: test expression, [ expression ]
+
+数值测试: -eq, -ne, -gt, -ge, -lt, -le
+字符测试: =, !=, &lt;, &gt;, -n  -z
+文件测试: -e, -d, -f, …
+复合条件测试: !, -o / ||, -a / &amp;&amp;
+
+
+
+
+结构化命令
+
+分支
+
+if-then-el ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2020/02/10/%E7%BB%8F%E5%85%B8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95%E6%8E%A8%E5%AF%BC%E6%B1%87%E6%80%BB.html" title="经典机器学习算法推导汇总">     <img class="post_bg" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="经典机器学习算法推导汇总"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/02/10/%E7%BB%8F%E5%85%B8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95%E6%8E%A8%E5%AF%BC%E6%B1%87%E6%80%BB.html" title="经典机器学习算法推导汇总">经典机器学习算法推导汇总</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2020-02-10T13:45:45.000Z" title="发表于 2020-02-10 21:45:45">2020-02-10</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a></span></div><div class="content">目录
+
+目录
+前言
+MLE/MAP
+
+最大似然估计(MLE)
+最大后验概率估计(MAP)
+
+
+线性回归/逻辑斯蒂回归
+
+线性回归
+逻辑斯蒂回归(LR)
+
+
+朴素贝叶斯
+PCA/LDA
+
+PCA
+
+计算步骤
+证明
+
+
+LDA
+
+计算步骤
+证明
+
+
+
+
+EM/GMM
+
+EM算法
+GMM模型
+
+
+SVM
+
+KKT条件
+核技巧
+分类问题
+
+线性可分
+线性不可分
+
+
+回归问题
+求解优化问题
+
+
+聚类
+
+距离度量
+KMeans
+Spectral
+
+
+决策树
+
+ID3
+C4.5
+CART
+RF
+
+
+
+
+前言
+本文只做复习使用，只给出关键算法描述和证明。
+MLE/MAP
+给定NNN个样本对{(X(i),y(i)),i=1,⋯ ,N}\{(X^{(i)}, y^{(i)}), i = 1, \cdots, N\}{(X(i),y(i)),i=1,⋯,N}，其中y∈{Ck,k=1,⋯ ,K}y \in \{C_k, k = 1, \cdots, K\}y∈{Ck​,k=1,⋯,K}，要求估计参数模型P(X∣θ)P(X | \theta)P(X∣θ)的参数θ\thetaθ，使之最能描述给定数据分布。
+最大似 ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2019/05/28/Useful-Terminal-Control-Sequences.html" title="Useful Terminal Control Sequences">     <img class="post_bg" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Useful Terminal Control Sequences"></a></div><div class="recent-post-info"><a class="article-title" href="/2019/05/28/Useful-Terminal-Control-Sequences.html" title="Useful Terminal Control Sequences">Useful Terminal Control Sequences</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-05-28T06:28:21.000Z" title="发表于 2019-05-28 14:28:21">2019-05-28</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">前言
+ANSI定义了用于屏幕显示的Escape屏幕控制码，打印输出到终端时，可指定输出颜色、格式等。
+基本格式
+1\033[&lt;background color&gt;;&lt;front color&gt;m string to print \033[0m
+
+\033[ xxxx m为一个句段；
+\033[0m关闭所有属性；
+
+光标控制
+
+
+
+ANSI控制码
+含义
+
+
+
+
+\033[nA
+光标上移n行
+
+
+\033[nB
+光标下移n行
+
+
+\033[nC
+光标右移n行
+
+
+\033[nD
+光标左移n行
+
+
+\033[y;xH
+设置光标位置
+
+
+\033[2J
+清屏
+
+
+\033[K
+清除从光标到行尾的内容
+
+
+\033[s
+保存光标位置
+
+
+\033[u
+恢复光标位置
+
+
+\033[?25l
+隐藏光标
+
+
+\033[?25h
+显示光标
+
+
+
+颜色控制
+
+
+
+ANSI控制码
+含义
+
+
+
+
+\033[m
+NONE
+
+
+\033[0;32;31m
+RED
+
+
+\033[1;31m
+LIGHT RED
+
+
+\033[0;32;32m
+GREEN
+
+
+\033[1;32m
+LIGHT GR ...</div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/touxiang.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">徐耀彬</div><div class="author-info__description">💭这个人很懒，什么都没有留下</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">23</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/isLouisHsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/isLouisHsu" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:is.louishsu@foxmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">记录和分享一些学习和开源内容，若有问题可通过邮箱is.louishsu@foxmail.com联系，欢迎交流！！</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/04/11/Arxiv%E6%AF%8F%E6%97%A5%E9%80%9F%E9%80%92.html" title="Arxiv每日速递(2024-04-11)"><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/Arxiv%E6%AF%8F%E6%97%A5%E9%80%9F%E9%80%92/wc.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv每日速递(2024-04-11)"/></a><div class="content"><a class="title" href="/2024/04/11/Arxiv%E6%AF%8F%E6%97%A5%E9%80%9F%E9%80%92.html" title="Arxiv每日速递(2024-04-11)">Arxiv每日速递(2024-04-11)</a><time datetime="2024-04-11T00:36:50.526Z" title="发表于 2024-04-11 08:36:50">2024-04-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/02/03/Stable%20Diffusion%20%E6%8F%90%E7%A4%BA%E8%AF%8D%E6%8C%87%E5%8D%97%E4%B9%A6.html" title="🎨 Stable Diffusion 提示词指南书"><img src="https://huggingface.co/blog/assets/98_stable_diffusion/stable_diffusion_12_1.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="🎨 Stable Diffusion 提示词指南书"/></a><div class="content"><a class="title" href="/2024/02/03/Stable%20Diffusion%20%E6%8F%90%E7%A4%BA%E8%AF%8D%E6%8C%87%E5%8D%97%E4%B9%A6.html" title="🎨 Stable Diffusion 提示词指南书">🎨 Stable Diffusion 提示词指南书</a><time datetime="2024-02-03T06:57:45.000Z" title="发表于 2024-02-03 14:57:45">2024-02-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/10/22/Transformer%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81%E4%B8%8E%E9%95%BF%E5%BA%A6%E5%A4%96%E6%8E%A8.html" title="Transformer语言模型的位置编码与长度外推"><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/city.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Transformer语言模型的位置编码与长度外推"/></a><div class="content"><a class="title" href="/2023/10/22/Transformer%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81%E4%B8%8E%E9%95%BF%E5%BA%A6%E5%A4%96%E6%8E%A8.html" title="Transformer语言模型的位置编码与长度外推">Transformer语言模型的位置编码与长度外推</a><time datetime="2023-10-22T14:55:45.000Z" title="发表于 2023-10-22 22:55:45">2023-10-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/22/vLLM%EF%BC%9A%E5%88%A9%E7%94%A8%E5%88%86%E9%A1%B5%E7%BC%93%E5%AD%98%E5%92%8C%E5%BC%A0%E9%87%8F%E5%B9%B6%E8%A1%8C%E6%8F%90%E9%AB%98%E5%A4%A7%E6%A8%A1%E5%9E%8B2~4x%E6%8E%A8%E7%90%86%E9%80%9F%E5%BA%A6.html" title="vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度"><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/ww5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度"/></a><div class="content"><a class="title" href="/2023/09/22/vLLM%EF%BC%9A%E5%88%A9%E7%94%A8%E5%88%86%E9%A1%B5%E7%BC%93%E5%AD%98%E5%92%8C%E5%BC%A0%E9%87%8F%E5%B9%B6%E8%A1%8C%E6%8F%90%E9%AB%98%E5%A4%A7%E6%A8%A1%E5%9E%8B2~4x%E6%8E%A8%E7%90%86%E9%80%9F%E5%BA%A6.html" title="vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度">vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度</a><time datetime="2023-09-22T14:55:45.000Z" title="发表于 2023-09-22 22:55:45">2023-09-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/06/Prompt%EF%BC%9A%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%89%A7%E8%A1%8C%E6%8C%87%E5%8D%97.html" title="Prompt：大语言模型的执行指南"><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/ww6.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Prompt：大语言模型的执行指南"/></a><div class="content"><a class="title" href="/2023/09/06/Prompt%EF%BC%9A%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%89%A7%E8%A1%8C%E6%8C%87%E5%8D%97.html" title="Prompt：大语言模型的执行指南">Prompt：大语言模型的执行指南</a><time datetime="2023-09-06T14:45:45.000Z" title="发表于 2023-09-06 22:45:45">2023-09-06</time></div></div></div></div><div class="card-widget" id="card-newest-comments"><div class="item-headline"><i class="fas fa-bolt"></i><span>最新评论</span></div><div class="aside-list"><span>正在加载中...</span></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            <a class="card-more-btn" href="/categories/" title="查看更多">
+    <i class="fas fa-angle-right"></i></a>
+            </div>
+            <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/AIGC/"><span class="card-category-list-name">AIGC</span><span class="card-category-list-count">1</span></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/AIGC/%E5%A4%9A%E6%A8%A1%E6%80%81/"><span class="card-category-list-name">多模态</span><span class="card-category-list-count">1</span></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/AIGC/%E5%A4%9A%E6%A8%A1%E6%80%81/%E6%96%87%E7%94%9F%E5%9B%BE/"><span class="card-category-list-name">文生图</span><span class="card-category-list-count">1</span></a></li></ul></li></ul></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Linux/"><span class="card-category-list-name">Linux</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Practice/"><span class="card-category-list-name">Practice</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%85%B6%E4%BB%96/"><span class="card-category-list-name">其他</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"><span class="card-category-list-name">机器学习</span><span class="card-category-list-count">3</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E7%AB%9E%E8%B5%9B%E7%9B%B8%E5%85%B3/"><span class="card-category-list-name">竞赛相关</span><span class="card-category-list-count">3</span></a></li>
+            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/Linux/" style="font-size: 1.1em; color: rgb(13, 111, 61)">Linux</a><a href="/tags/%E7%AB%9E%E8%B5%9B%E7%9B%B8%E5%85%B3/" style="font-size: 1.5em; color: rgb(18, 180, 152)">竞赛相关</a><a href="/tags/shell/" style="font-size: 1.1em; color: rgb(97, 113, 46)">shell</a><a href="/tags/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" style="font-size: 1.1em; color: rgb(11, 69, 21)">开发环境</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span><a class="card-more-btn" href="/archives/" title="查看更多">
+    <i class="fas fa-angle-right"></i></a></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/04/"><span class="card-archive-list-date">四月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/02/"><span class="card-archive-list-date">二月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/10/"><span class="card-archive-list-date">十月 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/09/"><span class="card-archive-list-date">九月 2023</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/05/"><span class="card-archive-list-date">五月 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/03/"><span class="card-archive-list-date">三月 2023</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/01/"><span class="card-archive-list-date">一月 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/12/"><span class="card-archive-list-date">十二月 2022</span><span class="card-archive-list-count">1</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">23</div></div><div class="webinfo-item"><div class="item-name">已运行时间 :</div><div class="item-count" id="runtimeshow" data-publishDate="2019-06-07T00:00:00.000Z"></div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">146.7k</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2024-04-11T00:40:01.292Z"></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By 徐耀彬</div><div class="footer_custom_text"><p><a style="margin-inline:5px"target="_blank"href="https://hexo.io/"><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&logo=hexo"title="博客框架为Hexo"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://butterfly.js.org/"><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&logo=bitdefender"title="主题采用butterfly"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://www.jsdelivr.com/"><img src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&logo=jsDelivr"title="本站使用JsDelivr为静态资源提供CDN加速"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://github.com/"><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&logo=GitHub"title="本站项目由Gtihub托管"alt="img"></a><a style="margin-inline:5px"target="_blank"href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&logo=Claris"alt="img"title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"></a></br></p></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>if (document.getElementsByClassName('mermaid').length) {
+  if (window.mermaidJsLoad) mermaid.init()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(() => {
+      window.mermaidJsLoad = true
+      mermaid.initialize({
+        theme: 'default',
+      })
+      false && mermaid.init()
+    })
+  }
+}</script></div><script>window.addEventListener('load', () => {
+  const changeContent = (content) => {
+    if (content === '') return content
+
+    content = content.replace(/<img.*?src="(.*?)"?[^\>]+>/ig, '[图片]') // replace image link
+    content = content.replace(/<a[^>]+?href=["']?([^"']+)["']?[^>]*>([^<]+)<\/a>/gi, '[链接]') // replace url
+    content = content.replace(/<pre><code>.*?<\/pre>/gi, '[代码]') // replace code
+    content = content.replace(/<[^>]+>/g,"") // remove html tag
+
+    if (content.length > 150) {
+      content = content.substring(0,150) + '...'
+    }
+    return content
+  }
+
+  const getComment = () => {
+    const runTwikoo = () => {
+      twikoo.getRecentComments({
+        envId: 'blog-',
+        region: '',
+        pageSize: 6,
+        includeReply: true
+      }).then(function (res) {
+        const twikooArray = res.map(e => {
+          return {
+            'content': changeContent(e.comment),
+            'avatar': e.avatar,
+            'nick': e.nick,
+            'url': e.url + '#' + e.id,
+            'date': new Date(e.created).toISOString()
+          }
+        })
+
+        saveToLocal.set('twikoo-newest-comments', JSON.stringify(twikooArray), 10/(60*24))
+        generateHtml(twikooArray)
+      }).catch(function (err) {
+        const $dom = document.querySelector('#card-newest-comments .aside-list')
+        $dom.innerHTML= "无法获取评论，请确认相关配置是否正确"
+      })
+    }
+
+    if (typeof twikoo === 'object') {
+      runTwikoo()
+    } else {
+      getScript('https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(runTwikoo)
+    }
+  }
+
+  const generateHtml = array => {
+    let result = ''
+
+    if (array.length) {
+      for (let i = 0; i < array.length; i++) {
+        result += '<div class=\'aside-list-item\'>'
+
+        if (true) {
+          const name = 'src'
+          result += `<a href='${array[i].url}' class='thumbnail'><img ${name}='${array[i].avatar}' alt='${array[i].nick}'></a>`
+        }
+        
+        result += `<div class='content'>
+        <a class='comment' href='${array[i].url}'>${array[i].content}</a>
+        <div class='name'><span>${array[i].nick} / </span><time datetime="${array[i].date}">${btf.diffDate(array[i].date, true)}</time></div>
+        </div></div>`
+      }
+    } else {
+      result += '没有评论'
+    }
+
+    let $dom = document.querySelector('#card-newest-comments .aside-list')
+    $dom.innerHTML= result
+    window.lazyLoadInstance && window.lazyLoadInstance.update()
+    window.pjax && window.pjax.refresh($dom)
+  }
+
+  const newestCommentInit = () => {
+    if (document.querySelector('#card-newest-comments .aside-list')) {
+      const data = saveToLocal.get('twikoo-newest-comments')
+      if (data) {
+        generateHtml(JSON.parse(data))
+      } else {
+        getComment()
+      }
+    }
+  }
+
+  newestCommentInit()
+  document.addEventListener('pjax:complete', newestCommentInit)
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --> <script data-pjax>if(document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    var parent = document.getElementById('recent-posts');
+    var child = '<div class="recent-post-item" style="width:100%;height: auto"><div id="catalog_magnet"><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/机器学习/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🐱 机器学习 (3)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (8)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/竞赛相关/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 竞赛相关 (3)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/阅读笔记/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 阅读笔记 (1)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><a class="magnet_link_more"  href="http://louishsu.xyz/categories" style="flex:1;text-align: center;margin-bottom: 10px;">查看更多...</a></div></div>';
+    console.log('已挂载magnet')
+    parent.insertAdjacentHTML("afterbegin",child)}
+     </script><style>#catalog_magnet{flex-wrap: wrap;display: flex;width:100%;justify-content:space-between;padding: 10px 10px 0 10px;align-content: flex-start;}.magnet_item{flex-basis: calc(50% - 5px);background: #f2f2f2;margin-bottom: 10px;border-radius: 8px;transition: all 0.2s ease-in-out;}.magnet_item:hover{background: #b30070}.magnet_link_more{color:#555}.magnet_link{color:black}.magnet_link:hover{color:white}@media screen and (max-width: 600px) {.magnet_item {flex-basis: 100%;}}.magnet_link_context{display:flex;padding: 10px;font-size:16px;transition: all 0.2s ease-in-out;}.magnet_link_context:hover{padding: 10px 20px;}</style>
+    <style></style><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2021/05/19/全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖).html" alt=""><img width="48" height="48" src="https://tianchi-public.oss-cn-hangzhou.aliyuncs.com/public/files/forum/161037709574435991610377095138.jpeg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-05-19</span><a class="blog-slider__title" href="2021/05/19/全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖).html" alt="">全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖)</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2021/05/19/全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖).html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2021/10/22/中国法律智能技术评测(CAIL2021)：信息抽取(Rank2).html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/cail2021.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-10-22</span><a class="blog-slider__title" href="2021/10/22/中国法律智能技术评测(CAIL2021)：信息抽取(Rank2).html" alt="">中国法律智能技术评测(CAIL2021)：信息抽取(Rank2)</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2021/10/22/中国法律智能技术评测(CAIL2021)：信息抽取(Rank2).html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/11/17/2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖).html" alt=""><img width="48" height="48" src="https://cdn.kesci.com/upload/image/r7j60un866.png?imageView2/2/w/2500/h/2500" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-11-17</span><a class="blog-slider__title" href="2022/11/17/2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖).html" alt="">2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖)</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2022/11/17/2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖).html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/09/22/vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度.html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/ww5.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-09-22</span><a class="blog-slider__title" href="2023/09/22/vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度.html" alt="">vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/09/22/vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/10/22/Transformer语言模型的位置编码与长度外推.html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/city.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-10-22</span><a class="blog-slider__title" href="2023/10/22/Transformer语言模型的位置编码与长度外推.html" alt="">Transformer语言模型的位置编码与长度外推</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/10/22/Transformer语言模型的位置编码与长度外推.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2024/02/03/Stable Diffusion 提示词指南书.html" alt=""><img width="48" height="48" src="https://huggingface.co/blog/assets/98_stable_diffusion/stable_diffusion_12_1.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2024-02-03</span><a class="blog-slider__title" href="2024/02/03/Stable Diffusion 提示词指南书.html" alt="">🎨 Stable Diffusion 提示词指南书</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2024/02/03/Stable Diffusion 提示词指南书.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/09/06/Prompt：大语言模型的执行指南.html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/ww6.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-09-06</span><a class="blog-slider__title" href="2023/09/06/Prompt：大语言模型的执行指南.html" alt="">Prompt：大语言模型的执行指南</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/09/06/Prompt：大语言模型的执行指南.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/11/26/升级深度学习开发环境全攻略.html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-11-26</span><a class="blog-slider__title" href="2022/11/26/升级深度学习开发环境全攻略.html" alt="">升级深度学习开发环境全攻略</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2022/11/26/升级深度学习开发环境全攻略.html" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>
