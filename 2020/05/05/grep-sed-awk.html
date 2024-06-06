@@ -1,0 +1,490 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>grep, sed, awk三剑客 | LOUIS' BLOG</title><meta name="author" content="徐耀彬"><meta name="copyright" content="徐耀彬"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="grep: Globally search a Regular Expression and Print  基本用法 参数说明   sed: Stream Editor  基本用法 参数说明 编辑命令 实例   awk:  Alfred Aho, Peter Weinberger, Brian Kernighan  基本用法 参数说明 常用内置变量 语法  运算符 BEGIN&#x2F;END 分支、循环">
+<meta property="og:type" content="article">
+<meta property="og:title" content="grep, sed, awk三剑客">
+<meta property="og:url" content="http://louishsu.xyz/2020/05/05/grep-sed-awk.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="grep: Globally search a Regular Expression and Print  基本用法 参数说明   sed: Stream Editor  基本用法 参数说明 编辑命令 实例   awk:  Alfred Aho, Peter Weinberger, Brian Kernighan  基本用法 参数说明 常用内置变量 语法  运算符 BEGIN&#x2F;END 分支、循环">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/grep-sed-awk.jpeg">
+<meta property="article:published_time" content="2020-05-05T10:47:36.000Z">
+<meta property="article:modified_time" content="2024-06-06T00:57:01.018Z">
+<meta property="article:author" content="徐耀彬">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/grep-sed-awk.jpeg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://louishsu.xyz/2020/05/05/grep-sed-awk"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: true,
+  isToc: true,
+  postUpdate: '2024-06-06 08:57:01'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><link rel="stylesheet" href="/css/background.css"><script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/touxiang.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">23</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 工具</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fas fa-pen"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/isLouisHsu/blog/tree/master/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-brands fa-app-store"></i><span> 利器</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://code.visualstudio.com/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> VSCode：微软旗下的跨平台代码编辑软件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mobaxterm.mobatek.net/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> MobaXterm：超好用的全能远程终端</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/CopyTranslator/CopyTranslator"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> CopyTranslator：“复制即翻译”的外文辅助阅读翻译解决方案</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.zotero.org/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Zotero：便于收集、组织、引用、共享的文献管理工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://zealdocs.org/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Zeal：离线文档浏览器，其灵感来自 OS X平台上的 Dash，目前支持 Window 和 Liunx，基于 QT5</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ditto-cp.sourceforge.io/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Ditto：强大的Windows剪贴板增强工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://wise-system-monitor.en.softonic.com/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Wise System Monitor：监控从系统到本地网络的所有运行情况</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/indiff/qttabbar"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> QtTabBar：在Windows资源管理器中使用多标签功能扩展工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/sentialx/multrin"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Multrin：“窗口合并”辅助小工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/Wox-launcher/Wox"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Wox &amp; Everything：基于名称快速定位文件和文件夹的搜索工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/NickeManarin/ScreenToGif"><i class="fa-fw fa-regular fa-star"></i><span> ScreenToGif：快速录制屏幕指定区域并保存为动图文件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mathpix.com/"><i class="fa-fw fa-regular fa-star"></i><span> Mathpix Snipping：识别数学公式并转换成LaTeX</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="http://www.uderzo.it/main_products/space_sniffer/index.html"><i class="fa-fw fa-regular fa-star"></i><span> Space Sniffer：磁盘空间分析工具</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/grep-sed-awk.jpeg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">LOUIS' BLOG</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 工具</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fas fa-pen"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/isLouisHsu/blog/tree/master/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-brands fa-app-store"></i><span> 利器</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://code.visualstudio.com/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> VSCode：微软旗下的跨平台代码编辑软件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mobaxterm.mobatek.net/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> MobaXterm：超好用的全能远程终端</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/CopyTranslator/CopyTranslator"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> CopyTranslator：“复制即翻译”的外文辅助阅读翻译解决方案</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.zotero.org/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Zotero：便于收集、组织、引用、共享的文献管理工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://zealdocs.org/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Zeal：离线文档浏览器，其灵感来自 OS X平台上的 Dash，目前支持 Window 和 Liunx，基于 QT5</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ditto-cp.sourceforge.io/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Ditto：强大的Windows剪贴板增强工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://wise-system-monitor.en.softonic.com/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Wise System Monitor：监控从系统到本地网络的所有运行情况</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/indiff/qttabbar"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> QtTabBar：在Windows资源管理器中使用多标签功能扩展工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/sentialx/multrin"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Multrin：“窗口合并”辅助小工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/Wox-launcher/Wox"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Wox &amp; Everything：基于名称快速定位文件和文件夹的搜索工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/NickeManarin/ScreenToGif"><i class="fa-fw fa-regular fa-star"></i><span> ScreenToGif：快速录制屏幕指定区域并保存为动图文件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mathpix.com/"><i class="fa-fw fa-regular fa-star"></i><span> Mathpix Snipping：识别数学公式并转换成LaTeX</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="http://www.uderzo.it/main_products/space_sniffer/index.html"><i class="fa-fw fa-regular fa-star"></i><span> Space Sniffer：磁盘空间分析工具</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">grep, sed, awk三剑客<a class="post-edit-link" href="https://github.com/isLouisHsu/blog/tree/master/source_posts/grep-sed-awk.md" title="编辑" target="_blank"><i class="fas fa-pencil-square"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-05-05T10:47:36.000Z" title="发表于 2020-05-05 18:47:36">2020-05-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-06-06T00:57:01.018Z" title="更新于 2024-06-06 08:57:01">2024-06-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Linux/">Linux</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>15分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2020/05/05/grep-sed-awk.html#post-comment"><span id="twikoo-count"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><ul>
+<li><a href="#grep-globally-search-a-regular-expression-and-print">grep: Globally search a Regular Expression and Print</a>
+<ul>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95">基本用法</a></li>
+<li><a href="#%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E">参数说明</a></li>
+</ul>
+</li>
+<li><a href="#sed-stream-editor">sed: Stream Editor</a>
+<ul>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95-1">基本用法</a></li>
+<li><a href="#%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E-1">参数说明</a></li>
+<li><a href="#%E7%BC%96%E8%BE%91%E5%91%BD%E4%BB%A4">编辑命令</a></li>
+<li><a href="#%E5%AE%9E%E4%BE%8B">实例</a></li>
+</ul>
+</li>
+<li><a href="#awk--alfred-aho-peter-weinberger-brian-kernighan">awk:  Alfred Aho, Peter Weinberger, Brian Kernighan</a>
+<ul>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95-2">基本用法</a></li>
+<li><a href="#%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E-2">参数说明</a></li>
+<li><a href="#%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%8F%98%E9%87%8F">常用内置变量</a></li>
+<li><a href="#%E8%AF%AD%E6%B3%95">语法</a>
+<ul>
+<li><a href="#%E8%BF%90%E7%AE%97%E7%AC%A6">运算符</a></li>
+<li><a href="#beginend">BEGIN/END</a></li>
+<li><a href="#%E5%88%86%E6%94%AF%E5%BE%AA%E7%8E%AF%E6%95%B0%E7%BB%84">分支、循环、数组</a>
+<ul>
+<li><a href="#%E5%88%86%E6%94%AF-if">分支: if</a></li>
+<li><a href="#%E5%BE%AA%E7%8E%AF-do-while-for">循环: do while, for</a></li>
+<li><a href="#%E6%95%B0%E7%BB%84">数组</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E5%B8%B8%E7%94%A8%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%87%BD%E6%95%B0">常用字符串函数</a></li>
+</ul>
+</li>
+</ul>
+<h1><a target="_blank" rel="noopener" href="https://www.gnu.org/software/grep/">grep: Globally search a Regular Expression and Print</a></h1>
+<p>强大的文本搜索工具，它能使用特定模式<strong>匹配（包括正则表达式）查找文本</strong>，并默认输出匹配行到STDOUT。</p>
+<h2 id="基本用法">基本用法</h2>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ grep [-abcEFGhHilLnqrsvVwxy][-A&lt;显示列数&gt;][-B&lt;显示列数&gt;][-C&lt;显示列数&gt;][-d&lt;进行动作&gt;][-e&lt;范本样式&gt;][-f&lt;范本文件&gt;][--<span class="built_in">help</span>][范本样式][文件或目录...]</span><br></pre></td></tr></table></figure>
+<h2 id="参数说明">参数说明</h2>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line">$ grep --<span class="built_in">help</span></span><br><span class="line">Usage: grep [OPTION]... PATTERN [FILE]...</span><br><span class="line">Search <span class="keyword">for</span> PATTERN <span class="keyword">in</span> each FILE.</span><br><span class="line">Example: grep -i <span class="string">&#x27;hello world&#x27;</span> menu.h main.c</span><br><span class="line"></span><br><span class="line">Pattern selection and interpretation:</span><br><span class="line">  -E, --extended-regexp     PATTERN is an extended regular expression</span><br><span class="line">  -F, --fixed-strings       PATTERN is a <span class="built_in">set</span> of newline-separated strings</span><br><span class="line">  -G, --basic-regexp        PATTERN is a basic regular expression (default)</span><br><span class="line">  -P, --perl-regexp         PATTERN is a Perl regular expression</span><br><span class="line">  -e, --regexp=PATTERN      use PATTERN <span class="keyword">for</span> matching                            <span class="comment"># -e 将PATTERN作为正则表达式</span></span><br><span class="line">  -f, --file=FILE           obtain PATTERN from FILE</span><br><span class="line">  -i, --ignore-case         ignore <span class="keyword">case</span> distinctions                            <span class="comment"># -i 忽略大小写</span></span><br><span class="line">  -w, --word-regexp         force PATTERN to match only whole words</span><br><span class="line">  -x, --line-regexp         force PATTERN to match only whole lines</span><br><span class="line">  -z, --null-data           a data line ends <span class="keyword">in</span> 0 byte, not newline</span><br><span class="line"></span><br><span class="line">Miscellaneous:</span><br><span class="line">  -s, --no-messages         suppress error messages</span><br><span class="line">  -v, --invert-match        <span class="keyword">select</span> non-matching lines                           <span class="comment"># -v 反向匹配，输出不包含PATTERN的文本行</span></span><br><span class="line">  -V, --version             display version information and <span class="built_in">exit</span></span><br><span class="line">      --<span class="built_in">help</span>                display this <span class="built_in">help</span> text and <span class="built_in">exit</span></span><br><span class="line"></span><br><span class="line">Output control:</span><br><span class="line">  -m, --max-count=NUM       stop after NUM selected lines</span><br><span class="line">  -b, --byte-offset         <span class="built_in">print</span> the byte offset with output lines</span><br><span class="line">  -n, --line-number         <span class="built_in">print</span> line number with output lines                 <span class="comment"># -n 输出匹配的文本行的行标</span></span><br><span class="line">      --line-buffered       flush output on every line</span><br><span class="line">  -H, --with-filename       <span class="built_in">print</span> file name with output lines</span><br><span class="line">  -h, --no-filename         suppress the file name prefix on output</span><br><span class="line">      --label=LABEL         use LABEL as the standard input file name prefix</span><br><span class="line">  -o, --only-matching       show only the part of a line matching PATTERN</span><br><span class="line">  -q, --quiet, --silent     suppress all normal output</span><br><span class="line">      --binary-files=TYPE   assume that binary files are TYPE;</span><br><span class="line">                            TYPE is <span class="string">&#x27;binary&#x27;</span>, <span class="string">&#x27;text&#x27;</span>, or <span class="string">&#x27;without-match&#x27;</span></span><br><span class="line">  -a, --text                equivalent to --binary-files=text                   <span class="comment"># -a 将二进制文件内容作为text进行搜索</span></span><br><span class="line">  -I                        equivalent to --binary-files=without-match</span><br><span class="line">  -d, --directories=ACTION  how to handle directories;</span><br><span class="line">                            ACTION is <span class="string">&#x27;read&#x27;</span>, <span class="string">&#x27;recurse&#x27;</span>, or <span class="string">&#x27;skip&#x27;</span></span><br><span class="line">  -D, --devices=ACTION      how to handle devices, FIFOs and sockets;</span><br><span class="line">                            ACTION is <span class="string">&#x27;read&#x27;</span> or <span class="string">&#x27;skip&#x27;</span></span><br><span class="line">  -r, --recursive           like --directories=recurse                          <span class="comment"># -r 在目录下递归搜索</span></span><br><span class="line">  -R, --dereference-recursive  likewise, but follow all symlinks</span><br><span class="line">      --include=FILE_PATTERN  search only files that match FILE_PATTERN</span><br><span class="line">      --exclude=FILE_PATTERN  skip files and directories matching FILE_PATTERN</span><br><span class="line">      --exclude-from=FILE   skip files matching any file pattern from FILE</span><br><span class="line">      --exclude-dir=PATTERN  directories that match PATTERN will be skipped.</span><br><span class="line">  -L, --files-without-match  <span class="built_in">print</span> only names of FILEs with no selected lines   <span class="comment"># -L 输出不包含能匹配PATTERN内容的文件名</span></span><br><span class="line">  -l, --files-with-matches  <span class="built_in">print</span> only names of FILEs with selected lines       <span class="comment"># -l 输出包含能匹配PATTERN内容的文件名</span></span><br><span class="line">  -c, --count               <span class="built_in">print</span> only a count of selected lines per FILE       <span class="comment"># -c 输出匹配到的文本行的数目</span></span><br><span class="line">  -T, --initial-tab         make tabs line up (<span class="keyword">if</span> needed)</span><br><span class="line">  -Z, --null                <span class="built_in">print</span> 0 byte after FILE name</span><br><span class="line"></span><br><span class="line">Context control:</span><br><span class="line">  -B, --before-context=NUM  <span class="built_in">print</span> NUM lines of leading context                  <span class="comment"># -B 显示查找到的某行字符串外，还显示之前&lt;NUM&gt;行</span></span><br><span class="line">  -A, --after-context=NUM   <span class="built_in">print</span> NUM lines of trailing context                 <span class="comment"># -A 显示查找到的某行字符串外，还显示随后&lt;NUM&gt;行</span></span><br><span class="line">  -C, --context=NUM         <span class="built_in">print</span> NUM lines of output context                   <span class="comment"># -C 显示查找到的某行字符串外，还显示之前和随后&lt;NUM&gt;行</span></span><br><span class="line">  -NUM                      same as --context=NUM</span><br><span class="line">      --color[=WHEN],</span><br><span class="line">      --colour[=WHEN]       use markers to highlight the matching strings;</span><br><span class="line">                            WHEN is <span class="string">&#x27;always&#x27;</span>, <span class="string">&#x27;never&#x27;</span>, or <span class="string">&#x27;auto&#x27;</span></span><br><span class="line">  -U, --binary              <span class="keyword">do</span> not strip CR characters at EOL (MSDOS/Windows)</span><br><span class="line"></span><br><span class="line">When FILE is <span class="string">&#x27;-&#x27;</span>, <span class="built_in">read</span> standard input.  With no FILE, <span class="built_in">read</span> <span class="string">&#x27;.&#x27;</span> <span class="keyword">if</span></span><br><span class="line">recursive, <span class="string">&#x27;-&#x27;</span> otherwise.  With fewer than two FILEs, assume -h.</span><br><span class="line">Exit status is 0 <span class="keyword">if</span> any line is selected, 1 otherwise;</span><br><span class="line"><span class="keyword">if</span> any error occurs and -q is not given, the <span class="built_in">exit</span> status is 2.</span><br><span class="line"></span><br><span class="line">Report bugs to: bug-grep@gnu.org</span><br><span class="line">GNU grep home page: &lt;http://www.gnu.org/software/grep/&gt;</span><br><span class="line">General <span class="built_in">help</span> using GNU software: &lt;http://www.gnu.org/gethelp/&gt;</span><br></pre></td></tr></table></figure>
+<h1>sed: Stream Editor</h1>
+<p>利用脚本来<strong>编辑文本文件</strong>，主要用来自动编辑一个或多个文件，简化对文件的反复操作、编写转换程序等。它执行的操作为</p>
+<ol>
+<li>一次从输入中读取一行数据；</li>
+<li>根据提供的编辑器命令匹配数据；</li>
+<li>按照命令修改流中的数据；</li>
+<li>将新的数据输出到STDOUT，不改变原来的文本文件。</li>
+</ol>
+<h2 id="基本用法-2">基本用法</h2>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sed [-e &lt;script&gt;][-f &lt;script文件&gt;][文本文件]</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>&lt;script&gt;</code>为字符串格式的编辑命令，多条命令间以<code>;</code>分隔，或者用<code>bash</code>中的次提示符分隔命令；</li>
+<li><code>&lt;script文件&gt;</code>表示记录编辑命令的文件名，为与<code>shell</code>脚本区分，一般用<code>.sed</code>作为文件后缀名</li>
+</ul>
+<h2 id="参数说明-2">参数说明</h2>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sed --<span class="built_in">help</span></span></span><br><span class="line">Usage: sed [OPTION]... &#123;script-only-if-no-other-script&#125; [input-file]...</span><br><span class="line"></span><br><span class="line">  -n, --quiet, --silent</span><br><span class="line">                 suppress automatic printing of pattern space</span><br><span class="line">  -e script, --expression=script                                            # -e 从命令行读取执行命令，单条编辑命令时可省略</span><br><span class="line">                 add the script to the commands to be executed</span><br><span class="line">  -f script-file, --file=script-file                                        # -f 从文件中读取执行命令</span><br><span class="line">                 add the contents of script-file to the commands to be executed</span><br><span class="line">  --follow-symlinks</span><br><span class="line">                 follow symlinks when processing in place</span><br><span class="line">  -i[SUFFIX], --in-place[=SUFFIX]                                           # -i 直接修改文本内容</span><br><span class="line">                 edit files in place (makes backup if SUFFIX supplied)</span><br><span class="line">  -l N, --line-length=N</span><br><span class="line">                 specify the desired line-wrap length for the `l&#x27; command</span><br><span class="line">  --posix</span><br><span class="line">                 disable all GNU extensions.</span><br><span class="line">  -E, -r, --regexp-extended</span><br><span class="line">                 use extended regular expressions in the script</span><br><span class="line">                 (for portability use POSIX -E).</span><br><span class="line">  -s, --separate</span><br><span class="line">                 consider files as separate rather than as a single,</span><br><span class="line">                 continuous long stream.</span><br><span class="line">      --sandbox</span><br><span class="line">                 operate in sandbox mode.</span><br><span class="line">  -u, --unbuffered</span><br><span class="line">                 load minimal amounts of data from the input files and flush</span><br><span class="line">                 the output buffers more often</span><br><span class="line">  -z, --null-data</span><br><span class="line">                 separate lines by NUL characters</span><br><span class="line">      --help     display this help and exit</span><br><span class="line">      --version  output version information and exit</span><br><span class="line"></span><br><span class="line">If no -e, --expression, -f, or --file option is given, then the first</span><br><span class="line">non-option argument is taken as the sed script to interpret.  All</span><br><span class="line">remaining arguments are names of input files; if no input files are</span><br><span class="line">specified, then the standard input is read.</span><br><span class="line"></span><br><span class="line">GNU sed home page: &lt;http://www.gnu.org/software/sed/&gt;.</span><br><span class="line">General help using GNU software: &lt;http://www.gnu.org/gethelp/&gt;.</span><br><span class="line">E-mail bug reports to: &lt;bug-sed@gnu.org&gt;.</span><br></pre></td></tr></table></figure>
+<h2 id="编辑命令">编辑命令</h2>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># `a`: 在指定行后添加行，注意若希望添加多行，行间用`\n`进行分隔，而开头和结尾无需添加`\n`；</span></span><br><span class="line">$ sed -e <span class="string">&quot;FROM[,TO] a [CONTENT]&quot;</span> FILENAME</span><br><span class="line"></span><br><span class="line"><span class="comment"># `i`: 在指定行前添加行</span></span><br><span class="line">$ sed -e <span class="string">&quot;FROM[,TO] i [CONTENT]&quot;</span> FILENAME</span><br><span class="line"></span><br><span class="line"><span class="comment"># `d`: 将指定行删除</span></span><br><span class="line">$ sed -e <span class="string">&quot;FROM[,TO] d&quot;</span> FILENAME</span><br><span class="line"></span><br><span class="line"><span class="comment"># `c`: 取代指定行内容</span></span><br><span class="line">$ sed -e <span class="string">&quot;FROM[,TO] c [CONTENT]&quot;</span> FILENAME</span><br><span class="line"></span><br><span class="line"><span class="comment"># `s`: 部分数据的搜索和取代</span></span><br><span class="line">$ sed -e <span class="string">&quot;FROM[,TO] s/[PATTERN]/[CONTENT]/g&quot;</span> FILENAME</span><br><span class="line"></span><br><span class="line"><span class="comment"># `p`: 打印输出指定行</span></span><br><span class="line">$ sed -n -e <span class="string">&quot;FROM[,TO] p&quot;</span> FILENAME</span><br><span class="line"></span><br><span class="line"><span class="comment"># `q`: 退出，终止命令</span></span><br><span class="line">$ sed -e <span class="string">&quot;[COMMANDS;]q&quot;</span> FILENAME</span><br></pre></td></tr></table></figure>
+<h2 id="实例">实例</h2>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 新建文本`test_sed.txt`</span></span><br><span class="line">$ <span class="keyword">for</span> (( i=<span class="number">1</span>; i&lt;=<span class="number">5</span>; i++ )) &#123;</span><br><span class="line">&gt; <span class="built_in">echo</span> <span class="string">&quot;line <span class="variable">$i</span>&quot;</span> &gt;&gt; test_sed.txt</span><br><span class="line">&gt; &#125;</span><br><span class="line">$ <span class="built_in">cat</span> test_sed.txt</span><br><span class="line">line 1</span><br><span class="line">line 2</span><br><span class="line">line 3</span><br><span class="line">line 4</span><br><span class="line">line 5</span><br><span class="line"></span><br><span class="line"><span class="comment"># ================= 基本操作 ==================</span></span><br><span class="line"><span class="comment"># ------------------ 打印行 -------------------</span></span><br><span class="line"><span class="comment"># 输出第3~5行，若不添加`-n`会输出全部内容</span></span><br><span class="line">$ sed -n -e <span class="string">&quot;3,5 p&quot;</span> test_sed.txt</span><br><span class="line"><span class="comment"># ------------------ 添加行 -------------------</span></span><br><span class="line"><span class="comment"># 在第3行后添加一行</span></span><br><span class="line">$ sed -e <span class="string">&quot;3 a newline&quot;</span> test_sed.txt</span><br><span class="line"><span class="comment"># 在3~5每行后添加一行</span></span><br><span class="line">$ sed -e <span class="string">&quot;3,5 a newline&quot;</span> test_sed.txt</span><br><span class="line"><span class="comment"># ------------------ 插入行 -------------------</span></span><br><span class="line"><span class="comment"># 在第3行前添加一行</span></span><br><span class="line">$ sed -e <span class="string">&quot;3 i newline&quot;</span> test_sed.txt</span><br><span class="line"><span class="comment"># 在第3行后添加两行</span></span><br><span class="line">$ sed -e <span class="string">&quot;3 a newline1\nnewline2&quot;</span> test_sed.txt</span><br><span class="line"><span class="comment"># ------------------ 删除行 -------------------</span></span><br><span class="line"><span class="comment"># 删除第3行</span></span><br><span class="line">$ sed -e <span class="string">&quot;3 d&quot;</span> test_sed.txt</span><br><span class="line"><span class="comment"># 删除第3~5行</span></span><br><span class="line">$ sed -e <span class="string">&quot;3,5 d&quot;</span> test_sed.txt</span><br><span class="line"><span class="comment"># 删除第3行到最后行</span></span><br><span class="line">$ sed -e <span class="string">&quot;3,$ d&quot;</span> test_sed.txt</span><br><span class="line"><span class="comment"># ------------------ 替换行 -------------------</span></span><br><span class="line"><span class="comment"># 替换第3行</span></span><br><span class="line">$ sed -e <span class="string">&quot;3 c replace&quot;</span> test_sed.txt</span><br><span class="line"><span class="comment"># 替换第3~5行</span></span><br><span class="line">$ sed -e <span class="string">&quot;3,5 c replace&quot;</span> test_sed.txt</span><br><span class="line"><span class="comment"># ------------- 查找替换部分文本 ---------------</span></span><br><span class="line"><span class="comment"># 替换第3行中的`li`为`LI`</span></span><br><span class="line">$ sed -e <span class="string">&quot;3 s/li/LI/g&quot;</span> test_sed.txt</span><br><span class="line"><span class="comment"># ----------------- 多点编辑 ------------------</span></span><br><span class="line"><span class="comment"># 删除第3行到末尾行内容，并把`line`替换为`LINE`</span></span><br><span class="line">$ sed -e <span class="string">&quot;3,$ d; s/line/LINE/g&quot;</span> test_sed.txt</span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line">$ $ sed -e <span class="string">&quot;3,$ d&quot;</span> -e <span class="string">&quot;s/line/LINE/g&quot;</span> test_sed.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># ============== 搜索并执行命令 ===============</span></span><br><span class="line"><span class="comment"># ---------------- 打印匹配行 -----------------</span></span><br><span class="line"><span class="comment"># 输出包含`3`的关键行，若不添加`-n`同时会输出所有行</span></span><br><span class="line">$ sed -n -e <span class="string">&quot;/3/p&quot;</span> test_sed.txt</span><br><span class="line"><span class="comment"># ---------------- 删除匹配行 -----------------</span></span><br><span class="line"><span class="comment"># 删除包含`3`的关键行</span></span><br><span class="line">$ sed -e <span class="string">&quot;/3/d&quot;</span> test_sed</span><br><span class="line"><span class="comment"># ---------------- 替换匹配行 -----------------</span></span><br><span class="line"><span class="comment"># 将包含`3`的关键行中，`line`替换为`this line`</span></span><br><span class="line">$ sed -e <span class="string">&quot;/3/&#123;s/line/this line/&#125;&quot;</span> test_sed.txt</span><br><span class="line"><span class="comment"># 将包含`3`的关键行中，`line`替换为`this line`，并且只输出该行</span></span><br><span class="line">$ sed -n -e <span class="string">&quot;/3/&#123;s/line/this line/; p; &#125;&quot;</span> test_sed.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># =============== in-place操作 ===============</span></span><br><span class="line"><span class="comment"># 直接修改文本内容，`line`替换为`this line`</span></span><br><span class="line">$ sed -i -e <span class="string">&quot;s/line/LINE/g&quot;</span> test_sed.txt</span><br><span class="line"><span class="comment"># 注意重定向操作可能出现错误</span></span><br><span class="line">$ sed -e <span class="string">&quot;s/line/LINE/g&quot;</span> test_sed.txt &gt;  test_sed.txt   <span class="comment"># 导致文本为空</span></span><br><span class="line">$ sed -e <span class="string">&quot;s/line/LINE/g&quot;</span> test_sed.txt &gt;&gt; test_sed.txt   <span class="comment"># 正常追加</span></span><br></pre></td></tr></table></figure>
+<h1>awk:  Alfred Aho, Peter Weinberger, Brian Kernighan</h1>
+<p>逐行扫描指定文件，寻<strong>找匹配特定模式的行，并在这些行上进行想要的操作</strong>。若未指定匹配模式，将会对所有行进行操作(即默认全部行)；若未指定处理方法，将会被输出到STDOUT(即默认为<code>print</code>)。</p>
+<h2 id="基本用法-3">基本用法</h2>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">awk [选项参数] <span class="string">&#x27;script&#x27;</span> var=value file(s)</span><br><span class="line">或</span><br><span class="line">awk [选项参数] -f scriptfile var=value file(s)</span><br></pre></td></tr></table></figure>
+<h2 id="参数说明-3">参数说明</h2>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">$ awk --<span class="built_in">help</span></span><br><span class="line">Usage: awk [POSIX or GNU style options] -f progfile [--] file ...</span><br><span class="line">Usage: awk [POSIX or GNU style options] [--] <span class="string">&#x27;program&#x27;</span> file ...</span><br><span class="line">POSIX options:          GNU long options: (standard)</span><br><span class="line">        -f progfile             --file=progfile         <span class="comment"># 从文本读取awk命令</span></span><br><span class="line">        -F fs                   --field-separator=fs    <span class="comment"># 字符分隔符，即改行文本以该符号作为分隔，例如$PATH中的`:`</span></span><br><span class="line">        -v var=val              --assign=var=val</span><br><span class="line">Short options:          GNU long options: (extensions)</span><br><span class="line">        -b                      --characters-as-bytes</span><br><span class="line">        -c                      --traditional</span><br><span class="line">        -C                      --copyright</span><br><span class="line">        -d[file]                --dump-variables[=file]</span><br><span class="line">        -D[file]                --debug[=file]</span><br><span class="line">        -e <span class="string">&#x27;program-text&#x27;</span>       --<span class="built_in">source</span>=<span class="string">&#x27;program-text&#x27;</span></span><br><span class="line">        -E file                 --<span class="built_in">exec</span>=file</span><br><span class="line">        -g                      --gen-pot</span><br><span class="line">        -h                      --<span class="built_in">help</span></span><br><span class="line">        -i includefile          --include=includefile</span><br><span class="line">        -l library              --load=library</span><br><span class="line">        -L[fatal|invalid]       --lint[=fatal|invalid]</span><br><span class="line">        -M                      --bignum</span><br><span class="line">        -N                      --use-lc-numeric</span><br><span class="line">        -n                      --non-decimal-data</span><br><span class="line">        -o[file]                --pretty-print[=file]</span><br><span class="line">        -O                      --optimize</span><br><span class="line">        -p[file]                --profile[=file]</span><br><span class="line">        -P                      --posix</span><br><span class="line">        -r                      --re-interval</span><br><span class="line">        -S                      --sandbox</span><br><span class="line">        -t                      --lint-old</span><br><span class="line">        -V                      --version</span><br><span class="line"></span><br><span class="line">To report bugs, see node `Bugs<span class="string">&#x27; in `gawk.info&#x27;</span>, <span class="built_in">which</span> is</span><br><span class="line">section `Reporting Problems and Bugs<span class="string">&#x27; in the printed version.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">gawk is a pattern scanning and processing language.</span></span><br><span class="line"><span class="string">By default it reads standard input and writes standard output.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Examples:</span></span><br><span class="line"><span class="string">        gawk &#x27;</span>&#123; <span class="built_in">sum</span> += <span class="variable">$1</span> &#125;; END &#123; <span class="built_in">print</span> <span class="built_in">sum</span> &#125;<span class="string">&#x27; file</span></span><br><span class="line"><span class="string">        gawk -F: &#x27;</span>&#123; <span class="built_in">print</span> <span class="variable">$1</span> &#125;<span class="string">&#x27; /etc/passwd</span></span><br></pre></td></tr></table></figure>
+<h2 id="常用内置变量">常用内置变量</h2>
+<table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$0</td>
+<td>当前记录</td>
+</tr>
+<tr>
+<td>$1 ~ $n</td>
+<td>当前记录被FS分隔后，第n个字段</td>
+</tr>
+<tr>
+<td>NF</td>
+<td>当前记录中字段个数</td>
+</tr>
+<tr>
+<td>NR</td>
+<td>已经读出的记录数</td>
+</tr>
+<tr>
+<td>FS</td>
+<td>字段分隔符，默认为空格</td>
+</tr>
+<tr>
+<td>RS</td>
+<td>记录分隔符，默认为换行符</td>
+</tr>
+<tr>
+<td>OFS</td>
+<td>输出字段分隔符，默认为空格</td>
+</tr>
+<tr>
+<td>ORS</td>
+<td>输出记录分隔符，默认为换行符</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>默认情况下，按换行符分隔记录、按空格分隔字段，即记录为单行文本、字段为文本单词。</p>
+</blockquote>
+<h2 id="语法">语法</h2>
+<h3 id="运算符">运算符</h3>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>=</td>
+<td>赋值</td>
+</tr>
+<tr>
+<td>+=, -=, *=, %=, ^=, **=</td>
+<td>赋值运算</td>
+</tr>
+<tr>
+<td>||, &amp;&amp;, !</td>
+<td>逻辑或，逻辑与，逻辑非</td>
+</tr>
+<tr>
+<td>~, !~</td>
+<td>匹配和不匹配正则表达式</td>
+</tr>
+<tr>
+<td>&lt;, &lt;=, &gt;=, !=, ==</td>
+<td>关系运算符；可以作为字符串比较，也可以用作数值比较；两个都为数字才为数值比较；字符串按字典序比较</td>
+</tr>
+<tr>
+<td>+, -, *, /</td>
+<td>加减乘除，所有用作算术运算符进行操作，操作数自动转为数值，<strong>所有非数值都变为0</strong></td>
+</tr>
+<tr>
+<td>&amp;</td>
+<td>求余</td>
+</tr>
+<tr>
+<td>^, ***</td>
+<td>求幂</td>
+</tr>
+<tr>
+<td>++, –</td>
+<td>前缀或后缀自增、自减</td>
+</tr>
+<tr>
+<td>$n</td>
+<td>字段引用</td>
+</tr>
+<tr>
+<td>空格</td>
+<td>字符串连接符</td>
+</tr>
+<tr>
+<td>?:</td>
+<td>三目运算符</td>
+</tr>
+<tr>
+<td>ln</td>
+<td>数组中是否存在某键值</td>
+</tr>
+</tbody>
+</table>
+<h3 id="BEGIN-END">BEGIN/END</h3>
+<p>在<code>BEGIN/END</code>代码块内的命令，只会在开始/结束处理输入文件的文本时执行一次。<code>BEGIN</code>块一般用作初始化<code>FS</code>、打印页眉、初始化全局变量等；<code>END</code>一般用于打印计算结果或输出摘要。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 统计`/etc/passwd`记录数</span></span><br><span class="line">$ awk <span class="string">&#x27;BEGIN&#123;count = 0&#125; &#123;count++&#125; END&#123;print count&#125;&#x27;</span> /etc/passwd</span><br><span class="line"></span><br><span class="line"><span class="comment"># 统计`/etc/passwd`字段数</span></span><br><span class="line">$ awk <span class="string">&#x27;BEGIN&#123;count = 0; FS=&quot;:&quot;&#125; &#123;count += NF&#125; END&#123;print count&#125;&#x27;</span> /etc/passwd</span><br></pre></td></tr></table></figure>
+<h3 id="分支、循环、数组">分支、循环、数组</h3>
+<h4 id="分支-if">分支: if</h4>
+<p>类似C的<code>if</code>语句</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cat</span> test.awk</span><br><span class="line">BEGIN &#123;</span><br><span class="line">        FS = <span class="string">&quot;:&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$1</span> == <span class="string">&quot;louishsu&quot;</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span> (<span class="variable">$2</span> == <span class="string">&quot;x&quot;</span>)&#123;</span><br><span class="line">                        <span class="built_in">print</span> <span class="string">&quot;louishsu x&quot;</span></span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        <span class="built_in">print</span> <span class="string">&quot;louishsu _&quot;</span></span><br><span class="line">                &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> ( <span class="variable">$1</span> == <span class="string">&quot;mysql&quot;</span>)&#123;</span><br><span class="line">                <span class="built_in">print</span> <span class="string">&quot;mysql&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$ awk -f test.awk /etc/passwd</span><br></pre></td></tr></table></figure>
+<h4 id="循环-do-while-for">循环: do while, for</h4>
+<p>可通过<code>break/continue</code>控制循环</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cat</span> test.awk</span><br><span class="line">BEGIN &#123;</span><br><span class="line">        FS = <span class="string">&quot;:&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">&#123;</span><br><span class="line">        <span class="built_in">print</span> <span class="string">&quot;----------------&quot;</span></span><br><span class="line">        count = 0</span><br><span class="line">        <span class="keyword">do</span> &#123;</span><br><span class="line">                <span class="built_in">print</span> <span class="variable">$count</span></span><br><span class="line">                count++</span><br><span class="line">        &#125; <span class="keyword">while</span> (count &lt; 3)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$ awk -f test.awk /etc/passwd</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cat</span> test.awk</span><br><span class="line">BEGIN &#123;</span><br><span class="line">        FS = <span class="string">&quot;:&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">&#123;</span><br><span class="line">        <span class="built_in">print</span> <span class="string">&quot;----------------&quot;</span></span><br><span class="line">        <span class="keyword">for</span> (count = 0; count &lt; 3; count++) &#123;</span><br><span class="line">                <span class="built_in">print</span> <span class="variable">$count</span></span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="数组">数组</h4>
+<p><code>awk</code>中的数组都是关联数组，数字索引也会转变为字符串索引</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cat</span> test.awk</span><br><span class="line">&#123;</span><br><span class="line">    cities[1] = <span class="string">&quot;beijing&quot;</span></span><br><span class="line">    cities[2] = <span class="string">&quot;shanghai&quot;</span></span><br><span class="line">    cities[<span class="string">&quot;three&quot;</span>] = <span class="string">&quot;guangzhou&quot;</span></span><br><span class="line">    <span class="keyword">for</span>( c <span class="keyword">in</span> cities) &#123;</span><br><span class="line">        <span class="built_in">print</span> cities[c]</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">print</span> cities[1]</span><br><span class="line">    <span class="built_in">print</span> cities[<span class="string">&quot;1&quot;</span>]</span><br><span class="line">    <span class="built_in">print</span> cities[<span class="string">&quot;three&quot;</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="常用字符串函数">常用字符串函数</h2>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sub(r, s, [t])</code></td>
+<td>在整个<code>t</code>中，用<code>s</code>代替<code>r</code>；<code>t</code>缺省为<code>$0</code>；返回替换数量</td>
+</tr>
+<tr>
+<td><code>gsub(r, s, [t])</code></td>
+<td><code>r</code>被作为正则表达式，其余同<code>sub</code>函数</td>
+</tr>
+<tr>
+<td><code>index(s1, s2)</code></td>
+<td>查找并返回<code>s2</code>在<code>s1</code>中的位置(从1开始编号)；若不存在则返回0</td>
+</tr>
+<tr>
+<td><code>match(s, r)</code></td>
+<td>在<code>s</code>中匹配正则表达式<code>r</code>(从1开始编号)；若未找到匹配返回-1</td>
+</tr>
+<tr>
+<td><code>length [(s)]</code></td>
+<td>返回<code>s</code>字符串长度，缺省为<code>$0</code></td>
+</tr>
+<tr>
+<td><code>substr(s, m, [n])</code></td>
+<td>返回从<code>m</code>开始，长度为<code>n</code>的子字符串；不指定<code>n</code>截取到字符串末尾</td>
+</tr>
+<tr>
+<td><code>split(s, a, [r])</code></td>
+<td>根据<code>r</code>指定的拓展正则表达式或<code>FS</code>，将字符串<code>s</code>分割为数组元素<code>a[1], a[2], ..., a[n]</code>；返回<code>n</code></td>
+</tr>
+<tr>
+<td><code>tolower(s), toupper(s)</code></td>
+<td>全部转换为小写/大写字母，大小写映射由当前语言环境的<code>LC_CTYPE</code>范畴定义</td>
+</tr>
+<tr>
+<td><code>sprintf(fmt, ...)</code></td>
+<td>根据<code>fmt</code>格式化字符串并返回</td>
+</tr>
+</tbody>
+</table>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">徐耀彬</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://louishsu.xyz/2020/05/05/grep-sed-awk.html">http://louishsu.xyz/2020/05/05/grep-sed-awk.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://louishsu.xyz" target="_blank">LOUIS' BLOG</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/grep-sed-awk.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/05/19/%E5%85%A8%E7%90%83%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0%E5%A4%A7%E8%B5%9B%E3%80%90%E8%B5%9B%E9%81%93%E4%B8%80%E3%80%91%EF%BC%9A%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E6%8A%A5%E5%91%8A%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B(%E4%B8%89%E7%AD%89%E5%A5%96).html"><img class="prev-cover" src="https://tianchi-public.oss-cn-hangzhou.aliyuncs.com/public/files/forum/161037709574435991610377095138.jpeg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖)</div></div></a></div><div class="next-post pull-right"><a href="/2020/05/04/Shell-Programming.html"><img class="next-cover" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/shell.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Shell Programming</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/touxiang.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">徐耀彬</div><div class="author-info__description">💭这个人很懒，什么都没有留下</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">23</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/isLouisHsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/isLouisHsu" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:is.louishsu@foxmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">记录和分享一些学习和开源内容，若有问题可通过邮箱is.louishsu@foxmail.com联系，欢迎交流！！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">grep: Globally search a Regular Expression and Print</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95"><span class="toc-number">1.1.</span> <span class="toc-text">基本用法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E"><span class="toc-number">1.2.</span> <span class="toc-text">参数说明</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">sed: Stream Editor</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95-2"><span class="toc-number">2.1.</span> <span class="toc-text">基本用法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E-2"><span class="toc-number">2.2.</span> <span class="toc-text">参数说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E8%BE%91%E5%91%BD%E4%BB%A4"><span class="toc-number">2.3.</span> <span class="toc-text">编辑命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B"><span class="toc-number">2.4.</span> <span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">awk:  Alfred Aho, Peter Weinberger, Brian Kernighan</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95-3"><span class="toc-number">3.1.</span> <span class="toc-text">基本用法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E-3"><span class="toc-number">3.2.</span> <span class="toc-text">参数说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%8F%98%E9%87%8F"><span class="toc-number">3.3.</span> <span class="toc-text">常用内置变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%AD%E6%B3%95"><span class="toc-number">3.4.</span> <span class="toc-text">语法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-number">3.4.1.</span> <span class="toc-text">运算符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BEGIN-END"><span class="toc-number">3.4.2.</span> <span class="toc-text">BEGIN&#x2F;END</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%94%AF%E3%80%81%E5%BE%AA%E7%8E%AF%E3%80%81%E6%95%B0%E7%BB%84"><span class="toc-number">3.4.3.</span> <span class="toc-text">分支、循环、数组</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%86%E6%94%AF-if"><span class="toc-number">3.4.3.1.</span> <span class="toc-text">分支: if</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BE%AA%E7%8E%AF-do-while-for"><span class="toc-number">3.4.3.2.</span> <span class="toc-text">循环: do while, for</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E7%BB%84"><span class="toc-number">3.4.3.3.</span> <span class="toc-text">数组</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%87%BD%E6%95%B0"><span class="toc-number">3.5.</span> <span class="toc-text">常用字符串函数</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/06/06/Arxiv%E6%AF%8F%E6%97%A5%E9%80%9F%E9%80%92.html" title="Arxiv每日速递(2024-06-06)"><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/Arxiv%E6%AF%8F%E6%97%A5%E9%80%9F%E9%80%92/wc.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv每日速递(2024-06-06)"/></a><div class="content"><a class="title" href="/2024/06/06/Arxiv%E6%AF%8F%E6%97%A5%E9%80%9F%E9%80%92.html" title="Arxiv每日速递(2024-06-06)">Arxiv每日速递(2024-06-06)</a><time datetime="2024-06-06T00:55:18.334Z" title="发表于 2024-06-06 08:55:18">2024-06-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/02/03/Stable%20Diffusion%20%E6%8F%90%E7%A4%BA%E8%AF%8D%E6%8C%87%E5%8D%97%E4%B9%A6.html" title="🎨 Stable Diffusion 提示词指南书"><img src="https://huggingface.co/blog/assets/98_stable_diffusion/stable_diffusion_12_1.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="🎨 Stable Diffusion 提示词指南书"/></a><div class="content"><a class="title" href="/2024/02/03/Stable%20Diffusion%20%E6%8F%90%E7%A4%BA%E8%AF%8D%E6%8C%87%E5%8D%97%E4%B9%A6.html" title="🎨 Stable Diffusion 提示词指南书">🎨 Stable Diffusion 提示词指南书</a><time datetime="2024-02-03T06:57:45.000Z" title="发表于 2024-02-03 14:57:45">2024-02-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/10/22/Transformer%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81%E4%B8%8E%E9%95%BF%E5%BA%A6%E5%A4%96%E6%8E%A8.html" title="Transformer语言模型的位置编码与长度外推"><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/city.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Transformer语言模型的位置编码与长度外推"/></a><div class="content"><a class="title" href="/2023/10/22/Transformer%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81%E4%B8%8E%E9%95%BF%E5%BA%A6%E5%A4%96%E6%8E%A8.html" title="Transformer语言模型的位置编码与长度外推">Transformer语言模型的位置编码与长度外推</a><time datetime="2023-10-22T14:55:45.000Z" title="发表于 2023-10-22 22:55:45">2023-10-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/22/vLLM%EF%BC%9A%E5%88%A9%E7%94%A8%E5%88%86%E9%A1%B5%E7%BC%93%E5%AD%98%E5%92%8C%E5%BC%A0%E9%87%8F%E5%B9%B6%E8%A1%8C%E6%8F%90%E9%AB%98%E5%A4%A7%E6%A8%A1%E5%9E%8B2~4x%E6%8E%A8%E7%90%86%E9%80%9F%E5%BA%A6.html" title="vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度"><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/ww5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度"/></a><div class="content"><a class="title" href="/2023/09/22/vLLM%EF%BC%9A%E5%88%A9%E7%94%A8%E5%88%86%E9%A1%B5%E7%BC%93%E5%AD%98%E5%92%8C%E5%BC%A0%E9%87%8F%E5%B9%B6%E8%A1%8C%E6%8F%90%E9%AB%98%E5%A4%A7%E6%A8%A1%E5%9E%8B2~4x%E6%8E%A8%E7%90%86%E9%80%9F%E5%BA%A6.html" title="vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度">vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度</a><time datetime="2023-09-22T14:55:45.000Z" title="发表于 2023-09-22 22:55:45">2023-09-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/06/Prompt%EF%BC%9A%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%89%A7%E8%A1%8C%E6%8C%87%E5%8D%97.html" title="Prompt：大语言模型的执行指南"><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/ww6.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Prompt：大语言模型的执行指南"/></a><div class="content"><a class="title" href="/2023/09/06/Prompt%EF%BC%9A%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%89%A7%E8%A1%8C%E6%8C%87%E5%8D%97.html" title="Prompt：大语言模型的执行指南">Prompt：大语言模型的执行指南</a><time datetime="2023-09-06T14:45:45.000Z" title="发表于 2023-09-06 22:45:45">2023-09-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By 徐耀彬</div><div class="footer_custom_text"><p><a style="margin-inline:5px"target="_blank"href="https://hexo.io/"><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&logo=hexo"title="博客框架为Hexo"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://butterfly.js.org/"><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&logo=bitdefender"title="主题采用butterfly"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://www.jsdelivr.com/"><img src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&logo=jsDelivr"title="本站使用JsDelivr为静态资源提供CDN加速"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://github.com/"><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&logo=GitHub"title="本站项目由Gtihub托管"alt="img"></a><a style="margin-inline:5px"target="_blank"href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&logo=Claris"alt="img"title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"></a></br></p></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>if (document.getElementsByClassName('mermaid').length) {
+  if (window.mermaidJsLoad) mermaid.init()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(() => {
+      window.mermaidJsLoad = true
+      mermaid.initialize({
+        theme: 'default',
+      })
+      false && mermaid.init()
+    })
+  }
+}</script><script>(()=>{
+  const $countDom = document.getElementById('twikoo-count')
+  const init = () => {
+    let initData = {
+      el: '#twikoo-wrap',
+      envId: 'blog-',
+      region: ''
+    }
+
+    if (false) {
+      const otherData = false
+      initData = Object.assign(initData, otherData)
+    }
+    
+    twikoo.init(initData)
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'blog-',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      $countDom.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const loadTwikoo = (bool = false) => {
+    if (typeof twikoo === 'object') {
+      init()
+      bool && $countDom && setTimeout(getCount,0)
+    } else {
+      getScript('https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(()=> {
+        init()
+        bool && $countDom && setTimeout(getCount,0)
+      })
+    }
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo(true)
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --> <script data-pjax>if(document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    var parent = document.getElementById('recent-posts');
+    var child = '<div class="recent-post-item" style="width:100%;height: auto"><div id="catalog_magnet"><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/机器学习/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🐱 机器学习 (3)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (8)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/竞赛相关/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 竞赛相关 (3)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/阅读笔记/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 阅读笔记 (1)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><a class="magnet_link_more"  href="http://louishsu.xyz/categories" style="flex:1;text-align: center;margin-bottom: 10px;">查看更多...</a></div></div>';
+    console.log('已挂载magnet')
+    parent.insertAdjacentHTML("afterbegin",child)}
+     </script><style>#catalog_magnet{flex-wrap: wrap;display: flex;width:100%;justify-content:space-between;padding: 10px 10px 0 10px;align-content: flex-start;}.magnet_item{flex-basis: calc(50% - 5px);background: #f2f2f2;margin-bottom: 10px;border-radius: 8px;transition: all 0.2s ease-in-out;}.magnet_item:hover{background: #b30070}.magnet_link_more{color:#555}.magnet_link{color:black}.magnet_link:hover{color:white}@media screen and (max-width: 600px) {.magnet_item {flex-basis: 100%;}}.magnet_link_context{display:flex;padding: 10px;font-size:16px;transition: all 0.2s ease-in-out;}.magnet_link_context:hover{padding: 10px 20px;}</style>
+    <style></style><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2021/05/19/全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖).html" alt=""><img width="48" height="48" src="https://tianchi-public.oss-cn-hangzhou.aliyuncs.com/public/files/forum/161037709574435991610377095138.jpeg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-05-19</span><a class="blog-slider__title" href="2021/05/19/全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖).html" alt="">全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖)</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2021/05/19/全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖).html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2021/10/22/中国法律智能技术评测(CAIL2021)：信息抽取(Rank2).html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/cail2021.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-10-22</span><a class="blog-slider__title" href="2021/10/22/中国法律智能技术评测(CAIL2021)：信息抽取(Rank2).html" alt="">中国法律智能技术评测(CAIL2021)：信息抽取(Rank2)</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2021/10/22/中国法律智能技术评测(CAIL2021)：信息抽取(Rank2).html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/11/17/2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖).html" alt=""><img width="48" height="48" src="https://cdn.kesci.com/upload/image/r7j60un866.png?imageView2/2/w/2500/h/2500" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-11-17</span><a class="blog-slider__title" href="2022/11/17/2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖).html" alt="">2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖)</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2022/11/17/2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖).html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/09/22/vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度.html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/ww5.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-09-22</span><a class="blog-slider__title" href="2023/09/22/vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度.html" alt="">vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/09/22/vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/10/22/Transformer语言模型的位置编码与长度外推.html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/city.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-10-22</span><a class="blog-slider__title" href="2023/10/22/Transformer语言模型的位置编码与长度外推.html" alt="">Transformer语言模型的位置编码与长度外推</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/10/22/Transformer语言模型的位置编码与长度外推.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2024/02/03/Stable Diffusion 提示词指南书.html" alt=""><img width="48" height="48" src="https://huggingface.co/blog/assets/98_stable_diffusion/stable_diffusion_12_1.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2024-02-03</span><a class="blog-slider__title" href="2024/02/03/Stable Diffusion 提示词指南书.html" alt="">🎨 Stable Diffusion 提示词指南书</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2024/02/03/Stable Diffusion 提示词指南书.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/09/06/Prompt：大语言模型的执行指南.html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/ww6.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-09-06</span><a class="blog-slider__title" href="2023/09/06/Prompt：大语言模型的执行指南.html" alt="">Prompt：大语言模型的执行指南</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/09/06/Prompt：大语言模型的执行指南.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/11/26/升级深度学习开发环境全攻略.html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-11-26</span><a class="blog-slider__title" href="2022/11/26/升级深度学习开发环境全攻略.html" alt="">升级深度学习开发环境全攻略</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2022/11/26/升级深度学习开发环境全攻略.html" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>
