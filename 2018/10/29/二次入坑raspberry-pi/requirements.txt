@@ -68,7 +68,7 @@ tensorflow==1.10.0
 termcolor==1.1.0
 terminado==0.8.1
 testpath==0.4.1
-torch==0.4.1
+torch==2.4.0
 torchfile==0.1.0
 torchnet==0.0.4
 torchvision==0.2.1
