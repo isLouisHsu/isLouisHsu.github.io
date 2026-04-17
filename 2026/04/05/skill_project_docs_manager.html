@@ -1,0 +1,480 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Project Docs Manager Skill：让 AI 自主驱动项目迭代的文档引擎 | LOUIS' BLOG</title><meta name="keywords" content="Agent,工具,Skill"><meta name="author" content="徐耀彬"><meta name="copyright" content="徐耀彬"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、这是什么 我创建了 project-docs-manager 技能，以标准化流程维护结构化项目文档库，帮助 AI 自主理解项目全貌、历史决策与当前状态。该技能遵循「单一事实源」「机器可读优先」「闭环自更新」三大原则，支持本地目录、Obsidian、云端文档等多种媒介，并内置初始化、迭代记录、状态查询等完整工作流。 它不只是一个文档管理工具。它要实现的是在项目中建立一套结构化文档体系，充当 AI">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Project Docs Manager Skill：让 AI 自主驱动项目迭代的文档引擎">
+<meta property="og:url" content="http://louishsu.xyz/2026/04/05/skill_project_docs_manager.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="一、这是什么 我创建了 project-docs-manager 技能，以标准化流程维护结构化项目文档库，帮助 AI 自主理解项目全貌、历史决策与当前状态。该技能遵循「单一事实源」「机器可读优先」「闭环自更新」三大原则，支持本地目录、Obsidian、云端文档等多种媒介，并内置初始化、迭代记录、状态查询等完整工作流。 它不只是一个文档管理工具。它要实现的是在项目中建立一套结构化文档体系，充当 AI">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg">
+<meta property="article:published_time" content="2026-04-05T02:24:23.000Z">
+<meta property="article:modified_time" content="2026-04-17T04:03:20.051Z">
+<meta property="article:author" content="徐耀彬">
+<meta property="article:tag" content="Agent">
+<meta property="article:tag" content="工具">
+<meta property="article:tag" content="Skill">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://louishsu.xyz/2026/04/05/skill_project_docs_manager"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: true,
+  isToc: true,
+  postUpdate: '2026-04-17 12:03:20'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><link rel="stylesheet" href="/css/background.css"><script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/touxiang.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">30</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">9</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 工具</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fas fa-pen"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/isLouisHsu/blog/tree/master/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-brands fa-app-store"></i><span> 利器</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://code.visualstudio.com/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> VSCode：微软旗下的跨平台代码编辑软件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mobaxterm.mobatek.net/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> MobaXterm：超好用的全能远程终端</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/CopyTranslator/CopyTranslator"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> CopyTranslator：“复制即翻译”的外文辅助阅读翻译解决方案</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.zotero.org/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Zotero：便于收集、组织、引用、共享的文献管理工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://zealdocs.org/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Zeal：离线文档浏览器，其灵感来自 OS X平台上的 Dash，目前支持 Window 和 Liunx，基于 QT5</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ditto-cp.sourceforge.io/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Ditto：强大的Windows剪贴板增强工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://wise-system-monitor.en.softonic.com/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Wise System Monitor：监控从系统到本地网络的所有运行情况</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/indiff/qttabbar"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> QtTabBar：在Windows资源管理器中使用多标签功能扩展工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/sentialx/multrin"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Multrin：“窗口合并”辅助小工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/Wox-launcher/Wox"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Wox &amp; Everything：基于名称快速定位文件和文件夹的搜索工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/NickeManarin/ScreenToGif"><i class="fa-fw fa-regular fa-star"></i><span> ScreenToGif：快速录制屏幕指定区域并保存为动图文件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mathpix.com/"><i class="fa-fw fa-regular fa-star"></i><span> Mathpix Snipping：识别数学公式并转换成LaTeX</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="http://www.uderzo.it/main_products/space_sniffer/index.html"><i class="fa-fw fa-regular fa-star"></i><span> Space Sniffer：磁盘空间分析工具</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">LOUIS' BLOG</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 工具</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fas fa-pen"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/isLouisHsu/blog/tree/master/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-brands fa-app-store"></i><span> 利器</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://code.visualstudio.com/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> VSCode：微软旗下的跨平台代码编辑软件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mobaxterm.mobatek.net/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> MobaXterm：超好用的全能远程终端</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/CopyTranslator/CopyTranslator"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> CopyTranslator：“复制即翻译”的外文辅助阅读翻译解决方案</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.zotero.org/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Zotero：便于收集、组织、引用、共享的文献管理工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://zealdocs.org/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Zeal：离线文档浏览器，其灵感来自 OS X平台上的 Dash，目前支持 Window 和 Liunx，基于 QT5</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ditto-cp.sourceforge.io/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Ditto：强大的Windows剪贴板增强工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://wise-system-monitor.en.softonic.com/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Wise System Monitor：监控从系统到本地网络的所有运行情况</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/indiff/qttabbar"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> QtTabBar：在Windows资源管理器中使用多标签功能扩展工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/sentialx/multrin"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Multrin：“窗口合并”辅助小工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/Wox-launcher/Wox"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Wox &amp; Everything：基于名称快速定位文件和文件夹的搜索工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/NickeManarin/ScreenToGif"><i class="fa-fw fa-regular fa-star"></i><span> ScreenToGif：快速录制屏幕指定区域并保存为动图文件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mathpix.com/"><i class="fa-fw fa-regular fa-star"></i><span> Mathpix Snipping：识别数学公式并转换成LaTeX</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="http://www.uderzo.it/main_products/space_sniffer/index.html"><i class="fa-fw fa-regular fa-star"></i><span> Space Sniffer：磁盘空间分析工具</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Project Docs Manager Skill：让 AI 自主驱动项目迭代的文档引擎<a class="post-edit-link" href="https://github.com/isLouisHsu/blog/tree/master/source_posts/skill_project_docs_manager.md" title="编辑" target="_blank"><i class="fas fa-pencil-square"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-04-05T02:24:23.000Z" title="发表于 2026-04-05 10:24:23">2026-04-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-04-17T04:03:20.051Z" title="更新于 2026-04-17 12:03:20">2026-04-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%B7%A5%E5%85%B7/">工具</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>15分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2026/04/05/skill_project_docs_manager.html#post-comment"><span id="twikoo-count"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="一、这是什么">一、这是什么</h2>
+<p>我创建了 <strong><code>project-docs-manager</code></strong> 技能，以标准化流程维护结构化项目文档库，帮助 AI 自主理解项目全貌、历史决策与当前状态。该技能遵循「单一事实源」「机器可读优先」「闭环自更新」三大原则，支持本地目录、Obsidian、云端文档等多种媒介，并内置初始化、迭代记录、状态查询等完整工作流。</p>
+<p>它不只是一个文档管理工具。它要实现的是在项目中建立一套结构化文档体系，充当 AI 的&quot;项目记忆&quot;和&quot;驱动引擎&quot;，<strong>从而让 AI 能够自主地理解项目现状、提出优化方向、执行变更、回收效果、沉淀知识，然后基于新的认知发起下一轮迭代——全程不依赖人类重新交代背景。</strong></p>
+<p><strong>这背后是一种范式的根本转变。</strong> 传统开发以代码为中心，人花大部分时间写代码、调模型、配部署。但在 AI 时代，这个关系颠倒了——<strong>文档成为中心，代码、模型、配置只是文档的附属产物。你把目标和大致的想法写进文档，AI 读取后设计方案、生成代码、训练模型、部署服务、回收指标。</strong> Project Docs Manager 就是要把这套 <strong>“文档驱动”</strong> 的工作流固化下来，让 AI 真正具备自主驱动项目的能力。</p>
+<blockquote>
+<p>🔗 源码与使用说明：<a target="_blank" rel="noopener" href="https://github.com/isLouisHsu/skills/tree/main/skills/project-docs-manager">https://github.com/isLouisHsu/skills/tree/main/skills/project-docs-manager</a></p>
+</blockquote>
+<p>它的文档架构是&quot;仓库索引 + 媒介详情&quot;两层：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;docs_path&#125;/</span><br><span class="line">└── _INDEX.md                  ← AI 每次会话的启动入口</span><br><span class="line"></span><br><span class="line">&#123;media_path&#125;/</span><br><span class="line">├── OVERVIEW.md                ← 项目全貌：背景、目标、指标、当前状态</span><br><span class="line">├── CHANGELOG.md               ← 迭代历史：每次变更的一句话结果</span><br><span class="line">├── KNOWLEDGE.md               ← 知识索引：踩过的坑、发现的规律</span><br><span class="line">├── changes/                   ← 迭代详情：方案、实施、效果、遗留</span><br><span class="line">│   └── 2026-04-07_xxx.md</span><br><span class="line">└── knowledge/                 ← 知识详情：技术要点、业务约束</span><br><span class="line">    └── topic_xxx.md</span><br></pre></td></tr></table></figure>
+<p>这套结构不是给人类写的项目文档，而是 <strong>AI 的操作系统</strong>——它从中读取目标、感知现状、检索历史、规避已知陷阱，并在每次迭代后将新认知写回，供下一次会话的 AI 继承。</p>
+<h2 id="二、为什么需要这个-Skill">二、为什么需要这个 Skill</h2>
+<p><strong>先看看 AI 开发卡在哪了。</strong> 跟 AI 协作写代码，表面上挺顺的——你说一句它写一段。但真做起项目来，处处都是断层：</p>
+<ol>
+<li><strong>想让它主动推进？它不知道要干嘛。</strong> 项目目标、当前进度、历史决策，这些信息散落在各处 —— 代码在 GitHub、模型在 Hugging Face、监控日志在云平台，跨平台的工作流需要人手动串联：模型版本更新了要重跑评估，线上报错要回溯代码——这些流程断成几截，AI 没有全局视图，更无法自主驱动完整工作流；</li>
+<li><strong>换了个会话，一切归零。</strong> 上次聊了一半的架构决策、刚发现的坑，AI 全忘了。两周前被证伪的方案，它可能重新提出来；上次暴露的约束，它再次忽视。没有记忆，就没有学习；</li>
+<li><strong>做完就结束，没有闭环。</strong> AI 的节奏是：接任务 → 写代码 → 交差。它不会回来看跑没跑通、效果达没达标，更不会基于结果规划下一轮。但真实迭代是循环的：分析 → 方案 → 实施 → 观测 → 沉淀 → 再分析……</li>
+<li><strong>人跟不上机器的节奏。</strong> 当 AI 真的自主跑起来，你怎么知道它做了什么、为什么这么决定、效果好不好？翻聊天记录太碎，看代码 diff 太累，你需要一种快速对齐的方式。</li>
+</ol>
+<p><strong>所以，交付件应该是文档，而不是代码。</strong> 代码是 AI 几秒钟就能写出来的东西，也能几秒钟重写。<strong>代码廉价且可再生。</strong> 真正值钱的是<strong>项目上下文</strong>——为什么要做？做到哪了？试过什么、效果如何？哪些路走不通？下一步该往哪？如果这些只在你脑子里，或散落在聊天记录里，AI 就永远是个&quot;单步执行工具&quot;。每次会话都要重新交代背景、重复约束、纠正方向，它的能力被锁死在被动模式里。</p>
+<p><strong>更深一层，这是开发范式的根本转变。</strong> 传统开发以代码为中心：人花大部分时间写代码、改代码，代码是核心资产。但在 AI 时代，这个关系颠倒了——<strong>文档成为中心，代码只是文档的附属产物</strong>。你把意图、约束、目标写进文档，AI 读取文档后生成代码、模型配置、部署脚本。代码随时可以重写，但文档里沉淀的决策逻辑、试错路径、业务知识才是持续积累的核心资产。维护好文档，AI 就能替你生成和维护一切；文档荒废，项目就沦为一次性代码的堆积。Project Docs Manager 做的就是把这套 <strong>“文档驱动”</strong> 的工作流固化下来，让范式转变真正落地。</p>
+<p><strong>有了这套机制，工作模式会发生根本转变：</strong></p>
+<ol>
+<li><strong>AI 从被动执行变成主动提案。</strong> 文档体系把分散在各平台的信息串联成可执行的因果链：AI 发现 Hugging Face 上的模型版本更新了，就能触发重跑评估；看到云平台的监控告警，能自动回溯代码定位缺陷。跨平台的工作流不再依赖人手动串联，AI 自己能驱动完整闭环。举个例子，它读取 <code>OVERVIEW.md</code> 了解目标与现状，检索 <code>KNOWLEDGE.md</code> 发现机会，然后主动判断：“距离目标还有 15%，上一轮优化效果一般，但知识库记了 B 方向的线索——建议这次试试 B。”；</li>
+<li><strong>认知持久化，不再反复踩坑。</strong> 新会话的 AI 花几秒读文档就能续上进度；<code>KNOWLEDGE.md</code> 记着被证伪的方案和暴露的约束，它会查历史：“缓存方案上次因为一致性问题挂了，这次换个角度。”；</li>
+<li><strong>单次交付变成迭代闭环。</strong> 每次结束必须记录效果、更新指标、沉淀知识。这些直接成为下一次迭代的输入——做完不是终点，而是下一轮的起点；</li>
+<li><strong>人无需追赶机器，只需审阅决策。</strong> 结构化的变更记录让你几分钟就能掌握 AI 的完整决策链和效果数据，随时介入把控方向，不用翻遍聊天记录。</li>
+</ol>
+<h2 id="三、如何使用">三、如何使用</h2>
+<p>安装技能：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npx skills add https://github.com/isLouisHsu/skills --skill project-docs-manager</span><br></pre></td></tr></table></figure>
+<p>然后在 AI Agent（如 Claude）中执行初始化：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/project-docs-manager 初始化项目文档库</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/skill_project_docs_manager/initialize.png" alt="initialize"></p>
+<p>初始化完成后，AI 会自动在项目中配置文档路径，并启动第一次上下文扫描。之后每次会话，AI 都会自动读取文档恢复项目认知。</p>
+<p>日常使用中，你可以像和同事对话一样直接提问：</p>
+<ul>
+<li>「目前的进展和效果」—— AI 汇总 CHANGELOG 和 OVERVIEW，告诉你距离目标还有多远</li>
+<li>「为什么当时这么决策」—— 追溯某次变更的上下文，理解当时的取舍依据</li>
+<li>「下一步可以做什么」—— AI 基于当前状态和目标差距，主动提出 1-3 个优化方案，附带推荐理由和风险评估</li>
+<li>「对比一下方案 A 和 B」—— 让 AI 针对具体方案做更深入的分析对比</li>
+<li>「好，按方案 A 执行」—— 你确认后，AI 开始实施，过程中会向你汇报关键节点</li>
+<li>「这个模块先评审一下」—— 让 AI 在继续推进前，先向你展示当前实现并确认方向</li>
+<li>「更新项目文档」—— 完成一次迭代后，让 AI 把变更记录、效果数据、新发现沉淀到文档中，为下一轮迭代做准备</li>
+</ul>
+<p>不需要记具体命令，自然语言即可。文档体系让 AI 具备了项目记忆，你的每句话都能踩在之前的积累上。</p>
+<h2 id="四、它是如何生效的">四、它是如何生效的</h2>
+<h3 id="1-启动感知：AI-自动恢复项目认知">1. 启动感知：AI 自动恢复项目认知</h3>
+<p>Skill 初始化时会在项目的 <code>CLAUDE.md</code> 中注册文档库路径。此后每次 AI 会话启动，自动触发认知恢复链路：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CLAUDE.md（AI 自动加载）</span><br><span class="line">  → 发现文档库配置 → 读取 _INDEX.md</span><br><span class="line">    → 加载 OVERVIEW.md（目标、现状、指标）</span><br><span class="line">    → 加载 CHANGELOG.md（迭代历史）</span><br><span class="line">    → 按需加载 KNOWLEDGE.md 和详情文件</span><br></pre></td></tr></table></figure>
+<p>零成本启动，不需要人类交代背景。AI 开口说的第一句话就可以是：“基于当前项目状态，我建议下一步……”</p>
+<h3 id="2-初始化：从项目中提取已有上下文">2. 初始化：从项目中提取已有上下文</h3>
+<p>对已有项目，初始化不是创建一堆空模板，而是主动扫描：</p>
+<ul>
+<li>项目结构和技术栈（Glob 扫描文件树）</li>
+<li>现有文档（README、CONTRIBUTING 等）</li>
+<li>Git 历史（提交记录、标签、分支）</li>
+<li>依赖和配置</li>
+</ul>
+<p>扫描结果被预填充到文档模板中，经用户确认后落盘。<strong>项目不是从零开始&quot;被文档化&quot;的，而是已有的隐性知识被显性化、结构化。</strong></p>
+<h3 id="3-迭代驱动：UPDATE-流程实现自主闭环">3. 迭代驱动：UPDATE 流程实现自主闭环</h3>
+<p>UPDATE 是这套体系的核心引擎，它定义了 AI 驱动项目前进的完整路径：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">① 读取文档 → 理解项目现状和历史</span><br><span class="line">        ↓</span><br><span class="line">② 差距分析 → 当前指标 vs 目标，识别优化空间</span><br><span class="line">        ↓</span><br><span class="line">③ 方案设计 → 1-3 个方案 + 推荐理由 + 风险评估</span><br><span class="line">        ↓</span><br><span class="line">④ 人类审批 → 确认方案（人类保留决策权）</span><br><span class="line">        ↓</span><br><span class="line">⑤ 实施执行 → 按方案落地，模块级评审</span><br><span class="line">        ↓</span><br><span class="line">⑥ 效果回收 → 收集前后对比数据</span><br><span class="line">        ↓</span><br><span class="line">⑦ 文档更新 → 写入变更详情、更新索引和概览、沉淀知识</span><br><span class="line">        ↓</span><br><span class="line">⑧ 准备下一轮 → 更新后的文档成为下次迭代的输入</span><br><span class="line">        ↓</span><br><span class="line">      回到 ①</span><br></pre></td></tr></table></figure>
+<p>关键点在于第⑦步和第⑧步之间的衔接——文档的更新不是&quot;归档&quot;，而是&quot;加载弹药&quot;。每一次迭代写入的效果数据、新发现的知识、调整后的优先级，都直接成为下一次 AI 分析和决策的依据。</p>
+<p><strong>迭代不是人类发起的，是文档驱动的。人类只需要在第④步把关。</strong></p>
+<h3 id="4-索引纪律：控制-AI-的认知成本">4. 索引纪律：控制 AI 的认知成本</h3>
+<p>让 AI 高效消费文档的关键是<strong>分层</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>文件</th>
+<th>内容</th>
+<th>每条长度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口层</td>
+<td><code>_INDEX.md</code></td>
+<td>文档目录</td>
+<td>&lt; 150 字符</td>
+</tr>
+<tr>
+<td>索引层</td>
+<td><code>CHANGELOG.md</code>、<code>KNOWLEDGE.md</code></td>
+<td>摘要 + 链接</td>
+<td>&lt; 150 字符</td>
+</tr>
+<tr>
+<td>详情层</td>
+<td><code>changes/*.md</code>、<code>knowledge/*.md</code></td>
+<td>完整记录</td>
+<td>不限</td>
+</tr>
+</tbody>
+</table>
+<p>大多数决策只需读取入口层和索引层（3 个文件），不需要打开任何详情文件。只有需要深入分析特定历史决策时才进入详情层。这让 AI 在上下文窗口有限的约束下，仍能高效获取项目全貌。</p>
+<h3 id="5-媒介灵活性：适配已有工作流">5. 媒介灵活性：适配已有工作流</h3>
+<p>文档的存放位置不局限于代码仓库，支持本地目录、Obsidian vault 和云文档（钉钉文档、Notion 等）。仓库内只保留一个轻量的 <code>_INDEX.md</code> 作为跳板。团队可以按已有习惯选择文档载体，不需要为了用这套体系而改变工作流。</p>
+<h2 id="五、总结">五、总结</h2>
+<p>Project Docs Manager 把项目上下文从人类的脑子里搬到结构化文档中，让 AI 能够自主读取现状、提出方案、执行变更、回收效果、沉淀认知，然后用新的认知发起下一轮迭代。</p>
+<p>然而这套机制并非万能，它的有效运转依赖几个前提：</p>
+<ol>
+<li><strong>最难的部分，是怎么清楚地描述项目状态。</strong> 文档写得含糊，AI 理解就偏差；指标定义不精确，差距分析就失焦。这要求使用者对项目有清晰的结构化思维——把模糊的业务目标翻译成可量化的指标，把隐性的工程约束显性化为决策依据。本质上，这个 skill 考验的是人的抽象能力，而不是 AI 的读写能力。</li>
+<li><strong>AI 只是辅助，关键决策仍需人把关。</strong> AI 可以基于文档自主提案、甚至执行变更，但&quot;下一步往哪走&quot;的决定权始终在人手里。目标调整、优先级排序、方案取舍——这些涉及价值判断的决策，AI 只能提供信息支持，不能替代人做选择。文档体系让 AI 成为高效的执行者，但方向盘仍由人掌控。</li>
+<li><strong>更适合目标可量化的项目</strong>，如算法优化（提升准确率、降低延迟）、工程重构（提升性能、降低复杂度）、功能迭代（提升转化率、改善体验）。这类项目有明确的评估标准，迭代路径清晰，文档化的 ROI 最高。目标越模糊、路径越开放的项目，这套结构的约束力越弱。</li>
+</ol>
+<p>归根结底，Project Docs Manager 推动的是一种工作范式的转变：<strong>从以代码为中心，转向以文档为中心</strong>。在这个新范式下，人的核心产出不再是代码，而是清晰、结构化、可执行的意图描述。代码交给 AI 生成，人专注于思考和决策——这才是 AI 时代开发者应有的样子。</p>
+<h2 id="六、Q-A">六、Q&amp;A</h2>
+<h3 id="1-带项目文档库的开发项目，和现在基于-AGENTS-md-CLAUDE-md-的项目，有什么不一样？">1. 带项目文档库的开发项目，和现在基于 <a target="_blank" rel="noopener" href="http://AGENTS.md/CLAUDE.md">AGENTS.md/CLAUDE.md</a> 的项目，有什么不一样？</h3>
+<p>现有 AI 编码工具（如 Cursor、Claude Code）推荐的 <code>AGENT.md</code> 或 <code>CLAUDE.md</code> 确实能提供项目背景，但它们本质上是<strong>单点静态说明</strong>，与 Project Docs Manager 的<strong>分层动态记忆</strong>有本质区别：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th><a target="_blank" rel="noopener" href="http://AGENT.md">AGENT.md</a> / <a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a></th>
+<th>Project Docs Manager</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>信息架构</strong></td>
+<td>单文件、线性叙述</td>
+<td>分层索引（入口→索引→详情），支持网状关联</td>
+</tr>
+<tr>
+<td><strong>时间维度</strong></td>
+<td>静态快照，描述&quot;项目是什么&quot;</td>
+<td>动态演进，记录&quot;项目如何走到现在&quot;</td>
+</tr>
+<tr>
+<td><strong>跨平台整合</strong></td>
+<td>只能描述仓库内代码，对外部依赖（HuggingFace 模型、云监控告警、Figma 设计稿）只能文字提及，无法形成可执行因果链</td>
+<td>通过 <code>KNOWLEDGE.md</code> 聚合多平台 URL 和关键元数据，AI 能识别&quot;模型版本更新→触发重跑评估&quot;这类跨平台事件</td>
+</tr>
+<tr>
+<td><strong>记忆持久性</strong></td>
+<td>会话级加载，跨会话容易丢失上下文</td>
+<td>项目级持久化，新会话通过 <code>_INDEX.md</code> 秒级恢复完整认知</td>
+</tr>
+<tr>
+<td><strong>可执行性</strong></td>
+<td>提供&quot;背景信息&quot;，AI 仍需人类告知下一步做什么</td>
+<td>提供&quot;操作指令+状态数据&quot;，AI 能自主判断差距、提案、执行并记录</td>
+</tr>
+</tbody>
+</table>
+<p>简单说，<code>CLAUDE.md</code> 是<strong>给 AI 的项目说明书</strong>，而 Project Docs Manager 是<strong>AI 的项目操作系统</strong>——前者让 AI&quot;了解背景&quot;，后者让 AI&quot;继承记忆并自主运转&quot;。</p>
+<h3 id="2-维护这么多文档，会不会增加额外负担？本来写代码就忙不过来了。">2. 维护这么多文档，会不会增加额外负担？本来写代码就忙不过来了。</h3>
+<p>恰恰相反，<strong>文档维护的边际成本远低于代码维护</strong>。</p>
+<p>在传统模式下，你需要写代码、写注释、写 Commit Message、在 PR 里写描述、在 IM 里同步进度——这些碎片信息最终还是要靠人脑整合。Project Docs Manager 只是把这些碎片<strong>结构化地归拢到一处</strong>：</p>
+<ul>
+<li><strong>初始化时</strong>：AI 自动扫描代码、Git 历史、现有文档，生成初稿，你只需校准；</li>
+<li><strong>迭代时</strong>：AI 自动将变更摘要写入 <code>CHANGELOG.md</code>，将技术决策沉淀到 <code>knowledge/</code>，你只需审阅而非从头编写；</li>
+<li><strong>换会话时</strong>：你无需再写&quot;上次我们做到哪了&quot;的背景说明，AI 自己读文档。</li>
+</ul>
+<p>当你觉得&quot;写文档好麻烦&quot;时，往往是因为<strong>没有区分一次性的代码和可复用的知识</strong>。那段调试了三小时的边界 case 处理逻辑，如果只在代码里存在，三周后重构时你还得再调试三小时；如果写进 <code>KNOWLEDGE.md</code>，AI 会记住并规避，这就是文档投资的复利。</p>
+<h3 id="3-这和传统的项目-Wiki、Confluence-有什么区别？">3. 这和传统的项目 Wiki、Confluence 有什么区别？</h3>
+<p>本质区别在于<strong>机器可读性（Machine-readable）</strong>。</p>
+<p>传统 Wiki 是写给人看的：大段文字、灵活排版、强调叙事完整性。人类读得舒服，但 AI 读起来成本高——需要在大量文本中提取关键信息，容易遗漏约束。</p>
+<p>Project Docs Manager 的文档结构是<strong>给 AI 消费优化的</strong>：</p>
+<ul>
+<li><strong>强制结构化</strong>：<code>OVERVIEW.md</code> 必须包含&quot;目标-现状-指标&quot;三段式，<code>CHANGELOG.md</code> 必须是一句话摘要+链接，没有歧义空间；</li>
+<li><strong>分层索引</strong>：AI 不用读完全部文档就能决策，大多数时候只读 <code>_INDEX.md</code> + <code>CHANGELOG.md</code>（几百字）即可；</li>
+<li><strong>双向链接</strong>：知识条目与代码文件、外部资源通过规范化链接关联，AI 能自动追溯。</li>
+</ul>
+<p>你可以理解为：Wiki 是<strong>人类知识的展览馆</strong>，Project Docs Manager 是<strong>AI 认知的数据库</strong>。前者服务于&quot;让新人快速了解项目&quot;，后者服务于&quot;让 AI 自主驱动项目&quot;。</p>
+<h3 id="4-小项目或者个人-side-project-有必要用这么重的机制吗？">4. 小项目或者个人 side project 有必要用这么重的机制吗？</h3>
+<p><strong>分阶段采用，而非全盘套用。</strong></p>
+<p>对于验证期的原型（&lt; 1 周、&lt; 500 行代码），单文件 <code>CLAUDE.md</code> 确实够用。但当出现以下信号时，就该迁移到 Project Docs Manager：</p>
+<ol>
+<li><strong>迭代超过 3 轮</strong>：你需要回顾&quot;试过哪些方案、为什么放弃&quot;，此时 <code>CHANGELOG.md</code> 的价值开始显现；</li>
+<li><strong>涉及多平台</strong>：代码在 GitHub、模型在 HuggingFace、部署在 Vercel，单文件无法承载跨平台关联；</li>
+<li><strong>中断风险</strong>：项目需要搁置一周再捡起，没有文档库意味着每次都要&quot;热启动&quot;；</li>
+<li><strong>AI 开始犯错</strong>：同样的约束需要反复提醒，说明需要 <code>KNOWLEDGE.md</code> 来持久化规则。</li>
+</ol>
+<p><strong>MVP 策略</strong>：即使是 side project，也建议保留 <code>_INDEX.md</code> + <code>OVERVIEW.md</code> 的最小集合（10 分钟维护成本），等到复杂度爆炸时再启用完整的 UPDATE 流程。这比事后补文档要容易得多。</p>
+<h3 id="5-我有多个子仓库（前端、后端、模型），每个都要维护一套文档库吗？">5. 我有多个子仓库（前端、后端、模型），每个都要维护一套文档库吗？</h3>
+<p>不需要。 这正是 Project Docs Manager 与单文件方案的关键差异之一——它支持分层联邦架构：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">project-docs/                    ← 主仓库（文档库）</span><br><span class="line">├── _INDEX.md</span><br><span class="line">├── OVERVIEW.md                  ← 全局目标、跨仓库指标、集成点</span><br><span class="line">├── CHANGELOG.md                 ← 端到端迭代（如&quot;上线推荐功能&quot;涉及三端联动）</span><br><span class="line">└── knowledge/</span><br><span class="line">└── cross-repo_integration.md</span><br><span class="line">backend-api/                     ← 子仓库 1</span><br><span class="line">├── CLAUDE.md                    ← 指向主文档库的链接 + 本地技术栈说明</span><br><span class="line">└── src/</span><br><span class="line">frontend-web/                    ← 子仓库 2</span><br><span class="line">├── CLAUDE.md</span><br><span class="line">└── src/</span><br><span class="line">ml-models/                       ← 子仓库 3</span><br><span class="line">├── CLAUDE.md</span><br><span class="line">└── src/</span><br></pre></td></tr></table></figure>
+<p>协作逻辑：</p>
+<table>
+<thead>
+<tr>
+<th>文档位置</th>
+<th>维护内容</th>
+<th>典型读者</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>联邦层</td>
+<td>主仓库 <code>project-docs/</code> 端到端目标、跨仓库依赖、集成测试策略、发布节奏</td>
+<td>架构师、PM、全栈 AI Agent</td>
+</tr>
+<tr>
+<td>自治层</td>
+<td>各子仓库 <code>CLAUDE.md</code> 本地代码规范、技术栈细节、API 契约、调试技巧</td>
+<td>专项 AI Agent、新加入的开发者</td>
+</tr>
+</tbody>
+</table>
+<p>双向链接确保一致性：<br>
+•  主仓库 <a target="_blank" rel="noopener" href="http://OVERVIEW.md">OVERVIEW.md</a> 记录：“模型推理延迟目标 &lt; 100ms，见 ml-models#<a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a>”；<br>
+•  子仓库 <a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a> 记录：“本服务目标延迟 &lt; 30ms，全局目标见 project-docs/OVERVIEW.md”。<br>
+当 AI 在子仓库工作时，<a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a> 提供足够的本地上下文完成编码；当它需要优化端到端延迟时，主仓库的文档库提供跨仓库视角驱动全局重构。</p>
+<p><a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a> 是子仓库的局部内存，Project Docs Manager 是项目的全局外存。联邦架构既避免了单文件的信息过载，又消除了多仓库的上下文孤岛。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">徐耀彬</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://louishsu.xyz/2026/04/05/skill_project_docs_manager.html">http://louishsu.xyz/2026/04/05/skill_project_docs_manager.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://louishsu.xyz" target="_blank">LOUIS' BLOG</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Agent/">Agent</a><a class="post-meta__tags" href="/tags/%E5%B7%A5%E5%85%B7/">工具</a><a class="post-meta__tags" href="/tags/Skill/">Skill</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2026/04/17/Arxiv%E6%AF%8F%E6%97%A5%E9%80%9F%E9%80%92.html"><img class="prev-cover" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/Arxiv%E6%AF%8F%E6%97%A5%E9%80%9F%E9%80%92/wc.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Arxiv每日速递(2026-04-17)</div></div></a></div><div class="next-post pull-right"><a href="/2026/04/02/skill_video_knowledge_purify.html"><img class="next-cover" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Video Knowledge Purify Skill：让视频变成可检索的结构化知识笔记</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2026/04/02/skill_video_knowledge_purify.html" title="Video Knowledge Purify Skill：让视频变成可检索的结构化知识笔记"><img class="cover" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-04-02</div><div class="title">Video Knowledge Purify Skill：让视频变成可检索的结构化知识笔记</div></div></a></div><div><a href="/2026/03/22/claude-code里的agent-harness工程.html" title="Claude Code 的 Agent Harness 工程"><img class="cover" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-03-22</div><div class="title">Claude Code 的 Agent Harness 工程</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/touxiang.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">徐耀彬</div><div class="author-info__description">我好像很久没写字了，老是打字</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">30</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">9</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/isLouisHsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/isLouisHsu" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:is.louishsu@foxmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">记录和分享一些学习和开源内容，若有问题可通过邮箱is.louishsu@foxmail.com联系，欢迎交流！！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%BF%99%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.</span> <span class="toc-text">一、这是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E8%BF%99%E4%B8%AA-Skill"><span class="toc-number">2.</span> <span class="toc-text">二、为什么需要这个 Skill</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8"><span class="toc-number">3.</span> <span class="toc-text">三、如何使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%AE%83%E6%98%AF%E5%A6%82%E4%BD%95%E7%94%9F%E6%95%88%E7%9A%84"><span class="toc-number">4.</span> <span class="toc-text">四、它是如何生效的</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%90%AF%E5%8A%A8%E6%84%9F%E7%9F%A5%EF%BC%9AAI-%E8%87%AA%E5%8A%A8%E6%81%A2%E5%A4%8D%E9%A1%B9%E7%9B%AE%E8%AE%A4%E7%9F%A5"><span class="toc-number">4.1.</span> <span class="toc-text">1. 启动感知：AI 自动恢复项目认知</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%88%9D%E5%A7%8B%E5%8C%96%EF%BC%9A%E4%BB%8E%E9%A1%B9%E7%9B%AE%E4%B8%AD%E6%8F%90%E5%8F%96%E5%B7%B2%E6%9C%89%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="toc-number">4.2.</span> <span class="toc-text">2. 初始化：从项目中提取已有上下文</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%BF%AD%E4%BB%A3%E9%A9%B1%E5%8A%A8%EF%BC%9AUPDATE-%E6%B5%81%E7%A8%8B%E5%AE%9E%E7%8E%B0%E8%87%AA%E4%B8%BB%E9%97%AD%E7%8E%AF"><span class="toc-number">4.3.</span> <span class="toc-text">3. 迭代驱动：UPDATE 流程实现自主闭环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E7%B4%A2%E5%BC%95%E7%BA%AA%E5%BE%8B%EF%BC%9A%E6%8E%A7%E5%88%B6-AI-%E7%9A%84%E8%AE%A4%E7%9F%A5%E6%88%90%E6%9C%AC"><span class="toc-number">4.4.</span> <span class="toc-text">4. 索引纪律：控制 AI 的认知成本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E5%AA%92%E4%BB%8B%E7%81%B5%E6%B4%BB%E6%80%A7%EF%BC%9A%E9%80%82%E9%85%8D%E5%B7%B2%E6%9C%89%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="toc-number">4.5.</span> <span class="toc-text">5. 媒介灵活性：适配已有工作流</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%80%BB%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">五、总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81Q-A"><span class="toc-number">6.</span> <span class="toc-text">六、Q&amp;A</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%B8%A6%E9%A1%B9%E7%9B%AE%E6%96%87%E6%A1%A3%E5%BA%93%E7%9A%84%E5%BC%80%E5%8F%91%E9%A1%B9%E7%9B%AE%EF%BC%8C%E5%92%8C%E7%8E%B0%E5%9C%A8%E5%9F%BA%E4%BA%8E-AGENTS-md-CLAUDE-md-%E7%9A%84%E9%A1%B9%E7%9B%AE%EF%BC%8C%E6%9C%89%E4%BB%80%E4%B9%88%E4%B8%8D%E4%B8%80%E6%A0%B7%EF%BC%9F"><span class="toc-number">6.1.</span> <span class="toc-text">1. 带项目文档库的开发项目，和现在基于 AGENTS.md&#x2F;CLAUDE.md 的项目，有什么不一样？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%BB%B4%E6%8A%A4%E8%BF%99%E4%B9%88%E5%A4%9A%E6%96%87%E6%A1%A3%EF%BC%8C%E4%BC%9A%E4%B8%8D%E4%BC%9A%E5%A2%9E%E5%8A%A0%E9%A2%9D%E5%A4%96%E8%B4%9F%E6%8B%85%EF%BC%9F%E6%9C%AC%E6%9D%A5%E5%86%99%E4%BB%A3%E7%A0%81%E5%B0%B1%E5%BF%99%E4%B8%8D%E8%BF%87%E6%9D%A5%E4%BA%86%E3%80%82"><span class="toc-number">6.2.</span> <span class="toc-text">2. 维护这么多文档，会不会增加额外负担？本来写代码就忙不过来了。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%BF%99%E5%92%8C%E4%BC%A0%E7%BB%9F%E7%9A%84%E9%A1%B9%E7%9B%AE-Wiki%E3%80%81Confluence-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">6.3.</span> <span class="toc-text">3. 这和传统的项目 Wiki、Confluence 有什么区别？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%B0%8F%E9%A1%B9%E7%9B%AE%E6%88%96%E8%80%85%E4%B8%AA%E4%BA%BA-side-project-%E6%9C%89%E5%BF%85%E8%A6%81%E7%94%A8%E8%BF%99%E4%B9%88%E9%87%8D%E7%9A%84%E6%9C%BA%E5%88%B6%E5%90%97%EF%BC%9F"><span class="toc-number">6.4.</span> <span class="toc-text">4. 小项目或者个人 side project 有必要用这么重的机制吗？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E6%88%91%E6%9C%89%E5%A4%9A%E4%B8%AA%E5%AD%90%E4%BB%93%E5%BA%93%EF%BC%88%E5%89%8D%E7%AB%AF%E3%80%81%E5%90%8E%E7%AB%AF%E3%80%81%E6%A8%A1%E5%9E%8B%EF%BC%89%EF%BC%8C%E6%AF%8F%E4%B8%AA%E9%83%BD%E8%A6%81%E7%BB%B4%E6%8A%A4%E4%B8%80%E5%A5%97%E6%96%87%E6%A1%A3%E5%BA%93%E5%90%97%EF%BC%9F"><span class="toc-number">6.5.</span> <span class="toc-text">5. 我有多个子仓库（前端、后端、模型），每个都要维护一套文档库吗？</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/04/17/Arxiv%E6%AF%8F%E6%97%A5%E9%80%9F%E9%80%92.html" title="Arxiv每日速递(2026-04-17)"><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/Arxiv%E6%AF%8F%E6%97%A5%E9%80%9F%E9%80%92/wc.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv每日速递(2026-04-17)"/></a><div class="content"><a class="title" href="/2026/04/17/Arxiv%E6%AF%8F%E6%97%A5%E9%80%9F%E9%80%92.html" title="Arxiv每日速递(2026-04-17)">Arxiv每日速递(2026-04-17)</a><time datetime="2026-04-17T04:01:34.044Z" title="发表于 2026-04-17 12:01:34">2026-04-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/04/05/skill_project_docs_manager.html" title="Project Docs Manager Skill：让 AI 自主驱动项目迭代的文档引擎"><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Project Docs Manager Skill：让 AI 自主驱动项目迭代的文档引擎"/></a><div class="content"><a class="title" href="/2026/04/05/skill_project_docs_manager.html" title="Project Docs Manager Skill：让 AI 自主驱动项目迭代的文档引擎">Project Docs Manager Skill：让 AI 自主驱动项目迭代的文档引擎</a><time datetime="2026-04-05T02:24:23.000Z" title="发表于 2026-04-05 10:24:23">2026-04-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/04/02/skill_video_knowledge_purify.html" title="Video Knowledge Purify Skill：让视频变成可检索的结构化知识笔记"><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Video Knowledge Purify Skill：让视频变成可检索的结构化知识笔记"/></a><div class="content"><a class="title" href="/2026/04/02/skill_video_knowledge_purify.html" title="Video Knowledge Purify Skill：让视频变成可检索的结构化知识笔记">Video Knowledge Purify Skill：让视频变成可检索的结构化知识笔记</a><time datetime="2026-04-02T05:51:12.000Z" title="发表于 2026-04-02 13:51:12">2026-04-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/03/31/TechPulse%E6%8A%80%E6%9C%AF%E8%B6%8B%E5%8A%BF%E8%BF%BD%E8%B8%AA%E6%8A%A5%E5%91%8A.html" title="TrendPulse 技术趋势追踪报告"><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="TrendPulse 技术趋势追踪报告"/></a><div class="content"><a class="title" href="/2026/03/31/TechPulse%E6%8A%80%E6%9C%AF%E8%B6%8B%E5%8A%BF%E8%BF%BD%E8%B8%AA%E6%8A%A5%E5%91%8A.html" title="TrendPulse 技术趋势追踪报告">TrendPulse 技术趋势追踪报告</a><time datetime="2026-03-31T16:00:00.000Z" title="发表于 2026-04-01 00:00:00">2026-04-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/03/22/claude-code%E9%87%8C%E7%9A%84agent-harness%E5%B7%A5%E7%A8%8B.html" title="Claude Code 的 Agent Harness 工程"><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Claude Code 的 Agent Harness 工程"/></a><div class="content"><a class="title" href="/2026/03/22/claude-code%E9%87%8C%E7%9A%84agent-harness%E5%B7%A5%E7%A8%8B.html" title="Claude Code 的 Agent Harness 工程">Claude Code 的 Agent Harness 工程</a><time datetime="2026-03-22T02:13:53.000Z" title="发表于 2026-03-22 10:13:53">2026-03-22</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2026 By 徐耀彬</div><div class="footer_custom_text"><p><a style="margin-inline:5px"target="_blank"href="https://hexo.io/"><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&logo=hexo"title="博客框架为Hexo"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://butterfly.js.org/"><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&logo=bitdefender"title="主题采用butterfly"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://www.jsdelivr.com/"><img src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&logo=jsDelivr"title="本站使用JsDelivr为静态资源提供CDN加速"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://github.com/"><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&logo=GitHub"title="本站项目由Gtihub托管"alt="img"></a><a style="margin-inline:5px"target="_blank"href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&logo=Claris"alt="img"title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"></a></br></p></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>if (document.getElementsByClassName('mermaid').length) {
+  if (window.mermaidJsLoad) mermaid.init()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(() => {
+      window.mermaidJsLoad = true
+      mermaid.initialize({
+        theme: 'default',
+      })
+      false && mermaid.init()
+    })
+  }
+}</script><script>(()=>{
+  const $countDom = document.getElementById('twikoo-count')
+  const init = () => {
+    let initData = {
+      el: '#twikoo-wrap',
+      envId: 'blog-',
+      region: ''
+    }
+
+    if (false) {
+      const otherData = false
+      initData = Object.assign(initData, otherData)
+    }
+    
+    twikoo.init(initData)
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'blog-',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      $countDom.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const loadTwikoo = (bool = false) => {
+    if (typeof twikoo === 'object') {
+      init()
+      bool && $countDom && setTimeout(getCount,0)
+    } else {
+      getScript('https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(()=> {
+        init()
+        bool && $countDom && setTimeout(getCount,0)
+      })
+    }
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo(true)
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style> <script data-pjax>if(document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    var parent = document.getElementById('recent-posts');
+    var child = '<div class="recent-post-item" style="width:100%;height: auto"><div id="catalog_magnet"><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/机器学习/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🐱 机器学习 (6)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (9)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/竞赛相关/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 竞赛相关 (3)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/阅读笔记/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 阅读笔记 (1)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><a class="magnet_link_more"  href="http://louishsu.xyz/categories" style="flex:1;text-align: center;margin-bottom: 10px;">查看更多...</a></div></div>';
+    console.log('已挂载magnet')
+    parent.insertAdjacentHTML("afterbegin",child)}
+     </script><style>#catalog_magnet{flex-wrap: wrap;display: flex;width:100%;justify-content:space-between;padding: 10px 10px 0 10px;align-content: flex-start;}.magnet_item{flex-basis: calc(50% - 5px);background: #f2f2f2;margin-bottom: 10px;border-radius: 8px;transition: all 0.2s ease-in-out;}.magnet_item:hover{background: #b30070}.magnet_link_more{color:#555}.magnet_link{color:black}.magnet_link:hover{color:white}@media screen and (max-width: 600px) {.magnet_item {flex-basis: 100%;}}.magnet_link_context{display:flex;padding: 10px;font-size:16px;transition: all 0.2s ease-in-out;}.magnet_link_context:hover{padding: 10px 20px;}</style>
+    <style></style><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2021/05/19/全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖).html" alt=""><img width="48" height="48" src="https://tianchi-public.oss-cn-hangzhou.aliyuncs.com/public/files/forum/161037709574435991610377095138.jpeg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-05-19</span><a class="blog-slider__title" href="2021/05/19/全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖).html" alt="">全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖)</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2021/05/19/全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖).html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2021/10/22/中国法律智能技术评测(CAIL2021)：信息抽取(Rank2).html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/cail2021.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-10-22</span><a class="blog-slider__title" href="2021/10/22/中国法律智能技术评测(CAIL2021)：信息抽取(Rank2).html" alt="">中国法律智能技术评测(CAIL2021)：信息抽取(Rank2)</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2021/10/22/中国法律智能技术评测(CAIL2021)：信息抽取(Rank2).html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/11/17/2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖).html" alt=""><img width="48" height="48" src="https://cdn.kesci.com/upload/image/r7j60un866.png?imageView2/2/w/2500/h/2500" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-11-17</span><a class="blog-slider__title" href="2022/11/17/2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖).html" alt="">2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖)</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2022/11/17/2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖).html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2025/01/01/图解：LLM是怎么通过PPO优化偏好的？.html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/ww3.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2025-01-01</span><a class="blog-slider__title" href="2025/01/01/图解：LLM是怎么通过PPO优化偏好的？.html" alt="">图解：LLM是怎么通过PPO优化偏好的？</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2025/01/01/图解：LLM是怎么通过PPO优化偏好的？.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/09/22/vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度.html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/ww5.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-09-22</span><a class="blog-slider__title" href="2023/09/22/vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度.html" alt="">vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/09/22/vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/10/22/Transformer语言模型的位置编码与长度外推.html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/city.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-10-22</span><a class="blog-slider__title" href="2023/10/22/Transformer语言模型的位置编码与长度外推.html" alt="">Transformer语言模型的位置编码与长度外推</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/10/22/Transformer语言模型的位置编码与长度外推.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2024/02/03/Stable Diffusion 提示词指南书.html" alt=""><img width="48" height="48" src="https://huggingface.co/blog/assets/98_stable_diffusion/stable_diffusion_12_1.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2024-02-03</span><a class="blog-slider__title" href="2024/02/03/Stable Diffusion 提示词指南书.html" alt="">🎨 Stable Diffusion 提示词指南书</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2024/02/03/Stable Diffusion 提示词指南书.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/09/06/Prompt：大语言模型的执行指南.html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/ww6.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-09-06</span><a class="blog-slider__title" href="2023/09/06/Prompt：大语言模型的执行指南.html" alt="">Prompt：大语言模型的执行指南</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/09/06/Prompt：大语言模型的执行指南.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/11/26/升级深度学习开发环境全攻略.html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-11-26</span><a class="blog-slider__title" href="2022/11/26/升级深度学习开发环境全攻略.html" alt="">升级深度学习开发环境全攻略</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2022/11/26/升级深度学习开发环境全攻略.html" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>
