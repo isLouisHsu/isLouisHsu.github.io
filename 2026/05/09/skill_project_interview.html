@@ -1,0 +1,499 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Project Interview Skill：用一场对话，把模糊的项目变成结构清晰的文档 | LOUIS' BLOG</title><meta name="keywords" content="Agent,工具,Skill"><meta name="author" content="徐耀彬"><meta name="copyright" content="徐耀彬"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、这是什么 我创建了 project-interview 技能，一个通过交互式问答采访，引导用户把项目信息梳理成结构化文档的 AI 助手。 它的工作方式很像一位经验丰富的项目顾问：先自己做功课（看代码、读文档、翻 Git 历史），然后跟你聊几个关键问题，最后输出一份结构完整的 Markdown 项目文档。  🔗 源码与使用说明：https:&#x2F;&#x2F;github.com&#x2F;isLouisHsu&#x2F;ski">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Project Interview Skill：用一场对话，把模糊的项目变成结构清晰的文档">
+<meta property="og:url" content="http://louishsu.xyz/2026/05/09/skill_project_interview.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="一、这是什么 我创建了 project-interview 技能，一个通过交互式问答采访，引导用户把项目信息梳理成结构化文档的 AI 助手。 它的工作方式很像一位经验丰富的项目顾问：先自己做功课（看代码、读文档、翻 Git 历史），然后跟你聊几个关键问题，最后输出一份结构完整的 Markdown 项目文档。  🔗 源码与使用说明：https:&#x2F;&#x2F;github.com&#x2F;isLouisHsu&#x2F;ski">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg">
+<meta property="article:published_time" content="2026-05-09T07:30:00.000Z">
+<meta property="article:modified_time" content="2026-06-12T03:33:12.080Z">
+<meta property="article:author" content="徐耀彬">
+<meta property="article:tag" content="Agent">
+<meta property="article:tag" content="工具">
+<meta property="article:tag" content="Skill">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://louishsu.xyz/2026/05/09/skill_project_interview"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: true,
+  isToc: true,
+  postUpdate: '2026-06-12 11:33:12'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><link rel="stylesheet" href="/css/background.css"><script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/touxiang.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">33</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">14</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 工具</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fas fa-pen"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/isLouisHsu/blog/tree/master/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-brands fa-app-store"></i><span> 利器</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://code.visualstudio.com/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> VSCode：微软旗下的跨平台代码编辑软件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mobaxterm.mobatek.net/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> MobaXterm：超好用的全能远程终端</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/CopyTranslator/CopyTranslator"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> CopyTranslator：“复制即翻译”的外文辅助阅读翻译解决方案</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.zotero.org/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Zotero：便于收集、组织、引用、共享的文献管理工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://zealdocs.org/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Zeal：离线文档浏览器，其灵感来自 OS X平台上的 Dash，目前支持 Window 和 Liunx，基于 QT5</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ditto-cp.sourceforge.io/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Ditto：强大的Windows剪贴板增强工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://wise-system-monitor.en.softonic.com/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Wise System Monitor：监控从系统到本地网络的所有运行情况</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/indiff/qttabbar"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> QtTabBar：在Windows资源管理器中使用多标签功能扩展工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/sentialx/multrin"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Multrin：“窗口合并”辅助小工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/Wox-launcher/Wox"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Wox &amp; Everything：基于名称快速定位文件和文件夹的搜索工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/NickeManarin/ScreenToGif"><i class="fa-fw fa-regular fa-star"></i><span> ScreenToGif：快速录制屏幕指定区域并保存为动图文件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mathpix.com/"><i class="fa-fw fa-regular fa-star"></i><span> Mathpix Snipping：识别数学公式并转换成LaTeX</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="http://www.uderzo.it/main_products/space_sniffer/index.html"><i class="fa-fw fa-regular fa-star"></i><span> Space Sniffer：磁盘空间分析工具</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">LOUIS' BLOG</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 工具</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fas fa-pen"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/isLouisHsu/blog/tree/master/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-brands fa-app-store"></i><span> 利器</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://code.visualstudio.com/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> VSCode：微软旗下的跨平台代码编辑软件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mobaxterm.mobatek.net/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> MobaXterm：超好用的全能远程终端</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/CopyTranslator/CopyTranslator"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> CopyTranslator：“复制即翻译”的外文辅助阅读翻译解决方案</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.zotero.org/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Zotero：便于收集、组织、引用、共享的文献管理工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://zealdocs.org/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Zeal：离线文档浏览器，其灵感来自 OS X平台上的 Dash，目前支持 Window 和 Liunx，基于 QT5</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ditto-cp.sourceforge.io/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Ditto：强大的Windows剪贴板增强工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://wise-system-monitor.en.softonic.com/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Wise System Monitor：监控从系统到本地网络的所有运行情况</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/indiff/qttabbar"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> QtTabBar：在Windows资源管理器中使用多标签功能扩展工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/sentialx/multrin"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Multrin：“窗口合并”辅助小工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/Wox-launcher/Wox"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Wox &amp; Everything：基于名称快速定位文件和文件夹的搜索工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/NickeManarin/ScreenToGif"><i class="fa-fw fa-regular fa-star"></i><span> ScreenToGif：快速录制屏幕指定区域并保存为动图文件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mathpix.com/"><i class="fa-fw fa-regular fa-star"></i><span> Mathpix Snipping：识别数学公式并转换成LaTeX</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="http://www.uderzo.it/main_products/space_sniffer/index.html"><i class="fa-fw fa-regular fa-star"></i><span> Space Sniffer：磁盘空间分析工具</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Project Interview Skill：用一场对话，把模糊的项目变成结构清晰的文档<a class="post-edit-link" href="https://github.com/isLouisHsu/blog/tree/master/source_posts/skill_project_interview.md" title="编辑" target="_blank"><i class="fas fa-pencil-square"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-05-09T07:30:00.000Z" title="发表于 2026-05-09 15:30:00">2026-05-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-12T03:33:12.080Z" title="更新于 2026-06-12 11:33:12">2026-06-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%B7%A5%E5%85%B7/">工具</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>10分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2026/05/09/skill_project_interview.html#post-comment"><span id="twikoo-count"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="一、这是什么">一、这是什么</h2>
+<p>我创建了 <strong><code>project-interview</code></strong> 技能，一个通过交互式问答采访，引导用户把项目信息梳理成结构化文档的 AI 助手。</p>
+<p>它的工作方式很像一位经验丰富的项目顾问：先自己做功课（看代码、读文档、翻 Git 历史），然后跟你聊几个关键问题，最后输出一份结构完整的 Markdown 项目文档。</p>
+<blockquote>
+<p>🔗 源码与使用说明：<a target="_blank" rel="noopener" href="https://github.com/isLouisHsu/skills/tree/main/skills/project-interview">https://github.com/isLouisHsu/skills/tree/main/skills/project-interview</a></p>
+</blockquote>
+<p>与普通的&quot;AI 帮我写文档&quot;不同，它解决的核心问题是**“我不知道该写什么”**。它不是等你给出一堆材料再整理，而是主动引导你——从项目背景到技术决策，从团队分工到踩过的坑，通过层层递进的对话，把你脑子里零散的项目信息一点点&quot;问&quot;出来，再组织成文档。</p>
+<p>文档结构根据项目体量自动适配：</p>
+<ul>
+<li><strong>小型项目</strong>（工具脚本、小模块）：项目概述 + 使用方法 + 技术要点，1-2 页</li>
+<li><strong>中型项目</strong>（独立应用、服务）：覆盖核心章节，3-5 页</li>
+<li><strong>大型项目</strong>（平台、系统）：完整章节结构，言之有物即可</li>
+</ul>
+<p>章节涵盖：项目概述、背景与动机、目标用户、核心功能、技术方案、团队与分工、项目进展、成果与数据、挑战与经验、后续规划、术语表。</p>
+<h2 id="二、为什么需要这个-Skill">二、为什么需要这个 Skill</h2>
+<p><strong>写项目文档的痛苦，往往不是&quot;写&quot;这个动作，而是&quot;不知道从哪开始&quot;。</strong></p>
+<p>很多人有过这样的经历：老板让整理一份项目文档，你打开编辑器，光标闪了十分钟，只写出一个标题。不是对项目不了解——恰恰相反，你天天做这个项目，太熟悉了，熟悉到不知道哪些信息对别人来说是重要的。</p>
+<p><strong>这就是&quot;知识诅咒&quot;：</strong> 身在其中的人觉得不言自明的东西，读文档的人完全不了解。你写&quot;基于 PDS 做了优化&quot;，但读者根本不知道 PDS 是什么；你跳过&quot;为什么选 Redis 不选 MySQL&quot;，但这个决策恰恰是后人最想知道的。</p>
+<p>Project Interview 要解决的就是这些卡点：</p>
+<ol>
+<li>
+<p><strong>要整理项目时不知道说什么。</strong> 没有文档模板，没有提问清单，面对空白文档大脑也一片空白。Project Interview 内置了完整的话题池，从项目定位到技术决策，从团队分工到经验教训，按节奏逐个引导，你只需要回答即可。</p>
+</li>
+<li>
+<p><strong>人工整理容易遗漏细节。</strong> 人写文档容易跟着自己的思维惯性走：技术出身的只写架构，产品出身的只写功能，运营出身的只写数据。Project Interview 站在&quot;外人&quot;视角，主动捕捉被忽略的信息——你提到缩写时它会追问全称，你跳过因果链条时它会补问中间环节。</p>
+</li>
+<li>
+<p><strong>在初稿上修改比空白开始简单。</strong> 一张白纸让人退缩，但看到一份&quot;大概对、需要改&quot;的草稿，人的编辑本能就会被激活。Project Interview 的 workflow 是先做功课出草稿，标记出 <code>[待补充]</code> 的地方，然后邀请你&quot;看看哪些需要补充或纠正&quot;——对话成本远低于从零写作。</p>
+</li>
+<li>
+<p><strong>知识诅咒：身在其中，盲区最多。</strong> 用户说&quot;大家都知道&quot;或&quot;就是那个&quot;时，Project Interview 会温和地请他展开——文档读者不在&quot;大家&quot;里。它会追问术语全称、补全因果链条、挑战那些&quot;不言自明&quot;的假设，最终文档中专业术语和缩写首次出现时都会加上解释。</p>
+</li>
+<li>
+<p><strong>文档结构和篇幅难以把控。</strong> 小项目被写成十几章的长篇大论，大项目只有三段话——这两种情况都很常见。Project Interview 先判断项目规模（看文件数、目录结构、Git 活跃度），再决定文档该多长、哪些章节该展开、哪些可以省略。</p>
+</li>
+<li>
+<p><strong>非技术项目或没有代码仓库时，AI 无从入手。</strong> 很多项目没有代码可分析——市场活动、业务流程梳理、研究报告。Project Interview 支持&quot;纯对话模式&quot;，通过 2-3 轮轻松的问题破冰，自动生成第一版草稿，再进入迭代完善。</p>
+</li>
+</ol>
+<h2 id="三、如何使用">三、如何使用</h2>
+<p>安装技能：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npx skills add https://github.com/isLouisHsu/skills --skill project-interview</span><br></pre></td></tr></table></figure>
+<p>然后在 AI Agent（如 Claude）中触发：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/project-interview 帮我整理这个项目</span><br></pre></td></tr></table></figure>
+<p>或者直接说：</p>
+<ul>
+<li>“帮我写个项目说明”</li>
+<li>“总结一下这个项目”</li>
+<li>“我要写项目交接文档”</li>
+</ul>
+<p><strong>整个流程只需四步：</strong></p>
+<p><strong>第一步：AI 做功课。</strong> 如果你在代码仓库里，AI 会自动扫描项目结构、读取 README、查看技术栈配置、翻最近 20 条 Git 记录——1-2 分钟内建立对项目的全局理解。小型项目甚至可以快速浏览所有源码。</p>
+<p><strong>第二步：出草稿。</strong> AI 把调研了解到的东西整理成文档，保存到当前目录（<code>&#123;项目名称&#125;_项目文档.md</code>），标记不确定的部分为 <code>[待补充]</code>，然后展示给你。</p>
+<p><strong>第三步：对话补充。</strong> 你看着草稿说&quot;技术方案这里不对&quot;“背景部分多写一点”“PDS 是我们内部的数据平台”——AI 逐条吸收，每收集 3-4 轮更新一次文档。不确定的地方说&quot;不清楚&quot;或&quot;跳过&quot;，AI 不会纠缠。</p>
+<p><strong>第四步：收尾定稿。</strong> 清理所有 <code>[待补充]</code> 标记，保存最终版，展示给你确认。后续想调整随时说，AI 直接改文件。</p>
+<h2 id="四、它是如何生效的">四、它是如何生效的</h2>
+<h3 id="1-主动调研：先做作业再开口">1. 主动调研：先做作业再开口</h3>
+<p>Project Interview 的核心原则是<strong>能从代码和文档中了解到的信息，不要问用户</strong>。</p>
+<p>启动后立即行动，不需要征求同意。AI 会：</p>
+<ul>
+<li>浏览顶层目录，判断项目规模</li>
+<li>读取 README、CHANGELOG、<a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a> 等文档</li>
+<li>查看 package.json / pyproject.toml / pom.xml 了解技术栈</li>
+<li>看 git log 了解活跃度和近期方向</li>
+</ul>
+<p>小型项目可以快速浏览所有源码，大型项目只看核心入口和模块结构——目标是&quot;建立全局理解&quot;，不是&quot;读懂每一行&quot;。</p>
+<h3 id="2-草稿驱动：让编辑本能代替写作焦虑">2. 草稿驱动：让编辑本能代替写作焦虑</h3>
+<p>调研后不是继续追问，而是<strong>立即输出一版草稿</strong>。</p>
+<p>心理学上有个概念叫&quot;空白页恐惧症&quot;（Blank Page Syndrome）——面对空白的编辑器，人的创造力会被抑制。但看到一份有框架、有内容、只是需要修改的文档时，批判性思维和编辑本能会被激活，阻力大幅下降。</p>
+<p>草稿中不确定的部分标记为 <code>[待补充：xxx]</code>，让用户一眼看到需要他输入的地方。这种&quot;半成品&quot;策略是 Project Interview 最有效的设计之一。</p>
+<h3 id="3-对话节奏：一次只问-1-2-个问题">3. 对话节奏：一次只问 1-2 个问题</h3>
+<p>很多 AI 助手做信息采集时，喜欢一次性抛出 10 个问题让用户填写——这跟填表没有区别，体验很差。</p>
+<p>Project Interview 严格控制节奏：</p>
+<ul>
+<li><strong>一次只问 1-2 个问题</strong></li>
+<li>用通俗的语言提问，避免专业术语</li>
+<li>根据回答灵活追问，不机械走清单</li>
+<li>允许用户随时喊停（“差不多了”“先这样”）</li>
+</ul>
+<p>对话轻松自然，像跟同事聊天，不像在做问卷调查。</p>
+<h3 id="4-打破知识诅咒：站在外人视角追问">4. 打破知识诅咒：站在外人视角追问</h3>
+<p>这是 Project Interview 最重要的职责之一。</p>
+<p>当用户使用缩写时，它追问全称和含义：“你提到了 PDS，这个具体是指什么？”</p>
+<p>当用户跳过因果链条时，它补问中间环节：“从 X 到 Z 中间经历了什么？”</p>
+<p>当用户说&quot;大家都知道&quot;时，它温和地请他展开：“文档读者不在’大家’里，能具体说说吗？”</p>
+<p>最终文档中，所有专业术语和缩写首次出现时都加上解释或全称——这是人工整理时最容易遗漏的细节。</p>
+<h3 id="5-篇幅适配：让文档匹配项目体量">5. 篇幅适配：让文档匹配项目体量</h3>
+<p>一个 100 行的小工具不需要 12 个章节的长文档，一个大型平台也不该只有三段话。</p>
+<p>Project Interview 根据项目规模自动调整：</p>
+<table>
+<thead>
+<tr>
+<th>项目规模</th>
+<th>判断依据</th>
+<th>文档篇幅</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>小型</td>
+<td>十几个文件，单目录</td>
+<td>1-2 页，3-4 个章节</td>
+</tr>
+<tr>
+<td>中型</td>
+<td>多模块，有配置文件</td>
+<td>3-5 页，核心章节全覆盖</td>
+</tr>
+<tr>
+<td>大型</td>
+<td>多层级目录，多服务</td>
+<td>完整章节，言之有物</td>
+</tr>
+</tbody>
+</table>
+<h3 id="6-纯对话模式：没有代码也能用">6. 纯对话模式：没有代码也能用</h3>
+<p>很多项目没有代码仓库——市场活动、业务流程、研究报告。这时候 Project Interview 切换到纯对话模式：</p>
+<ol>
+<li>先问最轻松的问题：“你的项目叫什么名字？大概是做什么的？”</li>
+<li>根据回答判断项目类型，后续提问自动适配</li>
+<li>2-3 轮对话后生成第一版草稿，进入正常的&quot;草稿→补充&quot;流程</li>
+</ol>
+<p>这种场景下，每个问题都必须有价值，Project Interview 会确保不问废话。</p>
+<h2 id="五、总结">五、总结</h2>
+<p>Project Interview 解决的不是&quot;写文档&quot;的技术问题，而是&quot;不知道写什么&quot;的心理障碍。</p>
+<p>它通过三个关键设计降低阻力：</p>
+<ol>
+<li><strong>AI 先做功课</strong>——不是从零开始问，而是带着理解来对话；</li>
+<li><strong>先出草稿再修改</strong>——激活编辑本能，绕过空白页恐惧；</li>
+<li><strong>站在外人视角追问</strong>——打破知识诅咒，捕捉被忽略的盲区。</li>
+</ol>
+<p>这套机制适合以下场景：</p>
+<ul>
+<li><strong>项目交接</strong>：离职或转岗前，把脑子里的事落到文档里；</li>
+<li><strong>项目复盘</strong>：阶段性总结，梳理成果、挑战和经验；</li>
+<li><strong>对外汇报</strong>：给老板、客户、投资人写项目说明；</li>
+<li><strong>个人整理</strong>：项目做久了，借文档梳理重新理解全局；</li>
+<li><strong>非技术项目</strong>：没有代码，纯靠对话也能产出结构化文档。</li>
+</ul>
+<p>Project Interview 把&quot;写项目文档&quot;这个让人望而生畏的大任务，拆解成了&quot;回答几个问题、修改一份草稿&quot;的小步骤——而这往往是让人动起来的关键。</p>
+<h2 id="六、Q-A">六、Q&amp;A</h2>
+<h3 id="1-这跟直接让-AI-帮我写个项目文档-有什么区别？">1. 这跟直接让 AI &quot;帮我写个项目文档&quot;有什么区别？</h3>
+<p>直接让 AI 写文档，通常有两种模式，都有明显缺陷：</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>你给材料，AI 整理</strong></td>
+<td>你得先写出/找出一堆材料，这本身就是最累的环节</td>
+</tr>
+<tr>
+<td><strong>AI 直接生成通用模板</strong></td>
+<td>内容空洞，跟你的项目无关，改起来比重写还累</td>
+</tr>
+</tbody>
+</table>
+<p>Project Interview 走的是第三条路：<strong>AI 主动调研 + 对话引导 + 迭代完善</strong>。</p>
+<ul>
+<li>有代码时，AI 先读取项目信息，出带内容的草稿；</li>
+<li>没代码时，AI 用 2-3 个问题破冰，出基于你描述的草稿；</li>
+<li>然后进入&quot;你指出问题 → AI 修改 → 再看再改&quot;的循环。</li>
+</ul>
+<p>你不是从零写，也不是改一份空洞模板——你是在一份&quot;大概对&quot;的初稿上精修。</p>
+<h3 id="2-它会问很多问题吗？我很忙，不想花太多时间。">2. 它会问很多问题吗？我很忙，不想花太多时间。</h3>
+<p>不会。设计原则就是&quot;轻量级&quot;：</p>
+<ul>
+<li>AI 能从代码里读到的，绝不问你；</li>
+<li>一次只问 1-2 个问题，不是问卷调查；</li>
+<li>你说&quot;不清楚&quot;或&quot;跳过&quot;，它不纠缠；</li>
+<li>你说&quot;差不多了&quot;，它立即收尾。</li>
+</ul>
+<p>根据实际使用反馈，一个中型项目通常 10-15 分钟对话即可完成核心文档——比你自己从零写要快得多。</p>
+<h3 id="3-文档结构是固定的吗？我想调整章节顺序或增减内容。">3. 文档结构是固定的吗？我想调整章节顺序或增减内容。</h3>
+<p>结构是参考性的，不是强制的。</p>
+<p>AI 会根据项目类型和规模自动选择合适的章节组合，但你可以随时说：</p>
+<ul>
+<li>“把技术方案放到前面”</li>
+<li>“加一个部署相关的章节”</li>
+<li>“去掉团队分工这部分”</li>
+</ul>
+<p>AI 会立即调整文档结构并重新组织内容。</p>
+<h3 id="4-纯技术项目用-project-interview，和用-project-docs-manager-有什么区别？">4. 纯技术项目用 project-interview，和用 project-docs-manager 有什么区别？</h3>
+<blockquote>
+<p><a href="https://louishsu.xyz/2026/04/05/skill_project_docs_manager.html">Project Docs Manager Skill：让 AI 自主驱动项目迭代的文档引擎</a></p>
+</blockquote>
+<p>这两个 skill 解决的是不同层面的问题：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Project Interview</th>
+<th>Project Docs Manager</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>核心目标</strong></td>
+<td>把项目信息从人脑子里&quot;问&quot;出来，生成文档</td>
+<td>建立持续迭代的项目记忆系统，让 AI 自主驱动</td>
+</tr>
+<tr>
+<td><strong>使用时机</strong></td>
+<td>一次性或低频：项目交接、阶段性总结、对外汇报</td>
+<td>持续使用：每次迭代都更新，形成动态知识库</td>
+</tr>
+<tr>
+<td><strong>输入来源</strong></td>
+<td>代码 + 对话（用户回答）</td>
+<td>代码 + 文档 + 执行结果 + 人工反馈</td>
+</tr>
+<tr>
+<td><strong>输出形态</strong></td>
+<td>一份结构化的项目文档</td>
+<td>分层的文档体系（索引 + 详情），持续演进</td>
+</tr>
+<tr>
+<td><strong>AI 角色</strong></td>
+<td>采访者 + 整理者</td>
+<td>自主驱动者，基于文档主动提案和执行</td>
+</tr>
+</tbody>
+</table>
+<p>简单说：</p>
+<ul>
+<li><strong>Project Interview</strong> 是&quot;项目写真&quot;——在特定时间点，把项目全貌拍下来，输出一份给人读的文档；</li>
+<li><strong>Project Docs Manager</strong> 是&quot;项目大脑&quot;——持续运转，让 AI 继承记忆、自主迭代。</li>
+</ul>
+<p>两者可以结合使用：用 Project Interview 快速产出项目的初始文档，然后纳入 Project Docs Manager 的文档体系，成为后续迭代的基线。</p>
+<h3 id="5-生成的文档可以导出到其他地方吗？">5. 生成的文档可以导出到其他地方吗？</h3>
+<p>生成的文档是标准 Markdown 格式，保存在当前工作目录，你可以：</p>
+<ul>
+<li>直接复制到 Notion、语雀、Confluence 等平台；</li>
+<li>提交到 Git 仓库作为项目文档；</li>
+<li>转换为 PDF 或 Word 格式分享；</li>
+<li>作为 Project Docs Manager 的初始 <a target="_blank" rel="noopener" href="http://OVERVIEW.md">OVERVIEW.md</a> 使用。</li>
+</ul>
+<p>文档是你的，AI 只是帮你组织和写出来。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">徐耀彬</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://louishsu.xyz/2026/05/09/skill_project_interview.html">http://louishsu.xyz/2026/05/09/skill_project_interview.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://louishsu.xyz" target="_blank">LOUIS' BLOG</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Agent/">Agent</a><a class="post-meta__tags" href="/tags/%E5%B7%A5%E5%85%B7/">工具</a><a class="post-meta__tags" href="/tags/Skill/">Skill</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2026/05/31/Superpowers%EF%BC%9AAI%20Agent%20%E7%B3%BB%E7%BB%9F%E5%8C%96%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E6%96%B9%E6%B3%95%E8%AE%BA.html"><img class="prev-cover" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Superpowers：AI Agent 系统化软件开发方法论</div></div></a></div><div class="next-post pull-right"><a href="/2026/04/05/skill_project_docs_manager.html"><img class="next-cover" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Project Docs Manager Skill：让 AI 自主驱动项目迭代的文档引擎</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2026/04/05/skill_project_docs_manager.html" title="Project Docs Manager Skill：让 AI 自主驱动项目迭代的文档引擎"><img class="cover" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-04-05</div><div class="title">Project Docs Manager Skill：让 AI 自主驱动项目迭代的文档引擎</div></div></a></div><div><a href="/2026/04/02/skill_video_knowledge_purify.html" title="Video Knowledge Purify Skill：让视频变成可检索的结构化知识笔记"><img class="cover" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-04-02</div><div class="title">Video Knowledge Purify Skill：让视频变成可检索的结构化知识笔记</div></div></a></div><div><a href="/2026/03/22/claude-code里的agent-harness工程.html" title="Claude Code 的 Agent Harness 工程"><img class="cover" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-03-22</div><div class="title">Claude Code 的 Agent Harness 工程</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/touxiang.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">徐耀彬</div><div class="author-info__description">我好像很久没写字了，老是打字</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">33</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">14</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/isLouisHsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/isLouisHsu" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:is.louishsu@foxmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">记录和分享一些学习和开源内容，若有问题可通过邮箱is.louishsu@foxmail.com联系，欢迎交流！！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%BF%99%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.</span> <span class="toc-text">一、这是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E8%BF%99%E4%B8%AA-Skill"><span class="toc-number">2.</span> <span class="toc-text">二、为什么需要这个 Skill</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8"><span class="toc-number">3.</span> <span class="toc-text">三、如何使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%AE%83%E6%98%AF%E5%A6%82%E4%BD%95%E7%94%9F%E6%95%88%E7%9A%84"><span class="toc-number">4.</span> <span class="toc-text">四、它是如何生效的</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%B8%BB%E5%8A%A8%E8%B0%83%E7%A0%94%EF%BC%9A%E5%85%88%E5%81%9A%E4%BD%9C%E4%B8%9A%E5%86%8D%E5%BC%80%E5%8F%A3"><span class="toc-number">4.1.</span> <span class="toc-text">1. 主动调研：先做作业再开口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E8%8D%89%E7%A8%BF%E9%A9%B1%E5%8A%A8%EF%BC%9A%E8%AE%A9%E7%BC%96%E8%BE%91%E6%9C%AC%E8%83%BD%E4%BB%A3%E6%9B%BF%E5%86%99%E4%BD%9C%E7%84%A6%E8%99%91"><span class="toc-number">4.2.</span> <span class="toc-text">2. 草稿驱动：让编辑本能代替写作焦虑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%AF%B9%E8%AF%9D%E8%8A%82%E5%A5%8F%EF%BC%9A%E4%B8%80%E6%AC%A1%E5%8F%AA%E9%97%AE-1-2-%E4%B8%AA%E9%97%AE%E9%A2%98"><span class="toc-number">4.3.</span> <span class="toc-text">3. 对话节奏：一次只问 1-2 个问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%89%93%E7%A0%B4%E7%9F%A5%E8%AF%86%E8%AF%85%E5%92%92%EF%BC%9A%E7%AB%99%E5%9C%A8%E5%A4%96%E4%BA%BA%E8%A7%86%E8%A7%92%E8%BF%BD%E9%97%AE"><span class="toc-number">4.4.</span> <span class="toc-text">4. 打破知识诅咒：站在外人视角追问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E7%AF%87%E5%B9%85%E9%80%82%E9%85%8D%EF%BC%9A%E8%AE%A9%E6%96%87%E6%A1%A3%E5%8C%B9%E9%85%8D%E9%A1%B9%E7%9B%AE%E4%BD%93%E9%87%8F"><span class="toc-number">4.5.</span> <span class="toc-text">5. 篇幅适配：让文档匹配项目体量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E7%BA%AF%E5%AF%B9%E8%AF%9D%E6%A8%A1%E5%BC%8F%EF%BC%9A%E6%B2%A1%E6%9C%89%E4%BB%A3%E7%A0%81%E4%B9%9F%E8%83%BD%E7%94%A8"><span class="toc-number">4.6.</span> <span class="toc-text">6. 纯对话模式：没有代码也能用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%80%BB%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">五、总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81Q-A"><span class="toc-number">6.</span> <span class="toc-text">六、Q&amp;A</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E8%BF%99%E8%B7%9F%E7%9B%B4%E6%8E%A5%E8%AE%A9-AI-%E5%B8%AE%E6%88%91%E5%86%99%E4%B8%AA%E9%A1%B9%E7%9B%AE%E6%96%87%E6%A1%A3-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">6.1.</span> <span class="toc-text">1. 这跟直接让 AI &quot;帮我写个项目文档&quot;有什么区别？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%AE%83%E4%BC%9A%E9%97%AE%E5%BE%88%E5%A4%9A%E9%97%AE%E9%A2%98%E5%90%97%EF%BC%9F%E6%88%91%E5%BE%88%E5%BF%99%EF%BC%8C%E4%B8%8D%E6%83%B3%E8%8A%B1%E5%A4%AA%E5%A4%9A%E6%97%B6%E9%97%B4%E3%80%82"><span class="toc-number">6.2.</span> <span class="toc-text">2. 它会问很多问题吗？我很忙，不想花太多时间。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%96%87%E6%A1%A3%E7%BB%93%E6%9E%84%E6%98%AF%E5%9B%BA%E5%AE%9A%E7%9A%84%E5%90%97%EF%BC%9F%E6%88%91%E6%83%B3%E8%B0%83%E6%95%B4%E7%AB%A0%E8%8A%82%E9%A1%BA%E5%BA%8F%E6%88%96%E5%A2%9E%E5%87%8F%E5%86%85%E5%AE%B9%E3%80%82"><span class="toc-number">6.3.</span> <span class="toc-text">3. 文档结构是固定的吗？我想调整章节顺序或增减内容。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E7%BA%AF%E6%8A%80%E6%9C%AF%E9%A1%B9%E7%9B%AE%E7%94%A8-project-interview%EF%BC%8C%E5%92%8C%E7%94%A8-project-docs-manager-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">6.4.</span> <span class="toc-text">4. 纯技术项目用 project-interview，和用 project-docs-manager 有什么区别？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E7%94%9F%E6%88%90%E7%9A%84%E6%96%87%E6%A1%A3%E5%8F%AF%E4%BB%A5%E5%AF%BC%E5%87%BA%E5%88%B0%E5%85%B6%E4%BB%96%E5%9C%B0%E6%96%B9%E5%90%97%EF%BC%9F"><span class="toc-number">6.5.</span> <span class="toc-text">5. 生成的文档可以导出到其他地方吗？</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/06/12/Arxiv%E6%AF%8F%E6%97%A5%E9%80%9F%E9%80%92.html" title="Arxiv每日速递(2026-06-12)"><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/Arxiv%E6%AF%8F%E6%97%A5%E9%80%9F%E9%80%92/wc.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv每日速递(2026-06-12)"/></a><div class="content"><a class="title" href="/2026/06/12/Arxiv%E6%AF%8F%E6%97%A5%E9%80%9F%E9%80%92.html" title="Arxiv每日速递(2026-06-12)">Arxiv每日速递(2026-06-12)</a><time datetime="2026-06-12T03:31:13.582Z" title="发表于 2026-06-12 11:31:13">2026-06-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/07/TechPulse%E6%8A%80%E6%9C%AF%E8%B6%8B%E5%8A%BF%E8%BF%BD%E8%B8%AA%E6%8A%A5%E5%91%8A.html" title="TrendPulse 技术趋势追踪报告"><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="TrendPulse 技术趋势追踪报告"/></a><div class="content"><a class="title" href="/2026/06/07/TechPulse%E6%8A%80%E6%9C%AF%E8%B6%8B%E5%8A%BF%E8%BF%BD%E8%B8%AA%E6%8A%A5%E5%91%8A.html" title="TrendPulse 技术趋势追踪报告">TrendPulse 技术趋势追踪报告</a><time datetime="2026-06-07T16:00:00.000Z" title="发表于 2026-06-08 00:00:00">2026-06-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/05/LLM%20Wiki%20%E6%B7%B1%E5%BA%A6%E8%A7%A3%E8%AF%BB%EF%BC%9A%E8%AE%A9%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E6%88%90%E4%B8%BA%E4%BD%A0%E7%9A%84%E7%9F%A5%E8%AF%86%E7%BC%96%E8%AF%91%E5%99%A8.html" title="LLM Wiki 深度解读：让大语言模型成为你的知识编译器"><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="LLM Wiki 深度解读：让大语言模型成为你的知识编译器"/></a><div class="content"><a class="title" href="/2026/06/05/LLM%20Wiki%20%E6%B7%B1%E5%BA%A6%E8%A7%A3%E8%AF%BB%EF%BC%9A%E8%AE%A9%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E6%88%90%E4%B8%BA%E4%BD%A0%E7%9A%84%E7%9F%A5%E8%AF%86%E7%BC%96%E8%AF%91%E5%99%A8.html" title="LLM Wiki 深度解读：让大语言模型成为你的知识编译器">LLM Wiki 深度解读：让大语言模型成为你的知识编译器</a><time datetime="2026-06-05T16:13:00.000Z" title="发表于 2026-06-06 00:13:00">2026-06-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/05/31/Superpowers%EF%BC%9AAI%20Agent%20%E7%B3%BB%E7%BB%9F%E5%8C%96%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E6%96%B9%E6%B3%95%E8%AE%BA.html" title="Superpowers：AI Agent 系统化软件开发方法论"><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Superpowers：AI Agent 系统化软件开发方法论"/></a><div class="content"><a class="title" href="/2026/05/31/Superpowers%EF%BC%9AAI%20Agent%20%E7%B3%BB%E7%BB%9F%E5%8C%96%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E6%96%B9%E6%B3%95%E8%AE%BA.html" title="Superpowers：AI Agent 系统化软件开发方法论">Superpowers：AI Agent 系统化软件开发方法论</a><time datetime="2026-05-31T12:28:37.000Z" title="发表于 2026-05-31 20:28:37">2026-05-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/05/09/skill_project_interview.html" title="Project Interview Skill：用一场对话，把模糊的项目变成结构清晰的文档"><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Project Interview Skill：用一场对话，把模糊的项目变成结构清晰的文档"/></a><div class="content"><a class="title" href="/2026/05/09/skill_project_interview.html" title="Project Interview Skill：用一场对话，把模糊的项目变成结构清晰的文档">Project Interview Skill：用一场对话，把模糊的项目变成结构清晰的文档</a><time datetime="2026-05-09T07:30:00.000Z" title="发表于 2026-05-09 15:30:00">2026-05-09</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2026 By 徐耀彬</div><div class="footer_custom_text"><p><a style="margin-inline:5px"target="_blank"href="https://hexo.io/"><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&logo=hexo"title="博客框架为Hexo"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://butterfly.js.org/"><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&logo=bitdefender"title="主题采用butterfly"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://www.jsdelivr.com/"><img src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&logo=jsDelivr"title="本站使用JsDelivr为静态资源提供CDN加速"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://github.com/"><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&logo=GitHub"title="本站项目由Gtihub托管"alt="img"></a><a style="margin-inline:5px"target="_blank"href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&logo=Claris"alt="img"title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"></a></br></p></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>if (document.getElementsByClassName('mermaid').length) {
+  if (window.mermaidJsLoad) mermaid.init()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(() => {
+      window.mermaidJsLoad = true
+      mermaid.initialize({
+        theme: 'default',
+      })
+      false && mermaid.init()
+    })
+  }
+}</script><script>(()=>{
+  const $countDom = document.getElementById('twikoo-count')
+  const init = () => {
+    let initData = {
+      el: '#twikoo-wrap',
+      envId: 'blog-',
+      region: ''
+    }
+
+    if (false) {
+      const otherData = false
+      initData = Object.assign(initData, otherData)
+    }
+    
+    twikoo.init(initData)
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'blog-',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      $countDom.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const loadTwikoo = (bool = false) => {
+    if (typeof twikoo === 'object') {
+      init()
+      bool && $countDom && setTimeout(getCount,0)
+    } else {
+      getScript('https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(()=> {
+        init()
+        bool && $countDom && setTimeout(getCount,0)
+      })
+    }
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo(true)
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@12.1.3/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12.1.3/swiper-bundle.min.css">
+ <script data-pjax>if(document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    var parent = document.getElementById('recent-posts');
+    var child = '<div class="recent-post-item" style="width:100%;height: auto"><div id="catalog_magnet"><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/机器学习/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🐱 机器学习 (7)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (9)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/竞赛相关/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 竞赛相关 (3)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/阅读笔记/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 阅读笔记 (1)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><a class="magnet_link_more"  href="http://louishsu.xyz/categories" style="flex:1;text-align: center;margin-bottom: 10px;">查看更多...</a></div></div>';
+    console.log('已挂载magnet')
+    parent.insertAdjacentHTML("afterbegin",child)}
+     </script><style>#catalog_magnet{flex-wrap: wrap;display: flex;width:100%;justify-content:space-between;padding: 10px 10px 0 10px;align-content: flex-start;}.magnet_item{flex-basis: calc(50% - 5px);background: #f2f2f2;margin-bottom: 10px;border-radius: 8px;transition: all 0.2s ease-in-out;}.magnet_item:hover{background: #b30070}.magnet_link_more{color:#555}.magnet_link{color:black}.magnet_link:hover{color:white}@media screen and (max-width: 600px) {.magnet_item {flex-basis: 100%;}}.magnet_link_context{display:flex;padding: 10px;font-size:16px;transition: all 0.2s ease-in-out;}.magnet_link_context:hover{padding: 10px 20px;}</style>
+    <style></style><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2021/05/19/全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖).html" alt=""><img width="48" height="48" src="https://tianchi-public.oss-cn-hangzhou.aliyuncs.com/public/files/forum/161037709574435991610377095138.jpeg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-05-19</span><a class="blog-slider__title" href="2021/05/19/全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖).html" alt="">全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖)</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2021/05/19/全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖).html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2021/10/22/中国法律智能技术评测(CAIL2021)：信息抽取(Rank2).html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/cail2021.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-10-22</span><a class="blog-slider__title" href="2021/10/22/中国法律智能技术评测(CAIL2021)：信息抽取(Rank2).html" alt="">中国法律智能技术评测(CAIL2021)：信息抽取(Rank2)</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2021/10/22/中国法律智能技术评测(CAIL2021)：信息抽取(Rank2).html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/11/17/2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖).html" alt=""><img width="48" height="48" src="https://cdn.kesci.com/upload/image/r7j60un866.png?imageView2/2/w/2500/h/2500" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-11-17</span><a class="blog-slider__title" href="2022/11/17/2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖).html" alt="">2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖)</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2022/11/17/2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖).html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2025/01/01/图解：LLM是怎么通过PPO优化偏好的？.html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/ww3.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2025-01-01</span><a class="blog-slider__title" href="2025/01/01/图解：LLM是怎么通过PPO优化偏好的？.html" alt="">图解：LLM是怎么通过PPO优化偏好的？</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2025/01/01/图解：LLM是怎么通过PPO优化偏好的？.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/09/22/vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度.html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/ww5.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-09-22</span><a class="blog-slider__title" href="2023/09/22/vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度.html" alt="">vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/09/22/vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/10/22/Transformer语言模型的位置编码与长度外推.html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/city.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-10-22</span><a class="blog-slider__title" href="2023/10/22/Transformer语言模型的位置编码与长度外推.html" alt="">Transformer语言模型的位置编码与长度外推</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/10/22/Transformer语言模型的位置编码与长度外推.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2024/02/03/Stable Diffusion 提示词指南书.html" alt=""><img width="48" height="48" src="https://huggingface.co/blog/assets/98_stable_diffusion/stable_diffusion_12_1.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2024-02-03</span><a class="blog-slider__title" href="2024/02/03/Stable Diffusion 提示词指南书.html" alt="">🎨 Stable Diffusion 提示词指南书</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2024/02/03/Stable Diffusion 提示词指南书.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/09/06/Prompt：大语言模型的执行指南.html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/ww6.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-09-06</span><a class="blog-slider__title" href="2023/09/06/Prompt：大语言模型的执行指南.html" alt="">Prompt：大语言模型的执行指南</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/09/06/Prompt：大语言模型的执行指南.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/11/26/升级深度学习开发环境全攻略.html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-11-26</span><a class="blog-slider__title" href="2022/11/26/升级深度学习开发环境全攻略.html" alt="">升级深度学习开发环境全攻略</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2022/11/26/升级深度学习开发环境全攻略.html" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>
