@@ -1,0 +1,819 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Agent 不只是一个 while 循环：Agent Harness 的十大核心模块 | LOUIS' BLOG</title><meta name="keywords" content="Agent"><meta name="author" content="徐耀彬"><meta name="copyright" content="徐耀彬"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="TL;DR Agent Demo 的核心可以只是一个 while 循环：模型观察上下文，决定是否调用工具，系统执行工具，再把结果交还给模型。但一旦进入真实产品，这个循环周围必须长出一整套 Harness。它负责管理入口、会话、规则、上下文、预算、权限、验证、观测和长期记忆，把模型的“下一步建议”变成安全、稳定、可恢复、可验证的系统行为。 这篇文章会沿着一次请求的完整生命周期，拆解 Agent H">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agent 不只是一个 while 循环：Agent Harness 的十大核心模块">
+<meta property="og:url" content="http://louishsu.xyz/2026/07/05/Agent%20%E4%B8%8D%E5%8F%AA%E6%98%AF%E4%B8%80%E4%B8%AA%20while%20%E5%BE%AA%E7%8E%AF%EF%BC%9AAgent%20Harness%20%E7%9A%84%E5%8D%81%E5%A4%A7%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97.html">
+<meta property="og:site_name" content="LOUIS&#39; BLOG">
+<meta property="og:description" content="TL;DR Agent Demo 的核心可以只是一个 while 循环：模型观察上下文，决定是否调用工具，系统执行工具，再把结果交还给模型。但一旦进入真实产品，这个循环周围必须长出一整套 Harness。它负责管理入口、会话、规则、上下文、预算、权限、验证、观测和长期记忆，把模型的“下一步建议”变成安全、稳定、可恢复、可验证的系统行为。 这篇文章会沿着一次请求的完整生命周期，拆解 Agent H">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg">
+<meta property="article:published_time" content="2026-07-05T16:13:00.000Z">
+<meta property="article:modified_time" content="2026-07-24T02:14:52.496Z">
+<meta property="article:author" content="徐耀彬">
+<meta property="article:tag" content="Agent">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://louishsu.xyz/2026/07/05/Agent%20%E4%B8%8D%E5%8F%AA%E6%98%AF%E4%B8%80%E4%B8%AA%20while%20%E5%BE%AA%E7%8E%AF%EF%BC%9AAgent%20Harness%20%E7%9A%84%E5%8D%81%E5%A4%A7%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: true,
+  isToc: true,
+  postUpdate: '2026-07-24 10:14:52'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><link rel="stylesheet" href="/css/background.css"><script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/touxiang.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">35</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">14</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 工具</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fas fa-pen"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/isLouisHsu/blog/tree/master/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-brands fa-app-store"></i><span> 利器</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://code.visualstudio.com/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> VSCode：微软旗下的跨平台代码编辑软件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mobaxterm.mobatek.net/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> MobaXterm：超好用的全能远程终端</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/CopyTranslator/CopyTranslator"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> CopyTranslator：“复制即翻译”的外文辅助阅读翻译解决方案</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.zotero.org/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Zotero：便于收集、组织、引用、共享的文献管理工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://zealdocs.org/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Zeal：离线文档浏览器，其灵感来自 OS X平台上的 Dash，目前支持 Window 和 Liunx，基于 QT5</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ditto-cp.sourceforge.io/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Ditto：强大的Windows剪贴板增强工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://wise-system-monitor.en.softonic.com/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Wise System Monitor：监控从系统到本地网络的所有运行情况</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/indiff/qttabbar"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> QtTabBar：在Windows资源管理器中使用多标签功能扩展工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/sentialx/multrin"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Multrin：“窗口合并”辅助小工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/Wox-launcher/Wox"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Wox &amp; Everything：基于名称快速定位文件和文件夹的搜索工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/NickeManarin/ScreenToGif"><i class="fa-fw fa-regular fa-star"></i><span> ScreenToGif：快速录制屏幕指定区域并保存为动图文件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mathpix.com/"><i class="fa-fw fa-regular fa-star"></i><span> Mathpix Snipping：识别数学公式并转换成LaTeX</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="http://www.uderzo.it/main_products/space_sniffer/index.html"><i class="fa-fw fa-regular fa-star"></i><span> Space Sniffer：磁盘空间分析工具</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">LOUIS' BLOG</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 工具</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fas fa-pen"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/isLouisHsu/blog/tree/master/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-brands fa-app-store"></i><span> 利器</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://code.visualstudio.com/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> VSCode：微软旗下的跨平台代码编辑软件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mobaxterm.mobatek.net/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> MobaXterm：超好用的全能远程终端</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/CopyTranslator/CopyTranslator"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> CopyTranslator：“复制即翻译”的外文辅助阅读翻译解决方案</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.zotero.org/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Zotero：便于收集、组织、引用、共享的文献管理工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://zealdocs.org/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Zeal：离线文档浏览器，其灵感来自 OS X平台上的 Dash，目前支持 Window 和 Liunx，基于 QT5</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ditto-cp.sourceforge.io/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Ditto：强大的Windows剪贴板增强工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://wise-system-monitor.en.softonic.com/"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> Wise System Monitor：监控从系统到本地网络的所有运行情况</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/indiff/qttabbar"><i class="fa-fw fa-sharp fa-solid fa-star"></i><span> QtTabBar：在Windows资源管理器中使用多标签功能扩展工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/sentialx/multrin"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Multrin：“窗口合并”辅助小工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/Wox-launcher/Wox"><i class="fa-fw fa-sharp fa-solid fa-star-half-stroke"></i><span> Wox &amp; Everything：基于名称快速定位文件和文件夹的搜索工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/NickeManarin/ScreenToGif"><i class="fa-fw fa-regular fa-star"></i><span> ScreenToGif：快速录制屏幕指定区域并保存为动图文件</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://mathpix.com/"><i class="fa-fw fa-regular fa-star"></i><span> Mathpix Snipping：识别数学公式并转换成LaTeX</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="http://www.uderzo.it/main_products/space_sniffer/index.html"><i class="fa-fw fa-regular fa-star"></i><span> Space Sniffer：磁盘空间分析工具</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Agent 不只是一个 while 循环：Agent Harness 的十大核心模块<a class="post-edit-link" href="https://github.com/isLouisHsu/blog/tree/master/source_posts/Agent 不只是一个 while 循环：Agent Harness 的十大核心模块.md" title="编辑" target="_blank"><i class="fas fa-pencil-square"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-07-05T16:13:00.000Z" title="发表于 2026-07-06 00:13:00">2026-07-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-07-24T02:14:52.496Z" title="更新于 2026-07-24 10:14:52">2026-07-24</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">12.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>41分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2026/07/05/Agent%20%E4%B8%8D%E5%8F%AA%E6%98%AF%E4%B8%80%E4%B8%AA%20while%20%E5%BE%AA%E7%8E%AF%EF%BC%9AAgent%20Harness%20%E7%9A%84%E5%8D%81%E5%A4%A7%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97.html#post-comment"><span id="twikoo-count"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><!-- 
+我想写一篇博客，来介绍agent harness架构。我认为可以拆成十大模块：
+
+1. 主循环（Agent Loop）：维护运行时状态（Runtime），输入的安全防护，迭代预算控制（IterationBudget），模型花费统计&工具调用统计，中断处理（资源清理，如关闭连接、停止子代理）
+2. 交互方式（Interface）：可以是cli、gateway、acp，来接到多端（web、移动端、桌面端、代码编辑器、终端）
+3. 会话管理（Session）：配合本地文件或数据库，包括新建（new）、恢复（resume）、检查点（checkpoint，包括基于影子git实现项目级回而不仅仅是对话级回退）、分叉（fork）、管理（list、browse、rename、export、delete）。全文检索。
+4. 模型上下文管理（Model Context Management）：Tool Output Pruning，上下文压缩&结构化摘要（新建Session），必要的不压缩（如系统提示词、最近n轮）
+5. 工作模式（Working Mode）：定时任务（cron）、任务系统（Task）、子Agent（subagent）、多Agent协同（Agent Team）
+6. 工具（Tool）：工具发现和注册，工具过滤以实现使用部分工具，并行调用和执行（哪些支持并行），执行结果的长度控制防止超长（写入临时文件并返回文件路径），人工审批（危险命令）。一些细节问题：1）Terminal工具的本地、沙盒、远程多后端实现 2）为什么要用专门的search工具而不是直接用grep） 3）文本编辑工具里 old_string 参数的后处理（fuzzy match）
+7. 技能（Skill）：技能的发现和注册、检索和使用、YAML frontmatter的设计、技能的自进化机制（自新建、修改、删除）
+8. 系统提示词（System Prompt）：身份、行为要求、动态段（规则、记忆、工具、技能、环境信息、模型特异性引导等）
+9. 自进化（Self-Evolution）：不局限于记忆、偏好、项目知识、用户特征等。比如：1）人设知识 rule.md user.md soul.md；2）项目知识 AGENTS.md/CLAUDE.md（btw 如何实现子目录 AGENTS.md 的发现）；3）Agent自主记忆（衰减机制防止长期不用的记忆干扰）；4）技能的自进化也可以属于这块
+10. 钩子&事件（Hooks&Events）：参考 Claude Code https://code.claude.com/docs/zh-CN/hooks
+
+Agent设计细节可以参考 Hermes Agent：https://zhanghandong.github.io/hermes-book/
+-->
+<h1>TL;DR</h1>
+<p>Agent Demo 的核心可以只是一个 <code>while</code> 循环：模型观察上下文，决定是否调用工具，系统执行工具，再把结果交还给模型。但一旦进入真实产品，这个循环周围必须长出一整套 Harness。它负责管理入口、会话、规则、上下文、预算、权限、验证、观测和长期记忆，把模型的“下一步建议”变成安全、稳定、可恢复、可验证的系统行为。</p>
+<p>这篇文章会沿着一次请求的完整生命周期，拆解 Agent Harness 的十个核心模块：Interface 让请求从 CLI、Gateway、ACP 等入口进入，Session 让任务在时间中保持连续，System Prompt 定义身份和规则边界，Context Manager 决定模型当前看见什么，Runtime 控制循环、预算和中断，Tool 让模型能改变外部世界，Skill 让 Agent 复用成熟方法，Orchestration 处理定时任务、长任务和多 Agent 协作，Hooks 与 Events 让系统可观测、可干预，Memory 与 Self-Evolution 则决定哪些经验值得留下。</p>
+<p>真正区分 Agent Demo 和生产级 Agent 的，往往不是循环里用了哪个模型，而是循环之外有没有稳定的 Harness。模型决定下一步可能是什么，Harness 决定这个“可能”能不能落地成可靠的系统行为。</p>
+<hr>
+<h1>十大核心模块</h1>
+<p>有没有见过那种 Agent Demo？</p>
+<p>一个终端窗口，一段 <code>while True</code>，模型说要调用工具，程序就执行工具；工具返回结果，再塞回模型；模型继续想，继续调用，直到它说“完成了”。第一次跑通的时候，确实很让人兴奋。你像是给模型装上了手和脚，它不再只是聊天，而是真的能读文件、改代码、跑测试、查资料。一个会行动的模型，好像就这么诞生了。</p>
+<p>最小版本大概长这样：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    response = model.generate(messages, tools)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> response.is_final:</span><br><span class="line">        <span class="keyword">return</span> response.text</span><br><span class="line"></span><br><span class="line">    results = execute_tools(response.tool_calls)</span><br><span class="line">    messages.extend(results)</span><br></pre></td></tr></table></figure>
+<p>这段代码没有错。事实上，很多复杂 Agent 系统的心脏，最后也还是这个循环：模型观察，模型决策，系统执行，环境反馈，再交给模型。但真正的问题通常不是“心脏会不会跳”，而是当这个小 Demo 被推进真实世界，它会很快撞上一堆不那么浪漫的细节。</p>
+<p>用户关掉终端以后，任务还要不要继续？模型连续调用了几十次工具，什么时候应该停？一次测试输出几十万字符，难道全部塞回上下文？用户恢复三天前的会话时，项目文件要不要一起恢复？模型说“测试通过了”，它到底真的跑过测试，还是只是觉得自己应该这么说？再往后，危险命令需要审批，工具权限需要隔离，多个 Agent 不能互相覆盖代码，长期记忆可能会把错误经验记成真理，Skill 也可能越改越乱。甚至连“任务完成”这件事，也不能只听模型自己宣布。</p>
+<p>到这个阶段，你构建的就不再是一个简单 Agent，而是一套围绕 Agent 运行的基础设施。</p>
+<p>这套基础设施，我会称它为 <strong>Agent Harness</strong>。</p>
+<p>你可以把它理解成 Agent 的操作系统。模型负责提出“下一步可能做什么”，Harness 负责决定它现在能看到什么、能做什么、在哪里做、做到什么程度必须停下，以及这次执行会不会影响未来。如果只看那个 <code>while</code> 循环，Agent 像一个聪明的实习生；如果加上 Harness，它才更像一个可以进生产环境的团队成员：有工位，有权限，有流程，有日志，有交接，有复盘，也有边界。</p>
+<p>把一套 Agent Harness 拆开，大致可以看到十个核心模块：</p>
+<ol>
+<li><strong>交互与协议（Interface）</strong></li>
+<li><strong>会话与工作区状态（Session）</strong></li>
+<li><strong>系统提示词（System Prompt）</strong></li>
+<li><strong>模型上下文管理（Model Context Management）</strong></li>
+<li><strong>运行时与主循环（Agent Runtime）</strong></li>
+<li><strong>工具系统（Tool）</strong></li>
+<li><strong>技能系统（Skill）</strong></li>
+<li><strong>任务与多 Agent 编排（Orchestration）</strong></li>
+<li><strong>钩子、事件与可观测性（Hooks &amp; Events）</strong></li>
+<li><strong>记忆与自进化（Memory &amp; Self-Evolution）</strong></li>
+</ol>
+<p>先用一张图把这十个模块放到同一个视野里：</p>
+<pre class="mermaid">flowchart TB
+    UI["客户端<br>Web / Mobile / Desktop / IDE / Terminal"]
+    IFACE["交互与协议适配<br>CLI / Gateway / ACP"]
+    LOOP["Agent Runtime / Agent Loop"]
+    CTX["模型上下文管理"]
+    ORCH["任务与多 Agent 编排"]
+    TOOL["工具系统"]
+    SKILL["技能系统"]
+    SESSION["Session 与 Workspace 状态"]
+    PROMPT["系统提示词构造"]
+    EVO["记忆与自进化"]
+    EVENT["Hooks / Event Bus"]
+    MODEL["Model Provider"]
+    ENV["执行环境<br>Local / Sandbox / Remote"]
+
+    UI --> IFACE
+    IFACE --> LOOP
+    LOOP --> PROMPT
+    PROMPT --> CTX
+    CTX --> MODEL
+    MODEL --> LOOP
+
+    LOOP --> ORCH
+    LOOP --> TOOL
+    LOOP --> SKILL
+    LOOP <--> SESSION
+    TOOL --> ENV
+
+    EVO --> PROMPT
+    EVO --> SKILL
+    EVO --> SESSION
+
+    EVENT -. 观测与干预 .-> LOOP
+    EVENT -. 观测与干预 .-> TOOL
+    EVENT -. 观测与干预 .-> SESSION
+    EVENT -. 观测与干预 .-> ORCH</--></pre>
+<p>这十个模块不是架构图上硬凑出来的十个盒子。</p>
+<p>它们刚好对应了一次请求的完整旅程：请求从客户端进入，落到一个持续存在的状态里；系统为模型准备规则和上下文；Runtime 驱动模型与工具交互；复杂任务被拆分和编排；所有动作被事件系统记录；最后，真正有价值的经验被沉淀下来。</p>
+<p>下面，我们就沿着一次请求的路径，把这十层拆开看。</p>
+<h1>模块一：交互与协议（Interface）</h1>
+<h2 id="请求从哪里进入-Agent">请求从哪里进入 Agent</h2>
+<p>故事从入口开始。</p>
+<p>最早的 Agent 往往只运行在终端里。用户输入一句话，Agent 开始工作，模型输出什么就打印什么。CLI 同时扮演客户端、协议层和展示层，简单、直接、舒服。</p>
+<p>直到同一个 Agent 要接入 Web、IDE、桌面端、移动端，甚至被其他系统通过 API 调用。</p>
+<p>这时候你会发现，每种入口都不一样。</p>
+<p>终端适合展示连续日志，却不适合展示复杂文件 Diff；IDE 能把修改定位到具体代码行，却未必适合承载几个小时的后台任务；移动端适合接收审批和完成通知，却不适合实时滚动几万行测试输出；Web 端适合多人协作，但它对断线重连、身份认证和权限隔离要求更高。</p>
+<p>如果每个客户端都各写一套 Agent Loop，很快就会出现几个行为不同的 Agent。</p>
+<p>CLI 支持恢复会话，Web 端不支持；IDE 用一套审批规则，桌面端又用另一套；同一个任务从编辑器切到终端，运行状态跟着丢了。用户以为自己在使用同一个 Agent，系统内部却像几条分叉的河。</p>
+<p>所以，交互层最好尽早从 Runtime 中拆出来。</p>
+<pre class="mermaid">flowchart LR
+    CLI["CLI"]
+    WEB["Web"]
+    DESK["Desktop"]
+    IDE["IDE"]
+    MOBILE["Mobile"]
+    API["API"]
+    IF["Interface Layer"]
+    RT["Agent Runtime"]
+
+    CLI --> IF
+    WEB --> IF
+    DESK --> IF
+    IDE --> IF
+    MOBILE --> IF
+    API --> IF
+    IF --> RT</pre>
+<p>Interface Layer 做的事情，是把不同客户端的输入转成统一请求，再把 Runtime 产生的结构化事件翻译成各端能展示的形式。它可以表现为 CLI，也可以是面向前端的 Gateway，或者遵循 ACP 这类 Agent 通信协议的适配层。对 Runtime 来说，用户是在 VS Code 里输入，还是在手机上发起请求，并不重要。它只需要知道：请求属于哪个 Session，当前工作区在哪里，客户端具备哪些能力，用户拥有什么权限，以及这次请求能不能被中断、恢复或审批。</p>
+<p>这里还有一个容易被低估的点：Agent 的输出不应该只是一串文字。</p>
+<p>一个真实 Agent 在运行时会产生很多种东西：模型输出、工具调用、审批请求、文件变更、任务状态、产物链接、错误报告。把这些都揉成一段字符串，就像把医院的病历、处方、缴费单和检查报告全写进同一个聊天框里，能看，但很难用。</p>
+<p>更稳妥的方式，是让 Runtime 输出结构化事件：</p>
+<pre class="mermaid">flowchart TB
+    Start["run.started"] --> Delta["assistant.delta"]
+    Delta --> ToolReq["tool.requested"]
+    ToolReq --> ToolRun["tool.started"]
+    ToolRun --> ToolOut["tool.output"]
+    ToolOut --> Decision{"还需要交互?"}
+    Decision -->|需要审批| Approval["approval.required"]
+    Decision -->|生成产物| Artifact["artifact.created"]
+    Decision -->|更新任务| Task["task.updated"]
+    Approval --> Delta
+    Artifact --> Done["run.completed / run.failed"]
+    Task --> Done
+    Decision -->|直接结束| Done</pre>
+<p>CLI 可以把它们显示成终端日志，IDE 可以把文件修改展示成 Diff，移动端只接收审批和完成通知，Web 端可以把长任务折叠成时间线。</p>
+<p>这一层的关键功能包括：</p>
+<ul>
+<li>统一请求模型：创建会话、恢复会话、取消运行、提交审批、上传附件。</li>
+<li>统一流式事件：模型增量、工具状态、任务状态、文件产物、错误和完成信号。</li>
+<li>客户端能力协商：当前客户端能否展示 Diff、能否弹审批、能否后台订阅。</li>
+<li>断线重连：通过事件游标恢复订阅，避免任务因为页面关闭就消失。</li>
+<li>身份与租户边界：确认用户、组织、工作区、资源额度和审计主体。</li>
+<li>反向控制消息：支持 cancel、approve、reject、modify-and-approve。</li>
+</ul>
+<p>CLI、Gateway、ACP、HTTP、WebSocket 的形式虽然不同，本质上解决的是同一个问题：**让客户端负责交互，让 Runtime 负责执行。**如果这一层设计得太晚，后面每接一个入口都可能复制一套审批、恢复、事件展示和错误处理逻辑。等到这些入口开始出现行为差异，用户看到的是“同一个 Agent 在不同地方性格不一样”，维护者看到的则是几套难以合并的运行路径。</p>
+<p>这是 Agent Harness 的第一层。没有它，Agent 只能待在一个入口里；有了它，Agent 才能成为一个可以被不同场景调用的系统。</p>
+<h1>模块二：会话与工作区状态（Session）</h1>
+<h2 id="Agent-如何在时间中保持连续">Agent 如何在时间中保持连续</h2>
+<p>请求进入系统以后，下一步不是马上调用模型，而是先找到它属于哪个状态空间。</p>
+<p>普通聊天产品里的 Session，通常就是一组消息。你今天问什么，昨天问什么，系统按时间存起来。对聊天来说，这已经够用了。但对 Agent 来说，对话只是状态的一小部分。Agent 可能已经修改了文件，启动了进程，创建了临时目录，拆分了任务，生成了报告，甚至操作了远程资源。如果恢复会话时只恢复消息，恢复的其实只是任务的“叙述”，不是任务现场。</p>
+<p>这就像侦探回到案发现场，只拿到了一份口供，却发现桌椅位置、门锁状态、监控录像全都变了。你可以继续推理，但你推理的是过去的世界，不是现在的世界。</p>
+<p>Agent 也会遇到这种错位。</p>
+<p>模型根据三天前的对话，认为某个文件仍然是旧版本；但真实工作区可能已经被用户或另一个 Agent 修改。模型记忆里的世界和磁盘上的世界分叉了，而它自己还不知道。</p>
+<p>所以，Agent Harness 中的 Session 更像一个持久化运行容器。它不只保存 Messages，还要保存 Run、Task、上下文摘要、Artifact、工作区引用、Checkpoint、分支关系和外部副作用。围绕这个容器，产品层还需要提供一组很朴素但很重要的管理动作：新建、恢复、重命名、浏览、导出、删除，以及按全文搜索找到某个历史任务。否则 Session 只是一堆数据库记录，不是用户真正能管理的工作现场。</p>
+<p>这里可以把几个层级分开：</p>
+<pre class="mermaid">flowchart TB
+    S["Session<br>长期会话"]
+    R["Run<br>一次连续执行"]
+    T["Turn<br>模型判断 + 环境反馈"]
+    I["Model Invocation<br>一次模型调用"]
+
+    S --> R
+    R --> T
+    T --> I</pre>
+<p>Session 是用户感知的长期会话。它可以跨越几天、几周，甚至成为一个项目的长期工作现场。</p>
+<p>Run 是一次连续执行，从用户提交请求开始，到完成、失败、取消或阻塞为止。</p>
+<p>Turn 是一次“模型判断—环境反馈”的循环。模型提出动作，系统执行动作，再把结果交回去。</p>
+<p>Model Invocation 是一次具体的模型 API 调用。一次调用失败后重试，可能只是增加了 Invocation，而不是开启新的 Run。</p>
+<p>真正困难的是 Checkpoint。Agent 的 Checkpoint 不能只记录对话进行到了哪里，还要记录当时的 Runtime、Task、上下文和工作区状态。对 Coding Agent 来说，影子 Git 是一种很自然的实现。Agent 每到一个关键节点，就在用户仓库之外维护一次隐藏快照，记录这次 Run 看到的文件树、未提交修改和产物索引：</p>
+<pre class="mermaid">flowchart LR
+    CP["Checkpoint A"]
+    MSG["对话状态 A"]
+    TASK["Task 状态 A"]
+    CTX["上下文状态 A"]
+    WS["工作区快照 A"]
+    ART["Artifact 索引 A"]
+
+    CP --> MSG
+    CP --> TASK
+    CP --> CTX
+    CP --> WS
+    CP --> ART</pre>
+<p>这样，恢复历史时才能同时恢复对话和项目文件，而不是让旧对话继续操作新工作区。不过 Git 只能恢复文件。已经发送的邮件、创建的云资源、修改的数据库，并不会随着 Git 回退而消失。所以 Session 还需要记录外部副作用：操作了什么资源，是否可逆，有没有补偿动作，是否已经通知用户。</p>
+<p>Session 还需要支持 Fork。</p>
+<p>Restore 是回到过去，Fork 则是从过去创建一条新分支。对于探索式任务，Fork 往往更安全，因为它不会覆盖当前结果。你可以让 Agent 从同一个问题出发尝试两种实现路线，最后再比较哪条更好。</p>
+<p>这一层的关键功能包括：</p>
+<ul>
+<li>Session/Run/Turn/Invocation 分层建模，避免把所有状态塞进聊天历史。</li>
+<li>Session 管理操作，包括 new、resume、list、browse、rename、export、delete 和全文检索。</li>
+<li>工作区引用和快照，记录 Agent 当时面对的真实文件状态。</li>
+<li>Checkpoint 与 Restore，支持从关键节点恢复对话、任务、上下文和工作区文件。</li>
+<li>Fork 分支，支持从历史状态探索新路线。</li>
+<li>Artifact Store，保存长日志、报告、生成文件和中间产物。</li>
+<li>外部副作用记录，追踪邮件、数据库、云资源等不可被 Git 回滚的动作。</li>
+<li>并发控制，避免同一个 Session 被多个 Run 同时写坏。</li>
+</ul>
+<p>Session 模块解决的不是“怎么保存聊天记录”，而是：<strong>Agent 如何跨越多次运行，保持对话、任务与环境状态的一致。</strong></p>
+<p>没有这一层，Agent 很容易变成一个健忘又自信的人。它记得自己说过什么，却不一定知道世界已经变了。</p>
+<h1>模块三：系统提示词（System Prompt）</h1>
+<h2 id="Agent-被告知了什么规则">Agent 被告知了什么规则</h2>
+<p>Session 确定以后，系统需要为模型准备 System Prompt。</p>
+<p>很多项目一开始会把它写成一个大字符串。身份写一点，安全规则写一点，行为要求写一点，工具说明写一点，项目规范写一点。后来支持 Skill，又追加一段；支持用户偏好，再追加一段；支持环境信息，再追加一段；支持不同模型，再追加一段。最后，这段 Prompt 变成整个系统中最重要、也最难解释的东西。</p>
+<p>某条规则为什么会出现？来自平台还是项目？两条规则冲突时谁覆盖谁？为什么同一个 Agent 进入不同目录后会有不同表现？为什么昨天还能执行的工具，今天突然不能用了？</p>
+<p>如果 System Prompt 只是字符串拼接，这些问题几乎无法回答。</p>
+<p>更合理的理解是：<strong>System Prompt 是多个片段编译出来的产物。</strong></p>
+<pre class="mermaid">flowchart TB
+    ID["核心身份"]
+    SAFE["安全规则"]
+    CONTRACT["Runtime 契约"]
+    TOOL["工具说明"]
+    PROJECT["项目规则"]
+    DIR["目录规则"]
+    SKILL["当前 Skill"]
+    PREF["用户偏好"]
+    ENV["环境信息"]
+    MODEL["模型特异性引导"]
+    PROMPT["System Prompt"]
+
+    ID --> PROMPT
+    SAFE --> PROMPT
+    CONTRACT --> PROMPT
+    TOOL --> PROMPT
+    PROJECT --> PROMPT
+    DIR --> PROMPT
+    SKILL --> PROMPT
+    PREF --> PROMPT
+    ENV --> PROMPT
+    MODEL --> PROMPT</pre>
+<p>这些来源拥有不同的作用域和优先级。</p>
+<p>平台安全规则不能被项目文件覆盖；目录规则可以细化项目规则，却不能突破更高层限制；用户偏好可以影响表达方式，却不能让 Agent 绕过安全策略；网页、日志和工具输出属于外部数据，更不应该被提升成系统指令。</p>
+<p>所以，Prompt Compiler 要做的不是简单拼接，而是收集、合并、冲突处理、去重和模型适配。身份、行为要求、安全边界这类稳定规则可以长期存在；当前工具、当前 Skill、当前工作目录、可用环境、模型特异性提示这类动态段，则应该按 Run 或 Turn 重新编译。这样才能解释为什么同一个 Agent 在不同项目、不同目录、不同模型下看见的规则不同。</p>
+<pre class="mermaid">flowchart TB
+    Sources["Prompt Sources"] --> Scope["Scope Resolution"]
+    Scope --> Merge["Priority Merge"]
+    Merge --> Conflict["Conflict Detection"]
+    Conflict --> Dedup["Deduplication"]
+    Dedup --> Render["Model Rendering"]</pre>
+<p>这有点像给演员发剧本。</p>
+<p>演员当然要知道自己演谁、这场戏在哪里、台词边界是什么。但你不能把所有历史剧本、导演闲聊、观众评论和道具说明都塞给他。更不能让观众席递上来一张纸条，就覆盖导演的指令。</p>
+<p>项目级的 <code>AGENTS.md</code>、<code>CLAUDE.md</code> 或类似规则，可以沿目录逐层发现。当 Agent 修改 <code>services/payment/refund.ts</code> 时，系统从项目根目录向目标文件目录查找规则。越靠近目标文件，规则越具体，优先级越高。但更具体不代表可以越权，它只能在上层规则允许的范围内补充细节。</p>
+<p>每条 Prompt 片段最好保存来源、作用域、优先级和内容 Hash。这样，当 Agent 做出异常行为时，开发者才能回答：<strong>它为什么会看到这条规则。</strong></p>
+<p>这一层的关键功能包括：</p>
+<ul>
+<li>Prompt Source Registry，管理身份、行为要求、平台规则、项目规则、目录规则、Skill、用户偏好和环境信息等来源。</li>
+<li>作用域解析，根据工作区、目标文件和当前任务选择规则。</li>
+<li>优先级合并，明确谁能覆盖谁、谁只能补充谁。</li>
+<li>冲突检测，对互相矛盾的规则给出可解释结果。</li>
+<li>Prompt Provenance，保留每段规则的来源、版本和 Hash。</li>
+<li>模型适配，把同一套规则渲染成不同模型更容易遵循的格式。</li>
+<li>注入防护，防止网页、日志、文件内容冒充系统指令。</li>
+</ul>
+<p>System Prompt 定义 Agent 应该遵守什么。</p>
+<p>但它还没有决定模型这一轮实际能看到什么。这就轮到下一层：上下文管理。</p>
+<h1>模块四：模型上下文管理（Model Context）</h1>
+<h2 id="不是所有信息都应该塞给模型">不是所有信息都应该塞给模型</h2>
+<p>Agent 可以接触的信息非常多。</p>
+<p>除了 System Prompt 和历史消息，还有当前 Task、项目文件、工具结果、用户记忆、Skill 内容、Subagent 摘要、环境信息和各种 Artifact。</p>
+<p>如果不做管理，最简单的实现就是不断向 <code>messages</code> 追加内容。短任务里看不出问题，任务一长，上下文很快就会被日志和历史淹没。这时很多人的第一反应是：换更大的上下文窗口。更大的窗口当然有用，但它只能缓解容量问题，不能解决信息选择问题。模型能看到更多，不代表它应该看到所有东西。重复内容、过期文件、无关日志和错误摘要同样会干扰判断。一个堆满旧草稿、废纸和过期便签的办公桌，不会因为桌子变大就变得清爽。</p>
+<p>所以上下文管理的核心不是“尽量装下”，而是“选择这一轮真正有价值的信息”。</p>
+<pre class="mermaid">flowchart LR
+    Collect["收集"] --> Filter["过滤"]
+    Filter --> Rank["排序"]
+    Rank --> Pin["固定关键内容"]
+    Pin --> Dedup["去重"]
+    Dedup --> Trim["裁剪"]
+    Trim --> Compress["压缩"]
+    Compress --> Budget["分配 Token"]</pre>
+<p>Tool Output Pruning 是最常见的一类压缩。最近几轮对话通常只依赖最近几次工具结果，早期工具调用的完整输出很快就会失去价值。Harness 可以保留最近 N 次工具输出，把更早的工具结果替换成占位符；如果结果仍有追溯价值，就把原始输出写入文件或 Artifact Store，再用文件链接、行号范围和简短说明替代原文。一次测试可能输出几十万字符，与其把完整内容全部塞给模型，不如只留下类似这样的引用：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;summary&quot;</span><span class="punctuation">:</span> <span class="string">&quot;测试失败，共 3 个失败用例，均涉及时区转换。&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;artifact_path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;.agent/artifacts/test-0187.log&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;original_bytes&quot;</span><span class="punctuation">:</span> <span class="number">283491</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>模型需要更多细节时，再读取对应区间。这样做的关键不是让模型“忘掉”早期工具结果，而是把它们从当前工作台挪到可查询存储里。最近输出留在上下文里，早期输出变成占位符或链接，Token 预算就不会被旧日志长期占住。</p>
+<p>这里有一个很重要的区别：</p>
+<blockquote>
+<p>不在当前上下文里，不等于系统已经忘记。</p>
+</blockquote>
+<p>上下文只是模型当前的工作台，不是系统全部存储。</p>
+<p>长期 Session 还需要结构化摘要。摘要要保留历史关键信息、当前任务、用户约束、已经完成的步骤、失败尝试、修改过的文件、待解决问题和下一步动作。系统提示词、安全规则、当前用户请求和最近几轮对话不应该参与这类压缩；它们要原样保留，因为这些内容定义了当前 Run 的边界和最新语境。压缩发生在原 Session 内，替代的是模型输入里的历史记录，不是用户界面里的完整历史。</p>
+<p>结构化摘要会更可靠：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">goal:</span></span><br><span class="line"><span class="attr">constraints:</span></span><br><span class="line"><span class="attr">completed:</span></span><br><span class="line"><span class="attr">decisions:</span></span><br><span class="line"><span class="attr">modified_files:</span></span><br><span class="line"><span class="attr">failed_attempts:</span></span><br><span class="line"><span class="attr">open_questions:</span></span><br><span class="line"><span class="attr">next_actions:</span></span><br></pre></td></tr></table></figure>
+<p>压缩后不需要创建新 Session。用户在界面上仍然能看到完整历史，系统在存储里也保留完整消息和工具记录；只是从下一次模型调用开始，Harness 不再把全部旧历史塞进模型输入，而是用系统提示词、结构化摘要、最近几轮对话，以及最近几次工具输出组成新的上下文。这样既能控制 Token，又不会把长期会话切碎成一堆难以追踪的新对话。</p>
+<p>压缩的触发时机通常有两种。第一种是系统触发：Context Manager 发现上下文长度接近或超过模型窗口，就自动执行 Tool Output Pruning、历史摘要和预算重分配。第二种是模型主动触发：模型判断当前任务会继续拉长，或者发现上下文里有大量旧工具结果，就调用压缩工具，请 Harness 把历史整理成摘要并保留必要引用。前者保证系统不会超限，后者让模型在长任务中主动整理工作台。</p>
+<p>还有一个细节：上下文管理不应该只按时间排序。</p>
+<p>有些信息虽然很旧，但非常关键，比如用户说“不要改数据库 Schema”；有些信息虽然刚产生，但只是工具噪声，比如安装依赖时的进度条。好的 Context Manager 要能区分“新”和“重要”。</p>
+<p>这一层的关键功能包括：</p>
+<ul>
+<li>Token Budget Planner，为系统规则、用户请求、历史、文件、工具输出分配预算。</li>
+<li>Context Pinning，固定保留目标、约束、安全规则和最近关键决策。</li>
+<li>Retrieval，根据当前任务从文件、记忆、Artifact 中召回相关内容。</li>
+<li>Tool Output Pruning，保留最近几次工具输出，把早期结果替换成占位符、文件链接或 Artifact 引用。</li>
+<li>Compressed Context，用结构化摘要替代模型输入里的早期历史，同时保留用户可见的完整历史。</li>
+<li>Compression Trigger，在上下文超限或模型主动请求时执行压缩。</li>
+<li>Staleness Detection，发现上下文中的文件内容已经落后于真实工作区。</li>
+<li>Context Diff，让开发者知道两次模型调用之间上下文发生了什么变化。</li>
+</ul>
+<p>上下文管理决定的是：<strong>在有限 Token 预算里，模型这一轮究竟看见怎样的世界。</strong></p>
+<p>它像舞台灯光。世界很大，但这一刻要照亮哪里，会直接影响演员接下来怎么行动。</p>
+<h1>模块五：Agent Loop &amp; Runtime</h1>
+<h2 id="真正驱动系统运行的主循环">真正驱动系统运行的主循环</h2>
+<p>直到 System Prompt 和上下文都准备好以后，那个最初的 <code>while</code> 循环才真正开始。</p>
+<p>但生产环境里的 Agent Loop，远不只是“调用模型—执行工具”。它要维护运行时状态，检查用户输入和模型输出是否越界，控制迭代预算，统计模型费用和工具调用，处理阻塞、取消、重试和资源清理。它通常要经历：</p>
+<pre class="mermaid">sequenceDiagram
+    participant Runtime as Agent Runtime
+    participant Context as Context Manager
+    participant Model as Model Provider
+    participant Tool as Tool Executor
+    participant Verifier as Verifier
+
+    loop 直到完成、失败、取消或预算耗尽
+        Runtime->>Context: 构造本轮上下文
+        Context-->>Runtime: System Prompt + 压缩历史 + 最近消息 + 工具结果
+        Runtime->>Model: 调用模型
+        Model-->>Runtime: 返回最终回答或工具调用
+        alt 模型请求工具
+            Runtime->>Runtime: 解析响应并验证动作
+            Runtime->>Tool: 执行工具调用
+            Tool-->>Runtime: 返回结构化结果
+            Runtime->>Runtime: 合并结果并更新运行状态
+        else 模型申请完成
+            Runtime->>Verifier: 验证完成条件
+            Verifier-->>Runtime: 通过或不通过
+        end
+    end
+
+    Runtime-->>Runtime: 返回结果或停止原因</pre>
+<p>这就像自动驾驶。</p>
+<p>方向盘转动只是你看到的动作，真正支撑它的是感知、规划、控制、限速、刹车、故障处理和接管机制。Agent Runtime 也是一样：模型提出下一步，但 Runtime 要负责把这一连串概率性决策变成可控执行。</p>
+<p>首先要解决的是预算。模型不能无限尝试。除了最大迭代次数，Runtime 通常还需要限制模型调用数、工具调用数、Token、费用、运行时间、子 Agent 数量和最终截止时间。这些限制可以统一成 Execution Budget，并且在每一轮更新统计：这次模型调用花了多少 Token 和费用，工具调用了几次，哪些工具最耗时，距离总预算还剩多少。</p>
+<p>预算耗尽以后，也不能只返回“失败”。成本耗尽、超时、迭代过多、审批被拒绝和验证不通过，代表完全不同的问题。Runtime 应该返回明确的停止原因，以及已经完成的进展。这样用户才能判断是继续加预算、修改目标、批准某个动作，还是接受当前结果。</p>
+<p>另一个关键问题是：模型说完成，不代表任务真的完成。模型可能说测试通过了，但实际上没有运行测试；也可能说文件已经写好，但最后一次工具调用失败；还可能把“我计划这么做”说成“我已经做完了”。所以 Runtime 需要独立 Verifier。</p>
+<p>代码任务可以运行测试和编译器，数据任务可以检查 Schema，运维任务可以读取真实资源状态，文档任务可以渲染产物。模型的最终回答只是一份完成申请，Verifier 才负责验收。</p>
+<p>Runtime 还需要处理输入安全、重试、中断和资源清理。用户输入里可能包含越权请求，模型响应里可能包含不符合工具 Schema 的动作，工具参数里也可能出现危险路径或高风险命令。网络超时可以重试，参数错误应交还模型修正，权限拒绝不能原样重试。用户取消时，模型请求、工具调用、Subagent 和后台进程都应收到取消信号。</p>
+<pre class="mermaid">flowchart LR
+    Cancel["Run Cancellation"]
+    ModelReq["Model Request"]
+    ToolCalls["Tool Calls"]
+    Subagents["Subagents"]
+    Tasks["Tasks"]
+    Bg["Background Processes"]
+
+    Cancel --> ModelReq
+    Cancel --> ToolCalls
+    Cancel --> Subagents
+    Cancel --> Tasks
+    Cancel --> Bg</pre>
+<p>无论正常结束、异常退出还是用户取消，Runtime 都要关闭连接、结束进程、释放文件锁并清理临时资源。</p>
+<p>这一层的关键功能包括：</p>
+<ul>
+<li>Run State Machine，明确 running、blocked、completed、failed、cancelled 等状态。</li>
+<li>Execution Budget，统一管理时间、费用、Token、工具调用和迭代次数。</li>
+<li>Usage Accounting，统计模型费用、Token、工具调用次数、工具耗时和失败率。</li>
+<li>Input Guard，检查用户输入、模型动作和工具参数是否触发安全边界。</li>
+<li>Action Validator，在执行工具前检查参数、权限和依赖。</li>
+<li>Completion Verifier，用测试、构建、Schema、资源状态等方式验收结果。</li>
+<li>Retry Policy，区分网络错误、模型格式错误、权限拒绝和业务失败。</li>
+<li>Cancellation Propagation，把取消信号传给模型、工具、任务和后台进程。</li>
+<li>Cleanup Manager，确保临时资源、文件锁、连接和进程被释放。</li>
+<li>Stop Reason，清楚说明为什么停下，而不是含糊地说失败。</li>
+</ul>
+<p>Agent Runtime 解决的是：<strong>如何把模型的一系列概率性决策，变成一个有预算、有状态、有停止条件的执行过程。</strong></p>
+<p>如果说模型是发动机，Runtime 就是变速箱、刹车和仪表盘。发动机越强，这些东西越不能省。</p>
+<h1>模块六：工具系统（Tools）</h1>
+<h2 id="模型如何真正改变外部世界">模型如何真正改变外部世界</h2>
+<p>模型本身不能修改文件、执行命令或访问数据库。这些动作都要通过 Tool 完成。Tool 是模型和真实世界之间的边界，也是整个 Harness 中风险最高的位置。因为从这里开始，模型的话会变成现实里的动作。最好区分三层：</p>
+<pre class="mermaid">flowchart TB
+    Tool["Tool<br>模型看到的能力契约"]
+    Handler["Handler<br>Harness 内部处理逻辑"]
+    Backend["Execution Backend<br>真实执行环境"]
+
+    Tool --> Handler
+    Handler --> Backend</pre>
+<p>Tool 是模型看到的接口契约，描述它能调用什么、参数怎么传、返回值长什么样。模型不会直接碰到真实文件系统、Shell 或数据库，它只是生成符合契约的 Tool Call。</p>
+<p>Handler 负责接住这个 Tool Call，并把它变成一次受控执行。它会检查参数是否合法、权限是否允许、是否需要审批，然后选择本地、沙盒、容器或远程 Backend 来完成动作。Backend 返回结果后，Handler 再把原始输出截断、摘要、包装成结构化结果，并写入 <code>tool.started</code>、<code>tool.output</code>、<code>tool.failed</code> 等事件。</p>
+<p>Backend 才是操作真正发生的地方。同一个 Terminal Tool，可以通过不同 Handler 配置连接本地环境、Sandbox、容器或远程服务器。</p>
+<p>Tool 注册到系统中，也不代表它一定会暴露给模型。Harness 应该先有完整 Tool Registry，再根据用户、任务、Session、Skill 和当前环境做工具过滤。一个代码审查 Subagent 可能只需要读取、搜索和查看 Diff，没有理由获得数据库写入和部署权限。一个写文档的 Agent 也不应该突然拥有删除云资源的能力。</p>
+<p>这里可以区分 Capability、Permission 和 Availability：</p>
+<ul>
+<li>Capability：系统是否拥有这个工具。</li>
+<li>Permission：当前用户和 Agent 是否允许使用。</li>
+<li>Availability：当前环境是否能够使用。</li>
+</ul>
+<p>即使工具已经暴露给模型，执行前也要经过 Policy Engine。Prompt 可以告诉模型不要执行危险操作，但真正的路径检查、网络限制和权限控制必须由 Harness 确定性执行。Policy Engine 可以允许、拒绝、要求审批，或者在安全范围内重写参数。比如模型想执行 <code>rm -rf /tmp/cache</code>，系统需要判断路径是否在允许范围内，是否需要用户审批，是否存在更安全的替代动作。这里不能靠模型自己解释“我只是想清理缓存”。</p>
+<p>工具系统还要处理并行。模型一次生成多个 Tool Call，不代表它们可以安全地同时执行。读取多个文件、搜索多个目录通常可以并行；两个工具修改同一个文件，或者一个修改代码、另一个马上跑测试，则可能产生竞态。因此，Tool Executor 需要理解调用之间的依赖关系，能并行的并行，可能互相影响的排队。</p>
+<p>这一层的关键功能包括：</p>
+<ul>
+<li>Tool Registry，管理工具 Schema、版本、描述、风险等级和返回格式。</li>
+<li>Tool Filtering，根据任务、Skill、Subagent、工作区和客户端能力决定哪些工具暴露给模型。</li>
+<li>Permission Model，按用户、Session、Agent、Task 和工作区控制权限。</li>
+<li>Policy Engine，在执行前做路径、网络、命令、参数和审批检查。</li>
+<li>Approval Flow，支持本次允许、按工具允许、按作用域允许和拒绝理由。</li>
+<li>Sandbox Backend，把高风险操作放进受控环境。</li>
+<li>Idempotency Key，避免重试时重复发邮件、重复扣款或重复创建资源。</li>
+<li>Dependency Scheduler，判断工具调用能否并行，避免文件和资源竞态。</li>
+<li>Output Limiter，把超长结果写入临时文件或 Artifact，只返回摘要、路径和读取方式。</li>
+<li>Structured Results，把工具输出变成可压缩、可追踪、可引用的数据。</li>
+<li>Edit Matcher，对 <code>old_string</code> 做精确匹配和受限 fuzzy match，避免误改。</li>
+</ul>
+<p>Tool 模块解决的是：**如何在安全、可控、可观察的边界里，把模型意图转成真实操作。**它像是 Agent 的手。但生产系统里，手不能想抓什么就抓什么，它要戴手套，要有门禁，还要留下指纹。</p>
+<h1>模块七：技能系统（Skills）</h1>
+<h2 id="Agent-如何复用一套做事方法">Agent 如何复用一套做事方法</h2>
+<p>Tool 解决“能做什么”，Skill 解决“这类事情通常应该怎么做”。举个例子，一次正式发布可能需要检查工作区、更新版本、生成 Changelog、运行测试、构建、打 Tag 和发布。每一步都可以通过工具完成，但整套流程本身是一种程序性知识，这就是 Skill。</p>
+<p>Skill 像一本放在工具箱旁边的操作手册。锤子、螺丝刀、电钻是 Tool；“怎么装一扇门”是 Skill。但 Skill 不适合全部写进 System Prompt。绝大多数任务都不需要知道如何发布、如何复盘事故或如何执行数据库迁移。如果所有流程长期常驻，只会增加上下文噪声，让模型每次都背着一整套图书馆出门。所以，Skill 应该按需发现和加载。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">release/</span><br><span class="line">├── SKILL.md</span><br><span class="line">├── scripts/</span><br><span class="line">├── templates/</span><br><span class="line">├── examples/</span><br><span class="line">└── tests/</span><br></pre></td></tr></table></figure>
+<p><code>SKILL.md</code> 可以通过 YAML Frontmatter 描述名称、适用条件、允许工具、风险等级和执行模式。这里的描述不只是给人看的文档，也是 Skill 检索和权限控制的入口。更好的实践是从简短描述里提炼出 <code>when-to-use</code>：它不强调 Skill 里面有什么功能，而是告诉模型在什么任务、什么信号、什么约束下应该调用它。<code>allowed_tools</code> 限定执行边界，<code>risk</code> 决定是否需要审批，<code>version</code> 和 <code>owner</code> 则帮助后续回滚和治理。</p>
+<p>Harness 一开始只需要把 Skill 名称和 <code>description</code>（或 <code>when-to-use</code>，模型甚至不必知道 Skill 的完整能力，只要能判断“现在该不该用这个 Skill”就够了） 交给模型。当用户显式指定，或者检索系统判断它与当前任务相关时，再加载完整内容。这个发现过程通常分两步：先从 Skill Index 里做轻量检索，再按需读取 <code>SKILL.md</code>、脚本、模板和样例。这样模型不会在每次任务开始时背上所有操作手册。</p>
+<p>随着 Skill 增加，版本、测试和回滚会变得越来越重要。所谓 Skill 自进化，不应该是 Agent 直接覆盖正在使用的文件，而应该经过候选生成、验证、审批、激活和监控。Agent 可以根据一次成功经验新建候选 Skill，也可以对已有 Skill 提出修改或删除建议，但这些变更要像代码一样留下 Diff、跑样例测试、经过评审，再进入可用索引。否则，今天为了修一个流程改出来的“经验”，明天可能会污染所有任务。</p>
+<p>这一层的关键功能包括：</p>
+<ul>
+<li>Skill Index，只把名称、描述和触发条件常驻上下文。</li>
+<li>Progressive Loading，先读入口说明，再按需读取脚本、模板和参考文件。</li>
+<li>Tool Allowlist，为每个 Skill 限定可用工具和权限。</li>
+<li>Execution Mode，支持当前上下文、Fork Context、Subagent 或批处理任务。</li>
+<li>Skill Tests，用样例任务验证 Skill 是否真的能完成目标。</li>
+<li>Versioning 与 Rollback，让 Skill 修改可以回退。</li>
+<li>Skill Provenance，记录 Skill 来自哪里、为什么被加载、执行了哪些步骤。</li>
+<li>Evolution Flow，把一次成功经验提炼成候选 Skill，或对 Skill 发起新建、修改、删除，再经过评审和验证。</li>
+</ul>
+<p>Skill 模块解决的是：<strong>如何把一次次临时操作，整理成可以检索、复用和演进的标准方法。</strong> 没有 Skill，Agent 每次都像临场发挥；有了 Skill，它才开始拥有工艺。</p>
+<h1>模块八：任务与多 Agent 编排</h1>
+<h2 id="一个-Agent-不够时怎么办">一个 Agent 不够时怎么办</h2>
+<p>单个 Agent Loop 很适合处理边界清晰、可以一次完成的任务。但真实任务经常不是这样。有的任务会持续几个小时，需要等待 CI、审批或外部系统；有的任务天然适合拆成多个并行部分；有的任务需要一个 Agent 写代码，另一个 Agent 做审查，第三个 Agent 准备文档；还有的任务根本不是用户实时发起的，而是每天定时运行，比如巡检仓库、整理报告、监控数据或定期发布。</p>
+<p>如果所有事情都塞进一个 Run，这个 Run 会越来越像一根拉到极限的橡皮筋：上下文越来越长，状态越来越复杂，一旦断掉，恢复成本很高。</p>
+<p>所以 Harness 需要独立的 Working Mode 和 Task 系统。Tool Call 是一次原子动作，Run 是一次连续执行，Task 则是可以持久化、暂停、恢复、重试和转移的工作单元。Cron 负责按时间创建 Task，Queue 负责分发 Task，Worker 负责执行 Task，Subagent 和 Agent Team 则负责把复杂任务拆给不同角色。</p>
+<pre class="mermaid">stateDiagram-v2
+    [*] --> pending
+    pending --> ready
+    ready --> running
+    running --> blocked
+    blocked --> ready
+    running --> completed
+    running --> failed
+    running --> cancelled
+    completed --> [*]
+    failed --> [*]
+    cancelled --> [*]</pre>
+<p>Cron 也不应该直接运行 Agent，而应该在指定时间创建 Task，再交给队列和 Worker。这样定时任务就能复用同一套预算、权限、重试、告警和审计机制，而不是变成一堆绕过 Harness 的脚本。</p>
+<p>任务可拆分以后，就会出现 Subagent。Subagent 拥有独立上下文、工具权限和预算。它的价值不仅是并行，更是上下文隔离。大量搜索、阅读和日志可以留在 Subagent 内，主 Agent 只接收结论和 Artifact。这就像一个主编带几个作者：主编不需要亲自采访每个人、整理每份录音、核对每个引用，他需要把任务分清楚，给出标准，最后把不同作者的稿件合成一篇风格统一、事实一致的文章。</p>
+<p>如果多个 Agent 需要互相通信、认领任务和共享进度，就进入 Agent Team。这时要解决的不只是消息传递，还包括工作区隔离、任务 Lease、心跳、失败接管和最终结果合并。多个 Coding Agent 最好使用独立 Worktree，完成后再统一合并和验证。否则，同时修改同一个目录很容易互相覆盖。</p>
+<p>这一层的关键功能包括：</p>
+<ul>
+<li>Task Store，持久化任务目标、状态、输入、产物、阻塞原因和重试次数。</li>
+<li>Cron Scheduler，按计划创建 Task，而不是直接绕过 Harness 执行脚本。</li>
+<li>Queue 与 Worker，把长任务从用户请求线程中解耦出来。</li>
+<li>Lease 与 Heartbeat，判断任务是否仍被某个 Worker 正常处理。</li>
+<li>Subagent Context，为子 Agent 分配独立上下文、工具、预算和输出契约。</li>
+<li>Worktree Isolation，为并行代码任务提供独立工作区。</li>
+<li>Result Aggregation，把多个子结果合并成统一答案或统一 Diff。</li>
+<li>Conflict Resolution，处理多个 Agent 修改同一资源的冲突。</li>
+<li>Human Handoff，在任务阻塞、审批或高风险决策时交还用户。</li>
+</ul>
+<p>启动多个模型很容易。真正困难的是：**如何让它们不重复、不冲突、能够恢复，并最终产出一个统一结果。**Orchestration 模块让 Agent 从“一个人在循环里工作”，变成“一组角色在同一个系统里协作”。</p>
+<h1>模块九：Hooks、Events 与可观测性</h1>
+<h2 id="如何知道系统内部发生了什么">如何知道系统内部发生了什么</h2>
+<p>当 Harness 只有一个模型和几个工具时，打印日志可能就够了。但一旦加入 Session、Skill、Task、Subagent、审批和上下文压缩，一次失败可能来自任何地方。也许模型判断错了，也许 Prompt 漏了一条规则，也许 Tool 参数被 Policy 改写了，也许 Subagent 结果没有正确合并，也许上下文压缩时丢掉了关键约束。</p>
+<p>如果每个模块各自设计回调和日志格式，最后很难还原完整过程。所以需要统一的 Event Bus。Claude Code 的 Hooks 思路可以作为一个很好的参照：在关键生命周期点暴露可订阅事件，让外部逻辑可以检查、拦截、通知或记录，但不要让每个模块私下发明一套扩展机制。</p>
+<p>Event 描述发生了什么，Hook 则订阅某类 Event 并执行动作。</p>
+<pre class="mermaid">flowchart TB
+    Bus["Event Bus"]
+    Model["model.*"]
+    Tool["tool.*"]
+    Context["context.*"]
+    Task["task.*"]
+    Session["session.*"]
+    Hooks["Hooks<br>阻塞 / 异步"]
+    Logs["Logs / Metrics / Traces"]
+
+    Model --> Bus
+    Tool --> Bus
+    Context --> Bus
+    Task --> Bus
+    Session --> Bus
+    Bus --> Hooks
+    Bus --> Logs</pre>
+<p>事件还应携带 Session、Run、Task 和因果关系。这样才能知道一次文件修改来自哪个 Tool Call，这个 Tool Call 又来自哪次模型决策，那次模型决策当时看到了哪些上下文。这就像给 Agent 装上一套黑匣子。黑匣子的目的不是监控它犯错，而是在出问题时能够回放：当时发生了什么，谁做了决定，系统允许了什么，结果落到了哪里。</p>
+<p>Hook 可以是阻塞式的，也可以是异步的。权限检查、参数校验、危险命令审批适合阻塞 Hook，因为它们要在动作发生前给出结论；通知、索引、遥测、报告归档适合异步 Hook，因为它们不应该拖慢主执行链路。每个 Hook 都需要自己的超时和失败策略。</p>
+<p>事件系统还要防止递归。一个 Tool 触发 Hook，Hook 又调用 Tool，很容易形成事件风暴。因此需要因果链、最大深度和重入控制。在统一事件之上，才能建立完整的 Log、Metric 和 Trace。Agent 的可解释性不一定要求公开模型内部推理。更重要的是 Harness 能够回答：<strong>模型当时看到了什么，系统允许了什么，执行过程中实际发生了什么。</strong></p>
+<p>这一层的关键功能包括：</p>
+<ul>
+<li>Event Schema，统一事件名称、字段、时间戳、状态和错误格式。</li>
+<li>Causality ID，把模型调用、工具调用、文件修改和任务状态串起来。</li>
+<li>Hook Registry，管理阻塞 Hook、异步 Hook、超时和失败策略。</li>
+<li>Audit Log，记录审批、权限、参数改写和外部副作用。</li>
+<li>Metrics，统计成功率、耗时、Token、费用、重试、工具失败率。</li>
+<li>Trace Viewer，按 Run 回放模型、工具、上下文和任务事件。</li>
+<li>Redaction，避免日志泄露密钥、隐私和敏感文件内容。</li>
+<li>Recursion Guard，防止 Hook 和 Tool 相互触发造成事件风暴。</li>
+</ul>
+<p>Hooks 与 Events 模块解决的是：**如何让 Agent 系统可扩展、可观测、可干预。**没有它，Agent 失败时就只剩一句“它没做好”；有了它，你才能知道到底是哪一层没有做好。</p>
+<h1>模块十：记忆与自进化</h1>
+<h2 id="Agent-如何把经验留到未来">Agent 如何把经验留到未来</h2>
+<p>一个长期使用的 Agent，如果每次都从零开始，会不断重复相同错误，也无法适应用户和项目。所以 Harness 最终会走向 Memory 和 Self-Evolution。但记住更多，并不一定意味着变得更好。错误记忆一旦长期存在，可能比没有记忆更危险。因为它会在未来任务中不断被检索，持续影响模型。</p>
+<p>这有点像一个人把一次误会写进日记，还在以后每次做决定时都拿出来当证据。记忆本身不是智慧，筛选记忆才是。</p>
+<p>首先要分清几种东西：</p>
+<ul>
+<li>Session History 是完整记录。</li>
+<li>Summary 是上下文压缩结果。</li>
+<li>Memory 是可复用经验。</li>
+<li>Rule 是长期约束。</li>
+<li>Skill 是程序性方法。</li>
+</ul>
+<p>它们不能全部塞进一个向量数据库，只靠语义相似度检索。</p>
+<p>用户明确说“默认使用中文”，可以成为长期偏好；项目必须使用 pnpm，属于项目知识；一次特殊故障的解决过程属于情景记忆；反复执行的发布过程，则可能被提炼成 Skill。更细一点，很多 Agent 还会把长期信息拆成人设知识、用户知识和项目知识，比如 <code>rule.md</code> 保存稳定行为边界，<code>user.md</code> 保存用户偏好，<code>soul.md</code> 保存产品希望呈现的长期人格；项目里则用 <code>AGENTS.md</code>、<code>CLAUDE.md</code> 或同类文件记录工程规则。</p>
+<p>但这些内容不应该在 Run 结束后直接写入长期系统。更稳妥的流程是：</p>
+<pre class="mermaid">flowchart LR
+    Observe["观察"] --> Extract["提取候选"]
+    Extract --> Classify["分类"]
+    Classify --> Dedup["去重"]
+    Dedup --> Verify["验证"]
+    Verify --> Scope["确定作用域"]
+    Scope --> Approve["审批"]
+    Approve --> Store["持久化"]</pre>
+<p>每条 Memory 都要保留来源、作用域、可信度和证据。项目知识不能影响其他项目，目录规则不能自动上升成全局规则，一次临时偏好也不能被推断成永久用户特征。对子目录规则也是一样：系统可以像 Prompt Compiler 那样沿路径发现 <code>AGENTS.md</code> 或 <code>CLAUDE.md</code>，但只能让它影响对应目录及其子目录，不能悄悄变成整个项目甚至全局规则。</p>
+<p>记忆还需要衰减和冲突处理。项目可能从 npm 迁移到 pnpm，旧知识应该被新知识替代；一次性的环境路径长期不用后，应降低检索优先级。但安全规则和用户明确设置不应自动衰减。最危险的问题，是 Prompt Injection 污染长期记忆。网页、文件和工具输出不能因为“看起来像有用规则”，就直接写入用户画像、项目知识或 Skill。自进化必须保留来源、Diff、验证结果和回滚版本。</p>
+<p>这一层的关键功能包括：</p>
+<ul>
+<li>Memory Candidate Extractor，从 Run 中提取可能值得保留的经验。</li>
+<li>Memory Classifier，区分用户偏好、项目知识、情景经验、规则、人设知识和 Skill 候选。</li>
+<li>Scope Resolver，决定记忆属于全局、用户、项目、目录还是某个 Skill。</li>
+<li>Evidence Store，为每条记忆保存来源对话、文件、工具结果或审批记录。</li>
+<li>Conflict Resolver，处理新旧记忆冲突和优先级。</li>
+<li>Decay Policy，让过期经验自然降低权重。</li>
+<li>Approval Flow，让长期写入经过用户或维护者确认。</li>
+<li>Evolution Pipeline，对 Rule、Prompt、Skill 和人设知识的修改保留 Diff、测试、审批和回滚。</li>
+</ul>
+<p>Memory 与 Self-Evolution 模块解决的是：**哪些经验值得留下，应该留在哪个作用域，以及如何避免 Agent 越学越错。**它让 Agent 不只是完成一次任务，而是在一次次任务之后，变得更贴近用户、更理解项目，也更知道自己不能随便相信什么。</p>
+<h1>十个模块如何连成一个整体</h1>
+<p>到这里，可以再回头看一次完整链路。</p>
+<pre class="mermaid">flowchart TB
+    I["1 Interface<br>接收请求并连接不同客户端"]
+    S["2 Session<br>提供持续可恢复的状态"]
+    P["3 System Prompt<br>定义身份规则和行为边界"]
+    C["4 Context Management<br>决定模型当前看到什么"]
+    R["5 Agent Runtime<br>驱动模型工具和状态形成闭环"]
+    T["6 Tool<br>让模型安全作用于真实环境"]
+    K["7 Skill<br>提供可复用的程序性知识"]
+    O["8 Orchestration<br>扩展成长任务和多 Agent 协作"]
+    E["9 Hooks & Events<br>让系统可观测可干预"]
+    M["10 Memory & Self-Evolution<br>沉淀长期能力"]
+
+    I --> S --> P --> C --> R
+    R --> T
+    R --> K
+    R --> O
+    R --> E
+    E --> M
+    M --> P</pre>
+<p>这十个模块并不是十个互相独立的功能。它们共同回答了一个问题：</p>
+<blockquote>
+<p>怎样把模型一次次不确定的输出，变成一个有状态、有权限、有恢复能力、能够验证，也能够长期演进的系统？</p>
+</blockquote>
+<p>如果从请求生命周期看，它们会像一条流水线：</p>
+<pre class="mermaid">flowchart TB
+    Req["Client Request"] --> IF["Interface"]
+    IF --> Session["Session / Workspace"]
+    Session --> Prompt["Prompt Compiler"]
+    Prompt --> Context["Context Manager"]
+    Context --> Runtime["Agent Runtime"]
+    Runtime --> Action["Tool / Skill / Subagent"]
+    Action --> Verifier["Verifier"]
+    Verifier --> Store["Event Log / Artifact Store"]
+    Store --> Memory["Memory Candidate"]</pre>
+<p>这条线里最有意思的地方是：模型并不是消失了，而是被放回了一个合适的位置。它仍然负责理解、判断、规划和表达。但系统不能把所有责任都推给它。什么能看、什么能做、什么时候停、结果怎么算完成、经验能不能留下，这些都需要 Harness 给出确定性的支撑。</p>
+<h1>结语</h1>
+<p>回到最开始的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    response = model.generate(messages, tools)</span><br></pre></td></tr></table></figure>
+<p>它仍然是 Agent 的心脏。但真正的 Agent Harness，存在于这个循环的前后和周围。</p>
+<p>请求要通过 Interface 进入；Session 要维持连续状态；System Prompt 要定义规则；Context Manager 要选择信息；Runtime 要控制预算和生命周期；Tool 要安全执行操作；Skill 要复用方法；Orchestration 要处理复杂任务；Events 要记录和干预过程；Memory 则负责把真正有价值的经验留到未来。</p>
+<p>模型决定下一步可能是什么。Harness 决定这个“可能”能不能成为一个安全、稳定、可恢复、可验证的系统行为。所以，真正区分 Agent Demo 和生产级 Agent 的，往往不是循环里用了哪个模型，而是循环之外建立了怎样的 Harness。</p>
+<p>Demo 里的 Agent 像一个灵感很强的人，想到什么就马上去做。生产里的 Agent 则需要一整套让灵感落地的系统：入口、状态、规则、上下文、执行、工具、技能、协作、观测和记忆。</p>
+<blockquote>
+<p>模型决定 Agent 能力的上限，Harness 决定这些能力能不能真正落地。</p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">徐耀彬</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://louishsu.xyz/2026/07/05/Agent%20%E4%B8%8D%E5%8F%AA%E6%98%AF%E4%B8%80%E4%B8%AA%20while%20%E5%BE%AA%E7%8E%AF%EF%BC%9AAgent%20Harness%20%E7%9A%84%E5%8D%81%E5%A4%A7%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97.html">http://louishsu.xyz/2026/07/05/Agent%20%E4%B8%8D%E5%8F%AA%E6%98%AF%E4%B8%80%E4%B8%AA%20while%20%E5%BE%AA%E7%8E%AF%EF%BC%9AAgent%20Harness%20%E7%9A%84%E5%8D%81%E5%A4%A7%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://louishsu.xyz" target="_blank">LOUIS' BLOG</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Agent/">Agent</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2026/07/21/TechPulse%E6%8A%80%E6%9C%AF%E8%B6%8B%E5%8A%BF%E8%BF%BD%E8%B8%AA%E6%8A%A5%E5%91%8A.html"><img class="prev-cover" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">TrendPulse 技术趋势追踪报告</div></div></a></div><div class="next-post pull-right"><a href="/2026/06/14/%E8%AE%A9%20AI%20%E5%86%99%E4%BA%86%E5%87%A0%E7%AF%87%E6%96%87%E7%AB%A0%E5%90%8E%EF%BC%8C%E6%88%91%E8%BF%98%E6%98%AF%E5%86%B3%E5%AE%9A%E8%87%AA%E5%B7%B1%E6%89%93%E5%AD%97.html"><img class="next-cover" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">让 AI 写了几篇文章后，我还是决定自己打字</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2026/03/22/claude-code里的agent-harness工程.html" title="Claude Code 的 Agent Harness 工程"><img class="cover" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-03-22</div><div class="title">Claude Code 的 Agent Harness 工程</div></div></a></div><div><a href="/2026/04/05/skill_project_docs_manager.html" title="Project Docs Manager Skill：让 AI 自主驱动项目迭代的文档引擎"><img class="cover" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-04-05</div><div class="title">Project Docs Manager Skill：让 AI 自主驱动项目迭代的文档引擎</div></div></a></div><div><a href="/2026/05/09/skill_project_interview.html" title="Project Interview Skill：用一场对话，把模糊的项目变成结构清晰的文档"><img class="cover" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-09</div><div class="title">Project Interview Skill：用一场对话，把模糊的项目变成结构清晰的文档</div></div></a></div><div><a href="/2026/04/02/skill_video_knowledge_purify.html" title="Video Knowledge Purify Skill：让视频变成可检索的结构化知识笔记"><img class="cover" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-04-02</div><div class="title">Video Knowledge Purify Skill：让视频变成可检索的结构化知识笔记</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/touxiang.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">徐耀彬</div><div class="author-info__description">我好像很久没写字了，老是打字</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">35</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">14</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/isLouisHsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/isLouisHsu" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:is.louishsu@foxmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">记录和分享一些学习和开源内容，若有问题可通过邮箱is.louishsu@foxmail.com联系，欢迎交流！！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">TL;DR</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">十大核心模块</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">模块一：交互与协议（Interface）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E4%BB%8E%E5%93%AA%E9%87%8C%E8%BF%9B%E5%85%A5-Agent"><span class="toc-number">3.1.</span> <span class="toc-text">请求从哪里进入 Agent</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">模块二：会话与工作区状态（Session）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Agent-%E5%A6%82%E4%BD%95%E5%9C%A8%E6%97%B6%E9%97%B4%E4%B8%AD%E4%BF%9D%E6%8C%81%E8%BF%9E%E7%BB%AD"><span class="toc-number">4.1.</span> <span class="toc-text">Agent 如何在时间中保持连续</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">模块三：系统提示词（System Prompt）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Agent-%E8%A2%AB%E5%91%8A%E7%9F%A5%E4%BA%86%E4%BB%80%E4%B9%88%E8%A7%84%E5%88%99"><span class="toc-number">5.1.</span> <span class="toc-text">Agent 被告知了什么规则</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">模块四：模型上下文管理（Model Context）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8D%E6%98%AF%E6%89%80%E6%9C%89%E4%BF%A1%E6%81%AF%E9%83%BD%E5%BA%94%E8%AF%A5%E5%A1%9E%E7%BB%99%E6%A8%A1%E5%9E%8B"><span class="toc-number">6.1.</span> <span class="toc-text">不是所有信息都应该塞给模型</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">模块五：Agent Loop &amp; Runtime</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9C%9F%E6%AD%A3%E9%A9%B1%E5%8A%A8%E7%B3%BB%E7%BB%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E4%B8%BB%E5%BE%AA%E7%8E%AF"><span class="toc-number">7.1.</span> <span class="toc-text">真正驱动系统运行的主循环</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">模块六：工具系统（Tools）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E5%A6%82%E4%BD%95%E7%9C%9F%E6%AD%A3%E6%94%B9%E5%8F%98%E5%A4%96%E9%83%A8%E4%B8%96%E7%95%8C"><span class="toc-number">8.1.</span> <span class="toc-text">模型如何真正改变外部世界</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">模块七：技能系统（Skills）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Agent-%E5%A6%82%E4%BD%95%E5%A4%8D%E7%94%A8%E4%B8%80%E5%A5%97%E5%81%9A%E4%BA%8B%E6%96%B9%E6%B3%95"><span class="toc-number">9.1.</span> <span class="toc-text">Agent 如何复用一套做事方法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">模块八：任务与多 Agent 编排</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%B8%AA-Agent-%E4%B8%8D%E5%A4%9F%E6%97%B6%E6%80%8E%E4%B9%88%E5%8A%9E"><span class="toc-number">10.1.</span> <span class="toc-text">一个 Agent 不够时怎么办</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">模块九：Hooks、Events 与可观测性</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E7%9F%A5%E9%81%93%E7%B3%BB%E7%BB%9F%E5%86%85%E9%83%A8%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88"><span class="toc-number">11.1.</span> <span class="toc-text">如何知道系统内部发生了什么</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">12.</span> <span class="toc-text">模块十：记忆与自进化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Agent-%E5%A6%82%E4%BD%95%E6%8A%8A%E7%BB%8F%E9%AA%8C%E7%95%99%E5%88%B0%E6%9C%AA%E6%9D%A5"><span class="toc-number">12.1.</span> <span class="toc-text">Agent 如何把经验留到未来</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">13.</span> <span class="toc-text">十个模块如何连成一个整体</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">14.</span> <span class="toc-text">结语</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/07/24/Arxiv%E6%AF%8F%E6%97%A5%E9%80%9F%E9%80%92.html" title="Arxiv每日速递(2026-07-24)"><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/_posts/Arxiv%E6%AF%8F%E6%97%A5%E9%80%9F%E9%80%92/wc.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv每日速递(2026-07-24)"/></a><div class="content"><a class="title" href="/2026/07/24/Arxiv%E6%AF%8F%E6%97%A5%E9%80%9F%E9%80%92.html" title="Arxiv每日速递(2026-07-24)">Arxiv每日速递(2026-07-24)</a><time datetime="2026-07-24T02:12:59.016Z" title="发表于 2026-07-24 10:12:59">2026-07-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/21/TechPulse%E6%8A%80%E6%9C%AF%E8%B6%8B%E5%8A%BF%E8%BF%BD%E8%B8%AA%E6%8A%A5%E5%91%8A.html" title="TrendPulse 技术趋势追踪报告"><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="TrendPulse 技术趋势追踪报告"/></a><div class="content"><a class="title" href="/2026/07/21/TechPulse%E6%8A%80%E6%9C%AF%E8%B6%8B%E5%8A%BF%E8%BF%BD%E8%B8%AA%E6%8A%A5%E5%91%8A.html" title="TrendPulse 技术趋势追踪报告">TrendPulse 技术趋势追踪报告</a><time datetime="2026-07-21T16:00:00.000Z" title="发表于 2026-07-22 00:00:00">2026-07-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/05/Agent%20%E4%B8%8D%E5%8F%AA%E6%98%AF%E4%B8%80%E4%B8%AA%20while%20%E5%BE%AA%E7%8E%AF%EF%BC%9AAgent%20Harness%20%E7%9A%84%E5%8D%81%E5%A4%A7%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97.html" title="Agent 不只是一个 while 循环：Agent Harness 的十大核心模块"><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Agent 不只是一个 while 循环：Agent Harness 的十大核心模块"/></a><div class="content"><a class="title" href="/2026/07/05/Agent%20%E4%B8%8D%E5%8F%AA%E6%98%AF%E4%B8%80%E4%B8%AA%20while%20%E5%BE%AA%E7%8E%AF%EF%BC%9AAgent%20Harness%20%E7%9A%84%E5%8D%81%E5%A4%A7%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97.html" title="Agent 不只是一个 while 循环：Agent Harness 的十大核心模块">Agent 不只是一个 while 循环：Agent Harness 的十大核心模块</a><time datetime="2026-07-05T16:13:00.000Z" title="发表于 2026-07-06 00:13:00">2026-07-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/14/%E8%AE%A9%20AI%20%E5%86%99%E4%BA%86%E5%87%A0%E7%AF%87%E6%96%87%E7%AB%A0%E5%90%8E%EF%BC%8C%E6%88%91%E8%BF%98%E6%98%AF%E5%86%B3%E5%AE%9A%E8%87%AA%E5%B7%B1%E6%89%93%E5%AD%97.html" title="让 AI 写了几篇文章后，我还是决定自己打字"><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="让 AI 写了几篇文章后，我还是决定自己打字"/></a><div class="content"><a class="title" href="/2026/06/14/%E8%AE%A9%20AI%20%E5%86%99%E4%BA%86%E5%87%A0%E7%AF%87%E6%96%87%E7%AB%A0%E5%90%8E%EF%BC%8C%E6%88%91%E8%BF%98%E6%98%AF%E5%86%B3%E5%AE%9A%E8%87%AA%E5%B7%B1%E6%89%93%E5%AD%97.html" title="让 AI 写了几篇文章后，我还是决定自己打字">让 AI 写了几篇文章后，我还是决定自己打字</a><time datetime="2026-06-14T11:50:22.000Z" title="发表于 2026-06-14 19:50:22">2026-06-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/05/LLM%20Wiki%20%E6%B7%B1%E5%BA%A6%E8%A7%A3%E8%AF%BB%EF%BC%9A%E8%AE%A9%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E6%88%90%E4%B8%BA%E4%BD%A0%E7%9A%84%E7%9F%A5%E8%AF%86%E7%BC%96%E8%AF%91%E5%99%A8.html" title="LLM Wiki 深度解读：让大语言模型成为你的知识编译器"><img src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="LLM Wiki 深度解读：让大语言模型成为你的知识编译器"/></a><div class="content"><a class="title" href="/2026/06/05/LLM%20Wiki%20%E6%B7%B1%E5%BA%A6%E8%A7%A3%E8%AF%BB%EF%BC%9A%E8%AE%A9%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E6%88%90%E4%B8%BA%E4%BD%A0%E7%9A%84%E7%9F%A5%E8%AF%86%E7%BC%96%E8%AF%91%E5%99%A8.html" title="LLM Wiki 深度解读：让大语言模型成为你的知识编译器">LLM Wiki 深度解读：让大语言模型成为你的知识编译器</a><time datetime="2026-06-05T16:13:00.000Z" title="发表于 2026-06-06 00:13:00">2026-06-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2026 By 徐耀彬</div><div class="footer_custom_text"><p><a style="margin-inline:5px"target="_blank"href="https://hexo.io/"><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&logo=hexo"title="博客框架为Hexo"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://butterfly.js.org/"><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&logo=bitdefender"title="主题采用butterfly"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://www.jsdelivr.com/"><img src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&logo=jsDelivr"title="本站使用JsDelivr为静态资源提供CDN加速"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://github.com/"><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&logo=GitHub"title="本站项目由Gtihub托管"alt="img"></a><a style="margin-inline:5px"target="_blank"href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&logo=Claris"alt="img"title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"></a></br></p></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>if (document.getElementsByClassName('mermaid').length) {
+  if (window.mermaidJsLoad) mermaid.init()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(() => {
+      window.mermaidJsLoad = true
+      mermaid.initialize({
+        theme: 'default',
+      })
+      false && mermaid.init()
+    })
+  }
+}</script><script>(()=>{
+  const $countDom = document.getElementById('twikoo-count')
+  const init = () => {
+    let initData = {
+      el: '#twikoo-wrap',
+      envId: 'blog-',
+      region: ''
+    }
+
+    if (false) {
+      const otherData = false
+      initData = Object.assign(initData, otherData)
+    }
+    
+    twikoo.init(initData)
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'blog-',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      $countDom.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const loadTwikoo = (bool = false) => {
+    if (typeof twikoo === 'object') {
+      init()
+      bool && $countDom && setTimeout(getCount,0)
+    } else {
+      getScript('https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(()=> {
+        init()
+        bool && $countDom && setTimeout(getCount,0)
+      })
+    }
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo(true)
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@12.1.3/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12.1.3/swiper-bundle.min.css">
+ <script data-pjax>if(document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    var parent = document.getElementById('recent-posts');
+    var child = '<div class="recent-post-item" style="width:100%;height: auto"><div id="catalog_magnet"><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/机器学习/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🐱 机器学习 (7)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (9)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/竞赛相关/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 竞赛相关 (3)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://louishsu.xyz/categories/阅读笔记/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 阅读笔记 (1)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><a class="magnet_link_more"  href="http://louishsu.xyz/categories" style="flex:1;text-align: center;margin-bottom: 10px;">查看更多...</a></div></div>';
+    console.log('已挂载magnet')
+    parent.insertAdjacentHTML("afterbegin",child)}
+     </script><style>#catalog_magnet{flex-wrap: wrap;display: flex;width:100%;justify-content:space-between;padding: 10px 10px 0 10px;align-content: flex-start;}.magnet_item{flex-basis: calc(50% - 5px);background: #f2f2f2;margin-bottom: 10px;border-radius: 8px;transition: all 0.2s ease-in-out;}.magnet_item:hover{background: #b30070}.magnet_link_more{color:#555}.magnet_link{color:black}.magnet_link:hover{color:white}@media screen and (max-width: 600px) {.magnet_item {flex-basis: 100%;}}.magnet_link_context{display:flex;padding: 10px;font-size:16px;transition: all 0.2s ease-in-out;}.magnet_link_context:hover{padding: 10px 20px;}</style>
+    <style></style><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2021/05/19/全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖).html" alt=""><img width="48" height="48" src="https://tianchi-public.oss-cn-hangzhou.aliyuncs.com/public/files/forum/161037709574435991610377095138.jpeg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-05-19</span><a class="blog-slider__title" href="2021/05/19/全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖).html" alt="">全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖)</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2021/05/19/全球人工智能技术创新大赛【赛道一】：医学影像报告异常检测(三等奖).html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2021/10/22/中国法律智能技术评测(CAIL2021)：信息抽取(Rank2).html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/cail2021.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-10-22</span><a class="blog-slider__title" href="2021/10/22/中国法律智能技术评测(CAIL2021)：信息抽取(Rank2).html" alt="">中国法律智能技术评测(CAIL2021)：信息抽取(Rank2)</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2021/10/22/中国法律智能技术评测(CAIL2021)：信息抽取(Rank2).html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/11/17/2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖).html" alt=""><img width="48" height="48" src="https://cdn.kesci.com/upload/image/r7j60un866.png?imageView2/2/w/2500/h/2500" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-11-17</span><a class="blog-slider__title" href="2022/11/17/2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖).html" alt="">2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖)</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2022/11/17/2022全球人工智能技术创新大赛(GAIIC2022)：商品标题实体识别(二等奖).html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2025/01/01/图解：LLM是怎么通过PPO优化偏好的？.html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/ww3.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2025-01-01</span><a class="blog-slider__title" href="2025/01/01/图解：LLM是怎么通过PPO优化偏好的？.html" alt="">图解：LLM是怎么通过PPO优化偏好的？</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2025/01/01/图解：LLM是怎么通过PPO优化偏好的？.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/09/22/vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度.html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/ww5.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-09-22</span><a class="blog-slider__title" href="2023/09/22/vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度.html" alt="">vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/09/22/vLLM：利用分页缓存和张量并行提高大模型2~4x推理速度.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/10/22/Transformer语言模型的位置编码与长度外推.html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/city.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-10-22</span><a class="blog-slider__title" href="2023/10/22/Transformer语言模型的位置编码与长度外推.html" alt="">Transformer语言模型的位置编码与长度外推</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/10/22/Transformer语言模型的位置编码与长度外推.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2024/02/03/Stable Diffusion 提示词指南书.html" alt=""><img width="48" height="48" src="https://huggingface.co/blog/assets/98_stable_diffusion/stable_diffusion_12_1.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2024-02-03</span><a class="blog-slider__title" href="2024/02/03/Stable Diffusion 提示词指南书.html" alt="">🎨 Stable Diffusion 提示词指南书</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2024/02/03/Stable Diffusion 提示词指南书.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/09/06/Prompt：大语言模型的执行指南.html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/ww6.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-09-06</span><a class="blog-slider__title" href="2023/09/06/Prompt：大语言模型的执行指南.html" alt="">Prompt：大语言模型的执行指南</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/09/06/Prompt：大语言模型的执行指南.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/11/26/升级深度学习开发环境全攻略.html" alt=""><img width="48" height="48" src="https://cdn.jsdelivr.net/gh/isLouisHsu/resource@master/blog_resource/misc/cover/default.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-11-26</span><a class="blog-slider__title" href="2022/11/26/升级深度学习开发环境全攻略.html" alt="">升级深度学习开发环境全攻略</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2022/11/26/升级深度学习开发环境全攻略.html" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>
