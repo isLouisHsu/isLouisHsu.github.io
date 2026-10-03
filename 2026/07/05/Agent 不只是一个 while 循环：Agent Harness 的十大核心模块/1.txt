@@ -1,0 +1,2077 @@
+建议按照“一次请求的完整生命周期”来组织十章：
+
+> **请求从哪里进入 → 绑定什么状态 → 模型被告知什么 → 模型实际看见什么 → 主循环如何运行 → 如何操作环境 → 如何复用能力 → 如何扩展为复杂任务 → 如何观测和干预 → 如何沉淀为长期能力**
+
+这样比按组件重要性排序更容易阅读，也可以避免十章像十篇互不相干的功能说明。
+
+# 一、调整后的十大模块顺序
+
+| 顺序 | 模块 | 这一章回答的问题 |
+|---|---|---|
+| 1 | 交互与协议 | 用户请求如何进入 Agent？ |
+| 2 | 会话与工作区状态 | 这次请求属于哪个持续存在的状态空间？ |
+| 3 | 系统提示词 | Agent 被赋予了什么身份、规则和运行契约？ |
+| 4 | 模型上下文管理 | 这一轮模型究竟能看到什么？ |
+| 5 | Agent Runtime 与主循环 | 模型、工具和状态如何形成闭环？ |
+| 6 | 工具系统 | Agent 如何安全地作用于外部环境？ |
+| 7 | 技能系统 | Agent 如何复用程序性知识和标准工作流？ |
+| 8 | 任务与多 Agent 编排 | 单次执行如何扩展为长期、并行和协作任务？ |
+| 9 | Hooks、事件与可观测性 | 外部系统如何观测、控制和扩展 Agent？ |
+| 10 | 记忆与自进化 | 一次执行如何沉淀为未来能力？ |
+
+这里有两个重要调整：
+
+第一，把 **System Prompt 和 Model Context Management 放到 Agent Loop 前面**。因为主循环调用模型前，必须先完成提示词编译和上下文构造。
+
+第二，把 **Hooks & Events 放到 Self-Evolution 前面**。因为自进化通常依赖事件采集、运行记录、反馈和写回机制；没有事件层，自进化很容易变成不可追踪的文件修改。
+
+---
+
+# 二、完整博客结构
+
+## 开篇：Agent 不只是一个 while 循环
+
+建议开篇不直接进入十大模块，而是先建立三个概念。
+
+### 0.1 什么是 Agent Harness
+
+可以给出这样的定义：
+
+> Agent Harness 是包裹在模型之外的运行时系统。它负责接收请求、管理状态、构造上下文、调用模型、执行工具、控制权限、验证结果、处理中断，并将有效经验沉淀为后续能力。
+
+### 0.2 Model、Agent 与 Harness 的边界
+
+可以用三句话区分：
+
+- **Model**：根据当前上下文预测下一步输出。
+- **Agent**：持续观察、推理并采取行动的逻辑主体。
+- **Harness**：让 Agent 可以稳定、安全、可恢复地运行的基础设施。
+
+### 0.3 一次请求在 Harness 中的完整旅程
+
+先给出总流程：
+
+```text
+Client
+  ↓
+Interface Adapter
+  ↓
+Session / Workspace
+  ↓
+System Prompt Compiler
+  ↓
+Context Manager
+  ↓
+Agent Runtime
+  ↓
+Model
+  ↓
+Tool / Skill / Subagent
+  ↓
+Verifier
+  ↓
+Session Persistence
+  ↓
+Memory & Evolution
+```
+
+这张图会成为后续十章的导航。
+
+---
+
+# 第一章：交互与协议层
+
+推荐标题：
+
+## 1. 交互与协议：Agent 如何连接不同客户端
+
+这一章强调：交互层不是 Agent 本身，而是 Agent Runtime 的适配器。
+
+### 1.1 为什么需要独立的交互层
+
+说明 CLI、Web、IDE、移动端之间的差异：
+
+- 输入形式不同
+- 流式输出方式不同
+- 审批交互不同
+- 中断机制不同
+- 客户端能力不同
+
+但它们不应该各自实现一套 Agent Loop。
+
+### 1.2 统一的请求模型
+
+建议定义几个核心概念：
+
+```text
+CreateSessionRequest
+PromptRequest
+ResumeRequest
+CancelRequest
+ApprovalResponse
+```
+
+一次请求至少应携带：
+
+- Session ID
+- 用户输入
+- 工作目录
+- 客户端能力
+- 权限上下文
+- 附件与资源引用
+- 请求级配置
+
+### 1.3 统一的流式事件模型
+
+不要只返回字符串，应返回结构化事件：
+
+```text
+run.started
+assistant.delta
+reasoning.status
+tool.requested
+tool.started
+tool.output
+approval.required
+task.updated
+artifact.created
+run.completed
+run.failed
+```
+
+客户端可以根据能力选择如何展示。
+
+### 1.4 CLI、Gateway 与 ACP
+
+分别说明三者定位：
+
+- **CLI**：本地单用户交互入口
+- **Gateway**：远程、多客户端、多租户入口
+- **ACP**：编辑器与 Agent 之间的标准协议适配
+- **HTTP/WebSocket**：服务化接口
+- **stdio/JSON-RPC**：本地进程通信
+
+### 1.5 流式传输、背压与断线重连
+
+需要讨论：
+
+- 客户端消费速度低于 Agent 产出速度时怎么办
+- 工具日志是否逐行推送
+- 断线后如何继续订阅
+- 是否保存事件游标
+- 重复事件如何去重
+
+建议采用单调递增的 `event_sequence`。
+
+### 1.6 用户中断与人工审批
+
+交互层需要支持两类反向消息：
+
+```text
+cancel(run_id)
+approve(request_id, decision)
+```
+
+审批不能只是“是或否”，还可以支持：
+
+- 本次允许
+- 本 Session 允许
+- 对这一工具允许
+- 修改参数后执行
+- 拒绝并给出原因
+
+### 1.7 身份认证与多租户边界
+
+Gateway 场景需要补充：
+
+- 用户身份
+- 组织身份
+- Session 所有权
+- Tool 权限
+- 资源配额
+- 审计主体
+
+### 1.8 本章常见失败模式
+
+- CLI 和 Web 分别维护不同状态
+- 断线导致任务被错误取消
+- 客户端关闭后，后台进程仍在运行
+- 审批结果无法对应到具体工具调用
+- 流式事件没有顺序和幂等语义
+
+---
+
+# 第二章：会话与工作区状态
+
+推荐标题：
+
+## 2. Session：从聊天记录到可恢复的运行状态
+
+这一章需要打破“Session 等于聊天历史”的理解。
+
+### 2.1 Session、Run、Turn 与 Context Epoch
+
+建议明确四个层次：
+
+```text
+Session
+└── Run
+    └── Turn
+        └── Model Invocation
+```
+
+另外加入：
+
+- **Context Epoch**：一次上下文压缩所形成的新上下文世代
+- **Branch**：从某个历史状态分叉出的新 Session 分支
+- **Checkpoint**：可恢复的状态快照
+
+### 2.2 Session 中应该保存什么
+
+至少包括：
+
+```text
+Session
+├── metadata
+├── messages
+├── runs
+├── runtime snapshots
+├── context epochs
+├── tasks
+├── artifacts
+├── workspace reference
+├── checkpoints
+└── branches
+```
+
+### 2.3 对话状态与工作区状态
+
+需要重点区分：
+
+**对话状态：**
+
+- 用户消息
+- 模型回复
+- 工具调用
+- 工具结果
+- 摘要
+- Prompt 版本
+
+**工作区状态：**
+
+- 文件修改
+- Git 状态
+- 临时文件
+- 运行中的进程
+- 环境变量
+- 数据库或云资源引用
+
+恢复对话不代表恢复工作区。
+
+### 2.4 Session 的生命周期
+
+建议覆盖：
+
+```text
+new
+resume
+suspend
+checkpoint
+restore
+fork
+rename
+export
+archive
+delete
+```
+
+还可以区分：
+
+- Active Session
+- Suspended Session
+- Archived Session
+- Deleted Session
+
+### 2.5 Checkpoint 的数据模型
+
+一个完整检查点可以包含：
+
+```text
+Checkpoint
+├── conversation_cursor
+├── runtime_snapshot
+├── task_snapshot
+├── context_snapshot
+├── workspace_snapshot
+└── external_side_effect_manifest
+```
+
+### 2.6 基于影子 Git 的项目级恢复
+
+这一节可以作为亮点。
+
+讨论三种方案：
+
+1. 隐藏 Git 仓库
+2. 临时 Worktree
+3. 内容寻址对象存储
+
+需要说明：
+
+- 哪些时刻创建快照
+- 如何控制存储增长
+- 未跟踪文件怎么处理
+- 大文件怎么处理
+- 用户自己的 Git 历史是否会受影响
+- 恢复时如何处理当前未提交修改
+
+### 2.7 外部副作用无法由 Git 恢复
+
+需要补充：
+
+- 数据库写入
+- 邮件发送
+- 云资源创建
+- 发布包
+- API 调用
+- 远程机器修改
+
+这些操作需要：
+
+- 外部资源清单
+- 幂等键
+- 补偿操作
+- 人工确认
+- 不可逆标记
+
+### 2.8 Fork 与 Restore 的区别
+
+- **Restore**：改变当前分支状态
+- **Fork**：保留原分支，从历史点创建新分支
+
+Fork 通常更安全，也更适合探索不同方案。
+
+### 2.9 全文检索与浏览
+
+索引对象可以包括：
+
+- 对话内容
+- 结构化摘要
+- 文件路径
+- Tool 名称
+- Task 名称
+- Artifact 元数据
+- 标签和项目
+- 错误信息
+
+工具原始输出不一定全部进入全文索引，尤其是日志和敏感数据。
+
+### 2.10 并发访问与 Session 锁
+
+多个客户端或 Agent 同时操作 Session 时，需要考虑：
+
+- 乐观锁
+- Session Revision
+- Run Lease
+- 单写多读
+- 分支写入
+- 冲突检测
+
+---
+
+# 第三章：系统提示词
+
+推荐标题：
+
+## 3. System Prompt：从静态文本到动态编译产物
+
+核心观点：
+
+> 系统提示词不应该是一段手写大字符串，而应该是多个有来源、有作用域、有优先级的片段编译而成。
+
+### 3.1 系统提示词承担什么职责
+
+包括：
+
+- Agent 身份
+- 行为原则
+- 安全边界
+- 运行时契约
+- 工具使用要求
+- 输出格式
+- 项目规则
+- 用户偏好
+- 环境信息
+
+### 3.2 静态段与动态段
+
+**静态段：**
+
+- 核心身份
+- 通用行为
+- 安全原则
+- Tool Calling 约定
+
+**动态段：**
+
+- 当前工作目录
+- 项目规则
+- 激活的 Skill
+- 用户偏好
+- 当前权限
+- 环境信息
+- 模型特异性指引
+
+### 3.3 System Prompt Compiler
+
+建议引入编译器抽象：
+
+```text
+Prompt Sources
+  ↓
+Scope Resolution
+  ↓
+Priority Merge
+  ↓
+Conflict Detection
+  ↓
+Deduplication
+  ↓
+Model Adaptation
+  ↓
+Serialization
+```
+
+### 3.4 提示词优先级
+
+可以定义：
+
+```text
+平台安全规则
+> Harness 核心契约
+> 组织规则
+> 项目规则
+> 目录级规则
+> 当前 Skill
+> 用户偏好
+> 临时任务指令
+> 检索到的信息
+```
+
+注意：检索结果不能提升成系统级规则。
+
+### 3.5 AGENTS.md、CLAUDE.md 等项目规则发现
+
+建议算法：
+
+1. 确定项目根目录。
+2. 从项目根目录走向目标文件目录。
+3. 每层查找规则文件。
+4. 从上到下依次加载。
+5. 距离目标文件越近，优先级越高。
+6. 使用文件路径、修改时间和内容哈希缓存。
+7. 工作目录变化或文件变化时重新计算。
+
+更进一步，可以在 Agent 访问某个文件时，惰性加载该文件对应的规则链。
+
+### 3.6 Prompt Provenance
+
+每一个提示词片段都应记录：
+
+```yaml
+source:
+scope:
+priority:
+content_hash:
+loaded_at:
+trusted:
+```
+
+这样才能回答：
+
+- 为什么这条规则出现在 Prompt 中
+- 是哪个文件提供的
+- 是否被更高优先级规则覆盖
+- 某次异常是哪个 Prompt 版本引起的
+
+### 3.7 模型特异性适配
+
+不同模型可能需要不同：
+
+- 工具描述长度
+- XML 或 Markdown 格式
+- 输出约束
+- 推理引导
+- 并行工具调用提示
+- 上下文分段方式
+
+因此最好保留：
+
+```text
+Canonical Prompt IR
+        ↓
+Model-specific Renderer
+```
+
+### 3.8 Prompt Injection 的边界隔离
+
+需要明确区分：
+
+- 系统规则
+- 用户指令
+- 文件内容
+- 网页内容
+- 工具输出
+- Memory
+- Skill
+
+外部内容应被标记为“不可信数据”，不能与系统指令无边界拼接。
+
+### 3.9 Prompt 版本化与实验
+
+记录：
+
+- Prompt Template Version
+- Dynamic Segment Hash
+- Model Version
+- Tool Schema Version
+- Skill Version
+
+这样才可以对 Prompt 修改做回归测试。
+
+---
+
+# 第四章：模型上下文管理
+
+推荐标题：
+
+## 4. Model Context Management：决定模型这一轮看到什么
+
+系统提示词回答“应该遵守什么”，上下文管理回答“当前实际知道什么”。
+
+### 4.1 Context 不等于 Message History
+
+上下文来源可以包括：
+
+- 系统提示词
+- 对话历史
+- 当前任务
+- Memory
+- 项目规则
+- 文件内容
+- Tool 结果
+- Skill
+- Subagent 摘要
+- 环境信息
+
+### 4.2 上下文构造流水线
+
+```text
+Collect
+→ Filter
+→ Rank
+→ Pin
+→ Deduplicate
+→ Prune
+→ Compact
+→ Budget
+→ Serialize
+```
+
+### 4.3 必须保留的内容
+
+通常不压缩：
+
+- 核心安全规则
+- 当前用户请求
+- 当前任务目标
+- 关键限制
+- 输出契约
+- 最近几轮交互
+- 尚未解决的错误
+- 当前正在执行的计划
+
+### 4.4 可以压缩或重新读取的内容
+
+- 较早对话
+- 大型日志
+- 搜索结果
+- 重复文件内容
+- 已完成子任务
+- 已经处理完的错误
+- 可通过文件路径重新访问的内容
+
+### 4.5 Tool Output Pruning
+
+建议工具结果分为：
+
+```text
+Inline Summary
+Artifact Reference
+Metadata
+Retrieval Handle
+```
+
+例如：
+
+```json
+{
+  "summary": "测试失败，共 3 个失败用例，均涉及时区转换。",
+  "artifact_path": ".agent/artifacts/test-0187.log",
+  "original_bytes": 283491,
+  "retained_bytes": 1900,
+  "sha256": "..."
+}
+```
+
+### 4.6 结构化上下文压缩
+
+不要只生成自由文本摘要。推荐保留：
+
+```yaml
+goal:
+constraints:
+completed:
+decisions:
+modified_files:
+failed_attempts:
+open_questions:
+next_actions:
+important_identifiers:
+```
+
+尤其需要保存：
+
+- 哪些方案已经失败
+- 用户明确否定了什么
+- 哪些文件已修改
+- 尚未完成的承诺
+
+### 4.7 Context Epoch
+
+压缩后不要伪装成原始对话。可以形成新的 Context Epoch：
+
+```text
+Epoch 1: 原始消息 1—40
+Epoch 2: Epoch 1 摘要 + 消息 41—70
+Epoch 3: Epoch 2 摘要 + 消息 71—当前
+```
+
+这样有利于审计和恢复。
+
+### 4.8 Token Budget 分配
+
+可以按类别划分预算：
+
+```text
+system_rules
+current_request
+recent_history
+task_state
+retrieved_memory
+workspace_context
+tool_results
+response_reserve
+```
+
+同时为最终输出预留 Token，避免输入占满上下文窗口。
+
+### 4.9 上下文去重与新鲜度
+
+需要处理：
+
+- 同一文件多次读取
+- 同一规则被多个来源重复加载
+- 旧版本文件与新版本文件同时存在
+- 过期任务状态
+- 已被更新的 Memory
+
+### 4.10 上下文管理如何评估
+
+评估不应只看 Token 数，还要看：
+
+- 关键约束保留率
+- 决策一致性
+- 错误重复率
+- 无关信息比例
+- 压缩后任务成功率
+- 重新读取次数
+
+---
+
+# 第五章：Agent Runtime 与主循环
+
+推荐标题：
+
+## 5. Agent Runtime：把模型调用变成可控执行过程
+
+这是整套 Harness 的内核。
+
+### 5.1 Runtime State
+
+运行时状态可以包括：
+
+```text
+RuntimeState
+├── session
+├── run
+├── current_turn
+├── messages
+├── active_tasks
+├── tool_calls
+├── budgets
+├── approvals
+├── resources
+├── cancellation
+└── usage
+```
+
+### 5.2 Agent Loop 的阶段
+
+建议不要只写一个 `while`，而是明确阶段：
+
+```text
+Prepare
+→ Build Context
+→ Invoke Model
+→ Parse Response
+→ Validate Action
+→ Execute Tools
+→ Integrate Results
+→ Verify Completion
+→ Continue or Stop
+```
+
+### 5.3 Execution Budget
+
+预算不只包括迭代次数：
+
+```text
+max_iterations
+max_model_calls
+max_tool_calls
+max_input_tokens
+max_output_tokens
+max_cost
+max_wall_time
+max_subagents
+deadline
+```
+
+每种预算应对应不同停止原因。
+
+### 5.4 模型调用统计与成本归因
+
+至少记录：
+
+- 模型名称和版本
+- 输入输出 Token
+- Cache Token
+- 延迟
+- 重试次数
+- 费用
+- 当前 Run
+- 当前 Task
+- 当前 Subagent
+
+### 5.5 停止原因模型
+
+不要只返回 `success` 或 `error`。
+
+可以定义：
+
+```text
+completed
+budget_exhausted
+cancelled_by_user
+approval_rejected
+tool_failure
+model_failure
+verification_failed
+deadline_exceeded
+runtime_shutdown
+```
+
+### 5.6 Completion Contract
+
+模型输出“完成”不代表真正完成。
+
+任务应有：
+
+```yaml
+success_criteria:
+required_artifacts:
+validators:
+forbidden_changes:
+```
+
+主循环需要通过 Verifier 判断是否完成。
+
+### 5.7 Retry 与错误分类
+
+需要区分：
+
+- 可重试模型错误
+- 不可重试认证错误
+- Tool 临时失败
+- Tool 参数错误
+- 用户输入问题
+- 验证失败
+- 状态冲突
+
+不要对所有错误无脑重试。
+
+### 5.8 幂等性
+
+工具或任务重试前需要知道：
+
+- 是否已经执行过
+- 是否产生副作用
+- 是否有 Idempotency Key
+- 是否可以安全重复
+- 是否需要先查询现有状态
+
+### 5.9 中断传播
+
+推荐使用取消树：
+
+```text
+Run Cancellation
+├── Model Request
+├── Tool Calls
+├── Subagents
+├── Tasks
+└── Background Processes
+```
+
+父级取消后，应向所有子资源传播。
+
+### 5.10 资源生命周期管理
+
+使用统一的 Resource Scope 管理：
+
+- 网络连接
+- 子进程
+- 临时目录
+- 文件锁
+- 数据库事务
+- 浏览器会话
+- Sandbox
+- Subagent
+
+即使异常退出，也必须执行清理。
+
+### 5.11 运行事件日志与重放
+
+建议把重要状态变化记录为事件：
+
+```text
+run.created
+model.called
+tool.started
+tool.finished
+checkpoint.created
+run.completed
+```
+
+事件日志有利于：
+
+- 故障分析
+- Session 恢复
+- 成本统计
+- 确定性重放
+- 审计
+
+### 5.12 模型路由与降级
+
+Runtime 可以支持：
+
+- 不同任务使用不同模型
+- 模型超时后降级
+- 低成本模型处理摘要
+- 高能力模型处理关键决策
+- 不同 Subagent 使用不同模型
+
+但模型切换应保存到运行记录中。
+
+---
+
+# 第六章：工具系统
+
+推荐标题：
+
+## 6. Tool Runtime：让 Agent 安全地作用于外部环境
+
+### 6.1 Tool、Function 与 Backend 的区别
+
+建议区分：
+
+- **Tool**：暴露给模型的能力契约
+- **Function Handler**：Harness 内部实现
+- **Execution Backend**：实际执行环境
+
+同一个 Terminal Tool 可以连接多个 Backend。
+
+### 6.2 工具定义
+
+工具元数据建议包括：
+
+```yaml
+name:
+description:
+input_schema:
+output_schema:
+side_effects:
+risk_level:
+supports_parallel:
+timeout:
+backend_requirements:
+```
+
+### 6.3 工具发现与注册
+
+来源可能包括：
+
+- 内置工具
+- 项目工具
+- 插件
+- Skill
+- MCP Server
+- 远程 Tool Registry
+- 用户自定义工具
+
+### 6.4 工具过滤与 Capability Manifest
+
+不要向模型暴露所有工具。
+
+过滤条件可以包括：
+
+- 当前 Agent 角色
+- 当前 Task
+- Permission Mode
+- Skill 声明
+- 用户权限
+- 当前环境
+- 模型是否支持
+- 风险级别
+
+每次调用模型时，可以生成当前能力清单。
+
+### 6.5 工具调用前的策略检查
+
+在执行前检查：
+
+- 参数是否合法
+- 路径是否越界
+- 是否访问敏感目录
+- 是否包含危险命令
+- 是否需要网络
+- 是否需要人工审批
+- 是否超出任务作用域
+
+安全策略不能只依赖系统提示词。
+
+### 6.6 人工审批模型
+
+建议将审批请求作为一等对象：
+
+```text
+ApprovalRequest
+├── operation
+├── normalized_arguments
+├── risk
+├── reason
+├── affected_resources
+├── preview
+└── expiration
+```
+
+### 6.7 工具并行执行
+
+不能仅凭模型一次返回多个 Tool Call 就并行。
+
+还要分析：
+
+- 是否写同一文件
+- 是否共享终端
+- 是否存在依赖
+- 是否操作同一浏览器页面
+- 是否修改同一远程资源
+- Tool 是否声明支持并行
+
+可以构建 Tool Call Dependency Graph。
+
+### 6.8 Terminal 的多 Backend 设计
+
+```text
+TerminalTool
+└── ExecutionBackend
+    ├── Local
+    ├── Sandbox
+    ├── Container
+    ├── SSH
+    └── Cloud Workspace
+```
+
+Backend 统一处理：
+
+- 路径映射
+- 环境变量
+- 网络策略
+- 命令超时
+- 输出捕获
+- 文件同步
+- 进程取消
+- 资源限制
+
+### 6.9 为什么需要专门的 Search Tool
+
+专门 Search Tool 可以统一：
+
+- `.gitignore`
+- 文件类型过滤
+- 最大结果数
+- 上下文行
+- 结果排序
+- 二进制文件排除
+- AST 和符号搜索
+- 超长行处理
+- 结构化位置返回
+- 结果落盘
+
+`grep` 可以是底层 Backend，但不应直接成为上层稳定契约。
+
+### 6.10 文本编辑与 Fuzzy Match
+
+推荐顺序：
+
+1. 精确匹配
+2. 换行符标准化
+3. 尾部空格标准化
+4. 缩进标准化
+5. 唯一模糊匹配
+6. 多候选时拒绝修改
+
+必须保留：
+
+- 匹配策略
+- 相似度
+- 匹配范围
+- 修改前 Hash
+- 修改 Diff
+
+### 6.11 超长输出与 Artifact Store
+
+工具结果过长时：
+
+1. 保存完整输出。
+2. 生成摘要。
+3. 返回 Artifact 路径或 Handle。
+4. 允许模型按区间重新读取。
+
+Artifact Store 最好独立于 Session 消息存储。
+
+### 6.12 Tool Error Taxonomy
+
+工具错误建议结构化：
+
+```text
+invalid_arguments
+permission_denied
+not_found
+timeout
+resource_conflict
+backend_unavailable
+partial_success
+cancelled
+unknown
+```
+
+结构化错误比把 stderr 原样扔给模型更有效。
+
+---
+
+# 第七章：技能系统
+
+推荐标题：
+
+## 7. Skill：把知识、流程和工具组合成可复用能力
+
+### 7.1 Skill 与其他概念的区别
+
+- Tool：执行原子操作
+- Prompt：常驻行为约束
+- Memory：过去发生过什么
+- Skill：完成某类任务的程序性方法
+- Subagent：独立执行主体
+
+### 7.2 Skill 的目录结构
+
+例如：
+
+```text
+release/
+├── SKILL.md
+├── scripts/
+├── templates/
+├── examples/
+└── tests/
+```
+
+### 7.3 YAML Frontmatter 设计
+
+建议包含：
+
+```yaml
+---
+name:
+description:
+when_to_use:
+when_not_to_use:
+allowed_tools:
+required_capabilities:
+arguments:
+risk_level:
+context_mode:
+version:
+dependencies:
+---
+```
+
+### 7.4 Skill 的发现与注册
+
+来源可以包括：
+
+- Harness 内置
+- 用户级目录
+- 项目级目录
+- 当前工作区
+- 插件
+- 远程 Skill Registry
+
+需要处理同名覆盖和优先级。
+
+### 7.5 Skill 检索与路由
+
+不要把所有 Skill 正文放入上下文。
+
+可以只展示：
+
+- 名称
+- 简短描述
+- 适用条件
+- 风险级别
+
+命中后再加载完整 Skill。
+
+### 7.6 显式调用与自动调用
+
+两种方式：
+
+- 用户显式指定 Skill
+- Harness 根据任务自动检索
+
+自动调用最好记录：
+
+- 为什么命中
+- 匹配分数
+- 使用了哪个版本
+- 是否影响工具权限
+
+### 7.7 Skill Context Mode
+
+不同 Skill 可以采用：
+
+- 当前上下文直接执行
+- Fork Context
+- Subagent Context
+- 独立 Sandbox
+- 只读上下文
+
+高噪声任务更适合 Fork 或 Subagent。
+
+### 7.8 Skill 的组合与依赖
+
+需要考虑：
+
+- Skill 调用另一个 Skill
+- 循环依赖
+- 版本约束
+- 工具权限合并
+- 参数传递
+- 失败传播
+
+### 7.9 Skill 的测试与评估
+
+Skill 不应只靠人工阅读。
+
+可以提供：
+
+- 示例任务
+- 预期产物
+- 静态检查
+- 模拟 Tool
+- 回归测试
+- 成功率统计
+- Token 与成本统计
+
+### 7.10 Skill 的版本化与发布
+
+建议维护：
+
+```text
+draft
+validated
+active
+deprecated
+disabled
+```
+
+### 7.11 Skill 自进化
+
+推荐流程：
+
+```text
+发现重复模式
+→ 生成候选 Skill
+→ 静态检查
+→ 沙盒验证
+→ 人工或策略审批
+→ 激活
+→ 监控
+→ 回滚
+```
+
+Agent 不应直接覆盖正在使用的 Skill。
+
+---
+
+# 第八章：任务与多 Agent 编排
+
+推荐标题：
+
+## 8. Orchestration：从一次 Agent Run 到任务系统和多 Agent 协作
+
+### 8.1 Tool Call、Task 与 Agent Run 的区别
+
+- Tool Call：原子操作
+- Agent Run：一次有限执行
+- Task：可持久化、可恢复的工作单元
+- Workflow：多个 Task 的依赖图
+
+### 8.2 Task 数据模型
+
+```text
+Task
+├── goal
+├── input
+├── state
+├── dependencies
+├── owner
+├── lease
+├── budget
+├── retries
+├── validators
+├── artifacts
+└── result
+```
+
+### 8.3 Task 状态机
+
+```text
+pending
+→ ready
+→ running
+→ blocked
+→ completed
+  failed
+  cancelled
+```
+
+可以额外增加：
+
+- waiting_for_approval
+- waiting_for_dependency
+- retry_scheduled
+
+### 8.4 Cron 与定时任务
+
+Cron 只负责触发，不应直接承载执行状态：
+
+```text
+Schedule
+→ Create Task
+→ Queue
+→ Worker / Agent Run
+```
+
+需要讨论：
+
+- 错过执行
+- 重复执行
+- 时区
+- 幂等性
+- 并发限制
+- 补偿运行
+
+### 8.5 Subagent 的委托模型
+
+父 Agent 应给出：
+
+- 明确目标
+- 输入范围
+- 工具权限
+- 预算
+- 输出格式
+- 完成条件
+
+Subagent 返回的重点是结论和产物，不是完整中间过程。
+
+### 8.6 Subagent 的上下文隔离
+
+优势：
+
+- 隔离大量搜索日志
+- 减少主上下文污染
+- 使用不同模型
+- 使用不同权限
+- 独立失败和重试
+
+### 8.7 Agent Team 的协作模型
+
+可以包括：
+
+- Leader/Worker
+- Planner/Executor/Reviewer
+- 对等 Agent
+- 专家 Agent
+- 辩论与仲裁
+
+### 8.8 Agent 间通信
+
+常见方式：
+
+- 消息队列
+- 共享 Task Board
+- Blackboard
+- Artifact Store
+- 事件总线
+- 共享数据库
+
+消息需要结构化，不能只依赖自然语言聊天。
+
+### 8.9 工作区隔离与结果合并
+
+并行 Coding Agent 尤其需要：
+
+- 独立 Worktree
+- 文件所有权
+- Patch 合并
+- 冲突检测
+- Merge Agent
+- 测试验证
+
+### 8.10 Lease、心跳与孤儿任务
+
+分布式执行要处理：
+
+- Worker 崩溃
+- Agent 失联
+- Task 被重复认领
+- Lease 过期
+- 孤儿子进程
+- 重复结果
+
+### 8.11 并发控制与背压
+
+控制维度包括：
+
+- 全局并发
+- 每个 Session 并发
+- 每个用户并发
+- 每个模型并发
+- 每个 Tool Backend 并发
+- 每个项目并发
+
+### 8.12 结果聚合与最终验收
+
+多 Agent 不能只把多个答案拼接起来。
+
+需要：
+
+- 去重
+- 冲突检测
+- 证据比较
+- 统一格式
+- Verifier 验收
+- 必要时重新分配任务
+
+---
+
+# 第九章：Hooks、事件与可观测性
+
+推荐标题：
+
+## 9. Hooks & Events：让 Agent Runtime 可观测、可干预、可扩展
+
+### 9.1 为什么需要统一事件系统
+
+没有事件层时：
+
+- 每个模块各自写回调
+- 插件强耦合内部代码
+- 审计信息不完整
+- 外部系统无法统一订阅
+- 调试难以重放
+
+### 9.2 统一事件信封
+
+```json
+{
+  "event_id": "evt_123",
+  "event_type": "tool.pre_execute",
+  "schema_version": 1,
+  "timestamp": "...",
+  "session_id": "...",
+  "run_id": "...",
+  "task_id": "...",
+  "causation_id": "...",
+  "payload": {}
+}
+```
+
+### 9.3 事件分类
+
+可以分为：
+
+- Session Events
+- Run Events
+- Model Events
+- Tool Events
+- Task Events
+- Subagent Events
+- Context Events
+- Workspace Events
+- Approval Events
+- Error Events
+- Memory Events
+
+### 9.4 Hook 与 Event 的区别
+
+- **Event**：描述已经发生或即将发生的事实
+- **Hook**：针对某类事件执行处理逻辑
+- **Policy**：决定某个动作是否允许
+- **Middleware**：在调用链前后进行统一处理
+
+### 9.5 Pre Hook 与 Post Hook
+
+例如：
+
+```text
+tool.pre_execute
+tool.post_execute
+model.pre_invoke
+model.post_invoke
+context.pre_compact
+context.post_compact
+session.pre_close
+session.post_close
+```
+
+### 9.6 Blocking Hook 与 Async Hook
+
+**Blocking Hook：**
+
+- 权限判断
+- 参数改写
+- 安全校验
+- 完成验证
+
+**Async Hook：**
+
+- 遥测
+- 通知
+- 索引
+- 审计
+- 后台测试
+
+### 9.7 Hook Handler 类型
+
+可以支持：
+
+- Shell
+- HTTP
+- 内部函数
+- MCP Tool
+- Prompt
+- Agent
+- 消息队列
+
+不同 Handler 的安全边界不同。
+
+### 9.8 Hook 的执行语义
+
+每个 Hook 应声明：
+
+```yaml
+mode:
+timeout:
+priority:
+retries:
+failure_policy:
+idempotent:
+```
+
+失败策略可以是：
+
+- ignore
+- warn
+- retry
+- block
+- fail_run
+
+### 9.9 防止 Hook 递归与事件风暴
+
+需要解决：
+
+- Hook 触发 Tool，Tool 再触发 Hook
+- Hook 修改 Session 导致新事件
+- 多个 Hook 相互循环
+- 高频 Tool 输出产生大量事件
+
+可以使用：
+
+- Causation Chain
+- Max Hook Depth
+- Event Deduplication
+- Rate Limit
+- 禁止特定事件重入
+
+### 9.10 日志、指标与 Trace
+
+三者职责不同：
+
+- **Log**：具体发生了什么
+- **Metric**：总体运行情况
+- **Trace**：一次请求跨模块经历了什么
+
+Trace 层级可以是：
+
+```text
+Session
+└── Run
+    ├── Model Call
+    ├── Tool Call
+    ├── Subagent Run
+    └── Verification
+```
+
+### 9.11 关键可观测指标
+
+包括：
+
+- 成功率
+- 平均迭代次数
+- Tool 失败率
+- 审批拒绝率
+- 上下文压缩频率
+- 任务恢复率
+- Token 和成本
+- 用户中断率
+- 验证失败率
+- Subagent 有效贡献率
+
+### 9.12 审计与数据脱敏
+
+事件中可能包含：
+
+- Prompt
+- 用户输入
+- 文件内容
+- Secret
+- 命令参数
+- Tool 输出
+
+应在写入日志前完成：
+
+- 字段分级
+- Secret Redaction
+- 数据保留策略
+- 访问权限控制
+- 删除和导出能力
+
+### 9.13 调试与确定性重放
+
+重放至少要保存：
+
+- 输入
+- Prompt 版本
+- 模型版本
+- Tool Schema
+- Tool 返回
+- 随机参数
+- 配置快照
+- Workspace Checkpoint
+
+无法完全确定性重放模型输出时，可以采用“录制 Tool 结果、重放控制逻辑”。
+
+---
+
+# 第十章：记忆与自进化
+
+推荐标题：
+
+## 10. Memory & Self-Evolution：让 Agent 从执行中持续学习
+
+“自进化”不要描述成 Agent 可以任意修改自己，而应定义为：
+
+> 从运行轨迹中提取候选知识，经过作用域判断、验证、审批和版本化后，写入长期知识系统。
+
+### 10.1 记忆的类型
+
+可以划分为：
+
+- 用户偏好
+- 人设知识
+- 项目知识
+- 情景记忆
+- 语义知识
+- 程序性知识
+- 失败经验
+- 环境知识
+
+### 10.2 文件式知识体系
+
+例如：
+
+```text
+soul.md
+user.md
+rules.md
+AGENTS.md
+CLAUDE.md
+memory/
+skills/
+```
+
+需要分别说明其作用域和优先级。
+
+### 10.3 Memory 与 Session History 的区别
+
+- Session History 是完整发生记录
+- Memory 是从历史中提炼出的可复用信息
+- Summary 是为了节省上下文
+- Rule 是必须遵守的规范
+- Skill 是程序性工作流
+
+不能把这些概念混为同一个向量库。
+
+### 10.4 Memory 写回流水线
+
+推荐：
+
+```text
+Observe
+→ Extract Candidate
+→ Classify
+→ Deduplicate
+→ Validate
+→ Assign Scope
+→ Approve
+→ Persist
+→ Monitor
+```
+
+### 10.5 作用域设计
+
+Memory 可以具有：
+
+```text
+global
+organization
+user
+project
+directory
+session
+task
+```
+
+越窄的作用域通常优先级越高。
+
+### 10.6 Memory 的来源与可信度
+
+每条 Memory 应保留：
+
+```yaml
+source:
+created_at:
+confidence:
+scope:
+evidence:
+last_accessed_at:
+successful_uses:
+contradictions:
+superseded_by:
+```
+
+### 10.7 检索与排序
+
+可以考虑：
+
+```text
+score =
+  semantic_relevance
+  × confidence
+  × scope_match
+  × utility
+  × recency_decay
+```
+
+不一定所有记忆都采用相同衰减策略。
+
+### 10.8 记忆衰减与遗忘
+
+适合衰减：
+
+- 一次性环境信息
+- 临时用户习惯
+- 情景经验
+- 不稳定项目状态
+
+不应自动衰减：
+
+- 安全规则
+- 用户明确要求
+- 项目规范
+- 经过确认的长期偏好
+
+### 10.9 冲突与过期知识处理
+
+需要处理：
+
+- 新旧偏好冲突
+- 项目规则更新
+- 用户改变决定
+- 旧环境已经不存在
+- 多条 Memory 相互矛盾
+
+可采用：
+
+- `superseded_by`
+- 有效时间范围
+- 来源优先级
+- 显式否定记录
+- 冲突时不自动注入
+
+### 10.10 项目知识自动更新
+
+Agent 可以发现：
+
+- 新的构建方式
+- 隐含目录规范
+- 测试命令
+- 发布流程
+- 常见错误
+
+但不能直接把一次成功操作写成全局规则。应先生成候选变更。
+
+### 10.11 人设与用户知识的更新
+
+需要防止：
+
+- 从一次表达推断永久偏好
+- 记录不必要的敏感信息
+- 把临时情绪写成长期人格
+- 不同用户之间数据泄漏
+
+显式偏好和重复出现的稳定偏好应区别处理。
+
+### 10.12 Skill 的自进化
+
+Skill 自进化可以在本章作为程序性记忆的一种展开：
+
+- 新建 Skill
+- 修正 Skill
+- 合并重复 Skill
+- 废弃失效 Skill
+- 根据运行反馈调整使用条件
+
+### 10.13 自进化的治理
+
+任何自动变更都需要：
+
+- Diff
+- 来源
+- 原因
+- 验证
+- 版本
+- 审批策略
+- 回滚能力
+- 影响范围
+
+### 10.14 防止 Prompt Injection 污染长期记忆
+
+这是必须单独讨论的问题。
+
+外部网页、文件和 Tool 输出中的内容不能直接写入：
+
+- 系统规则
+- 用户画像
+- 项目知识
+- Skill
+- 长期 Memory
+
+需要经过来源分类和可信度评估。
+
+### 10.15 如何评估自进化是否有效
+
+不仅看“记住了多少”，更要看：
+
+- 重复错误是否减少
+- 任务成功率是否提升
+- 用户纠正次数是否减少
+- 无关 Memory 干扰率
+- 过期知识使用率
+- Skill 成功率变化
+- 回滚次数
+
+---
+
+# 三、建议额外补充的架构细节
+
+这些内容不必增加为第十一章，但应该贯穿十章。
+
+## 1. Artifact Store 应成为一等组件
+
+很多 Agent 只保存消息，却没有统一管理：
+
+- 日志
+- Patch
+- 截图
+- 报告
+- 测试结果
+- 下载文件
+- Subagent 输出
+- 大型 Tool 结果
+
+建议每个 Artifact 记录：
+
+```text
+artifact_id
+session_id
+run_id
+task_id
+mime_type
+size
+hash
+creator
+retention
+sensitivity
+storage_location
+```
+
+Session 中只保存引用。
+
+## 2. Policy Engine 不应等于 Prompt
+
+安全规则如果只写在系统提示词里，模型仍可能违反。
+
+Policy Engine 应在 Harness 层确定性执行，例如：
+
+```text
+can_read(path)
+can_write(path)
+can_execute(command)
+can_access_network(host)
+requires_approval(action)
+```
+
+Prompt 负责告诉模型规则，Policy Engine 负责真正执行规则。
+
+## 3. Verifier 应是一等组件
+
+Verifier 可以包括：
+
+- 单元测试
+- 编译器
+- Schema 验证
+- 文件存在性
+- Diff 检查
+- 输出格式检查
+- LLM Judge
+- 人工验收
+
+模型自身的自我检查不能代替外部验证。
+
+## 4. Secret Management
+
+需要明确：
+
+- Secret 是否进入 Prompt
+- Tool 如何获取 Secret
+- 日志如何脱敏
+- Subagent 是否继承 Secret
+- Remote Backend 如何注入 Secret
+- Session Export 是否包含 Secret
+
+最好让 Tool Backend 通过 Secret Handle 获取，而不是把明文提供给模型。
+
+## 5. 配置层级与覆盖规则
+
+建议统一配置来源：
+
+```text
+Harness Default
+→ Organization
+→ User
+→ Project
+→ Directory
+→ Session
+→ Run
+→ Task
+```
+
+越具体的配置覆盖越通用的配置，但安全上限不能被下级配置放宽。
+
+## 6. Schema 与协议版本化
+
+以下对象都需要版本：
+
+- Session Schema
+- Event Schema
+- Tool Schema
+- Prompt Template
+- Skill Format
+- Checkpoint Format
+- Artifact Metadata
+- Memory Format
+
+否则未来升级会很困难。
+
+## 7. Failure Domain
+
+要明确不同失败应该影响多大范围：
+
+- 一个 Tool Call 失败
+- 一个 Subagent 失败
+- 一个 Task 失败
+- 一个 Run 失败
+- 一个 Session 损坏
+- 整个 Runtime 崩溃
+
+不要因为一个非关键 Subagent 失败而中止整个 Session。
+
+## 8. 数据保留与隐私
+
+需要设计：
+
+- Session 保留时长
+- Tool 原始输出保留时长
+- Artifact 自动清理
+- Memory 删除
+- 用户数据导出
+- 项目数据隔离
+- 敏感数据分类
+
+## 9. Capability 与 Permission 分离
+
+- **Capability**：系统是否具备这种能力
+- **Permission**：当前用户或 Agent 是否允许使用
+- **Availability**：当前环境是否可用
+
+例如：
+
+```text
+Terminal Tool 已注册       → Capability
+用户允许执行本地命令       → Permission
+当前运行在只读远程环境     → Availability
+```
+
+这三者不要混为一个布尔值。
+
+## 10. Harness 自身的评估体系
+
+可以建立分层评估：
+
+```text
+Model Evaluation
+Tool Evaluation
+Skill Evaluation
+Context Evaluation
+Agent Loop Evaluation
+Task Evaluation
+End-to-End Evaluation
+```
+
+否则很难判断问题来自模型，还是来自上下文、工具或 Prompt。
+
+---
+
+# 四、每章建议采用统一写作模板
+
+为了避免文章前松后紧，十个章节可以统一采用七段结构：
+
+### A. 它解决什么问题
+
+先讲真实问题，不先给抽象定义。
+
+### B. 为什么不能交给模型自己解决
+
+强调 Harness 存在的必要性。
+
+### C. 核心概念与数据结构
+
+给出关键对象、状态机或接口。
+
+### D. 一次请求如何经过这个模块
+
+使用时序图或伪代码。
+
+### E. 关键实现细节
+
+展开最有价值的工程问题。
+
+### F. 常见失败模式
+
+这部分最容易体现文章深度。
+
+### G. 设计取舍与案例
+
+结合 Hermes、Claude Code、Codex、ACP 等实现进行比较。
+
+---
+
+# 五、推荐的最终标题和分篇方式
+
+整篇标题可以是：
+
+## 《Agent 不只是一个 while 循环：生产级 Agent Harness 的十大核心模块》
+
+副标题：
+
+> 从请求接入、上下文构造和工具执行，到多 Agent 编排、运行时治理与持续进化。
+
+如果单篇篇幅过长，可以拆成三篇系列：
+
+### 上篇：一次 Agent 请求是如何运行的
+
+1. 交互与协议  
+2. Session  
+3. System Prompt  
+4. Context Management  
+5. Agent Runtime  
+
+### 中篇：Agent 如何作用于真实世界
+
+6. Tool  
+7. Skill  
+8. Task、Subagent 与 Agent Team  
+
+### 下篇：Agent 系统如何被治理和持续进化
+
+9. Hooks、Events 与 Observability  
+10. Memory 与 Self-Evolution  
+
+整套内容最适合围绕这一条主线展开：
+
+> **模型决定下一步可能做什么，Harness 决定它当前知道什么、实际允许做什么、执行后如何验证，以及哪些经验值得被保留下来。**
